@@ -1,0 +1,106 @@
+# This configuration is a part of ABM
+
+# You'll configure modes here
+deathmatch: # <-- This mode's id (case-insensitive)
+  # The mode's name
+  name: "&bDeathmatch"
+
+  # You can write a short sentence to describe this mode
+  description: "&fA game where single players attack each other to know who is the winner"
+
+  # Chat for waiting phase
+  waiting_chat:
+    # Should we enable it?
+    enabled: true
+
+    # The format
+    # [placeholder supported]
+    format: "&8%player_displayname%&f: {__message__}"
+
+  # Chat for playing phase
+  playing_chat:
+    # Should we enable it?
+    enabled: true
+
+    # The format
+    # [placeholder supported]
+    format: "&8%player_displayname%&f: {__message__}"
+
+  # A built-in scoreboard which is used during the waiting phase
+  waiting_scoreboard:
+    # Use this or not?
+    enabled: true
+
+    # This scoreboard's title
+    # [placeholder supported]
+    title: "&a &c&lBATTLE"
+
+    # The content of this scoreboard
+    # [placeholder supported] [maximum lines: 15]
+    content:
+      - "&e"
+      - "&aDeathmatch - %abm_arena_name%"
+      - "&b"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&c"
+      - "&dminecraft.net"
+
+  # A built-in scoreboard which is used during the playing phase
+  playing_scoreboard:
+    # Use this or not?
+    enabled: true
+
+    # The title
+    # [placeholder supported]
+    title: "&a &c&lBATTLE"
+
+    # The content
+    # [placeholder supported] [maximum lines: 15]
+    content:
+      - "&e"
+      - "&aDeathmatch - %abm_arena_name%"
+      - "&c%abm_game_remaining_time_formatted% left"
+      - "&b"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
+      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&c"
+      - "&dminecraft.net"
+
+team_deathmatch:
+  name: "&eTeam &bDeathmatch"
+  description: "&fA game where two teams attack each other to know who is the winner"
+  waiting_chat:
+    enabled: true
+    format: "&8%player_displayname%&f: {__message__}"
+  playing_chat:
+    enabled: true
+    format: "&7[%abm_tdm_team%] &8%player_displayname%&f: {__message__}"
+  waiting_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&e"
+      - "&aTeam deathmatch - %abm_arena_name%"
+      - "&b"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&c"
+      - "&dminecraft.net"
+  playing_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&e"
+      - "&aTeam deathmatch - %abm_arena_name%"
+      - "&c%abm_game_remaining_time_formatted% left"
+      - "&b"
+      - "%abm_icon_letter% &aTeam: &f%abm_tdm_team% &e(%abm_tdm_team_players% players)"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
+      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&c"
+      - "&dminecraft.net"

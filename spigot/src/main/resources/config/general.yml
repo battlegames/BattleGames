@@ -1,0 +1,81 @@
+# This configuration is a part of ABM
+# General plugin configuration
+
+# The locale file which ABM uses for messages and texts
+# Available: en_us.yml
+locale: "en_us.yml"
+
+
+# Date format to be used by ABM
+# Read more about the date format here:
+# https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+date_format:
+  # Long-form date format with day, month, year, etc
+  long_form: "dd/MM/yyyy HH:mm:ss"
+
+  # Short-form (which is used for things like countdown)
+  short_form:
+    # For time which can be displayed as hours, remaining is converted to lower units
+    hours: "HH:mm:ss"
+
+    # For time which can be displayed as minutes, remaining is converted to lower units
+    minutes: "mm:ss"
+
+    # For time which can be displayed as seconds, remaining is converted to lower units
+    seconds: "ss"
+
+
+# Level system configuration
+level_system:
+  # The formula that converts X exp to Y level
+  exp_to_level_formula: "floor(sqrt(x/20)/2)"
+
+  # The reverse formula
+  level_to_exp_formula: "floor(x*x*4*20)"
+
+
+# Default built-in scoreboard
+default_scoreboard:
+  # Enables it?
+  enabled: true
+
+  # This scoreboard's title
+  # [placeholder supported]
+  title: "&a &c&lBATTLE"
+
+  # The content of this scoreboard
+  # [placeholder supported] [maximum lines: 15]
+  content:
+    - "&a&f"
+    - "%abm_icon_user% &aName:&r &b%player_displayname%"
+    - "%abm_icon_medal% &aLevel:&r &b%abm_level% (%abm_level_progress%%)"
+    - "%abm_icon_money_bag% &aMoney:&r &b$%vault_eco_balance_formatted%"
+    - "%abm_icon_gold_cup% &aW/L:&r &b%abm_stats_win_matches%/%abm_stats_lose_matches%"
+    - "%abm_icon_headshot% &aHS/AS:&r &b%abm_stats_headshots%/%abm_stats_assists%"
+    - "%abm_icon_gun% &aK/D:&r &b%abm_stats_kills%/%abm_stats_deaths%"
+    - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+    - "%abm_icon_online% &aOnline:&r &b%server_online%/%server_max_players%"
+    - "&c&a"
+    - "&dminecraft.net"
+
+
+# Default chat settings
+default_chat:
+  # Allows it to work?
+  enabled: true
+
+  # Chat format
+  # [placeholder supported]
+  format: "&7[%abm_icon_medal%&r%abm_level%&7] &8%player_displayname%&f: {__message__}"
+
+
+# Storage settings
+storage:
+  # Available storage types: file
+  # [case-insensitive]
+  type: file
+
+  # Configuration for file-based storage
+  file:
+    # The path to the directory where we store data
+    data_path: ".battle"

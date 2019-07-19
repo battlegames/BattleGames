@@ -1,0 +1,88 @@
+# This configuration is a part of ABM
+
+# Use this configuration to set up your arenas
+# Lets start with the first one
+
+dm_demo: # The id of this arena
+  # This is the name of this arena
+  # [required]
+  name: "&aExample Arena 1"
+
+  # The mode of this arena
+  # [required] [case-insensitive]
+  mode: deathmatch
+
+  # The formula which is used to calculate the final experience
+  # that players receive when finishing the game.
+  # Read the documentation for further information.
+  # [required]
+  final_exp_formula: "a+b*30-c*10+d*5"
+
+  # The formula which is used to calculate the final money that players
+  # receive when finishing the game.
+  # Read the documentation for further information.
+  # [required]
+  final_money_formula: "a*4+b*12+d*5"
+
+  # The material which is used to symbolize
+  # [optional] [case-insensitive] [default: grass]
+  icon: redstone
+
+  # Maximum playing time
+  # [optional] [default: 0] [time unit: ticks]
+  max_time: 8400
+
+  # The maximum amount of players
+  # [optional] [default: 0]
+  max_players: 15
+
+  # Arenas attributes configuration
+  # Attributes depend on the mode, so make sure you have
+  # read the documentation and fill this section completely.
+  # And don't copy/paste as options should be UNIQUE for EACH arena.
+  attr:
+    min_players: 2
+    waiting_spawn_points:
+      - dm_assault 0 0 0
+    playing_spawn_points:
+      - dm_assault 0 0 0 0 0
+    countdown_time: 300
+    item_selection_time: 200
+    spawn_protection_time: 40
+    respawn_waiting_time: 200
+
+  # Commands to be executed by the console at the end
+  # You can use expressions within commands.
+  # The format is: <? your expression ?> (e.g: <? 5^3+2 ?>)
+  # Placeholders inside expressions are allowed, though,
+  # they only work if the returning value is a number
+  end_commands:
+    # All players information below belong to winners only
+    # [optional]
+    winners:
+      - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
+
+    # Like above but for losers
+    # [optional]
+    losers:
+      - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
+
+tdm_demo:
+  name: "&aExample Arena 2"
+  mode: team_deathmatch
+  max_time: 8400
+  max_players: 10
+  final_exp_formula: "a*2+b*28-c*8+d*3"
+  final_money_formula: "a*5+b*15+d*3"
+  attr:
+    min_players: 2
+    waiting_spawn_points:
+      - dm_assault 0 0 0
+    playing_spawn_points_a:
+      - dm_assault 0 0 0
+    playing_spawn_points_b:
+      - dm_assault 0 0 0
+    countdown_time: 300
+    item_selection_time: 200
+    spawn_protection_time: 40
+    respawn_waiting_time: 200

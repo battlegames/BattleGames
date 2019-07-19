@@ -1,0 +1,51 @@
+# This configuration is a part of ABM
+
+# Here you can customize Battle items
+# E.g: guns, ammo, magazines, etc
+# All sections below use ABIF which you can look at here to know
+# the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+
+ammo: # <-- don't change!
+  name: "{__ammo_name__}"
+  lore:
+    - "&aBullets: &f{__ammo_bullet_count__}"
+    - "&e> Total damage: &f{__ammo_total_bullet_damage__}"
+    - "&e> Total knockback: &f{__ammo_total_bullet_knockback__}"
+
+model_ammo:
+  name: "{__ammo_name__}"
+  lore:
+    - "&aBullets: &f{__ammo_bullet_count__}"
+    - "&e> Total damage: &f{__ammo_total_bullet_damage__}"
+    - "&e> Total knockback: &f{__ammo_total_bullet_knockback__}"
+
+magazine:
+  name: "{__magazine_name__}"
+  lore:
+    - "&aAmmo: &f{__magazine_ammo_count__}/{__magazine_ammo_capacity__} {__ammo_name__}"
+
+model_magazine:
+  name: "{__magazine_name__}"
+
+gun:
+  name: "{__gun_name__}"
+  lore:
+    - "&aAmmo: &f{__ammo_name__} &e({__magazine_ammo_count__}/{__magazine_ammo_capacity__})"
+    - "&aWeight: &f{__gun_weight__}"
+    - "&aMagazine: &f{__magazine_name__}"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true
+
+model_gun:
+  name: "{__gun_name__}"
+  lore:
+    - "&aWeight: &f{__gun_weight__}"
+    - "&aMagazine:"
+    - "&e> Default: &f{__gun_default_magazine_name__}"
+    - "&e> Maximum capacity: &f{__gun_max_magazine_capacity__}"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true

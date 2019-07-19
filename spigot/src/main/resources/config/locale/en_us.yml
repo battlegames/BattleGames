@@ -1,0 +1,117 @@
+# This configuration is a part of ABM
+# Default locale file
+
+name: "English (en-US)"
+item_type:
+  magazine: Magazine
+  ammo: Ammunition
+  gun: Gun
+medal:
+  headshot_title: "&l%abm_icon_headshot%"
+  headshot_subtitle: "&bHeadshot"
+  assist_title: "&l%abm_icon_assist%"
+  assist_subtitle: "&cAssist"
+server:
+  illegal_block_break: "&cIllegal action: You aren't allowed to break blocks!"
+  illegal_block_blace: "&cIllegal action: You aren't allowed to place blocks!"
+arena:
+  not_found: "&cCouldn't find that arena."
+  error_already_joined: "&cYou've already joined!"
+  error_attendance_disabled: "&cSorry, you can't attend during this time."
+  error_full_players: "&cSorry, this arena is full! Please join later."
+  error_mode_controller_unavailable: "&cInternal error: Mode controller was unavailable."
+  error_attendance_refused: "&cThe mode which you're going to join refused your request."
+  reward_message: "&aYou received &f{__exp__}&a exp and &f${__money__}"
+mode_dm:
+  player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
+  player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
+  countdown_title: "&a&lStart in"
+  countdown_subtitle: "&f&l{__current__}"
+  game_start_broadcast: "&bStarted the game!"
+  error_item_selection_overtime: "&cYou can't choose items now!"
+  error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
+  respawn_title: "&e&lRespawn in"
+  respawn_subtitle: "&f&l{__current__}"
+mode_tdm:
+  team_a: Team A
+  team_b: Team B
+  player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
+  player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
+  countdown_title: "&a&lStart in"
+  countdown_subtitle: "&f&l{__current__}"
+  game_start_broadcast: "&bStarted the game!"
+  error_item_selection_overtime: "&cYou can't choose items now!"
+  error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
+  respawn_title: "&e&lRespawn in"
+  respawn_subtitle: "&f&l{__current__}"
+gun:
+  none_magazine_message: "&cThis gun doesn't have the magazine!"
+  out_of_ammo: "&cThis gun is out of ammunition."
+items:
+  not_found: "&cCouldn't find that item"
+  gun:
+    none_magazine: "&cNo attached magazine"
+  magazine:
+    none_ammo: "&cNo ammunition"
+tool:
+  position:
+    message: "&fYour current location is: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
+    location: "/%s %.2f %.2f %.2f %.2f %.2f"
+kit:
+  no_permission: "&cYou don't have permission to use this kit!"
+  unavailable: "&cThis kit is currently unavailable! You need to wait until %s"
+  one_time_use: "&cThis kit can only be used one-time!"
+gui:
+  empty: "&f"
+  btn:
+    close_name: "&cClose"
+    close_lore:
+      - "&aClick here to close this inventory"
+    prev_name: "&aPrevious page"
+    prev_lore:
+      - "&fGo back to previous page"
+    back_inv_name: "&cBack"
+    back_inv_lore:
+      - "&fBack to your inventory"
+    next_name: "&aNext page"
+    next_lore:
+      - "&fTurn to the next page"
+  item_info:
+    owning_date: "&fOwning date:"
+  inventory_menu:
+    title: "&e&lInventory"
+    gun_name: "&fGun"
+    gun_lore:
+      - "&aClick here to view owned guns"
+    magazine_name: "&fMagazine"
+    magazine_lore:
+      - "&aClick here to view owned magazines"
+    ammo_name: "&fAmmunition"
+    ammo_lore:
+      - "&aClick here to view owned ammunition"
+  inventory_gun:
+    title: "&c&lInventory > Gun"
+  inventory_magazine:
+    title: "&c&lInventory > Magazine"
+  inventory_ammo:
+    title: "&c&lInventory > Ammunition"
+  kit_menu:
+    title: "&b&lKits"
+  arena_chooser:
+    title: "&e&lChoose arena"
+  main_player_inv:
+    title: "&c&lMain hotbar"
+    arena_chooser_name: "&e&lChoose arena"
+    arena_chooser_lore:
+      - "&aSelect an arena to play on"
+    your_inventory_name: "&b&lYour inventory"
+    your_inventory_lore:
+      - "&aOpen your inventory"
+  game_player_inv:
+    title: "&c&lGame hotbar"
+    your_inventory_name: "&b&lYour inventory"
+    your_inventory_lore:
+      - "&aOpen your inventory"
+    quit_name: "&c&lQuit"
+    quit_lore:
+      - "&eQuit this game"

@@ -1,0 +1,6 @@
+# This configuration is a part of ABM
+# WARNING: THIS IS THE SYSTEM FILE
+# DO NOT TOUCH ANYTHING!
+config_version: ${config.version}
+storage_version: ${storage.version}
+current_version: ${project.version}

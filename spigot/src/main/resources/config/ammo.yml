@@ -1,0 +1,90 @@
+# This configuration is a part of ABM
+
+# You can configure ammunition here
+
+7_62mm: # Ammo's ID
+  # Put its name here
+  # [required]
+  name: "&f7.62mm"
+
+  # Skin configuration
+  skin:
+    # The material
+    # [optional] [default: air]
+    material: arrow
+
+    # The damage
+    # [optional] [default: 0]
+    damage: 0
+
+  # All bullets inside this ammo
+  bullets:
+    # The first bullet
+    '1': # <-- Write anything you want, but make sure it is unique
+      # How much damage this bullet causes?
+      # [optional] [default: 0]
+      damage: 12
+
+      # Push the entity backward
+      # [optional] [default: 0]
+      knockback: 0.1
+
+      # Here you can customize the particles (they're used to symbolize the bullet)
+      particle:
+        # Particle's type
+        # [case-insensitive] [optional] [default: end_rod]
+        type: end_rod
+
+        # The number of particles
+        # [optional] [default: 1]
+        count: 1
+
+        # The maximum random offset on the X axis
+        # [optional] [default: 0]
+        offset_x: 0
+
+        # The maximum random offset on the Y axis
+        # [optional] [default: 0]
+        offset_y: 0
+
+        # The maximum random offset on the Z axis
+        # [optional] [default: 0]
+        offset_z: 0
+
+        # The speed
+        # [optional] [default: 0]
+        speed: 0
+
+        # The data to use for this particle
+        data:
+          # Dust section for Redstone particles
+          dust:
+            # The dust's color in RGB.
+            # [optional]
+            color:
+              red: 255
+              green: 0
+              blue: 0
+
+            # The dust's size
+            # [optional] [default: 0.5]
+            size: 0.5
+
+          # Here you can make an item to use for Itemcrack particles
+          # This section uses ABIF which you can look at here to know
+          # the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+          item:
+            material: DIRT
+
+        # The maximum distance from this particle that players are able to view
+        view_distance: 50
+
+
+_50_ae:
+  name: "&f.50 Action Express"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 10.8
+      knockback: 0.102
