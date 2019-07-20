@@ -22,23 +22,25 @@ public class GunHandler extends ItemHandler {
         super(plugin);
     }
 
-    public ItemStack createGun(GunItem gunItem, boolean secondarySkin){
-        return draw(gunItem.getModel(), plugin.itemManager.preMake(gunItem), secondarySkin);
+    public ItemStack createGun(Gun gunItem, boolean secondarySkin){
+        return gunItem.getModel()
+                .map(gunModel -> draw(gunModel, plugin.itemManager.preMakeItem(gunItem), secondarySkin))
+                .orElse(null);
     }
 
     @Nullable
-    public ItemStack draw(Gun gun, @Nullable ItemStack itemStack, boolean secondarySkin){
+    public ItemStack draw(GunModel gun, @Nullable ItemStack itemStack, boolean secondarySkin){
         return super.draw(secondarySkin ? gun.getSecondarySkin() : gun.getPrimarySkin(), itemStack);
     }
 
-    public void selectGun(Player player, Gun g, int slot) {
-        Map.Entry<Ammo, Integer> ammo = g.getDefaultMagazine().getAmmunition().entrySet().iterator().next();
-        GunItem gun = new GunItem();
+    public void selectGun(Player player, GunModel g, int slot) {
+        Map.Entry<AmmoModel, Integer> ammo = g.getDefaultMagazine().getAmmunition().entrySet().iterator().next();
+        Gun gun = new Gun();
         gun.setModel(g);
-        MagazineItem magazine = gun.getMagazine();
+        Magazine magazine = gun.getMagazine();
         magazine.setModel(g.getDefaultMagazine());
         magazine.setAmmoCount(ammo.getValue());
-        AmmoItem ammoItem = magazine.getAmmo();
+        Ammo ammoItem = magazine.getAmmo();
         ammoItem.setModel(ammo.getKey());
 
         player.getInventory().setItem(slot, createGun(gun, false));
@@ -64,13 +66,13 @@ public class GunHandler extends ItemHandler {
         return q.getY() - ve.getLocation().getY() > getBodyHeight(ve);
     }
 
-    public void shoot(Game game, Player player, GunItem gunItem){
-        MagazineItem mag = gunItem.getMagazine();
-        if(mag.getModel() == null) {
+    public void shoot(Game game, Player player, Gun gunItem){
+        Magazine mag = gunItem.getMagazine();
+        if(!mag.getModel().isPresent()) {
             plugin.chatProvider.sendPlayer(player, "gun.none_magazine_message");
             return;
         }
-        if(mag.getAmmoCount() == 0) {
+        if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
             plugin.chatProvider.sendPlayer(player, "gun.out_of_ammo");
             return;
         }
@@ -78,7 +80,7 @@ public class GunHandler extends ItemHandler {
 
         player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 3f, 1f);
         Vector originVec = player.getEyeLocation().toVector();
-        List<Bullet> bullets = mag.getAmmo().getModel().getBullets();
+        List<Bullet> bullets = mag.getAmmo().getModel().get().getBullets();
         for(Bullet b : bullets){
             Location start = player.getEyeLocation();
             BulletEntity entity = new BulletEntity(start, b);

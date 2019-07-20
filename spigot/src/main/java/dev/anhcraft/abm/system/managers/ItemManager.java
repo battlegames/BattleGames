@@ -5,12 +5,13 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.api.ext.BattleItem;
-import dev.anhcraft.abm.api.impl.BattleItemModel;
-import dev.anhcraft.abm.api.impl.Informative;
-import dev.anhcraft.abm.api.objects.AmmoItem;
-import dev.anhcraft.abm.api.objects.GunItem;
-import dev.anhcraft.abm.api.objects.MagazineItem;
+import dev.anhcraft.abm.api.ext.BattleItemModel;
+import dev.anhcraft.abm.api.objects.Ammo;
+import dev.anhcraft.abm.api.objects.Gun;
+import dev.anhcraft.abm.api.objects.Magazine;
 import dev.anhcraft.abm.system.ItemTag;
+import dev.anhcraft.abm.utils.MathUtil;
+import dev.anhcraft.abm.utils.info.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,10 +19,11 @@ import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ItemManager extends BattleComponent {
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9_]+__}");
@@ -30,7 +32,7 @@ public class ItemManager extends BattleComponent {
         super(plugin);
     }
 
-    public static String rplc(String str, Map<String, String> x){
+    private static String rplc(String str, Map<String, String> x){
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
@@ -44,40 +46,59 @@ public class ItemManager extends BattleComponent {
 
     private BattleItem newItemInstance(ItemType type){
         switch (type){
-            case GUN: return new GunItem();
-            case MAGAZINE: return new MagazineItem();
-            case AMMO: return new AmmoItem();
+            case GUN: return new Gun();
+            case MAGAZINE: return new Magazine();
+            case AMMO: return new Ammo();
         }
         return null;
     }
 
     @Nullable
-    public ItemStack preMake(@Nullable BattleItem battleItem){
+    public <R extends BattleItemModel> ItemStack preMakeItem(@Nullable BattleItem<R> battleItem){
         if(battleItem == null) return null;
-        ConfigurationSection sec = plugin.getItemConf().getConfigurationSection(battleItem.getModel().getItemType().name().toLowerCase());
-        if(sec == null) return null;
-        return write(ABIF.load(sec, s -> {
-            Map<String, String> plc = new HashMap<>();
-            ConfigurationSection cs = plugin.getLocaleConf().getConfigurationSection("items."+battleItem.getModel().getItemType().name().toLowerCase());
-            if(cs == null) return s;
-            if(battleItem instanceof Informative)  ((Informative) battleItem).writeInfo(plc, cs);
-            if(battleItem.getModel() instanceof Informative)  ((Informative) battleItem.getModel()).writeInfo(plc, cs);
-            return rplc(s, plc);
-        }), battleItem);
+        Optional<R> opt = battleItem.getModel();
+        if(opt.isPresent()){
+            String k = opt.get().getItemType().name().toLowerCase();
+            ConfigurationSection sec = plugin.getItemConf().getConfigurationSection(k);
+            if(sec != null)
+                return write(ABIF.load(sec, s ->
+                        rplc(s, handleInfo(battleItem.collectInfo(null)))), battleItem);
+        }
+        return null;
     }
 
     @Nullable
     public ItemStack makeModel(@Nullable BattleItemModel bim){
         if(bim == null) return null;
-        ConfigurationSection sec = plugin.getItemConf().getConfigurationSection("model_"+bim.getItemType().name().toLowerCase());
+        String k = bim.getItemType().name().toLowerCase();
+        ConfigurationSection sec = plugin.getItemConf().getConfigurationSection("model_"+k);
         if(sec == null) return null;
-        return ABIF.load(sec, s -> {
-            Map<String, String> plc = new HashMap<>();
-            ConfigurationSection cs = plugin.getLocaleConf().getConfigurationSection("items."+
-                    bim.getItemType().name().toLowerCase());
-            if(bim instanceof Informative) ((Informative) bim).writeInfo(plc, cs);
-            return rplc(s, plc);
-        });
+        return ABIF.load(sec, s -> rplc(s, handleInfo(bim.collectInfo(null))));
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private Map<String, String> handleInfo(InfoHolder holder){
+        return holder.read().entrySet().stream().collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> {
+                    InfoData data = entry.getValue();
+                    if(data instanceof InfoBooleanData){
+                        if(((InfoBooleanData) data).getValue())
+                            return plugin.getLocaleConf().getString("state.enabled");
+                        else
+                            return plugin.getLocaleConf().getString("state.disabled");
+                    }
+                    else if(data instanceof InfoDoubleData)
+                        return MathUtil.round(((InfoDoubleData) data).getValue(), 3);
+                    else if(data instanceof InfoIntData)
+                        return Integer.toString(((InfoIntData) data).getValue());
+                    else if(data instanceof InfoLongData)
+                        return Long.toString(((InfoLongData) data).getValue());
+                    else if(data instanceof InfoStringData)
+                        return ((InfoStringData) data).getValue();
+                    return "Error! (data class="+data.getClass().getSimpleName()+")";
+                }
+        ));
     }
 
     @Nullable
@@ -96,13 +117,14 @@ public class ItemManager extends BattleComponent {
     }
 
     @Nullable
-    public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem battleItem){
+    public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem){
         if(itemStack == null || battleItem == null) return null;
         ItemMeta meta = itemStack.getItemMeta();
         if(meta == null) return null;
         CustomItemTagContainer c = meta.getCustomTagContainer();
         battleItem.save(c);
-        c.setCustomTag(ItemTag.ITEM_TYPE, ItemTagType.STRING, battleItem.getModel().getItemType().name());
+        if(battleItem.getModel().isPresent())
+            c.setCustomTag(ItemTag.ITEM_TYPE, ItemTagType.STRING, battleItem.getModel().get().getItemType().name());
         itemStack.setItemMeta(meta);
         return itemStack;
     }

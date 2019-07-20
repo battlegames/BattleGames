@@ -8,7 +8,7 @@ import dev.anhcraft.abm.api.ext.BattleItem;
 import dev.anhcraft.abm.api.objects.DamageReport;
 import dev.anhcraft.abm.api.objects.Game;
 import dev.anhcraft.abm.api.objects.GamePlayer;
-import dev.anhcraft.abm.api.objects.GunItem;
+import dev.anhcraft.abm.api.objects.Gun;
 import dev.anhcraft.abm.gui.core.BattleSlot;
 import dev.anhcraft.abm.gui.core.PlayerGui;
 import dev.anhcraft.abm.system.QueueTitle;
@@ -59,10 +59,10 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     public void secondarySkin(Player player, BattleItem newItem, BattleItem oldItem){
-        if(newItem instanceof GunItem)
+        if(newItem instanceof Gun)
             player.getInventory().setItemInOffHand(plugin.getHandler(GunHandler.class).createGun(
-                    (GunItem) newItem, true));
-        else if(newItem == null && oldItem instanceof GunItem)
+                    (Gun) newItem, true));
+        else if(newItem == null && oldItem instanceof Gun)
             player.getInventory().setItemInOffHand(null);
     }
 
@@ -81,9 +81,9 @@ public class PlayerListener extends BattleComponent implements Listener {
         Player p = event.getPlayer();
         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             BattleItem item = plugin.itemManager.read(event.getItem());
-            if (item instanceof GunItem) {
+            if (item instanceof Gun) {
                 plugin.gameManager.getGame(p).ifPresent(game -> {
-                    GunItem gun = (GunItem) item;
+                    Gun gun = (Gun) item;
                     plugin.getHandler(GunHandler.class).shoot(game, p, gun);
                     p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                     event.setCancelled(true);
@@ -136,8 +136,9 @@ public class PlayerListener extends BattleComponent implements Listener {
         BattleItem newItem = plugin.itemManager.read(newItemStack);
         BattleItem oldItem = plugin.itemManager.read(oldItemStack);
         if(newItem != null){
-            if(newItem instanceof GunItem) {
-                PlayerUtil.reduceSpeed(player, ((GunItem) newItem).getModel().getWeight());
+            if(newItem instanceof Gun) {
+                ((Gun) newItem).getModel().ifPresent(m ->
+                        PlayerUtil.reduceSpeed(player, m.getWeight()));
                 secondarySkin(player, newItem, oldItem);
             } else {
                 // OTHER ITEM TYPE PUT HERE
@@ -145,8 +146,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                 secondarySkin(player, null, oldItem);
             }
         } else if(oldItem != null) {
-            if(oldItem instanceof GunItem)
-                PlayerUtil.increaseSpeed(player, ((GunItem) oldItem).getModel().getWeight());
+            if(oldItem instanceof Gun)
+                ((Gun) oldItem).getModel().ifPresent(m ->
+                    PlayerUtil.increaseSpeed(player, m.getWeight()));
             secondarySkin(player, null, oldItem);
         }
     }

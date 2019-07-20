@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.api.events;
 
-import dev.anhcraft.abm.api.ext.WeaponItem;
+import dev.anhcraft.abm.api.ext.Weapon;
 import dev.anhcraft.abm.api.objects.DamageReport;
 import dev.anhcraft.abm.api.objects.Game;
 import org.bukkit.entity.LivingEntity;
@@ -16,10 +16,10 @@ public class PlayerDamageEvent extends Event implements Cancellable {
     private Game game;
     private DamageReport report;
     private LivingEntity entity;
-    private WeaponItem weapon;
+    private Weapon weapon;
     private boolean cancelled;
 
-    public PlayerDamageEvent(Game game, DamageReport report, LivingEntity entity, WeaponItem weapon) {
+    public PlayerDamageEvent(Game game, DamageReport report, LivingEntity entity, Weapon weapon) {
         this.game = game;
         this.report = report;
         this.entity = entity;
@@ -50,7 +50,7 @@ public class PlayerDamageEvent extends Event implements Cancellable {
         report.setDamage(damage);
     }
 
-    public WeaponItem getWeapon() {
+    public Weapon getWeapon() {
         return weapon;
     }
 

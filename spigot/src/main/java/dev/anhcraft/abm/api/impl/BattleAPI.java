@@ -12,13 +12,13 @@ public interface BattleAPI {
     Optional<PlayerData> getPlayerData(OfflinePlayer player);
     ServerData getServerData();
     Optional<Arena> getArena(String id);
-    Optional<Ammo> getAmmo(String id);
-    Optional<Gun> getGun(String id);
-    Optional<Magazine> getMagazine(String id);
+    Optional<AmmoModel> getAmmoModel(String id);
+    Optional<GunModel> getGunModel(String id);
+    Optional<MagazineModel> getMagazineModel(String id);
     Optional<Kit> getKit(String id);
     List<Arena> listArenas();
-    List<Ammo> listAmmo();
-    List<Gun> listGuns();
-    List<Magazine> listMagazines();
+    List<AmmoModel> listAmmoModels();
+    List<GunModel> listGunModels();
+    List<MagazineModel> listMagazineModels();
     List<Kit> listKits();
 }

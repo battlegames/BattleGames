@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0_132.
- */
 package dev.anhcraft.abm.api.enums;
 
 public enum Icon {

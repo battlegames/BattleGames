@@ -2,10 +2,13 @@
 # Default locale file
 
 name: "English (en-US)"
+state:
+  enabled: Enabled
+  disabled: Disabled
 item_type:
-  magazine: Magazine
+  magazine: MagazineModel
   ammo: Ammunition
-  gun: Gun
+  gun: GunModel
 medal:
   headshot_title: "&l%abm_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
@@ -49,10 +52,6 @@ gun:
   out_of_ammo: "&cThis gun is out of ammunition."
 items:
   not_found: "&cCouldn't find that item"
-  gun:
-    none_magazine: "&cNo attached magazine"
-  magazine:
-    none_ammo: "&cNo ammunition"
 tool:
   position:
     message: "&fYour current location is: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"

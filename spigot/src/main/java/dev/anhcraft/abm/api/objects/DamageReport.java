@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 public class DamageReport {
     private long date;
     private Player damager;
-
     private double damage;
     private boolean headshotDamage;
 

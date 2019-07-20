@@ -4,10 +4,10 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.enums.ItemType;
-import dev.anhcraft.abm.api.objects.Ammo;
+import dev.anhcraft.abm.api.objects.AmmoModel;
 import dev.anhcraft.abm.api.objects.Arena;
-import dev.anhcraft.abm.api.objects.Gun;
-import dev.anhcraft.abm.api.objects.Magazine;
+import dev.anhcraft.abm.api.objects.GunModel;
+import dev.anhcraft.abm.api.objects.MagazineModel;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -81,7 +81,7 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.give.gun")
     public void giveGun(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
         r = (r == null ? player : r);
-        Optional<Gun> gun = plugin.getGun(s);
+        Optional<GunModel> gun = plugin.getGunModel(s);
         if(gun.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.GUN).put(s));
@@ -92,7 +92,7 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.give.magazine")
     public void giveMagazine(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
         r = (r == null ? player : r);
-        Optional<Magazine> mag = plugin.getMagazine(s);
+        Optional<MagazineModel> mag = plugin.getMagazineModel(s);
         if(mag.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.MAGAZINE).put(s));
@@ -103,7 +103,7 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.give.ammo")
     public void giveAmmo(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
         r = (r == null ? player : r);
-        Optional<Ammo> ammo = plugin.getAmmo(s);
+        Optional<AmmoModel> ammo = plugin.getAmmoModel(s);
         if(ammo.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.AMMO).put(s));

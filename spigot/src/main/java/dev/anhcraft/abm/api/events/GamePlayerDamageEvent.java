@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.api.events;
 
-import dev.anhcraft.abm.api.ext.WeaponItem;
+import dev.anhcraft.abm.api.ext.Weapon;
 import dev.anhcraft.abm.api.objects.DamageReport;
 import dev.anhcraft.abm.api.objects.Game;
 import dev.anhcraft.abm.api.objects.GamePlayer;
@@ -15,7 +15,7 @@ public class GamePlayerDamageEvent extends PlayerDamageEvent {
     private GamePlayer gp1;
     private GamePlayer gp2;
 
-    public GamePlayerDamageEvent(Game game, DamageReport report, LivingEntity entity, WeaponItem weapon, GamePlayer gp1, GamePlayer gp2) {
+    public GamePlayerDamageEvent(Game game, DamageReport report, LivingEntity entity, Weapon weapon, GamePlayer gp1, GamePlayer gp2) {
         super(game, report, entity, weapon);
         this.gp1 = gp1;
         this.gp2 = gp2;

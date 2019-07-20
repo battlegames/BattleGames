@@ -1,70 +1,65 @@
 package dev.anhcraft.abm.api.objects;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.ItemType;
-import dev.anhcraft.abm.api.impl.BattleItemModel;
-import dev.anhcraft.abm.api.impl.Informative;
+import dev.anhcraft.abm.api.ext.BattleItem;
+import dev.anhcraft.abm.system.ItemTag;
+import dev.anhcraft.abm.utils.info.InfoHolder;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+public class Magazine extends BattleItem<MagazineModel> {
+    @NotNull
+    private Ammo ammo = new Ammo();
+    private int ammoCount;
 
-public class Magazine implements BattleItemModel, Informative {
-    private final Map<Ammo, Integer> ammunition = new HashMap<>();
-    private String id;
-    private String name;
-    private Skin skin;
+    public int getAmmoCount() {
+        return ammoCount;
+    }
 
-    public Magazine(@NotNull String id, @NotNull ConfigurationSection conf) {
-        Validate.notNull(id, "Id must be non-null");
-        Validate.notNull(conf, "Conf must be non-null");
+    public void setAmmoCount(int ammoCount) {
+        this.ammoCount = ammoCount;
+    }
 
-        this.id = id;
-        name = conf.getString("name");
-        if(name == null) throw new NullPointerException("Name must be specified");
+    @NotNull
+    public Ammo getAmmo() {
+        return ammo;
+    }
 
-        String material = conf.getString("skin.material");
-        skin = new Skin(material == null ? null : Material.getMaterial(material.toUpperCase()), conf.getInt("skin.damage"));
+    public void setAmmo(@NotNull Ammo ammo) {
+        Validate.notNull(ammo, "AmmoModel must be non-null");
+        this.ammo = ammo;
+    }
 
-        ConfigurationSection am = conf.getConfigurationSection("ammo");
-        if(am != null){
-            for(String a : am.getKeys(false)) BattlePlugin.getAPI().getAmmo(a).ifPresent(ammo -> ammunition.put(ammo, am.getInt(a)));
-        }
+    public void resetAmmo() {
+        getModel().ifPresent(magazineModel -> ammo.getModel().ifPresent(ammoModel -> ammoCount = magazineModel.getAmmunition().getOrDefault(ammoModel, 0)));
     }
 
     @Override
-    @NotNull
-    public ItemType getItemType() {
-        return ItemType.MAGAZINE;
-    }
-
-    @NotNull
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @NotNull
-    public Skin getSkin() {
-        return skin;
-    }
-
-    @NotNull
-    public Map<Ammo, Integer> getAmmunition() {
-        return ammunition;
+    public void save(CustomItemTagContainer container) {
+        getModel().ifPresent(magazineModel -> container.setCustomTag(ItemTag.MAGAZINE_ID, ItemTagType.STRING, magazineModel.getId()));
+        container.setCustomTag(ItemTag.MAGAZINE_AMMO_COUNT, ItemTagType.INTEGER, ammoCount);
+        CustomItemTagContainer c = container.getAdapterContext().newTagContainer();
+        ammo.save(c);
+        container.setCustomTag(ItemTag.MAGAZINE_AMMO, ItemTagType.TAG_CONTAINER, c);
     }
 
     @Override
-    public void writeInfo(Map<String, String> map, ConfigurationSection localeConf) {
-        map.put("magazine_name", name);
+    public void load(CustomItemTagContainer container) {
+        BattlePlugin.getAPI()
+                .getMagazineModel(container.getCustomTag(ItemTag.MAGAZINE_ID, ItemTagType.STRING))
+                .ifPresent(this::setModel);
+        Integer a = container.getCustomTag(ItemTag.MAGAZINE_AMMO_COUNT, ItemTagType.INTEGER);
+        if(a != null) ammoCount = a;
+        CustomItemTagContainer am = container.getCustomTag(ItemTag.MAGAZINE_AMMO, ItemTagType.TAG_CONTAINER);
+        if(am != null) ammo.load(am);
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        getModel().ifPresent(magazineModel -> holder.link(magazineModel.collectInfo(null))
+                .link(ammo.collectInfo(null))
+                .inform("ammo_count", ammoCount));
     }
 }

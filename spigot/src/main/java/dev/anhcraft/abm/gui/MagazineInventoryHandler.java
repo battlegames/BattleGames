@@ -29,7 +29,7 @@ public class MagazineInventoryHandler extends BattleGuiHandler implements Pagina
             int len = Math.min(toIndex + 1, x.size());
             for(int i = fromIndex; i < len; i++){
                 Map.Entry<String, Long> id = x.get(i);
-                plugin.getMagazine(id.getKey()).ifPresent(m -> items.add(plugin.getHandler(MagazineHandler.class).draw(
+                plugin.getMagazineModel(id.getKey()).ifPresent(m -> items.add(plugin.getHandler(MagazineHandler.class).draw(
                         m.getSkin(),
                         plugin.itemManager.makeModel(m),
                         StringUtil.formatPlaceholders(p,bg.getHeaderLore()

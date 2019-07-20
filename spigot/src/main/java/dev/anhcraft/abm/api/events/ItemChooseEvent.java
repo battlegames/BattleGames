@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.api.events;
 
-import dev.anhcraft.abm.api.impl.BattleItemModel;
+import dev.anhcraft.abm.api.ext.BattleItemModel;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -124,7 +124,7 @@ public class DeathmatchController extends ModeController {
                 if(cooldownMap.isPassed(player, t)) plugin.chatProvider.sendPlayer(player, "mode_dm.error_item_selection_overtime");
                 else {
                     if (event.getItemModel().getItemType() == ItemType.GUN) {
-                        plugin.getHandler(GunHandler.class).selectGun(player, (Gun) event.getItemModel(), 0);
+                        plugin.getHandler(GunHandler.class).selectGun(player, (GunModel) event.getItemModel(), 0);
                     } else {
                         plugin.chatProvider.sendPlayer(player, "mode_dm.error_disabled_item_type");
                     }
@@ -175,7 +175,7 @@ public class DeathmatchController extends ModeController {
         plugin.gameManager.getGame(p).ifPresent(game -> {
             if (game.getMode() != getMode()) return;
             BattleItem item = plugin.itemManager.read(e.getItemDrop().getItemStack());
-            if(item instanceof GunItem) e.setCancelled(true);
+            if(item instanceof Gun) e.setCancelled(true);
         });
     }
 
@@ -185,9 +185,9 @@ public class DeathmatchController extends ModeController {
         plugin.gameManager.getGame(p).ifPresent(game -> {
             if(game.getMode() != getMode()) return;
             BattleItem item = plugin.itemManager.read(e.getOffHandItem());
-            if(item instanceof GunItem){
-                GunItem gun = (GunItem) item;
-                MagazineItem mag = gun.getMagazine();
+            if(item instanceof Gun){
+                Gun gun = (Gun) item;
+                Magazine mag = gun.getMagazine();
                 mag.resetAmmo();
                 p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
                 e.setCancelled(true);

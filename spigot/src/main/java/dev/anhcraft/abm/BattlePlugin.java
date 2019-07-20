@@ -65,10 +65,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private static BattleAPI api;
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new HashMap<>();
     private final Map<String, Arena> ARENA_MAP = new HashMap<>();
-    private final Map<String, Ammo>  AMMO_MAP = new HashMap<>();
-    private final Map<String, Gun> GUN_MAP = new HashMap<>();
+    private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
+    private final Map<String, GunModel> GUN_MAP = new HashMap<>();
     private final Map<String, Kit> KIT_MAP = new HashMap<>();
-    private final Map<String, Magazine> MAGAZINE_MAP = new HashMap<>();
+    private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private File localeDir;
@@ -293,15 +293,15 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initAmmo(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> AMMO_MAP.put(s, new Ammo(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> AMMO_MAP.put(s, new AmmoModel(s, c.getConfigurationSection(s))));
     }
 
     private void initMagazine(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> MAGAZINE_MAP.put(s, new Magazine(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> MAGAZINE_MAP.put(s, new MagazineModel(s, c.getConfigurationSection(s))));
     }
 
     private void initGun(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> GUN_MAP.put(s, new Gun(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> GUN_MAP.put(s, new GunModel(s, c.getConfigurationSection(s))));
     }
 
     private void initGui(FileConfiguration c) {
@@ -388,17 +388,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<Ammo> getAmmo(String id) {
+    public Optional<AmmoModel> getAmmoModel(String id) {
         return Optional.ofNullable(AMMO_MAP.get(id));
     }
 
     @Override
-    public Optional<Gun> getGun(String id) {
+    public Optional<GunModel> getGunModel(String id) {
         return Optional.ofNullable(GUN_MAP.get(id));
     }
 
     @Override
-    public Optional<Magazine> getMagazine(String id) {
+    public Optional<MagazineModel> getMagazineModel(String id) {
         return Optional.ofNullable(MAGAZINE_MAP.get(id));
     }
 
@@ -413,17 +413,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public List<Ammo> listAmmo() {
+    public List<AmmoModel> listAmmoModels() {
         return new ArrayList<>(AMMO_MAP.values());
     }
 
     @Override
-    public List<Gun> listGuns() {
+    public List<GunModel> listGunModels() {
         return new ArrayList<>(GUN_MAP.values());
     }
 
     @Override
-    public List<Magazine> listMagazines() {
+    public List<MagazineModel> listMagazineModels() {
         return new ArrayList<>(MAGAZINE_MAP.values());
     }
 

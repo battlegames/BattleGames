@@ -31,7 +31,7 @@ public class AmmoInventoryHandler extends BattleGuiHandler implements Pagination
             int len = Math.min(toIndex + 1, x.size());
             for(int i = fromIndex; i < len; i++){
                 Map.Entry<String, Long> id = x.get(i);
-                plugin.getAmmo(id.getKey()).ifPresent(ammo -> items.add(plugin.getHandler(AmmoHandler.class).draw(
+                plugin.getAmmoModel(id.getKey()).ifPresent(ammo -> items.add(plugin.getHandler(AmmoHandler.class).draw(
                         ammo.getSkin(),
                         plugin.itemManager.makeModel(ammo),
                         StringUtil.formatPlaceholders(p, bg.getHeaderLore()

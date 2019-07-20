@@ -31,7 +31,7 @@ public class GunInventoryHandler extends BattleGuiHandler implements PaginationH
             int len = Math.min(toIndex + 1, x.size());
             for(int i = fromIndex; i < len; i++){
                 Map.Entry<String, Long> id = x.get(i);
-                plugin.getGun(id.getKey()).ifPresent(g -> items.add(plugin.getHandler(GunHandler.class).draw(
+                plugin.getGunModel(id.getKey()).ifPresent(g -> items.add(plugin.getHandler(GunHandler.class).draw(
                         g.getPrimarySkin(),
                         plugin.itemManager.makeModel(g),
                         StringUtil.formatPlaceholders(p,bg.getHeaderLore()
@@ -57,7 +57,7 @@ public class GunInventoryHandler extends BattleGuiHandler implements PaginationH
             Map.Entry<String, Long> id = playerData.getInventory().getStorage(ItemType.GUN)
                     .list().get(dataIndex);
             if(id == null) return;
-            plugin.getGun(id.getKey()).ifPresent(gun -> {
+            plugin.getGunModel(id.getKey()).ifPresent(gun -> {
                 ItemChooseEvent e = new ItemChooseEvent(p, event.getCurrentItem(), gun);
                 Bukkit.getPluginManager().callEvent(e);
             });
