@@ -50,7 +50,7 @@ public class AmmoModel extends BattleItemModel {
                         bs.getDouble("particle.offset_y"),
                         bs.getDouble("particle.offset_z"),
                         bs.getDouble("particle.speed"), data,
-                        bs.getDouble("particle.view_distance")));
+                        bs.getDouble("particle.view_distance", 50)));
             }
         }
     }
