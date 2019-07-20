@@ -63,24 +63,4 @@ public class GunInventoryHandler extends BattleGuiHandler implements PaginationH
             });
         });
     }
-
-    @SlotClickHandler("prev")
-    public void prev(InventoryClickEvent event, PlayerGui gui){
-        int c = gui.getPage();
-        if(c == 0) return;
-        gui.setPage(c-1);
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), gui);
-    }
-
-    @SlotClickHandler("back")
-    public void back(InventoryClickEvent event){
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), "inventory_menu");
-    }
-
-    @SlotClickHandler("next")
-    public void next(InventoryClickEvent event, PlayerGui gui){
-        if(gui.isOutOfData()) return;
-        gui.setPage(gui.getPage()+1);
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), gui);
-    }
 }
