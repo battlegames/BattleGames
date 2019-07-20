@@ -26,8 +26,8 @@ public class LocationUtil {
                 Double.parseDouble(str2loc[1]),
                 Double.parseDouble(str2loc[2]),
                 Double.parseDouble(str2loc[3]));
-        if(str2loc.length == 5) loc.setPitch(Float.parseFloat(str2loc[4]));
-        if(str2loc.length > 5) loc.setYaw(Float.parseFloat(str2loc[5]));
+        if(str2loc.length == 5) loc.setYaw(Float.parseFloat(str2loc[4]));
+        if(str2loc.length > 5) loc.setPitch(Float.parseFloat(str2loc[5]));
         return loc;
     }
 }
