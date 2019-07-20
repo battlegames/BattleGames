@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BattleItemModel implements Informative {
     private String id;
     private String name;
+    private InfoHolder cachedInfoHolder;
 
     protected BattleItemModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -39,10 +40,10 @@ public abstract class BattleItemModel implements Informative {
         holder.inform("id", id).inform("name", name);
     }
 
-    public InfoHolder collectInfo(@Nullable String prefix) {
-        InfoHolder h = new InfoHolder((prefix == null ? "" : prefix) +
-                getItemType().name().toLowerCase() + "_");
-        inform(h);
-        return h;
+    public synchronized InfoHolder collectInfo(@Nullable String prefix) {
+        if(cachedInfoHolder != null) return cachedInfoHolder;
+        inform(cachedInfoHolder = new InfoHolder((prefix == null ? "" : prefix) +
+                getItemType().name().toLowerCase() + "_"));
+        return cachedInfoHolder;
     }
 }
