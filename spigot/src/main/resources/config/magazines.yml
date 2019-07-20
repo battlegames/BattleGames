@@ -4,7 +4,7 @@
 
 default_ak_47: # The id of this magazine
   # Next is its name
-  # [required]
+  # [optional]
   name: "&2AK-47 Magazine"
 
   # Skin configuration

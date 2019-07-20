@@ -43,7 +43,7 @@ model_gun:
   lore:
     - "&aWeight: &f{__gun_weight__}"
     - "&aMagazine:"
-    - "&e> Default: &f{__gun_default_magazine_name__}"
+    - "&e> Default: &f{__default_magazine_name__}"
     - "&e> Maximum capacity: &f{__gun_max_magazine_capacity__}"
   flag:
     - hide_attributes

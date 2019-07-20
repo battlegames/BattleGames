@@ -4,7 +4,7 @@
 
 ak_47: # Gun's ID
   # Put the name here
-  # [required]
+  # [optional]
   name: "&e&l&nAK-47"
 
   # Does this gun support dual wielding?
