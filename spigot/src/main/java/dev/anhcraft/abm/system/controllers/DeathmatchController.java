@@ -59,7 +59,7 @@ public class DeathmatchController extends ModeController {
     private void countdown(Game game) {
         if(hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
-        int m = game.getArena().getAttributes().getInt("min_players");
+        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         trackTask(game, "countdown", plugin.taskManager.newAsyncTimerTask(() -> {
             if(m <= game.countPlayers()) {
                 broadcastTitle(game, "mode_dm.countdown_title", "mode_dm.countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
