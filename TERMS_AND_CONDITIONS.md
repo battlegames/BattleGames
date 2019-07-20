@@ -6,10 +6,6 @@ This one is applied for all aspects of this plugin and related works (official r
 
 ## License summary
 
-- Commercial uses are allowed
-- Contribution is allowed
-- Modification and redistribution is limited
-
 |                  	| Non-buyers 	| Contributors 	| Buyers 	|
 |:----------------:	|:----------:	|:------------:	|:------:	|
 |  Redistribution  	|      ~     	|       ~      	|    ~   	|
