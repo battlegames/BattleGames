@@ -58,8 +58,10 @@ public class Magazine extends BattleItem<MagazineModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        getModel().ifPresent(magazineModel -> holder.link(magazineModel.collectInfo(null))
-                .link(ammo.collectInfo(null))
-                .inform("ammo_count", ammoCount));
+        getModel().ifPresent(magazineModel -> {
+            magazineModel.inform(holder);
+            ammo.getModel().ifPresent(ammoModel -> holder.inform("ammo_capacity", magazineModel.getAmmunition().getOrDefault(ammoModel, 0)));
+        });
+        holder.link(ammo.collectInfo(null)).inform("ammo_count", ammoCount);
     }
 }
