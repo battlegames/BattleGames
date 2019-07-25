@@ -7,6 +7,7 @@ import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.enums.Mode;
 import dev.anhcraft.abm.api.enums.StorageType;
 import dev.anhcraft.abm.api.impl.BattleAPI;
+import dev.anhcraft.abm.api.impl.BattleGameManager;
 import dev.anhcraft.abm.api.objects.*;
 import dev.anhcraft.abm.cmd.BattleCommand;
 import dev.anhcraft.abm.gui.*;
@@ -430,6 +431,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public List<Kit> listKits() {
         return new ArrayList<>(KIT_MAP.values());
+    }
+
+    @Override
+    public BattleGameManager getGameManager() {
+        return gameManager;
     }
 
     private void exit(String msg) {

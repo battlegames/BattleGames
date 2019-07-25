@@ -6,6 +6,7 @@ import dev.anhcraft.abm.api.enums.Mode;
 import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.api.ext.BattleComponent;
+import dev.anhcraft.abm.api.impl.BattleGameManager;
 import dev.anhcraft.abm.api.objects.Arena;
 import dev.anhcraft.abm.api.objects.Game;
 import dev.anhcraft.abm.api.objects.GamePlayer;
@@ -21,7 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class GameManager extends BattleComponent {
+public class GameManager extends BattleComponent implements BattleGameManager {
     private final Map<Arena, Game> ARENA_GAME_MAP = new HashMap<>();
     private final Map<Player, Game> PLAYER_GAME_MAP = new HashMap<>();
     private final Object LOCK = new Object();
@@ -38,6 +39,7 @@ public class GameManager extends BattleComponent {
         Bukkit.getPluginManager().registerEvents(controller, plugin);
     }
 
+    @Override
     public Optional<GamePlayer> getGamePlayer(Player player){
         synchronized (LOCK) {
             Game x = PLAYER_GAME_MAP.get(player);
@@ -45,12 +47,14 @@ public class GameManager extends BattleComponent {
         }
     }
 
+    @Override
     public Optional<Game> getGame(Player player){
         synchronized (LOCK) {
             return Optional.ofNullable(PLAYER_GAME_MAP.get(player));
         }
     }
 
+    @Override
     public Optional<Game> getGame(Arena arena){
         return Optional.ofNullable(ARENA_GAME_MAP.get(arena));
     }
@@ -64,6 +68,7 @@ public class GameManager extends BattleComponent {
         return true;
     }
 
+    @Override
     public boolean join(Player player, Arena arena){
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player)) {
@@ -94,6 +99,7 @@ public class GameManager extends BattleComponent {
         }
     }
 
+    @Override
     public boolean forceJoin(Player player, Arena arena) {
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player)) return false;
@@ -105,6 +111,7 @@ public class GameManager extends BattleComponent {
         }
     }
 
+    @Override
     public boolean quit(Player player){
         synchronized (LOCK) {
             Game game = PLAYER_GAME_MAP.get(player);
@@ -120,6 +127,7 @@ public class GameManager extends BattleComponent {
         }
     }
 
+    @Override
     public void destroy(Game game){
         synchronized (LOCK) {
             game.getPlayers().forEach((player, gp) -> {
@@ -159,6 +167,7 @@ public class GameManager extends BattleComponent {
         }));
     }
 
+    @Override
     public Collection<Game> getGames(){
         synchronized (LOCK) {
             return Collections.unmodifiableCollection(ARENA_GAME_MAP.values());

@@ -21,4 +21,5 @@ public interface BattleAPI {
     List<GunModel> listGunModels();
     List<MagazineModel> listMagazineModels();
     List<Kit> listKits();
+    BattleGameManager getGameManager();
 }
