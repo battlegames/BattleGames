@@ -19,12 +19,12 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>aikar</id>
@@ -32,7 +32,7 @@
         </repository>
         <repository>
             <id>anhcraft</id>
-            <url>https://anhcraft.dev:7554/repository/mvn/</url>
+            <url>https://repo.anhcraft.dev/repository/mvn/</url>
         </repository>
     </repositories>
 
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.3</version>
+            <version>2.10.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
