@@ -3,6 +3,7 @@ package dev.anhcraft.abm.api.objects;
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abm.api.enums.ItemType;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ public class Kit {
         if(ic == null) throw new NullPointerException("Icon must be specified");
         icon = ABIF.load(ic);
         ConfigurationSection naic = conf.getConfigurationSection("no_access_icon");
-        if(naic != null) noAccessIcon = ABIF.load(naic);
+        noAccessIcon = naic == null ? new ItemStack(Material.BARRIER, 1) : ABIF.load(naic);
         permission = conf.getString("permission");
         renewTime = conf.getInt("renew_time", -1);
 
