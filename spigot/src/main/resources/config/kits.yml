@@ -15,9 +15,10 @@ starter: # This kit's ID
 
   # The icon which is display when players have no access
   # to this kit.
-  # [optional
+  # [optional]
   no_access_icon:
     material: barrier
+    name: "&c&lYou don't have access to this kit!"
 
   # You can restrict access to this kit by adding permission
   # [optional]
