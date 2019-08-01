@@ -26,11 +26,7 @@ public class KitMenuHandler extends BattleGuiHandler implements PaginationHandle
                     return;
                 }
                 long last = pd.getKits().getOrDefault(kit.getId(), 0L);
-                if(kit.getRenewTime() == -1 && last != 0){
-                    return;
-                }
-                long next = last + kit.getRenewTime();
-                if(System.currentTimeMillis() < next) {
+                if(last != 0 && (kit.getRenewTime() == -1 || last + kit.getRenewTime()*50 > System.currentTimeMillis())){
                     items.add(kit.getNoAccessIcon());
                     return;
                 }
@@ -56,8 +52,8 @@ public class KitMenuHandler extends BattleGuiHandler implements PaginationHandle
                 plugin.chatProvider.sendPlayer(p, "kit.one_time_use");
                 return;
             }
-            long next = last + kit.getRenewTime();
-            if(System.currentTimeMillis() < next) {
+            long next = last + kit.getRenewTime()*50;
+            if(next > System.currentTimeMillis()) {
                 p.sendMessage(String.format(plugin.chatProvider.getFormattedMessage(p, "kit.unavailable"), plugin.formatLongFormDate(new Date(next))));
                 return;
             }
@@ -66,7 +62,7 @@ public class KitMenuHandler extends BattleGuiHandler implements PaginationHandle
                 ItemStorage is = pd.getInventory().getStorage(type);
                 x.forEach(is::put);
             });
-            pd.getKits().put(kit.getId(),System.currentTimeMillis());
+            pd.getKits().put(kit.getId(), System.currentTimeMillis());
             plugin.guiManager.openInventory(p, "kit_menu");
         });
     }
