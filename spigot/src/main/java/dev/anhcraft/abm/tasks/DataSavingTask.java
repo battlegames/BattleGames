@@ -1,4 +1,4 @@
-package dev.anhcraft.abm.system.workers;
+package dev.anhcraft.abm.tasks;
 
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ext.BattleComponent;

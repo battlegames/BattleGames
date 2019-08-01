@@ -25,9 +25,9 @@ import dev.anhcraft.abm.system.providers.TitleProvider;
 import dev.anhcraft.abm.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
-import dev.anhcraft.abm.system.workers.DataSavingTask;
-import dev.anhcraft.abm.system.workers.GameTask;
-import dev.anhcraft.abm.system.workers.QueueTitleTask;
+import dev.anhcraft.abm.tasks.DataSavingTask;
+import dev.anhcraft.abm.tasks.GameTask;
+import dev.anhcraft.abm.tasks.QueueTitleTask;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -38,10 +38,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -97,14 +94,14 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public void onEnable(){
-        try{
+    public void onEnable() {
+        try {
             Class.forName("org.spigotmc.SpigotConfig");
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             exit("ABM can only work on Spigot-based servers.");
             return;
         }
-        if(!VaultApi.init()) exit("Failed to hook to Vault");
+        if (!VaultApi.init()) exit("Failed to hook to Vault");
         getLogger().info("Consider to donate me if you think ABM is awesome <3");
         localeDir = new File(getDataFolder(), "locale");
         localeDir.mkdirs();

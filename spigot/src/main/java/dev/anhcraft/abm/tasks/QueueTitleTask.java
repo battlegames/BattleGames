@@ -1,4 +1,4 @@
-package dev.anhcraft.abm.system.workers;
+package dev.anhcraft.abm.tasks;
 
 import dev.anhcraft.abm.system.QueueTitle;
 import org.bukkit.entity.Player;
