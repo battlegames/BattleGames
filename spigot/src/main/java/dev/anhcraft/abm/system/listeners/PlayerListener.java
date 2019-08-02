@@ -15,7 +15,7 @@ import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.handlers.PlayerInventoryHandler;
 import dev.anhcraft.abm.utils.PlayerUtil;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -184,13 +184,13 @@ public class PlayerListener extends BattleComponent implements Listener {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return; // ignore attackers who quit the game
                 gp.getHeadshotCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(StringUtil.formatPlaceholders(player, hst),StringUtil.formatPlaceholders(player, hsst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPlaceholders(player, hst), PlaceholderUtils.formatPlaceholders(player, hsst)));
             });
             assistants.forEach(player -> {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
                 gp.getAssistCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(StringUtil.formatPlaceholders(player, ast),StringUtil.formatPlaceholders(player, asst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPlaceholders(player, ast), PlaceholderUtils.formatPlaceholders(player, asst)));
             });
             killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
         });

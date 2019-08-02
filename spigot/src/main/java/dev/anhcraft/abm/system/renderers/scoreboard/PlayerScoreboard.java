@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class PlayerScoreboard {
         this.title = title;
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
-        objective = scoreboard.registerNewObjective(StringUtil.subStr("abm." + player.getName(), 16), "dummy", StringUtil.formatPlaceholders(player, title));
+        objective = scoreboard.registerNewObjective(dev.anhcraft.jvmkit.utils.StringUtil.cutString("abm." + player.getName(), 16), "dummy", PlaceholderUtils.formatPlaceholders(player, title));
         int i = 0;
         int max = Math.min(15, lines.size());
         while(i < max){
@@ -38,7 +38,7 @@ public class PlayerScoreboard {
     }
 
     public void renderTitle(){
-        objective.setDisplayName(StringUtil.formatPlaceholders(player, title));
+        objective.setDisplayName(PlaceholderUtils.formatPlaceholders(player, title));
     }
 
     public void renderLines(){
@@ -49,7 +49,7 @@ public class PlayerScoreboard {
 
     public void renderLine(int index){
         ScoreboardLine line = lines[index];
-        String str = StringUtil.formatPlaceholders(player, line.getContent());
+        String str = PlaceholderUtils.formatPlaceholders(player, line.getContent());
         line.getTeam().setPrefix(str.substring(0, Math.min(str.length(), 64)));
         if(str.length() > 64) line.getTeam().setSuffix(str.substring(65));
         line.getTeam().addEntry(line.getTeam().getName());

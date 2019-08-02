@@ -8,7 +8,7 @@ import dev.anhcraft.abm.gui.core.BattlePagination;
 import dev.anhcraft.abm.gui.core.PaginationHandler;
 import dev.anhcraft.abm.gui.core.PlayerGui;
 import dev.anhcraft.abm.system.handlers.MagazineHandler;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,12 +34,12 @@ public class MagazineInventoryHandler extends BattleGuiHandler implements Pagina
                 plugin.getMagazineModel(id.getKey()).ifPresent(m -> items.add(plugin.getHandler(MagazineHandler.class).draw(
                         m.getSkin(),
                         plugin.itemManager.makeModel(m),
-                        StringUtil.formatPlaceholders(p,bg.getHeaderLore()
+                        PlaceholderUtils.formatPlaceholders(p,bg.getHeaderLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                         plugin.formatLongFormDate(new Date(id.getValue()))))
                                 .collect(Collectors.toList())),
-                        StringUtil.formatPlaceholders(p,bg.getFooterLore()
+                        PlaceholderUtils.formatPlaceholders(p,bg.getFooterLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                         plugin.formatLongFormDate(new Date(id.getValue()))))

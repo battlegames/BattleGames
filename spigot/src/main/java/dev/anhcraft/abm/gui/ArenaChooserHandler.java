@@ -3,7 +3,7 @@ package dev.anhcraft.abm.gui;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.objects.Arena;
 import dev.anhcraft.abm.gui.core.*;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -24,10 +24,10 @@ public class ArenaChooserHandler extends BattleGuiHandler implements PaginationH
             ItemStack item = new ItemStack(a.getIcon(), 1);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setDisplayName(StringUtil.formatPlaceholders(p, a.getName()));
+                meta.setDisplayName(PlaceholderUtils.formatPlaceholders(p, a.getName()));
                 List<String> lore = new ArrayList<>();
-                lore.addAll(StringUtil.formatPlaceholders(p, bg.getHeaderLore()));
-                lore.addAll(StringUtil.formatPlaceholders(p, bg.getFooterLore()));
+                lore.addAll(PlaceholderUtils.formatPlaceholders(p, bg.getHeaderLore()));
+                lore.addAll(PlaceholderUtils.formatPlaceholders(p, bg.getFooterLore()));
                 meta.setLore(lore);
             }
             item.setItemMeta(meta);

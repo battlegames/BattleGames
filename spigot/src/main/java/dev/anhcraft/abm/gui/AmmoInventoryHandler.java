@@ -8,7 +8,7 @@ import dev.anhcraft.abm.gui.core.BattlePagination;
 import dev.anhcraft.abm.gui.core.PaginationHandler;
 import dev.anhcraft.abm.gui.core.PlayerGui;
 import dev.anhcraft.abm.system.handlers.AmmoHandler;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,12 +34,12 @@ public class AmmoInventoryHandler extends BattleGuiHandler implements Pagination
                 plugin.getAmmoModel(id.getKey()).ifPresent(ammo -> items.add(plugin.getHandler(AmmoHandler.class).draw(
                         ammo.getSkin(),
                         plugin.itemManager.makeModel(ammo),
-                        StringUtil.formatPlaceholders(p, bg.getHeaderLore()
+                        PlaceholderUtils.formatPlaceholders(p, bg.getHeaderLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                                 plugin.formatLongFormDate(new Date(id.getValue()))))
                                 .collect(Collectors.toList())),
-                        StringUtil.formatPlaceholders(p, bg.getFooterLore()
+                        PlaceholderUtils.formatPlaceholders(p, bg.getFooterLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                         plugin.formatLongFormDate(new Date(id.getValue()))))

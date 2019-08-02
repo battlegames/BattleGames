@@ -6,7 +6,7 @@ import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.objects.PlayerData;
 import dev.anhcraft.abm.gui.core.*;
 import dev.anhcraft.abm.system.handlers.GunHandler;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -34,12 +34,12 @@ public class GunInventoryHandler extends BattleGuiHandler implements PaginationH
                 plugin.getGunModel(id.getKey()).ifPresent(g -> items.add(plugin.getHandler(GunHandler.class).draw(
                         g.getPrimarySkin(),
                         plugin.itemManager.makeModel(g),
-                        StringUtil.formatPlaceholders(p,bg.getHeaderLore()
+                        PlaceholderUtils.formatPlaceholders(p,bg.getHeaderLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                         plugin.formatLongFormDate(new Date(id.getValue()))))
                                 .collect(Collectors.toList())),
-                                StringUtil.formatPlaceholders(p,bg.getFooterLore()
+                                PlaceholderUtils.formatPlaceholders(p,bg.getFooterLore()
                                 .stream()
                                 .map(s -> s.replace("{__owning_date__}",
                                         plugin.formatLongFormDate(new Date(id.getValue()))))

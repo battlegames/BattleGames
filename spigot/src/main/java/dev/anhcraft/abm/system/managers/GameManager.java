@@ -16,7 +16,7 @@ import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.abm.system.integrations.VaultApi;
 import dev.anhcraft.abm.utils.MathUtil;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -140,8 +140,8 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     private void runCmd(String s, Player player){
-        s = StringUtil.formatPlaceholders(player, s);
-        s = StringUtil.formatExpression(s);
+        s = PlaceholderUtils.formatPlaceholders(player, s);
+        s = PlaceholderUtils.formatExpression(s);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
     }
 

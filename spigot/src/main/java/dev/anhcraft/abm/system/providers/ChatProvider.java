@@ -3,7 +3,7 @@ package dev.anhcraft.abm.system.providers;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.api.objects.Game;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public class ChatProvider extends BattleComponent {
             switch (g.getPhase()){
                 case WAITING:{
                     if(!g.getMode().isWaitingChatEnabled()) return false;
-                    String q = StringUtil.formatPlaceholders(player, g.getArena()
+                    String q = PlaceholderUtils.formatPlaceholders(player, g.getArena()
                             .getMode().getWaitingChatFormat())
                             .replace("{__message__}", msg);
                     g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
@@ -34,7 +34,7 @@ public class ChatProvider extends BattleComponent {
                 }
                 default:{
                     if(!g.getMode().isPlayingChatEnabled()) return false;
-                    String q = StringUtil.formatPlaceholders(player, g.getArena()
+                    String q = PlaceholderUtils.formatPlaceholders(player, g.getArena()
                             .getMode().getPlayingChatFormat())
                             .replace("{__message__}", msg);
                     g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
@@ -43,7 +43,7 @@ public class ChatProvider extends BattleComponent {
             }
         } else {
             if(!plugin.getGeneralConf().getBoolean("default_chat.enabled")) return false;
-            String q = Objects.requireNonNull(StringUtil.formatPlaceholders(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
+            String q = Objects.requireNonNull(PlaceholderUtils.formatPlaceholders(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
             Bukkit.getOnlinePlayers().stream()
                     .filter((Predicate<Player>) player1 -> !plugin.gameManager.getGame(player1).isPresent())
                     .forEach(p -> p.sendMessage(q));
@@ -52,7 +52,7 @@ public class ChatProvider extends BattleComponent {
     }
 
     public String getFormattedMessage(Player target, String localePath){
-        return Objects.requireNonNull(StringUtil.formatPlaceholders(target,
+        return Objects.requireNonNull(PlaceholderUtils.formatPlaceholders(target,
                 plugin.getLocaleConf().getString(localePath)));
     }
 

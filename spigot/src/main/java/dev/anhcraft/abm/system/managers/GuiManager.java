@@ -4,7 +4,7 @@ import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.gui.core.*;
-import dev.anhcraft.abm.utils.StringUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -104,8 +104,8 @@ public class GuiManager extends BattleComponent {
         GUI.put(id, gui);
         BattlePagination pg = gui.getPagination();
         if(pg != null){
-            pg.getHeaderLore().replaceAll(s -> StringUtil.localizeString(s, plugin.getLocaleConf()));
-            pg.getFooterLore().replaceAll(s -> StringUtil.localizeString(s, plugin.getLocaleConf()));
+            pg.getHeaderLore().replaceAll(s -> PlaceholderUtils.localizeString(s, plugin.getLocaleConf()));
+            pg.getFooterLore().replaceAll(s -> PlaceholderUtils.localizeString(s, plugin.getLocaleConf()));
         }
     }
 
@@ -191,11 +191,11 @@ public class GuiManager extends BattleComponent {
     }
 
     private List<String> formatStrings(List<String> ls, Player player) {
-        return StringUtil.formatPlaceholders(player, StringUtil.localizeStrings(ls, plugin.getLocaleConf()));
+        return PlaceholderUtils.formatPlaceholders(player, PlaceholderUtils.localizeStrings(ls, plugin.getLocaleConf()));
     }
 
     private String formatString(String s, Player player) {
-        return StringUtil.formatPlaceholders(player, StringUtil.localizeString(s, plugin.getLocaleConf()));
+        return PlaceholderUtils.formatPlaceholders(player, PlaceholderUtils.localizeString(s, plugin.getLocaleConf()));
     }
 
     public void destroyGui(Player player){
