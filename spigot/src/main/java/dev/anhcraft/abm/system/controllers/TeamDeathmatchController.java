@@ -14,7 +14,7 @@ import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
 import dev.anhcraft.abm.utils.LocationUtil;
-import dev.anhcraft.abm.utils.RandomUtil;
+import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
