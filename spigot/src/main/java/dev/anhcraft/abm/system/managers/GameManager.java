@@ -15,7 +15,7 @@ import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.abm.system.integrations.VaultApi;
-import dev.anhcraft.abm.utils.MathUtil;
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -151,7 +151,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             long e = Math.max(0, game.getArena().calculateFinalExp(gamePlayer));
             VaultApi.getEconomyApi().depositPlayer(gamePlayer.getPlayer(), m);
             playerData.getExp().addAndGet(e);
-            plugin.chatProvider.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.round(m, 3)).replace("{__exp__}", Long.toString(e)));
+            plugin.chatProvider.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
 
             playerData.getKillCounter().addAndGet(gamePlayer.getKillCounter().get());
             playerData.getHeadshotCounter().addAndGet(gamePlayer.getHeadshotCounter().get());

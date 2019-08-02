@@ -10,8 +10,8 @@ import dev.anhcraft.abm.api.objects.Ammo;
 import dev.anhcraft.abm.api.objects.Gun;
 import dev.anhcraft.abm.api.objects.Magazine;
 import dev.anhcraft.abm.system.ItemTag;
-import dev.anhcraft.abm.utils.MathUtil;
 import dev.anhcraft.abm.utils.info.*;
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -89,7 +89,7 @@ public class ItemManager extends BattleComponent {
                             return plugin.getLocaleConf().getString("state.disabled");
                     }
                     else if(data instanceof InfoDoubleData)
-                        return MathUtil.round(((InfoDoubleData) data).getValue(), 3);
+                        return MathUtil.formatRound(((InfoDoubleData) data).getValue());
                     else if(data instanceof InfoIntData)
                         return Integer.toString(((InfoIntData) data).getValue());
                     else if(data instanceof InfoLongData)

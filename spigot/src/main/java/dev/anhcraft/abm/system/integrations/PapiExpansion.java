@@ -2,7 +2,7 @@ package dev.anhcraft.abm.system.integrations;
 
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.enums.Icon;
-import dev.anhcraft.abm.utils.MathUtil;
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -30,7 +30,7 @@ public class PapiExpansion extends PlaceholderExpansion {
                     long current = playerData.getExp().get();
                     int nextLv = plugin.calculateLevel(current)+1;
                     long next = plugin.calculateExp(nextLv);
-                    return MathUtil.round(100d/next*current, 1);
+                    return MathUtil.formatRound(100d/next*current);
                 })
                 .orElse(null));
         handlers.put("stats_win_matches", player -> plugin.getPlayerData(player)

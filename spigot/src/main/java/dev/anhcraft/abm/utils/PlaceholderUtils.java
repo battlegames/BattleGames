@@ -1,5 +1,6 @@
 package dev.anhcraft.abm.utils;
 
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +29,7 @@ public class PlaceholderUtils {
         while(m.find()){
             String p = m.group();
             String s = p.substring(2, p.length()-2).trim();
-            m.appendReplacement(sb, MathUtil.round(new ExpressionBuilder(s).build().evaluate(), 2));
+            m.appendReplacement(sb, MathUtil.formatRound(new ExpressionBuilder(s).build().evaluate()));
         }
         m.appendTail(sb);
         return sb.toString();
