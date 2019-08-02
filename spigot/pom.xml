@@ -17,25 +17,6 @@
         <storage.version>1</storage.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>aikar</id>
-            <url>http://ci.emc.gs/nexus/content/groups/aikar/</url>
-        </repository>
-        <repository>
-            <id>anhcraft</id>
-            <url>https://repo.anhcraft.dev/repository/mvn/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
