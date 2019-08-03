@@ -1,6 +1,7 @@
 package dev.anhcraft.abm.api.objects;
 
 import dev.anhcraft.abif.ABIF;
+import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.api.enums.ItemType;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
@@ -17,8 +18,8 @@ import java.util.Set;
 public class Kit {
     private final Map<ItemType, List<String>> abmItems = new HashMap<>();
     private String id;
-    private ItemStack icon;
-    private ItemStack noAccessIcon;
+    private PreparedItem icon;
+    private PreparedItem noAccessIcon;
     private String permission;
     private int renewTime;
     private ItemStack[] vanillaItems;
@@ -30,9 +31,9 @@ public class Kit {
 
         ConfigurationSection ic = conf.getConfigurationSection("icon");
         if(ic == null) throw new NullPointerException("Icon must be specified");
-        icon = ABIF.load(ic);
+        icon = ABIF.read(ic);
         ConfigurationSection naic = conf.getConfigurationSection("no_access_icon");
-        noAccessIcon = naic == null ? new ItemStack(Material.BARRIER, 1) : ABIF.load(naic);
+        noAccessIcon = naic == null ? PreparedItem.of(new ItemStack(Material.BARRIER, 1)) : ABIF.read(naic);
         permission = conf.getString("permission");
         renewTime = conf.getInt("renew_time", -1);
 
@@ -43,7 +44,7 @@ public class Kit {
             int i = 0;
             for(String k : keys){
                 ConfigurationSection x = iv.getConfigurationSection(k);
-                if(x != null) vanillaItems[i++] = ABIF.load(x);
+                if(x != null) vanillaItems[i++] = ABIF.read(x).build();
             }
         } else vanillaItems = new ItemStack[0];
 
@@ -63,12 +64,12 @@ public class Kit {
     }
 
     @NotNull
-    public ItemStack getIcon() {
-        return icon;
+    public PreparedItem getIcon() {
+        return icon.clone();
     }
 
     @NotNull
-    public ItemStack getNoAccessIcon() {
+    public PreparedItem getNoAccessIcon() {
         return noAccessIcon;
     }
 
