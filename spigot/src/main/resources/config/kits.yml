@@ -5,7 +5,7 @@
 starter: # This kit's ID
   # This kit's icon
   # This section uses ABIF which you can look at here to know
-  # the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
   # [required]
   icon:
     material: redstone

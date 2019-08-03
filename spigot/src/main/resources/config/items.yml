@@ -3,7 +3,7 @@
 # Here you can customize Battle items
 # E.g: guns, ammo, magazines, etc
 # All sections below use ABIF which you can look at here to know
-# the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+# the format: https://github.com/anhcraft/ABIF/blob/master/README.md
 
 ammo: # <-- don't change!
   name: "{__ammo_name__}"

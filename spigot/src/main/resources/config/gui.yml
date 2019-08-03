@@ -48,7 +48,7 @@ inventory_menu: # Don't change this
 
   # The background
   # This section uses ABIF which you can look at here to know
-  # the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
   # And like the title above, it is possible to get strings from
   # the locale file (Only the name and the lore support this feature)
   # [optional] [placeholder supported]
@@ -70,7 +70,7 @@ inventory_menu: # Don't change this
       column: 3_items_1
 
       # This section uses ABIF which you can look at here to know
-      # the syntax: https://github.com/anhcraft/ABIF/blob/master/README.md
+      # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
       # [optional] [placeholder supported]
       item:
         material: diamond_axe
