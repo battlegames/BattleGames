@@ -8,19 +8,33 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlaceholderUtils {
     private static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
     private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
+    private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9_]+__}");
 
-    public static String formatPlaceholders(Player player, String str){
+    public static String formatPAPI(Player player, String str){
         return PlaceholderAPI.setPlaceholders(player, str);
     }
 
-    public static List<String> formatPlaceholders(Player player, List<String> str){
+    public static List<String> formatPAPI(Player player, List<String> str){
         return PlaceholderAPI.setPlaceholders(player, str);
+    }
+
+    public static String formatInfo(String str, Map<String, String> x){
+        Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
+        StringBuffer sb = new StringBuffer(str.length());
+        while(m.find()){
+            String p = m.group();
+            String s = p.substring(3, p.length()-3).trim();
+            m.appendReplacement(sb, x.getOrDefault(s, p));
+        }
+        m.appendTail(sb);
+        return sb.toString();
     }
 
     public static String formatExpression(String str){
@@ -59,9 +73,5 @@ public class PlaceholderUtils {
             } else it.set(localizeString(q, localeConf));
         }
         return strs;
-    }
-
-    public static String subStr(String s, int len){
-        return s.substring(0, Math.min(s.length(), len));
     }
 }
