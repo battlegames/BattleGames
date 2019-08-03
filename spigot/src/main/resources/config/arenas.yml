@@ -24,9 +24,15 @@ dm_demo: # The id of this arena
   # [required]
   final_money_formula: "a*4+b*12+d*5"
 
-  # The material which is used to symbolize
-  # [optional] [case-insensitive] [default: grass]
-  icon: redstone
+  # Arenas icon.
+  # This section uses ABIF which you can look at here to know
+  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
+  # [required]
+  icon:
+    material: GRASS
+    name: "&aExample Arena 1"
+    lore:
+      - "&aMode: &fDeathmatch"
 
   # Maximum playing time
   # [optional] [default: 0] [time unit: ticks]
@@ -38,7 +44,7 @@ dm_demo: # The id of this arena
 
   # Arenas attributes configuration
   # Attributes depend on the mode, so make sure you have
-  # read the documentation and fill this section completely.
+  # read the documentation to fill this section completely.
   # And don't copy/paste as options should be UNIQUE for EACH arena.
   attr:
     min_players: 2
@@ -54,15 +60,15 @@ dm_demo: # The id of this arena
   # Commands to be executed by the console at the end
   # You can use expressions within commands.
   # The format is: <? your expression ?> (e.g: <? 5^3+2 ?>)
-  # Placeholders inside expressions are allowed, though,
-  # they only work if the returning value is a number
+  # Placeholders inside expressions are allowed.
+  # Make sure returning values are numbers!!!
   end_commands:
-    # All players information below belong to winners only
+    # For winners.
     # [optional]
     winners:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
 
-    # Like above but for losers
+    # For losers.
     # [optional]
     losers:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
@@ -72,6 +78,16 @@ tdm_demo:
   mode: team_deathmatch
   max_time: 8400
   max_players: 10
+  icon:
+    material: diamond_sword
+    name: "&aExample Arena 2"
+    lore:
+      - "&aMode: &fTeam Deathmatch"
+    enchant:
+      sharpness: 1
+    flag:
+      - hide_enchants
+    unbreakable: true
   final_exp_formula: "a*2+b*28-c*8+d*3"
   final_money_formula: "a*5+b*15+d*3"
   attr:

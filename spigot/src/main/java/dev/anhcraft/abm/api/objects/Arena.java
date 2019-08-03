@@ -1,10 +1,11 @@
 package dev.anhcraft.abm.api.objects;
 
+import dev.anhcraft.abif.ABIF;
+import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.api.enums.Mode;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ public class Arena {
     private String id;
     private String name;
     private Mode mode;
-    private Material icon;
+    private PreparedItem icon;
     private long maxTime;
     private int maxPlayers;
     private Expression finalExpCalculator;
@@ -42,8 +43,9 @@ public class Arena {
         if(fmc == null) throw new NullPointerException("Final money formula must be specified");
         else finalMoneyCalculator = new ExpressionBuilder(fmc).variables("a", "b", "c", "d").build();
 
-        String ic = conf.getString("icon");
-        icon = ic == null ? Material.GRASS : Material.getMaterial(ic.toUpperCase());
+        ConfigurationSection ic = conf.getConfigurationSection("icon");
+        if(ic == null) throw new NullPointerException("Icon must be specified");
+        icon = ABIF.read(ic);
         maxTime = conf.getLong("max_time");
         maxPlayers = conf.getInt("max_players");
 
@@ -69,8 +71,8 @@ public class Arena {
     }
 
     @NotNull
-    public Material getIcon() {
-        return icon;
+    public PreparedItem getIcon() {
+        return icon.clone();
     }
 
     public long getMaxTime() {
