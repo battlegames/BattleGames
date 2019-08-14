@@ -112,7 +112,6 @@ public class GuiManager extends BattleComponent {
     public PlayerGui getPlayerGui(Player player){
         PlayerGui x = PLAYER_GUI.get(player);
         if(x == null) {
-            System.out.println("Making player gui........");
             PLAYER_GUI.put(player, x = new PlayerGui());
         }
         return x;
@@ -129,15 +128,12 @@ public class GuiManager extends BattleComponent {
 
     public void callEvent(Player p, int slot, boolean top, @Nullable Event event) {
         PlayerGui pg = getPlayerGui(p);
-        System.out.println("event check top: "+(pg.getTopGui() == null));
         callEvent(p, top ? pg.getTopGui() : pg.getBottomGui(), slot, event);
     }
 
     public void callEvent(Player p, @Nullable BattleGui bg, int slot, @Nullable Event event) {
-        System.out.println(bg == null);
         if(bg == null) return;
         BattleGuiSlot[] x = bg.getSlots();
-        System.out.println("Call event "+bg.getGui().getTitle()+"/"+slot+"/"+x.length);
         if (slot < x.length) {
             BattleGuiSlot s = x[slot];
             if(s == null) return;
@@ -233,11 +229,9 @@ public class GuiManager extends BattleComponent {
     }
 
     public void openTopInventory(Player player, String name){
-        System.out.println("Open inv "+name);
         PlayerGui pg = getPlayerGui(player);
         BattleGui bg = setupGui(player, pg, GUI.get(name));
         pg.setTopGui(bg);
-        System.out.println("check top: "+(pg.getTopGui() == null));
         Inventory inv;
         if(bg.getGui().getTitle() == null) inv = Bukkit.createInventory(null, bg.getGui().getSize());
         else {
