@@ -1,9 +1,7 @@
 package dev.anhcraft.abm.api.objects;
 
+import dev.anhcraft.abif.PreparedItem;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,15 +23,9 @@ public class Skin {
         return damage;
     }
 
-    @NotNull
-    public ItemStack getItem(int amount){
-        ItemStack item = new ItemStack(material, amount);
-        ItemMeta meta;
-        if((meta = item.getItemMeta()) instanceof Damageable) {
-            ((Damageable) meta).setDamage(damage);
-            meta.setUnbreakable(true);
-        }
-        item.setItemMeta(meta);
-        return item;
+    public PreparedItem transform(PreparedItem preparedItem){
+        preparedItem.material(material);
+        preparedItem.damage(damage);
+        return preparedItem;
     }
 }
