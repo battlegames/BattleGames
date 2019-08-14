@@ -41,7 +41,7 @@ public class AmmoModel extends BattleItemModel {
                     );
                 } else if(pt.getDataType() == ItemStack.class){
                     ConfigurationSection its = bs.getConfigurationSection("particle.data.item");
-                    if(its != null) data = ABIF.load(its);
+                    if(its != null) data = ABIF.read(its).build();
                 }
                 bullets.add(new Bullet(bs.getDouble("damage"),
                         bs.getDouble("knockback"), pt,
