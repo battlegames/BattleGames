@@ -65,7 +65,7 @@ public class Kit {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.clone();
+        return icon.duplicate();
     }
 
     @NotNull

@@ -52,7 +52,7 @@ public class ItemManager extends BattleComponent {
         if(opt.isPresent()){
             Map<String, String> info = handleInfo(battleItem.collectInfo(null));
             if(addition != null) info.putAll(addition);
-            PreparedItem pi = ITEMS.get(opt.get().getItemType()).clone();
+            PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
             pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
             pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
                     .collect(Collectors.toList()));
@@ -71,7 +71,7 @@ public class ItemManager extends BattleComponent {
         if(bim == null) return null;
         Map<String, String> info = handleInfo(bim.collectInfo(null));
         if(addition != null) info.putAll(addition);
-        PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).clone();
+        PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
         pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
         pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
                 .collect(Collectors.toList()));
