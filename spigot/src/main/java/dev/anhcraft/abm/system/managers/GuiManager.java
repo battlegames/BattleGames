@@ -54,8 +54,8 @@ public class GuiManager extends BattleComponent {
                     @Override
                     public void call(GuiReport event) {
                         try {
-                            if (count == 1) m.invoke(event.getPlayer());
-                            else if (count == 2) m.invoke(event.getPlayer(), event.getGui());
+                            if (count == 1) m.invoke(handler, event.getPlayer());
+                            else if (count == 2) m.invoke(handler, event.getPlayer(), event.getGui());
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
                         }
@@ -69,7 +69,7 @@ public class GuiManager extends BattleComponent {
                             @Override
                             public void call(SlotReport event) {
                                 try {
-                                    m.invoke(event);
+                                    m.invoke(handler, event);
                                 } catch (IllegalAccessException | InvocationTargetException e) {
                                     e.printStackTrace();
                                 }
@@ -82,7 +82,7 @@ public class GuiManager extends BattleComponent {
                             @Override
                             public void call(SlotClickReport event) {
                                 try {
-                                    m.invoke(event);
+                                    m.invoke(handler, event);
                                 } catch (IllegalAccessException | InvocationTargetException e) {
                                     e.printStackTrace();
                                 }
@@ -95,7 +95,7 @@ public class GuiManager extends BattleComponent {
                             @Override
                             public void call(SlotCancelReport event) {
                                 try {
-                                    m.invoke(event);
+                                    m.invoke(handler, event);
                                 } catch (IllegalAccessException | InvocationTargetException e) {
                                     e.printStackTrace();
                                 }
@@ -111,7 +111,10 @@ public class GuiManager extends BattleComponent {
     @NotNull
     public PlayerGui getPlayerGui(Player player){
         PlayerGui x = PLAYER_GUI.get(player);
-        if(x == null) PLAYER_GUI.put(player, x = new PlayerGui());
+        if(x == null) {
+            System.out.println("Making player gui........");
+            PLAYER_GUI.put(player, x = new PlayerGui());
+        }
         return x;
     }
 
@@ -126,14 +129,18 @@ public class GuiManager extends BattleComponent {
 
     public void callEvent(Player p, int slot, boolean top, @Nullable Event event) {
         PlayerGui pg = getPlayerGui(p);
+        System.out.println("event check top: "+(pg.getTopGui() == null));
         callEvent(p, top ? pg.getTopGui() : pg.getBottomGui(), slot, event);
     }
 
     public void callEvent(Player p, @Nullable BattleGui bg, int slot, @Nullable Event event) {
+        System.out.println(bg == null);
         if(bg == null) return;
         BattleGuiSlot[] x = bg.getSlots();
+        System.out.println("Call event "+bg.getGui().getTitle()+"/"+slot+"/"+x.length);
         if (slot < x.length) {
             BattleGuiSlot s = x[slot];
+            if(s == null) return;
             s.getEvents().forEach(gl -> {
                 if(gl.getClazz() == GuiReport.class){
                     ((GuiListener<GuiReport>) gl).call(new GuiReport(p, bg));
@@ -159,25 +166,23 @@ public class GuiManager extends BattleComponent {
         BattleGuiSlot[] slots = new BattleGuiSlot[gui.getSize()];
         for(int i = 0; i < gui.getSize(); i++){
             List<GuiListener<? extends GuiReport>> listeners = new ArrayList<>();
-            GuiSlot s = gui.getSlots()[i];
             // only handling on normal slots
-            if(!s.isPaginationSlot()) {
-                Collection<String> ehs = s.getEventHandlers();
-                for (String eh : ehs) {
-                    String[] args = eh.split("::");
-                    if (args.length < 2) continue;
+            GuiSlot s = gui.getSlots()[i];
+            if(s.isPaginationSlot()) continue;
+            Collection<String> ehs = s.getEventHandlers();
+            for (String eh : ehs) {
+                String[] args = eh.split("::");
+                if (args.length < 2) continue;
 
-                    GuiHandler guiHandler = GUI_HANDLERS.get(args[0]);
-                    if (guiHandler == null) continue;
+                GuiHandler guiHandler = GUI_HANDLERS.get(args[0]);
+                if (guiHandler == null) continue;
 
-                    GuiListener<? extends GuiReport> listener = guiHandler.getEventListeners().get(args[1]);
-                    listeners.add(listener);
-                }
+                GuiListener<? extends GuiReport> listener = guiHandler.getEventListeners().get(args[1]);
+                listeners.add(listener);
             }
             slots[i] = new BattleGuiSlot(i, s, listeners);
         }
 
-        BattleGui bg = new BattleGui(gui, pg, slots);
         if(gui.getPagination() != null){
             GuiHandler gh = GUI_HANDLERS.get(gui.getPagination().getHandler());
             if (gh instanceof PaginationHandler) {
@@ -194,62 +199,70 @@ public class GuiManager extends BattleComponent {
                 for(ItemStack item : keys){
                     int index = pageSlots[j++]; // get slot index
                     BattleGuiSlot s = slots[index];
+                    if(s == null) {
+                        slots[index] = (s = new BattleGuiSlot(index, new GuiSlot(null, new ArrayList<>(), true), Collections.unmodifiableCollection(data.get(item))));
+                    } else {
+                        s.getEvents().clear();
+                        s.getEvents().addAll(data.get(item));
+                    }
                     s.setCachedItem(item); // cache item
-                    // reset events
-                    s.getEvents().clear();
-                    s.getEvents().addAll(data.get(item));
                     // put to temp pagination slots
                     ps[i++] = s;
                     if(j == pageSlots.length) j = 0; // reset if reached the maximum slot
                 }
+                BattleGui bg = new BattleGui(gui, pg, slots);
                 bg.setPagination(new PaginationHelper<>(ps, pageSlots.length));
+                return bg;
             }
         }
-        return bg;
+        return new BattleGui(gui, pg, slots);
     }
 
     public void setBottomInv(Player player, String name){
         PlayerGui gui = getPlayerGui(player);
         gui.setBottomGui(setupGui(player, gui, GUI.get(name)));
-        setBottomInv(player, gui);
+        renderBottomInv(player, gui);
     }
 
-    public void setBottomInv(Player player, PlayerGui apg){
+    public void renderBottomInv(Player player, PlayerGui apg){
         BattleGui bg = apg.getBottomGui();
         if(bg == null) return;
         ItemStack[] items = renderItems(player, bg);
-        for(int i = 0; i < items.length; i++) player.getInventory().setItem(i, items[i]);
+        for(int i = 0; i < items.length; i++)
+            player.getInventory().setItem(i, items[i]);
     }
 
     public void openTopInventory(Player player, String name){
-        PlayerGui gui = getPlayerGui(player);
-        gui.setTopGui(setupGui(player, gui, GUI.get(name)));
-        openTopInventory(player, gui);
+        System.out.println("Open inv "+name);
+        PlayerGui pg = getPlayerGui(player);
+        BattleGui bg = setupGui(player, pg, GUI.get(name));
+        pg.setTopGui(bg);
+        System.out.println("check top: "+(pg.getTopGui() == null));
+        Inventory inv;
+        if(bg.getGui().getTitle() == null) inv = Bukkit.createInventory(null, bg.getGui().getSize());
+        else {
+            String title = PlaceholderUtils.localizeString(bg.getGui().getTitle(), plugin.getLocaleConf());
+            title = PlaceholderUtils.formatPAPI(player, title);
+            inv = Bukkit.createInventory(null, bg.getGui().getSize(), title);
+        }
+        pg.setTopInv(inv);
+        renderTopInventory(player, pg);
+        player.openInventory(inv);
+        if(bg.getGui().getSound() != null)
+            player.playSound(player.getLocation(), bg.getGui().getSound(), 2f, 1f);
     }
 
-    public void openTopInventory(Player player, PlayerGui apg){
+    public void renderTopInventory(Player player, PlayerGui apg){
         BattleGui gui = apg.getTopGui();
-        if(gui == null) return;
-        Inventory inv;
-        if(gui.getGui().getTitle() == null) inv = Bukkit.createInventory(null, gui.getGui().getSize());
-        else {
-            String title = PlaceholderUtils.localizeString(gui.getGui().getTitle(), plugin.getLocaleConf());
-            title = PlaceholderUtils.formatPAPI(player, title);
-            inv = Bukkit.createInventory(null, gui.getGui().getSize(), title);
-        }
-        ItemStack[] items = renderItems(player, gui);
-        inv.setContents(items);
-        apg.setTopInv(inv);
-        player.openInventory(inv);
-        if(gui.getGui().getSound() != null)
-            player.playSound(player.getLocation(), gui.getGui().getSound(), 2f, 1f);
+        if(gui == null || apg.getTopInv() == null) return;
+        apg.getTopInv().setContents(renderItems(player, gui));
     }
 
     public void renderGui(Player player, BattleGui gui){
         if(gui.getPlayerGui().getTopGui() == gui)
-            plugin.guiManager.openTopInventory(player, gui.getPlayerGui());
+            plugin.guiManager.renderTopInventory(player, gui.getPlayerGui());
         else if(gui.getPlayerGui().getBottomGui() == gui)
-            plugin.guiManager.setBottomInv(player, gui.getPlayerGui());
+            plugin.guiManager.renderBottomInv(player, gui.getPlayerGui());
         else
             throw new UnsupportedOperationException();
     }
@@ -260,20 +273,17 @@ public class GuiManager extends BattleComponent {
 
     private ItemStack[] renderItems(Player player, BattleGui bg){
         ItemStack[] items = new ItemStack[bg.getGui().getSize()];
-        if(bg.getGui().getBackground() != null) {
-            ItemStack item = formatStrings(ABIF.read(bg.getGui().getBackground()), player).build();
-            Arrays.fill(items, item);
-        }
         BattleGuiSlot[] bs = bg.getSlots();
         for(int i = 0; i < bs.length; i++){
             BattleGuiSlot x = bs[i];
-            if(x.getSlot().getItemConf() != null)
+            if(x != null && x.getSlot() != null && x.getSlot().getItemConf() != null)
                 items[i] = formatStrings(ABIF.read(x.getSlot().getItemConf()), player).build();
         }
         if(bg.getPagination() != null && bg.getGui().getPagination() != null){
             BattleGuiSlot[] ps = bg.getPagination().collect(); // get all slots in current page
             int[] is = bg.getGui().getPagination().getSlots(); // get all slot indexes
-            for(int i = 0; i < is.length; i++)
+            int len = Math.min(is.length, ps.length);
+            for(int i = 0; i < len; i++)
                 items[is[i]] = ps[i].getCachedItem();
         }
         return items;

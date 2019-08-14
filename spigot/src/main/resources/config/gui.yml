@@ -46,15 +46,20 @@ inventory_menu: # Don't change this
   # [optional] [case-insensitive]
   sound: block_chest_open
 
-  # The background
-  # This section uses ABIF which you can look at here to know
-  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-  # And like the title above, it is possible to get strings from
-  # the locale file (Only the name and the lore support this feature)
-  # [optional] [placeholder supported]
+  # The background (for all slots)
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    # This section uses ABIF which you can look at here to know
+    # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
+    # And like the title above, it is possible to get strings from
+    # the locale file (Only the name and the lore support this feature)
+    # [optional] [placeholder supported]
+    item:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+
+    # The handlers
+    handlers:
+      - "core::cancel_event"
 
   # Configure each slot here
   # [optional]
@@ -89,7 +94,7 @@ inventory_menu: # Don't change this
 
       # The handlers for this slot
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open_gun"
 
     magazine:
@@ -101,7 +106,7 @@ inventory_menu: # Don't change this
         lore:
           - "$$gui.inventory_menu.magazine_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open_magazine"
 
     ammo:
@@ -113,7 +118,7 @@ inventory_menu: # Don't change this
         lore:
           - "$$gui.inventory_menu.ammo_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open_ammo"
 
     close:
@@ -132,8 +137,11 @@ inventory_gun:
   size: 54
   sound: block_chest_open
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
 
   # This is the pagination of this GUI
   pagination:
@@ -165,7 +173,7 @@ inventory_gun:
         lore:
           - "$$gui.btn.prev_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::prev_page"
     back:
       row: 6
@@ -176,7 +184,7 @@ inventory_gun:
         lore:
           - "$$gui.btn.back_inv_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open"
     next:
       row: 6
@@ -187,7 +195,7 @@ inventory_gun:
         lore:
           - "$$gui.btn.next_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::next_page"
 
 inventory_magazine:
@@ -195,15 +203,18 @@ inventory_magazine:
   size: 54
   sound: block_chest_open
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
   pagination:
     region:
       top_row: 1
       bottom_row: 5
       left_column: 1
       right_column: 9
-    handlers: "inventory_magazine"
+    handler: "inventory_magazine"
   slots:
     prev:
       row: 6
@@ -214,7 +225,7 @@ inventory_magazine:
         lore:
           - "$$gui.btn.prev_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::prev_page"
     back:
       row: 6
@@ -225,7 +236,7 @@ inventory_magazine:
         lore:
           - "$$gui.btn.back_inv_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open"
     next:
       row: 6
@@ -236,7 +247,7 @@ inventory_magazine:
         lore:
           - "$$gui.btn.next_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::next_page"
 
 inventory_ammo:
@@ -244,8 +255,11 @@ inventory_ammo:
   size: 54
   sound: block_chest_open
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
   pagination:
     region:
       top_row: 1
@@ -263,7 +277,7 @@ inventory_ammo:
         lore:
           - "$$gui.btn.prev_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::prev_page"
     back:
       row: 6
@@ -274,7 +288,7 @@ inventory_ammo:
         lore:
           - "$$gui.btn.back_inv_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "inventory_menu::open"
     next:
       row: 6
@@ -285,7 +299,7 @@ inventory_ammo:
         lore:
           - "$$gui.btn.next_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::next_page"
 
 kit_menu:
@@ -293,8 +307,11 @@ kit_menu:
   size: 54
   sound: block_chest_open
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
   pagination:
     region:
       top_row: 1
@@ -312,7 +329,7 @@ kit_menu:
         lore:
           - "$$gui.btn.prev_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::prev_page"
     close:
       row: 6
@@ -323,7 +340,7 @@ kit_menu:
         lore:
           - "$$gui.btn.close_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::close"
     next:
       row: 6
@@ -334,7 +351,7 @@ kit_menu:
         lore:
           - "$$gui.btn.next_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::next_page"
 
 arena_chooser:
@@ -342,8 +359,11 @@ arena_chooser:
   size: 54
   sound: block_chest_open
   background:
-    material: GRAY_STAINED_GLASS_PANE
-    name: "{{ gui.empty }}"
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
   pagination:
     region:
       top_row: 1
@@ -361,7 +381,7 @@ arena_chooser:
         lore:
           - "$$gui.btn.prev_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::prev_page"
     close:
       row: 6
@@ -372,7 +392,7 @@ arena_chooser:
         lore:
           - "$$gui.btn.close_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::close"
     next:
       row: 6
@@ -383,7 +403,7 @@ arena_chooser:
         lore:
           - "$$gui.btn.next_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::next_page"
 
 # =========================================
@@ -406,7 +426,7 @@ main_player_inv:
         lore:
           - "$$gui.main_player_inv.arena_chooser_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::choose_arena"
     your_inventory:
       row: 1
@@ -417,7 +437,7 @@ main_player_inv:
         lore:
           - "$$gui.main_player_inv.your_inventory_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::open_inventory"
 
 game_player_inv:
@@ -433,7 +453,7 @@ game_player_inv:
         lore:
           - "$$gui.main_player_inv.your_inventory_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::open_inventory"
     quit:
       row: 1
@@ -444,5 +464,5 @@ game_player_inv:
         lore:
           - "$$gui.game_player_inv.quit_lore"
       handlers:
-        - "core:cancel_event"
+        - "core::cancel_event"
         - "core::quit_game"

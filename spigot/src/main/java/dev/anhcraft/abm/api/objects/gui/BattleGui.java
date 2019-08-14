@@ -35,4 +35,8 @@ public class BattleGui {
     public void setPagination(@Nullable PaginationHelper<BattleGuiSlot> pagination) {
         this.pagination = pagination;
     }
+
+    public void updatePagination(){
+        pagination.each(battleGuiSlot -> slots[battleGuiSlot.getIndex()] = battleGuiSlot);
+    }
 }

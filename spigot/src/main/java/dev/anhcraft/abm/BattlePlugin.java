@@ -159,7 +159,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 game.getPlayers().values().forEach(new Consumer<GamePlayer>() {
                     @Override
                     public void accept(GamePlayer player) {
-                        player.getPlayer().getInventory().setContents(player.getBackupInventory());
+                        if(player.getBackupInventory() != null)
+                            player.getPlayer().getInventory().setContents(player.getBackupInventory());
                     }
                 });
             }

@@ -5,7 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +13,6 @@ import java.util.Set;
 public class Gui {
     private String title;
     private int size;
-    private ConfigurationSection background;
     private GuiSlot[] slots;
     private Pagination pagination;
     private Sound sound;
@@ -21,7 +20,6 @@ public class Gui {
     public Gui(ConfigurationSection conf){
         title = conf.getString("title");
         size = conf.getInt("size", 9);
-        background = conf.getConfigurationSection("background");
         String snd = conf.getString("sound");
         sound = (snd == null ? null : Sound.valueOf(snd.toUpperCase()));
 
@@ -60,10 +58,16 @@ public class Gui {
                 for(int j = minX; j <= maxX; j++){
                     int pos = i * 9 + j - 10;
                     ps[in++] = pos;
-                    slots[pos] = new GuiSlot(null, Collections.singleton(handlerId), true);
+                    slots[pos] = new GuiSlot(null, new ArrayList<>(), true);
                 }
             }
             pagination = new Pagination(ps, handlerId);
+        }
+
+        ConfigurationSection bgIcon = conf.getConfigurationSection("background.item");
+        List<String> bgHandlers = conf.getStringList("background.handlers");
+        for(int i = 0; i < slots.length; i++){
+            if(slots[i] == null) slots[i] = new GuiSlot(bgIcon, bgHandlers, false);
         }
     }
 
@@ -74,11 +78,6 @@ public class Gui {
 
     public int getSize() {
         return size;
-    }
-
-    @Nullable
-    public ConfigurationSection getBackground() {
-        return background;
     }
 
     @NotNull

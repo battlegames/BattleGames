@@ -26,6 +26,7 @@ public class CoreHandler extends GuiHandler {
     public void prevPage(Player player, BattleGui gui){
         if(gui.getPagination() != null) {
             gui.getPagination().prev();
+            gui.updatePagination(); // refresh listener
             plugin.guiManager.renderGui(player, gui);
         }
     }
@@ -34,6 +35,7 @@ public class CoreHandler extends GuiHandler {
     public void nextPage(Player player, BattleGui gui){
         if(gui.getPagination() != null) {
             gui.getPagination().next();
+            gui.updatePagination();
             plugin.guiManager.renderGui(player, gui);
         }
     }

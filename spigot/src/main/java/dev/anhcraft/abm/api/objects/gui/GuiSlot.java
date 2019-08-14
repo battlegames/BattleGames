@@ -13,7 +13,6 @@ public class GuiSlot {
     private boolean isPaginationSlot;
 
     public GuiSlot(@Nullable ConfigurationSection itemConf, @NotNull Collection<String> eventHandlers, boolean isPaginationSlot) {
-        Condition.argNotNull("itemConf", itemConf);
         Condition.argNotNull("eventHandlers", eventHandlers);
         this.isPaginationSlot = isPaginationSlot;
         this.itemConf = itemConf;
