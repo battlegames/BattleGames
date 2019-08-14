@@ -1,5 +1,6 @@
 package dev.anhcraft.abm.system.handlers;
 
+import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.objects.*;
@@ -9,28 +10,24 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class GunHandler extends ItemHandler {
+public class GunHandler extends Handler {
     public GunHandler(BattlePlugin plugin) {
         super(plugin);
     }
 
-    public ItemStack createGun(Gun gunItem, boolean secondarySkin){
+    public PreparedItem createGun(Gun gunItem, boolean secondarySkin){
         return gunItem.getModel()
-                .map(gunModel -> draw(gunModel, plugin.itemManager.preMakeItem(gunItem), secondarySkin))
-                .orElse(null);
-    }
-
-    @Nullable
-    public ItemStack draw(GunModel gun, @Nullable ItemStack itemStack, boolean secondarySkin){
-        return super.draw(secondarySkin ? gun.getSecondarySkin() : gun.getPrimarySkin(), itemStack);
+                .map(gunModel -> {
+                    Skin skin = secondarySkin ? gunModel.getSecondarySkin() : gunModel.getPrimarySkin();
+                    PreparedItem pi = plugin.itemManager.make(gunItem);
+                    return pi == null ? null : skin.transform(pi);
+                }).orElse(null);
     }
 
     public void selectGun(Player player, GunModel g, int slot) {
@@ -43,10 +40,10 @@ public class GunHandler extends ItemHandler {
         Ammo ammoItem = magazine.getAmmo();
         ammoItem.setModel(ammo.getKey());
 
-        player.getInventory().setItem(slot, createGun(gun, false));
+        player.getInventory().setItem(slot, createGun(gun, false).build());
         int held = player.getInventory().getHeldItemSlot();
         if(held == slot) {
-            player.getInventory().setItemInOffHand(createGun(gun, true));
+            player.getInventory().setItemInOffHand(createGun(gun, true).build());
             PlayerUtil.reduceSpeed(player, g.getWeight());
         }
     }
