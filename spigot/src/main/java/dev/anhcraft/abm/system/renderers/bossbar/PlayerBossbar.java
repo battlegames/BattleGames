@@ -23,7 +23,7 @@ public class PlayerBossbar {
         this.callback = callback;
         this.flags = flags;
 
-        bar = Bukkit.createBossBar(PlaceholderUtils.formatPlaceholders(player, title), color, style, flags);
+        bar = Bukkit.createBossBar(PlaceholderUtils.formatPAPI(player, title), color, style, flags);
         bar.setProgress(value);
     }
 
@@ -32,7 +32,7 @@ public class PlayerBossbar {
     }
 
     public void setTitle(String title) {
-        bar.setTitle(PlaceholderUtils.formatPlaceholders(player, title));
+        bar.setTitle(PlaceholderUtils.formatPAPI(player, title));
     }
 
     public void setColor(BarColor color) {
@@ -58,7 +58,7 @@ public class PlayerBossbar {
     }
 
     void render(){
-        bar.setTitle(PlaceholderUtils.formatPlaceholders(player, title));
+        bar.setTitle(PlaceholderUtils.formatPAPI(player, title));
         callback.accept(this);
     }
 

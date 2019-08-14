@@ -26,7 +26,7 @@ public class PlayerScoreboard {
         this.title = title;
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
-        objective = scoreboard.registerNewObjective(dev.anhcraft.jvmkit.utils.StringUtil.cutString("abm." + player.getName(), 16), "dummy", PlaceholderUtils.formatPlaceholders(player, title));
+        objective = scoreboard.registerNewObjective(dev.anhcraft.jvmkit.utils.StringUtil.cutString("abm." + player.getName(), 16), "dummy", PlaceholderUtils.formatPAPI(player, title));
         int i = 0;
         int max = Math.min(15, lines.size());
         while(i < max){
@@ -38,7 +38,7 @@ public class PlayerScoreboard {
     }
 
     public void renderTitle(){
-        objective.setDisplayName(PlaceholderUtils.formatPlaceholders(player, title));
+        objective.setDisplayName(PlaceholderUtils.formatPAPI(player, title));
     }
 
     public void renderLines(){
@@ -49,7 +49,7 @@ public class PlayerScoreboard {
 
     public void renderLine(int index){
         ScoreboardLine line = lines[index];
-        String str = PlaceholderUtils.formatPlaceholders(player, line.getContent());
+        String str = PlaceholderUtils.formatPAPI(player, line.getContent());
         line.getTeam().setPrefix(str.substring(0, Math.min(str.length(), 64)));
         if(str.length() > 64) line.getTeam().setSuffix(str.substring(65));
         line.getTeam().addEntry(line.getTeam().getName());
