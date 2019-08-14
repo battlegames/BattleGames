@@ -1,15 +1,14 @@
 package dev.anhcraft.abm.system.managers;
 
 import dev.anhcraft.abif.ABIF;
+import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.api.ext.BattleItem;
 import dev.anhcraft.abm.api.ext.BattleItemModel;
-import dev.anhcraft.abm.api.objects.Ammo;
-import dev.anhcraft.abm.api.objects.Gun;
-import dev.anhcraft.abm.api.objects.Magazine;
 import dev.anhcraft.abm.system.ItemTag;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.abm.utils.info.*;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,61 +18,64 @@ import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ItemManager extends BattleComponent {
-    private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9_]+__}");
+    private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
+    private final Map<ItemType, PreparedItem> ITEM_MODELS = new HashMap<>();
 
     public ItemManager(BattlePlugin plugin) {
         super(plugin);
-    }
 
-    private static String rplc(String str, Map<String, String> x){
-        Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
-        StringBuffer sb = new StringBuffer(str.length());
-        while(m.find()){
-            String p = m.group();
-            String s = p.substring(3, p.length()-3).trim();
-            m.appendReplacement(sb, x.getOrDefault(s, p));
+        ItemType[] types = ItemType.values();
+        for(ItemType type : types){
+            String k = type.name().toLowerCase();
+            ConfigurationSection sec = plugin.getItemConf().getConfigurationSection("model_"+k);
+            if(sec != null) ITEM_MODELS.put(type, ABIF.read(sec));
+            sec = plugin.getItemConf().getConfigurationSection(k);
+            if(sec != null) ITEMS.put(type, ABIF.read(sec));
         }
-        m.appendTail(sb);
-        return sb.toString();
-    }
-
-    private BattleItem newItemInstance(ItemType type){
-        switch (type){
-            case GUN: return new Gun();
-            case MAGAZINE: return new Magazine();
-            case AMMO: return new Ammo();
-        }
-        return null;
     }
 
     @Nullable
-    public <R extends BattleItemModel> ItemStack preMakeItem(@Nullable BattleItem<R> battleItem){
+    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem){
+        return make(battleItem, null);
+    }
+
+    @Nullable
+    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, Map<String, String> addition){
         if(battleItem == null) return null;
         Optional<R> opt = battleItem.getModel();
         if(opt.isPresent()){
-            String k = opt.get().getItemType().name().toLowerCase();
-            ConfigurationSection sec = plugin.getItemConf().getConfigurationSection(k);
-            if(sec != null)
-                return write(ABIF.load(sec, s ->
-                        rplc(s, handleInfo(battleItem.collectInfo(null)))), battleItem);
+            Map<String, String> info = handleInfo(battleItem.collectInfo(null));
+            if(addition != null) info.putAll(addition);
+            PreparedItem pi = ITEMS.get(opt.get().getItemType()).clone();
+            pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
+            pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
+                    .collect(Collectors.toList()));
+            return pi;
         }
         return null;
     }
 
     @Nullable
-    public ItemStack makeModel(@Nullable BattleItemModel bim){
+    public PreparedItem make(@Nullable BattleItemModel bim){
+        return make(bim, null);
+    }
+
+    @Nullable
+    public PreparedItem make(@Nullable BattleItemModel bim, Map<String, String> addition){
         if(bim == null) return null;
-        String k = bim.getItemType().name().toLowerCase();
-        ConfigurationSection sec = plugin.getItemConf().getConfigurationSection("model_"+k);
-        if(sec == null) return null;
-        return ABIF.load(sec, s -> rplc(s, handleInfo(bim.collectInfo(null))));
+        Map<String, String> info = handleInfo(bim.collectInfo(null));
+        if(addition != null) info.putAll(addition);
+        PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).clone();
+        pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
+        pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
+                .collect(Collectors.toList()));
+        return pi;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -109,9 +111,7 @@ public class ItemManager extends BattleComponent {
         CustomItemTagContainer c = meta.getCustomTagContainer();
         String type = c.getCustomTag(ItemTag.ITEM_TYPE, ItemTagType.STRING);
         if(type == null) return null;
-        ItemType itemType = ItemType.valueOf(type);
-        BattleItem item = newItemInstance(itemType);
-        if(item == null) return null;
+        BattleItem item = ItemType.valueOf(type).make();
         item.load(c);
         return item;
     }
