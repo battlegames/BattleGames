@@ -1,6 +1,6 @@
 # Terms & conditions
 
-This one is applied for all aspects of this plugin (include the official resource pack).
+This one is applied for all aspects of this plugin.
 
 **Last changed: 13/8/2019**
 
