@@ -140,7 +140,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     private void runCmd(String s, Player player){
-        s = PlaceholderUtils.formatPlaceholders(player, s);
+        s = PlaceholderUtils.formatPAPI(player, s);
         s = PlaceholderUtils.formatExpression(s);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
     }

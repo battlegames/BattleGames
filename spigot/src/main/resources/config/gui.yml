@@ -87,8 +87,10 @@ inventory_menu: # Don't change this
           - hide_attributes
           - hide_unbreakable
 
-      # The handler for this slot
-      handler: "inventory_menu::open_gun"
+      # The handlers for this slot
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open_gun"
 
     magazine:
       row: 2
@@ -98,7 +100,9 @@ inventory_menu: # Don't change this
         name: "{{ gui.inventory_menu.magazine_name }}"
         lore:
           - "$$gui.inventory_menu.magazine_lore"
-      handler: "inventory_menu::open_magazine"
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open_magazine"
 
     ammo:
       row: 2
@@ -108,7 +112,9 @@ inventory_menu: # Don't change this
         name: "{{ gui.inventory_menu.ammo_name }}"
         lore:
           - "$$gui.inventory_menu.ammo_lore"
-      handler: "inventory_menu::open_ammo"
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open_ammo"
 
     close:
       row: 4
@@ -118,7 +124,8 @@ inventory_menu: # Don't change this
         name: "{{ gui.btn.close_name }}"
         lore:
           - "$$gui.btn.close_lore"
-      handler: "core::close"
+      handlers:
+        - "core::close"
 
 inventory_gun:
   title: "{{ gui.inventory_gun.title }}"
@@ -130,18 +137,6 @@ inventory_gun:
 
   # This is the pagination of this GUI
   pagination:
-    # Here you can customize the lore of items in this pagination
-    item_lore:
-      # The header which is displayed above the main lore
-      # [optional] [placeholder supported]
-      #header:
-
-      # The footer which is displayed below the main lore
-      # [optional] [placeholder supported]
-      footer:
-        - ""
-        - "{{ gui.item_info.owning_date }} {__owning_date__}"
-
     # The region where the pagination is able to put items into
     region:
       # From the first row to the fifth
@@ -169,7 +164,9 @@ inventory_gun:
         name: "{{ gui.btn.prev_name }}"
         lore:
           - "$$gui.btn.prev_lore"
-      handler: "core::prev_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::prev_page"
     back:
       row: 6
       column: 3_items_2
@@ -178,7 +175,9 @@ inventory_gun:
         name: "{{ gui.btn.back_inv_name }}"
         lore:
           - "$$gui.btn.back_inv_lore"
-      handler: "inventory_menu::open"
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open"
     next:
       row: 6
       column: 3_items_3
@@ -187,7 +186,9 @@ inventory_gun:
         name: "{{ gui.btn.next_name }}"
         lore:
           - "$$gui.btn.next_lore"
-      handler: "core::next_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::next_page"
 
 inventory_magazine:
   title: "{{ gui.inventory_magazine.title }}"
@@ -197,16 +198,12 @@ inventory_magazine:
     material: GRAY_STAINED_GLASS_PANE
     name: "{{ gui.empty }}"
   pagination:
-    item_lore:
-      footer:
-        - ""
-        - "{{ gui.item_info.owning_date }} {__owning_date__}"
     region:
       top_row: 1
       bottom_row: 5
       left_column: 1
       right_column: 9
-    handler: "inventory_magazine"
+    handlers: "inventory_magazine"
   slots:
     prev:
       row: 6
@@ -216,7 +213,9 @@ inventory_magazine:
         name: "{{ gui.btn.prev_name }}"
         lore:
           - "$$gui.btn.prev_lore"
-      handler: "core::prev_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::prev_page"
     back:
       row: 6
       column: 3_items_2
@@ -225,7 +224,9 @@ inventory_magazine:
         name: "{{ gui.btn.back_inv_name }}"
         lore:
           - "$$gui.btn.back_inv_lore"
-      handler: "inventory_menu::open"
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open"
     next:
       row: 6
       column: 3_items_3
@@ -234,7 +235,9 @@ inventory_magazine:
         name: "{{ gui.btn.next_name }}"
         lore:
           - "$$gui.btn.next_lore"
-      handler: "core::next_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::next_page"
 
 inventory_ammo:
   title: "{{ gui.inventory_ammo.title }}"
@@ -244,10 +247,6 @@ inventory_ammo:
     material: GRAY_STAINED_GLASS_PANE
     name: "{{ gui.empty }}"
   pagination:
-    item_lore:
-      footer:
-        - ""
-        - "{{ gui.item_info.owning_date }} {__owning_date__}"
     region:
       top_row: 1
       bottom_row: 5
@@ -263,7 +262,9 @@ inventory_ammo:
         name: "{{ gui.btn.prev_name }}"
         lore:
           - "$$gui.btn.prev_lore"
-      handler: "core::prev_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::prev_page"
     back:
       row: 6
       column: 3_items_2
@@ -272,7 +273,9 @@ inventory_ammo:
         name: "{{ gui.btn.back_inv_name }}"
         lore:
           - "$$gui.btn.back_inv_lore"
-      handler: "inventory_menu::open"
+      handlers:
+        - "core:cancel_event"
+        - "inventory_menu::open"
     next:
       row: 6
       column: 3_items_3
@@ -281,7 +284,9 @@ inventory_ammo:
         name: "{{ gui.btn.next_name }}"
         lore:
           - "$$gui.btn.next_lore"
-      handler: "core::next_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::next_page"
 
 kit_menu:
   title: "{{ gui.kit_menu.title }}"
@@ -306,7 +311,9 @@ kit_menu:
         name: "{{ gui.btn.prev_name }}"
         lore:
           - "$$gui.btn.prev_lore"
-      handler: "core::prev_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::prev_page"
     close:
       row: 6
       column: 3_items_2
@@ -315,7 +322,9 @@ kit_menu:
         name: "{{ gui.btn.close_name }}"
         lore:
           - "$$gui.btn.close_lore"
-      handler: "core::close"
+      handlers:
+        - "core:cancel_event"
+        - "core::close"
     next:
       row: 6
       column: 3_items_3
@@ -324,7 +333,9 @@ kit_menu:
         name: "{{ gui.btn.next_name }}"
         lore:
           - "$$gui.btn.next_lore"
-      handler: "core::next_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::next_page"
 
 arena_chooser:
   title: "{{ gui.arena_chooser.title }}"
@@ -349,7 +360,9 @@ arena_chooser:
         name: "{{ gui.btn.prev_name }}"
         lore:
           - "$$gui.btn.prev_lore"
-      handler: "core::prev_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::prev_page"
     close:
       row: 6
       column: 3_items_2
@@ -358,7 +371,9 @@ arena_chooser:
         name: "{{ gui.btn.close_name }}"
         lore:
           - "$$gui.btn.close_lore"
-      handler: "core::close"
+      handlers:
+        - "core:cancel_event"
+        - "core::close"
     next:
       row: 6
       column: 3_items_3
@@ -367,14 +382,16 @@ arena_chooser:
         name: "{{ gui.btn.next_name }}"
         lore:
           - "$$gui.btn.next_lore"
-      handler: "core::next_page"
+      handlers:
+        - "core:cancel_event"
+        - "core::next_page"
 
 # =========================================
 # Sections below are for players inventory
 # Note: Slots from 0 to 9 will be displayed
 # on the hot-bar.
-# ABM only overrides items up to your defined
-# slot. Remaining slots won't get affected.
+# ABM only overrides items that were defined.
+# Remaining will not get affected.
 
 main_player_inv:
   title: "{{ gui.main_player_inv.title }}"
@@ -388,7 +405,9 @@ main_player_inv:
         name: "{{ gui.main_player_inv.arena_chooser_name }}"
         lore:
           - "$$gui.main_player_inv.arena_chooser_lore"
-      handler: "core::choose_arena"
+      handlers:
+        - "core:cancel_event"
+        - "core::choose_arena"
     your_inventory:
       row: 1
       column: 2
@@ -397,7 +416,9 @@ main_player_inv:
         name: "{{ gui.main_player_inv.your_inventory_name }}"
         lore:
           - "$$gui.main_player_inv.your_inventory_lore"
-      handler: "core::open_inventory"
+      handlers:
+        - "core:cancel_event"
+        - "core::open_inventory"
 
 game_player_inv:
   title: "{{ gui.game_player_inv.title }}"
@@ -411,7 +432,9 @@ game_player_inv:
         name: "{{ gui.main_player_inv.your_inventory_name }}"
         lore:
           - "$$gui.main_player_inv.your_inventory_lore"
-      handler: "core::open_inventory"
+      handlers:
+        - "core:cancel_event"
+        - "core::open_inventory"
     quit:
       row: 1
       column: 9
@@ -420,4 +443,6 @@ game_player_inv:
         name: "{{ gui.game_player_inv.quit_name }}"
         lore:
           - "$$gui.game_player_inv.quit_lore"
-      handler: "core::quit_game"
+      handlers:
+        - "core:cancel_event"
+        - "core::quit_game"

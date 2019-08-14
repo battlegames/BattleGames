@@ -1,45 +1,31 @@
 package dev.anhcraft.abm.gui;
 
+import com.google.common.collect.LinkedHashMultimap;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.objects.Arena;
-import dev.anhcraft.abm.gui.core.*;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.api.ext.gui.GuiListener;
+import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
+import dev.anhcraft.abm.api.objects.gui.SlotReport;
+import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
+import dev.anhcraft.abm.api.ext.gui.GuiHandler;
+import dev.anhcraft.abm.api.objects.gui.Pagination;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ArenaChooserHandler extends BattleGuiHandler implements PaginationHandler {
+public class ArenaChooserHandler extends GuiHandler implements PaginationHandler {
     public ArenaChooserHandler(BattlePlugin plugin) {
         super(plugin);
     }
 
     @Override
-    public void getData(Player p, PlayerGui gui, BattlePagination bg, int fromIndex, int toIndex, List<ItemStack> items) {
-        List<Arena> x = plugin.listArenas();
-        if(fromIndex < x.size()) x.subList(fromIndex, Math.min(toIndex+1, x.size())).forEach(a -> {
-            ItemStack item = new ItemStack(a.getIcon(), 1);
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                meta.setDisplayName(PlaceholderUtils.formatPlaceholders(p, a.getName()));
-                List<String> lore = new ArrayList<>();
-                lore.addAll(PlaceholderUtils.formatPlaceholders(p, bg.getHeaderLore()));
-                lore.addAll(PlaceholderUtils.formatPlaceholders(p, bg.getFooterLore()));
-                meta.setLore(lore);
-            }
-            item.setItemMeta(meta);
-            items.add(item);
+    public void pullData(Pagination pagination, Player player, LinkedHashMultimap<ItemStack, GuiListener<? extends SlotReport>> data) {
+        plugin.listArenas().forEach(arena -> {
+            data.put(arena.getIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                @Override
+                public void call(SlotClickReport event) {
+                    event.getPlayer().closeInventory();
+                    plugin.gameManager.join(event.getPlayer(), arena);
+                }
+            });
         });
-    }
-
-    @SlotClickHandler(SlotClickHandler.PAGINATION)
-    public void pagination(InventoryClickEvent event, PlayerGui gui){
-        Player p = (Player) event.getWhoClicked();
-        Integer f = gui.getSlot2DataIndexes().get(event.getSlot());
-        if(f == null) return;
-        plugin.gameManager.join(p, plugin.listArenas().get(f));
     }
 }

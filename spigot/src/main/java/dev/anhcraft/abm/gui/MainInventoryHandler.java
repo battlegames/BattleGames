@@ -1,33 +1,32 @@
 package dev.anhcraft.abm.gui;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.gui.core.BattleGuiHandler;
-import dev.anhcraft.abm.gui.core.SlotClickHandler;
+import dev.anhcraft.abm.api.ext.gui.GuiHandler;
+import dev.anhcraft.jvmkit.lang.annotation.Label;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class MainInventoryHandler extends BattleGuiHandler {
+public class MainInventoryHandler extends GuiHandler {
     public MainInventoryHandler(BattlePlugin plugin) {
         super(plugin);
     }
 
-    @SlotClickHandler("open")
-    public void open(InventoryClickEvent event){
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), "inventory_menu");
+    @Label("open")
+    public void open(Player player){
+        plugin.guiManager.openTopInventory(player, "inventory_menu");
     }
 
-    @SlotClickHandler("open_gun")
-    public void openGunInv(InventoryClickEvent event){
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), "inventory_gun");
+    @Label("open_gun")
+    public void openGunInv(Player player){
+        plugin.guiManager.openTopInventory(player, "inventory_gun");
     }
 
-    @SlotClickHandler("open_magazine")
-    public void openMagazineInv(InventoryClickEvent event){
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), "inventory_magazine");
+    @Label("open_magazine")
+    public void openMagazineInv(Player player){
+        plugin.guiManager.openTopInventory(player, "inventory_magazine");
     }
 
-    @SlotClickHandler("open_ammo")
-    public void openAmmoInv(InventoryClickEvent event){
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), "inventory_ammo");
+    @Label("open_ammo")
+    public void openAmmoInv(Player player){
+        plugin.guiManager.openTopInventory(player, "inventory_ammo");
     }
 }

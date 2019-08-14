@@ -75,8 +75,6 @@ gui:
     next_name: "&aNext page"
     next_lore:
       - "&fTurn to the next page"
-  item_info:
-    owning_date: "&fOwning date:"
   inventory_menu:
     title: "&e&lInventory"
     gun_name: "&fGun"

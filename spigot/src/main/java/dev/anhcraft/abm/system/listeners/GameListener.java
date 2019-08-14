@@ -21,7 +21,7 @@ public class GameListener extends BattleComponent implements Listener {
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(i.getContents());
         i.clear();
-        plugin.guiManager.setPlayerInventory(p, "game_player_inv");
+        plugin.guiManager.setBottomInv(p, "game_player_inv");
     }
 
     @EventHandler
@@ -31,7 +31,7 @@ public class GameListener extends BattleComponent implements Listener {
         if(inv != null) p.getInventory().setContents(inv);
         // although the inventory got backup, its handler still
         // didn't change so we must set it again
-        plugin.guiManager.setPlayerInventory(p, "main_player_inv");
+        plugin.guiManager.setBottomInv(p, "main_player_inv");
 
         plugin.queueTitleTask.remove(p);
 

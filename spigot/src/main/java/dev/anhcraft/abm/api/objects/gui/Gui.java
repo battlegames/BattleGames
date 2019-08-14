@@ -1,30 +1,31 @@
-package dev.anhcraft.abm.gui.core;
+package dev.anhcraft.abm.api.objects.gui;
 
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class BattleGui {
+public class Gui {
     private String title;
     private int size;
     private ConfigurationSection background;
-    private BattleSlot[] slots;
-    private BattlePagination pagination;
+    private GuiSlot[] slots;
+    private Pagination pagination;
     private Sound sound;
 
-    public BattleGui(ConfigurationSection conf){
+    public Gui(ConfigurationSection conf){
         title = conf.getString("title");
         size = conf.getInt("size", 9);
         background = conf.getConfigurationSection("background");
         String snd = conf.getString("sound");
         sound = (snd == null ? null : Sound.valueOf(snd.toUpperCase()));
 
-        slots = new BattleSlot[size];
+        slots = new GuiSlot[size];
         ConfigurationSection sc = conf.getConfigurationSection("slots");
         if(sc != null){
             Set<String> keys = sc.getKeys(false);
@@ -37,8 +38,8 @@ public class BattleGui {
 
                 int pos = sc.getInt(k+".row") * 9 + cl - 10;
                 ConfigurationSection item = sc.getConfigurationSection(k+".item");
-                String handler = sc.getString(k+".handler");
-                slots[pos] = new BattleSlot(item, handler);
+                List<String> handlers = sc.getStringList(k+".handlers");
+                slots[pos] = new GuiSlot(item, handlers, false);
             }
         }
 
@@ -59,12 +60,10 @@ public class BattleGui {
                 for(int j = minX; j <= maxX; j++){
                     int pos = i * 9 + j - 10;
                     ps[in++] = pos;
-                    slots[pos] = new BattleSlot(null, handlerId+"::"+SlotClickHandler.PAGINATION);
+                    slots[pos] = new GuiSlot(null, Collections.singleton(handlerId), true);
                 }
             }
-            List<String> hl = pg.getStringList("item_lore.header");
-            List<String> fl = pg.getStringList("item_lore.footer");
-            pagination = new BattlePagination(hl, fl, ps, handlerId);
+            pagination = new Pagination(ps, handlerId);
         }
     }
 
@@ -83,12 +82,12 @@ public class BattleGui {
     }
 
     @NotNull
-    public BattleSlot[] getSlots() {
+    public GuiSlot[] getSlots() {
         return slots;
     }
 
     @Nullable
-    public BattlePagination getPagination() {
+    public Pagination getPagination() {
         return pagination;
     }
 

@@ -9,13 +9,10 @@ import dev.anhcraft.abm.api.objects.DamageReport;
 import dev.anhcraft.abm.api.objects.Game;
 import dev.anhcraft.abm.api.objects.GamePlayer;
 import dev.anhcraft.abm.api.objects.Gun;
-import dev.anhcraft.abm.gui.core.BattleSlot;
-import dev.anhcraft.abm.gui.core.PlayerGui;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.handlers.GunHandler;
-import dev.anhcraft.abm.system.handlers.PlayerInventoryHandler;
-import dev.anhcraft.abm.utils.PlayerUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -47,13 +44,13 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.taskManager.newAsyncTask(() -> plugin.dataManager.loadPlayerData(player));
         plugin.taskManager.newTask(() -> {
             plugin.resetScoreboard(player);
-            plugin.guiManager.setPlayerInventory(player, "main_player_inv");
+            plugin.guiManager.setBottomInv(player, "main_player_inv");
         });
     }
 
     @EventHandler
     public void quit(PlayerQuitEvent event){
-        plugin.guiManager.destroyGui(event.getPlayer());
+        plugin.guiManager.destroyPlayerGui(event.getPlayer());
         plugin.gameManager.quit(event.getPlayer());
         plugin.taskManager.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
@@ -61,32 +58,34 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void secondarySkin(Player player, BattleItem newItem, BattleItem oldItem){
         if(newItem instanceof Gun)
             player.getInventory().setItemInOffHand(plugin.getHandler(GunHandler.class).createGun(
-                    (Gun) newItem, true));
+                    (Gun) newItem, true).build());
         else if(newItem == null && oldItem instanceof Gun)
             player.getInventory().setItemInOffHand(null);
     }
 
     @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
-        plugin.getHandler(PlayerInventoryHandler.class).handleSlot(event.getPlayer(), event, event.getPlayer().getInventory().getHeldItemSlot());
+        plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
     }
 
     @EventHandler
     public void drop(PlayerDropItemEvent event) {
-        plugin.getHandler(PlayerInventoryHandler.class).handleSlot(event.getPlayer(), event, event.getPlayer().getInventory().getHeldItemSlot());
+        plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
     }
 
     @EventHandler
     public void interact(PlayerInteractEvent event) {
         Player p = event.getPlayer();
+        if(event.getHand() == EquipmentSlot.OFF_HAND)
+            return;
         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             BattleItem item = plugin.itemManager.read(event.getItem());
-            if(item != null && event.getHand() != EquipmentSlot.OFF_HAND) {
+            if(item != null) {
                 if (item instanceof Gun) {
                     plugin.gameManager.getGame(p).ifPresent(game -> {
                         Gun gun = (Gun) item;
                         plugin.getHandler(GunHandler.class).shoot(game, p, gun);
-                        p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                        p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND).build());
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
                     });
@@ -94,7 +93,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 return;
             }
         }
-        plugin.getHandler(PlayerInventoryHandler.class).handleSlot(p, event, p.getInventory().getHeldItemSlot());
+        plugin.guiManager.callEvent(p, p.getInventory().getHeldItemSlot(), false, event);
     }
 
     @EventHandler
@@ -184,13 +183,13 @@ public class PlayerListener extends BattleComponent implements Listener {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return; // ignore attackers who quit the game
                 gp.getHeadshotCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPlaceholders(player, hst), PlaceholderUtils.formatPlaceholders(player, hsst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPAPI(player, hst), PlaceholderUtils.formatPAPI(player, hsst)));
             });
             assistants.forEach(player -> {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
                 gp.getAssistCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPlaceholders(player, ast), PlaceholderUtils.formatPlaceholders(player, asst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPAPI(player, ast), PlaceholderUtils.formatPAPI(player, asst)));
             });
             killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
         });
@@ -206,18 +205,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void clickInv(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
-            PlayerGui apg = plugin.guiManager.getGui(p);
-            if(event.getRawSlot() == event.getSlot()){
-                if(event.getClickedInventory() instanceof PlayerInventory)
-                    plugin.getHandler(PlayerInventoryHandler.class).handleSlot(p, event, event.getSlot());
-                else if(event.getClickedInventory().equals(apg.getInventory()) && apg.getGui() != null) {
-                    BattleSlot[] x = apg.getGui().getSlots();
-                    if(event.getSlot() < x.length) {
-                        BattleSlot s = x[event.getSlot()];
-                        event.setCancelled(s == null || plugin.guiManager.callSlotHandler(event, apg, s));
-                    }
-                }
-            } else plugin.getHandler(PlayerInventoryHandler.class).handleSlot(p, event, event.getSlot());
+            plugin.guiManager.callEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
         }
     }
 

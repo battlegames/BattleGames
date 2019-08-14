@@ -112,11 +112,11 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("inv")
     public void inv(Player player){
-        plugin.guiManager.openInventory(player, "inventory_menu");
+        plugin.guiManager.openTopInventory(player, "inventory_menu");
     }
 
     @Subcommand("kit")
     public void kit(Player player){
-        plugin.guiManager.openInventory(player, "kit_menu");
+        plugin.guiManager.openTopInventory(player, "kit_menu");
     }
 }

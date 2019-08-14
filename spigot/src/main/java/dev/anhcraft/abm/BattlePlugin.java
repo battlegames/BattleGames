@@ -11,7 +11,7 @@ import dev.anhcraft.abm.api.impl.BattleGameManager;
 import dev.anhcraft.abm.api.objects.*;
 import dev.anhcraft.abm.cmd.BattleCommand;
 import dev.anhcraft.abm.gui.*;
-import dev.anhcraft.abm.gui.core.BattleGui;
+import dev.anhcraft.abm.api.objects.gui.Gui;
 import dev.anhcraft.abm.system.ItemTag;
 import dev.anhcraft.abm.system.handlers.*;
 import dev.anhcraft.abm.system.integrations.PapiExpansion;
@@ -38,7 +38,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -107,6 +110,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         localeDir.mkdirs();
 
         api = this;
+        initConfigFiles();
+
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
         taskManager = new TaskManager(this);
@@ -117,11 +122,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         gameManager = new GameManager(this);
         ItemTag.init(this);
         HANDLERS.put(GunHandler.class, new GunHandler(this));
-        HANDLERS.put(MagazineHandler.class, new MagazineHandler(this));
-        HANDLERS.put(AmmoHandler.class, new AmmoHandler(this));
-        HANDLERS.put(PlayerInventoryHandler.class, new PlayerInventoryHandler(this));
 
-        initConfigFiles();
         initSystem(CONFIG[0]);
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
@@ -305,15 +306,15 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private void initGui(FileConfiguration c) {
         guiManager.registerGuiHandler("core", new CoreHandler(this));
         guiManager.registerGuiHandler("inventory_menu", new MainInventoryHandler(this));
-        guiManager.registerGuiHandler("inventory_gun", new GunInventoryHandler(this));
-        guiManager.registerGuiHandler("inventory_magazine", new MagazineInventoryHandler(this));
-        guiManager.registerGuiHandler("inventory_ammo", new AmmoInventoryHandler(this));
+        guiManager.registerGuiHandler("inventory_gun", new GunInventory(this));
+        guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory(this));
+        guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory(this));
         guiManager.registerGuiHandler("kit_menu", new KitMenuHandler(this));
         guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler(this));
 
         c.getKeys(false).forEach(s -> {
             if(s.length() > 0 && s.charAt(0) != '$')
-                guiManager.registerGUI(s, new BattleGui(c.getConfigurationSection(s)));
+                guiManager.registerGui(s, new Gui(c.getConfigurationSection(s)));
         });
     }
 

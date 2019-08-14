@@ -1,49 +1,54 @@
 package dev.anhcraft.abm.gui;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.gui.core.BattleGuiHandler;
-import dev.anhcraft.abm.gui.core.PlayerGui;
-import dev.anhcraft.abm.gui.core.SlotClickHandler;
-import dev.anhcraft.abm.gui.core.SlotHandler;
+import dev.anhcraft.abm.api.ext.gui.GuiHandler;
+import dev.anhcraft.abm.api.objects.gui.BattleGui;
+import dev.anhcraft.abm.api.objects.gui.SlotCancelReport;
+import dev.anhcraft.jvmkit.lang.annotation.Label;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class CoreHandler extends BattleGuiHandler {
+public class CoreHandler extends GuiHandler {
     public CoreHandler(BattlePlugin plugin) {
         super(plugin);
     }
 
-    @SlotClickHandler("close")
-    public void close(InventoryClickEvent event){
-        event.getWhoClicked().closeInventory();
+    @Label({"cancel_event", "onCancellableSlot"})
+    public void prevent(SlotCancelReport report) {
+        report.getCancelEvent().setCancelled(true);
     }
 
-    @SlotClickHandler("prev_page")
-    public void prevPage(InventoryClickEvent event, PlayerGui gui){
-        int c = gui.getPage();
-        if(c == 0) return;
-        gui.setPage(c-1);
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), gui);
+    @Label("close")
+    public void close(Player player) {
+        player.closeInventory();
     }
 
-    @SlotClickHandler("next_page")
-    public void nextPage(InventoryClickEvent event, PlayerGui gui){
-        if(gui.isOutOfData()) return;
-        gui.setPage(gui.getPage()+1);
-        plugin.guiManager.openInventory((Player) event.getWhoClicked(), gui);
+    @Label("prev_page")
+    public void prevPage(Player player, BattleGui gui){
+        if(gui.getPagination() != null) {
+            gui.getPagination().prev();
+            plugin.guiManager.renderGui(player, gui);
+        }
     }
 
-    @SlotHandler("choose_arena")
+    @Label("next_page")
+    public void nextPage(Player player, BattleGui gui){
+        if(gui.getPagination() != null) {
+            gui.getPagination().next();
+            plugin.guiManager.renderGui(player, gui);
+        }
+    }
+
+    @Label("choose_arena")
     public void chooseArena(Player player){
-        plugin.guiManager.openInventory(player, "arena_chooser");
+        plugin.guiManager.openTopInventory(player, "arena_chooser");
     }
 
-    @SlotHandler("open_inventory")
+    @Label("open_inventory")
     public void openInv(Player player){
-        plugin.guiManager.openInventory(player, "inventory_menu");
+        plugin.guiManager.openTopInventory(player, "inventory_menu");
     }
 
-    @SlotHandler("quit_game")
+    @Label("quit_game")
     public void quitGame(Player player){
         plugin.gameManager.quit(player);
     }
