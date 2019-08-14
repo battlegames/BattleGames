@@ -72,7 +72,7 @@ public class Arena {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.clone();
+        return icon.duplicate();
     }
 
     public long getMaxTime() {
