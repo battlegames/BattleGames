@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Arrays;
+
 public class GameListener extends BattleComponent implements Listener {
     public GameListener(BattlePlugin plugin) {
         super(plugin);
@@ -19,7 +21,7 @@ public class GameListener extends BattleComponent implements Listener {
     public void join(GameJoinEvent event){
         Player p = event.getGamePlayer().getPlayer();
         PlayerInventory i = p.getInventory();
-        event.getGamePlayer().setBackupInventory(i.getContents());
+        event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
         plugin.guiManager.setBottomInv(p, "game_player_inv");
     }
