@@ -58,7 +58,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void secondarySkin(Player player, BattleItem newItem, BattleItem oldItem){
         if(newItem instanceof Gun)
             player.getInventory().setItemInOffHand(plugin.getHandler(GunHandler.class).createGun(
-                    (Gun) newItem, true).build());
+                    (Gun) newItem, true));
         else if(newItem == null && oldItem instanceof Gun)
             player.getInventory().setItemInOffHand(null);
     }
@@ -85,7 +85,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                     plugin.gameManager.getGame(p).ifPresent(game -> {
                         Gun gun = (Gun) item;
                         plugin.getHandler(GunHandler.class).shoot(game, p, gun);
-                        p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND).build());
+                        p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
                     });

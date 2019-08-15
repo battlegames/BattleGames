@@ -189,7 +189,7 @@ public class DeathmatchController extends ModeController {
                 Gun gun = (Gun) item;
                 Magazine mag = gun.getMagazine();
                 mag.resetAmmo();
-                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false).build());
+                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
                 e.setCancelled(true);
             }
         });

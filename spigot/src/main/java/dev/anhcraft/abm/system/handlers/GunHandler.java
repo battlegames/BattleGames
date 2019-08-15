@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
@@ -21,12 +22,16 @@ public class GunHandler extends Handler {
         super(plugin);
     }
 
-    public PreparedItem createGun(Gun gunItem, boolean secondarySkin){
+    public ItemStack createGun(Gun gunItem, boolean secondarySkin){
         return gunItem.getModel()
                 .map(gunModel -> {
                     Skin skin = secondarySkin ? gunModel.getSecondarySkin() : gunModel.getPrimarySkin();
                     PreparedItem pi = plugin.itemManager.make(gunItem);
-                    return pi == null ? null : skin.transform(pi);
+                    if(pi == null) return null;
+                    else {
+                        pi = skin.transform(pi);
+                        return plugin.itemManager.write(pi.build(), gunItem);
+                    }
                 }).orElse(null);
     }
 
@@ -40,10 +45,10 @@ public class GunHandler extends Handler {
         Ammo ammoItem = magazine.getAmmo();
         ammoItem.setModel(ammo.getKey());
 
-        player.getInventory().setItem(slot, createGun(gun, false).build());
+        player.getInventory().setItem(slot, createGun(gun, false));
         int held = player.getInventory().getHeldItemSlot();
         if(held == slot) {
-            player.getInventory().setItemInOffHand(createGun(gun, true).build());
+            player.getInventory().setItemInOffHand(createGun(gun, true));
             PlayerUtil.reduceSpeed(player, g.getWeight());
         }
     }
