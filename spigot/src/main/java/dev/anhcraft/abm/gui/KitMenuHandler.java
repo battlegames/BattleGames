@@ -2,13 +2,13 @@ package dev.anhcraft.abm.gui;
 
 import com.google.common.collect.LinkedHashMultimap;
 import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.ext.gui.GuiListener;
-import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
-import dev.anhcraft.abm.api.objects.gui.SlotReport;
 import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
 import dev.anhcraft.abm.api.objects.ItemStorage;
-import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.objects.gui.Pagination;
+import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
+import dev.anhcraft.abm.api.objects.gui.SlotReport;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -62,7 +62,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                 data.put(kit.getIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                     @Override
                     public void call(SlotClickReport event) {
-                        event.getPlayer().getInventory().addItem(kit.getVanillaItems());
+                        event.getPlayer().getInventory().addItem(kit.getVanillaItems()).values().forEach(itemStack -> event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), itemStack));
                         kit.getAbmItems().forEach((type, x) -> {
                             ItemStorage is = pd.getInventory().getStorage(type);
                             x.forEach(is::put);
