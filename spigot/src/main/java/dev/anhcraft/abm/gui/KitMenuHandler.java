@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.gui;
 
-import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.ext.gui.GuiListener;
@@ -20,7 +20,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
     }
 
     @Override
-    public void pullData(Pagination pagination, Player player, LinkedHashMultimap<ItemStack, GuiListener<? extends SlotReport>> data) {
+    public void pullData(Pagination pagination, Player player, Multimap<ItemStack, GuiListener<? extends SlotReport>> data) {
         plugin.getPlayerData(player).ifPresent(pd -> {
             plugin.listKits().forEach(kit -> {
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {

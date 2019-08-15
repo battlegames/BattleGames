@@ -1,6 +1,9 @@
 package dev.anhcraft.abm.system.managers;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
@@ -182,9 +185,11 @@ public class GuiManager extends BattleComponent {
         if(gui.getPagination() != null){
             GuiHandler gh = GUI_HANDLERS.get(gui.getPagination().getHandler());
             if (gh instanceof PaginationHandler) {
-                LinkedHashMultimap<ItemStack, GuiListener<? extends SlotReport>> data = LinkedHashMultimap.create();
+                Multimap<ItemStack, GuiListener<? extends SlotReport>> data = LinkedHashMultimap.create();
                 // get data
                 ((PaginationHandler) gh).pullData(gui.getPagination(), player, data);
+                // we dont want null keys
+                data = Multimaps.filterKeys(data, Predicates.notNull());
                 // slots per page
                 int[] pageSlots = gui.getPagination().getSlots();
                 // all pagination slots

@@ -1,18 +1,18 @@
 package dev.anhcraft.abm.gui;
 
-import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
+import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.ext.gui.GuiListener;
-import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
-import dev.anhcraft.abm.api.objects.gui.SlotReport;
 import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
 import dev.anhcraft.abm.api.objects.GunModel;
 import dev.anhcraft.abm.api.objects.PlayerData;
-import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.objects.gui.Pagination;
+import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
+import dev.anhcraft.abm.api.objects.gui.SlotReport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,7 @@ public class GunInventory extends GuiHandler implements PaginationHandler {
     }
 
     @Override
-    public void pullData(Pagination pagination, Player player, LinkedHashMultimap<ItemStack, GuiListener<? extends SlotReport>> data) {
+    public void pullData(Pagination pagination, Player player, Multimap<ItemStack, GuiListener<? extends SlotReport>> data) {
         Optional<PlayerData> pd = plugin.getPlayerData(player);
         pd.ifPresent(playerData -> {
             playerData.getInventory().getStorage(ItemType.GUN).list().forEach(ent -> {
