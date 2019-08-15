@@ -39,6 +39,7 @@ public abstract class ModeController extends BattleComponent implements Listener
     public abstract void onJoin(Player player, Game game);
     public void onQuit(Player player, Game game){}
     public void onRespawn(PlayerRespawnEvent event, Game game){}
+    public void onTask(Game game){}
 
     void broadcast(Game game, String localePath){
         game.getPlayers().keySet().forEach(player -> plugin.chatProvider.sendPlayer(player, localePath));

@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.api.enums.GamePhase;
 import dev.anhcraft.abm.api.enums.Mode;
+import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
 import dev.anhcraft.abm.api.impl.Resettable;
 import org.apache.commons.lang.Validate;
@@ -79,6 +80,12 @@ public class Game implements Resettable {
 
     public Multimap<Player, DamageReport> getDamageReports() {
         return damageReports;
+    }
+
+    public synchronized void end() {
+        if(phase == GamePhase.END) return;
+        phase = GamePhase.END;
+        Bukkit.getPluginManager().callEvent(new GameEndEvent(this));
     }
 
     @Override
