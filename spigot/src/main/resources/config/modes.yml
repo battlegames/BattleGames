@@ -83,7 +83,7 @@ team_deathmatch:
     title: "&a &c&lBATTLE"
     content:
       - "&e"
-      - "&aTeam deathmatch - %abm_arena_name%"
+      - "&aTeam Deathmatch - %abm_arena_name%"
       - "&b"
       - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
       - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
@@ -94,7 +94,7 @@ team_deathmatch:
     title: "&a &c&lBATTLE"
     content:
       - "&e"
-      - "&aTeam deathmatch - %abm_arena_name%"
+      - "&aTeam Deathmatch - %abm_arena_name%"
       - "&c%abm_game_remaining_time_formatted% left"
       - "&b"
       - "%abm_icon_letter% &aTeam: &f%abm_tdm_team% &e(%abm_tdm_team_players% players)"
