@@ -45,6 +45,11 @@ public class CoreHandler extends GuiHandler {
         plugin.guiManager.openTopInventory(player, "arena_chooser");
     }
 
+    @Label("open_kit_menu")
+    public void openKitMenu(Player player){
+        plugin.guiManager.openTopInventory(player, "kit_menu");
+    }
+
     @Label("open_inventory")
     public void openInv(Player player){
         plugin.guiManager.openTopInventory(player, "inventory_menu");
