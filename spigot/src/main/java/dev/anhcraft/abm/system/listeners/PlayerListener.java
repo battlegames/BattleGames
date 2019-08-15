@@ -216,6 +216,6 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(opt.isPresent()){
             Game g = opt.get();
             Objects.requireNonNull(g.getMode().getController()).onRespawn(event, g);
-        } else player.teleport(plugin.getServerData().getSpawnPoint());
+        } else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
     }
 }

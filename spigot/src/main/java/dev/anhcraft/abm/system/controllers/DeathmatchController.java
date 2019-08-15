@@ -138,6 +138,9 @@ public class DeathmatchController extends ModeController {
         Player player = event.getPlayer();
         GamePlayer gp = game.getPlayer(player);
         if (gp != null) {
+            String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
+                    .getStringList("waiting_spawn_points"));
+            event.setRespawnLocation(LocationUtil.fromString(loc));
             gp.setSpectator(true);
             player.setGameMode(GameMode.SPECTATOR);
             AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
