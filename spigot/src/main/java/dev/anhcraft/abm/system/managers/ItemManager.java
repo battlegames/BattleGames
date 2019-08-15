@@ -11,6 +11,7 @@ import dev.anhcraft.abm.system.ItemTag;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.abm.utils.info.*;
 import dev.anhcraft.jvmkit.utils.MathUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -53,9 +54,8 @@ public class ItemManager extends BattleComponent {
             Map<String, String> info = handleInfo(battleItem.collectInfo(null));
             if(addition != null) info.putAll(addition);
             PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
-            pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
-            pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
-                    .collect(Collectors.toList()));
+            pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
+            pi.lore(pi.lore().stream().map(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info))).collect(Collectors.toList()));
             return pi;
         }
         return null;
@@ -72,9 +72,8 @@ public class ItemManager extends BattleComponent {
         Map<String, String> info = handleInfo(bim.collectInfo(null));
         if(addition != null) info.putAll(addition);
         PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
-        pi.name(PlaceholderUtils.formatInfo(pi.name(), info));
-        pi.lore(pi.lore().stream().map(s -> PlaceholderUtils.formatInfo(s, info))
-                .collect(Collectors.toList()));
+        pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
+        pi.lore(pi.lore().stream().map(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info))).collect(Collectors.toList()));
         return pi;
     }
 
