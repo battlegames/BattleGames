@@ -93,7 +93,9 @@ public class FileStorage extends StorageHandler {
     public boolean load() {
         if(file.exists()) {
             try {
-                byte[] bytes = ByteStreams.toByteArray(new FileInputStream(file));
+                FileInputStream fis = new FileInputStream(file);
+                byte[] bytes = ByteStreams.toByteArray(fis);
+                fis.close();
                 if(bytes.length > 0) {
                     getData().clear();
 

@@ -2,18 +2,18 @@ package dev.anhcraft.abm;
 
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.enums.Mode;
 import dev.anhcraft.abm.api.enums.StorageType;
 import dev.anhcraft.abm.api.impl.BattleAPI;
 import dev.anhcraft.abm.api.impl.BattleGameManager;
 import dev.anhcraft.abm.api.objects.*;
+import dev.anhcraft.abm.api.objects.gui.Gui;
 import dev.anhcraft.abm.cmd.BattleCommand;
 import dev.anhcraft.abm.gui.*;
-import dev.anhcraft.abm.api.objects.gui.Gui;
 import dev.anhcraft.abm.system.ItemTag;
-import dev.anhcraft.abm.system.handlers.*;
+import dev.anhcraft.abm.system.handlers.GunHandler;
+import dev.anhcraft.abm.system.handlers.Handler;
 import dev.anhcraft.abm.system.integrations.PapiExpansion;
 import dev.anhcraft.abm.system.integrations.VaultApi;
 import dev.anhcraft.abm.system.listeners.BlockListener;
@@ -28,6 +28,7 @@ import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.abm.tasks.DataSavingTask;
 import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
+import dev.anhcraft.jvmkit.utils.FileUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -38,10 +39,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -220,8 +218,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             try {
                 if(f.exists()) CONFIG[i] = YamlConfiguration.loadConfiguration(f);
                 else if(f.createNewFile()) {
-                    byte[] bytes = ByteStreams.toByteArray(getResource("config/"+s));
-                    Files.write(bytes, f);
+                    InputStream in = getResource("config/"+s);
+                    byte[] bytes = ByteStreams.toByteArray(in);
+                    in.close();
+                    FileUtil.write(f, bytes);
                     Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
                     CONFIG[i] = YamlConfiguration.loadConfiguration(reader);
                 }
