@@ -2,7 +2,7 @@
 
 This one is applied for all aspects of this plugin.
 
-**Last changed: 13/8/2019**
+**Last changed: 15/8/2019**
 
 ## Details
 
@@ -30,4 +30,4 @@ This one is applied for all aspects of this plugin.
 - I can revoke the license of someone else without reasons if I think they had illegal actions against the plugin
 - I can drop support for any Minecraft versions, decline any suggestions or requests if I think they are impossible for me to maintain/implement
 
-**&copy; 2019 by anhcraft. All right reversed.**
+**&copy; 2019 - ∞ by anhcraft. All right reversed.**
