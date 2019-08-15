@@ -130,6 +130,7 @@ inventory_menu: # Don't change this
         lore:
           - "$$gui.btn.close_lore"
       handlers:
+        - "core::cancel_event"
         - "core::close"
 
 inventory_gun:
