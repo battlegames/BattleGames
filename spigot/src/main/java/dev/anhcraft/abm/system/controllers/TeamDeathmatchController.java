@@ -55,6 +55,16 @@ public class TeamDeathmatchController extends ModeController {
     }
 
     @Override
+    public void onTask(Game game){
+        SimpleTeam<DeathmatchTeam> x = TEAM.get(game);
+        if(x != null) {
+            int a = x.countPlayers(DeathmatchTeam.TEAM_A);
+            int b = x.countPlayers(DeathmatchTeam.TEAM_B);
+            if (a == 0 || b == 0) game.end();
+        }
+    }
+
+    @Override
     public void onQuit(Player player, Game game){
         broadcast(game, "mode_tdm.player_quit_broadcast",
                 s -> s.replace("{__target__}", player.getDisplayName()));
@@ -268,23 +278,27 @@ public class TeamDeathmatchController extends ModeController {
         SimpleTeam<DeathmatchTeam> team = TEAM.remove(game);
 
         Map<DeathmatchTeam, List<GamePlayer>> map = team.reverse(game::getPlayer);
-        IntSummaryStatistics sa = map.get(DeathmatchTeam.TEAM_A).stream().mapToInt(value -> {
-            respw(game, value.getPlayer(), DeathmatchTeam.TEAM_A);
-            value.setSpectator(false);
-            return value.getKillCounter().get();
-        }).summaryStatistics();
-        IntSummaryStatistics sb = map.get(DeathmatchTeam.TEAM_B).stream().mapToInt(value -> {
-            respw(game, value.getPlayer(), DeathmatchTeam.TEAM_B);
-            value.setSpectator(false);
-            return value.getKillCounter().get();
-        }).summaryStatistics();
-        DeathmatchTeam winner;
-        if(sa.getSum() == sb.getSum())
-            winner = sa.getAverage() > sb.getAverage() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
-        else
-            winner = sa.getSum() > sb.getSum() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
-        map.get(winner).forEach(player -> player.setWinner(true));
-        team.reset();
+        List<GamePlayer> aPlayers = map.get(DeathmatchTeam.TEAM_A);
+        List<GamePlayer> bPlayers = map.get(DeathmatchTeam.TEAM_B);
+        if(aPlayers != null & bPlayers != null) {
+            IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
+                respw(game, value.getPlayer(), DeathmatchTeam.TEAM_A);
+                value.setSpectator(false);
+                return value.getKillCounter().get();
+            }).summaryStatistics();
+            IntSummaryStatistics sb = bPlayers.stream().mapToInt(value -> {
+                respw(game, value.getPlayer(), DeathmatchTeam.TEAM_B);
+                value.setSpectator(false);
+                return value.getKillCounter().get();
+            }).summaryStatistics();
+            DeathmatchTeam winner;
+            if (sa.getSum() == sb.getSum())
+                winner = sa.getAverage() > sb.getAverage() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
+            else
+                winner = sa.getSum() > sb.getSum() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
+            map.get(winner).forEach(player -> player.setWinner(true));
+            team.reset();
+        }
 
         plugin.gameManager.rewardAndSaveCache(game);
         plugin.gameManager.destroy(game);
