@@ -8,7 +8,7 @@ This one is applied for all aspects of this plugin.
 
 ### General
 - You can compile, modify, redistribute the source of this plugin **for private uses** and **non-commercially**
-- You are not permitted to use the plugin for **commercial uses** unless you are **a buyer** and using **official build**
+- You are not permitted to use the plugin for **commercial uses** unless you are using **official builds**
 
 ### With buyers
 
