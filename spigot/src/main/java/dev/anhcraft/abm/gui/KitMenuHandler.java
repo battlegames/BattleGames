@@ -62,13 +62,14 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                 data.put(kit.getIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                     @Override
                     public void call(SlotClickReport event) {
+                        event.getClickEvent().setCancelled(true);
                         event.getPlayer().getInventory().addItem(kit.getVanillaItems()).values().forEach(itemStack -> event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), itemStack));
                         kit.getAbmItems().forEach((type, x) -> {
                             ItemStorage is = pd.getInventory().getStorage(type);
                             x.forEach(is::put);
                         });
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
-                        plugin.guiManager.openTopInventory(event.getPlayer(), "kit_menu");
+                        plugin.guiManager.renderTopInventory(event.getPlayer(), event.getGui().getPlayerGui());
                     }
                 });
             });
