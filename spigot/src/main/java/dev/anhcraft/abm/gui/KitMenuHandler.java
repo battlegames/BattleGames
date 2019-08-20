@@ -62,7 +62,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                             x.forEach(is::put);
                         });
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
-                        api.getGuiManager().renderTopInventory(event.getPlayer(), event.getGui().getPlayerGui());
+                        api.getGuiManager().openTopInventory(event.getPlayer(), "kit_menu");
                     }
                 });
             });
