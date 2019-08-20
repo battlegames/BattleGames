@@ -59,12 +59,6 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
     }
 
     @Override
-    public void sendPlayer(Player target, String localePath, ChatMessageType type){
-        TextComponent c = new TextComponent(TextComponent.fromLegacyText(getFormattedMessage(target, localePath)));
-        target.spigot().sendMessage(type, c);
-    }
-
-    @Override
     public void sendPlayer(Player target, String localePath, ChatMessageType type, Function<String, String> x){
         String s = x.apply(getFormattedMessage(target, localePath));
         TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
