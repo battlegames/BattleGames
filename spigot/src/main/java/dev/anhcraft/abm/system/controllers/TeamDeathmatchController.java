@@ -1,15 +1,11 @@
 package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.DeathmatchTeam;
-import dev.anhcraft.abm.api.enums.GamePhase;
-import dev.anhcraft.abm.api.enums.ItemType;
-import dev.anhcraft.abm.api.enums.Mode;
+import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
-import dev.anhcraft.abm.api.ext.BattleItem;
-import dev.anhcraft.abm.api.objects.*;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
@@ -181,12 +177,12 @@ public class TeamDeathmatchController extends ModeController {
             if(game.getMode() != getMode() && game.getPhase() != GamePhase.PLAYING) return;
             performCooldownMap(game, "item_selection", cooldownMap -> {
                 int t = game.getArena().getAttributes().getInt("item_selection_time");
-                if(cooldownMap.isPassed(player, t)) plugin.chatProvider.sendPlayer(player, "mode_tdm.error_item_selection_overtime");
+                if(cooldownMap.isPassed(player, t)) plugin.chatManager.sendPlayer(player, "mode_tdm.error_item_selection_overtime");
                 else {
                     if (event.getItemModel().getItemType() == ItemType.GUN) {
                         plugin.getHandler(GunHandler.class).selectGun(player, (GunModel) event.getItemModel(), 0);
                     } else {
-                        plugin.chatProvider.sendPlayer(player, "mode_tdm.error_disabled_item_type");
+                        plugin.chatManager.sendPlayer(player, "mode_tdm.error_disabled_item_type");
                     }
                 }
             });

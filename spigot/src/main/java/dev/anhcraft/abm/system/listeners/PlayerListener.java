@@ -3,12 +3,12 @@ package dev.anhcraft.abm.system.listeners;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.ext.BattleComponent;
-import dev.anhcraft.abm.api.ext.BattleItem;
-import dev.anhcraft.abm.api.objects.DamageReport;
-import dev.anhcraft.abm.api.objects.Game;
-import dev.anhcraft.abm.api.objects.GamePlayer;
-import dev.anhcraft.abm.api.objects.Gun;
+import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.api.inventory.items.BattleItem;
+import dev.anhcraft.abm.api.misc.DamageReport;
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
@@ -197,7 +197,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void chat(AsyncPlayerChatEvent event) {
-        if(plugin.chatProvider.chat(event.getPlayer(), event.getMessage()))
+        if(plugin.chatManager.chat(event.getPlayer(), event.getMessage()))
             event.setCancelled(true);
     }
 

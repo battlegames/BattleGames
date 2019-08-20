@@ -1,11 +1,11 @@
 package dev.anhcraft.abm.system.managers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.StorageType;
-import dev.anhcraft.abm.api.ext.BattleComponent;
-import dev.anhcraft.abm.api.objects.PlayerData;
+import dev.anhcraft.abm.api.storage.StorageType;
+import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.storage.handlers.FileStorage;
-import dev.anhcraft.abm.system.providers.StorageProvider;
+import dev.anhcraft.abm.storage.Storage;
 import org.bukkit.OfflinePlayer;
 
 import java.io.File;
@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataManager extends BattleComponent {
-    private final Map<OfflinePlayer, StorageProvider> PLAYER_STORAGE = new HashMap<>();
-    private StorageProvider serverStorage;
+    private final Map<OfflinePlayer, Storage> PLAYER_STORAGE = new HashMap<>();
+    private Storage serverStorage;
     private StorageType storageType;
     private File dataDir;
 
@@ -25,7 +25,7 @@ public class DataManager extends BattleComponent {
 
     public void initFileStorage(File dataDir) {
         this.dataDir = dataDir;
-        serverStorage = new StorageProvider(new FileStorage(new File(dataDir, "server.abm")));
+        serverStorage = new Storage(new FileStorage(new File(dataDir, "server.abm")));
     }
 
     public void loadServerData(){
@@ -44,12 +44,12 @@ public class DataManager extends BattleComponent {
     }
 
     public void loadPlayerData(OfflinePlayer player){
-        StorageProvider provider = PLAYER_STORAGE.get(player);
+        Storage provider = PLAYER_STORAGE.get(player);
         if(provider == null) {
             switch (storageType) {
                 case FILE: {
                     File f = new File(dataDir, "player." + player.getUniqueId().toString() + ".abm");
-                    PLAYER_STORAGE.put(player, provider = new StorageProvider(new FileStorage(f)));
+                    PLAYER_STORAGE.put(player, provider = new Storage(new FileStorage(f)));
                     break;
                 }
                 default:
@@ -68,7 +68,7 @@ public class DataManager extends BattleComponent {
 
     public void savePlayerData(OfflinePlayer player){
         plugin.getPlayerData(player).ifPresent(playerData -> {
-            StorageProvider provider = PLAYER_STORAGE.get(player);
+            Storage provider = PLAYER_STORAGE.get(player);
             provider.getData().clear();
             playerData.write(provider.getData());
             provider.save();

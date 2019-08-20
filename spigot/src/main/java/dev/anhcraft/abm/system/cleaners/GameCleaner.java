@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.system.cleaners;
 
-import dev.anhcraft.abm.api.objects.Arena;
+import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.system.cleaners.works.BlockRestoration;
 
 import java.util.Arrays;

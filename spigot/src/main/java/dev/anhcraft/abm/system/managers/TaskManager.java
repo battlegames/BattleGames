@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.system.managers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.ext.BattleComponent;
+import dev.anhcraft.abm.BattleComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;

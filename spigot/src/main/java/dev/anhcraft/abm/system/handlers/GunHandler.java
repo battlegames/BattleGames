@@ -2,8 +2,13 @@ package dev.anhcraft.abm.system.handlers;
 
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.game.Bullet;
+import dev.anhcraft.abm.api.entity.BulletEntity;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.objects.*;
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.misc.DamageReport;
+import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -71,11 +76,11 @@ public class GunHandler extends Handler {
     public void shoot(Game game, Player player, Gun gunItem){
         Magazine mag = gunItem.getMagazine();
         if(!mag.getModel().isPresent()) {
-            plugin.chatProvider.sendPlayer(player, "gun.none_magazine_message");
+            plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
             return;
         }
         if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
-            plugin.chatProvider.sendPlayer(player, "gun.out_of_ammo");
+            plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return;
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);

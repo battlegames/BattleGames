@@ -1,15 +1,15 @@
 package dev.anhcraft.abm.system.controllers;
 
+import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.Mode;
-import dev.anhcraft.abm.api.ext.BattleComponent;
-import dev.anhcraft.abm.api.objects.Game;
+import dev.anhcraft.abm.api.BattleModeController;
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.utils.CooldownMap;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class ModeController extends BattleComponent implements Listener {
+public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
     private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>()); // fix bug!
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
     private Mode mode;
@@ -33,28 +33,20 @@ public abstract class ModeController extends BattleComponent implements Listener
         this.mode = mode;
     }
 
-    public boolean canJoin(Player player, Game game){
-        return true;
-    }
-    public abstract void onJoin(Player player, Game game);
-    public void onQuit(Player player, Game game){}
-    public void onRespawn(PlayerRespawnEvent event, Game game){}
-    public void onTask(Game game){}
-
     void broadcast(Game game, String localePath){
-        game.getPlayers().keySet().forEach(player -> plugin.chatProvider.sendPlayer(player, localePath));
+        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath));
     }
 
     void broadcast(Game game, String localePath, Function<String, String> x){
-        game.getPlayers().keySet().forEach(player -> plugin.chatProvider.sendPlayer(player, localePath, x));
+        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, x));
     }
 
     void broadcast(Game game, String localePath, ChatMessageType type){
-        game.getPlayers().keySet().forEach(player -> plugin.chatProvider.sendPlayer(player, localePath, type));
+        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, type));
     }
 
     void broadcast(Game game, String localePath, ChatMessageType type, Function<String, String> x){
-        game.getPlayers().keySet().forEach(player -> plugin.chatProvider.sendPlayer(player, localePath, type, x));
+        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, type, x));
     }
 
     void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath){

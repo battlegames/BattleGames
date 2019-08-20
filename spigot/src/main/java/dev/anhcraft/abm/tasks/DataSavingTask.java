@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.tasks;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.ext.BattleComponent;
+import dev.anhcraft.abm.BattleComponent;
 
 public class DataSavingTask extends BattleComponent implements Runnable {
     public DataSavingTask(BattlePlugin plugin) {

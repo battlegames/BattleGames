@@ -1,33 +1,26 @@
 package dev.anhcraft.abm.gui;
 
 import com.google.common.collect.Multimap;
-import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.ext.gui.GuiHandler;
-import dev.anhcraft.abm.api.ext.gui.GuiListener;
-import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
-import dev.anhcraft.abm.api.objects.ItemStorage;
-import dev.anhcraft.abm.api.objects.gui.Pagination;
-import dev.anhcraft.abm.api.objects.gui.SlotClickReport;
-import dev.anhcraft.abm.api.objects.gui.SlotReport;
+import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.BattleAPI;
+import dev.anhcraft.abm.api.gui.*;
+import dev.anhcraft.abm.api.inventory.ItemStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Date;
 
 public class KitMenuHandler extends GuiHandler implements PaginationHandler {
-    public KitMenuHandler(BattlePlugin plugin) {
-        super(plugin);
-    }
-
     @Override
     public void pullData(Pagination pagination, Player player, Multimap<ItemStack, GuiListener<? extends SlotReport>> data) {
-        plugin.getPlayerData(player).ifPresent(pd -> {
-            plugin.listKits().forEach(kit -> {
+        BattleAPI api = APIProvider.get();
+        api.getPlayerData(player).ifPresent(pd -> {
+            api.listKits().forEach(kit -> {
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
                     data.put(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                         @Override
                         public void call(SlotClickReport event) {
-                            plugin.chatProvider.sendPlayer(event.getPlayer(), "kit.no_permission");
+                            api.getChatManager().sendPlayer(event.getPlayer(), "kit.no_permission");
                             event.getClickEvent().setCancelled(true);
                         }
                     });
@@ -39,7 +32,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                         data.put(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
-                                plugin.chatProvider.sendPlayer(event.getPlayer(), "kit.one_time_use");
+                                api.getChatManager().sendPlayer(event.getPlayer(), "kit.one_time_use");
                                 event.getClickEvent().setCancelled(true);
                             }
                         });
@@ -50,8 +43,8 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                         data.put(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
-                                String msg = plugin.chatProvider.getFormattedMessage(event.getPlayer(), "kit.unavailable");
-                                msg = String.format(msg, plugin.formatLongFormDate(new Date(next)));
+                                String msg = api.getChatManager().getFormattedMessage(event.getPlayer(), "kit.unavailable");
+                                msg = String.format(msg, api.formatLongFormDate(new Date(next)));
                                 event.getPlayer().sendMessage(msg);
                                 event.getClickEvent().setCancelled(true);
                             }
@@ -69,7 +62,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                             x.forEach(is::put);
                         });
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
-                        plugin.guiManager.renderTopInventory(event.getPlayer(), event.getGui().getPlayerGui());
+                        api.getGuiManager().renderTopInventory(event.getPlayer(), event.getGui().getPlayerGui());
                     }
                 });
             });

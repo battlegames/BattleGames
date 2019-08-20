@@ -4,7 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
-import dev.anhcraft.abm.storage.tags.*;
+import dev.anhcraft.abm.api.storage.tags.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("ALL")
-public class FileStorage extends StorageHandler {
+public class FileStorage extends StorageProvider {
     private File file;
 
     public FileStorage(File file) {

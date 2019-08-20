@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.system.integrations;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.Icon;
+import dev.anhcraft.abm.api.misc.Icon;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;

@@ -1,23 +1,20 @@
 package dev.anhcraft.abm.system.managers;
 
+import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.enums.GamePhase;
-import dev.anhcraft.abm.api.enums.Mode;
+import dev.anhcraft.abm.api.BattleGameManager;
+import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
-import dev.anhcraft.abm.api.ext.BattleComponent;
-import dev.anhcraft.abm.api.impl.BattleGameManager;
-import dev.anhcraft.abm.api.objects.Arena;
-import dev.anhcraft.abm.api.objects.Game;
-import dev.anhcraft.abm.api.objects.GamePlayer;
+import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.system.cleaners.GameCleaner;
 import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.abm.system.integrations.VaultApi;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +64,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         return Optional.ofNullable(ARENA_GAME_MAP.get(arena));
     }
 
-    private boolean join(Player player, Game game, ModeController controller) {
+    private boolean join(Player player, Game game, BattleModeController controller) {
         GamePlayer gp = new GamePlayer(player);
         game.getPlayers().put(player, gp);
         PLAYER_GAME_MAP.put(player, game);
@@ -82,27 +79,27 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player)) {
-                plugin.chatProvider.sendPlayer(player, "arena.error_already_joined");
+                plugin.chatManager.sendPlayer(player, "arena.error_already_joined");
                 return false;
             }
             Game game = ARENA_GAME_MAP.get(arena);
             if(ARENA_GAME_MAP.containsKey(arena)){
                 if (game.getPhase() == GamePhase.END || game.getPhase() == GamePhase.CLEANING) {
-                    plugin.chatProvider.sendPlayer(player, "arena.error_attendance_disabled");
+                    plugin.chatManager.sendPlayer(player, "arena.error_attendance_disabled");
                     return false;
                 }
                 if(game.getPlayers().size() == arena.getMaxPlayers()){
-                    plugin.chatProvider.sendPlayer(player, "arena.error_full_players");
+                    plugin.chatManager.sendPlayer(player, "arena.error_full_players");
                     return false;
                 }
             } else ARENA_GAME_MAP.put(arena, game = new Game(arena));
-            ModeController controller = game.getMode().getController();
+            BattleModeController controller = game.getMode().getController();
             if (controller == null) {
-                plugin.chatProvider.sendPlayer(player, "arena.error_mode_controller_unavailable");
+                plugin.chatManager.sendPlayer(player, "arena.error_mode_controller_unavailable");
                 return false;
             }
             if (!controller.canJoin(player, game)) {
-                plugin.chatProvider.sendPlayer(player, "arena.error_attendance_refused");
+                plugin.chatManager.sendPlayer(player, "arena.error_attendance_refused");
                 return false;
             }
             return join(player, game, controller);
@@ -117,7 +114,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             if (PLAYER_GAME_MAP.containsKey(player)) return false;
             Game game = ARENA_GAME_MAP.get(arena);
             if(!ARENA_GAME_MAP.containsKey(arena)) ARENA_GAME_MAP.put(arena, game = new Game(arena));
-            ModeController controller = game.getMode().getController();
+            BattleModeController controller = game.getMode().getController();
             if (controller == null) return false;
             return join(player, game, controller);
         }
@@ -165,7 +162,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             long e = Math.max(0, game.getArena().calculateFinalExp(gamePlayer));
             VaultApi.getEconomyApi().depositPlayer(gamePlayer.getPlayer(), m);
             playerData.getExp().addAndGet(e);
-            plugin.chatProvider.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
+            plugin.chatManager.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
 
             playerData.getKillCounter().addAndGet(gamePlayer.getKillCounter().get());
             playerData.getHeadshotCounter().addAndGet(gamePlayer.getHeadshotCounter().get());

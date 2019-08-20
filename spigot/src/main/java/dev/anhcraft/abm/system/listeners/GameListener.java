@@ -3,7 +3,7 @@ package dev.anhcraft.abm.system.listeners;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
-import dev.anhcraft.abm.api.ext.BattleComponent;
+import dev.anhcraft.abm.BattleComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -2,18 +2,23 @@ package dev.anhcraft.abm;
 
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.io.ByteStreams;
-import dev.anhcraft.abm.api.enums.ItemType;
-import dev.anhcraft.abm.api.enums.Mode;
-import dev.anhcraft.abm.api.enums.StorageType;
-import dev.anhcraft.abm.api.impl.BattleAPI;
-import dev.anhcraft.abm.api.impl.BattleGameManager;
-import dev.anhcraft.abm.api.impl.BattleGuiManager;
-import dev.anhcraft.abm.api.impl.BattleItemManager;
-import dev.anhcraft.abm.api.objects.*;
-import dev.anhcraft.abm.api.objects.gui.Gui;
+import dev.anhcraft.abm.api.*;
+import dev.anhcraft.abm.api.game.Arena;
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.inventory.items.AmmoModel;
+import dev.anhcraft.abm.api.inventory.items.GunModel;
+import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.abm.api.game.Mode;
+import dev.anhcraft.abm.api.inventory.items.MagazineModel;
+import dev.anhcraft.abm.api.misc.Kit;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
+import dev.anhcraft.abm.api.storage.data.ServerData;
+import dev.anhcraft.abm.api.storage.StorageType;
+import dev.anhcraft.abm.api.gui.Gui;
 import dev.anhcraft.abm.cmd.BattleCommand;
 import dev.anhcraft.abm.gui.*;
-import dev.anhcraft.abm.system.ItemTag;
+import dev.anhcraft.abm.api.inventory.items.ItemTag;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.handlers.Handler;
 import dev.anhcraft.abm.system.integrations.PapiExpansion;
@@ -22,8 +27,8 @@ import dev.anhcraft.abm.system.listeners.BlockListener;
 import dev.anhcraft.abm.system.listeners.GameListener;
 import dev.anhcraft.abm.system.listeners.PlayerListener;
 import dev.anhcraft.abm.system.managers.*;
-import dev.anhcraft.abm.system.providers.ChatProvider;
-import dev.anhcraft.abm.system.providers.TitleProvider;
+import dev.anhcraft.abm.system.managers.ChatManager;
+import dev.anhcraft.abm.system.managers.TitleManager;
 import dev.anhcraft.abm.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
@@ -44,6 +49,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -65,7 +71,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "kits.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
-    private static BattleAPI api;
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new HashMap<>();
     private final Map<String, Arena> ARENA_MAP = new HashMap<>();
     private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
@@ -75,8 +80,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private File localeDir;
-    public ChatProvider chatProvider;
-    public TitleProvider titleProvider;
+    public ChatManager chatManager;
+    public TitleManager titleProvider;
     public GameManager gameManager;
     public DataManager dataManager;
     public TaskManager taskManager;
@@ -93,14 +98,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private SimpleDateFormat shortFormDate1;
     private SimpleDateFormat shortFormDate2;
     private SimpleDateFormat shortFormDate3;
-
-    @NotNull
-    public static BattleAPI getAPI(){
-        if(api == null){
-            throw new UnsupportedOperationException("API is not ready yet!");
-        }
-        return api;
-    }
 
     @Override
     public void onEnable() {
@@ -120,8 +117,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
         taskManager = new TaskManager(this);
-        chatProvider = new ChatProvider(this);
-        titleProvider = new TitleProvider(this);
+        chatManager = new ChatManager(this);
+        titleProvider = new TitleManager(this);
         itemManager = new ItemManager(this);
         guiManager = new GuiManager(this);
         gameManager = new GameManager(this);
@@ -155,7 +152,20 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new BattleCommand(this));
 
-        api = this;
+        injectApiProvider();
+    }
+
+    private void injectApiProvider() {
+        APIProvider ap = new APIProvider();
+        ap.set(this);
+        try {
+            Class<?> clazz = APIProvider.class;
+            Field pf = clazz.getDeclaredField("provider");
+            pf.setAccessible(true);
+            pf.set(null, ap);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -314,13 +324,13 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initGui(FileConfiguration c) {
-        guiManager.registerGuiHandler("core", new CoreHandler(this));
-        guiManager.registerGuiHandler("inventory_menu", new MainInventoryHandler(this));
-        guiManager.registerGuiHandler("inventory_gun", new GunInventory(this));
-        guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory(this));
-        guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory(this));
-        guiManager.registerGuiHandler("kit_menu", new KitMenuHandler(this));
-        guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler(this));
+        guiManager.registerGuiHandler("core", new CoreHandler());
+        guiManager.registerGuiHandler("inventory_menu", new MainInventoryHandler());
+        guiManager.registerGuiHandler("inventory_gun", new GunInventory());
+        guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory());
+        guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory());
+        guiManager.registerGuiHandler("kit_menu", new KitMenuHandler());
+        guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler());
 
         c.getKeys(false).forEach(s -> {
             if(s.length() > 0 && s.charAt(0) != '$')
@@ -348,10 +358,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return papiExpansion;
     }
 
+    @Override
     public String formatLongFormDate(Date date){
         return longFormDate.format(date);
     }
 
+    @Override
     public String formatShortForm(long time){
         final long x = 1000;
         if(time < 60 * x) return formatShortFormDateSeconds(new Date(time));
@@ -359,14 +371,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         else return formatShortFormDateHours(new Date(time));
     }
 
+    @Override
     public String formatShortFormDateHours(Date date){
         return shortFormDate1.format(date);
     }
 
+    @Override
     public String formatShortFormDateMinutes(Date date){
         return shortFormDate2.format(date);
     }
 
+    @Override
     public String formatShortFormDateSeconds(Date date){
         return shortFormDate3.format(date);
     }
@@ -441,22 +456,24 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return new ArrayList<>(KIT_MAP.values());
     }
 
-    @NotNull
     @Override
-    public BattleGameManager getGameManager() {
+    public @NotNull BattleGameManager getGameManager() {
         return gameManager;
     }
 
-    @NotNull
     @Override
-    public BattleItemManager getItemManager() {
+    public @NotNull BattleItemManager getItemManager() {
         return itemManager;
     }
 
-    @NotNull
     @Override
-    public BattleGuiManager getGuiManager() {
+    public @NotNull BattleGuiManager getGuiManager() {
         return guiManager;
+    }
+
+    @Override
+    public @NotNull BattleChatManager getChatManager() {
+        return chatManager;
     }
 
     private void exit(String msg) {

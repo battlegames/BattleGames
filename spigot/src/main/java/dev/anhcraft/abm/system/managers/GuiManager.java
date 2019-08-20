@@ -6,12 +6,9 @@ import com.google.common.collect.Multimaps;
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.ext.BattleComponent;
-import dev.anhcraft.abm.api.ext.gui.GuiHandler;
-import dev.anhcraft.abm.api.ext.gui.GuiListener;
-import dev.anhcraft.abm.api.impl.BattleGuiManager;
-import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
-import dev.anhcraft.abm.api.objects.gui.*;
+import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.api.gui.*;
+import dev.anhcraft.abm.api.BattleGuiManager;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
@@ -275,15 +272,6 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         BattleGui gui = apg.getTopGui();
         if(gui == null || apg.getTopInv() == null) return;
         apg.getTopInv().setContents(renderItems(player, gui));
-    }
-
-    public void renderGui(Player player, BattleGui gui){
-        if(gui.getPlayerGui().getTopGui() == gui)
-            plugin.guiManager.renderTopInventory(player, gui.getPlayerGui());
-        else if(gui.getPlayerGui().getBottomGui() == gui)
-            plugin.guiManager.renderBottomInv(player, gui.getPlayerGui());
-        else
-            throw new UnsupportedOperationException();
     }
 
     @Override

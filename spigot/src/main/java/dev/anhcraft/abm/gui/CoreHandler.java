@@ -1,17 +1,14 @@
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.ext.gui.GuiHandler;
-import dev.anhcraft.abm.api.objects.gui.BattleGui;
-import dev.anhcraft.abm.api.objects.gui.SlotCancelReport;
+import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.BattleGuiManager;
+import dev.anhcraft.abm.api.gui.BattleGui;
+import dev.anhcraft.abm.api.gui.GuiHandler;
+import dev.anhcraft.abm.api.gui.SlotCancelReport;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
 import org.bukkit.entity.Player;
 
 public class CoreHandler extends GuiHandler {
-    public CoreHandler(BattlePlugin plugin) {
-        super(plugin);
-    }
-
     @Label({"cancel_event", "onCancellableSlot"})
     public void prevent(SlotCancelReport report) {
         report.getCancelEvent().setCancelled(true);
@@ -22,12 +19,20 @@ public class CoreHandler extends GuiHandler {
         player.closeInventory();
     }
 
+    private void renderGui(Player player, BattleGui gui){
+        BattleGuiManager guiManager = APIProvider.get().getGuiManager();
+        if(gui.getPlayerGui().getTopGui() == gui)
+            guiManager.renderTopInventory(player, gui.getPlayerGui());
+        else if(gui.getPlayerGui().getBottomGui() == gui)
+            guiManager.renderBottomInv(player, gui.getPlayerGui());
+    }
+
     @Label("prev_page")
     public void prevPage(Player player, BattleGui gui){
         if(gui.getPagination() != null) {
             gui.getPagination().prev();
             gui.updatePagination(); // refresh listener
-            plugin.guiManager.renderGui(player, gui);
+            renderGui(player, gui);
         }
     }
 
@@ -36,27 +41,27 @@ public class CoreHandler extends GuiHandler {
         if(gui.getPagination() != null) {
             gui.getPagination().next();
             gui.updatePagination();
-            plugin.guiManager.renderGui(player, gui);
+            renderGui(player, gui);
         }
     }
 
     @Label("choose_arena")
     public void chooseArena(Player player){
-        plugin.guiManager.openTopInventory(player, "arena_chooser");
+        APIProvider.get().getGuiManager().openTopInventory(player, "arena_chooser");
     }
 
     @Label("open_kit_menu")
     public void openKitMenu(Player player){
-        plugin.guiManager.openTopInventory(player, "kit_menu");
+        APIProvider.get().getGuiManager().openTopInventory(player, "kit_menu");
     }
 
     @Label("open_inventory")
     public void openInv(Player player){
-        plugin.guiManager.openTopInventory(player, "inventory_menu");
+        APIProvider.get().getGuiManager().openTopInventory(player, "inventory_menu");
     }
 
     @Label("quit_game")
     public void quitGame(Player player){
-        plugin.gameManager.quit(player);
+        APIProvider.get().getGameManager().quit(player);
     }
 }
