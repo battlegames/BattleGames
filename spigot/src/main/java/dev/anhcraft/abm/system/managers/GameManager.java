@@ -15,10 +15,12 @@ import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.abm.system.integrations.VaultApi;
+import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -39,23 +41,29 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Bukkit.getPluginManager().registerEvents(controller, plugin);
     }
 
+    @NotNull
     @Override
-    public Optional<GamePlayer> getGamePlayer(Player player){
+    public Optional<GamePlayer> getGamePlayer(@NotNull Player player){
+        Condition.argNotNull("player", player);
         synchronized (LOCK) {
             Game x = PLAYER_GAME_MAP.get(player);
             return Optional.ofNullable(x == null ? null : x.getPlayer(player));
         }
     }
 
+    @NotNull
     @Override
-    public Optional<Game> getGame(Player player){
+    public Optional<Game> getGame(@NotNull Player player){
+        Condition.argNotNull("player", player);
         synchronized (LOCK) {
             return Optional.ofNullable(PLAYER_GAME_MAP.get(player));
         }
     }
 
+    @NotNull
     @Override
-    public Optional<Game> getGame(Arena arena){
+    public Optional<Game> getGame(@NotNull Arena arena){
+        Condition.argNotNull("arena", arena);
         return Optional.ofNullable(ARENA_GAME_MAP.get(arena));
     }
 
@@ -69,7 +77,9 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     @Override
-    public boolean join(Player player, Arena arena){
+    public boolean join(@NotNull Player player, @NotNull Arena arena){
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player)) {
                 plugin.chatProvider.sendPlayer(player, "arena.error_already_joined");
@@ -100,7 +110,9 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     @Override
-    public boolean forceJoin(Player player, Arena arena) {
+    public boolean forceJoin(@NotNull Player player, @NotNull Arena arena) {
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player)) return false;
             Game game = ARENA_GAME_MAP.get(arena);
@@ -112,7 +124,8 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     @Override
-    public boolean quit(Player player){
+    public boolean quit(@NotNull Player player){
+        Condition.argNotNull("player", player);
         synchronized (LOCK) {
             Game game = PLAYER_GAME_MAP.get(player);
             if (game == null) return false;
@@ -128,7 +141,8 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     @Override
-    public void destroy(Game game){
+    public void destroy(@NotNull Game game){
+        Condition.argNotNull("game", game);
         synchronized (LOCK) {
             game.getPlayers().forEach((player, gp) -> {
                 Bukkit.getPluginManager().callEvent(new GameQuitEvent(gp, game));
@@ -167,6 +181,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         }));
     }
 
+    @NotNull
     @Override
     public Collection<Game> getGames(){
         synchronized (LOCK) {

@@ -7,6 +7,7 @@ import dev.anhcraft.abm.api.enums.ItemType;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.api.ext.BattleItem;
 import dev.anhcraft.abm.api.ext.BattleItemModel;
+import dev.anhcraft.abm.api.impl.BattleItemManager;
 import dev.anhcraft.abm.system.ItemTag;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.abm.utils.info.*;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ItemManager extends BattleComponent {
+public class ItemManager extends BattleComponent implements BattleItemManager {
     private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
     private final Map<ItemType, PreparedItem> ITEM_MODELS = new HashMap<>();
 
@@ -47,7 +48,7 @@ public class ItemManager extends BattleComponent {
     }
 
     @Nullable
-    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, Map<String, String> addition){
+    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition){
         if(battleItem == null) return null;
         Optional<R> opt = battleItem.getModel();
         if(opt.isPresent()){
@@ -67,7 +68,7 @@ public class ItemManager extends BattleComponent {
     }
 
     @Nullable
-    public PreparedItem make(@Nullable BattleItemModel bim, Map<String, String> addition){
+    public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition){
         if(bim == null) return null;
         Map<String, String> info = handleInfo(bim.collectInfo(null));
         if(addition != null) info.putAll(addition);

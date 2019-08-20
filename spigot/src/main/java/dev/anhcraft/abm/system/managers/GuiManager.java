@@ -1,6 +1,5 @@
 package dev.anhcraft.abm.system.managers;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -10,11 +9,13 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ext.BattleComponent;
 import dev.anhcraft.abm.api.ext.gui.GuiHandler;
 import dev.anhcraft.abm.api.ext.gui.GuiListener;
+import dev.anhcraft.abm.api.impl.BattleGuiManager;
 import dev.anhcraft.abm.api.impl.gui.PaginationHandler;
 import dev.anhcraft.abm.api.objects.gui.*;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -29,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class GuiManager extends BattleComponent {
+public class GuiManager extends BattleComponent implements BattleGuiManager {
     private final Map<String, Gui> GUI = new HashMap<>();
     private final Map<String, GuiHandler> GUI_HANDLERS = new HashMap<>();
     private final Map<Player, PlayerGui> PLAYER_GUI = new HashMap<>();
@@ -38,11 +39,17 @@ public class GuiManager extends BattleComponent {
         super(plugin);
     }
 
-    public void registerGui(String id, Gui gui){
+    @Override
+    public void registerGui(@NotNull String id, @NotNull Gui gui){
+        Condition.argNotNull("id", id);
+        Condition.argNotNull("gui", gui);
         GUI.put(id, gui);
     }
 
-    public void registerGuiHandler(String id, GuiHandler handler){
+    @Override
+    public void registerGuiHandler(@NotNull String id, @NotNull GuiHandler handler){
+        Condition.argNotNull("id", id);
+        Condition.argNotNull("handler", handler);
         GUI_HANDLERS.put(id, handler);
 
         // register slot listeners here
@@ -111,8 +118,9 @@ public class GuiManager extends BattleComponent {
         }
     }
 
-    @NotNull
-    public PlayerGui getPlayerGui(Player player){
+    @Override
+    @NotNull public PlayerGui getPlayerGui(@NotNull Player player){
+        Condition.argNotNull("player", player);
         PlayerGui x = PLAYER_GUI.get(player);
         if(x == null) {
             PLAYER_GUI.put(player, x = new PlayerGui());
@@ -189,7 +197,7 @@ public class GuiManager extends BattleComponent {
                 // get data
                 ((PaginationHandler) gh).pullData(gui.getPagination(), player, data);
                 // we dont want null keys
-                data = Multimaps.filterKeys(data, Predicates.notNull());
+                data = Multimaps.filterKeys(data, Objects::nonNull);
                 // slots per page
                 int[] pageSlots = gui.getPagination().getSlots();
                 // all pagination slots
@@ -219,13 +227,19 @@ public class GuiManager extends BattleComponent {
         return new BattleGui(gui, pg, slots);
     }
 
-    public void setBottomInv(Player player, String name){
+    @Override
+    public void setBottomInv(@NotNull Player player, @NotNull String name){
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("name", name);
         PlayerGui gui = getPlayerGui(player);
         gui.setBottomGui(setupGui(player, gui, GUI.get(name)));
         renderBottomInv(player, gui);
     }
 
-    public void renderBottomInv(Player player, PlayerGui apg){
+    @Override
+    public void renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg){
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("apg", apg);
         BattleGui bg = apg.getBottomGui();
         if(bg == null) return;
         ItemStack[] items = renderItems(player, bg);
@@ -233,7 +247,10 @@ public class GuiManager extends BattleComponent {
             player.getInventory().setItem(i, items[i]);
     }
 
-    public void openTopInventory(Player player, String name){
+    @Override
+    public void openTopInventory(@NotNull Player player, @NotNull String name){
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("name", name);
         PlayerGui pg = getPlayerGui(player);
         BattleGui bg = setupGui(player, pg, GUI.get(name));
         pg.setTopGui(bg);
@@ -251,7 +268,10 @@ public class GuiManager extends BattleComponent {
             player.playSound(player.getLocation(), bg.getGui().getSound(), 2f, 1f);
     }
 
-    public void renderTopInventory(Player player, PlayerGui apg){
+    @Override
+    public void renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg){
+        Condition.argNotNull("player", player);
+        Condition.argNotNull("apg", apg);
         BattleGui gui = apg.getTopGui();
         if(gui == null || apg.getTopInv() == null) return;
         apg.getTopInv().setContents(renderItems(player, gui));
@@ -266,7 +286,9 @@ public class GuiManager extends BattleComponent {
             throw new UnsupportedOperationException();
     }
 
-    public void destroyPlayerGui(Player player){
+    @Override
+    public void destroyPlayerGui(@NotNull Player player){
+        Condition.argNotNull("player", player);
         PLAYER_GUI.remove(player);
     }
 

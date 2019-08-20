@@ -7,6 +7,8 @@ import dev.anhcraft.abm.api.enums.Mode;
 import dev.anhcraft.abm.api.enums.StorageType;
 import dev.anhcraft.abm.api.impl.BattleAPI;
 import dev.anhcraft.abm.api.impl.BattleGameManager;
+import dev.anhcraft.abm.api.impl.BattleGuiManager;
+import dev.anhcraft.abm.api.impl.BattleItemManager;
 import dev.anhcraft.abm.api.objects.*;
 import dev.anhcraft.abm.api.objects.gui.Gui;
 import dev.anhcraft.abm.cmd.BattleCommand;
@@ -38,6 +40,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -90,7 +94,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private SimpleDateFormat shortFormDate2;
     private SimpleDateFormat shortFormDate3;
 
+    @NotNull
     public static BattleAPI getAPI(){
+        if(api == null){
+            throw new UnsupportedOperationException("API is not ready yet!");
+        }
         return api;
     }
 
@@ -107,7 +115,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         localeDir = new File(getDataFolder(), "locale");
         localeDir.mkdirs();
 
-        api = this;
         initConfigFiles();
 
         papiExpansion = new PapiExpansion(this);
@@ -147,6 +154,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new BattleCommand(this));
+
+        api = this;
     }
 
     @Override
@@ -373,7 +382,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<PlayerData> getPlayerData(OfflinePlayer player) {
+    public Optional<PlayerData> getPlayerData(@Nullable OfflinePlayer player) {
         return Optional.ofNullable(PLAYER_MAP.get(player));
     }
 
@@ -383,27 +392,27 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<Arena> getArena(String id) {
+    public Optional<Arena> getArena(@Nullable String id) {
         return Optional.ofNullable(ARENA_MAP.get(id));
     }
 
     @Override
-    public Optional<AmmoModel> getAmmoModel(String id) {
+    public Optional<AmmoModel> getAmmoModel(@Nullable String id) {
         return Optional.ofNullable(AMMO_MAP.get(id));
     }
 
     @Override
-    public Optional<GunModel> getGunModel(String id) {
+    public Optional<GunModel> getGunModel(@Nullable String id) {
         return Optional.ofNullable(GUN_MAP.get(id));
     }
 
     @Override
-    public Optional<MagazineModel> getMagazineModel(String id) {
+    public Optional<MagazineModel> getMagazineModel(@Nullable String id) {
         return Optional.ofNullable(MAGAZINE_MAP.get(id));
     }
 
     @Override
-    public Optional<Kit> getKit(String id) {
+    public Optional<Kit> getKit(@Nullable String id) {
         return Optional.ofNullable(KIT_MAP.get(id));
     }
 
@@ -432,9 +441,22 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return new ArrayList<>(KIT_MAP.values());
     }
 
+    @NotNull
     @Override
     public BattleGameManager getGameManager() {
         return gameManager;
+    }
+
+    @NotNull
+    @Override
+    public BattleItemManager getItemManager() {
+        return itemManager;
+    }
+
+    @NotNull
+    @Override
+    public BattleGuiManager getGuiManager() {
+        return guiManager;
     }
 
     private void exit(String msg) {
