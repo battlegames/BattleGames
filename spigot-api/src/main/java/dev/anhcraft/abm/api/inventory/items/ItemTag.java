@@ -21,7 +21,7 @@ public class ItemTag {
         if(init) return;
         Field[] fields = ItemTag.class.getDeclaredFields();
         for(Field field : fields){
-            if(Modifier.isStatic(field.getModifiers())) {
+            if(Modifier.isStatic(field.getModifiers()) && field.getType() == NamespacedKey.class) {
                 try {
                     field.set(null, new NamespacedKey(plugin, field.getName().toLowerCase()));
                 } catch (IllegalAccessException e) {
