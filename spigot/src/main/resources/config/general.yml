@@ -79,3 +79,9 @@ storage:
   file:
     # The path to the directory where we store data
     data_path: ".battle"
+
+# Miscellaneous settings
+misc:
+  # Basic anti death drops
+  # This option prevents player items and exp from dropping
+  anti_death_drops: true

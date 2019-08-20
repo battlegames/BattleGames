@@ -156,8 +156,12 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void death(PlayerDeathEvent e) {
-        e.setKeepInventory(true);
-        e.setKeepLevel(true);
+        if(plugin.getGeneralConf().getBoolean("misc.anti_death_drops")){
+            e.getDrops().clear();
+            e.setDroppedExp(0);
+            e.setKeepInventory(true);
+            e.setKeepLevel(true);
+        }
         plugin.gameManager.getGame(e.getEntity()).ifPresent(game -> {
             e.setDeathMessage(null);
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getDeathCounter().incrementAndGet();
