@@ -113,6 +113,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         localeDir.mkdirs();
 
         initConfigFiles();
+        injectApiProvider();
 
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
@@ -151,8 +152,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new BattleCommand(this));
-
-        injectApiProvider();
     }
 
     private void injectApiProvider() {
