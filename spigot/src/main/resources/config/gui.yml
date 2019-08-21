@@ -43,8 +43,16 @@ inventory_menu: # Don't change this
   size: 36
 
   # The sound to be played when opening this GUI
-  # [optional] [case-insensitive]
-  sound: block_chest_open
+  # With Bukkit sounds, prefix the name with a dollar sign ($)
+  # Format: [$]<sound name>[:<VOLUME>[:<PITCH>]]
+  # Default volume: 2.0; pitch: 1.0
+  # Examples:
+  # - my.custom.sound
+  # - $entity_generic_explode
+  # - $entity_generic_explode:1.0
+  # - example.sound:3.0:1.5
+  # [optional] [default: $block_chest_open]
+  sound: $block_chest_open
 
   # The background (for all slots)
   background:
@@ -136,7 +144,6 @@ inventory_menu: # Don't change this
 inventory_gun:
   title: "{{ gui.inventory_gun.title }}"
   size: 54
-  sound: block_chest_open
   background:
     icon:
       material: GRAY_STAINED_GLASS_PANE
@@ -202,7 +209,6 @@ inventory_gun:
 inventory_magazine:
   title: "{{ gui.inventory_magazine.title }}"
   size: 54
-  sound: block_chest_open
   background:
     icon:
       material: GRAY_STAINED_GLASS_PANE
@@ -254,7 +260,6 @@ inventory_magazine:
 inventory_ammo:
   title: "{{ gui.inventory_ammo.title }}"
   size: 54
-  sound: block_chest_open
   background:
     icon:
       material: GRAY_STAINED_GLASS_PANE
@@ -306,7 +311,6 @@ inventory_ammo:
 kit_menu:
   title: "{{ gui.kit_menu.title }}"
   size: 54
-  sound: block_chest_open
   background:
     icon:
       material: GRAY_STAINED_GLASS_PANE
@@ -358,7 +362,6 @@ kit_menu:
 arena_chooser:
   title: "{{ gui.arena_chooser.title }}"
   size: 54
-  sound: block_chest_open
   background:
     icon:
       material: GRAY_STAINED_GLASS_PANE

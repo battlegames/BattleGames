@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.api.gui;
 
-import org.bukkit.Sound;
+import dev.anhcraft.abm.api.misc.SoundRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,13 +15,13 @@ public class Gui {
     private int size;
     private GuiSlot[] slots;
     private Pagination pagination;
-    private Sound sound;
+    private SoundRecord sound;
 
     public Gui(ConfigurationSection conf){
         title = conf.getString("title");
         size = conf.getInt("size", 9);
         String snd = conf.getString("sound");
-        sound = (snd == null ? null : Sound.valueOf(snd.toUpperCase()));
+        sound = new SoundRecord(snd == null ? "$block_chest_open" : snd.toUpperCase());
 
         slots = new GuiSlot[size];
         ConfigurationSection sc = conf.getConfigurationSection("slots");
@@ -90,8 +90,8 @@ public class Gui {
         return pagination;
     }
 
-    @Nullable
-    public Sound getSound() {
+    @NotNull
+    public SoundRecord getSound() {
         return sound;
     }
 }

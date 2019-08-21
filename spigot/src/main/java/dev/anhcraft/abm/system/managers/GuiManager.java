@@ -261,8 +261,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         pg.setTopInv(inv);
         renderTopInventory(player, pg);
         player.openInventory(inv);
-        if(bg.getGui().getSound() != null)
-            player.playSound(player.getLocation(), bg.getGui().getSound(), 2f, 1f);
+        bg.getGui().getSound().play(player);
     }
 
     @Override
