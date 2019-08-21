@@ -6,7 +6,7 @@
 
     <groupId>dev.anhcraft</groupId>
     <artifactId>abm</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>pom</packaging>
 
     <name>Battle</name>
@@ -14,8 +14,8 @@
     <description>anhcraft's Battle minigame</description>
 
     <modules>
-        <module>spigot</module>
         <module>spigot-api</module>
+        <module>spigot</module>
         <module>bungee</module>
     </modules>
 
@@ -55,8 +55,8 @@
                     <finalName>${project.name}</finalName>
                     <relocations>
                         <relocation>
-                            <pattern>co.aikar</pattern>
-                            <shadedPattern>dev.anhcraft.abm.aikar</shadedPattern>
+                            <pattern>co.aikar.commands</pattern>
+                            <shadedPattern>dev.anhcraft.abm.cmd.core</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.anhcraft.abif</pattern>
