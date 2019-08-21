@@ -15,24 +15,25 @@ dm_demo: # The id of this arena
   # The formula which is used to calculate the final experience
   # that players receive when finishing the game.
   # Read the documentation for further information.
-  # [required]
+  # [required] [expression supported]
   final_exp_formula: "a+b*30-c*10+d*5"
 
   # The formula which is used to calculate the final money that players
   # receive when finishing the game.
   # Read the documentation for further information.
-  # [required]
+  # [required] [expression supported]
   final_money_formula: "a*4+b*12+d*5"
 
   # Arenas icon.
   # This section uses ABIF which you can look at here to know
   # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-  # [required]
+  # [required] [placeholder supported]
   icon:
     material: GRASS
-    name: "&aExample Arena 1"
+    name: "{__arena_name__}"
     lore:
-      - "&aMode: &fDeathmatch"
+      - "&4Mode: &f{__mode_name__}"
+      - "&4Players: &f{__game_current_time:0__}/{__arena_max_players__}"
 
   # Maximum playing time
   # [optional] [default: 0] [time unit: ticks]
@@ -62,6 +63,7 @@ dm_demo: # The id of this arena
   # The format is: <? your expression ?> (e.g: <? 5^3+2 ?>)
   # Placeholders inside expressions are allowed.
   # Make sure returning values are numbers!!!
+  # [expression supported] [placeholder supported]
   end_commands:
     # For winners.
     # [optional]
@@ -80,9 +82,10 @@ tdm_demo:
   max_players: 10
   icon:
     material: diamond_sword
-    name: "&aExample Arena 2"
+    name: "{__arena_name_}"
     lore:
-      - "&aMode: &fTeam Deathmatch"
+      - "&eMode: &f{__mode_name__}"
+      - "&ePlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
     enchant:
       sharpness: 1
     flag:
