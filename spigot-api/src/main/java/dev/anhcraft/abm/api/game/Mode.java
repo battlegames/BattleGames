@@ -1,6 +1,8 @@
 package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abm.api.BattleModeController;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.misc.info.Informative;
 import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public enum Mode {
+public enum Mode implements Informative {
     DEATHMATCH,
     TEAM_DEATHMATCH;
 
@@ -113,5 +115,12 @@ public enum Mode {
 
     public void setController(@Nullable BattleModeController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        holder.inform("id", name().toLowerCase())
+                .inform("name", name)
+                .inform("description", description);
     }
 }

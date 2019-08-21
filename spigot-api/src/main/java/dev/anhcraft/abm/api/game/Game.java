@@ -6,6 +6,8 @@ import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
 import dev.anhcraft.abm.api.misc.Resettable;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.misc.info.Informative;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Game implements Resettable {
+public class Game implements Resettable, Informative {
     private final Multimap<Player, DamageReport> damageReports = HashMultimap.create();
     private final Map<Player, GamePlayer> players = new ConcurrentHashMap<>();
     private final AtomicLong currentTime = new AtomicLong();
@@ -105,5 +107,15 @@ public class Game implements Resettable {
     @Override
     public int hashCode() {
         return Objects.hash(arena);
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        InfoHolder arenaHolder = new InfoHolder("arena_");
+        arena.inform(arenaHolder);
+        holder.inform("current_time", currentTime.get())
+                .inform("phase", phase.name().toLowerCase())
+                .inform("player_count", players.size())
+                .link(arenaHolder);
     }
 }

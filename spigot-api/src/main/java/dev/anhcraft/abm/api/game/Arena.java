@@ -2,6 +2,8 @@ package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.misc.info.Informative;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-public class Arena {
+public class Arena implements Informative {
     private String id;
     private String name;
     private Mode mode;
@@ -128,5 +130,16 @@ public class Arena {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        InfoHolder modeInfo = new InfoHolder("mode_");
+        mode.inform(modeInfo);
+        holder.inform("id", id)
+                .inform("name", name)
+                .inform("max_time", maxTime)
+                .inform("max_players", maxPlayers)
+                .link(modeInfo);
     }
 }
