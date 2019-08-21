@@ -1,11 +1,11 @@
 package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.game.*;
-import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
+import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
@@ -29,6 +29,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class TeamDeathmatchController extends ModeController {
     private final Map<Game, SimpleTeam<DeathmatchTeam>> TEAM = new ConcurrentHashMap<>();
+
+    @Override
+    public void onDeath(PlayerDeathEvent event, Game game){
+        plugin.taskManager.newTask(() -> {
+            event.getEntity().getInventory().setItem(0, null);
+            event.getEntity().spigot().respawn();
+        });
+    }
 
     public TeamDeathmatchController(BattlePlugin plugin) {
         super(plugin, Mode.TEAM_DEATHMATCH);
@@ -213,19 +221,6 @@ public class TeamDeathmatchController extends ModeController {
                 } else cancelTask(game, task);
             }, 0, 20));
         }
-    }
-
-    @EventHandler
-    public void death(PlayerDeathEvent event) {
-        plugin.gameManager.getGame(event.getEntity()).ifPresent(game -> {
-            if(game.getMode() != getMode()) return;
-            event.setDroppedExp(0);
-            event.getDrops().clear();
-            plugin.taskManager.newTask(() -> {
-                event.getEntity().getInventory().setItem(0, null);
-                event.getEntity().spigot().respawn();
-            });
-        });
     }
 
     @EventHandler

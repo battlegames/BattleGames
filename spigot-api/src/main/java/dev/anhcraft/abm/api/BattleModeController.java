@@ -2,6 +2,7 @@ package dev.anhcraft.abm.api;
 
 import dev.anhcraft.abm.api.game.Game;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public interface BattleModeController {
@@ -20,6 +21,10 @@ public interface BattleModeController {
     }
 
     default void onTask(Game game){
+
+    }
+
+    default void onDeath(PlayerDeathEvent event, Game game){
 
     }
 }

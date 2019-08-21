@@ -1,14 +1,14 @@
 package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.game.Game;
-import dev.anhcraft.abm.api.game.GamePhase;
-import dev.anhcraft.abm.api.game.GamePlayer;
-import dev.anhcraft.abm.api.inventory.items.*;
-import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.GamePhase;
+import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.game.Mode;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
@@ -30,6 +30,14 @@ import java.util.concurrent.atomic.AtomicLong;
 public class DeathmatchController extends ModeController {
     public DeathmatchController(BattlePlugin plugin) {
         super(plugin, Mode.DEATHMATCH);
+    }
+
+    @Override
+    public void onDeath(PlayerDeathEvent event, Game game){
+        plugin.taskManager.newTask(() -> {
+            event.getEntity().getInventory().setItem(0, null);
+            event.getEntity().spigot().respawn();
+        });
     }
 
     @Override
@@ -157,19 +165,6 @@ public class DeathmatchController extends ModeController {
                 } else cancelTask(game, task);
             }, 0, 20));
         }
-    }
-
-    @EventHandler
-    public void death(PlayerDeathEvent event) {
-        plugin.gameManager.getGame(event.getEntity()).ifPresent(game -> {
-            if(game.getMode() != getMode()) return;
-            event.setDroppedExp(0);
-            event.getDrops().clear();
-            plugin.taskManager.newTask(() -> {
-                event.getEntity().getInventory().setItem(0, null);
-                event.getEntity().spigot().respawn();
-            });
-        });
     }
 
     @EventHandler

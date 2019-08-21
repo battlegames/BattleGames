@@ -1,14 +1,15 @@
 package dev.anhcraft.abm.system.listeners;
 
+import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.BattleComponent;
-import dev.anhcraft.abm.api.inventory.items.BattleItem;
-import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.Gun;
+import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
@@ -196,6 +197,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPAPI(player, ast), PlaceholderUtils.formatPAPI(player, asst)));
             });
             killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
+
+            BattleModeController c = game.getMode().getController();
+            if(c != null) c.onDeath(e, game);
         });
     }
 
