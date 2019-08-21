@@ -6,6 +6,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class PlaceholderUtils {
     }
 
     public static String formatInfo(String str, Map<String, String> x){
+        if(str == null) return null;
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
@@ -38,6 +40,7 @@ public class PlaceholderUtils {
     }
 
     public static String formatExpression(String str){
+        if(str == null) return null;
         Matcher m = EXPRESSION_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
@@ -50,6 +53,7 @@ public class PlaceholderUtils {
     }
 
     public static String localizeString(String str, ConfigurationSection localeConf){
+        if(str == null || localeConf == null) return null;
         Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
@@ -62,6 +66,7 @@ public class PlaceholderUtils {
     }
 
     public static List<String> localizeStrings(List<String> strs, ConfigurationSection localeConf){
+        if(strs == null || localeConf == null) return new ArrayList<>();
         ListIterator<String> it = strs.listIterator();
         while(it.hasNext()){
             String q = it.next();
