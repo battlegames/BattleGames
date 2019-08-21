@@ -9,6 +9,7 @@ import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
 import dev.anhcraft.abm.api.inventory.items.ItemTag;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.abm.utils.ListUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ItemManager extends BattleComponent implements BattleItemManager {
     private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
@@ -54,7 +54,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
             if(addition != null) info.putAll(addition);
             PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
             pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
-            pi.lore(pi.lore().stream().map(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info))).collect(Collectors.toList()));
+            ListUtil.update(pi.lore(), s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
             return pi;
         }
         return null;
@@ -72,7 +72,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         if(addition != null) info.putAll(addition);
         PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
         pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
-        pi.lore(pi.lore().stream().map(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info))).collect(Collectors.toList()));
+        ListUtil.update(pi.lore(), s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
         return pi;
     }
 
