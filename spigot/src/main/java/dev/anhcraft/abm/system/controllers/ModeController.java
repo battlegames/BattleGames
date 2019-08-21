@@ -169,15 +169,16 @@ public abstract class ModeController extends BattleComponent implements Listener
                 playerBossBar.getBar().setTitle(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
 
                 if(now > 0) return;
+                else {
+                    gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
+                    player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
+                }
             }
 
             RELOADING_GUN.remove(player.getUniqueId());
 
             if(cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
             else plugin.bossbarRenderer.removeSecondaryBar(player);
-
-            gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
-            player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
         });
 
         if(cb.isPrimarySlot()) plugin.bossbarRenderer.setPrimaryBar(bar);
