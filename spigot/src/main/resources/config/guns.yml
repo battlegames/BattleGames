@@ -7,10 +7,6 @@ ak_47: # Gun's ID
   # [optional]
   name: "&e&l&nAK-47"
 
-  # Does this gun support dual wielding?
-  # [optional] [default: false]
-  dual_wielding: false
-
   # Configure this gun's skin
   skin:
     # The primary skin
