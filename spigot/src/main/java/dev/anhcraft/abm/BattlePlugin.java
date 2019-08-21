@@ -174,6 +174,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @Override
     public void onDisable(){
+        gameManager.cleaner.destroy();
         gameManager.getGames().forEach(new Consumer<Game>() {
             @Override
             public void accept(Game game) {

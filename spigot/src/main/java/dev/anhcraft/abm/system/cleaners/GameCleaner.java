@@ -20,4 +20,8 @@ public class GameCleaner {
             onFinished.accept(arena);
         });
     }
+
+    public void destroy(){
+        POOL.shutdown();
+    }
 }
