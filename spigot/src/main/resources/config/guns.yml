@@ -53,6 +53,20 @@ ak_47: # Gun's ID
   # [optional] [default: 0]
   inventory_slot: 1
 
+  # List of sounds
+  # With Bukkit sounds, prefix the name with a dollar sign ($)
+  # Format: [$]<sound name>[:<VOLUME>[:<PITCH>]]
+  # Default volume: 2.0; pitch: 1.0
+  # Examples:
+  # - my.custom.sound
+  # - $entity_generic_explode
+  # - $entity_generic_explode:1.0
+  # - example.sound:3.0:1.5
+  sounds:
+    # The sound on shooting
+    # [optional] [default: $entity_arrow_shoot]
+    on_shoot: "$entity_dragon_fireball_explode"
+
 desert_eagle:
   name: "&6&l&nDesert Eagle"
   skin:

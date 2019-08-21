@@ -1,6 +1,7 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.Skin;
 import org.bukkit.Material;
@@ -16,6 +17,7 @@ public class GunModel extends WeaponModel {
     private MagazineModel defaultMagazine;
     private int magazineMaxCapacity;
     private int inventorySlot;
+    private SoundRecord shootSound;
 
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
@@ -38,6 +40,8 @@ public class GunModel extends WeaponModel {
         }
 
         inventorySlot = conf.getInt("inventory_slot");
+        String ss = conf.getString("sounds.on_shoot");
+        shootSound = new SoundRecord(ss == null ? "$entity_arrow_shoot" : ss);
     }
 
     @Override
@@ -78,5 +82,10 @@ public class GunModel extends WeaponModel {
 
     public int getInventorySlot() {
         return inventorySlot;
+    }
+
+    @NotNull
+    public SoundRecord getShootSound() {
+        return shootSound;
     }
 }

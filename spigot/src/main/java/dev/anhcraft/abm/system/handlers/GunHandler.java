@@ -2,17 +2,16 @@ package dev.anhcraft.abm.system.handlers;
 
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.game.Bullet;
 import dev.anhcraft.abm.api.entity.BulletEntity;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
+import dev.anhcraft.abm.api.game.Bullet;
 import dev.anhcraft.abm.api.game.Game;
-import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -85,7 +84,7 @@ public class GunHandler extends Handler {
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
 
-        player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 3f, 1f);
+        gunItem.getModel().ifPresent(s -> s.getShootSound().play(player.getWorld(), player.getLocation()));
         Vector originVec = player.getEyeLocation().toVector();
         List<Bullet> bullets = mag.getAmmo().getModel().get().getBullets();
         for(Bullet b : bullets){
