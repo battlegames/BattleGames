@@ -132,7 +132,10 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(game.getPlayer(player), game));
             game.getPlayers().remove(player);
             PLAYER_GAME_MAP.remove(player);
-            if(game.countPlayers() == 0) cleaner.doClean(game.getArena(), ARENA_GAME_MAP::remove);
+            if(game.countPlayers() == 0) {
+                game.setPhase(GamePhase.CLEANING);
+                cleaner.doClean(game.getArena(), ARENA_GAME_MAP::remove);
+            }
             return true;
         }
     }
