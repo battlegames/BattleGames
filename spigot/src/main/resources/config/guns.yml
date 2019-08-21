@@ -47,6 +47,12 @@ ak_47: # Gun's ID
     # [optional] [default: 0]
     max_capacity: 90
 
+  # The slot where this gun is put on.
+  # If the slot is out of bound, it will be overridden by default.
+  # Note: Not all modes support this option
+  # [optional] [default: 0]
+  inventory_slot: 1
+
 desert_eagle:
   name: "&6&l&nDesert Eagle"
   skin:
@@ -57,3 +63,4 @@ desert_eagle:
   magazine:
     default: default_de
     max_capacity: 35
+  inventory_slot: 0
