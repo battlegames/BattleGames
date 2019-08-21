@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class PlaceholderUtils {
     private static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
     private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
-    private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9_]+__}");
+    private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
     public static String formatPAPI(Player player, String str){
         return PlaceholderAPI.setPlaceholders(player, str);
