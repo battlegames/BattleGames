@@ -141,18 +141,19 @@ public abstract class ModeController extends BattleComponent implements Listener
             Optional<AmmoModel> aop = gun.getMagazine().getAmmo().getModel();
             return aop.isPresent() ? magazineModel.getAmmunition().getOrDefault(aop.get(), 0) : 0;
         }).get();
+        int currentBullet = gun.getMagazine().getAmmoCount();
+        if(currentBullet == maxBullet) return;
         long maxTime = (long) gm.getReloadTimeCalculator()
-                .setVariable("a", gun.getMagazine().getAmmoCount())
+                .setVariable("a", currentBullet)
                 .setVariable("b", maxBullet).evaluate();
         if(maxTime <= 0) return;
 
         RELOADING_GUN.add(player.getUniqueId());
 
         long totalTime = maxTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
-        long tickBulletInc = totalTime / (maxBullet - gun.getMagazine().getAmmoCount());
+        long tickBulletInc = totalTime / (maxBullet - currentBullet);
         AtomicLong currentTime = new AtomicLong(totalTime);
         CustomBossBar cb = gm.getReloadBar();
-        boolean isShow = false;
 
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
             boolean isStopped = game.getPhase() != GamePhase.PLAYING;
