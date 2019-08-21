@@ -1,10 +1,15 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.misc.CustomBossBar;
 import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.Skin;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +23,8 @@ public class GunModel extends WeaponModel {
     private int magazineMaxCapacity;
     private int inventorySlot;
     private SoundRecord shootSound;
+    private Expression reloadTimeCalculator;
+    private CustomBossBar reloadBar;
 
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
@@ -42,6 +49,21 @@ public class GunModel extends WeaponModel {
         inventorySlot = conf.getInt("inventory_slot");
         String ss = conf.getString("sounds.on_shoot");
         shootSound = new SoundRecord(ss == null ? "$entity_arrow_shoot" : ss);
+
+        reloadBar = new CustomBossBar(true, null, BarColor.GREEN, BarStyle.SOLID);
+        ConfigurationSection rbs = conf.getConfigurationSection("bossbar.on_reload");
+        if(rbs != null){
+            reloadBar.setPrimarySlot(rbs.getBoolean("primary", true));
+            reloadBar.setTitle(rbs.getString("title"));
+            String barColor = rbs.getString("color");
+            if(barColor != null) reloadBar.setColor(BarColor.valueOf(barColor.toUpperCase()));
+            String barStyle = rbs.getString("style");
+            if(barStyle != null) reloadBar.setStyle(BarStyle.valueOf(barStyle.toUpperCase()));
+        }
+
+        String rtf = conf.getString("reload_time_formula");
+        if(rtf == null) throw new NullPointerException("Reloading time formula must be specified");
+        reloadTimeCalculator = new ExpressionBuilder(rtf).variables("a", "b").build();
     }
 
     @Override
@@ -87,5 +109,15 @@ public class GunModel extends WeaponModel {
     @NotNull
     public SoundRecord getShootSound() {
         return shootSound;
+    }
+
+    @NotNull
+    public CustomBossBar getReloadBar() {
+        return reloadBar;
+    }
+
+    @NotNull
+    public Expression getReloadTimeCalculator() {
+        return reloadTimeCalculator;
     }
 }

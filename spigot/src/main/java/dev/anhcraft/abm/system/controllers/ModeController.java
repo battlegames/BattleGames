@@ -4,8 +4,17 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.Mode;
+import dev.anhcraft.abm.api.inventory.items.AmmoModel;
+import dev.anhcraft.abm.api.inventory.items.Gun;
+import dev.anhcraft.abm.api.inventory.items.GunModel;
+import dev.anhcraft.abm.api.misc.CustomBossBar;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.system.handlers.GunHandler;
+import dev.anhcraft.abm.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.abm.utils.CooldownMap;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -13,12 +22,10 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,6 +33,7 @@ import java.util.stream.Collectors;
 public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
     private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>()); // fix bug!
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
+    public final List<UUID> RELOADING_GUN = Collections.synchronizedList(new ArrayList<>());
     private Mode mode;
 
     ModeController(BattlePlugin plugin, Mode mode) {
@@ -120,5 +128,59 @@ public abstract class ModeController extends BattleComponent implements Listener
     @NotNull
     public Mode getMode() {
         return mode;
+    }
+
+    public void doReloadGun(Game game, Player player, Gun gun){
+        if(RELOADING_GUN.contains(player.getUniqueId())) return;
+
+        Optional<GunModel> gmo = gun.getModel();
+        if(!gmo.isPresent()) return;
+        GunModel gm = gmo.get();
+
+        int maxBullet = gun.getMagazine().getModel().map(magazineModel -> {
+            Optional<AmmoModel> aop = gun.getMagazine().getAmmo().getModel();
+            return aop.isPresent() ? magazineModel.getAmmunition().getOrDefault(aop.get(), 0) : 0;
+        }).get();
+        long maxTime = (long) gm.getReloadTimeCalculator()
+                .setVariable("a", gun.getMagazine().getAmmoCount())
+                .setVariable("b", maxBullet).evaluate();
+        if(maxTime <= 0) return;
+
+        RELOADING_GUN.add(player.getUniqueId());
+
+        long totalTime = maxTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
+        long tickBulletInc = totalTime / (maxBullet - gun.getMagazine().getAmmoCount());
+        AtomicLong currentTime = new AtomicLong(totalTime);
+        CustomBossBar cb = gm.getReloadBar();
+
+        PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
+            boolean isStopped = game.getPhase() != GamePhase.PLAYING;
+            if(!isStopped){
+                long now = currentTime.decrementAndGet();
+                if(now < 0) return;
+                playerBossBar.getBar().setProgress(1 - Math.max(0, 1.0/totalTime*now));
+
+                if(now % tickBulletInc == 0) {
+                    gun.getMagazine().setAmmoCount(gun.getMagazine().getAmmoCount() + 1);
+                }
+
+                InfoHolder info = new InfoHolder("gun_");
+                gun.inform(info);
+                playerBossBar.getBar().setTitle(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
+
+                if(now > 0) return;
+            }
+
+            RELOADING_GUN.remove(player.getUniqueId());
+
+            if(cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
+            else plugin.bossbarRenderer.removeSecondaryBar(player);
+
+            gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
+            player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
+        });
+
+        if(cb.isPrimarySlot()) plugin.bossbarRenderer.setPrimaryBar(bar);
+        else plugin.bossbarRenderer.setSecondaryBar(bar);
     }
 }

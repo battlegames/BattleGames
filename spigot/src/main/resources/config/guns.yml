@@ -68,6 +68,32 @@ ak_47: # Gun's ID
     # [optional] [default: $entity_arrow_shoot]
     on_shoot: "$entity_dragon_fireball_explode"
 
+  # The formula used for calculating reloading time (in ticks)
+  # Read the documentation for further information.
+  # [required] [expression supported]
+  reload_time_formula: "(b-a)*10"
+
+  # Boss bar related to guns
+  bossbar:
+    # The boss bar shows on magazine-reloading
+    on_reload:
+      # Where to put this bar?
+      # If set to false, this bar shows on the secondary slot
+      # [optional] [default: true]
+      primary: false
+
+      # The bar's title
+      # [optional] [placeholder supported]
+      title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
+
+      # The bar's color (pink, blue, red, green, yellow, purple, white)
+      # [optional] [default: green]
+      color: green
+
+      # The bar's style (solid, segmented_6, segmented_10, segmented_12, segmented_20)
+      # [optional] [default: solid]
+      style: segmented_20
+
 desert_eagle:
   name: "&6&l&nDesert Eagle"
   skin:
@@ -79,3 +105,8 @@ desert_eagle:
     default: default_de
     max_capacity: 35
   inventory_slot: 0
+  reload_time_formula: "(b-a)*10"
+  bossbar:
+    on_reload:
+      title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
+      color: red

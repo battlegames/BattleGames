@@ -241,10 +241,8 @@ public class TeamDeathmatchController extends ModeController {
             BattleItem item = plugin.itemManager.read(e.getOffHandItem());
             if(item instanceof Gun){
                 Gun gun = (Gun) item;
-                Magazine mag = gun.getMagazine();
-                mag.resetAmmo();
-                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
                 e.setCancelled(true);
+                doReloadGun(game, p, gun);
             }
         });
     }

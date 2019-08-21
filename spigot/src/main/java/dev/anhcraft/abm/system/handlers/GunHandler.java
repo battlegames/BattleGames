@@ -9,6 +9,7 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -81,6 +82,13 @@ public class GunHandler extends Handler {
         if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return;
+        }
+        ModeController mc = (ModeController) game.getMode().getController();
+        if(mc != null){
+            if(mc.RELOADING_GUN.contains(player.getUniqueId())){
+                plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
+                return;
+            }
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
 

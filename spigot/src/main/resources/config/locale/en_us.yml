@@ -50,6 +50,7 @@ mode_tdm:
 gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."
+  reloading_warn: "&cYou are reloading gun ammo!"
 items:
   not_found: "&cCouldn't find that item"
 tool:
