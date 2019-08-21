@@ -60,6 +60,8 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class BattlePlugin extends JavaPlugin implements BattleAPI {
+    public static final long BOSSBAR_UPDATE_INTERVAL = 10;
+    public static final long SCOREBOARD_UPDATE_INTERVAL = 10;
     private static final String[] CONFIG_FILES = new String[]{
             "system.yml",
             "general.yml",
@@ -147,8 +149,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         getServer().getPluginManager().registerEvents(pl, this);
         getServer().getOnlinePlayers().forEach(pl::handleJoin);
 
-        taskManager.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, 10);
-        taskManager.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, 10);
+        taskManager.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
+        taskManager.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
         taskManager.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
         taskManager.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskManager.newTimerTask(gameTask = new GameTask(this), 0, 1);
