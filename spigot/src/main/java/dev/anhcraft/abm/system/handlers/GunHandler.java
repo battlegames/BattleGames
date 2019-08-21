@@ -40,7 +40,7 @@ public class GunHandler extends Handler {
                 }).orElse(null);
     }
 
-    public void selectGun(Player player, GunModel g, int slot) {
+    public void selectGun(Player player, GunModel g) {
         Map.Entry<AmmoModel, Integer> ammo = g.getDefaultMagazine().getAmmunition().entrySet().iterator().next();
         Gun gun = new Gun();
         gun.setModel(g);
@@ -50,9 +50,9 @@ public class GunHandler extends Handler {
         Ammo ammoItem = magazine.getAmmo();
         ammoItem.setModel(ammo.getKey());
 
-        player.getInventory().setItem(slot, createGun(gun, false));
+        player.getInventory().setItem(g.getInventorySlot(), createGun(gun, false));
         int held = player.getInventory().getHeldItemSlot();
-        if(held == slot) {
+        if(held == g.getInventorySlot()) {
             player.getInventory().setItemInOffHand(createGun(gun, true));
             PlayerUtil.reduceSpeed(player, g.getWeight());
         }

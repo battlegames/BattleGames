@@ -188,7 +188,7 @@ public class TeamDeathmatchController extends ModeController {
                 if(cooldownMap.isPassed(player, t)) plugin.chatManager.sendPlayer(player, "mode_tdm.error_item_selection_overtime");
                 else {
                     if (event.getItemModel().getItemType() == ItemType.GUN) {
-                        plugin.getHandler(GunHandler.class).selectGun(player, (GunModel) event.getItemModel(), 0);
+                        plugin.getHandler(GunHandler.class).selectGun(player, (GunModel) event.getItemModel());
                     } else {
                         plugin.chatManager.sendPlayer(player, "mode_tdm.error_disabled_item_type");
                     }

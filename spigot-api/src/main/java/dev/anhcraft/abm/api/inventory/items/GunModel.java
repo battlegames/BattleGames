@@ -10,16 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 public class GunModel extends WeaponModel {
-    private boolean dualWielding;
     private Skin primarySkin;
     private Skin secondarySkin;
     private double weight;
     private MagazineModel defaultMagazine;
     private int magazineMaxCapacity;
+    private int inventorySlot;
 
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
-        dualWielding = conf.getBoolean("dual_wielding");
 
         String primaryMaterial = conf.getString("skin.primary.material");
         primarySkin = new Skin(primaryMaterial == null ? null : Material.getMaterial(primaryMaterial.toUpperCase()), conf.getInt("skin.primary.damage"));
@@ -37,15 +36,13 @@ public class GunModel extends WeaponModel {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
+        inventorySlot = conf.getInt("inventory_slot");
     }
 
     @Override
     public @NotNull ItemType getItemType() {
         return ItemType.GUN;
-    }
-
-    public boolean isDualWielding() {
-        return dualWielding;
     }
 
     @NotNull
@@ -75,8 +72,11 @@ public class GunModel extends WeaponModel {
     public void inform(@NotNull InfoHolder holder){
         super.inform(holder);
         holder.inform("weight", weight)
-                .inform("dual_wielding", dualWielding)
-                .inform("max_magazine_capacity", getMagazineMaxCapacity());
-        holder.link(defaultMagazine.collectInfo("default_"));
+                .inform("max_magazine_capacity", getMagazineMaxCapacity())
+                .link(defaultMagazine.collectInfo("default_"));
+    }
+
+    public int getInventorySlot() {
+        return inventorySlot;
     }
 }
