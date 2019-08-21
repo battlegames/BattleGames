@@ -86,7 +86,7 @@ tdm_demo:
   max_players: 10
   icon:
     material: diamond_sword
-    name: "{__arena_name_}"
+    name: "{__arena_name__}"
     lore:
       - "&eMode: &f{__mode_name__}"
       - "&ePlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
