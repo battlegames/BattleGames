@@ -33,6 +33,11 @@ public class PlaceholderUtils {
         while(m.find()){
             String p = m.group();
             String s = p.substring(3, p.length()-3).trim();
+            String[] f = s.split(":");
+            if(f.length == 2) {
+                s = f[0];
+                p = f[1];
+            }
             m.appendReplacement(sb, x.getOrDefault(s, p));
         }
         m.appendTail(sb);
