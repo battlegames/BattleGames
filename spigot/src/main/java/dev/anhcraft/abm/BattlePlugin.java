@@ -352,6 +352,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         } else scoreboardRenderer.removeScoreboard(player);
     }
 
+    @NotNull
+    @Override
     public Map<String, String> mapInfo(InfoHolder holder){
         return holder.read().entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -384,11 +386,13 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return papiExpansion;
     }
 
+    @NotNull
     @Override
     public String formatLongFormDate(Date date){
         return longFormDate.format(date);
     }
 
+    @NotNull
     @Override
     public String formatShortForm(long time){
         final long x = 1000;
@@ -397,16 +401,19 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         else return formatShortFormDateHours(new Date(time));
     }
 
+    @NotNull
     @Override
     public String formatShortFormDateHours(Date date){
         return shortFormDate1.format(date);
     }
 
+    @NotNull
     @Override
     public String formatShortFormDateMinutes(Date date){
         return shortFormDate2.format(date);
     }
 
+    @NotNull
     @Override
     public String formatShortFormDateSeconds(Date date){
         return shortFormDate3.format(date);
@@ -427,6 +434,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return Optional.ofNullable(PLAYER_MAP.get(player));
     }
 
+    @NotNull
     @Override
     public ServerData getServerData() {
         return SERVER_DATA;
@@ -457,26 +465,31 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return Optional.ofNullable(KIT_MAP.get(id));
     }
 
+    @NotNull
     @Override
     public List<Arena> listArenas() {
         return new ArrayList<>(ARENA_MAP.values());
     }
 
+    @NotNull
     @Override
     public List<AmmoModel> listAmmoModels() {
         return new ArrayList<>(AMMO_MAP.values());
     }
 
+    @NotNull
     @Override
     public List<GunModel> listGunModels() {
         return new ArrayList<>(GUN_MAP.values());
     }
 
+    @NotNull
     @Override
     public List<MagazineModel> listMagazineModels() {
         return new ArrayList<>(MAGAZINE_MAP.values());
     }
 
+    @NotNull
     @Override
     public List<Kit> listKits() {
         return new ArrayList<>(KIT_MAP.values());
