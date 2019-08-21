@@ -62,6 +62,7 @@ ak_47: # Gun's ID
   # - $entity_generic_explode
   # - $entity_generic_explode:1.0
   # - example.sound:3.0:1.5
+  # Leave blank to disable sound
   sounds:
     # The sound on shooting
     # [optional] [default: $entity_arrow_shoot]

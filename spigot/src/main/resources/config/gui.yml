@@ -51,6 +51,7 @@ inventory_menu: # Don't change this
   # - $entity_generic_explode
   # - $entity_generic_explode:1.0
   # - example.sound:3.0:1.5
+  # Leave blank to disable sound
   # [optional] [default: $block_chest_open]
   sound: $block_chest_open
 

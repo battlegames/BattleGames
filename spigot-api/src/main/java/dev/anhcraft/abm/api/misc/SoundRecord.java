@@ -12,6 +12,7 @@ public class SoundRecord {
     private float pitch = 1;
 
     public SoundRecord(String s) {
+        if(s.length() == 0) return;
         String[] x = s.split(":");
         if(x.length >= 1){
             String sound = x[0];
