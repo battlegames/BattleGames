@@ -2,16 +2,14 @@ package dev.anhcraft.abm.system.managers;
 
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abif.PreparedItem;
-import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.BattleItemManager;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
-import dev.anhcraft.abm.api.BattleItemManager;
 import dev.anhcraft.abm.api.inventory.items.ItemTag;
+import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
-import dev.anhcraft.abm.api.misc.info.*;
-import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +50,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         if(battleItem == null) return null;
         Optional<R> opt = battleItem.getModel();
         if(opt.isPresent()){
-            Map<String, String> info = handleInfo(battleItem.collectInfo(null));
+            Map<String, String> info = plugin.mapInfo(battleItem.collectInfo(null));
             if(addition != null) info.putAll(addition);
             PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
             pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
@@ -70,37 +68,12 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
     @Nullable
     public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition){
         if(bim == null) return null;
-        Map<String, String> info = handleInfo(bim.collectInfo(null));
+        Map<String, String> info = plugin.mapInfo(bim.collectInfo(null));
         if(addition != null) info.putAll(addition);
         PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
         pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
         pi.lore(pi.lore().stream().map(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info))).collect(Collectors.toList()));
         return pi;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private Map<String, String> handleInfo(InfoHolder holder){
-        return holder.read().entrySet().stream().collect(Collectors.toMap(
-                Map.Entry::getKey,
-                entry -> {
-                    InfoData data = entry.getValue();
-                    if(data instanceof InfoBooleanData){
-                        if(((InfoBooleanData) data).getValue())
-                            return plugin.getLocaleConf().getString("state.enabled");
-                        else
-                            return plugin.getLocaleConf().getString("state.disabled");
-                    }
-                    else if(data instanceof InfoDoubleData)
-                        return MathUtil.formatRound(((InfoDoubleData) data).getValue());
-                    else if(data instanceof InfoIntData)
-                        return Integer.toString(((InfoIntData) data).getValue());
-                    else if(data instanceof InfoLongData)
-                        return Long.toString(((InfoLongData) data).getValue());
-                    else if(data instanceof InfoStringData)
-                        return ((InfoStringData) data).getValue();
-                    return "Error! (data class="+data.getClass().getSimpleName()+")";
-                }
-        ));
     }
 
     @Nullable

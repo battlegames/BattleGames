@@ -12,6 +12,7 @@ import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.MagazineModel;
 import dev.anhcraft.abm.api.misc.Kit;
+import dev.anhcraft.abm.api.misc.info.*;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.api.storage.data.ServerData;
 import dev.anhcraft.abm.api.storage.StorageType;
@@ -36,6 +37,7 @@ import dev.anhcraft.abm.tasks.DataSavingTask;
 import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
 import dev.anhcraft.jvmkit.utils.FileUtil;
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -54,6 +56,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class BattlePlugin extends JavaPlugin implements BattleAPI {
@@ -347,6 +350,30 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             List<String> content = getGeneralConf().getStringList("default_scoreboard.content");
             scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content));
         } else scoreboardRenderer.removeScoreboard(player);
+    }
+
+    public Map<String, String> mapInfo(InfoHolder holder){
+        return holder.read().entrySet().stream().collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> {
+                    InfoData data = entry.getValue();
+                    if(data instanceof InfoBooleanData){
+                        if(((InfoBooleanData) data).getValue())
+                            return getLocaleConf().getString("state.enabled");
+                        else
+                            return getLocaleConf().getString("state.disabled");
+                    }
+                    else if(data instanceof InfoDoubleData)
+                        return MathUtil.formatRound(((InfoDoubleData) data).getValue());
+                    else if(data instanceof InfoIntData)
+                        return Integer.toString(((InfoIntData) data).getValue());
+                    else if(data instanceof InfoLongData)
+                        return Long.toString(((InfoLongData) data).getValue());
+                    else if(data instanceof InfoStringData)
+                        return ((InfoStringData) data).getValue();
+                    return "Error! (data class="+data.getClass().getSimpleName()+")";
+                }
+        ));
     }
 
     public <T extends Handler> T getHandler(Class<T> clazz){
