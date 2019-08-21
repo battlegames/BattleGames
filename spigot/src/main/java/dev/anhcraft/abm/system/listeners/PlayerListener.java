@@ -85,8 +85,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if (item instanceof Gun) {
                     plugin.gameManager.getGame(p).ifPresent(game -> {
                         Gun gun = (Gun) item;
-                        plugin.getHandler(GunHandler.class).shoot(game, p, gun);
-                        p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                        if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
+                            p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
                     });

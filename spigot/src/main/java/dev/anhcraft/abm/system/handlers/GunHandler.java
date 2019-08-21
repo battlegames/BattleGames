@@ -73,21 +73,21 @@ public class GunHandler extends Handler {
         return q.getY() - ve.getLocation().getY() > getBodyHeight(ve);
     }
 
-    public void shoot(Game game, Player player, Gun gunItem){
+    public boolean shoot(Game game, Player player, Gun gunItem){
         Magazine mag = gunItem.getMagazine();
         if(!mag.getModel().isPresent()) {
             plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
-            return;
+            return false;
         }
         if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
-            return;
+            return false;
         }
         ModeController mc = (ModeController) game.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.contains(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
-                return;
+                return false;
             }
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
@@ -123,5 +123,6 @@ public class GunHandler extends Handler {
                 }
             }
         }
+        return true;
     }
 }
