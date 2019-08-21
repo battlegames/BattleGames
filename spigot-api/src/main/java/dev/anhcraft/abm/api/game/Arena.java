@@ -26,6 +26,7 @@ public class Arena implements Informative {
     private ConfigurationSection attrSection;
     private List<String> endCommandWinners;
     private List<String> endCommandLosers;
+    private boolean renderGuiOnDeath;
 
     public Arena(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -54,6 +55,7 @@ public class Arena implements Informative {
         if(attrSection == null) attrSection = new YamlConfiguration();
         endCommandWinners = conf.getStringList("end_commands.winners");
         endCommandLosers = conf.getStringList("end_commands.losers");
+        renderGuiOnDeath = conf.getBoolean("render_gui_on_death");
     }
 
     @NotNull
@@ -117,6 +119,10 @@ public class Arena implements Informative {
     @NotNull
     public List<String> getEndCommandLosers() {
         return endCommandLosers;
+    }
+
+    public boolean isRenderGuiOnDeath() {
+        return renderGuiOnDeath;
     }
 
     @Override

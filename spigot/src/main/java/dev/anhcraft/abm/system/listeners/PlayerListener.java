@@ -198,6 +198,10 @@ public class PlayerListener extends BattleComponent implements Listener {
             });
             killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
 
+            if(game.getArena().isRenderGuiOnDeath()){
+                plugin.guiManager.renderBottomInv(e.getEntity(), plugin.guiManager.getPlayerGui(e.getEntity()));
+            }
+
             BattleModeController c = game.getMode().getController();
             if(c != null) c.onDeath(e, game);
         });

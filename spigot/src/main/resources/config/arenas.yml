@@ -75,6 +75,10 @@ dm_demo: # The id of this arena
     losers:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
 
+  # When a player dies, should we re-render his bottom gui?
+  # This option can prevent players from using previous Battle items
+  render_gui_on_death: true
+
 tdm_demo:
   name: "&aExample Arena 2"
   mode: team_deathmatch
@@ -105,3 +109,4 @@ tdm_demo:
     item_selection_time: 200
     spawn_protection_time: 40
     respawn_waiting_time: 200
+  render_inv_on_death: true
