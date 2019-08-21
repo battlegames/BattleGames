@@ -12,6 +12,7 @@ public class PlayerBossBar {
     private Player player;
     private BossBar bar;
     private Consumer<PlayerBossBar> callback;
+    private boolean isShow;
 
     public PlayerBossBar(Player player, String title, BarColor color, BarStyle style, Consumer<PlayerBossBar> callback) {
         this.player = player;
@@ -32,7 +33,9 @@ public class PlayerBossBar {
         callback.accept(this);
     }
 
-    void show(){
+    public void show(){
+        if(isShow) return;
+        isShow = true;
         bar.addPlayer(player);
         bar.setVisible(true);
     }

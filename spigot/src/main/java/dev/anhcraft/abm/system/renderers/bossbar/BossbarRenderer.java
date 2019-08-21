@@ -13,14 +13,12 @@ public class BossbarRenderer implements Runnable {
         PlayerBossBar old = ACTIVE_1.get(bar.getPlayer());
         if(old != null) old.remove();
         ACTIVE_1.put(bar.getPlayer(), bar);
-        bar.show();
     }
 
     public void setSecondaryBar(PlayerBossBar bar){
         PlayerBossBar old = ACTIVE_2.get(bar.getPlayer());
         if(old != null) old.remove();
         ACTIVE_2.put(bar.getPlayer(), bar);
-        bar.show();
     }
 
     public void removePrimaryBar(Player player){

@@ -152,6 +152,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         long tickBulletInc = totalTime / (maxBullet - gun.getMagazine().getAmmoCount());
         AtomicLong currentTime = new AtomicLong(totalTime);
         CustomBossBar cb = gm.getReloadBar();
+        boolean isShow = false;
 
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
             boolean isStopped = game.getPhase() != GamePhase.PLAYING;
@@ -167,6 +168,8 @@ public abstract class ModeController extends BattleComponent implements Listener
                 InfoHolder info = new InfoHolder("gun_");
                 gun.inform(info);
                 playerBossBar.getBar().setTitle(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
+
+                playerBossBar.show();
 
                 if(now > 0) return;
                 else {
