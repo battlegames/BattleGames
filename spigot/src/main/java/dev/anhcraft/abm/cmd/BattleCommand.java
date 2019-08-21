@@ -45,6 +45,12 @@ public class BattleCommand extends BaseCommand{
         player.teleport(plugin.getServerData().getSpawnPoint());
     }
 
+    @Subcommand("arena menu")
+    @CommandPermission("abm.arena.menu")
+    public void arenaMenu(Player player){
+        plugin.guiManager.openTopInventory(player, "arena_chooser");
+    }
+
     @Subcommand("arena join")
     @CommandPermission("abm.arena.join")
     public void join(Player player, String arenaName){
