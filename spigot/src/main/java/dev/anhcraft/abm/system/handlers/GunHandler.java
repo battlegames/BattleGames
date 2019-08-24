@@ -76,6 +76,13 @@ public class GunHandler extends Handler {
     }
 
     public boolean shoot(Game game, Player player, Gun gunItem){
+        ModeController mc = (ModeController) game.getMode().getController();
+        if(mc != null){
+            if(mc.RELOADING_GUN.contains(player.getUniqueId())){
+                plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
+                return false;
+            }
+        }
         Magazine mag = gunItem.getMagazine();
         if(!mag.getModel().isPresent()) {
             plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
@@ -84,13 +91,6 @@ public class GunHandler extends Handler {
         if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return false;
-        }
-        ModeController mc = (ModeController) game.getMode().getController();
-        if(mc != null){
-            if(mc.RELOADING_GUN.contains(player.getUniqueId())){
-                plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
-                return false;
-            }
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
 
