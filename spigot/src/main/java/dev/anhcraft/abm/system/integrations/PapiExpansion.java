@@ -127,6 +127,7 @@ public class PapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier){
+        if(player == null) return null;
         Function<Player, String> x = handlers.get(identifier);
         return x == null ? null : x.apply(player);
     }
