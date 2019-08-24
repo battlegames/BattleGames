@@ -1,6 +1,5 @@
 package dev.anhcraft.abm.gui;
 
-import com.google.common.collect.Multimap;
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.BattleAPI;
@@ -11,11 +10,12 @@ import dev.anhcraft.abm.api.storage.data.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AmmoInventory extends GuiHandler implements PaginationHandler {
     @Override
-    public void pullData(Pagination pagination, Player player, Multimap<ItemStack, GuiListener<? extends SlotReport>> data) {
+    public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = APIProvider.get();
         Optional<PlayerData> pd = api.getPlayerData(player);
         pd.ifPresent(playerData -> {
@@ -26,12 +26,12 @@ public class AmmoInventory extends GuiHandler implements PaginationHandler {
                     PreparedItem pi = api.getItemManager().make(am);
                     if(pi == null) return;
                     ItemStack item = am.getSkin().transform(pi).build();
-                    data.put(item, new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                    data.add(new PaginationItem(item, new GuiListener<SlotClickReport>(SlotClickReport.class) {
                         @Override
                         public void call(SlotClickReport event) {
                             event.getClickEvent().setCancelled(true);
                         }
-                    });
+                    }));
                 }
             });
         });

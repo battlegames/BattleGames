@@ -1,14 +1,11 @@
 package dev.anhcraft.abm.system.managers;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import dev.anhcraft.abif.ABIF;
 import dev.anhcraft.abif.PreparedItem;
-import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.BattleComponent;
-import dev.anhcraft.abm.api.gui.*;
+import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleGuiManager;
+import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
@@ -190,28 +187,25 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         if(gui.getPagination() != null){
             GuiHandler gh = GUI_HANDLERS.get(gui.getPagination().getHandler());
             if (gh instanceof PaginationHandler) {
-                Multimap<ItemStack, GuiListener<? extends SlotReport>> data = LinkedHashMultimap.create();
+                List<PaginationItem> data = new ArrayList<>();
                 // get data
                 ((PaginationHandler) gh).pullData(gui.getPagination(), player, data);
-                // we dont want null keys
-                data = Multimaps.filterKeys(data, Objects::nonNull);
                 // slots per page
                 int[] pageSlots = gui.getPagination().getSlots();
                 // all pagination slots
                 BattleGuiSlot[] ps = new BattleGuiSlot[data.size()];
-                Set<ItemStack> keys = data.keySet();
                 int i = 0; // data index
                 int j = 0; // slot index on one page
-                for(ItemStack item : keys){
+                for(PaginationItem elem : data){
                     int index = pageSlots[j++]; // get slot index
                     BattleGuiSlot s = slots[index];
                     if(s == null) {
-                        slots[index] = (s = new BattleGuiSlot(index, new GuiSlot(null, new ArrayList<>(), true), Collections.unmodifiableCollection(data.get(item))));
+                        slots[index] = (s = new BattleGuiSlot(index, new GuiSlot(null, new ArrayList<>(), true), Collections.unmodifiableCollection(elem.getGuiListeners())));
                     } else {
                         s.getEvents().clear();
-                        s.getEvents().addAll(data.get(item));
+                        s.getEvents().addAll(elem.getGuiListeners());
                     }
-                    s.setCachedItem(item); // cache item
+                    s.setCachedItem(elem.getItemStack()); // cache item
                     // put to temp pagination slots
                     ps[i++] = s;
                     if(j == pageSlots.length) j = 0; // reset if reached the maximum slot
