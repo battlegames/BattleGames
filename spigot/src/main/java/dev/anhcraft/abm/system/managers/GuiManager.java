@@ -291,8 +291,10 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             BattleGuiSlot[] ps = bg.getPagination().collect(); // get all slots in current page
             int[] is = bg.getGui().getPagination().getSlots(); // get all slot indexes
             int len = Math.min(is.length, ps.length);
-            for(int i = 0; i < len; i++)
-                items[is[i]] = ps[i].getCachedItem();
+            for(int i = 0; i < len; i++) {
+                if(ps[i] != null)
+                    items[is[i]] = ps[i].getCachedItem();
+            }
         }
         return items;
     }
