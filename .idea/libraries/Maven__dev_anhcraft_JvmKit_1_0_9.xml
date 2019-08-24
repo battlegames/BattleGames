@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Maven: dev.anhcraft:jvmkit:1.0.9">
+  <library name="Maven: dev.anhcraft:JvmKit:1.0.9">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/dev/anhcraft/jvmkit/1.0.9/jvmkit-1.0.9.jar!/" />
     </CLASSES>
@@ -7,7 +7,7 @@
       <root url="jar://$MAVEN_REPOSITORY$/dev/anhcraft/jvmkit/1.0.9/jvmkit-1.0.9-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/dev/anhcraft/jvmkit/1.0.9/jvmkit-1.0.9-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/dev/anhcraft/JvmKit/1.0.9/JvmKit-1.0.9-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

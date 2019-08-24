@@ -21,7 +21,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="spigot-api" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:abif:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.spigot:1.0.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.common:1.0.7" level="project" />
@@ -34,6 +33,14 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r1:1.0.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r2:1.0.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_14_r1:1.0.7" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-paper:0.5.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-bukkit:0.5.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-core:0.5.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:Table:1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:DelegatingMap:1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:locales:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.jodah:expiringmap:0.5.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:minecraft-timings:1.0.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
@@ -46,14 +53,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.10.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:acf-paper:0.5.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:acf-bukkit:0.5.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:acf-core:0.5.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:Table:1.0.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:DelegatingMap:1.0.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:locales:1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: net.jodah:expiringmap:0.5.8" level="project" />
-    <orderEntry type="library" name="Maven: co.aikar:minecraft-timings:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:17.0.0" level="project" />
   </component>
 </module>

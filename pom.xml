@@ -6,7 +6,7 @@
 
     <groupId>dev.anhcraft</groupId>
     <artifactId>abm</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
 
     <name>Battle</name>
@@ -56,15 +56,7 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>dev.anhcraft.abm.cmd.core</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>dev.anhcraft.abif</pattern>
-                            <shadedPattern>dev.anhcraft.abm.abif</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>dev.anhcraft.jvmkit</pattern>
-                            <shadedPattern>dev.anhcraft.abm.jvmkit</shadedPattern>
+                            <shadedPattern>dev.anhcraft.craftkit.acf</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -113,12 +105,6 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.anhcraft</groupId>
-            <artifactId>jvmkit</artifactId>
-            <version>1.0.9</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

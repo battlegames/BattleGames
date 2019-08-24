@@ -6,6 +6,10 @@
       <item index="1" class="java.lang.String" itemvalue="net.md_5.bungee.event.EventHandler" />
     </list>
   </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="W:/BATTLE JAVADOC" />
+    <option name="OPTION_SCOPE" value="public" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
