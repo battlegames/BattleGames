@@ -186,7 +186,7 @@ public class DeathmatchController extends ModeController {
             if(item instanceof Gun){
                 Gun gun = (Gun) item;
                 e.setCancelled(true);
-                doReloadGun(game, p, gun);
+                doReloadGun(p, gun);
             }
         });
     }

@@ -1,9 +1,13 @@
 package dev.anhcraft.abm.system.listeners;
 
-import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.events.GameJoinEvent;
-import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.BattleModeController;
+import dev.anhcraft.abm.api.events.GameJoinEvent;
+import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
+import dev.anhcraft.abm.api.events.GameQuitEvent;
+import dev.anhcraft.abm.api.game.GamePhase;
+import dev.anhcraft.abm.system.controllers.ModeController;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,7 +47,19 @@ public class GameListener extends BattleComponent implements Listener {
             if(p.isOnline()) {
                 plugin.resetScoreboard(p);
                 p.teleport(plugin.getServerData().getSpawnPoint());
+
+                BattleModeController bmc = event.getGame().getMode().getController();
+                if(bmc != null) ((ModeController) bmc).cancelReloadGun(p);
             }
         });
+    }
+
+    @EventHandler
+    public void phaseChange(GamePhaseChangeEvent event){
+        BattleModeController bmc = event.getGame().getMode().getController();
+        if(bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
+            ModeController mc = (ModeController) bmc;
+            event.getGame().getPlayers().keySet().forEach(mc::cancelReloadGun);
+        }
     }
 }

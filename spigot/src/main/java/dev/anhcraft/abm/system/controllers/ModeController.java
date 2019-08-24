@@ -4,7 +4,6 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.Game;
-import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.AmmoModel;
 import dev.anhcraft.abm.api.inventory.items.Gun;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
     private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>()); // fix bug!
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
-    public final List<UUID> RELOADING_GUN = Collections.synchronizedList(new ArrayList<>());
+    public final Map<UUID, Runnable> RELOADING_GUN = Collections.synchronizedMap(new HashMap<>());
     private Mode mode;
 
     ModeController(BattlePlugin plugin, Mode mode) {
@@ -130,8 +129,13 @@ public abstract class ModeController extends BattleComponent implements Listener
         return mode;
     }
 
-    public void doReloadGun(Game game, Player player, Gun gun){
-        if(RELOADING_GUN.contains(player.getUniqueId())) return;
+    public void cancelReloadGun(Player player){
+        Runnable runnable = RELOADING_GUN.remove(player.getUniqueId());
+        if(runnable != null) runnable.run();
+    }
+
+    public void doReloadGun(Player player, Gun gun){
+        if(RELOADING_GUN.containsKey(player.getUniqueId())) return;
 
         Optional<GunModel> gmo = gun.getModel();
         if(!gmo.isPresent()) return;
@@ -148,21 +152,21 @@ public abstract class ModeController extends BattleComponent implements Listener
                 .setVariable("b", maxBullet).evaluate();
         if(maxTime <= 0) return;
 
-        RELOADING_GUN.add(player.getUniqueId());
-
         long totalTime = maxTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
         long tickBulletInc = totalTime / (maxBullet - currentBullet);
         AtomicLong currentTime = new AtomicLong(totalTime);
         CustomBossBar cb = gm.getReloadBar();
 
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
-            boolean isStopped = game.getPhase() != GamePhase.PLAYING;
-            if(!isStopped){
-                long now = currentTime.decrementAndGet();
-                if(now < 0) return;
-                playerBossBar.getBar().setProgress(1 - Math.max(0, 1.0/totalTime*now));
+            long now = currentTime.decrementAndGet();
+            if(now <= 0){
+                gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
+                player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
+                RELOADING_GUN.remove(player.getUniqueId()).run();
+            } else {
+                playerBossBar.getBar().setProgress(1 - Math.max(0, 1.0 / totalTime * now));
 
-                if(now % tickBulletInc == 0) {
+                if (now % tickBulletInc == 0) {
                     gun.getMagazine().setAmmoCount(gun.getMagazine().getAmmoCount() + 1);
                 }
 
@@ -171,16 +175,10 @@ public abstract class ModeController extends BattleComponent implements Listener
                 playerBossBar.getBar().setTitle(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
 
                 playerBossBar.show();
-
-                if(now > 0) return;
-                else {
-                    gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
-                    player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
-                }
             }
+        });
 
-            RELOADING_GUN.remove(player.getUniqueId());
-
+        RELOADING_GUN.put(player.getUniqueId(), () -> {
             if(cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
             else plugin.bossbarRenderer.removeSecondaryBar(player);
         });

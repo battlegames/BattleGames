@@ -78,7 +78,7 @@ public class GunHandler extends Handler {
     public boolean shoot(Game game, Player player, Gun gunItem){
         ModeController mc = (ModeController) game.getMode().getController();
         if(mc != null){
-            if(mc.RELOADING_GUN.contains(player.getUniqueId())){
+            if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
                 return false;
             }

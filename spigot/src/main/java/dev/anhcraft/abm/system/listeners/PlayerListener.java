@@ -11,6 +11,7 @@ import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.system.QueueTitle;
+import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.abm.utils.PlayerUtil;
@@ -203,7 +204,10 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
 
             BattleModeController c = game.getMode().getController();
-            if(c != null) c.onDeath(e, game);
+            if(c != null) {
+                c.onDeath(e, game);
+                ((ModeController) c).cancelReloadGun(e.getEntity());
+            }
         });
     }
 
