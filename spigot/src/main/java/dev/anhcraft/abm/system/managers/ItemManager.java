@@ -11,12 +11,12 @@ import dev.anhcraft.abm.api.inventory.items.ItemTag;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.utils.ListUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
+import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
-import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -79,26 +79,25 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
     @Nullable
     public BattleItem read(@Nullable ItemStack itemStack){
         if(itemStack == null) return null;
-        ItemMeta meta = itemStack.getItemMeta();
-        if(meta == null) return null;
-        CustomItemTagContainer c = meta.getCustomTagContainer();
-        String type = c.getCustomTag(ItemTag.ITEM_TYPE, ItemTagType.STRING);
-        if(type == null) return null;
-        BattleItem item = ItemType.valueOf(type).make();
-        item.load(c);
+        ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
+        CompoundTag compoundTag = nbtHelper.getTag().get("abm", CompoundTag.class);
+        if(compoundTag == null) return null;
+        StringTag typeTag = compoundTag.get(ItemTag.ITEM_TYPE, StringTag.class);
+        if(typeTag == null) return null;
+        BattleItem item = ItemType.valueOf(typeTag.getValue()).make();
+        item.load(compoundTag);
         return item;
     }
 
     @Nullable
     public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem){
         if(itemStack == null || battleItem == null) return null;
-        ItemMeta meta = itemStack.getItemMeta();
-        if(meta == null) return null;
-        CustomItemTagContainer c = meta.getCustomTagContainer();
-        battleItem.save(c);
+        ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
+        CompoundTag compoundTag = nbtHelper.getTag().getOrCreateDefault("abm", CompoundTag.class);
+        battleItem.save(compoundTag);
         if(battleItem.getModel().isPresent())
-            c.setCustomTag(ItemTag.ITEM_TYPE, ItemTagType.STRING, battleItem.getModel().get().getItemType().name());
-        itemStack.setItemMeta(meta);
-        return itemStack;
+            compoundTag.put(ItemTag.ITEM_TYPE, battleItem.getModel().get().getItemType().name());
+        nbtHelper.getTag().put("abm", compoundTag);
+        return nbtHelper.save();
     }
 }

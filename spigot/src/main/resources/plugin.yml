@@ -4,4 +4,4 @@ author: anhcraft
 version: ${project.version}
 main: dev.anhcraft.abm.BattlePlugin
 api-version: "1.13"
-depend: [PlaceholderAPI, Vault]
+depend: [CraftKit, PlaceholderAPI, Vault]

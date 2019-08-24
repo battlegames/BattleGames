@@ -1,34 +1,27 @@
 package dev.anhcraft.abm.api.inventory.items;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.plugin.Plugin;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class ItemTag {
-    public static NamespacedKey ITEM_TYPE;
-    public static NamespacedKey AMMO_ID;
-    public static NamespacedKey GUN_ID;
-    public static NamespacedKey GUN_MAGAZINE;
-    public static NamespacedKey MAGAZINE_ID;
-    public static NamespacedKey MAGAZINE_AMMO_COUNT;
-    public static NamespacedKey MAGAZINE_AMMO;
+    public static String ITEM_TYPE;
+    public static String AMMO_ID;
+    public static String GUN_ID;
+    public static String GUN_MAGAZINE;
+    public static String MAGAZINE_ID;
+    public static String MAGAZINE_AMMO_COUNT;
+    public static String MAGAZINE_AMMO;
 
-    private static boolean init;
-
-    public static void init(Plugin plugin){
-        if(init) return;
+    static {
         Field[] fields = ItemTag.class.getDeclaredFields();
         for(Field field : fields){
-            if(Modifier.isStatic(field.getModifiers()) && field.getType() == NamespacedKey.class) {
+            if(Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) {
                 try {
-                    field.set(null, new NamespacedKey(plugin, field.getName().toLowerCase()));
+                    field.set(null, field.getName().toLowerCase());
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
         }
-        init = true;
     }
 }

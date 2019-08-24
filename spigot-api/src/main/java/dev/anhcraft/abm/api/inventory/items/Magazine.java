@@ -2,9 +2,10 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.IntTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
-import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.NotNull;
 
 public class Magazine extends BattleItem<MagazineModel> {
@@ -35,22 +36,20 @@ public class Magazine extends BattleItem<MagazineModel> {
     }
 
     @Override
-    public void save(CustomItemTagContainer container) {
-        getModel().ifPresent(magazineModel -> container.setCustomTag(ItemTag.MAGAZINE_ID, ItemTagType.STRING, magazineModel.getId()));
-        container.setCustomTag(ItemTag.MAGAZINE_AMMO_COUNT, ItemTagType.INTEGER, ammoCount);
-        CustomItemTagContainer c = container.getAdapterContext().newTagContainer();
+    public void save(CompoundTag compound) {
+        getModel().ifPresent(magazineModel -> compound.put(ItemTag.MAGAZINE_ID, magazineModel.getId()));
+        compound.put(ItemTag.MAGAZINE_AMMO_COUNT, ammoCount);
+        CompoundTag c = new CompoundTag();
         ammo.save(c);
-        container.setCustomTag(ItemTag.MAGAZINE_AMMO, ItemTagType.TAG_CONTAINER, c);
+        compound.put(ItemTag.MAGAZINE_AMMO, c);
     }
 
     @Override
-    public void load(CustomItemTagContainer container) {
-        APIProvider.get()
-                .getMagazineModel(container.getCustomTag(ItemTag.MAGAZINE_ID, ItemTagType.STRING))
-                .ifPresent(this::setModel);
-        Integer a = container.getCustomTag(ItemTag.MAGAZINE_AMMO_COUNT, ItemTagType.INTEGER);
+    public void load(CompoundTag compound) {
+        APIProvider.get().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)).ifPresent(this::setModel);
+        Integer a = compound.getValue(ItemTag.MAGAZINE_AMMO_COUNT, IntTag.class);
         if(a != null) ammoCount = a;
-        CustomItemTagContainer am = container.getCustomTag(ItemTag.MAGAZINE_AMMO, ItemTagType.TAG_CONTAINER);
+        CompoundTag am = compound.get(ItemTag.MAGAZINE_AMMO, CompoundTag.class);
         if(am != null) ammo.load(am);
     }
 

@@ -1,9 +1,9 @@
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.misc.info.Informative;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,8 +21,8 @@ public abstract class BattleItem<M extends BattleItemModel> implements Informati
         this.model = model;
     }
 
-    public abstract void save(CustomItemTagContainer container);
-    public abstract void load(CustomItemTagContainer container);
+    public abstract void save(CompoundTag compound);
+    public abstract void load(CompoundTag compound);
 
     public InfoHolder collectInfo(@Nullable String prefix) {
         Validate.notNull(model, "Model must be assigned");

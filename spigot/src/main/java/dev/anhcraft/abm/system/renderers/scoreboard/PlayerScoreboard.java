@@ -1,6 +1,7 @@
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.jvmkit.utils.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,7 +27,8 @@ public class PlayerScoreboard {
         this.title = title;
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
-        objective = scoreboard.registerNewObjective(dev.anhcraft.jvmkit.utils.StringUtil.cutString("abm." + player.getName(), 16), "dummy", PlaceholderUtils.formatPAPI(player, title));
+        objective = scoreboard.registerNewObjective(StringUtil.cutString("abm." + player.getName(), 16), "dummy");
+        objective.setDisplayName(PlaceholderUtils.formatPAPI(player, title));
         int i = 0;
         int max = Math.min(15, lines.size());
         while(i < max){
@@ -69,9 +71,9 @@ public class PlayerScoreboard {
     }
 
     void show(){
+        renderLines();
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         player.setScoreboard(scoreboard);
-        renderLines();
     }
 
     void remove(){

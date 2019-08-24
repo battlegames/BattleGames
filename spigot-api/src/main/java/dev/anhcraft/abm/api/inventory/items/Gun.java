@@ -2,9 +2,9 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
-import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.jetbrains.annotations.NotNull;
 
 public class Gun extends Weapon<GunModel> {
@@ -22,20 +22,17 @@ public class Gun extends Weapon<GunModel> {
     }
 
     @Override
-    public void save(CustomItemTagContainer container) {
-        getModel().ifPresent(gunModel ->
-                container.setCustomTag(ItemTag.GUN_ID, ItemTagType.STRING, gunModel.getId()));
-        CustomItemTagContainer c = container.getAdapterContext().newTagContainer();
+    public void save(CompoundTag compound) {
+        getModel().ifPresent(gunModel -> compound.put(ItemTag.GUN_ID, gunModel.getId()));
+        CompoundTag c = new CompoundTag();
         magazine.save(c);
-        container.setCustomTag(ItemTag.GUN_MAGAZINE, ItemTagType.TAG_CONTAINER, c);
+        compound.put(ItemTag.GUN_MAGAZINE, c);
     }
 
     @Override
-    public void load(CustomItemTagContainer container) {
-        APIProvider.get()
-                .getGunModel(container.getCustomTag(ItemTag.GUN_ID, ItemTagType.STRING))
-                .ifPresent(this::setModel);
-        CustomItemTagContainer mag = container.getCustomTag(ItemTag.GUN_MAGAZINE, ItemTagType.TAG_CONTAINER);
+    public void load(CompoundTag compound) {
+        APIProvider.get().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)).ifPresent(this::setModel);
+        CompoundTag mag = compound.get(ItemTag.GUN_MAGAZINE, CompoundTag.class);
         if(mag != null) (magazine = new Magazine()).load(mag);
     }
 
