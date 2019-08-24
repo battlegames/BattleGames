@@ -39,42 +39,30 @@
         # [optional] [default: 1]
         count: 1
 
-        # The maximum random offset on the X axis
+        # The maximum random offset on the X axis.
+        # With colored dust particle, this option determines
+        # the Red value (in RGB). You also need to divide it
+        # by 255 to clamp the value between 0 and 1.
         # [optional] [default: 0]
         offset_x: 0
 
-        # The maximum random offset on the Y axis
+        # The maximum random offset on the Y axis.
+          # With colored dust particle, this option determines
+        # the Green value (in RGB). You also need to divide it
+        # by 255 to clamp the value between 0 and 1.
         # [optional] [default: 0]
         offset_y: 0
 
         # The maximum random offset on the Z axis
+          # With colored dust particle, this option determines
+        # the Blue value (in RGB). You also need to divide it
+        # by 255 to clamp the value between 0 and 1.
         # [optional] [default: 0]
         offset_z: 0
 
         # The speed
         # [optional] [default: 0]
         speed: 0
-
-        # The data to use for this particle
-        data:
-          # Dust section for Redstone particles
-          dust:
-            # The dust's color in RGB.
-            # [optional]
-            color:
-              red: 255
-              green: 0
-              blue: 0
-
-            # The dust's size
-            # [optional] [default: 0.5]
-            size: 0.5
-
-          # Here you can make an item to use for Itemcrack particles
-          # This section uses ABIF which you can look at here to know
-          # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-          item:
-            material: DIRT
 
         # The maximum distance from this particle that players are able to view
         # [optional] [default: 50]

@@ -1,6 +1,5 @@
 package dev.anhcraft.abm.api.entity;
 
-import dev.anhcraft.abm.api.game.Bullet;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,7 +23,7 @@ public class BulletEntity extends VirtualEntity {
 
     public void spawnParticle(){
         Objects.requireNonNull(getLocation().getWorld())
-                .getNearbyEntities(getLocation(), bullet.getViewDistance(), bullet.getViewDistance(), bullet.getViewDistance(), f -> f instanceof Player)
-                .forEach(entity -> ((Player) entity).spawnParticle(bullet.getParticle(), getLocation(), bullet.getCount(), bullet.getOffsetX(), bullet.getOffsetY(), bullet.getOffsetZ(), bullet.getSpeed(), bullet.getData()));
+                .getNearbyEntities(getLocation(), bullet.getViewDistance(), bullet.getViewDistance(), bullet.getViewDistance()).stream().filter(f -> f instanceof Player)
+                .forEach(entity -> ((Player) entity).spawnParticle(bullet.getParticle(), getLocation(), bullet.getCount(), bullet.getOffsetX(), bullet.getOffsetY(), bullet.getOffsetZ(), bullet.getSpeed()));
     }
 }

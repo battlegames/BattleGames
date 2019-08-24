@@ -2,9 +2,9 @@ package dev.anhcraft.abm.system.handlers;
 
 import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.entity.Bullet;
 import dev.anhcraft.abm.api.entity.BulletEntity;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.game.Bullet;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
@@ -14,11 +14,13 @@ import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -103,24 +105,23 @@ public class GunHandler extends Handler {
                 entity.setLocation(clone.add(clone.getDirection().normalize().multiply(d)));
                 entity.spawnParticle();
                 Block block = entity.getLocation().getBlock();
-                if(!block.isPassable()) break;
+                if(block.getType().isSolid()) break;
 
-                Collection<Entity> entities = block.getWorld()
-                        .getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5,
-                                entity1 -> entity1 instanceof LivingEntity && !entity1.equals(player));
-                for (Entity e : entities) {
-                    LivingEntity ve = (LivingEntity) e;
-                    DamageReport dr = new DamageReport(player, b.getDamage());
-                    dr.setHeadshotDamage(isHeadShot(entity.getLocation(), ve));
-                    PlayerDamageEvent event = new PlayerDamageEvent(game, dr, ve, gunItem);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if(event.isCancelled()) continue;
+                 block.getWorld().getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5).stream()
+                     .filter(entity1 -> entity1 instanceof LivingEntity && !entity1.equals(player))
+                     .forEach(e -> {
+                         LivingEntity ve = (LivingEntity) e;
+                         DamageReport dr = new DamageReport(player, b.getDamage());
+                         dr.setHeadshotDamage(isHeadShot(entity.getLocation(), ve));
+                         PlayerDamageEvent event = new PlayerDamageEvent(game, dr, ve, gunItem);
+                         Bukkit.getPluginManager().callEvent(event);
+                         if(event.isCancelled()) return;
 
-                    ve.damage(event.getDamage(), player);
-                    Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
-                            .normalize().multiply(b.getKnockback()));
-                    ve.setVelocity(vec);
-                }
+                         ve.damage(event.getDamage(), player);
+                         Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
+                                 .normalize().multiply(b.getKnockback()));
+                         ve.setVelocity(vec);
+                     });
             }
         }
         return true;
