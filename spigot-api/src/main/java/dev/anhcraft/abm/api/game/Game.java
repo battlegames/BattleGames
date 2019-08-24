@@ -48,6 +48,7 @@ public class Game implements Resettable, Informative {
 
     public void setPhase(@NotNull GamePhase phase) {
         Validate.notNull(phase, "Phase must be non-null");
+        if(phase == this.phase) return;
         if(!Bukkit.isPrimaryThread()){
             try {
                 throw new Exception("Can't use #setPhase from another thread");
