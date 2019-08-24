@@ -117,7 +117,7 @@ public class PapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String getAuthor() {
-        return plugin.getDescription().getAuthors().get(0);
+        return String.join(", ", plugin.getDescription().getAuthors());
     }
 
     @Override
