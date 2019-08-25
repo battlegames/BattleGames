@@ -11,6 +11,8 @@ import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.utils.PlayerUtil;
+import dev.anhcraft.craftkit.utils.BlockUtil;
+import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -23,6 +25,7 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GunHandler extends Handler {
     public GunHandler(BattlePlugin plugin) {
@@ -105,7 +108,17 @@ public class GunHandler extends Handler {
                 entity.setLocation(clone.add(clone.getDirection().normalize().multiply(d)));
 
                 Block block = entity.getLocation().getBlock();
-                if(block.getType().isSolid()) break;
+                if(block.getType().isSolid()) {
+                    List<Player> viewers = block.getWorld()
+                            .getNearbyEntities(entity.getLocation(), 25, 25, 25)
+                            .stream()
+                            .filter(e -> e instanceof Player)
+                            .map(e -> ((Player) e))
+                            .collect(Collectors.toList());
+                    int id = entity.getLocation().hashCode();
+                    BlockUtil.createBreakAnimation(id, block, RandomUtil.randomInt(0, 9), viewers);
+                    break;
+                }
 
                 entity.spawnParticle();
                 block.getWorld().getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5).stream()
