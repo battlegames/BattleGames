@@ -181,9 +181,13 @@ public abstract class ModeController extends BattleComponent implements Listener
         RELOADING_GUN.put(player.getUniqueId(), () -> {
             if(cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
             else plugin.bossbarRenderer.removeSecondaryBar(player);
+
+            if(gm.getReloadEndSound() != null) gm.getReloadEndSound().play(player);
         });
 
         if(cb.isPrimarySlot()) plugin.bossbarRenderer.setPrimaryBar(bar);
         else plugin.bossbarRenderer.setSecondaryBar(bar);
+
+        if(gm.getReloadStartSound() != null) gm.getReloadStartSound().play(player);
     }
 }

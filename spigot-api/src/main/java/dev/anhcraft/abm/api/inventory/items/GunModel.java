@@ -12,6 +12,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -23,6 +24,8 @@ public class GunModel extends WeaponModel {
     private int magazineMaxCapacity;
     private int inventorySlot;
     private SoundRecord shootSound;
+    private SoundRecord reloadStartSound;
+    private SoundRecord reloadEndSound;
     private Expression reloadTimeCalculator;
     private CustomBossBar reloadBar;
 
@@ -49,6 +52,10 @@ public class GunModel extends WeaponModel {
         inventorySlot = conf.getInt("inventory_slot");
         String ss = conf.getString("sounds.on_shoot");
         shootSound = new SoundRecord(ss == null ? "$entity_arrow_shoot" : ss);
+        String rss = conf.getString("sounds.on_start_reloading");
+        if(rss != null) reloadStartSound = new SoundRecord(rss);
+        String res = conf.getString("sounds.on_end_reloading");
+        if(res != null) reloadStartSound = new SoundRecord(res);
 
         reloadBar = new CustomBossBar(true, null, BarColor.GREEN, BarStyle.SOLID);
         ConfigurationSection rbs = conf.getConfigurationSection("bossbar.on_reload");
@@ -119,5 +126,15 @@ public class GunModel extends WeaponModel {
     @NotNull
     public Expression getReloadTimeCalculator() {
         return reloadTimeCalculator;
+    }
+
+    @Nullable
+    public SoundRecord getReloadStartSound() {
+        return reloadStartSound;
+    }
+
+    @Nullable
+    public SoundRecord getReloadEndSound() {
+        return reloadEndSound;
     }
 }
