@@ -103,11 +103,12 @@ public class GunHandler extends Handler {
             for(double d = 0.5; d < 100; d += 0.5){
                 Location clone = start.clone();
                 entity.setLocation(clone.add(clone.getDirection().normalize().multiply(d)));
-                entity.spawnParticle();
+
                 Block block = entity.getLocation().getBlock();
                 if(block.getType().isSolid()) break;
 
-                 block.getWorld().getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5).stream()
+                entity.spawnParticle();
+                block.getWorld().getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5).stream()
                      .filter(entity1 -> entity1 instanceof LivingEntity && !entity1.equals(player))
                      .forEach(e -> {
                          LivingEntity ve = (LivingEntity) e;
