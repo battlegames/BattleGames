@@ -33,6 +33,7 @@ import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.abm.tasks.DataSavingTask;
 import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
+import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -69,7 +70,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "magazines.yml",
             "guns.yml",
             "items.yml",
-            "gui.yml",
+            "gui.yml " + (NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
@@ -233,12 +234,15 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     private void initConfigFiles(){
         for(int i = 0; i < CONFIG_FILES.length; i++){
-            String s = CONFIG_FILES[i];
-            File f = new File(getDataFolder(), s);
+            String[] s = CONFIG_FILES[i].split(" ");
+            String fp = s[0];
+            String cp = s[0];
+            if(s.length == 2) cp = s[1];
+            File f = new File(getDataFolder(), fp);
             try {
                 if(f.exists()) CONFIG[i] = YamlConfiguration.loadConfiguration(f);
                 else if(f.createNewFile()) {
-                    InputStream in = getResource("config/"+s);
+                    InputStream in = getResource("config/"+cp);
                     byte[] bytes = ByteStreams.toByteArray(in);
                     in.close();
                     FileUtil.write(f, bytes);

@@ -1,0 +1,479 @@
+# This configuration is a part of ABM
+
+# ================= EXTRA =================
+# You dont need to configure here!
+# Let's scroll down to the next part
+$center_items:
+  # If you really wanna know wtf is this, this is a list of "center positions" which
+  # you can use to center multiple items on a row
+  # E.g: If the row need to have one centered item
+  1_item: 5 # Put it on the fifth column
+
+  # Or with two items
+  2_items_1: 3 # For the first, put it on the third column
+  2_items_2: 7 # Another is on the seventh column
+
+  3_items_1: 2
+  3_items_2: 5
+  3_items_3: 8
+
+  4_items_1: 2
+  4_items_2: 4
+  4_items_3: 6
+  4_items_4: 8
+
+  5_items_1: 1
+  5_items_2: 3
+  5_items_3: 5
+  5_items_4: 7
+  5_items_5: 9
+# =========================================
+
+# You can customize the GUI here
+
+inventory_menu: # Don't change this
+  # The title of this GUI
+  # To get strings from the locale file, write the path with this format: {{ path_to_the_string(s) }}
+  # [optional] [placeholder supported]
+  title: "{{ gui.inventory_menu.title }}"
+
+  # The size of this inventory
+  # Should be a multiplier of 9
+  # [optional] [default: 9] [Maximum: 54]
+  size: 36
+
+  # The sound to be played when opening this GUI
+  # With Bukkit sounds, prefix the name with a dollar sign ($)
+  # Format: [$]<sound name>[:<VOLUME>[:<PITCH>]]
+  # Default volume: 2.0; pitch: 1.0
+  # Examples:
+  # - my.custom.sound
+  # - $entity_generic_explode
+  # - $entity_generic_explode:1.0
+  # - example.sound:3.0:1.5
+  # Leave blank to disable sound
+  # [optional] [default: $block_chest_open]
+  sound: $block_chest_open
+
+  # The background (for all slots)
+  background:
+    # This section uses ABIF which you can look at here to know
+    # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
+    # And like the title above, it is possible to get strings from
+    # the locale file (Only the name and the lore support this feature)
+    # [optional] [placeholder supported]
+    item:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+
+    # The handlers
+    handlers:
+      - "core::cancel_event"
+
+  # Configure each slot here
+  # [optional]
+  slots:
+    gun: # <-- Write anything you want, just make sure it is unique
+      # The row which this slot is put on
+      # [optional] [default: 0] [maximum: 6]
+      row: 2
+
+      # The column which this slot is put on
+      # You can use "center positions" here, e.g: 3_items_2, 2_items_1, etc
+      # [optional] [default: 0] [maximum: 9]
+      column: 3_items_1
+
+      # This section uses ABIF which you can look at here to know
+      # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
+      # [optional] [placeholder supported]
+      item:
+        material: diamond_axe
+        damage: 1
+        name: "{{ gui.inventory_menu.gun_name }}"
+
+        # To get lists from the locale file, write two dollar signs before the replacement path
+        lore:
+          - "$$gui.inventory_menu.gun_lore"
+        #- "------------------" # Write other lines as normal :D
+
+        unbreakable: true
+        flag:
+          - hide_attributes
+          - hide_unbreakable
+
+      # The handlers for this slot
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open_gun"
+
+    magazine:
+      row: 2
+      column: 3_items_2
+      item:
+        material: chest
+        name: "{{ gui.inventory_menu.magazine_name }}"
+        lore:
+          - "$$gui.inventory_menu.magazine_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open_magazine"
+
+    ammo:
+      row: 2
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.inventory_menu.ammo_name }}"
+        lore:
+          - "$$gui.inventory_menu.ammo_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open_ammo"
+
+    close:
+      row: 4
+      column: 1_item
+      item:
+        material: barrier
+        name: "{{ gui.btn.close_name }}"
+        lore:
+          - "$$gui.btn.close_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::close"
+
+inventory_gun:
+  title: "{{ gui.inventory_gun.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+
+  # This is the pagination of this GUI
+  pagination:
+    # The region where the pagination is able to put items into
+    region:
+      # From the first row to the fifth
+      # [optional] [default: 0] [maximum: 9]
+      top_row: 1
+      # [optional] [default: 0] [maximum: 9]
+      bottom_row: 5
+
+      # From the first column to the ninth
+      # [optional] [default: 0] [maximum: 9]
+      left_column: 1
+      # [optional] [default: 0] [maximum: 9]
+      right_column: 9
+
+    # The handler of this pagination
+    # [required]
+    handler: "inventory_gun"
+
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    back:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.back_inv_name }}"
+        lore:
+          - "$$gui.btn.back_inv_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+inventory_magazine:
+  title: "{{ gui.inventory_magazine.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 5
+      left_column: 1
+      right_column: 9
+    handler: "inventory_magazine"
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    back:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.back_inv_name }}"
+        lore:
+          - "$$gui.btn.back_inv_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+inventory_ammo:
+  title: "{{ gui.inventory_ammo.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 5
+      left_column: 1
+      right_column: 9
+    handler: "inventory_ammo"
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    back:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.back_inv_name }}"
+        lore:
+          - "$$gui.btn.back_inv_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+kit_menu:
+  title: "{{ gui.kit_menu.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 5
+      left_column: 1
+      right_column: 9
+    handler: "kit_menu"
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    close:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.close_name }}"
+        lore:
+          - "$$gui.btn.close_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::close"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+arena_chooser:
+  title: "{{ gui.arena_chooser.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 5
+      left_column: 1
+      right_column: 9
+    handler: "arena_chooser"
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    close:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.close_name }}"
+        lore:
+          - "$$gui.btn.close_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::close"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+# =========================================
+# Sections below are for players inventory
+# Note: Slots from 0 to 9 will be displayed
+# on the hot-bar.
+# ABM only overrides items that were defined.
+# Remaining will not get affected.
+
+main_player_inv:
+  title: "{{ gui.main_player_inv.title }}"
+  size: 2
+  slots:
+    arena_chooser:
+      row: 1
+      column: 1
+      item:
+        material: watch
+        name: "{{ gui.main_player_inv.arena_chooser_name }}"
+        lore:
+          - "$$gui.main_player_inv.arena_chooser_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::choose_arena"
+    your_inventory:
+      row: 1
+      column: 2
+      item:
+        material: ender_chest
+        name: "{{ gui.main_player_inv.your_inventory_name }}"
+        lore:
+          - "$$gui.main_player_inv.your_inventory_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::open_inventory"
+
+game_player_inv:
+  title: "{{ gui.game_player_inv.title }}"
+  size: 9
+  slots:
+    your_inventory:
+      row: 1
+      column: 8
+      item:
+        material: ender_chest
+        name: "{{ gui.main_player_inv.your_inventory_name }}"
+        lore:
+          - "$$gui.main_player_inv.your_inventory_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::open_inventory"
+    quit:
+      row: 1
+      column: 9
+      item:
+        material: barrier
+        name: "{{ gui.game_player_inv.quit_name }}"
+        lore:
+          - "$$gui.game_player_inv.quit_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::quit_game"
