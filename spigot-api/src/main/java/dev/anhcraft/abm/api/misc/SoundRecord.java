@@ -1,5 +1,6 @@
 package dev.anhcraft.abm.api.misc;
 
+import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -17,7 +18,7 @@ public class SoundRecord {
         if(x.length >= 1){
             String sound = x[0];
             if(sound.charAt(0) == '$')
-                bukkitSound = Sound.valueOf(sound.substring(1).toUpperCase());
+                bukkitSound = EnumUtil.getEnum(Sound.values(), sound.substring(1));
             else
                 soundName = sound;
 

@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.game.Game;

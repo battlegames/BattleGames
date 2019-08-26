@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.system.handlers;
 
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.entity.Bullet;
 import dev.anhcraft.abm.api.entity.BulletEntity;

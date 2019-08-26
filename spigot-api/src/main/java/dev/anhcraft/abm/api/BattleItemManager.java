@@ -1,8 +1,8 @@
 package dev.anhcraft.abm.api;
 
-import dev.anhcraft.abif.PreparedItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

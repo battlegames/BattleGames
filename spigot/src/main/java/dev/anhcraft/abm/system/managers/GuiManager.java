@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.system.managers;
 
-import dev.anhcraft.abif.ABIF;
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleGuiManager;

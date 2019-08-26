@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.api.misc;
 
-import dev.anhcraft.abif.ABIF;
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;

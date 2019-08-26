@@ -5,6 +5,7 @@ import dev.anhcraft.abm.api.misc.CustomBossBar;
 import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.abm.utils.EnumUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Material;
@@ -33,9 +34,9 @@ public class GunModel extends WeaponModel {
         super(id, conf);
 
         String primaryMaterial = conf.getString("skin.primary.material");
-        primarySkin = new Skin(primaryMaterial == null ? null : Material.getMaterial(primaryMaterial.toUpperCase()), conf.getInt("skin.primary.damage"));
+        primarySkin = new Skin(primaryMaterial == null ? null : EnumUtil.getEnum(Material.values(), primaryMaterial), conf.getInt("skin.primary.damage"));
         String secondaryMaterial = conf.getString("skin.secondary.material");
-        secondarySkin = new Skin(secondaryMaterial == null ? null : Material.getMaterial(secondaryMaterial.toUpperCase()), conf.getInt("skin.secondary.damage"));
+        secondarySkin = new Skin(secondaryMaterial == null ? null : EnumUtil.getEnum(Material.values(), secondaryMaterial), conf.getInt("skin.secondary.damage"));
 
         weight = conf.getDouble("weight");
         magazineMaxCapacity = conf.getInt("magazine.max_capacity");
@@ -63,9 +64,9 @@ public class GunModel extends WeaponModel {
             reloadBar.setPrimarySlot(rbs.getBoolean("primary", true));
             reloadBar.setTitle(rbs.getString("title"));
             String barColor = rbs.getString("color");
-            if(barColor != null) reloadBar.setColor(BarColor.valueOf(barColor.toUpperCase()));
+            if(barColor != null) reloadBar.setColor(EnumUtil.getEnum(BarColor.values(), barColor));
             String barStyle = rbs.getString("style");
-            if(barStyle != null) reloadBar.setStyle(BarStyle.valueOf(barStyle.toUpperCase()));
+            if(barStyle != null) reloadBar.setStyle(EnumUtil.getEnum(BarStyle.values(), barStyle));
         }
 
         String rtf = conf.getString("reload_time_formula");

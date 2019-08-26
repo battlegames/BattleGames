@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.api.misc;
 
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

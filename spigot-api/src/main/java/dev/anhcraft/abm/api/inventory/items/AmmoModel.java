@@ -3,6 +3,7 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.entity.Bullet;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,7 +20,7 @@ public class AmmoModel extends BattleItemModel {
         super(id, conf);
 
         String material = conf.getString("skin.material");
-        skin = new Skin(material == null ? null : Material.getMaterial(material.toUpperCase()),
+        skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material),
                 conf.getInt("skin.damage"));
 
         ConfigurationSection bss = conf.getConfigurationSection("bullets");
@@ -28,7 +29,7 @@ public class AmmoModel extends BattleItemModel {
                 ConfigurationSection bs = bss.getConfigurationSection(bsk);
                 if(bs == null) continue;
                 String ptn = bs.getString("particle.type");
-                Particle pt = ptn == null ? Particle.END_ROD : Particle.valueOf(ptn.toUpperCase());
+                Particle pt = ptn == null ? Particle.END_ROD : EnumUtil.getEnum(Particle.values(), ptn);
                 bullets.add(new Bullet(bs.getDouble("damage"),
                         bs.getDouble("knockback"), pt,
                         bs.getInt("particle.count", 1),

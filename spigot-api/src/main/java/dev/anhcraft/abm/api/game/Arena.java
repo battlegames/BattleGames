@@ -1,7 +1,7 @@
 package dev.anhcraft.abm.api.game;
 
-import dev.anhcraft.abif.ABIF;
-import dev.anhcraft.abif.PreparedItem;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import net.objecthunter.exp4j.Expression;
