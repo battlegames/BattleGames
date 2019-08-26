@@ -1,9 +1,10 @@
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.jvmkit.utils.StringUtil;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerScoreboard {
+    private static final int MAX_LINE_CHAR = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
     private final List<String> ENTRIES = new ArrayList<>();
     private final Player player;
     private final ScoreboardLine[] lines;
@@ -52,8 +54,17 @@ public class PlayerScoreboard {
     public void renderLine(int index){
         ScoreboardLine line = lines[index];
         String str = PlaceholderUtils.formatPAPI(player, line.getContent());
-        line.getTeam().setPrefix(str.substring(0, Math.min(str.length(), 64)));
-        if(str.length() > 64) line.getTeam().setSuffix(str.substring(65));
+
+        int mid = Math.min(str.length(), MAX_LINE_CHAR);
+        String pre = str.substring(0, mid);
+        line.getTeam().setPrefix(pre);
+
+        if(str.length() > MAX_LINE_CHAR) {
+            int max = Math.min(str.length(), MAX_LINE_CHAR * 2);
+            String suf = str.substring(MAX_LINE_CHAR, max);
+            suf = ChatColor.getLastColors(pre) + suf;
+            line.getTeam().setSuffix(StringUtil.cutString(suf, MAX_LINE_CHAR));
+        }
         line.getTeam().addEntry(line.getTeam().getName());
         ENTRIES.forEach(line.getTeam()::addEntry);
     }

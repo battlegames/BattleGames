@@ -1,6 +1,6 @@
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
 public class ScoreboardLine {
