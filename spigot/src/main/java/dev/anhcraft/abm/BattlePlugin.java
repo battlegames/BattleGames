@@ -66,10 +66,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "locale/en_us.yml", // PUT DEFAULT LOCALE HERE
             "modes.yml",
             "arenas.yml",
-            "ammo.yml",
-            "magazines.yml",
-            "guns.yml",
-            "items.yml",
+            "items/ammo.yml",
+            "items/magazines.yml",
+            "items/guns.yml",
+            "items/items.yml",
             "gui.yml " + (NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml"
     };
