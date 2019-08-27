@@ -1,14 +1,16 @@
 package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.Mode;
-import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.inventory.items.BattleItem;
+import dev.anhcraft.abm.api.inventory.items.Gun;
+import dev.anhcraft.abm.api.inventory.items.GunModel;
+import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
@@ -201,10 +203,8 @@ public class DeathmatchController extends ModeController {
             });
     }
 
-    @EventHandler
-    public void end(GameEndEvent event){
-        Game game = event.getGame();
-        if(game.getMode() != getMode()) return;
+    @Override
+    public void onEnd(Game game) {
         cancelAllTasks(game);
         clearCooldown();
 

@@ -12,6 +12,8 @@ public interface BattleModeController {
 
     void onJoin(Player player, Game game);
 
+    void onEnd(Game game);
+
     default void onQuit(Player player, Game game){
 
     }

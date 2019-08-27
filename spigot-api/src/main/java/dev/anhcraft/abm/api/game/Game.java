@@ -2,9 +2,9 @@ package dev.anhcraft.abm.api.game;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
+import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Resettable;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
@@ -88,6 +88,7 @@ public class Game implements Resettable, Informative {
         if(phase == GamePhase.END) return;
         phase = GamePhase.END;
         Bukkit.getPluginManager().callEvent(new GameEndEvent(this));
+        arena.getMode().getController(c -> c.onEnd(this));
     }
 
     @Override
