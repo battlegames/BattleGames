@@ -6,9 +6,9 @@ state:
   enabled: Enabled
   disabled: Disabled
 item_type:
-  magazine: MagazineModel
+  magazine: Magazine
   ammo: Ammunition
-  gun: GunModel
+  gun: Gun
 medal:
   headshot_title: "&l%abm_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
