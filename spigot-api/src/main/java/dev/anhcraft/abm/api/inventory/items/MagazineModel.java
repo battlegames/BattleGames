@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MagazineModel extends BattleItemModel {
+public class MagazineModel extends BattleItemModel implements Attachable {
     private final Map<AmmoModel, Integer> ammunition = new HashMap<>();
     private Skin skin;
 
@@ -39,5 +39,12 @@ public class MagazineModel extends BattleItemModel {
     @NotNull
     public Map<AmmoModel, Integer> getAmmunition() {
         return ammunition;
+    }
+
+    @Override
+    public ItemType[] getHolderTypes() {
+        return new ItemType[]{
+                ItemType.GUN
+        };
     }
 }

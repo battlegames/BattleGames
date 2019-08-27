@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AmmoModel extends BattleItemModel {
+public class AmmoModel extends BattleItemModel implements Attachable {
     private final List<Bullet> bullets = new ArrayList<>();
     private Skin skin;
 
@@ -65,5 +65,12 @@ public class AmmoModel extends BattleItemModel {
         .inform("total_bullet_knockback", bullets.stream().mapToDouble(Bullet::getKnockback).sum())
         .inform("avg_bullet_damage", bullets.stream().mapToDouble(Bullet::getDamage).average().orElse(0))
         .inform("avg_bullet_knockback", bullets.stream().mapToDouble(Bullet::getKnockback).average().orElse(0));
+    }
+
+    @Override
+    public ItemType[] getHolderTypes() {
+        return new ItemType[]{
+                ItemType.MAGAZINE
+        };
     }
 }
