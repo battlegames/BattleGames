@@ -48,8 +48,7 @@ public class GameListener extends BattleComponent implements Listener {
                 plugin.resetScoreboard(p);
                 p.teleport(plugin.getServerData().getSpawnPoint());
 
-                BattleModeController bmc = event.getGame().getMode().getController();
-                if(bmc != null) ((ModeController) bmc).cancelReloadGun(p);
+                event.getGame().getMode().getController(c -> ((ModeController) c).cancelReloadGun(p));
             }
         });
     }

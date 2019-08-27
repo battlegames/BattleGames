@@ -2,7 +2,6 @@ package dev.anhcraft.abm.system.listeners;
 
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.game.Game;
@@ -203,11 +202,10 @@ public class PlayerListener extends BattleComponent implements Listener {
                 plugin.guiManager.renderBottomInv(e.getEntity(), plugin.guiManager.getPlayerGui(e.getEntity()));
             }
 
-            BattleModeController c = game.getMode().getController();
-            if(c != null) {
+            game.getMode().getController(c -> {
                 c.onDeath(e, game);
                 ((ModeController) c).cancelReloadGun(e.getEntity());
-            }
+            });
         });
     }
 
@@ -231,7 +229,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         Optional<Game> opt = plugin.gameManager.getGame(player);
         if(opt.isPresent()){
             Game g = opt.get();
-            Objects.requireNonNull(g.getMode().getController()).onRespawn(event, g);
+            g.getMode().getController(c -> c.onRespawn(event, g));
         } else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
     }
 }
