@@ -1,5 +1,6 @@
 package dev.anhcraft.abm.api;
 
+import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.Mode;
 import org.bukkit.entity.Player;
@@ -39,6 +40,10 @@ public interface BattleModeController {
     }
 
     default void onDropItem(PlayerDropItemEvent event, Game game){
+
+    }
+
+    default void onChooseItem(ItemChooseEvent event, Game game){
 
     }
 

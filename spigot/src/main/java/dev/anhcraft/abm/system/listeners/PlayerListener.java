@@ -3,6 +3,7 @@ package dev.anhcraft.abm.system.listeners;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
+import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePlayer;
@@ -77,6 +78,13 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
         plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
             game.getMode().getController(c -> c.onDropItem(event, game));
+        });
+    }
+
+    @EventHandler
+    public void chooseItem(ItemChooseEvent event) {
+        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+            game.getMode().getController(c -> c.onChooseItem(event, game));
         });
     }
 

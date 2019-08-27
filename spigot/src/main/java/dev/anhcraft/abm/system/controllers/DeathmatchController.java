@@ -120,22 +120,19 @@ public class DeathmatchController extends ModeController {
         }
     }
 
-    @EventHandler
-    public void choose(ItemChooseEvent event){
-        Player player = event.getPlayer();
-        plugin.gameManager.getGame(player).ifPresent(game -> {
-            if(game.getMode() != getMode() && game.getPhase() != GamePhase.PLAYING) return;
-            performCooldownMap(game, "item_selection", cooldownMap -> {
-                int t = game.getArena().getAttributes().getInt("item_selection_time");
-                if(cooldownMap.isPassed(player, t)) plugin.chatManager.sendPlayer(player, "mode_dm.error_item_selection_overtime");
-                else {
-                    if (event.getItemModel().getItemType() == ItemType.GUN) {
-                        plugin.getHandler(GunHandler.class).selectGun(player, (GunModel) event.getItemModel());
-                    } else {
-                        plugin.chatManager.sendPlayer(player, "mode_dm.error_disabled_item_type");
-                    }
-                }
-            });
+    @Override
+    public void onChooseItem(ItemChooseEvent event, Game game){
+        if(game.getPhase() != GamePhase.PLAYING) return;
+        performCooldownMap(game, "item_selection", cooldownMap -> {
+            int t = game.getArena().getAttributes().getInt("item_selection_time");
+            if(cooldownMap.isPassed(event.getPlayer(), t))
+                plugin.chatManager.sendPlayer(event.getPlayer(), "mode_dm.error_item_selection_overtime");
+            else {
+                if (event.getItemModel().getItemType() == ItemType.GUN)
+                    plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
+                else
+                    plugin.chatManager.sendPlayer(event.getPlayer(), "mode_dm.error_disabled_item_type");
+            }
         });
     }
 
