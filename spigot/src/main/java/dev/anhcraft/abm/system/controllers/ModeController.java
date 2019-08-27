@@ -2,10 +2,12 @@ package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
+import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.AmmoModel;
+import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.misc.CustomBossBar;
@@ -18,6 +20,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +41,16 @@ public abstract class ModeController extends BattleComponent implements Listener
     ModeController(BattlePlugin plugin, Mode mode) {
         super(plugin);
         this.mode = mode;
+    }
+
+    @Override
+    public void onSwapHand(PlayerSwapHandItemsEvent event, Game game){
+        BattleItem item = APIProvider.get().getItemManager().read(event.getOffHandItem());
+        if(item instanceof Gun){
+            Gun gun = (Gun) item;
+            event.setCancelled(true);
+            doReloadGun(event.getPlayer(), gun);
+        }
     }
 
     void broadcast(Game game, String localePath){

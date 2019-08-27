@@ -67,6 +67,9 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+            game.getMode().getController(c -> c.onSwapHand(event, game));
+        });
     }
 
     @EventHandler

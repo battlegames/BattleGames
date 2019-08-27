@@ -23,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.Iterator;
 import java.util.List;
@@ -176,20 +175,6 @@ public class DeathmatchController extends ModeController {
             if (game.getMode() != getMode()) return;
             BattleItem item = plugin.itemManager.read(e.getItemDrop().getItemStack());
             if(item instanceof Gun) e.setCancelled(true);
-        });
-    }
-
-    @EventHandler
-    public void reload(PlayerSwapHandItemsEvent e) {
-        Player p = e.getPlayer();
-        plugin.gameManager.getGame(p).ifPresent(game -> {
-            if(game.getMode() != getMode()) return;
-            BattleItem item = plugin.itemManager.read(e.getOffHandItem());
-            if(item instanceof Gun){
-                Gun gun = (Gun) item;
-                e.setCancelled(true);
-                doReloadGun(p, gun);
-            }
         });
     }
 
