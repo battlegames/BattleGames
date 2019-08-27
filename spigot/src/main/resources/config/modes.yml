@@ -1,11 +1,13 @@
 # This configuration is a part of ABM
 
 # You'll configure modes here
-deathmatch: # <-- This mode's id (case-insensitive)
+deathmatch: # <-- This mode's id (do not change)
   # The mode's name
+  # [required]
   name: "&bDeathmatch"
 
   # You can write a short sentence to describe this mode
+  # [required]
   description: "&fA game where single players attack each other to know who is the winner"
 
   # Chat for waiting phase
@@ -14,7 +16,7 @@ deathmatch: # <-- This mode's id (case-insensitive)
     enabled: true
 
     # The format
-    # [placeholder supported]
+    # [optional] [default: <empty>] [placeholder supported]
     format: "&8%player_displayname%&f: {__message__}"
 
   # Chat for playing phase
@@ -23,7 +25,7 @@ deathmatch: # <-- This mode's id (case-insensitive)
     enabled: true
 
     # The format
-    # [placeholder supported]
+    # [optional] [default: <empty>] [placeholder supported]
     format: "&8%player_displayname%&f: {__message__}"
 
   # A built-in scoreboard which is used during the waiting phase
@@ -32,11 +34,11 @@ deathmatch: # <-- This mode's id (case-insensitive)
     enabled: true
 
     # This scoreboard's title
-    # [placeholder supported]
+    # [optional] [default: <empty>] [placeholder supported]
     title: "&a &c&lBATTLE"
 
     # The content of this scoreboard
-    # [placeholder supported] [maximum lines: 15]
+    # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
       - "&aDeathmatch - %abm_arena_name%"
@@ -52,11 +54,11 @@ deathmatch: # <-- This mode's id (case-insensitive)
     enabled: true
 
     # The title
-    # [placeholder supported]
+    # [optional] [default: <empty>] [placeholder supported]
     title: "&a &c&lBATTLE"
 
     # The content
-    # [placeholder supported] [maximum lines: 15]
+    # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
       - "&aDeathmatch - %abm_arena_name%"

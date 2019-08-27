@@ -309,7 +309,9 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initMode(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> Mode.valueOf(s.toUpperCase()).init(c.getConfigurationSection(s)));
+        c.getKeys(false).forEach(s -> {
+            Mode.getMode(s, m -> m.init(c.getConfigurationSection(s)));
+        });
     }
 
     private void initArena(FileConfiguration c) {

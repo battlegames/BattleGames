@@ -37,7 +37,7 @@ public class Arena implements Informative {
         if(name == null) throw new NullPointerException("Name must be specified");
         String m = conf.getString("mode");
         if(m == null) throw new NullPointerException("Mode must be specified");
-        mode = Mode.valueOf(m.toUpperCase());
+        mode = Mode.getMode(m);
         String fec = conf.getString("final_exp_formula");
         if(fec == null) throw new NullPointerException("Final experience formula must be specified");
         else finalExpCalculator = new ExpressionBuilder(fec).variables("a", "b", "c", "d").build();
@@ -70,6 +70,8 @@ public class Arena implements Informative {
 
     @NotNull
     public Mode getMode() {
+        if(mode == null)
+            throw new UnsupportedOperationException("Mode is not present");
         return mode;
     }
 
