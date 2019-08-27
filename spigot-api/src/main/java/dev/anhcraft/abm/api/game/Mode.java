@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public enum Mode implements Informative {
     DEATHMATCH,
@@ -111,6 +112,10 @@ public enum Mode implements Informative {
     @Nullable
     public BattleModeController getController() {
         return controller;
+    }
+
+    public void getController(Consumer<BattleModeController> consumer) {
+        if(controller != null && consumer != null) consumer.accept(controller);
     }
 
     public void setController(@Nullable BattleModeController controller) {
