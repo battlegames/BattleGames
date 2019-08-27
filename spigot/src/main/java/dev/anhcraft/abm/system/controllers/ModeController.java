@@ -124,8 +124,8 @@ public abstract class ModeController extends BattleComponent implements Listener
         else ifPresent.accept(m);
     }
 
-    @NotNull
-    public Mode getMode() {
+    @Override
+    @NotNull public Mode getMode() {
         return mode;
     }
 

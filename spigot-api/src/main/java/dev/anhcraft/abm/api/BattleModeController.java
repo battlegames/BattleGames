@@ -1,9 +1,11 @@
 package dev.anhcraft.abm.api;
 
 import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.Mode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.jetbrains.annotations.NotNull;
 
 public interface BattleModeController {
     default boolean canJoin(Player player, Game game){
@@ -29,4 +31,6 @@ public interface BattleModeController {
     default void onDeath(PlayerDeathEvent event, Game game){
 
     }
+
+    @NotNull Mode getMode();
 }
