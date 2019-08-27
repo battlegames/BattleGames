@@ -4,6 +4,7 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.Mode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,10 @@ public interface BattleModeController {
     }
 
     default void onSwapHand(PlayerSwapHandItemsEvent event, Game game){
+
+    }
+
+    default void onDropItem(PlayerDropItemEvent event, Game game){
 
     }
 

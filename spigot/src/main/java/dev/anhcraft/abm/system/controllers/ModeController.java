@@ -20,6 +20,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,12 @@ public abstract class ModeController extends BattleComponent implements Listener
             event.setCancelled(true);
             doReloadGun(event.getPlayer(), gun);
         }
+    }
+
+    @Override
+    public void onDropItem(PlayerDropItemEvent event, Game game){
+        BattleItem item = plugin.itemManager.read(event.getItemDrop().getItemStack());
+        if(item != null) event.setCancelled(true);
     }
 
     void broadcast(Game game, String localePath){

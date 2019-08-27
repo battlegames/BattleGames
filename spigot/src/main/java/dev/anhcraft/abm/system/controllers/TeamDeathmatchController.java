@@ -225,16 +225,6 @@ public class TeamDeathmatchController extends ModeController {
     }
 
     @EventHandler
-    public void drop(PlayerDropItemEvent e) {
-        Player p = e.getPlayer();
-        plugin.gameManager.getGame(p).ifPresent(game -> {
-            if (game.getMode() != getMode()) return;
-            BattleItem item = plugin.itemManager.read(e.getItemDrop().getItemStack());
-            if(item instanceof Gun) e.setCancelled(true);
-        });
-    }
-
-    @EventHandler
     public void damage(GamePlayerDamageEvent e) {
         if(e.getGame().getMode() != getMode()) return;
         SimpleTeam<DeathmatchTeam> x = TEAM.get(e.getGame());

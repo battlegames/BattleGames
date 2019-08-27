@@ -7,8 +7,6 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.Mode;
-import dev.anhcraft.abm.api.inventory.items.BattleItem;
-import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.system.handlers.GunHandler;
@@ -21,7 +19,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.Iterator;
@@ -166,16 +163,6 @@ public class DeathmatchController extends ModeController {
                 } else cancelTask(game, task);
             }, 0, 20));
         }
-    }
-
-    @EventHandler
-    public void drop(PlayerDropItemEvent e) {
-        Player p = e.getPlayer();
-        plugin.gameManager.getGame(p).ifPresent(game -> {
-            if (game.getMode() != getMode()) return;
-            BattleItem item = plugin.itemManager.read(e.getItemDrop().getItemStack());
-            if(item instanceof Gun) e.setCancelled(true);
-        });
     }
 
     @EventHandler
