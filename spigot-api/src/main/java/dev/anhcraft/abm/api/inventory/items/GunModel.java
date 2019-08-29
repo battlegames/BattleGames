@@ -56,7 +56,7 @@ public class GunModel extends WeaponModel {
         String rss = conf.getString("sounds.on_start_reloading");
         if(rss != null) reloadStartSound = new SoundRecord(rss);
         String res = conf.getString("sounds.on_end_reloading");
-        if(res != null) reloadStartSound = new SoundRecord(res);
+        if(res != null) reloadEndSound = new SoundRecord(res);
 
         reloadBar = new CustomBossBar(true, null, BarColor.GREEN, BarStyle.SOLID);
         ConfigurationSection rbs = conf.getConfigurationSection("bossbar.on_reload");
