@@ -30,7 +30,7 @@ public class Mode implements Informative {
     }
 
     @NotNull
-    public Collection<Mode> listModes(){
+    public static Collection<Mode> listModes(){
         return Collections.unmodifiableCollection(MODE_REGISTRY.values());
     }
 
