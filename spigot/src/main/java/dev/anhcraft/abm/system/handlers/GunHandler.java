@@ -10,6 +10,7 @@ import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.utils.PlayerUtil;
+import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -33,6 +34,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GunHandler extends Handler {
+    private static final ItemStack PUMPKIN_HELMET = new ItemStack(NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? Material.valueOf("CARVED_PUMPKIN") : Material.PUMPKIN, 1);
+
     public GunHandler(BattlePlugin plugin) {
         super(plugin);
     }
@@ -126,7 +129,7 @@ public class GunHandler extends Handler {
         else {
             ScopeModel sm = scp.getModel().get();
             int nextLv = sm.getZoomLevels().get(next);
-            player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN, 1));
+            player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
             player.setWalkSpeed(-1f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
