@@ -60,9 +60,11 @@ public class Mode implements Informative {
     private boolean waitingScoreboardEnabled;
     private String waitingScoreboardTitle;
     private List<String> waitingScoreboardContent;
+    private boolean waitingScoreboardFixedLength;
     private boolean playingScoreboardEnabled;
     private String playingScoreboardTitle;
     private List<String> playingScoreboardContent;
+    private boolean playingScoreboardFixedLength;
     private ConfigurationSection config;
     private BattleModeController controller;
 
@@ -86,9 +88,11 @@ public class Mode implements Informative {
         waitingScoreboardEnabled = conf.getBoolean("waiting_scoreboard.enabled");
         waitingScoreboardTitle = conf.getString("waiting_scoreboard.title", "");
         waitingScoreboardContent = conf.getStringList("waiting_scoreboard.content");
+        waitingScoreboardFixedLength = conf.getBoolean("waiting_scoreboard.fixed_length");
         playingScoreboardEnabled = conf.getBoolean("playing_scoreboard.enabled");
         playingScoreboardTitle = conf.getString("playing_scoreboard.title", "");
         playingScoreboardContent = conf.getStringList("playing_scoreboard.content");
+        playingScoreboardFixedLength = conf.getBoolean("playing_scoreboard.fixed_length");
     }
 
     @NotNull
@@ -138,6 +142,10 @@ public class Mode implements Informative {
         return waitingScoreboardContent;
     }
 
+    public boolean isWaitingScoreboardFixedLength() {
+        return waitingScoreboardFixedLength;
+    }
+
     public boolean isPlayingScoreboardEnabled() {
         return playingScoreboardEnabled;
     }
@@ -150,6 +158,10 @@ public class Mode implements Informative {
     @NotNull
     public List<String> getPlayingScoreboardContent() {
         return playingScoreboardContent;
+    }
+
+    public boolean isPlayingScoreboardFixedLength() {
+        return playingScoreboardFixedLength;
     }
 
     @NotNull

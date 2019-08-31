@@ -48,6 +48,9 @@ deathmatch: # <-- This mode's id (do not change)
       - "&c"
       - "&dminecraft.net"
 
+    # Should the scoreboard always has a fixed length?
+    fixed_length: false
+
   # A built-in scoreboard which is used during the playing phase
   playing_scoreboard:
     # Use this or not?
@@ -70,6 +73,9 @@ deathmatch: # <-- This mode's id (do not change)
       - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
+
+    # Should the scoreboard always has a fixed length?
+    fixed_length: false
 
 team_deathmatch:
   name: "&eTeam &bDeathmatch"

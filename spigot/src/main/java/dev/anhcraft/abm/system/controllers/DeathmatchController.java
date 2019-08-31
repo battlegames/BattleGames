@@ -54,7 +54,8 @@ public class DeathmatchController extends ModeController {
                 respw(game, player);
                 String title = game.getMode().getWaitingScoreboardTitle();
                 List<String> content = game.getMode().getWaitingScoreboardContent();
-                plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content));
+                boolean b = game.getMode().isWaitingScoreboardFixedLength();
+                plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, b));
                 if(m <= game.countPlayers()) countdown(game);
                 break;
             }
@@ -92,7 +93,8 @@ public class DeathmatchController extends ModeController {
     private void addPlayer(Game game, Player player) {
         String title = game.getMode().getPlayingScoreboardTitle();
         List<String> content = game.getMode().getPlayingScoreboardContent();
-        plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content));
+        boolean b = game.getMode().isPlayingScoreboardFixedLength();
+        plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, b));
         respw(game, player);
     }
 

@@ -22,11 +22,13 @@ public class PlayerScoreboard {
     private final Objective objective;
     private final Scoreboard scoreboard;
     private final String title;
+    private final boolean fixedLength;
 
-    public PlayerScoreboard(Player player, String title, List<String> lines) {
+    public PlayerScoreboard(Player player, String title, List<String> lines, boolean fixedLength) {
         this.player = player;
         this.lines = new ScoreboardLine[lines.size()];
         this.title = title;
+        this.fixedLength = fixedLength;
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
         objective = scoreboard.registerNewObjective(StringUtil.cutString("abm." + player.getName(), 16), "dummy");
@@ -55,15 +57,26 @@ public class PlayerScoreboard {
         ScoreboardLine line = lines[index];
         String str = PlaceholderUtils.formatPAPI(player, line.getContent());
 
-        int mid = Math.min(str.length(), MAX_LINE_CHAR);
-        String pre = str.substring(0, mid);
+        StringBuilder preBuilder = new StringBuilder(str.substring(0, Math.min(str.length(), MAX_LINE_CHAR)));
+        if(fixedLength){
+            int f = preBuilder.length();
+            for (int i = f; i < MAX_LINE_CHAR; i++)
+                preBuilder.append(" ");
+        }
+        String pre = preBuilder.toString();
         line.getTeam().setPrefix(pre);
 
         if(str.length() > MAX_LINE_CHAR) {
             int max = Math.min(str.length(), MAX_LINE_CHAR * 2);
             String suf = str.substring(MAX_LINE_CHAR, max);
             suf = ChatColor.getLastColors(pre) + suf;
-            line.getTeam().setSuffix(StringUtil.cutString(suf, MAX_LINE_CHAR));
+            StringBuilder sufBuilder = new StringBuilder(StringUtil.cutString(suf, MAX_LINE_CHAR));
+            if(fixedLength){
+                int f = preBuilder.length();
+                for (int i = f; i < MAX_LINE_CHAR; i++)
+                    sufBuilder.append(" ");
+            }
+            line.getTeam().setSuffix(sufBuilder.toString());
         }
         line.getTeam().addEntry(line.getTeam().getName());
         ENTRIES.forEach(line.getTeam()::addEntry);

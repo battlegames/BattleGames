@@ -58,6 +58,8 @@ default_scoreboard:
     - "&c&a"
     - "&dminecraft.net"
 
+  # Should the scoreboard always has a fixed length?
+  fixed_length: false
 
 # Default chat settings
 default_chat:
