@@ -20,7 +20,7 @@ public class ScopeModel extends BattleItemModel implements Attachable {
         skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material), conf.getInt("skin.damage"));
         zoomLevels = conf.getIntegerList("zoom_levels");
         zoomLevels.removeIf(integer -> {
-            boolean b = integer < 1;
+            boolean b = integer < 1 || integer > 255;
             if(b) Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, id));
             return b;
         });
