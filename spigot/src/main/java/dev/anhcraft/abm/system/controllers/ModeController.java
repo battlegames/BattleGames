@@ -182,7 +182,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         int slot = player.getInventory().getHeldItemSlot();
 
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
-            long now = currentTime.decrementAndGet();
+            long now = currentTime.getAndDecrement();
             if(now <= 0){
                 gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
                 player.getInventory().setItem(slot, plugin.getHandler(GunHandler.class).createGun(gun, false));
