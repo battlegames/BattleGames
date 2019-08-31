@@ -14,7 +14,6 @@ import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
-import dev.anhcraft.abm.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -47,6 +46,8 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.taskManager.newTask(() -> {
             plugin.resetScoreboard(player);
             plugin.guiManager.setBottomInv(player, "main_player_inv");
+            player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+            player.setFlySpeed(plugin.getDefaultFlyingSpeed());
         });
     }
 
@@ -169,8 +170,9 @@ public class PlayerListener extends BattleComponent implements Listener {
         BattleItem oldItem = plugin.itemManager.read(oldItemStack);
         if(newItem != null){
             if(newItem instanceof Gun) {
-                ((Gun) newItem).getModel().ifPresent(m ->
-                        PlayerUtil.reduceSpeed(player, m.getWeight()));
+                ((Gun) newItem).getModel().ifPresent(m -> {
+                    plugin.getHandler(GunHandler.class).reduceSpeed(player, m);
+                });
                 secondarySkin(player, newItem, oldItem);
             } else {
                 // OTHER ITEM TYPE PUT HERE
@@ -181,8 +183,10 @@ public class PlayerListener extends BattleComponent implements Listener {
             if(oldItem instanceof Gun){
                 Gun gun = (Gun) oldItem;
                 gun.getModel().ifPresent(m -> {
-                    PlayerUtil.increaseSpeed(player, m.getWeight());
-                    plugin.getHandler(GunHandler.class).handleZoomOut(player);
+                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player)){
+                        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+                        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+                    }
                 });
             }
             secondarySkin(player, null, oldItem);

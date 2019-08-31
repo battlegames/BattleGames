@@ -9,7 +9,6 @@ import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.system.controllers.ModeController;
-import dev.anhcraft.abm.utils.PlayerUtil;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.BlockUtil;
@@ -24,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -67,8 +67,17 @@ public class GunHandler extends Handler {
         int held = player.getInventory().getHeldItemSlot();
         if(held == g.getInventorySlot()) {
             player.getInventory().setItemInOffHand(createGun(gun, true));
-            PlayerUtil.reduceSpeed(player, g.getWeight());
+            reduceSpeed(player, g);
         }
+    }
+
+    public void reduceSpeed(Player player, GunModel g){
+        float w = plugin.getDefaultWalkingSpeed();
+        w = (float) Math.max(-1f, w - g.getWeight());
+        float f = plugin.getDefaultFlyingSpeed();
+        f = (float) Math.max(-1f, f - g.getWeight());
+        player.setWalkSpeed(w);
+        player.setFlySpeed(f);
     }
 
     private double getBodyHeight(LivingEntity e) {
@@ -87,18 +96,24 @@ public class GunHandler extends Handler {
     }
 
     private void rmvZoom(Player player){
-        player.setWalkSpeed(0.2f);
+        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
         player.removeMetadata("zoom", plugin);
     }
 
-    public void handleZoomOut(Player player){
+    public boolean handleZoomOut(Player player){
         if(player.hasMetadata("zoom")) {
-            player.getMetadata("zoom").forEach(v -> {
-                if(v.getOwningPlugin() == plugin && v.asInt() != -1) rmvZoom(player);
-            });
+            List<MetadataValue> x = player.getMetadata("zoom");
+            for(MetadataValue v : x){
+                if(v.getOwningPlugin() == plugin && v.asInt() != -1) {
+                    rmvZoom(player);
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
     public boolean handleZoomIn(Game game, Player player, Gun gunItem){
@@ -132,6 +147,7 @@ public class GunHandler extends Handler {
             player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
             player.setWalkSpeed(-1f);
+            player.setFlySpeed(-1f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
         }
         return true;

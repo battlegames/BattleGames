@@ -437,6 +437,16 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    public float getDefaultWalkingSpeed() {
+        return (float) getGeneralConf().getDouble("misc.default_speed.walk", 0.2);
+    }
+
+    @Override
+    public float getDefaultFlyingSpeed() {
+        return (float) getGeneralConf().getDouble("misc.default_speed.fly", 0.2);
+    }
+
+    @Override
     public long calculateExp(int level) {
         return (long) toExpConverter.setVariable("x", level).evaluate();
     }

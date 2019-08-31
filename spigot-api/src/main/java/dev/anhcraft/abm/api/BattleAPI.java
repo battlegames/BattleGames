@@ -22,6 +22,8 @@ public interface BattleAPI {
     @NotNull String formatShortFormDateHours(Date date);
     @NotNull String formatShortFormDateMinutes(Date date);
     @NotNull String formatShortFormDateSeconds(Date date);
+    float getDefaultWalkingSpeed();
+    float getDefaultFlyingSpeed();
     long calculateExp(int level);
     int calculateLevel(long exp);
     Optional<PlayerData> getPlayerData(@Nullable OfflinePlayer player);
