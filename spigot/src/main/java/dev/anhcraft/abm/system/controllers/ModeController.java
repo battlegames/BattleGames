@@ -34,7 +34,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
-    private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>()); // fix bug!
+    private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
     public final Map<UUID, Runnable> RELOADING_GUN = Collections.synchronizedMap(new HashMap<>());
     private Mode mode;
@@ -177,11 +177,13 @@ public abstract class ModeController extends BattleComponent implements Listener
         AtomicLong currentTime = new AtomicLong(totalTime);
         CustomBossBar cb = gm.getReloadBar();
 
+        int slot = player.getInventory().getHeldItemSlot();
+
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
             long now = currentTime.decrementAndGet();
             if(now <= 0){
                 gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
-                player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, false));
+                player.getInventory().setItem(slot, plugin.getHandler(GunHandler.class).createGun(gun, false));
                 RELOADING_GUN.remove(player.getUniqueId()).run();
             } else {
                 playerBossBar.getBar().setProgress(1 - Math.max(0, 1.0 / totalTime * now));
