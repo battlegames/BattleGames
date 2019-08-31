@@ -43,6 +43,12 @@ ak_47: # Gun's ID
     # [optional] [default: 0]
     max_capacity: 90
 
+  # Configure this gun's scope
+  scope:
+    # The default scope
+    # [optional]
+    default: basic_scope
+
   # The slot where this gun is put on.
   # If the slot is out of bound, it will be overridden by default.
   # Note: Not all modes support this option

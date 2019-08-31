@@ -1,9 +1,7 @@
 package dev.anhcraft.abm.api;
 
 import dev.anhcraft.abm.api.game.Arena;
-import dev.anhcraft.abm.api.inventory.items.AmmoModel;
-import dev.anhcraft.abm.api.inventory.items.GunModel;
-import dev.anhcraft.abm.api.inventory.items.MagazineModel;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.Kit;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
@@ -32,11 +30,13 @@ public interface BattleAPI {
     Optional<AmmoModel> getAmmoModel(@Nullable String id);
     Optional<GunModel> getGunModel(@Nullable String id);
     Optional<MagazineModel> getMagazineModel(@Nullable String id);
+    Optional<ScopeModel> getScopeModel(@Nullable String id);
     Optional<Kit> getKit(@Nullable String id);
     @NotNull List<Arena> listArenas();
     @NotNull List<AmmoModel> listAmmoModels();
     @NotNull List<GunModel> listGunModels();
     @NotNull List<MagazineModel> listMagazineModels();
+    @NotNull List<ScopeModel> listScopes();
     @NotNull List<Kit> listKits();
     @NotNull BattleGameManager getGameManager();
     @NotNull BattleItemManager getItemManager();

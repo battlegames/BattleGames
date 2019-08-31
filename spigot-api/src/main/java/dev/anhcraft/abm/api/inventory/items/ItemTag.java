@@ -8,9 +8,12 @@ public class ItemTag {
     public static String AMMO_ID;
     public static String GUN_ID;
     public static String GUN_MAGAZINE;
+    public static String GUN_SCOPE;
     public static String MAGAZINE_ID;
     public static String MAGAZINE_AMMO_COUNT;
     public static String MAGAZINE_AMMO;
+    public static String SCOPE_ID;
+    public static String SCOPE_NEXT_ZOOM_LEVEL;
 
     static {
         Field[] fields = ItemTag.class.getDeclaredFields();

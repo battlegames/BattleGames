@@ -49,3 +49,9 @@ model_gun:
     - hide_attributes
     - hide_unbreakable
   unbreakable: true
+
+scope:
+  name: "{__scope_name__}"
+
+model_scope:
+  name: "{__scope_name__}"

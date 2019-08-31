@@ -54,6 +54,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void quit(PlayerQuitEvent event){
         plugin.guiManager.destroyPlayerGui(event.getPlayer());
         plugin.gameManager.quit(event.getPlayer());
+        plugin.getHandler(GunHandler.class).handleZoomOut(event.getPlayer());
         plugin.taskManager.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
 
@@ -100,6 +101,21 @@ public class PlayerListener extends BattleComponent implements Listener {
                     plugin.gameManager.getGame(p).ifPresent(game -> {
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
+                            p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                        event.setCancelled(true);
+                        event.setUseInteractedBlock(Event.Result.DENY);
+                    });
+                }
+                return;
+            }
+        }
+        else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            BattleItem item = plugin.itemManager.read(event.getItem());
+            if(item != null) {
+                if (item instanceof Gun) {
+                    plugin.gameManager.getGame(p).ifPresent(game -> {
+                        Gun gun = (Gun) item;
+                        if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
@@ -162,9 +178,13 @@ public class PlayerListener extends BattleComponent implements Listener {
                 secondarySkin(player, null, oldItem);
             }
         } else if(oldItem != null) {
-            if(oldItem instanceof Gun)
-                ((Gun) oldItem).getModel().ifPresent(m ->
-                    PlayerUtil.increaseSpeed(player, m.getWeight()));
+            if(oldItem instanceof Gun){
+                Gun gun = (Gun) oldItem;
+                gun.getModel().ifPresent(m -> {
+                    PlayerUtil.increaseSpeed(player, m.getWeight());
+                    plugin.getHandler(GunHandler.class).handleZoomOut(player);
+                });
+            }
             secondarySkin(player, null, oldItem);
         }
     }
@@ -220,6 +240,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 c.onDeath(e, game);
                 ((ModeController) c).cancelReloadGun(e.getEntity());
             });
+
+            plugin.getHandler(GunHandler.class).handleZoomOut(e.getEntity());
         });
     }
 

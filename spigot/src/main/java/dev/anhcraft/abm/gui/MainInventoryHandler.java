@@ -11,6 +11,11 @@ public class MainInventoryHandler extends GuiHandler {
         APIProvider.get().getGuiManager().openTopInventory(player, "inventory_menu");
     }
 
+    @Label("open_scope")
+    public void openScopeInv(Player player){
+        APIProvider.get().getGuiManager().openTopInventory(player, "inventory_scope");
+    }
+
     @Label("open_gun")
     public void openGunInv(Player player){
         APIProvider.get().getGuiManager().openTopInventory(player, "inventory_gun");

@@ -22,6 +22,7 @@ public class GunModel extends WeaponModel {
     private Skin secondarySkin;
     private double weight;
     private MagazineModel defaultMagazine;
+    private ScopeModel defaultScope;
     private int magazineMaxCapacity;
     private int inventorySlot;
     private SoundRecord shootSound;
@@ -72,6 +73,15 @@ public class GunModel extends WeaponModel {
         String rtf = conf.getString("reload_time_formula");
         if(rtf == null) throw new NullPointerException("Reloading time formula must be specified");
         reloadTimeCalculator = new ExpressionBuilder(rtf).variables("a", "b").build();
+
+        String defaultScp = conf.getString("scope.default");
+        if(defaultScp != null) {
+            try {
+                defaultScope = APIProvider.get().getScopeModel(defaultScp).orElseThrow((Supplier<Throwable>) () -> new NullPointerException("Scope not found"));
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -137,5 +147,10 @@ public class GunModel extends WeaponModel {
     @Nullable
     public SoundRecord getReloadEndSound() {
         return reloadEndSound;
+    }
+
+    @Nullable
+    public ScopeModel getDefaultScope() {
+        return defaultScope;
     }
 }

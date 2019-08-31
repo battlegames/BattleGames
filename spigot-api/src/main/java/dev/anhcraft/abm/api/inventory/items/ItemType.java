@@ -8,7 +8,8 @@ import java.util.function.Supplier;
 public enum ItemType {
     AMMO(Ammo::new),
     GUN(Gun::new),
-    MAGAZINE(Magazine::new);
+    MAGAZINE(Magazine::new),
+    SCOPE(Scope::new);
 
     Supplier<BattleItem> c;
 

@@ -9,6 +9,7 @@ item_type:
   magazine: Magazine
   ammo: Ammunition
   gun: Gun
+  scope: Scope
 medal:
   headshot_title: "&l%abm_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
@@ -51,6 +52,7 @@ gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."
   reloading_warn: "&cYou are reloading gun ammo!"
+  none_scope_message: "&cNo scope is attached to this gun!"
 items:
   not_found: "&cCouldn't find that item"
 tool:
@@ -87,12 +89,17 @@ gui:
     ammo_name: "&fAmmunition"
     ammo_lore:
       - "&aClick here to view owned ammunition"
+    scope_name: "&fScopes"
+    scope_lore:
+      - "&aClick here to view owned scopes"
   inventory_gun:
     title: "&c&lInventory > Gun"
   inventory_magazine:
     title: "&c&lInventory > Magazine"
   inventory_ammo:
     title: "&c&lInventory > Ammunition"
+  inventory_scope:
+    title: "&c&lInventory > Scope"
   kit_menu:
     title: "&b&lKits"
   arena_chooser:

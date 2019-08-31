@@ -172,6 +172,8 @@ public abstract class ModeController extends BattleComponent implements Listener
                 .setVariable("b", maxBullet).evaluate();
         if(maxTime <= 0) return;
 
+        plugin.getHandler(GunHandler.class).handleZoomOut(player);
+
         long totalTime = maxTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
         long tickBulletInc = totalTime / (maxBullet - currentBullet);
         AtomicLong currentTime = new AtomicLong(totalTime);

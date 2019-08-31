@@ -8,10 +8,7 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.gui.Gui;
-import dev.anhcraft.abm.api.inventory.items.AmmoModel;
-import dev.anhcraft.abm.api.inventory.items.GunModel;
-import dev.anhcraft.abm.api.inventory.items.ItemType;
-import dev.anhcraft.abm.api.inventory.items.MagazineModel;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.Kit;
 import dev.anhcraft.abm.api.misc.info.*;
 import dev.anhcraft.abm.api.storage.StorageType;
@@ -66,8 +63,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "locale/en_us.yml", // PUT DEFAULT LOCALE HERE
             "modes.yml",
             "arenas.yml",
+            // START: ATTACHMENTS
             "items/ammo.yml",
             "items/magazines.yml",
+            "items/scopes.yml",
+            // END: ATTACHMENTS
             "items/guns.yml",
             "items/items.yml",
             "gui.yml " + (NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? "gui.yml" : "gui.legacy.yml"),
@@ -80,6 +80,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, GunModel> GUN_MAP = new HashMap<>();
     private final Map<String, Kit> KIT_MAP = new HashMap<>();
     private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
+    private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private File localeDir;
@@ -114,6 +115,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         getLogger().info("Consider to donate me if you think ABM is awesome <3");
         localeDir = new File(getDataFolder(), "locale");
         localeDir.mkdirs();
+        new File(getDataFolder(), "items").mkdir();
 
         initConfigFiles();
         injectApiProvider();
@@ -135,10 +137,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         initArena(CONFIG[4]);
         initAmmo(CONFIG[5]);
         initMagazine(CONFIG[6]);
-        initGun(CONFIG[7]);
-        //initItem(CONFIG[8]);
-        initGui(CONFIG[9]);
-        initKits(CONFIG[10]);
+        initScope(CONFIG[7]);
+        initGun(CONFIG[8]);
+        //initItem(CONFIG[9]);
+        initGui(CONFIG[10]);
+        initKits(CONFIG[11]);
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -216,20 +219,24 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return CONFIG[6];
     }
 
-    public FileConfiguration getGunConf(){
+    public FileConfiguration getScopeConf(){
         return CONFIG[7];
     }
 
-    public FileConfiguration getItemConf(){
+    public FileConfiguration getGunConf(){
         return CONFIG[8];
     }
 
-    public FileConfiguration getGuiConf(){
+    public FileConfiguration getItemConf(){
         return CONFIG[9];
     }
 
-    public FileConfiguration getKitConf(){
+    public FileConfiguration getGuiConf(){
         return CONFIG[10];
+    }
+
+    public FileConfiguration getKitConf(){
+        return CONFIG[11];
     }
 
     private void initConfigFiles(){
@@ -330,12 +337,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         c.getKeys(false).forEach(s -> GUN_MAP.put(s, new GunModel(s, c.getConfigurationSection(s))));
     }
 
+    private void initScope(FileConfiguration c) {
+        c.getKeys(false).forEach(s -> SCOPE_MAP.put(s, new ScopeModel(s, c.getConfigurationSection(s))));
+    }
+
     private void initGui(FileConfiguration c) {
         guiManager.registerGuiHandler("core", new CoreHandler());
         guiManager.registerGuiHandler("inventory_menu", new MainInventoryHandler());
         guiManager.registerGuiHandler("inventory_gun", new GunInventory());
         guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory());
         guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory());
+        guiManager.registerGuiHandler("inventory_scope", new ScopeInventory());
         guiManager.registerGuiHandler("kit_menu", new KitMenuHandler());
         guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler());
 
@@ -466,6 +478,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    public Optional<ScopeModel> getScopeModel(@Nullable String id) {
+        return Optional.ofNullable(SCOPE_MAP.get(id));
+    }
+
+    @Override
     public Optional<Kit> getKit(@Nullable String id) {
         return Optional.ofNullable(KIT_MAP.get(id));
     }
@@ -492,6 +509,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public List<MagazineModel> listMagazineModels() {
         return new ArrayList<>(MAGAZINE_MAP.values());
+    }
+
+    @Override
+    public @NotNull List<ScopeModel> listScopes() {
+        return new ArrayList<>(SCOPE_MAP.values());
     }
 
     @NotNull

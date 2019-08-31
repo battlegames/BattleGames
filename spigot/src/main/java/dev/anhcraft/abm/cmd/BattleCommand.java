@@ -3,11 +3,8 @@ package dev.anhcraft.abm.cmd;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.inventory.items.ItemType;
-import dev.anhcraft.abm.api.inventory.items.AmmoModel;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.game.Arena;
-import dev.anhcraft.abm.api.inventory.items.GunModel;
-import dev.anhcraft.abm.api.inventory.items.MagazineModel;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -113,6 +110,17 @@ public class BattleCommand extends BaseCommand{
         if(ammo.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.AMMO).put(s));
+        } else plugin.chatManager.sendPlayer(player, "items.not_found");
+    }
+
+    @Subcommand("give scope")
+    @CommandPermission("abm.give.scope")
+    public void giveScope(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
+        r = (r == null ? player : r);
+        Optional<ScopeModel> sc = plugin.getScopeModel(s);
+        if(sc.isPresent()) {
+            plugin.getPlayerData(r).ifPresent(playerData ->
+                    playerData.getInventory().getStorage(ItemType.SCOPE).put(s));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
