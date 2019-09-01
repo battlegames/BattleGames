@@ -5,6 +5,7 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.Mode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -40,6 +41,10 @@ public interface BattleModeController {
     }
 
     default void onDropItem(PlayerDropItemEvent event, Game game){
+
+    }
+
+    default void onClickInventory(InventoryClickEvent event, Game game, Player player){
 
     }
 
