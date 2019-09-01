@@ -14,6 +14,7 @@ import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.craftkit.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -77,7 +78,9 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void drop(PlayerDropItemEvent event) {
-        plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+        if(ItemUtil.isNull(event.getPlayer().getItemOnCursor())) {
+            plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+        }
         plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
             game.getMode().getController(c -> c.onDropItem(event, game));
         });
