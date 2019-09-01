@@ -10,26 +10,30 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public abstract class BattleItem<M extends BattleItemModel> implements Informative {
-    private M model;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<M> model = Optional.empty();
 
     public Optional<M> getModel() {
-        return Optional.ofNullable(model);
+        return model;
     }
 
     public void setModel(@NotNull M model) {
         Validate.notNull(model, "Model must be non-null");
-        this.model = model;
+        this.model = Optional.of(model);
     }
 
     public abstract void save(CompoundTag compound);
     public abstract void load(CompoundTag compound);
 
     public InfoHolder collectInfo(@Nullable String prefix) {
-        Validate.notNull(model, "Model must be assigned");
-        InfoHolder h = new InfoHolder((prefix == null ? "" : prefix) +
-                model.getItemType().name().toLowerCase() + "_")
-                .link(model.collectInfo(prefix));
-        inform(h);
-        return h;
+        if(model.isPresent()) {
+            M m = model.get();
+            InfoHolder h = new InfoHolder((prefix == null ? "" : prefix) +
+                    m.getItemType().name().toLowerCase() + "_")
+                    .link(m.collectInfo(prefix));
+            inform(h);
+            return h;
+        }
+        return null;
     }
 }
