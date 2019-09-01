@@ -32,7 +32,7 @@ public class DeathmatchController extends ModeController {
 
     @Override
     public void onDeath(PlayerDeathEvent event, Game game){
-        plugin.taskManager.newTask(() -> {
+        plugin.taskHelper.newTask(() -> {
             event.getEntity().getInventory().setItem(0, null);
             event.getEntity().spigot().respawn();
         });
@@ -69,7 +69,7 @@ public class DeathmatchController extends ModeController {
         if(hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
-        trackTask(game, "countdown", plugin.taskManager.newAsyncTimerTask(() -> {
+        trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.countPlayers()) {
                 broadcastTitle(game, "mode_dm.countdown_title", "mode_dm.countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
@@ -83,7 +83,7 @@ public class DeathmatchController extends ModeController {
 
     private void play(Game game) {
         broadcast(game,"mode_dm.game_start_broadcast");
-        plugin.taskManager.newTask(() -> {
+        plugin.taskHelper.newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             game.getPlayers().values().forEach(p -> {
                 cancelTask(game, "respawn::"+p.getPlayer().getName());
@@ -154,14 +154,14 @@ public class DeathmatchController extends ModeController {
             player.setGameMode(GameMode.SPECTATOR);
             AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
             String task = "respawn::"+player.getName();
-            trackTask(game, task, plugin.taskManager.newAsyncTimerTask(() -> {
+            trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
                     sendTitle(game, player, "mode_dm.respawn_title", "mode_dm.respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);
                         gp.setSpectator(false);
-                        plugin.taskManager.newTask(() -> respw(game, player));
+                        plugin.taskHelper.newTask(() -> respw(game, player));
                     }
                 } else cancelTask(game, task);
             }, 0, 20));

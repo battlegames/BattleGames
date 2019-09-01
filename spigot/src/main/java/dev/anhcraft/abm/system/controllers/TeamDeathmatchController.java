@@ -30,7 +30,7 @@ public class TeamDeathmatchController extends ModeController {
 
     @Override
     public void onDeath(PlayerDeathEvent event, Game game){
-        plugin.taskManager.newTask(() -> {
+        plugin.taskHelper.newTask(() -> {
             event.getEntity().getInventory().setItem(0, null);
             event.getEntity().spigot().respawn();
         });
@@ -108,7 +108,7 @@ public class TeamDeathmatchController extends ModeController {
         if(hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
         int m = game.getArena().getAttributes().getInt("min_players");
-        trackTask(game, "countdown", plugin.taskManager.newAsyncTimerTask(() -> {
+        trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.countPlayers()) {
                 broadcastTitle(game, "mode_tdm.countdown_title", "mode_tdm.countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
@@ -133,7 +133,7 @@ public class TeamDeathmatchController extends ModeController {
         team.addPlayers(tb, DeathmatchTeam.TEAM_B);
         TEAM.put(game, team);
 
-        plugin.taskManager.newTask(() -> {
+        plugin.taskHelper.newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(game, "respawn::"+p.getName());
@@ -209,14 +209,14 @@ public class TeamDeathmatchController extends ModeController {
             player.setGameMode(GameMode.SPECTATOR);
             AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
             String task = "respawn::"+player.getName();
-            trackTask(game, task, plugin.taskManager.newAsyncTimerTask(() -> {
+            trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
                     sendTitle(game, player, "mode_tdm.respawn_title", "mode_tdm.respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);
                         gp.setSpectator(false);
-                        plugin.taskManager.newTask(() -> respw(game, player, TEAM.get(game).getTeam(player)));
+                        plugin.taskHelper.newTask(() -> respw(game, player, TEAM.get(game).getTeam(player)));
                     }
                 } else cancelTask(game, task);
             }, 0, 20));

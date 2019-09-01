@@ -31,6 +31,7 @@ import dev.anhcraft.abm.tasks.DataSavingTask;
 import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
+import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -88,7 +89,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public TitleManager titleProvider;
     public GameManager gameManager;
     public DataManager dataManager;
-    public TaskManager taskManager;
+    public TaskHelper taskHelper;
     public ItemManager itemManager;
     public GuiManager guiManager;
     public ScoreboardRenderer scoreboardRenderer;
@@ -122,7 +123,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
-        taskManager = new TaskManager(this);
+        taskHelper = new TaskHelper(this);
         chatManager = new ChatManager(this);
         titleProvider = new TitleManager(this);
         itemManager = new ItemManager(this);
@@ -149,11 +150,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         getServer().getPluginManager().registerEvents(pl, this);
         getServer().getOnlinePlayers().forEach(pl::handleJoin);
 
-        taskManager.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
-        taskManager.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
-        taskManager.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
-        taskManager.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
-        taskManager.newTimerTask(gameTask = new GameTask(this), 0, 1);
+        taskHelper.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
+        taskHelper.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
+        taskHelper.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
+        taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
+        taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
 
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new BattleCommand(this));

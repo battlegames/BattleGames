@@ -98,14 +98,14 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     void cancelTask(Game game, String id){
         Integer x = RUNNING_TASKS.remove(game.getArena().getId()+id);
-        if(x != null) plugin.taskManager.cancelTask(x);
+        if(x != null) plugin.taskHelper.cancelTask(x);
     }
 
     void cancelAllTasks(Game game){
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(game.getArena().getId()))
                 .collect(Collectors.toList());
-        x.forEach(e -> plugin.taskManager.cancelTask(RUNNING_TASKS.remove(e.getKey())));
+        x.forEach(e -> plugin.taskHelper.cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
     void playSound(Game game, Sound sound){

@@ -42,8 +42,8 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     public void handleJoin(Player player) {
         player.teleport(plugin.getServerData().getSpawnPoint());
-        plugin.taskManager.newAsyncTask(() -> plugin.dataManager.loadPlayerData(player));
-        plugin.taskManager.newTask(() -> {
+        plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.loadPlayerData(player));
+        plugin.taskHelper.newTask(() -> {
             plugin.resetScoreboard(player);
             plugin.guiManager.setBottomInv(player, "main_player_inv");
             player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
@@ -56,7 +56,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.guiManager.destroyPlayerGui(event.getPlayer());
         plugin.gameManager.quit(event.getPlayer());
         plugin.getHandler(GunHandler.class).handleZoomOut(event.getPlayer());
-        plugin.taskManager.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
+        plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
 
     public void secondarySkin(Player player, BattleItem newItem, BattleItem oldItem){
