@@ -2,12 +2,15 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.misc.CustomBossBar;
+import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
-import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.utils.EnumUtil;
+import dev.anhcraft.jvmkit.lang.enumeration.RegEx;
+import dev.anhcraft.jvmkit.utils.Pair;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -15,6 +18,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class GunModel extends WeaponModel {
@@ -30,6 +35,7 @@ public class GunModel extends WeaponModel {
     private SoundRecord reloadEndSound;
     private Expression reloadTimeCalculator;
     private CustomBossBar reloadBar;
+    private final List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
 
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
@@ -82,6 +88,20 @@ public class GunModel extends WeaponModel {
                 throwable.printStackTrace();
             }
         }
+
+        conf.getStringList("spray_pattern").forEach(s -> {
+            String[] args = s.trim().split(" ");
+            double x = 0, y = 0;
+            if(args.length >= 1){
+                if(RegEx.DECIMAL.valid(args[0])) x = Double.parseDouble(args[0]);
+                else Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], id));
+            }
+            if(args.length >= 2){
+                if(RegEx.DECIMAL.valid(args[1])) y = Double.parseDouble(args[1]);
+                else Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], id));
+            }
+            sprayPattern.add(new Pair<>(x, y));
+        });
     }
 
     @Override
@@ -152,5 +172,10 @@ public class GunModel extends WeaponModel {
     @Nullable
     public ScopeModel getDefaultScope() {
         return defaultScope;
+    }
+
+    @NotNull
+    public List<Pair<Double, Double>> getSprayPattern() {
+        return sprayPattern;
     }
 }

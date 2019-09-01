@@ -195,6 +195,7 @@ public abstract class ModeController extends BattleComponent implements Listener
             long now = currentTime.getAndDecrement();
             if(now <= 0){
                 gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
+                gun.setNextSpray(-1);
                 player.getInventory().setItem(slot, plugin.getHandler(GunHandler.class).createGun(gun, false));
                 RELOADING_GUN.remove(player.getUniqueId()).run();
             } else {

@@ -105,6 +105,42 @@ ak_47: # Gun's ID
       # [optional] [default: solid]
       style: segmented_20
 
+  # Spray patterns
+  # Each entry contains two values represent X offset and Y offset
+  # You can use this tool for easier creation: https://anhcraft.dev/tools/battle/spray.html
+  # [optional]
+  spray_pattern:
+    - "1.05 1.3"
+    - "1.45 1.9"
+    - "1.75 3"
+    - "1.25 3.5"
+    - "0.45 3.9"
+    - "-0.25 4.4"
+    - "-1.05 4.8"
+    - "-1.45 5.7"
+    - "-1.45 6.8"
+    - "-1.25 7.6"
+    - "-0.65 8.3"
+    - "0.35 8.7"
+    - "1.35 9.3"
+    - "3.05 8.5"
+    - "2.15 8"
+    - "1.15 7.7"
+    - "0.15 7.7"
+    - "-0.75 8.2"
+    - "-1.85 8.7"
+    - "-2.85 8.8"
+    - "-3.45 8.2"
+    - "-2.85 7.4"
+    - "-1.75 7.2"
+    - "-0.95 7.7"
+    - "0.95 8.7"
+    - "1.75 8.2"
+    - "1.95 7.2"
+    - "0.85 6.9"
+    - "-0.45 7.2"
+    - "-1.35 7.9"
+
 desert_eagle:
   name: "&6&l&nDesert Eagle"
   skin:
@@ -121,3 +157,11 @@ desert_eagle:
     on_reload:
       title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
       color: red
+  spray_pattern:
+    - "1.65 0.6"
+    - "0.15 1.6"
+    - "-4.45 6.3"
+    - "1.75 5.2"
+    - "3.05 4.3"
+    - "3.65 7.2"
+    - "-1.35 11.5"

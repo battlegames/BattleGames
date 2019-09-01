@@ -9,6 +9,8 @@ public class ItemTag {
     public static String GUN_ID;
     public static String GUN_MAGAZINE;
     public static String GUN_SCOPE;
+    public static String GUN_NEXT_SPRAY;
+    public static String GUN_LAST_SPRAY_TIME;
     public static String MAGAZINE_ID;
     public static String MAGAZINE_AMMO_COUNT;
     public static String MAGAZINE_AMMO;

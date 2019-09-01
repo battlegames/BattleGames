@@ -9,9 +9,11 @@ import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.system.controllers.ModeController;
+import dev.anhcraft.abm.utils.VectUtil;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.BlockUtil;
+import dev.anhcraft.jvmkit.utils.Pair;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -154,6 +156,9 @@ public class GunHandler extends Handler {
     }
 
     public boolean shoot(Game game, Player player, Gun gunItem){
+        Optional<GunModel> gmo = gunItem.getModel();
+        if(!gmo.isPresent()) return false;
+        GunModel gm = gmo.get();
         ModeController mc = (ModeController) game.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
@@ -173,14 +178,23 @@ public class GunHandler extends Handler {
         mag.setAmmoCount(mag.getAmmoCount()-1);
 
         gunItem.getModel().ifPresent(s -> s.getShootSound().play(player.getWorld(), player.getLocation()));
+        Location start = player.getEyeLocation();
         Vector originVec = player.getEyeLocation().toVector();
+        Vector dir = start.getDirection().normalize();
+        Vector sprayVec;
+        if(gunItem.nextSpray() != -1){
+            Pair<Double, Double> pair = gm.getSprayPattern().get(gunItem.getNextSpray());
+            sprayVec = new Vector(pair.getFirst(), pair.getSecond(), 0).normalize();
+            VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
+            sprayVec.multiply(.75);
+        } else
+            sprayVec = new Vector();
         List<Bullet> bullets = mag.getAmmo().getModel().get().getBullets();
         for(Bullet b : bullets){
-            Location start = player.getEyeLocation();
             BulletEntity entity = new BulletEntity(start, b);
             for(double d = 0.5; d < 100; d += 0.5){
                 Location clone = start.clone();
-                entity.setLocation(clone.add(clone.getDirection().normalize().multiply(d)));
+                entity.setLocation(clone.add(dir.clone().multiply(d).add(sprayVec)));
 
                 Block block = entity.getLocation().getBlock();
                 if(block.getType().isSolid()) {

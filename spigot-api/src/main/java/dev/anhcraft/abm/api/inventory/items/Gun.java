@@ -3,6 +3,8 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.APIProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.IntTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.LongTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,9 @@ public class Gun extends Weapon<GunModel> {
 
     @Nullable
     private Scope scope;
+
+    private int nextSpray;
+    private long lastSprayTime;
 
     @Nullable
     public Scope getScope() {
@@ -34,6 +39,33 @@ public class Gun extends Weapon<GunModel> {
         this.magazine = magazine;
     }
 
+    public int getNextSpray() {
+        return nextSpray;
+    }
+
+    public void setNextSpray(int nextSpray) {
+        this.nextSpray = nextSpray;
+    }
+
+    public int nextSpray() {
+        getModel().ifPresent(model -> {
+            int max = model.getSprayPattern().size();
+            if(max == 0) return;
+            if(System.currentTimeMillis() - lastSprayTime >= 500) nextSpray = 0;
+            else if(++nextSpray == max) nextSpray = max - 1;
+            lastSprayTime = System.currentTimeMillis();
+        });
+        return nextSpray;
+    }
+
+    public long getLastSprayTime() {
+        return lastSprayTime;
+    }
+
+    public void setLastSprayTime(long lastSprayTime) {
+        this.lastSprayTime = lastSprayTime;
+    }
+
     @Override
     public void save(CompoundTag compound) {
         getModel().ifPresent(gunModel -> compound.put(ItemTag.GUN_ID, gunModel.getId()));
@@ -47,6 +79,8 @@ public class Gun extends Weapon<GunModel> {
             scope.save(sc);
             compound.put(ItemTag.GUN_SCOPE, sc);
         }
+        compound.put(ItemTag.GUN_NEXT_SPRAY, nextSpray);
+        compound.put(ItemTag.GUN_LAST_SPRAY_TIME, lastSprayTime);
     }
 
     @Override
@@ -57,6 +91,12 @@ public class Gun extends Weapon<GunModel> {
 
         CompoundTag scp = compound.get(ItemTag.GUN_SCOPE, CompoundTag.class);
         if(scp != null) (scope = (scope == null) ? new Scope() : scope).load(scp);
+
+        Integer nextSpray = compound.getValue(ItemTag.GUN_NEXT_SPRAY, IntTag.class);
+        if(nextSpray != null) this.nextSpray = nextSpray;
+
+        Long lastSprayTime = compound.getValue(ItemTag.GUN_LAST_SPRAY_TIME, LongTag.class);
+        if(lastSprayTime != null) this.lastSprayTime = lastSprayTime;
     }
 
     @Override
