@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerScoreboard {
-    private static final int MAX_LINE_CHAR = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
+    private static final int MAX_CHAR = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
     private final List<String> ENTRIES = new ArrayList<>();
     private final Player player;
     private final ScoreboardLine[] lines;
@@ -26,57 +26,89 @@ public class PlayerScoreboard {
 
     public PlayerScoreboard(Player player, String title, List<String> lines, boolean fixedLength) {
         this.player = player;
-        this.lines = new ScoreboardLine[lines.size()];
+        int maxLines = Math.min(15, lines.size());
+        this.lines = new ScoreboardLine[maxLines];
         this.title = title;
         this.fixedLength = fixedLength;
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
         objective = scoreboard.registerNewObjective(StringUtil.cutString("abm." + player.getName(), 16), "dummy");
-        objective.setDisplayName(PlaceholderUtils.formatPAPI(player, title));
+        renderTitle();
         int i = 0;
-        int max = Math.min(15, lines.size());
-        while(i < max){
+        while(i < maxLines){
             ChatColor color = ChatColor.values()[i];
-            String entry = color.toString()+ChatColor.RESET.toString();
+            String entry = color.toString() + ChatColor.RESET.toString();
             this.lines[i] = new ScoreboardLine(scoreboard.registerNewTeam(entry), color, lines.get(i));
-            objective.getScore(entry).setScore(max - (++i));
+            objective.getScore(entry).setScore(maxLines - (++i));
         }
     }
 
     public void renderTitle(){
-        objective.setDisplayName(PlaceholderUtils.formatPAPI(player, title));
+        objective.setDisplayName(StringUtil.cutString(PlaceholderUtils.formatPAPI(player, title), 2 * MAX_CHAR));
     }
 
     public void renderLines(){
         int i = 0;
-        int max = Math.min(15, lines.length);
-        while(i < max) renderLine(i++);
+        while(i < lines.length)
+            renderLine(i++);
     }
 
     public void renderLine(int index){
         ScoreboardLine line = lines[index];
-        String str = PlaceholderUtils.formatPAPI(player, line.getContent());
+        String content = PlaceholderUtils.formatPAPI(player, line.getContent());
 
-        StringBuilder preBuilder = new StringBuilder(str.substring(0, Math.min(str.length(), MAX_LINE_CHAR)));
-        if(fixedLength){
-            int f = preBuilder.length();
-            for (int i = f; i < MAX_LINE_CHAR; i++)
-                preBuilder.append(" ");
-        }
-        String pre = preBuilder.toString();
-        line.getTeam().setPrefix(pre);
+        StringBuilder prefix = new StringBuilder(StringUtil.cutString(content, MAX_CHAR));
+        // if the prefix ends with colors, remove it!
+        if (prefix.charAt(prefix.length() - 2) == ChatColor.COLOR_CHAR)
+            prefix.delete(prefix.length() - 2, prefix.length());
+        if(prefix.length() == 0) return;
 
-        if(str.length() > MAX_LINE_CHAR) {
-            int max = Math.min(str.length(), MAX_LINE_CHAR * 2);
-            String suf = str.substring(MAX_LINE_CHAR, max);
-            suf = ChatColor.getLastColors(pre) + suf;
-            StringBuilder sufBuilder = new StringBuilder(StringUtil.cutString(suf, MAX_LINE_CHAR));
-            if(fixedLength){
-                int f = preBuilder.length();
-                for (int i = f; i < MAX_LINE_CHAR; i++)
-                    sufBuilder.append(" ");
+        boolean rendered = false;
+
+        // only change the suffix if needed
+        if(content.length() > MAX_CHAR) {
+            // sometimes, dividing prefix and suffix causes the prefix to be ended with a color sign
+            // we can remove it here
+            if (prefix.charAt(prefix.length() - 1) == ChatColor.COLOR_CHAR)
+                prefix.deleteCharAt(prefix.length() - 1);
+            if(prefix.length() == 0) return;
+            String preStr = prefix.toString();
+
+            StringBuilder suffix = new StringBuilder();
+            int maxSufLen = Math.min(prefix.length() + MAX_CHAR - suffix.length(), content.length());
+            String s = content.substring(prefix.length(), maxSufLen);
+            if(s.length() == 0) return;
+            suffix.append(s);
+
+            // if the beginning of the suffix did not have colors, we will try to add
+            // color codes from the end of the prefix
+            if(s.charAt(0) != ChatColor.COLOR_CHAR) {
+                String lc = ChatColor.getLastColors(preStr);
+                if(suffix.length() + lc.length() <= MAX_CHAR) suffix.insert(0, lc);
             }
-            line.getTeam().setSuffix(sufBuilder.toString());
+
+            // if the suffix ends with colors, remove it!
+            if(suffix.charAt(suffix.length() - 2) == ChatColor.COLOR_CHAR)
+                suffix.delete(suffix.length() - 2, suffix.length());
+            if(suffix.length() == 0) return;
+
+            // sometimes, dividing suffix and the rest causes the suffix to be ended with a color sign
+            // we can remove it here
+            if (suffix.charAt(suffix.length() - 1) == ChatColor.COLOR_CHAR)
+                suffix.deleteCharAt(suffix.length() - 1);
+            if(suffix.length() == 0) return;
+
+            // add spaces to the end if needed
+            while (fixedLength && suffix.length() < MAX_CHAR) suffix.append(" ");
+            line.getTeam().setPrefix(preStr);
+            line.getTeam().setSuffix(suffix.toString());
+            rendered = true;
+        }
+        if(!rendered) {
+            // add spaces to the end if needed
+            while (fixedLength && prefix.length() < MAX_CHAR) prefix.append(" ");
+            line.getTeam().setPrefix(prefix.toString());
+            line.getTeam().setSuffix("");
         }
         line.getTeam().addEntry(line.getTeam().getName());
         ENTRIES.forEach(line.getTeam()::addEntry);
