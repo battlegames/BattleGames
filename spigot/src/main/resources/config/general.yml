@@ -2,7 +2,7 @@
 # General plugin configuration
 
 # The locale file which ABM uses for messages and texts
-# Available: en_us.yml
+# Available: en_us.yml, vi.yml
 locale: "en_us.yml"
 
 

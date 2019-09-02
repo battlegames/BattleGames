@@ -240,27 +240,32 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return CONFIG[11];
     }
 
+    private YamlConfiguration loadConfigFile(String fp, String cp){
+        File f = new File(getDataFolder(), fp);
+        try {
+            if(f.exists()) return YamlConfiguration.loadConfiguration(f);
+            else if(f.createNewFile()) {
+                InputStream in = getResource("config/"+cp);
+                byte[] bytes = ByteStreams.toByteArray(in);
+                in.close();
+                FileUtil.write(f, bytes);
+                Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
+                return YamlConfiguration.loadConfiguration(reader);
+            }
+        } catch (IOException e) {
+            exit("Failed to load file: "+f.getPath());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void initConfigFiles(){
         for(int i = 0; i < CONFIG_FILES.length; i++){
             String[] s = CONFIG_FILES[i].split(" ");
             String fp = s[0];
             String cp = s[0];
             if(s.length == 2) cp = s[1];
-            File f = new File(getDataFolder(), fp);
-            try {
-                if(f.exists()) CONFIG[i] = YamlConfiguration.loadConfiguration(f);
-                else if(f.createNewFile()) {
-                    InputStream in = getResource("config/"+cp);
-                    byte[] bytes = ByteStreams.toByteArray(in);
-                    in.close();
-                    FileUtil.write(f, bytes);
-                    Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
-                    CONFIG[i] = YamlConfiguration.loadConfiguration(reader);
-                }
-            } catch (IOException e) {
-                exit("Failed to load file: "+f.getPath());
-                e.printStackTrace();
-            }
+            CONFIG[i] = loadConfigFile(fp, cp);
         }
     }
 
@@ -290,22 +295,22 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initLocale(FileConfiguration cache) {
-        File f = new File(localeDir, getGeneralConf().getString("locale"));
-        if(f.exists()){
-            YamlConfiguration local = YamlConfiguration.loadConfiguration(f);
+        String path = getGeneralConf().getString("locale");
+        YamlConfiguration local = loadConfigFile("locale/"+path, "locale/"+path);
+        if(local != null) {
             Set<String> keys = cache.getKeys(true);
-            for(String k : keys){
+            for (String k : keys) {
                 Object v;
-                if(local.contains(k)) v = local.get(k);
+                if (local.contains(k)) v = local.get(k);
                 else {
-                    getLogger().warning("You locale file doesn't have path "+k);
+                    getLogger().warning("The locale file is outdated. Missing path: " + k);
                     v = cache.get(k);
                 }
-                if(v instanceof String)
+                if (v instanceof String)
                     cache.set(k, ChatColor.translateAlternateColorCodes('&', (String) v));
                 else cache.set(k, v);
             }
-        } else getLogger().warning("Your locale file didn't exist");
+        } else getLogger().warning("Locale file not found.");
 
         ConfigurationSection itemTypeSec = cache.getConfigurationSection("item_type");
         if(itemTypeSec != null){

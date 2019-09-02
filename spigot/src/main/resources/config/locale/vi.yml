@@ -1,0 +1,122 @@
+# This configuration is a part of ABM
+# Vietnamese (VI-VN)
+
+name: "Tiếng Việt (Vi)"
+state:
+  enabled: Đã bật
+  disabled: Đã tắt
+item_type:
+  magazine: Băng đạn
+  ammo: Đạn dược
+  gun: Súng
+  scope: Kính ngắm
+medal:
+  headshot_title: "&l%abm_icon_headshot%"
+  headshot_subtitle: "&bHeadshot"
+  assist_title: "&l%abm_icon_assist%"
+  assist_subtitle: "&cAssist"
+server:
+  illegal_block_break: "&cHành động bị cấm: Bạn không được phép phá block!"
+  illegal_block_blace: "&cHành động bị cấm: Bạn không được phép đặt block!"
+arena:
+  not_found: "&cKhông thể tìm thấy đấu trường đó."
+  error_already_joined: "&cBạn đã tham gia trò chơi!"
+  error_attendance_disabled: "&cXin lỗi, bạn không thể tham gia trong thời gian này."
+  error_full_players: "&cĐấu trường đã đầy."
+  error_mode_controller_unavailable: "&cLỗi hệ thống: Không tìm thấy bộ điều khiển trò chơi."
+  error_attendance_refused: "&cBạn đã bị từ chối yêu cầu tham gia."
+  reward_message: "&aBạn nhận được &f{__exp__}&a exp và &f${__money__}"
+mode_dm:
+  player_join_broadcast: "&f{__target__} đã tham gia! (%abm_game_total_players%/%abm_arena_max_players%)"
+  player_quit_broadcast: "&f{__target__} đã thoát! (%abm_game_total_players%/%abm_arena_max_players%)"
+  countdown_title: "&a&lBắt đầu sau"
+  countdown_subtitle: "&f&l{__current__}"
+  game_start_broadcast: "&bĐã bắt đầu trò chơi!"
+  error_item_selection_overtime: "&cĐã quá thời gian cho phép chọn vật phẩm!"
+  error_disabled_item_type: "&cLoại vật phẩm này hiện bị cấm trong trò chơi!"
+  respawn_title: "&e&lHồi sinh sau"
+  respawn_subtitle: "&f&l{__current__}"
+mode_tdm:
+  team_a: Đội A
+  team_b: Đội B
+  player_join_broadcast: "&f{__target__} đã tham gia! (%abm_game_total_players%/%abm_arena_max_players%)"
+  player_quit_broadcast: "&f{__target__} đã thoát! (%abm_game_total_players%/%abm_arena_max_players%)"
+  countdown_title: "&a&lBắt đầu sau"
+  countdown_subtitle: "&f&l{__current__}"
+  game_start_broadcast: "&bĐã bắt đầu trò chơi!"
+  error_item_selection_overtime: "&cĐã hết thời gian chọn vật phẩm!"
+  error_disabled_item_type: "&cLoại vật phẩm này hiện đang bị cấm!"
+  respawn_title: "&e&lHồi sinh sau"
+  respawn_subtitle: "&f&l{__current__}"
+gun:
+  none_magazine_message: "&cKhẩu súng này chưa có băng đạn!"
+  out_of_ammo: "&cSúng đã hết đạn."
+  reloading_warn: "&cĐang nạp đạn!"
+  none_scope_message: "&cKhẩu súng này chưa được trang bị kính ngắm!"
+items:
+  not_found: "&cKhông tìm thấy vật phẩm"
+tool:
+  position:
+    message: "&fVị trí hiện tại của bạn là: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
+    location: "/%s %.2f %.2f %.2f %.2f %.2f"
+kit:
+  no_permission: "&cBạn không có quyền để sử dụng kit này!"
+  unavailable: "&cKit này hiện không có sẵn! Bạn phải chờ đến %s"
+  one_time_use: "&cKit này chỉ được nhận một lần!"
+gui:
+  empty: "&f"
+  btn:
+    close_name: "&cĐóng"
+    close_lore:
+      - "&aNhấn vào đây để đóng"
+    prev_name: "&aTrang trước"
+    prev_lore:
+      - "&fXem trang trước"
+    back_inv_name: "&cQuay về"
+    back_inv_lore:
+      - "&fQuay về GUI trước"
+    next_name: "&aTrang sau"
+    next_lore:
+      - "&fXem trang sau"
+  inventory_menu:
+    title: "&e&lTúi đồ"
+    gun_name: "&fSúng"
+    gun_lore:
+      - "&aXem toàn bộ khẩu súng đã sở hữu"
+    magazine_name: "&fBăng đạn"
+    magazine_lore:
+      - "&aXem toàn bộ băng đạn đã sở hữu"
+    ammo_name: "&fĐạn dược"
+    ammo_lore:
+      - "&aXem toàn bộ đạn dược đã sở hữu"
+    scope_name: "&fKính ngắm"
+    scope_lore:
+      - "&aXem toàn bộ kính ngắm đã sở hữu"
+  inventory_gun:
+    title: "&c&lTúi đồ > Súng"
+  inventory_magazine:
+    title: "&c&lTúi đồ > Băng đạn"
+  inventory_ammo:
+    title: "&c&lTúi đồ > Đạn dược"
+  inventory_scope:
+    title: "&c&lTúi đồ > Kính ngắm"
+  kit_menu:
+    title: "&b&lKit"
+  arena_chooser:
+    title: "&e&lChọn đấu trường"
+  main_player_inv:
+    title: "&c&lHotbar chính"
+    arena_chooser_name: "&e&lChọn đấu trường"
+    arena_chooser_lore:
+      - "&aTìm đấu trường phù hợp để tham gia trò chơi"
+    your_inventory_name: "&b&lTúi đồ của bạn"
+    your_inventory_lore:
+      - "&aXem túi đồ của bạn"
+  game_player_inv:
+    title: "&c&lHotbar trò chơi"
+    your_inventory_name: "&b&lTúi đồ"
+    your_inventory_lore:
+      - "&aXem túi đồ của bạn"
+    quit_name: "&c&lThoát"
+    quit_lore:
+      - "&eRời khỏi trận đấu"
