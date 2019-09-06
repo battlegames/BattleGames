@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TeamDeathmatchController extends ModeController {
-    private final Map<Game, SimpleTeam<DeathmatchTeam>> TEAM = new ConcurrentHashMap<>();
+    private final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
 
     @Override
     public void onDeath(PlayerDeathEvent event, Game game){
@@ -59,17 +59,17 @@ public class TeamDeathmatchController extends ModeController {
         super(plugin, Mode.TEAM_DEATHMATCH);
 
         plugin.getPapiExpansion().handlers.put("tdm_team", player -> plugin.gameManager.getGame(player).map(game -> {
-            SimpleTeam<DeathmatchTeam> t = TEAM.get(game);
+            SimpleTeam<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
-            DeathmatchTeam dt = t.getTeam(player);
+            ABTeam dt = t.getTeam(player);
             if(dt == null) return null;
             return plugin.getLocaleConf().getString("mode_tdm."+dt.name().toLowerCase());
         }).orElse(null));
 
         plugin.getPapiExpansion().handlers.put("tdm_team_players", player -> plugin.gameManager.getGame(player).map(game -> {
-            SimpleTeam<DeathmatchTeam> t = TEAM.get(game);
+            SimpleTeam<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
-            DeathmatchTeam dt = t.getTeam(player);
+            ABTeam dt = t.getTeam(player);
             if(dt == null) return null;
             return Integer.toString(t.countPlayers(dt));
         }).orElse(null));
@@ -77,10 +77,10 @@ public class TeamDeathmatchController extends ModeController {
 
     @Override
     public void onTask(Game game){
-        SimpleTeam<DeathmatchTeam> x = TEAM.get(game);
+        SimpleTeam<ABTeam> x = TEAM.get(game);
         if(x != null) {
-            int a = x.countPlayers(DeathmatchTeam.TEAM_A);
-            int b = x.countPlayers(DeathmatchTeam.TEAM_B);
+            int a = x.countPlayers(ABTeam.TEAM_A);
+            int b = x.countPlayers(ABTeam.TEAM_B);
             if (a == 0 || b == 0) game.end();
         }
     }
@@ -91,11 +91,11 @@ public class TeamDeathmatchController extends ModeController {
                 s -> s.replace("{__target__}", player.getDisplayName()));
     }
 
-    private DeathmatchTeam findTeam(Game game) {
-        SimpleTeam<DeathmatchTeam> x = TEAM.get(game);
-        int a = x.countPlayers(DeathmatchTeam.TEAM_A);
-        int b = x.countPlayers(DeathmatchTeam.TEAM_B);
-        return a <= b ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
+    private ABTeam findTeam(Game game) {
+        SimpleTeam<ABTeam> x = TEAM.get(game);
+        int a = x.countPlayers(ABTeam.TEAM_A);
+        int b = x.countPlayers(ABTeam.TEAM_B);
+        return a <= b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
     }
 
     @Override
@@ -116,7 +116,7 @@ public class TeamDeathmatchController extends ModeController {
                 break;
             }
             case PLAYING: {
-                DeathmatchTeam t = findTeam(game);
+                ABTeam t = findTeam(game);
                 TEAM.get(game).addPlayer(player, t);
                 addPlayer(game, player, t);
             }
@@ -147,25 +147,25 @@ public class TeamDeathmatchController extends ModeController {
         List<Player> ta = x.subList(0, sz);
         List<Player> tb = x.subList(sz, x.size());
 
-        SimpleTeam<DeathmatchTeam> team = new SimpleTeam<>();
-        team.addPlayers(ta, DeathmatchTeam.TEAM_A);
-        team.addPlayers(tb, DeathmatchTeam.TEAM_B);
+        SimpleTeam<ABTeam> team = new SimpleTeam<>();
+        team.addPlayers(ta, ABTeam.TEAM_A);
+        team.addPlayers(tb, ABTeam.TEAM_B);
         TEAM.put(game, team);
 
         plugin.taskHelper.newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(game, "respawn::"+p.getName());
-                addPlayer(game, p, DeathmatchTeam.TEAM_A);
+                addPlayer(game, p, ABTeam.TEAM_A);
             });
             tb.forEach(p -> {
                 cancelTask(game, "respawn::"+p.getName());
-                addPlayer(game, p, DeathmatchTeam.TEAM_B);
+                addPlayer(game, p, ABTeam.TEAM_B);
             });
         });
     }
 
-    private void addPlayer(Game game, Player player, DeathmatchTeam dt) {
+    private void addPlayer(Game game, Player player, ABTeam dt) {
         if(game.getMode().isPlayingScoreboardEnabled()) {
             String title = game.getMode().getPlayingScoreboardTitle();
             List<String> content = game.getMode().getPlayingScoreboardContent();
@@ -176,7 +176,7 @@ public class TeamDeathmatchController extends ModeController {
         respw(game, player, dt);
     }
 
-    private void respw(Game game, Player player, DeathmatchTeam dt) {
+    private void respw(Game game, Player player, ABTeam dt) {
         player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
@@ -188,7 +188,7 @@ public class TeamDeathmatchController extends ModeController {
             }
             case PLAYING: {
                 String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                        .getStringList("playing_spawn_points_"+ (dt == DeathmatchTeam.TEAM_A ? "a" : "b")));
+                        .getStringList("playing_spawn_points_"+ (dt == ABTeam.TEAM_A ? "a" : "b")));
                 player.teleport(LocationUtil.fromString(loc));
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
@@ -245,7 +245,7 @@ public class TeamDeathmatchController extends ModeController {
     @EventHandler
     public void damage(GamePlayerDamageEvent e) {
         if(e.getGame().getMode() != getMode()) return;
-        SimpleTeam<DeathmatchTeam> x = TEAM.get(e.getGame());
+        SimpleTeam<ABTeam> x = TEAM.get(e.getGame());
         if(x.getTeam(e.getDamager()) == x.getTeam(e.getPlayer())) e.setCancelled(true);
         else performCooldownMap(e.getGame(), "spawn_protection",
                 cooldownMap -> {
@@ -257,27 +257,27 @@ public class TeamDeathmatchController extends ModeController {
     @Override
     public void onEnd(Game game) {
         cancelAllTasks(game);
-        SimpleTeam<DeathmatchTeam> team = TEAM.remove(game);
+        SimpleTeam<ABTeam> team = TEAM.remove(game);
 
-        Map<DeathmatchTeam, List<GamePlayer>> map = team.reverse(game::getPlayer);
-        List<GamePlayer> aPlayers = map.get(DeathmatchTeam.TEAM_A);
-        List<GamePlayer> bPlayers = map.get(DeathmatchTeam.TEAM_B);
+        Map<ABTeam, List<GamePlayer>> map = team.reverse(game::getPlayer);
+        List<GamePlayer> aPlayers = map.get(ABTeam.TEAM_A);
+        List<GamePlayer> bPlayers = map.get(ABTeam.TEAM_B);
         if(aPlayers != null & bPlayers != null) {
             IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
-                respw(game, value.getPlayer(), DeathmatchTeam.TEAM_A);
+                respw(game, value.getPlayer(), ABTeam.TEAM_A);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
             IntSummaryStatistics sb = bPlayers.stream().mapToInt(value -> {
-                respw(game, value.getPlayer(), DeathmatchTeam.TEAM_B);
+                respw(game, value.getPlayer(), ABTeam.TEAM_B);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
-            DeathmatchTeam winner;
+            ABTeam winner;
             if (sa.getSum() == sb.getSum())
-                winner = sa.getAverage() > sb.getAverage() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
+                winner = sa.getAverage() > sb.getAverage() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
             else
-                winner = sa.getSum() > sb.getSum() ? DeathmatchTeam.TEAM_A : DeathmatchTeam.TEAM_B;
+                winner = sa.getSum() > sb.getSum() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
             map.get(winner).forEach(player -> player.setWinner(true));
             team.reset();
         }
