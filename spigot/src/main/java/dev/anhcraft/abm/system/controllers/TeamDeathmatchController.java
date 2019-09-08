@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamDeathmatchController extends DeathmatchController {
-    private final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
+    protected final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
         this(plugin, Mode.TEAM_DEATHMATCH);
@@ -46,7 +46,7 @@ public class TeamDeathmatchController extends DeathmatchController {
     TeamDeathmatchController(BattlePlugin plugin, Mode mode) {
         super(plugin, mode);
 
-        String p = mode.getId();
+        String p = mode.getId()+"_";
 
         plugin.getPapiExpansion().handlers.put(p+"team", player -> {
             return plugin.gameManager.getGame(player).map(game -> {
