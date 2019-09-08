@@ -56,15 +56,11 @@ public class SimpleTeam<T extends Team> implements Resettable {
     }
 
     public T getTeam(Player player) {
-        synchronized (LOCK) {
-            return PLAYER_MAP.get(player);
-        }
+        return PLAYER_MAP.get(player);
     }
 
     public int countPlayers(T team) {
-        synchronized (LOCK) {
-            return PLAYER_COUNTER.getOrDefault(team, 0);
-        }
+        return PLAYER_COUNTER.getOrDefault(team, 0);
     }
 
     public Map<T, List<Player>> reverse(){
@@ -72,13 +68,15 @@ public class SimpleTeam<T extends Team> implements Resettable {
     }
 
     public <R> Map<T, List<R>> reverse(Function<Player, R> valueFunc){
-        return PLAYER_MAP.entrySet()
-                .stream().collect(Collectors.groupingBy(Map.Entry::getValue)).values()
-                .stream().collect(Collectors.toMap(
-                        item -> item.get(0).getValue(),
-                        item -> new ArrayList<>(item.stream().map(Map.Entry::getKey)
-                                .map(valueFunc).collect(Collectors.toList())))
-                );
+        synchronized (LOCK) {
+            return PLAYER_MAP.entrySet()
+                    .stream().collect(Collectors.groupingBy(Map.Entry::getValue)).values()
+                    .stream().collect(Collectors.toMap(
+                            item -> item.get(0).getValue(),
+                            item -> new ArrayList<>(item.stream().map(Map.Entry::getKey)
+                                    .map(valueFunc).collect(Collectors.toList())))
+                    );
+        }
     }
 
     @Override
