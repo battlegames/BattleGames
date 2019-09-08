@@ -30,14 +30,10 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class TeamDeathmatchController extends DeathmatchController {
-    protected final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
+    protected final Map<Game, SimpleTeam<ABTeam>> TEAM = new HashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
         this(plugin, Mode.TEAM_DEATHMATCH);
