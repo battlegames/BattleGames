@@ -56,7 +56,7 @@ public class TeamDeathmatchController extends DeathmatchController {
                 ABTeam dt = t.getTeam(player);
                 if(dt == null)
                     return null;
-                return plugin.getLocaleConf().getString(dt.name().toLowerCase());
+                return plugin.getLocaleConf().getString(blp(dt.name().toLowerCase()));
             }).orElse(null);
         });
 
