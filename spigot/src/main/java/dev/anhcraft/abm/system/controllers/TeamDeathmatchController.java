@@ -34,7 +34,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
@@ -46,14 +45,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class TeamDeathmatchController extends ModeController {
     private final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
-
-    @Override
-    public void onDeath(PlayerDeathEvent event, Game game){
-        plugin.taskHelper.newTask(() -> {
-            event.getEntity().getInventory().setItem(0, null);
-            event.getEntity().spigot().respawn();
-        });
-    }
 
     public TeamDeathmatchController(BattlePlugin plugin) {
         super(plugin, Mode.TEAM_DEATHMATCH);

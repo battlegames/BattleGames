@@ -39,6 +39,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -63,6 +64,13 @@ public abstract class ModeController extends BattleComponent implements Listener
     ModeController(BattlePlugin plugin, Mode mode) {
         super(plugin);
         this.mode = mode;
+    }
+
+    @Override
+    public void onDeath(PlayerDeathEvent event, Game game){
+        plugin.taskHelper.newTask(() -> {
+            event.getEntity().spigot().respawn();
+        });
     }
 
     @Override
