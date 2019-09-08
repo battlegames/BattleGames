@@ -47,23 +47,37 @@ public class TeamDeathmatchController extends ModeController {
     private final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
-        super(plugin, Mode.TEAM_DEATHMATCH);
+        this(plugin, Mode.TEAM_DEATHMATCH);
+    }
 
-        plugin.getPapiExpansion().handlers.put("tdm_team", player -> plugin.gameManager.getGame(player).map(game -> {
-            SimpleTeam<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
-            ABTeam dt = t.getTeam(player);
-            if(dt == null) return null;
-            return plugin.getLocaleConf().getString(dt.name().toLowerCase());
-        }).orElse(null));
+    TeamDeathmatchController(BattlePlugin plugin, Mode mode) {
+        super(plugin, mode);
 
-        plugin.getPapiExpansion().handlers.put("tdm_team_players", player -> plugin.gameManager.getGame(player).map(game -> {
-            SimpleTeam<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
-            ABTeam dt = t.getTeam(player);
-            if(dt == null) return null;
-            return Integer.toString(t.countPlayers(dt));
-        }).orElse(null));
+        String p = mode.getId();
+
+        plugin.getPapiExpansion().handlers.put(p+"team", player -> {
+            return plugin.gameManager.getGame(player).map(game -> {
+                SimpleTeam<ABTeam> t = TEAM.get(game);
+                if(t == null)
+                    return null;
+                ABTeam dt = t.getTeam(player);
+                if(dt == null)
+                    return null;
+                return plugin.getLocaleConf().getString(dt.name().toLowerCase());
+            }).orElse(null);
+        });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
+            return plugin.gameManager.getGame(player).map(game -> {
+                SimpleTeam<ABTeam> t = TEAM.get(game);
+                if(t == null)
+                    return null;
+                ABTeam dt = t.getTeam(player);
+                if(dt == null)
+                    return null;
+                return Integer.toString(t.countPlayers(dt));
+            }).orElse(null);
+        });
     }
 
     @Override
