@@ -54,7 +54,7 @@ public class TeamDeathmatchController extends ModeController {
             if(t == null) return null;
             ABTeam dt = t.getTeam(player);
             if(dt == null) return null;
-            return plugin.getLocaleConf().getString("mode_tdm."+dt.name().toLowerCase());
+            return plugin.getLocaleConf().getString(dt.name().toLowerCase());
         }).orElse(null));
 
         plugin.getPapiExpansion().handlers.put("tdm_team_players", player -> plugin.gameManager.getGame(player).map(game -> {
@@ -78,7 +78,7 @@ public class TeamDeathmatchController extends ModeController {
 
     @Override
     public void onQuit(Player player, Game game){
-        broadcast(game, "mode_tdm.player_quit_broadcast",
+        broadcast(game, "player_quit_broadcast",
                 s -> s.replace("{__target__}", player.getDisplayName()));
     }
 
@@ -91,7 +91,7 @@ public class TeamDeathmatchController extends ModeController {
 
     @Override
     public void onJoin(Player player, Game game) {
-        broadcast(game, "mode_tdm.player_join_broadcast",
+        broadcast(game, "player_join_broadcast",
                 s -> s.replace("{__target__}", player.getDisplayName()));
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
@@ -120,7 +120,7 @@ public class TeamDeathmatchController extends ModeController {
         int m = game.getArena().getAttributes().getInt("min_players");
         trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.countPlayers()) {
-                broadcastTitle(game, "mode_tdm.countdown_title", "mode_tdm.countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
+                broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                 if(current.getAndDecrement() == 0) {
                     cancelTask(game, "countdown");
@@ -131,7 +131,7 @@ public class TeamDeathmatchController extends ModeController {
     }
 
     private void play(Game game) {
-        broadcast(game,"mode_tdm.game_start_broadcast");
+        broadcast(game,"game_start_broadcast");
 
         List<Player> x = new ArrayList<>(game.getPlayers().keySet());
         int sz = Math.floorDiv(x.size(), 2);
@@ -197,12 +197,12 @@ public class TeamDeathmatchController extends ModeController {
         performCooldownMap(game, "item_selection", cooldownMap -> {
             int t = game.getArena().getAttributes().getInt("item_selection_time");
             if(cooldownMap.isPassed(event.getPlayer(), t))
-                plugin.chatManager.sendPlayer(event.getPlayer(), "mode_tdm.error_item_selection_overtime");
+                plugin.chatManager.sendPlayer(event.getPlayer(), "error_item_selection_overtime");
             else {
                 if (event.getItemModel().getItemType() == ItemType.GUN)
                     plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
                 else
-                    plugin.chatManager.sendPlayer(event.getPlayer(), "mode_tdm.error_disabled_item_type");
+                    plugin.chatManager.sendPlayer(event.getPlayer(), "error_disabled_item_type");
             }
         });
     }
@@ -221,7 +221,7 @@ public class TeamDeathmatchController extends ModeController {
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
-                    sendTitle(game, player, "mode_tdm.respawn_title", "mode_tdm.respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
+                    sendTitle(player, "respawn_title", "respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);

@@ -59,11 +59,15 @@ public abstract class ModeController extends BattleComponent implements Listener
     private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
     public final Map<UUID, Runnable> RELOADING_GUN = Collections.synchronizedMap(new HashMap<>());
-    private Mode mode;
+    private final Mode mode;
 
     ModeController(BattlePlugin plugin, Mode mode) {
         super(plugin);
         this.mode = mode;
+    }
+
+    protected String blp(String path){
+        return "mode_"+mode.getId()+"."+path;
     }
 
     @Override
@@ -98,30 +102,42 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     void broadcast(Game game, String localePath){
-        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.chatManager.sendPlayer(player, blp(localePath));
+        });
     }
 
     void broadcast(Game game, String localePath, Function<String, String> x){
-        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, x));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.chatManager.sendPlayer(player, blp(localePath), x);
+        });
     }
 
     void broadcast(Game game, String localePath, ChatMessageType type){
-        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, type));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.chatManager.sendPlayer(player, blp(localePath), type);
+        });
     }
 
     void broadcast(Game game, String localePath, ChatMessageType type, Function<String, String> x){
-        game.getPlayers().keySet().forEach(player -> plugin.chatManager.sendPlayer(player, localePath, type, x));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.chatManager.sendPlayer(player, blp(localePath), type, x);
+        });
     }
 
     void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath){
-        game.getPlayers().keySet().forEach(player -> plugin.titleProvider.send(player, titleLocalePath, subtitleLocalePath));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath));
+        });
     }
 
     void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
-        game.getPlayers().keySet().forEach(player -> plugin.titleProvider.send(player, titleLocalePath, subtitleLocalePath, x));
+        game.getPlayers().keySet().forEach(player -> {
+            plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
+        });
     }
 
-    void sendTitle(Game game, Player player, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
+    void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
         plugin.titleProvider.send(player, titleLocalePath, subtitleLocalePath, x);
     }
 

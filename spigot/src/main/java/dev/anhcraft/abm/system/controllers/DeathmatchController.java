@@ -50,13 +50,13 @@ public class DeathmatchController extends ModeController {
 
     @Override
     public void onQuit(Player player, Game game){
-        broadcast(game, "mode_dm.player_quit_broadcast",
+        broadcast(game, "player_quit_broadcast",
                 s -> s.replace("{__target__}", player.getDisplayName()));
     }
 
     @Override
     public void onJoin(Player player, Game game) {
-        broadcast(game, "mode_dm.player_join_broadcast",
+        broadcast(game, "player_join_broadcast",
                 s -> s.replace("{__target__}", player.getDisplayName()));
         int m = game.getArena().getAttributes().getInt("min_players");
         switch (game.getPhase()){
@@ -81,7 +81,7 @@ public class DeathmatchController extends ModeController {
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.countPlayers()) {
-                broadcastTitle(game, "mode_dm.countdown_title", "mode_dm.countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
+                broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                 if(current.getAndDecrement() == 0) {
                     cancelTask(game, "countdown");
@@ -92,7 +92,7 @@ public class DeathmatchController extends ModeController {
     }
 
     private void play(Game game) {
-        broadcast(game,"mode_dm.game_start_broadcast");
+        broadcast(game,"game_start_broadcast");
         plugin.taskHelper.newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             game.getPlayers().values().forEach(p -> {
@@ -142,12 +142,12 @@ public class DeathmatchController extends ModeController {
         performCooldownMap(game, "item_selection", cooldownMap -> {
             int t = game.getArena().getAttributes().getInt("item_selection_time");
             if(cooldownMap.isPassed(event.getPlayer(), t))
-                plugin.chatManager.sendPlayer(event.getPlayer(), "mode_dm.error_item_selection_overtime");
+                plugin.chatManager.sendPlayer(event.getPlayer(), "error_item_selection_overtime");
             else {
                 if (event.getItemModel().getItemType() == ItemType.GUN)
                     plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
                 else
-                    plugin.chatManager.sendPlayer(event.getPlayer(), "mode_dm.error_disabled_item_type");
+                    plugin.chatManager.sendPlayer(event.getPlayer(), "error_disabled_item_type");
             }
         });
     }
@@ -166,7 +166,7 @@ public class DeathmatchController extends ModeController {
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
-                    sendTitle(game, player, "mode_dm.respawn_title", "mode_dm.respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
+                    sendTitle(player, "respawn_title", "respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);
