@@ -45,20 +45,22 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class DeathmatchController extends ModeController {
     public DeathmatchController(BattlePlugin plugin) {
-        super(plugin, Mode.DEATHMATCH);
+        this(plugin, Mode.DEATHMATCH);
+    }
+
+    DeathmatchController(BattlePlugin plugin, Mode mode) {
+        super(plugin, mode);
     }
 
     @Override
     public void onQuit(Player player, Game game){
-        broadcast(game, "player_quit_broadcast",
-                s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
     }
 
     @Override
     public void onJoin(Player player, Game game) {
-        broadcast(game, "player_join_broadcast",
-                s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = game.getArena().getAttributes().getInt("min_players");
+        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player);
@@ -75,7 +77,7 @@ public class DeathmatchController extends ModeController {
         }
     }
 
-    private void countdown(Game game) {
+    protected void countdown(Game game) {
         if(hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
@@ -112,19 +114,17 @@ public class DeathmatchController extends ModeController {
         respw(game, player);
     }
 
-    private void respw(Game game, Player player) {
+    protected void respw(Game game, Player player) {
         player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                        .getStringList("waiting_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
                 player.teleport(LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                        .getStringList("playing_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points"));
                 player.teleport(LocationUtil.fromString(loc));
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),

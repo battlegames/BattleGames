@@ -21,29 +21,22 @@ package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
-import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.game.*;
-import dev.anhcraft.abm.api.inventory.items.GunModel;
-import dev.anhcraft.abm.api.inventory.items.ItemType;
-import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.ArrayList;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
-public class TeamDeathmatchController extends ModeController {
+public class TeamDeathmatchController extends DeathmatchController {
     private final Map<Game, SimpleTeam<ABTeam>> TEAM = new ConcurrentHashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
@@ -90,12 +83,6 @@ public class TeamDeathmatchController extends ModeController {
         }
     }
 
-    @Override
-    public void onQuit(Player player, Game game){
-        broadcast(game, "player_quit_broadcast",
-                s -> s.replace("{__target__}", player.getDisplayName()));
-    }
-
     private ABTeam findTeam(Game game) {
         SimpleTeam<ABTeam> x = TEAM.get(game);
         int a = x.countPlayers(ABTeam.TEAM_A);
@@ -105,8 +92,7 @@ public class TeamDeathmatchController extends ModeController {
 
     @Override
     public void onJoin(Player player, Game game) {
-        broadcast(game, "player_join_broadcast",
-                s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
             case WAITING:{
@@ -126,22 +112,6 @@ public class TeamDeathmatchController extends ModeController {
                 addPlayer(game, player, t);
             }
         }
-    }
-
-    private void countdown(Game game) {
-        if(hasTask(game, "countdown")) return;
-        AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
-        int m = game.getArena().getAttributes().getInt("min_players");
-        trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
-            if(m <= game.countPlayers()) {
-                broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
-                playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
-                if(current.getAndDecrement() == 0) {
-                    cancelTask(game, "countdown");
-                    play(game);
-                }
-            } else cancelTask(game, "countdown");
-        }, 0, 20));
     }
 
     private void play(Game game) {
@@ -181,19 +151,22 @@ public class TeamDeathmatchController extends ModeController {
         respw(game, player, dt);
     }
 
-    private void respw(Game game, Player player, ABTeam dt) {
+    @Override
+    protected void respw(Game game, Player player) {
+        respw(game, player, TEAM.get(game).getTeam(player));
+    }
+
+    private void respw(Game game, Player player, ABTeam team) {
         player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                        .getStringList("waiting_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
                 player.teleport(LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                        .getStringList("playing_spawn_points_"+ (dt == ABTeam.TEAM_A ? "a" : "b")));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points_"+ (team == ABTeam.TEAM_A ? "a" : "b")));
                 player.teleport(LocationUtil.fromString(loc));
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
@@ -202,48 +175,6 @@ public class TeamDeathmatchController extends ModeController {
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
             }
-        }
-    }
-
-    @Override
-    public void onChooseItem(ItemChooseEvent event, Game game){
-        if(game.getPhase() != GamePhase.PLAYING) return;
-        performCooldownMap(game, "item_selection", cooldownMap -> {
-            int t = game.getArena().getAttributes().getInt("item_selection_time");
-            if(cooldownMap.isPassed(event.getPlayer(), t))
-                plugin.chatManager.sendPlayer(event.getPlayer(), "error_item_selection_overtime");
-            else {
-                if (event.getItemModel().getItemType() == ItemType.GUN)
-                    plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
-                else
-                    plugin.chatManager.sendPlayer(event.getPlayer(), "error_disabled_item_type");
-            }
-        });
-    }
-
-    @Override
-    public void onRespawn(PlayerRespawnEvent event, Game game) {
-        Player player = event.getPlayer();
-        GamePlayer gp = game.getPlayer(player);
-        if (gp != null) {
-            String loc = RandomUtil.pickRandom(game.getArena().getAttributes()
-                    .getStringList("waiting_spawn_points"));
-            event.setRespawnLocation(LocationUtil.fromString(loc));
-            gp.setSpectator(true);
-            player.setGameMode(GameMode.SPECTATOR);
-            AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
-            String task = "respawn::"+player.getName();
-            trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
-                if(player.isOnline()) {
-                    sendTitle(player, "respawn_title", "respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
-                    playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
-                    if(current.getAndDecrement() == 0) {
-                        cancelTask(game, task);
-                        gp.setSpectator(false);
-                        plugin.taskHelper.newTask(() -> respw(game, player, TEAM.get(game).getTeam(player)));
-                    }
-                } else cancelTask(game, task);
-            }, 0, 20));
         }
     }
 
