@@ -10,6 +10,9 @@ item_type:
   ammo: Ammunition
   gun: Gun
   scope: Scope
+ab_team:
+  team_a: Team A
+  team_b: Team B
 medal:
   headshot_title: "&l%abm_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
@@ -37,8 +40,6 @@ mode_dm:
   respawn_title: "&e&lRespawn in"
   respawn_subtitle: "&f&l{__current__}"
 mode_tdm:
-  team_a: Team A
-  team_b: Team B
   player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
   countdown_title: "&a&lStart in"

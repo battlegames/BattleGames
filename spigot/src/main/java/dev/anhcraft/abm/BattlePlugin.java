@@ -22,10 +22,7 @@ package dev.anhcraft.abm;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.io.ByteStreams;
 import dev.anhcraft.abm.api.*;
-import dev.anhcraft.abm.api.game.Arena;
-import dev.anhcraft.abm.api.game.Game;
-import dev.anhcraft.abm.api.game.GamePlayer;
-import dev.anhcraft.abm.api.game.Mode;
+import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.api.gui.Gui;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.Kit;
@@ -338,6 +335,9 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 if(n != null) t.setLocalizedName(n);
             }
         }
+
+        ABTeam.TEAM_A.setLocalizedName(cache.getString("ab_team.team_a"));
+        ABTeam.TEAM_B.setLocalizedName(cache.getString("ab_team.team_b"));
     }
 
     private void initMode(FileConfiguration c) {

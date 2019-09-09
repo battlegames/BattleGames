@@ -19,5 +19,9 @@
  */
 package dev.anhcraft.abm.api.game;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Team {
+    @NotNull String getLocalizedName();
+    void setLocalizedName(@NotNull String localizedName);
 }

@@ -52,7 +52,7 @@ public class TeamDeathmatchController extends DeathmatchController {
                 ABTeam dt = t.getTeam(player);
                 if(dt == null)
                     return null;
-                return plugin.getLocaleConf().getString(blp(dt.name().toLowerCase()));
+                return dt.getLocalizedName();
             }).orElse(null);
         });
 
@@ -110,7 +110,7 @@ public class TeamDeathmatchController extends DeathmatchController {
         }
     }
 
-    private void play(Game game) {
+    protected void play(Game game) {
         broadcast(game,"game_start_broadcast");
 
         List<Player> x = new ArrayList<>(game.getPlayers().keySet());

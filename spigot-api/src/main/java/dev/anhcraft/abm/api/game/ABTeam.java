@@ -19,7 +19,24 @@
  */
 package dev.anhcraft.abm.api.game;
 
+import org.apache.commons.lang.Validate;
+import org.jetbrains.annotations.NotNull;
+
 public enum ABTeam implements Team {
     TEAM_A,
-    TEAM_B
+    TEAM_B;
+
+    private String localizedName = name();
+
+    @Override
+    @NotNull
+    public String getLocalizedName() {
+        return localizedName;
+    }
+
+    @Override
+    public void setLocalizedName(@NotNull String localizedName) {
+        Validate.notNull(localizedName, "Localized name must be non-null");
+        this.localizedName = localizedName;
+    }
 }
