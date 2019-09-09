@@ -74,7 +74,7 @@ public class Arena implements Informative {
         if(attrSection == null) attrSection = new YamlConfiguration();
         endCommandWinners = conf.getStringList("end_commands.winners");
         endCommandLosers = conf.getStringList("end_commands.losers");
-        renderGuiOnDeath = conf.getBoolean("render_gui_on_death");
+        renderGuiOnDeath = conf.getBoolean("render_gui_on_death", true);
     }
 
     @NotNull

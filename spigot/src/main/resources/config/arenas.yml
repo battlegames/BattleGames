@@ -77,6 +77,7 @@ dm_demo: # The id of this arena
 
   # When a player dies, should we re-render his bottom gui?
   # This option can prevent players from using previous Battle items
+  # [default: true]
   render_gui_on_death: true
 
 tdm_demo:
@@ -109,4 +110,3 @@ tdm_demo:
     item_selection_time: 200
     spawn_protection_time: 40
     respawn_waiting_time: 200
-  render_inv_on_death: true
