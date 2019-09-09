@@ -10,7 +10,7 @@ dm_demo: # The id of this arena
 
   # The mode of this arena
   # [required] [case-insensitive]
-  mode: deathmatch
+  mode: dm # dm is the ID of deathmatch mode
 
   # The formula which is used to calculate the final experience
   # that players receive when finishing the game.
@@ -82,7 +82,7 @@ dm_demo: # The id of this arena
 
 tdm_demo:
   name: "&aExample Arena 2"
-  mode: team_deathmatch
+  mode: tdm # tdm is the ID of team deathmatch mode
   max_time: 8400
   max_players: 10
   icon:
