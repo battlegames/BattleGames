@@ -1,5 +1,10 @@
 # Battle
+
 anhcraft's Battle minigame (shortly ABM)
+
+Spigot: https://spigotmc.org/resources/69463/
+
+![banner](https://i.imgur.com/iyUYiml.png)
 
 ### Discord
 https://discord.gg/QSpc5xH
@@ -7,4 +12,6 @@ https://discord.gg/QSpc5xH
 ### Credits
 - ACF (Aikar)
 - exp4j (objecthunter)
-- Spigot (surely)
+- Spigot
+- Vault/PlaceholderAPI
+
