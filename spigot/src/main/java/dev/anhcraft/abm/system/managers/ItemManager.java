@@ -19,8 +19,6 @@
  */
 package dev.anhcraft.abm.system.managers;
 
-import dev.anhcraft.craftkit.kits.abif.ABIF;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleItemManager;
@@ -28,11 +26,12 @@ import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
 import dev.anhcraft.abm.api.inventory.items.ItemTag;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
-import dev.anhcraft.abm.utils.ListUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -73,7 +72,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
             if(addition != null) info.putAll(addition);
             PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
             pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
-            ListUtil.update(pi.lore(), s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
+            pi.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
             return pi;
         }
         return null;
@@ -91,7 +90,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         if(addition != null) info.putAll(addition);
         PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
         pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
-        ListUtil.update(pi.lore(), s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
+        pi.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
         return pi;
     }
 
