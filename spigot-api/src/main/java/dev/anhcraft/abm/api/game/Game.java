@@ -122,12 +122,16 @@ public class Game implements Resettable, Informative {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return arena.equals(game.arena);
+        return damageReports.equals(game.damageReports) &&
+                players.equals(game.players) &&
+                currentTime.equals(game.currentTime) &&
+                phase == game.phase &&
+                arena.equals(game.arena);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(arena);
+        return Objects.hash(damageReports, players, currentTime, phase, arena);
     }
 
     @Override
