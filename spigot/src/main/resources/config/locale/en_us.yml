@@ -21,6 +21,7 @@ medal:
 server:
   illegal_block_break: "&cIllegal action: You aren't allowed to break blocks!"
   illegal_block_blace: "&cIllegal action: You aren't allowed to place blocks!"
+  set_spawn_success: "&aThe spawn point has been set to %s"
 arena:
   not_found: "&cCouldn't find that arena."
   error_already_joined: "&cYou've already joined!"
@@ -29,6 +30,10 @@ arena:
   error_mode_controller_unavailable: "&cInternal error: Mode controller was unavailable."
   error_attendance_refused: "&cThe mode which you're going to join refused your request."
   reward_message: "&aYou received &f{__exp__}&a exp and &f${__money__}"
+  join_failed: "&cFailed to make %s join the arena"
+  join_success: "&a%s joined the arena successfully!"
+  quit_failed: "&cFailed to make %s quit the game"
+  quit_success: "&a%s quit the game successfully!"
 mode_dm:
   player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
@@ -66,6 +71,7 @@ gun:
   none_scope_message: "&cNo scope is attached to this gun!"
 items:
   not_found: "&cCouldn't find that item"
+  given: "&aGiven item &e(%s)&a to %s"
 tool:
   position:
     message: "&fYour current location is: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"

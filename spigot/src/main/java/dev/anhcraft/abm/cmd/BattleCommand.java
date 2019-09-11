@@ -22,10 +22,12 @@ package dev.anhcraft.abm.cmd;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.game.Arena;
+import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.utils.LocationUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,7 +54,9 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("setspawn")
     @CommandPermission("abm.setspawn")
     public void setSpawn(Player player){
-        plugin.getServerData().setSpawnPoint(player.getLocation());
+        Location loc = player.getLocation();
+        plugin.getServerData().setSpawnPoint(loc);
+        plugin.chatManager.sendPlayer(player, "server.set_spawn_success", s -> String.format(s, LocationUtil.toString(loc)));
     }
 
     @Subcommand("spawn")
@@ -71,7 +75,12 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.arena.join")
     public void join(Player player, String arenaName){
         Optional<Arena> arena = plugin.getArena(arenaName);
-        if(arena.isPresent()) plugin.gameManager.join(player, arena.get());
+        if(arena.isPresent()) {
+            if(plugin.gameManager.join(player, arena.get()))
+                plugin.chatManager.sendPlayer(player, "arena.join_success");
+            else
+                plugin.chatManager.sendPlayer(player, "arena.join_failed");
+        }
         else plugin.chatManager.sendPlayer(player, "arena.not_found");
     }
 
@@ -79,14 +88,23 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.arena.forcejoin")
     public void forceJoin(Player s, Player p, String arenaName){
         Optional<Arena> arena = plugin.getArena(arenaName);
-        if(arena.isPresent()) plugin.gameManager.forceJoin(p, arena.get());
+        if(arena.isPresent()) {
+            if(plugin.gameManager.forceJoin(p, arena.get()))
+                plugin.chatManager.sendPlayer(p, "arena.join_success");
+            else
+                plugin.chatManager.sendPlayer(p, "arena.join_failed");
+        }
         else plugin.chatManager.sendPlayer(s, "arena.not_found");
     }
 
     @Subcommand("arena quit")
     @CommandPermission("abm.arena.quit")
-    public void quit(Player player){
-        plugin.gameManager.quit(player);
+    public void quit(Player player, @co.aikar.commands.annotation.Optional Player target){
+        target = (target == null) ? player : target;
+        if(plugin.gameManager.quit(target))
+            plugin.chatManager.sendPlayer(player, "arena.quit_success");
+        else
+            plugin.chatManager.sendPlayer(player, "arena.quit_failed");
     }
 
     @Subcommand("tool position")
@@ -107,6 +125,8 @@ public class BattleCommand extends BaseCommand{
         if(gun.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.GUN).put(s));
+            String receiver = r.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -118,6 +138,8 @@ public class BattleCommand extends BaseCommand{
         if(mag.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.MAGAZINE).put(s));
+            String receiver = r.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -129,6 +151,8 @@ public class BattleCommand extends BaseCommand{
         if(ammo.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.AMMO).put(s));
+            String receiver = r.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -140,6 +164,8 @@ public class BattleCommand extends BaseCommand{
         if(sc.isPresent()) {
             plugin.getPlayerData(r).ifPresent(playerData ->
                     playerData.getInventory().getStorage(ItemType.SCOPE).put(s));
+            String receiver = r.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
