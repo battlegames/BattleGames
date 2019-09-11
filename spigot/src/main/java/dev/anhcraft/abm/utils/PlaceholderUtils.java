@@ -24,6 +24,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class PlaceholderUtils {
     private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
+    @Contract("_, null -> null")
     public static String formatPAPI(Player player, String str){
         return PlaceholderAPI.setPlaceholders(player, str);
     }

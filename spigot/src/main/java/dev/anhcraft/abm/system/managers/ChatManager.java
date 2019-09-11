@@ -73,8 +73,13 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
 
     @Override
     public String getFormattedMessage(Player target, String localePath){
-        return Objects.requireNonNull(PlaceholderUtils.formatPAPI(target,
-                plugin.getLocaleConf().getString(localePath)));
+        String s = plugin.getLocaleConf().getString(localePath);
+        if(s == null) {
+            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
+            return "null";
+        }
+        s = PlaceholderUtils.formatPAPI(target, s);
+        return s == null ? "null" : s;
     }
 
     @Override
@@ -86,7 +91,11 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
 
     @Override
     public void sendConsole(String localePath, Function<String, String> x){
-        Bukkit.getConsoleSender().sendMessage(Objects.requireNonNull(
-                x.apply(plugin.getLocaleConf().getString(localePath))));
+        String s = plugin.getLocaleConf().getString(localePath);
+        if(s == null) {
+            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
+            s = "null";
+        }
+        Bukkit.getConsoleSender().sendMessage(x.apply(s));
     }
 }
