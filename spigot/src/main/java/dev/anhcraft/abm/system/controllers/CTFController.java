@@ -188,6 +188,8 @@ public class CTFController extends TeamDeathmatchController {
                 if(f.getTeam() == ABTeam.TEAM_A) a++;
                 else b++;
             }
+            f.getArmorStand().remove();
+            f.reset();
         }
         if(a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
         else return a > b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
