@@ -1,7 +1,7 @@
 # This configuration is a part of ABM
 
 # You'll configure modes here
-deathmatch: # <-- This mode's id (do not change)
+dm: # <-- This mode's id (do not change)
   # The mode's name
   # [required]
   name: "&bDeathmatch"
@@ -77,7 +77,7 @@ deathmatch: # <-- This mode's id (do not change)
     # Should the scoreboard always has a fixed length?
     fixed_length: false
 
-team_deathmatch:
+tdm:
   name: "&eTeam &bDeathmatch"
   description: "&fA game where two teams attack each other to know who is the winner"
   waiting_chat:
