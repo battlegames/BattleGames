@@ -49,6 +49,16 @@ mode_tdm:
   error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
   respawn_title: "&e&lRespawn in"
   respawn_subtitle: "&f&l{__current__}"
+mode_ctf:
+  player_join_broadcast: "&c{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
+  player_quit_broadcast: "&c{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
+  countdown_title: "&6&lStart in"
+  countdown_subtitle: "&e&l{__current__}"
+  game_start_broadcast: "&bStarted the game!"
+  error_item_selection_overtime: "&cYou can't choose items now!"
+  error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
+  respawn_title: "&6&lRespawn in"
+  respawn_subtitle: "&e&l{__current__}"
 gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."

@@ -68,6 +68,7 @@ public class Mode implements Informative {
 
     public static final Mode DEATHMATCH = registerMode(new Mode("dm"));
     public static final Mode TEAM_DEATHMATCH = registerMode(new Mode("tdm"));
+    public static final Mode CTF = registerMode(new Mode("ctf"));
 
     private String id;
     private String name;

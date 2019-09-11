@@ -112,3 +112,41 @@ tdm:
       - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
+
+ctf:
+  name: "&cCapture &fthe &eflag"
+  description: "&fA game where two teams capture as many flags as possible to become the winner"
+  waiting_chat:
+    enabled: true
+    format: "&8%player_displayname%&f: {__message__}"
+  playing_chat:
+    enabled: true
+    format: "&7[%abm_ctf_team%] &8%player_displayname%&f: {__message__}"
+  waiting_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&f"
+      - "&cCTF - %abm_arena_name%"
+      - "&d"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&e"
+      - "&eminecraft.net"
+  playing_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&f"
+      - "&cCTF - %abm_arena_name%"
+      - "&c%abm_game_remaining_time_formatted% left"
+      - "&d"
+      - "%abm_icon_letter% &aTeam: &f%abm_ctf_team% &e(%abm_ctf_team_players% players)"
+      - "%abm_icon_medal% &aFlags: &f%abm_ctf_team_valid_flags%/%abm_ctf_team_all_flags%/%abm_ctf_flags%"
+      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
+      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
+      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
+      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&e"
+      - "&eminecraft.net"
+    fixed_length: true

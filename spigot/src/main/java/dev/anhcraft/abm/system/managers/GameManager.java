@@ -27,6 +27,7 @@ import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.system.cleaners.GameCleaner;
+import dev.anhcraft.abm.system.controllers.CTFController;
 import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
@@ -50,6 +51,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         super(plugin);
         initController(Mode.DEATHMATCH, new DeathmatchController(plugin));
         initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
+        initController(Mode.CTF, new CTFController(plugin));
     }
 
     private void initController(Mode mode, ModeController controller) {
