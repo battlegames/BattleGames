@@ -162,7 +162,7 @@ public class Arena implements Informative {
     @Override
     public void inform(@NotNull InfoHolder holder) {
         InfoHolder modeInfo = new InfoHolder("mode_");
-        mode.inform(modeInfo);
+        getMode().inform(modeInfo);
         holder.inform("id", id)
                 .inform("name", name)
                 .inform("max_time", maxTime)
