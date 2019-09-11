@@ -111,6 +111,12 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
+    public void onQuit(Player player, Game game){
+        super.onQuit(player, game);
+        TEAM.get(game).removePlayer(player);
+    }
+
+    @Override
     protected void play(Game game) {
         broadcast(game,"game_start_broadcast");
 
