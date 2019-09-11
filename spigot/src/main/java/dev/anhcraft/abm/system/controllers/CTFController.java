@@ -180,16 +180,24 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
+    public void onEnd(Game game) {
+        super.onEnd(game);
+
+        FLAG.removeAll(game).forEach(f -> {
+            f.getArmorStand().remove();
+            f.reset();
+        });
+    }
+
+    @Override
     protected ABTeam handleResult(Game game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
         int a = 0, b = 0;
-        Collection<TeamFlag<ABTeam>> flags = FLAG.removeAll(game);
+        Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
         for(TeamFlag<ABTeam> f : flags){
             if(f.isValid()){
                 if(f.getTeam() == ABTeam.TEAM_A) a++;
                 else b++;
             }
-            f.getArmorStand().remove();
-            f.reset();
         }
         if(a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
         else return a > b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
