@@ -48,6 +48,7 @@ import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
+import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -57,6 +58,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -206,6 +209,13 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         });
         dataManager.saveServerData();
         PLAYER_MAP.keySet().forEach(dataManager::savePlayerData);
+        ServerUtil.getAllEntities().forEach(new Consumer<Entity>() {
+            @Override
+            public void accept(Entity entity) {
+                if(entity instanceof HumanEntity) return;
+                if(entity.hasMetadata("abm_temp_entity")) entity.remove();
+            }
+        });
     }
 
     public FileConfiguration getSystemConf(){
