@@ -79,7 +79,7 @@ public class TeamDeathmatchController extends DeathmatchController {
         }
     }
 
-    private ABTeam findTeam(Game game) {
+    private ABTeam nextTeam(Game game) {
         SimpleTeam<ABTeam> x = TEAM.get(game);
         int a = x.countPlayers(ABTeam.TEAM_A);
         int b = x.countPlayers(ABTeam.TEAM_B);
@@ -103,13 +103,14 @@ public class TeamDeathmatchController extends DeathmatchController {
                 break;
             }
             case PLAYING: {
-                ABTeam t = findTeam(game);
+                ABTeam t = nextTeam(game);
                 TEAM.get(game).addPlayer(player, t);
                 addPlayer(game, player, t);
             }
         }
     }
 
+    @Override
     protected void play(Game game) {
         broadcast(game,"game_start_broadcast");
 
@@ -149,7 +150,8 @@ public class TeamDeathmatchController extends DeathmatchController {
 
     @Override
     protected void respw(Game game, Player player) {
-        respw(game, player, TEAM.get(game).getTeam(player));
+        SimpleTeam<ABTeam> t = TEAM.get(game);
+        respw(game, player, t == null ? null : t.getTeam(player));
     }
 
     private void respw(Game game, Player player, ABTeam team) {
@@ -205,16 +207,19 @@ public class TeamDeathmatchController extends DeathmatchController {
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
-            ABTeam winner;
-            if (sa.getSum() == sb.getSum())
-                winner = sa.getAverage() > sb.getAverage() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
-            else
-                winner = sa.getSum() > sb.getSum() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
+            ABTeam winner = handleResult(game, sa, sb, aPlayers, bPlayers);
             map.get(winner).forEach(player -> player.setWinner(true));
             team.reset();
         }
 
         plugin.gameManager.rewardAndSaveCache(game);
         plugin.gameManager.destroy(game);
+    }
+
+    protected ABTeam handleResult(Game game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
+        if (sa.getSum() == sb.getSum())
+            return sa.getAverage() > sb.getAverage() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
+        else
+            return sa.getSum() > sb.getSum() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
     }
 }
