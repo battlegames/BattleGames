@@ -70,6 +70,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -94,7 +95,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "kits.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
-    public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new HashMap<>();
+    public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
     private final Map<String, Arena> ARENA_MAP = new HashMap<>();
     private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
     private final Map<String, GunModel> GUN_MAP = new HashMap<>();
