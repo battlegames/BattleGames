@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.CustomBossBar;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.SoundRecord;
@@ -70,7 +70,7 @@ public class GunModel extends WeaponModel {
         String defaultMag = conf.getString("magazine.default");
         if(defaultMag == null) throw new NullPointerException("Default magazine must be specified");
         try {
-            defaultMagazine = APIProvider.get().getMagazineModel(defaultMag)
+            defaultMagazine = ApiProvider.consume().getMagazineModel(defaultMag)
                     .orElseThrow((Supplier<Throwable>) () -> new NullPointerException("MagazineModel did not exist"));
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -102,7 +102,7 @@ public class GunModel extends WeaponModel {
         String defaultScp = conf.getString("scope.default");
         if(defaultScp != null) {
             try {
-                defaultScope = APIProvider.get().getScopeModel(defaultScp).orElseThrow((Supplier<Throwable>) () -> new NullPointerException("Scope not found"));
+                defaultScope = ApiProvider.consume().getScopeModel(defaultScp).orElseThrow((Supplier<Throwable>) () -> new NullPointerException("Scope not found"));
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }

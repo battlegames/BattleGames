@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.IntTag;
@@ -104,7 +104,7 @@ public class Gun extends Weapon<GunModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        APIProvider.get().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)).ifPresent(this::setModel);
+        ApiProvider.consume().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)).ifPresent(this::setModel);
         CompoundTag mag = compound.get(ItemTag.GUN_MAGAZINE, CompoundTag.class);
         if(mag != null) magazine.load(mag);
 

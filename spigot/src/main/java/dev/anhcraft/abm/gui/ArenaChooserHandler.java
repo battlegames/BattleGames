@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.gui.*;
@@ -36,10 +36,10 @@ import java.util.Optional;
 public class ArenaChooserHandler extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
-        BattleAPI api = APIProvider.get();
+        BattleAPI api = ApiProvider.consume();
         api.listArenas().forEach(arena -> {
             InfoHolder infoHolder;
-            Optional<Game> gameOpt = APIProvider.get().getGameManager().getGame(arena);
+            Optional<Game> gameOpt = ApiProvider.consume().getGameManager().getGame(arena);
             if(gameOpt.isPresent()){
                 infoHolder = new InfoHolder("game_");
                 gameOpt.get().inform(infoHolder);
@@ -47,7 +47,7 @@ public class ArenaChooserHandler extends GuiHandler implements PaginationHandler
                 infoHolder = new InfoHolder("arena_");
                 arena.inform(infoHolder);
             }
-            Map<String, String> infoMap = APIProvider.get().mapInfo(infoHolder);
+            Map<String, String> infoMap = ApiProvider.consume().mapInfo(infoHolder);
             PreparedItem icon = arena.getIcon();
             icon.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(icon.name(), infoMap)));
             icon.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, infoMap)));

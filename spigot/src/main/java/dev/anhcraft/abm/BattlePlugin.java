@@ -181,10 +181,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void injectApiProvider() {
-        APIProvider ap = new APIProvider();
+        ApiProvider ap = new ApiProvider();
         ap.set(this);
         try {
-            Class<?> clazz = APIProvider.class;
+            Class<?> clazz = ApiProvider.class;
             Field pf = clazz.getDeclaredField("provider");
             pf.setAccessible(true);
             pf.set(null, ap);

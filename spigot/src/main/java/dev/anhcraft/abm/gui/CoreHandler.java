@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleGuiManager;
 import dev.anhcraft.abm.api.gui.BattleGui;
 import dev.anhcraft.abm.api.gui.GuiHandler;
@@ -39,7 +39,7 @@ public class CoreHandler extends GuiHandler {
     }
 
     private void renderGui(Player player, BattleGui gui){
-        BattleGuiManager guiManager = APIProvider.get().getGuiManager();
+        BattleGuiManager guiManager = ApiProvider.consume().getGuiManager();
         if(gui.getPlayerGui().getTopGui() == gui)
             guiManager.renderTopInventory(player, gui.getPlayerGui());
         else if(gui.getPlayerGui().getBottomGui() == gui)
@@ -66,21 +66,21 @@ public class CoreHandler extends GuiHandler {
 
     @Label("choose_arena")
     public void chooseArena(Player player){
-        APIProvider.get().getGuiManager().openTopInventory(player, "arena_chooser");
+        ApiProvider.consume().getGuiManager().openTopInventory(player, "arena_chooser");
     }
 
     @Label("open_kit_menu")
     public void openKitMenu(Player player){
-        APIProvider.get().getGuiManager().openTopInventory(player, "kit_menu");
+        ApiProvider.consume().getGuiManager().openTopInventory(player, "kit_menu");
     }
 
     @Label("open_inventory")
     public void openInv(Player player){
-        APIProvider.get().getGuiManager().openTopInventory(player, "inventory_menu");
+        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_menu");
     }
 
     @Label("quit_game")
     public void quitGame(Player player){
-        APIProvider.get().getGameManager().quit(player);
+        ApiProvider.consume().getGameManager().quit(player);
     }
 }

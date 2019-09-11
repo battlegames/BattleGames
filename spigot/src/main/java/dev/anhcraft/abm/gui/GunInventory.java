@@ -20,7 +20,7 @@
 package dev.anhcraft.abm.gui;
 
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.gui.*;
@@ -37,7 +37,7 @@ import java.util.Optional;
 public class GunInventory extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
-        BattleAPI api = APIProvider.get();
+        BattleAPI api = ApiProvider.consume();
         Optional<PlayerData> pd = api.getPlayerData(player);
         pd.ifPresent(playerData -> {
             playerData.getInventory().getStorage(ItemType.GUN).list().forEach(ent -> {

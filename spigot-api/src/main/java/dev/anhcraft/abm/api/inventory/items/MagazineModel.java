@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Material;
@@ -41,7 +41,7 @@ public class MagazineModel extends BattleItemModel implements Attachable {
 
         ConfigurationSection am = conf.getConfigurationSection("ammo");
         if(am != null){
-            for(String a : am.getKeys(false)) APIProvider.get().getAmmoModel(a).ifPresent(ammo -> ammunition.put(ammo, am.getInt(a)));
+            for(String a : am.getKeys(false)) ApiProvider.consume().getAmmoModel(a).ifPresent(ammo -> ammunition.put(ammo, am.getInt(a)));
         }
     }
 

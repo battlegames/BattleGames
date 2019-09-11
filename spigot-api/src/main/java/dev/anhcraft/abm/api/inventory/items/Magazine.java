@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.IntTag;
@@ -65,7 +65,7 @@ public class Magazine extends BattleItem<MagazineModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        APIProvider.get().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)).ifPresent(this::setModel);
+        ApiProvider.consume().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)).ifPresent(this::setModel);
         Integer a = compound.getValue(ItemTag.MAGAZINE_AMMO_COUNT, IntTag.class);
         if(a != null) ammoCount = a;
         CompoundTag am = compound.get(ItemTag.MAGAZINE_AMMO, CompoundTag.class);

@@ -21,7 +21,7 @@ package dev.anhcraft.abm.system.controllers;
 
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.Mode;
@@ -79,7 +79,7 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     @Override
     public void onSwapHand(PlayerSwapHandItemsEvent event, Game game){
-        BattleItem item = APIProvider.get().getItemManager().read(event.getOffHandItem());
+        BattleItem item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
         if(item instanceof Gun){
             Gun gun = (Gun) item;
             event.setCancelled(true);

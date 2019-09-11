@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.inventory.ItemStorage;
@@ -31,7 +31,7 @@ import java.util.List;
 public class KitMenuHandler extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
-        BattleAPI api = APIProvider.get();
+        BattleAPI api = ApiProvider.consume();
         api.getPlayerData(player).ifPresent(pd -> {
             api.listKits().forEach(kit -> {
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {

@@ -19,11 +19,11 @@
  */
 package dev.anhcraft.abm.api;
 
-public class APIProvider {
-    private static APIProvider provider;
+public class ApiProvider {
+    private static ApiProvider provider;
     private BattleAPI api;
 
-    public static BattleAPI get() {
+    public static BattleAPI consume() {
         if(provider == null){
             throw new UnsupportedOperationException("API is not ready yet!");
         }

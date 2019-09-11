@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.APIProvider;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.IntTag;
@@ -52,7 +52,7 @@ public class Scope extends BattleItem<ScopeModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        APIProvider.get().getScopeModel(compound.getValue(ItemTag.SCOPE_ID, StringTag.class)).ifPresent(this::setModel);
+        ApiProvider.consume().getScopeModel(compound.getValue(ItemTag.SCOPE_ID, StringTag.class)).ifPresent(this::setModel);
         Integer nextZoomLv = compound.getValue(ItemTag.SCOPE_NEXT_ZOOM_LEVEL, IntTag.class);
         if(nextZoomLv != null) nextZoomLevel = nextZoomLv;
     }
