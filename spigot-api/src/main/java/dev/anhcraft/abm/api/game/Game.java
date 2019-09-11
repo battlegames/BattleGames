@@ -131,7 +131,7 @@ public class Game implements Resettable, Informative {
 
     @Override
     public int hashCode() {
-        return Objects.hash(damageReports, players, currentTime, phase, arena);
+        return Objects.hash(arena); // arena is unique for each game
     }
 
     @Override
