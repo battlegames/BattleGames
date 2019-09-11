@@ -43,7 +43,7 @@ import java.util.*;
 
 public class GameManager extends BattleComponent implements BattleGameManager {
     private final Map<Arena, Game> ARENA_GAME_MAP = new HashMap<>();
-    private final Map<Player, Game> PLAYER_GAME_MAP = new HashMap<>();
+    private final Map<UUID, Game> PLAYER_GAME_MAP = new HashMap<>();
     private final Object LOCK = new Object();
     public final GameCleaner cleaner = new GameCleaner();
 
@@ -64,7 +64,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public Optional<GamePlayer> getGamePlayer(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            Game x = PLAYER_GAME_MAP.get(player);
+            Game x = PLAYER_GAME_MAP.get(player.getUniqueId());
             return Optional.ofNullable(x == null ? null : x.getPlayer(player));
         }
     }
@@ -74,7 +74,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public Optional<Game> getGame(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            return Optional.ofNullable(PLAYER_GAME_MAP.get(player));
+            return Optional.ofNullable(PLAYER_GAME_MAP.get(player.getUniqueId()));
         }
     }
 
@@ -88,7 +88,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     private boolean join(Player player, Game game, BattleModeController controller) {
         GamePlayer gp = new GamePlayer(player);
         game.getPlayers().put(player, gp);
-        PLAYER_GAME_MAP.put(player, game);
+        PLAYER_GAME_MAP.put(player.getUniqueId(), game);
         controller.onJoin(player, game);
         Bukkit.getPluginManager().callEvent(new GameJoinEvent(gp, game));
         return true;
@@ -99,7 +99,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Condition.argNotNull("player", player);
         Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
-            if (PLAYER_GAME_MAP.containsKey(player)) {
+            if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) {
                 plugin.chatManager.sendPlayer(player, "arena.error_already_joined");
                 return false;
             }
@@ -132,7 +132,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Condition.argNotNull("player", player);
         Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
-            if (PLAYER_GAME_MAP.containsKey(player)) return false;
+            if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) return false;
             Game game = ARENA_GAME_MAP.get(arena);
             if(!ARENA_GAME_MAP.containsKey(arena)) ARENA_GAME_MAP.put(arena, game = new Game(arena));
             BattleModeController controller = game.getMode().getController();
@@ -145,14 +145,14 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public boolean quit(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            Game game = PLAYER_GAME_MAP.get(player);
+            Game game = PLAYER_GAME_MAP.get(player.getUniqueId());
             if (game == null) return false;
             // don't save the player data here!!!
             // plugin.getPlayerData(player);
             Objects.requireNonNull(game.getMode().getController()).onQuit(player, game);
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(game.getPlayer(player), game));
             game.getPlayers().remove(player);
-            PLAYER_GAME_MAP.remove(player);
+            PLAYER_GAME_MAP.remove(player.getUniqueId());
             if(game.countPlayers() == 0) {
                 game.setPhase(GamePhase.CLEANING);
                 cleaner.doClean(game.getArena(), ARENA_GAME_MAP::remove);
@@ -167,7 +167,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         synchronized (LOCK) {
             game.getPlayers().forEach((player, gp) -> {
                 Bukkit.getPluginManager().callEvent(new GameQuitEvent(gp, game));
-                PLAYER_GAME_MAP.remove(player);
+                PLAYER_GAME_MAP.remove(player.getUniqueId());
             });
             game.setPhase(GamePhase.CLEANING);
             cleaner.doClean(game.getArena(), ARENA_GAME_MAP::remove);
