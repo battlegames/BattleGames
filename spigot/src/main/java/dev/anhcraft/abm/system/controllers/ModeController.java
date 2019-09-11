@@ -138,7 +138,7 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
-        plugin.titleProvider.send(player, titleLocalePath, subtitleLocalePath, x);
+        plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
     }
 
     void trackTask(Game game, String id, int task){
