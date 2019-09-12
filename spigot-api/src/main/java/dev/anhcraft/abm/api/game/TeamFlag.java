@@ -21,6 +21,7 @@
 package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abm.api.misc.Resettable;
+import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
@@ -41,6 +42,8 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
     private T team;
     private int maxHealth;
     private boolean capturing;
+    private SoundRecord captureStartSound;
+    private SoundRecord captureStopSound;
 
     public TeamFlag(@NotNull ArmorStand armorStand, int maxHealth) {
         Condition.argNotNull("armorStand", armorStand);
@@ -97,6 +100,24 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
         return maxHealth;
     }
 
+    @Nullable
+    public SoundRecord getCaptureStartSound() {
+        return captureStartSound;
+    }
+
+    public void setCaptureStartSound(@Nullable SoundRecord captureStartSound) {
+        this.captureStartSound = captureStartSound;
+    }
+
+    @Nullable
+    public SoundRecord getCaptureStopSound() {
+        return captureStopSound;
+    }
+
+    public void setCaptureStopSound(@Nullable SoundRecord captureStopSound) {
+        this.captureStopSound = captureStopSound;
+    }
+
     @Override
     public void reset() {
         valid = false;
@@ -105,6 +126,8 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
         displayNames[1] = null;
         displayNames[2] = null;
         maxHealth = 0;
+        captureStartSound = null;
+        captureStopSound = null;
     }
 
     @Override
@@ -118,8 +141,7 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeamFlag<?> teamFlag = (TeamFlag<?>) o;
-        return maxHealth == teamFlag.maxHealth &&
-                armorStand.equals(teamFlag.armorStand);
+        return maxHealth == teamFlag.maxHealth && armorStand.equals(teamFlag.armorStand);
     }
 
     @Override

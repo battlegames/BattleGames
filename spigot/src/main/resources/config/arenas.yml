@@ -144,6 +144,8 @@ ctf_demo:
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
           neutral: "&7Neutral"
         max_health: 10
+        start_capture_sound: "$entity_player_levelup"
+        stop_capture_sound: "$ui_toast_challenge_complete"
       '2':
         location: ctf_italy 0 0 0
         display_name:

@@ -23,6 +23,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
@@ -99,6 +100,10 @@ public class CTFController extends TeamDeathmatchController {
                         flag.inform(h);
                         return PlaceholderUtils.formatInfo(s, plugin.mapInfo(h));
                     });
+                    String startCaptureSound = sec.getString(k+".start_capture_sound");
+                    if(startCaptureSound != null) flag.setCaptureStartSound(new SoundRecord(startCaptureSound));
+                    String stopCaptureSound = sec.getString(k+".stop_capture_sound");
+                    if(stopCaptureSound != null) flag.setCaptureStopSound(new SoundRecord(stopCaptureSound));
                     FLAG.put(game, flag);
                 }
             }
@@ -109,6 +114,7 @@ public class CTFController extends TeamDeathmatchController {
         ABTeam team = TEAM.get(game).getTeam(occupier);
         if(flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
         flag.setCapturing(true);
+        if(flag.getCaptureStartSound() != null) flag.getCaptureStartSound().play(occupier);
         String id = "ctf_flag_occupy_"+occupier.getName();
         int tid = plugin.taskHelper.newTimerTask(() -> {
             if(occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5){
@@ -143,6 +149,7 @@ public class CTFController extends TeamDeathmatchController {
     private void stopOccupyFlag(Game game, TeamFlag<ABTeam> flag, Player occupier){
         cancelTask(game, "ctf_flag_occupy_"+occupier.getName());
         flag.setCapturing(false);
+        if(flag.getCaptureStopSound() != null) flag.getCaptureStopSound().play(occupier);
     }
 
     @EventHandler
