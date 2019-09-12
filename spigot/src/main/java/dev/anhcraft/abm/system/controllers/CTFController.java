@@ -54,6 +54,11 @@ public class CTFController extends TeamDeathmatchController {
             return Integer.toString(f.size());
         }).orElse(null));
 
+        plugin.getPapiExpansion().handlers.put(p+"valid_flags", player -> plugin.gameManager.getGame(player).map(game -> {
+            Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
+            return Long.toString(FLAG.get(game).stream().filter(TeamFlag::isValid).count());
+        }).orElse(null));
+
         plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> plugin.gameManager.getGame(player).map(game -> {
             SimpleTeam<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -61,7 +66,6 @@ public class CTFController extends TeamDeathmatchController {
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return Long.toString(f.stream().filter(flag -> flag.getTeam() == team).count());
         }).orElse(null));
-
 
         plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> plugin.gameManager.getGame(player).map(game -> {
             SimpleTeam<ABTeam> t = TEAM.get(game);
