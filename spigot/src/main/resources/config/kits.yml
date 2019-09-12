@@ -43,3 +43,19 @@ starter: # This kit's ID
   # Write the duration in ticks (or '-1' to mean 'never')
   # [optional] [default: -1]
   renew_time: -1
+
+food:
+  icon:
+    material: cake
+    name: "&fHot food"
+    lore:
+      - "&fGuess what? Free food here. Yummy!"
+  items:
+    vanilla:
+      '1':
+        material: cooked_chicken
+        amount: 8
+      '2':
+        material: cooked_porkchop
+        amount: 8
+  renew_time: 6000
