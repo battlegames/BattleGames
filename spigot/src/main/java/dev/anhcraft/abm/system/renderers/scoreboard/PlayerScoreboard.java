@@ -34,21 +34,27 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerScoreboard {
-    private static final int MAX_CHAR = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
+    private static final int MAX_ENTRY_LENGTH = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
     private final List<String> ENTRIES = new ArrayList<>();
     private final Player player;
     private final ScoreboardLine[] lines;
     private final Objective objective;
     private final Scoreboard scoreboard;
     private final String title;
-    private final boolean fixedLength;
+    private final int maxEntryLength;
+    private boolean fixedLength;
 
-    public PlayerScoreboard(Player player, String title, List<String> lines, boolean fixedLength) {
+    public PlayerScoreboard(Player player, String title, List<String> lines, int fixedLength) {
         this.player = player;
         int maxLines = Math.min(15, lines.size());
         this.lines = new ScoreboardLine[maxLines];
         this.title = title;
-        this.fixedLength = fixedLength;
+        fixedLength = fixedLength / 2;
+        if(fixedLength <= 0 || fixedLength > MAX_ENTRY_LENGTH) maxEntryLength = MAX_ENTRY_LENGTH;
+        else {
+            maxEntryLength = fixedLength;
+            this.fixedLength = true;
+        }
 
         scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
         objective = scoreboard.registerNewObjective(StringUtil.cutString("abm." + player.getName(), 16), "dummy");
@@ -63,7 +69,7 @@ public class PlayerScoreboard {
     }
 
     public void renderTitle(){
-        objective.setDisplayName(StringUtil.cutString(PlaceholderUtils.formatPAPI(player, title), 2 * MAX_CHAR));
+        objective.setDisplayName(StringUtil.cutString(PlaceholderUtils.formatPAPI(player, title), 2 * maxEntryLength));
     }
 
     public void renderLines(){
@@ -76,7 +82,7 @@ public class PlayerScoreboard {
         ScoreboardLine line = lines[index];
         String content = PlaceholderUtils.formatPAPI(player, line.getContent());
 
-        StringBuilder prefix = new StringBuilder(StringUtil.cutString(content, MAX_CHAR));
+        StringBuilder prefix = new StringBuilder(StringUtil.cutString(content, maxEntryLength));
         // if the prefix ends with colors, remove it!
         if (prefix.charAt(prefix.length() - 2) == ChatColor.COLOR_CHAR)
             prefix.delete(prefix.length() - 2, prefix.length());
@@ -85,7 +91,7 @@ public class PlayerScoreboard {
         boolean rendered = false;
 
         // only change the suffix if needed
-        if(content.length() > MAX_CHAR) {
+        if(content.length() > maxEntryLength) {
             // sometimes, dividing prefix and suffix causes the prefix to be ended with a color sign
             // we can remove it here
             if (prefix.charAt(prefix.length() - 1) == ChatColor.COLOR_CHAR)
@@ -94,7 +100,7 @@ public class PlayerScoreboard {
             String preStr = prefix.toString();
 
             StringBuilder suffix = new StringBuilder();
-            int maxSufLen = Math.min(prefix.length() + MAX_CHAR - suffix.length(), content.length());
+            int maxSufLen = Math.min(prefix.length() + maxEntryLength - suffix.length(), content.length());
             String s = content.substring(prefix.length(), maxSufLen);
             if(s.length() == 0) return;
             suffix.append(s);
@@ -103,7 +109,7 @@ public class PlayerScoreboard {
             // color codes from the end of the prefix
             if(s.charAt(0) != ChatColor.COLOR_CHAR) {
                 String lc = ChatColor.getLastColors(preStr);
-                if(suffix.length() + lc.length() <= MAX_CHAR) suffix.insert(0, lc);
+                if(suffix.length() + lc.length() <= maxEntryLength) suffix.insert(0, lc);
             }
 
             // if the suffix ends with colors, remove it!
@@ -118,14 +124,14 @@ public class PlayerScoreboard {
             if(suffix.length() == 0) return;
 
             // add spaces to the end if needed
-            while (fixedLength && suffix.length() < MAX_CHAR) suffix.append(" ");
+            while (fixedLength && suffix.length() < maxEntryLength) suffix.append(" ");
             line.getTeam().setPrefix(preStr);
             line.getTeam().setSuffix(suffix.toString());
             rendered = true;
         }
         if(!rendered) {
             // add spaces to the end if needed
-            while (fixedLength && prefix.length() < MAX_CHAR) prefix.append(" ");
+            while (fixedLength && prefix.length() < maxEntryLength) prefix.append(" ");
             line.getTeam().setPrefix(prefix.toString());
             line.getTeam().setSuffix("");
         }

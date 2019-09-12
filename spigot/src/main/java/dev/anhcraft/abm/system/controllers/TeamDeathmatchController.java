@@ -96,8 +96,8 @@ public class TeamDeathmatchController extends DeathmatchController {
                 if(game.getMode().isWaitingScoreboardEnabled()) {
                     String title = game.getMode().getWaitingScoreboardTitle();
                     List<String> content = game.getMode().getWaitingScoreboardContent();
-                    boolean b = game.getMode().isWaitingScoreboardFixedLength();
-                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, b));
+                    int len = game.getMode().isWaitingScoreboardFixedLength();
+                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
                 }
                 if(m <= game.countPlayers()) countdown(game);
                 break;
@@ -147,8 +147,8 @@ public class TeamDeathmatchController extends DeathmatchController {
         if(game.getMode().isPlayingScoreboardEnabled()) {
             String title = game.getMode().getPlayingScoreboardTitle();
             List<String> content = game.getMode().getPlayingScoreboardContent();
-            boolean b = game.getMode().isPlayingScoreboardFixedLength();
-            plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, b));
+            int len = game.getMode().isPlayingScoreboardFixedLength();
+            plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
         }
         // TODO ADD SPERATE SCOREBOARD TO HIDE NAMETAG HERE
         respw(game, player, dt);

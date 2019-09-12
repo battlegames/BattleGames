@@ -58,8 +58,13 @@ default_scoreboard:
     - "&c&a"
     - "&dminecraft.net"
 
-  # Should the scoreboard always has a fixed length?
-  fixed_length: false
+  # The fixed length of this scoreboard
+  # Set to 0 if you wanna disabling this option
+  # Maximum length for a scoreboard is:
+  # - 128 characters (1.13+)
+  # - 32 characters (1.12)
+  # [optional] [default: 0]
+  fixed_length: 0
 
 # Default chat settings
 default_chat:

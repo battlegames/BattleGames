@@ -401,8 +401,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         if(getGeneralConf().getBoolean("default_scoreboard.enabled")) {
             String title = getGeneralConf().getString("default_scoreboard.title");
             List<String> content = getGeneralConf().getStringList("default_scoreboard.content");
-            boolean fl = getGeneralConf().getBoolean("default_scoreboard.fixed_length");
-            scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, fl));
+            int len = getGeneralConf().getInt("default_scoreboard.fixed_length");
+            scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
         } else scoreboardRenderer.removeScoreboard(player);
     }
 

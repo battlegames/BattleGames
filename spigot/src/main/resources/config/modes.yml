@@ -48,8 +48,13 @@ dm: # <-- This mode's id (do not change)
       - "&c"
       - "&dminecraft.net"
 
-    # Should the scoreboard always has a fixed length?
-    fixed_length: false
+    # The fixed length of this scoreboard
+    # Set to 0 if you wanna disabling this option
+    # Maximum length for a scoreboard is:
+    # - 128 characters (1.13+)
+    # - 32 characters (1.12)
+    # [optional] [default: 0]
+    fixed_length: 0
 
   # A built-in scoreboard which is used during the playing phase
   playing_scoreboard:
@@ -74,8 +79,13 @@ dm: # <-- This mode's id (do not change)
       - "&c"
       - "&dminecraft.net"
 
-    # Should the scoreboard always has a fixed length?
-    fixed_length: false
+    # The fixed length of this scoreboard
+    # Set to 0 if you wanna disabling this option
+    # Maximum length for a scoreboard is:
+    # - 128 characters (1.13+)
+    # - 32 characters (1.12)
+    # [optional] [default: 0]
+    fixed_length: 0
 
 tdm:
   name: "&eTeam &bDeathmatch"
@@ -133,6 +143,7 @@ ctf:
       - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&e"
       - "&eminecraft.net"
+    fixed_length: 32
   playing_scoreboard:
     enabled: true
     title: "&a &c&lBATTLE"
@@ -149,4 +160,4 @@ ctf:
       - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&e"
       - "&eminecraft.net"
-    fixed_length: true
+    fixed_length: 32
