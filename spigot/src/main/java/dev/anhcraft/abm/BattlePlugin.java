@@ -217,6 +217,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 if(entity.hasMetadata("abm_temp_entity")) entity.remove();
             }
         });
+        dataManager.destroy();
     }
 
     public FileConfiguration getSystemConf(){

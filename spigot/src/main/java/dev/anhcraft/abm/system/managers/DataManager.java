@@ -19,12 +19,12 @@
  */
 package dev.anhcraft.abm.system.managers;
 
+import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.storage.StorageType;
-import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
-import dev.anhcraft.abm.storage.handlers.FileStorage;
 import dev.anhcraft.abm.storage.Storage;
+import dev.anhcraft.abm.storage.handlers.FileStorage;
 import org.bukkit.OfflinePlayer;
 
 import java.io.File;
@@ -92,5 +92,11 @@ public class DataManager extends BattleComponent {
             playerData.write(provider.getData());
             provider.save();
         });
+    }
+
+    public void destroy(){
+        PLAYER_STORAGE.values().forEach(Storage::destroy);
+        serverStorage.destroy();
+        PLAYER_STORAGE.clear();
     }
 }

@@ -31,6 +31,9 @@ public abstract class StorageProvider {
     protected abstract void writeTag(int type, DataTag tag, ByteArrayDataOutput output);
     public abstract boolean load();
     public abstract void save();
+    public void destroy(){
+
+    }
 
     public DataMap<String> getData() {
         return data;

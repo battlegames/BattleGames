@@ -56,4 +56,9 @@ public class Storage extends StorageProvider {
     public DataMap<String> getData() {
         return handler.getData();
     }
+
+    @Override
+    public void destroy() {
+        handler.destroy();
+    }
 }
