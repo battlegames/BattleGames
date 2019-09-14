@@ -89,7 +89,7 @@ public class TeamDeathmatchController extends DeathmatchController {
     @Override
     public void onJoin(Player player, Game game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
+        int m = Math.max(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player, null);
