@@ -6,7 +6,7 @@
 
     <groupId>dev.anhcraft</groupId>
     <artifactId>abm</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>pom</packaging>
 
     <name>Battle</name>
@@ -57,6 +57,10 @@
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
                             <shadedPattern>dev.anhcraft.craftkit.acf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>dev.anhcraft.abm.hikari</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
