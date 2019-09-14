@@ -113,7 +113,9 @@ public class TeamDeathmatchController extends DeathmatchController {
     @Override
     public void onQuit(Player player, Game game){
         super.onQuit(player, game);
-        TEAM.get(game).removePlayer(player);
+        SimpleTeam<ABTeam> team = TEAM.get(game);
+        if(team != null)
+            team.removePlayer(player);
     }
 
     @Override
