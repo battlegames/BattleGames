@@ -19,6 +19,11 @@
  */
 package dev.anhcraft.abm.api.storage.tags;
 
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 public abstract class DataTag<T> {
     public static final int INT = 1;
     public static final int BOOL = 2;
@@ -30,13 +35,28 @@ public abstract class DataTag<T> {
 
     private T value;
 
-    public DataTag(T value) {
+    public DataTag(@NotNull T value) {
+        Condition.argNotNull("value", value);
         this.value = value;
     }
 
+    @NotNull
     public T getValue() {
         return value;
     }
 
     public abstract int getId();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataTag<?> dataTag = (DataTag<?>) o;
+        return getId() == dataTag.getId() && value.equals(dataTag.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), value);
+    }
 }
