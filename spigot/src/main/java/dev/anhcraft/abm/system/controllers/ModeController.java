@@ -35,6 +35,7 @@ import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.abm.utils.CooldownMap;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -220,33 +221,32 @@ public abstract class ModeController extends BattleComponent implements Listener
         }).get();
         int currentBullet = gun.getMagazine().getAmmoCount();
         if(currentBullet == maxBullet) return;
-        long maxTime = (long) gm.getReloadTimeCalculator()
+        double reloadTime = gm.getReloadTimeCalculator()
                 .setVariable("a", currentBullet)
                 .setVariable("b", maxBullet).evaluate();
-        if(maxTime <= 0) return;
+        if(reloadTime <= 0) return;
 
         plugin.getHandler(GunHandler.class).handleZoomOut(player);
 
-        long totalTime = maxTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
-        long tickBulletInc = Math.max(totalTime / (maxBullet - currentBullet), 1);
-        AtomicLong currentTime = new AtomicLong(totalTime);
+        double maxTime = reloadTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
+        int bullerPerTime = (int) Math.floor((maxBullet - currentBullet) / maxTime);
+        AtomicLong currentTime = new AtomicLong();
         CustomBossBar cb = gm.getReloadBar();
 
         int slot = player.getInventory().getHeldItemSlot();
 
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
-            long now = currentTime.getAndDecrement();
-            if(now <= 0){
+            long now = currentTime.getAndIncrement();
+            if(now > maxTime){
                 gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
                 gun.setNextSpray(-1);
                 player.getInventory().setItem(slot, plugin.getHandler(GunHandler.class).createGun(gun, false));
                 RELOADING_GUN.remove(player.getUniqueId()).run();
             } else {
-                playerBossBar.getBar().setProgress(1 - Math.max(0, 1.0 / totalTime * now));
+                playerBossBar.getBar().setProgress(MathUtil.clampDouble(now / maxTime, 0, 1));
 
-                if (now % tickBulletInc == 0) {
-                    gun.getMagazine().setAmmoCount(gun.getMagazine().getAmmoCount() + 1);
-                }
+                int n = gun.getMagazine().getAmmoCount() + bullerPerTime;
+                gun.getMagazine().setAmmoCount(Math.min(n, maxBullet));
 
                 InfoHolder info = new InfoHolder("gun_");
                 gun.inform(info);
