@@ -23,11 +23,13 @@ import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface BattleChatManager {
-    String getFormattedMessage(Player target, String localePath);
+    List<String> getFormattedMessages(String localePath);
+    List<String> getFormattedMessages(Player target, String localePath);
 
     default void send(CommandSender commandSender, String localePath){
         if(commandSender instanceof Player)

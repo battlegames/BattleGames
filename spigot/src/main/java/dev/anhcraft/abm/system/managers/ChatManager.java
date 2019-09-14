@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.abm.system.managers;
 
-import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleChatManager;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
@@ -29,10 +29,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ChatManager extends BattleComponent implements BattleChatManager {
     public ChatManager(BattlePlugin plugin) {
@@ -72,30 +72,44 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
     }
 
     @Override
-    public String getFormattedMessage(Player target, String localePath){
-        String s = plugin.getLocaleConf().getString(localePath);
+    public List<String> getFormattedMessages(String localePath) {
+        Object s = plugin.getLocaleConf().get(localePath);
         if(s == null) {
             plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            return "null";
+            return Collections.singletonList("null");
         }
-        s = PlaceholderUtils.formatPAPI(target, s);
-        return s == null ? "null" : s;
+        if(s instanceof Collection)
+            return ((Collection<?>) s).stream().map((Function<Object, String>) String::valueOf).collect(Collectors.toList());
+        else
+            return Collections.singletonList(String.valueOf(s));
+    }
+
+    @Override
+    public List<String> getFormattedMessages(Player target, String localePath){
+        Object s = plugin.getLocaleConf().get(localePath);
+        if(s == null) {
+            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
+            return Collections.singletonList("null");
+        }
+        if(s instanceof Collection)
+            return PlaceholderUtils.formatPAPI(target, ((Collection<?>) s).stream().map((Function<Object, String>) String::valueOf).collect(Collectors.toList()));
+        else
+            return Collections.singletonList(PlaceholderUtils.formatPAPI(target, String.valueOf(s)));
     }
 
     @Override
     public void sendPlayer(Player target, String localePath, ChatMessageType type, Function<String, String> x){
-        String s = x.apply(getFormattedMessage(target, localePath));
-        TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
-        target.spigot().sendMessage(type, c);
+        getFormattedMessages(target, localePath).forEach(s -> {
+            s = x.apply(s);
+            TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
+            target.spigot().sendMessage(type, c);
+        });
     }
 
     @Override
     public void sendConsole(String localePath, Function<String, String> x){
-        String s = plugin.getLocaleConf().getString(localePath);
-        if(s == null) {
-            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            s = "null";
-        }
-        Bukkit.getConsoleSender().sendMessage(x.apply(s));
+        getFormattedMessages(localePath).forEach(s -> {
+            Bukkit.getConsoleSender().sendMessage(x.apply(s));
+        });
     }
 }

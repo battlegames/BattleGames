@@ -105,8 +105,8 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("tool position")
     @CommandPermission("abm.tool.position")
     public void pos(Player player){
-        String s1 = String.format(plugin.chatManager.getFormattedMessage(player, "tool.position.message"), player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
-        String s2 = String.format(plugin.chatManager.getFormattedMessage(player, "tool.position.location"), player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+        String s1 = String.format(plugin.chatManager.getFormattedMessages(player, "tool.position.message").get(0), player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+        String s2 = String.format(plugin.chatManager.getFormattedMessages(player, "tool.position.location").get(0), player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
         TextComponent c = new TextComponent(TextComponent.fromLegacyText(s1));
         c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, s2));
         player.spigot().sendMessage(c);
