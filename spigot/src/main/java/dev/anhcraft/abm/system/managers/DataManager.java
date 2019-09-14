@@ -66,14 +66,14 @@ public class DataManager extends BattleComponent {
         serverStorage = new Storage(new MySQLStorage(dataSource, "abm_server_"));
     }
 
-    public void loadServerData(){
+    public synchronized void loadServerData(){
         if(serverStorage != null) {
             plugin.getServerData().reset();
             if(serverStorage.load()) plugin.getServerData().read(serverStorage.getData());
         }
     }
 
-    public void saveServerData(){
+    public synchronized void saveServerData(){
         if(serverStorage != null) {
             plugin.getServerData().write(serverStorage.getData());
             if(serverStorage.getData().getChanged().get() && serverStorage.save())
@@ -81,7 +81,7 @@ public class DataManager extends BattleComponent {
         }
     }
 
-    public void loadPlayerData(OfflinePlayer player){
+    public synchronized void loadPlayerData(OfflinePlayer player){
         Storage provider = PLAYER_STORAGE.get(player);
         if(provider == null) {
             switch (storageType) {
@@ -103,12 +103,12 @@ public class DataManager extends BattleComponent {
         plugin.PLAYER_MAP.put(player, pd);
     }
 
-    public void unloadPlayerData(OfflinePlayer player){
+    public synchronized void unloadPlayerData(OfflinePlayer player){
         plugin.PLAYER_MAP.remove(player);
         PLAYER_STORAGE.remove(player);
     }
 
-    public void savePlayerData(OfflinePlayer player){
+    public synchronized void savePlayerData(OfflinePlayer player){
         plugin.getPlayerData(player).ifPresent(playerData -> {
             Storage provider = PLAYER_STORAGE.get(player);
             playerData.write(provider.getData());

@@ -43,6 +43,7 @@ import dev.anhcraft.abm.system.managers.*;
 import dev.anhcraft.abm.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
+import dev.anhcraft.abm.tasks.DataLoadingTask;
 import dev.anhcraft.abm.tasks.DataSavingTask;
 import dev.anhcraft.abm.tasks.GameTask;
 import dev.anhcraft.abm.tasks.QueueTitleTask;
@@ -123,6 +124,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private SimpleDateFormat shortFormDate1;
     private SimpleDateFormat shortFormDate2;
     private SimpleDateFormat shortFormDate3;
+    private boolean syncDataTaskNeed;
 
     @Override
     public void onEnable() {
@@ -173,6 +175,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         taskHelper.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
+        if(syncDataTaskNeed)
+            taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
 
@@ -320,6 +324,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 ConfigurationSection dsp = c.getConfigurationSection("storage.mysql.datasource_properties");
                 String url = new StringBuilder("jdbc:mysql://").append(host).append(':').append(port).append('/').append(database).toString();
                 dataManager.initMySQLStorage(url, username, password, dsp);
+                syncDataTaskNeed = true;
                 break;
             }
         }
