@@ -19,23 +19,29 @@
  */
 package dev.anhcraft.abm.system.managers;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.storage.StorageType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.storage.Storage;
 import dev.anhcraft.abm.storage.handlers.FileStorage;
+import dev.anhcraft.abm.storage.handlers.MySQLStorage;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class DataManager extends BattleComponent {
     private final Map<OfflinePlayer, Storage> PLAYER_STORAGE = new HashMap<>();
     private Storage serverStorage;
     private StorageType storageType;
     private File dataDir;
+    private HikariDataSource dataSource;
 
     public DataManager(BattlePlugin plugin, StorageType storageType) {
         super(plugin);
@@ -45,6 +51,19 @@ public class DataManager extends BattleComponent {
     public void initFileStorage(File dataDir) {
         this.dataDir = dataDir;
         serverStorage = new Storage(new FileStorage(new File(dataDir, "server.abm")));
+    }
+
+    public void initMySQLStorage(String url, String user, String pass, ConfigurationSection dsc) {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url);
+        config.setUsername(user);
+        config.setPassword(pass);
+        if(dsc != null){
+            Set<String> keys = dsc.getKeys(true);
+            for(String k : keys) config.addDataSourceProperty(k, dsc.get(k));
+        }
+        dataSource = new HikariDataSource(config);
+        serverStorage = new Storage(new MySQLStorage(dataSource, "abm_server_"));
     }
 
     public void loadServerData(){
@@ -69,6 +88,10 @@ public class DataManager extends BattleComponent {
                 case FILE: {
                     File f = new File(dataDir, "player." + player.getUniqueId().toString() + ".abm");
                     PLAYER_STORAGE.put(player, provider = new Storage(new FileStorage(f)));
+                    break;
+                }
+                case MYSQL: {
+                    PLAYER_STORAGE.put(player, provider = new Storage(new MySQLStorage(dataSource, "abm_player_"+player.getUniqueId().toString().replace("-", "")+"_")));
                     break;
                 }
                 default:
@@ -98,5 +121,6 @@ public class DataManager extends BattleComponent {
         PLAYER_STORAGE.values().forEach(Storage::destroy);
         serverStorage.destroy();
         PLAYER_STORAGE.clear();
+        if(dataSource != null) dataSource.close();
     }
 }

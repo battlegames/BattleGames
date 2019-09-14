@@ -311,6 +311,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 dataManager.initFileStorage(f);
                 break;
             }
+            case MYSQL: {
+                String host = c.getString("storage.mysql.hostname");
+                int port = c.getInt("storage.mysql.port");
+                String database = c.getString("storage.mysql.database");
+                String username = c.getString("storage.mysql.username");
+                String password = c.getString("storage.mysql.password");
+                ConfigurationSection dsp = c.getConfigurationSection("storage.mysql.datasource_properties");
+                String url = new StringBuilder("jdbc:mysql://").append(host).append(':').append(port).append('/').append(database).toString();
+                dataManager.initMySQLStorage(url, username, password, dsp);
+                break;
+            }
         }
         dataManager.loadServerData();
 

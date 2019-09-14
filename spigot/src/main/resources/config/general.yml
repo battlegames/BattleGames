@@ -78,7 +78,7 @@ default_chat:
 
 # Storage settings
 storage:
-  # Available storage types: file
+  # Available storage types: file, mysql
   # [case-insensitive]
   type: file
 
@@ -86,6 +86,30 @@ storage:
   file:
     # The path to the directory where we store data
     data_path: ".battle"
+
+  # Configuration for MySQL storage
+  mysql:
+    # Hostname or IP
+    hostname: localhost
+
+    # The port which MySQL listens to
+    port: 3306
+
+    # The database where the data should store in
+    database: minecraft
+
+    # The username
+    username: root
+
+    # The password
+    password: ""
+
+    # External configuration for HikariCP's data source
+    datasource_properties:
+      prepStmtCacheSize: 250
+      prepStmtCacheSqlLimit: 2048
+      cachePrepStmts: true
+      useServerPrepStmts: true
 
 # Miscellaneous settings
 misc:
