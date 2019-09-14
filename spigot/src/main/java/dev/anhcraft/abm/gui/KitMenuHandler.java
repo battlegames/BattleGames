@@ -23,6 +23,7 @@ import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.inventory.ItemStorage;
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.entity.Player;
 
 import java.util.Date;
@@ -61,9 +62,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                         data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
-                                String msg = api.getChatManager().getFormattedMessage(event.getPlayer(), "kit.unavailable");
-                                msg = String.format(msg, api.formatLongFormDate(new Date(next)));
-                                event.getPlayer().sendMessage(msg);
+                                api.getChatManager().sendPlayer(event.getPlayer(), "kit.unavailable", ChatMessageType.CHAT, x -> String.format(x, api.formatLongFormDate(new Date(next))));
                                 event.getClickEvent().setCancelled(true);
                             }
                         }));
