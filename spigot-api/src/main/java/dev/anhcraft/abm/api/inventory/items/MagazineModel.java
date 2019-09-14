@@ -26,11 +26,12 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MagazineModel extends BattleItemModel implements Attachable {
-    private final Map<AmmoModel, Integer> ammunition = new HashMap<>();
+    private Map<AmmoModel, Integer> ammunition = new HashMap<>();
     private Skin skin;
 
     public MagazineModel(@NotNull String id, @NotNull ConfigurationSection conf) {
@@ -43,6 +44,7 @@ public class MagazineModel extends BattleItemModel implements Attachable {
         if(am != null){
             for(String a : am.getKeys(false)) ApiProvider.consume().getAmmoModel(a).ifPresent(ammo -> ammunition.put(ammo, am.getInt(a)));
         }
+        ammunition = Collections.unmodifiableMap(ammunition);
     }
 
     @Override

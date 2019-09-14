@@ -29,13 +29,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Kit {
-    private final Map<ItemType, List<String>> abmItems = new HashMap<>();
+    private Map<ItemType, List<String>> abmItems = new HashMap<>();
     private String id;
     private PreparedItem icon;
     private PreparedItem noAccessIcon;
@@ -75,6 +72,7 @@ public class Kit {
                 abmItems.put(type, ia.getStringList(s));
             }
         }
+        abmItems = Collections.unmodifiableMap(abmItems);
     }
 
     @NotNull

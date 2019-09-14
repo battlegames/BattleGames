@@ -30,6 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,8 +73,8 @@ public class Arena implements Informative {
 
         attrSection = conf.getConfigurationSection("attr");
         if(attrSection == null) attrSection = new YamlConfiguration();
-        endCommandWinners = conf.getStringList("end_commands.winners");
-        endCommandLosers = conf.getStringList("end_commands.losers");
+        endCommandWinners = Collections.unmodifiableList(conf.getStringList("end_commands.winners"));
+        endCommandLosers = Collections.unmodifiableList(conf.getStringList("end_commands.losers"));
         renderGuiOnDeath = conf.getBoolean("render_gui_on_death", true);
     }
 

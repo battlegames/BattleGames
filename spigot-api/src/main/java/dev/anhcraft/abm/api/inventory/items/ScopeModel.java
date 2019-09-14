@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ScopeModel extends BattleItemModel implements Attachable {
@@ -43,6 +44,7 @@ public class ScopeModel extends BattleItemModel implements Attachable {
             if(b) Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, id));
             return b;
         });
+        zoomLevels = Collections.unmodifiableList(zoomLevels);
     }
 
     @NotNull

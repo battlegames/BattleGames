@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -54,7 +55,7 @@ public class GunModel extends WeaponModel {
     private SoundRecord reloadEndSound;
     private Expression reloadTimeCalculator;
     private CustomBossBar reloadBar;
-    private final List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
+    private List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
 
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
@@ -121,6 +122,7 @@ public class GunModel extends WeaponModel {
             }
             sprayPattern.add(new Pair<>(x, y));
         });
+        sprayPattern = Collections.unmodifiableList(sprayPattern);
     }
 
     @Override

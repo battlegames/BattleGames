@@ -29,10 +29,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AmmoModel extends BattleItemModel implements Attachable {
-    private final List<Bullet> bullets = new ArrayList<>();
+    private List<Bullet> bullets = new ArrayList<>();
     private Skin skin;
 
     public AmmoModel(@NotNull String id, @NotNull ConfigurationSection conf) {
@@ -59,6 +60,7 @@ public class AmmoModel extends BattleItemModel implements Attachable {
                         bs.getDouble("particle.view_distance", 50)));
             }
         }
+        bullets = Collections.unmodifiableList(bullets);
     }
 
     @Override
