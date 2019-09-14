@@ -24,14 +24,20 @@ import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
+import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.LocationUtil;
+import dev.anhcraft.abm.utils.PlaceholderUtils;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 @CommandAlias("abm|b|battle")
@@ -64,6 +70,19 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.spawn")
     public void spawn(Player player){
         player.teleport(plugin.getServerData().getSpawnPoint());
+    }
+
+    @Subcommand("game list")
+    @CommandPermission("abm.game.list")
+    public void listGames(CommandSender sender){
+        Collection<Game> q = plugin.gameManager.getGames();
+        plugin.chatManager.send(sender, "game.list_header", ChatMessageType.CHAT, str -> String.format(str, Integer.toString(q.size())));
+        q.forEach(game -> {
+            InfoHolder holder = new InfoHolder("game_");
+            game.inform(holder);
+            Map<String, String> map = plugin.mapInfo(holder);
+            plugin.chatManager.send(sender, "game.list_section", ChatMessageType.CHAT, x -> PlaceholderUtils.formatInfo(x, map));
+        });
     }
 
     @Subcommand("arena menu")

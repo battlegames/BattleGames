@@ -34,6 +34,13 @@ arena:
   join_success: "&a%s joined the arena successfully!"
   quit_failed: "&cFailed to make %s quit the game"
   quit_success: "&a%s quit the game successfully!"
+game:
+  list_header: "&4&l--- All active games: (%s) ---"
+  list_section:
+    - "&eArena: &f{__arena_name__}"
+    - "&eMode: &f{__mode_name__}"
+    - "&eTime: &f{__game_current_time__}/{__arena_max_time__} ticks"
+    - "&ePlayers: &f{__game_player_count__}/{__arena_max_players__}"
 mode_dm:
   player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
