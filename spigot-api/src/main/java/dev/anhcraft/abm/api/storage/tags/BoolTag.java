@@ -26,6 +26,6 @@ public class BoolTag extends DataTag<Boolean> {
 
     @Override
     public int getId() {
-        return 2;
+        return BOOL;
     }
 }

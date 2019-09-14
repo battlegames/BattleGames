@@ -26,6 +26,6 @@ public class IntTag extends DataTag<Integer> {
 
     @Override
     public int getId() {
-        return 1;
+        return INT;
     }
 }

@@ -46,13 +46,13 @@ public class FileStorage extends StorageProvider {
 
     private DataTag readTag(int type, ByteArrayDataInput input) {
         switch (type){
-            case 1: return new IntTag(input.readInt());
-            case 2: return new BoolTag(input.readBoolean());
-            case 3: return new DoubleTag(input.readDouble());
-            case 4: return new StringTag(input.readUTF());
-            case 5: return new LongTag(input.readLong());
-            case 6: return new FloatTag(input.readFloat());
-            case 7: {
+            case DataTag.INT: return new IntTag(input.readInt());
+            case DataTag.BOOL: return new BoolTag(input.readBoolean());
+            case DataTag.DOUBLE: return new DoubleTag(input.readDouble());
+            case DataTag.STRING: return new StringTag(input.readUTF());
+            case DataTag.LONG: return new LongTag(input.readLong());
+            case DataTag.FLOAT: return new FloatTag(input.readFloat());
+            case DataTag.LIST: {
                 int size = input.readInt();
                 if(size > 0) {
                     int elemtype = input.readInt();
@@ -68,31 +68,31 @@ public class FileStorage extends StorageProvider {
 
     private void writeTag(int type, DataTag tag, ByteArrayDataOutput output) {
         switch (type){
-            case 1: {
+            case DataTag.INT: {
                 output.writeInt((Integer) tag.getValue());
                 break;
             }
-            case 2: {
+            case DataTag.BOOL: {
                 output.writeBoolean((Boolean) tag.getValue());
                 break;
             }
-            case 3: {
+            case DataTag.DOUBLE: {
                 output.writeDouble((Double) tag.getValue());
                 break;
             }
-            case 4: {
+            case DataTag.STRING: {
                 output.writeUTF((String) tag.getValue());
                 break;
             }
-            case 5: {
+            case DataTag.LONG: {
                 output.writeLong((Long) tag.getValue());
                 break;
             }
-            case 6: {
+            case DataTag.FLOAT: {
                 output.writeFloat((Float) tag.getValue());
                 break;
             }
-            case 7: {
+            case DataTag.LIST: {
                 List<DataTag> t = (List<DataTag>) tag.getValue();
                 output.writeInt(t.size());
                 if(!t.isEmpty()){

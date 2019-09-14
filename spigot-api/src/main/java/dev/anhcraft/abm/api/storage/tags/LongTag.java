@@ -26,6 +26,6 @@ public class LongTag extends DataTag<Long> {
 
     @Override
     public int getId() {
-        return 5;
+        return LONG;
     }
 }

@@ -20,6 +20,14 @@
 package dev.anhcraft.abm.api.storage.tags;
 
 public abstract class DataTag<T> {
+    public static final int INT = 1;
+    public static final int BOOL = 2;
+    public static final int DOUBLE = 3;
+    public static final int STRING = 4;
+    public static final int LONG = 5;
+    public static final int FLOAT = 6;
+    public static final int LIST = 7;
+
     private T value;
 
     public DataTag(T value) {

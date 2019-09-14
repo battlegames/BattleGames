@@ -26,6 +26,6 @@ public class DoubleTag extends DataTag<Double> {
 
     @Override
     public int getId() {
-        return 3;
+        return DOUBLE;
     }
 }

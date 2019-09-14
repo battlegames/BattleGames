@@ -26,6 +26,6 @@ public class FloatTag extends DataTag<Float> {
 
     @Override
     public int getId() {
-        return 6;
+        return FLOAT;
     }
 }

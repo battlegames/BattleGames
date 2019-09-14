@@ -28,6 +28,6 @@ public class ListTag<T extends DataTag> extends DataTag<List<T>> {
 
     @Override
     public int getId() {
-        return 7;
+        return LIST;
     }
 }

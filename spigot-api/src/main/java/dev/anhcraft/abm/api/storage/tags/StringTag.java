@@ -26,6 +26,6 @@ public class StringTag extends DataTag<String> {
 
     @Override
     public int getId() {
-        return 4;
+        return STRING;
     }
 }
