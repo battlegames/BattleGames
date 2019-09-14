@@ -19,13 +19,13 @@
  */
 package dev.anhcraft.abm.system.managers;
 
-import dev.anhcraft.craftkit.kits.abif.ABIF;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleGuiManager;
 import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -46,7 +46,7 @@ import java.util.*;
 public class GuiManager extends BattleComponent implements BattleGuiManager {
     private final Map<String, Gui> GUI = new HashMap<>();
     private final Map<String, GuiHandler> GUI_HANDLERS = new HashMap<>();
-    private final Map<Player, PlayerGui> PLAYER_GUI = new HashMap<>();
+    private final Map<UUID, PlayerGui> PLAYER_GUI = new HashMap<>();
 
     public GuiManager(BattlePlugin plugin) {
         super(plugin);
@@ -134,10 +134,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     @Override
     @NotNull public PlayerGui getPlayerGui(@NotNull Player player){
         Condition.argNotNull("player", player);
-        PlayerGui x = PLAYER_GUI.get(player);
-        if(x == null) {
-            PLAYER_GUI.put(player, x = new PlayerGui());
-        }
+        PlayerGui x = PLAYER_GUI.get(player.getUniqueId());
+        if(x == null) PLAYER_GUI.put(player.getUniqueId(), x = new PlayerGui());
         return x;
     }
 
@@ -289,7 +287,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     @Override
     public void destroyPlayerGui(@NotNull Player player){
         Condition.argNotNull("player", player);
-        PLAYER_GUI.remove(player);
+        PLAYER_GUI.remove(player.getUniqueId());
     }
 
     private ItemStack[] renderItems(Player player, BattleGui bg){
