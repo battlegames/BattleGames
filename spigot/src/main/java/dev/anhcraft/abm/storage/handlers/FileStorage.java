@@ -44,8 +44,7 @@ public class FileStorage extends StorageProvider {
         return file;
     }
 
-    @Override
-    protected DataTag readTag(int type, ByteArrayDataInput input) {
+    private DataTag readTag(int type, ByteArrayDataInput input) {
         switch (type){
             case 1: return new IntTag(input.readInt());
             case 2: return new BoolTag(input.readBoolean());
@@ -67,8 +66,7 @@ public class FileStorage extends StorageProvider {
         }
     }
 
-    @Override
-    protected void writeTag(int type, DataTag tag, ByteArrayDataOutput output) {
+    private void writeTag(int type, DataTag tag, ByteArrayDataOutput output) {
         switch (type){
             case 1: {
                 output.writeInt((Integer) tag.getValue());
