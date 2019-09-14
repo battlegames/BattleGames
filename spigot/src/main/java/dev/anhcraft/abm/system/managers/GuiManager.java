@@ -180,6 +180,15 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         }
     }
 
+    public boolean validateButton(Player p, int slot, boolean top) {
+        PlayerGui pg = getPlayerGui(p);
+        BattleGui bg = top ? pg.getTopGui() : pg.getBottomGui();
+        if(bg == null) return false;
+        BattleGuiSlot[] x = bg.getSlots();
+        if (slot < x.length) return x[slot] != null;
+        return false;
+    }
+
     private BattleGui setupGui(Player player, PlayerGui pg, Gui gui){
         BattleGuiSlot[] slots = new BattleGuiSlot[gui.getSize()];
         for(int i = 0; i < gui.getSize(); i++){
