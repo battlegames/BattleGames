@@ -114,14 +114,12 @@ public class FileStorage extends StorageProvider {
                 byte[] bytes = ByteStreams.toByteArray(fis);
                 fis.close();
                 if(bytes.length > 0) {
-                    getData().clear();
-
                     ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
                     int size = in.readInt();
                     for (int i = 0; i < size; i++) {
                         String name = in.readUTF();
                         int type = in.readInt();
-                        getData().put(name, readTag(type, in));
+                        getData().fastPut(name, readTag(type, in));
                     }
                     return true;
                 }
@@ -133,7 +131,7 @@ public class FileStorage extends StorageProvider {
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeInt(getData().size());
         getData().forEach(new BiConsumer<String, DataTag>() {
@@ -150,6 +148,8 @@ public class FileStorage extends StorageProvider {
             Files.write(out.toByteArray(), file);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }

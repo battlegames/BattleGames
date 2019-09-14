@@ -35,8 +35,8 @@ public class Storage extends StorageProvider {
     }
 
     @Override
-    public void save() {
-        handler.save();
+    public boolean save() {
+        return handler.save();
     }
 
     @Override
