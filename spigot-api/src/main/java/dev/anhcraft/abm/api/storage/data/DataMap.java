@@ -22,17 +22,37 @@ package dev.anhcraft.abm.api.storage.data;
 import dev.anhcraft.abm.api.storage.tags.*;
 import org.apache.commons.lang.ClassUtils;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
 
-public class DataMap<T> extends HashMap<T, DataTag> {
+public class DataMap<T> {
+    private Map<T, DataTag> map = new HashMap<>();
+    private AtomicBoolean changed = new AtomicBoolean();
+
     @SuppressWarnings("unchecked")
     public <C> C readTag(T key, Class<? extends C> clazz){
         clazz = ClassUtils.primitiveToWrapper(clazz);
-        DataTag q = get(key);
+        DataTag q = map.get(key);
         if(q == null) return null;
         Object a = q.getValue();
         return clazz.isAssignableFrom(a.getClass()) ? (C) a : null;
+    }
+
+    public void forEach(BiConsumer<T, DataTag> consumer){
+        map.forEach(consumer);
+    }
+
+    public void put(T key, DataTag tag){
+        if(!Objects.equals(tag, map.put(key, tag))) changed.set(true);
+    }
+
+    /**
+     * @deprecated INTERNAL ONLY!
+     */
+    @Deprecated
+    public void fastPut(T key, DataTag tag){
+        map.put(key, tag);
     }
 
     public void writeTag(T key, boolean value){
@@ -61,5 +81,17 @@ public class DataMap<T> extends HashMap<T, DataTag> {
 
     public <C extends DataTag> void writeTag(T key, List<C> value){
         put(key, new ListTag<>(value));
+    }
+
+    public AtomicBoolean getChanged() {
+        return changed;
+    }
+
+    public int size() {
+        return map.size();
+    }
+
+    public Set<Map.Entry<T, DataTag>> entrySet() {
+        return map.entrySet();
     }
 }
