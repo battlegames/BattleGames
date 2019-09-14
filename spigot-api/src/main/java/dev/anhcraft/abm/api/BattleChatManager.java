@@ -20,6 +20,7 @@
 package dev.anhcraft.abm.api;
 
 import net.md_5.bungee.api.ChatMessageType;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.function.Function;
@@ -27,6 +28,27 @@ import java.util.function.UnaryOperator;
 
 public interface BattleChatManager {
     String getFormattedMessage(Player target, String localePath);
+
+    default void send(CommandSender commandSender, String localePath){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, UnaryOperator.identity());
+        else
+            sendConsole(localePath);
+    }
+
+    default void send(CommandSender commandSender, String localePath, ChatMessageType type){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, type, UnaryOperator.identity());
+        else
+            sendConsole(localePath);
+    }
+
+    default void send(CommandSender commandSender, String localePath, ChatMessageType type, Function<String, String> x){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, type, x);
+        else
+            sendConsole(localePath, x);
+    }
 
     default void sendPlayer(Player target, String localePath){
         sendPlayer(target, localePath, ChatMessageType.CHAT, UnaryOperator.identity());
