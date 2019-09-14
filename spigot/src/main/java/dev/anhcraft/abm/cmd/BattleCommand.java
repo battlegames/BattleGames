@@ -20,6 +20,7 @@
 package dev.anhcraft.abm.cmd;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
@@ -45,10 +46,10 @@ public class BattleCommand extends BaseCommand{
         return plugin;
     }
 
-    @Default
     @CatchUnknown
     @HelpCommand
-    public void help(CommandSender sender){
+    public void help(CommandSender sender, CommandHelp help){
+        help.showHelp();
     }
 
     @Subcommand("setspawn")
@@ -73,38 +74,32 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("arena join")
     @CommandPermission("abm.arena.join")
-    public void join(Player player, String arenaName){
-        Optional<Arena> arena = plugin.getArena(arenaName);
-        if(arena.isPresent()) {
-            if(plugin.gameManager.join(player, arena.get()))
-                plugin.chatManager.sendPlayer(player, "arena.join_success");
+    @CommandCompletion("@arena")
+    public void join(Player player, String arena, @co.aikar.commands.annotation.Optional Player target){
+        Player t = (target == null) ? player : target;
+        Optional<Arena> ao = plugin.getArena(arena);
+        if(ao.isPresent()) {
+            if(plugin.gameManager.join(t, ao.get()))
+                plugin.chatManager.sendPlayer(player, "arena.join_success", str ->
+                        String.format(str, t.getName()));
             else
-                plugin.chatManager.sendPlayer(player, "arena.join_failed");
+                plugin.chatManager.sendPlayer(player, "arena.join_failed", str ->
+                        String.format(str, t.getName()));
         }
         else plugin.chatManager.sendPlayer(player, "arena.not_found");
     }
 
-    @Subcommand("arena forcejoin")
-    @CommandPermission("abm.arena.forcejoin")
-    public void forceJoin(Player s, Player p, String arenaName){
-        Optional<Arena> arena = plugin.getArena(arenaName);
-        if(arena.isPresent()) {
-            if(plugin.gameManager.forceJoin(p, arena.get()))
-                plugin.chatManager.sendPlayer(p, "arena.join_success");
-            else
-                plugin.chatManager.sendPlayer(p, "arena.join_failed");
-        }
-        else plugin.chatManager.sendPlayer(s, "arena.not_found");
-    }
-
     @Subcommand("arena quit")
     @CommandPermission("abm.arena.quit")
+    @CommandCompletion("@players")
     public void quit(Player player, @co.aikar.commands.annotation.Optional Player target){
-        target = (target == null) ? player : target;
-        if(plugin.gameManager.quit(target))
-            plugin.chatManager.sendPlayer(player, "arena.quit_success");
+        Player t = (target == null) ? player : target;
+        if(plugin.gameManager.quit(t))
+            plugin.chatManager.sendPlayer(player, "arena.quit_success", str ->
+                    String.format(str, t.getName()));
         else
-            plugin.chatManager.sendPlayer(player, "arena.quit_failed");
+            plugin.chatManager.sendPlayer(player, "arena.quit_failed", str ->
+                    String.format(str, t.getName()));
     }
 
     @Subcommand("tool position")
@@ -119,53 +114,57 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("give gun")
     @CommandPermission("abm.give.gun")
-    public void giveGun(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
-        r = (r == null ? player : r);
-        Optional<GunModel> gun = plugin.getGunModel(s);
+    @CommandCompletion("@gun @players")
+    public void giveGun(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+        target = (target == null ? player : target);
+        Optional<GunModel> gun = plugin.getGunModel(id);
         if(gun.isPresent()) {
-            plugin.getPlayerData(r).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.GUN).put(s));
-            String receiver = r.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
+            plugin.getPlayerData(target).ifPresent(playerData ->
+                    playerData.getInventory().getStorage(ItemType.GUN).put(id));
+            String receiver = target.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
     @Subcommand("give magazine")
     @CommandPermission("abm.give.magazine")
-    public void giveMagazine(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
-        r = (r == null ? player : r);
-        Optional<MagazineModel> mag = plugin.getMagazineModel(s);
+    @CommandCompletion("@magazine @players")
+    public void giveMagazine(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+        target = (target == null ? player : target);
+        Optional<MagazineModel> mag = plugin.getMagazineModel(id);
         if(mag.isPresent()) {
-            plugin.getPlayerData(r).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.MAGAZINE).put(s));
-            String receiver = r.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
+            plugin.getPlayerData(target).ifPresent(playerData ->
+                    playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id));
+            String receiver = target.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
     @Subcommand("give ammo")
     @CommandPermission("abm.give.ammo")
-    public void giveAmmo(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
-        r = (r == null ? player : r);
-        Optional<AmmoModel> ammo = plugin.getAmmoModel(s);
+    @CommandCompletion("@ammo @players")
+    public void giveAmmo(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+        target = (target == null ? player : target);
+        Optional<AmmoModel> ammo = plugin.getAmmoModel(id);
         if(ammo.isPresent()) {
-            plugin.getPlayerData(r).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.AMMO).put(s));
-            String receiver = r.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
+            plugin.getPlayerData(target).ifPresent(playerData ->
+                    playerData.getInventory().getStorage(ItemType.AMMO).put(id));
+            String receiver = target.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
     @Subcommand("give scope")
     @CommandPermission("abm.give.scope")
-    public void giveScope(Player player, String s, @co.aikar.commands.annotation.Optional Player r){
-        r = (r == null ? player : r);
-        Optional<ScopeModel> sc = plugin.getScopeModel(s);
+    @CommandCompletion("@scope @players")
+    public void giveScope(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+        target = (target == null ? player : target);
+        Optional<ScopeModel> sc = plugin.getScopeModel(id);
         if(sc.isPresent()) {
-            plugin.getPlayerData(r).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.SCOPE).put(s));
-            String receiver = r.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, s, receiver));
+            plugin.getPlayerData(target).ifPresent(playerData ->
+                    playerData.getInventory().getStorage(ItemType.SCOPE).put(id));
+            String receiver = target.getName();
+            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 

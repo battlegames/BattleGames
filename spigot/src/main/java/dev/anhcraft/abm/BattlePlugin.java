@@ -19,6 +19,9 @@
  */
 package dev.anhcraft.abm;
 
+import co.aikar.commands.BukkitCommandCompletionContext;
+import co.aikar.commands.CommandCompletions;
+import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.io.ByteStreams;
 import dev.anhcraft.abm.api.*;
@@ -181,7 +184,38 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
 
         PaperCommandManager manager = new PaperCommandManager(this);
+        manager.enableUnstableAPI("help");
         manager.registerCommand(new BattleCommand(this));
+        manager.getCommandCompletions().registerAsyncCompletion("ammo", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return listAmmoModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("gun", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return listGunModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("magazine", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return listMagazineModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("scope", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return listScopes().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("arena", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return listArenas().stream().map(Arena::getId).collect(Collectors.toList());
+            }
+        });
     }
 
     private void injectApiProvider() {
