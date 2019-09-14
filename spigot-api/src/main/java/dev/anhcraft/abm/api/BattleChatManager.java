@@ -24,12 +24,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface BattleChatManager {
-    List<String> getFormattedMessages(String localePath);
-    List<String> getFormattedMessages(Player target, String localePath);
+    default List<String> getFormattedMessages(String localePath){
+        return getFormattedMessages(localePath, UnaryOperator.identity());
+    }
+
+    List<String> getFormattedMessages(String localePath, UnaryOperator<String> x);
+
+    default List<String> getFormattedMessages(Player target, String localePath){
+        return getFormattedMessages(target, localePath, UnaryOperator.identity());
+    }
+
+    List<String> getFormattedMessages(Player target, String localePath, UnaryOperator<String> x);
 
     default void send(CommandSender commandSender, String localePath){
         if(commandSender instanceof Player)
@@ -45,7 +53,7 @@ public interface BattleChatManager {
             sendConsole(localePath);
     }
 
-    default void send(CommandSender commandSender, String localePath, ChatMessageType type, Function<String, String> x){
+    default void send(CommandSender commandSender, String localePath, ChatMessageType type, UnaryOperator<String> x){
         if(commandSender instanceof Player)
             sendPlayer((Player) commandSender, localePath, type, x);
         else
@@ -60,15 +68,15 @@ public interface BattleChatManager {
         sendPlayer(target, localePath, type, UnaryOperator.identity());
     }
 
-    default void sendPlayer(Player target, String localePath, Function<String, String> x){
+    default void sendPlayer(Player target, String localePath, UnaryOperator<String> x){
         sendPlayer(target, localePath, ChatMessageType.CHAT, x);
     }
 
-    void sendPlayer(Player target, String localePath, ChatMessageType type, Function<String, String> x);
+    void sendPlayer(Player target, String localePath, ChatMessageType type, UnaryOperator<String> x);
 
     default void sendConsole(String localePath){
         sendConsole(localePath, UnaryOperator.identity());
     }
 
-    void sendConsole(String localePath, Function<String, String> x);
+    void sendConsole(String localePath, UnaryOperator<String> x);
 }

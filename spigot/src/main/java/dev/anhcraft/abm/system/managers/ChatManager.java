@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public class ChatManager extends BattleComponent implements BattleChatManager {
@@ -72,44 +73,41 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
     }
 
     @Override
-    public List<String> getFormattedMessages(String localePath) {
+    public List<String> getFormattedMessages(String localePath, UnaryOperator<String> x) {
         Object s = plugin.getLocaleConf().get(localePath);
         if(s == null) {
             plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
             return Collections.singletonList("null");
         }
         if(s instanceof Collection)
-            return ((Collection<?>) s).stream().map((Function<Object, String>) String::valueOf).collect(Collectors.toList());
+            return ((Collection<?>) s).stream().map((Function<Object, String>) o -> x.apply(String.valueOf(o))).collect(Collectors.toList());
         else
-            return Collections.singletonList(String.valueOf(s));
+            return Collections.singletonList(x.apply(String.valueOf(s)));
     }
 
     @Override
-    public List<String> getFormattedMessages(Player target, String localePath){
+    public List<String> getFormattedMessages(Player target, String localePath, UnaryOperator<String> x){
         Object s = plugin.getLocaleConf().get(localePath);
         if(s == null) {
             plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
             return Collections.singletonList("null");
         }
         if(s instanceof Collection)
-            return PlaceholderUtils.formatPAPI(target, ((Collection<?>) s).stream().map((Function<Object, String>) String::valueOf).collect(Collectors.toList()));
+            return PlaceholderUtils.formatPAPI(target, ((Collection<?>) s).stream().map((Function<Object, String>) o -> x.apply(String.valueOf(o))).collect(Collectors.toList()));
         else
-            return Collections.singletonList(PlaceholderUtils.formatPAPI(target, String.valueOf(s)));
+            return Collections.singletonList(PlaceholderUtils.formatPAPI(target, x.apply(String.valueOf(s))));
     }
 
     @Override
-    public void sendPlayer(Player target, String localePath, ChatMessageType type, Function<String, String> x){
-        getFormattedMessages(target, localePath).forEach(s -> {
-            s = x.apply(s);
+    public void sendPlayer(Player target, String localePath, ChatMessageType type, UnaryOperator<String> x){
+        getFormattedMessages(target, localePath, x).forEach(s -> {
             TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
             target.spigot().sendMessage(type, c);
         });
     }
 
     @Override
-    public void sendConsole(String localePath, Function<String, String> x){
-        getFormattedMessages(localePath).forEach(s -> {
-            Bukkit.getConsoleSender().sendMessage(x.apply(s));
-        });
+    public void sendConsole(String localePath, UnaryOperator<String> x){
+        getFormattedMessages(localePath, x).forEach(s -> Bukkit.getConsoleSender().sendMessage(s));
     }
 }

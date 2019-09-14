@@ -53,7 +53,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
@@ -108,7 +108,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         });
     }
 
-    void broadcast(Game game, String localePath, Function<String, String> x){
+    void broadcast(Game game, String localePath, UnaryOperator<String> x){
         game.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath), x);
         });
@@ -120,7 +120,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         });
     }
 
-    void broadcast(Game game, String localePath, ChatMessageType type, Function<String, String> x){
+    void broadcast(Game game, String localePath, ChatMessageType type, UnaryOperator<String> x){
         game.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath), type, x);
         });
@@ -132,13 +132,13 @@ public abstract class ModeController extends BattleComponent implements Listener
         });
     }
 
-    void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
+    void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
         game.getPlayers().keySet().forEach(player -> {
             plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
         });
     }
 
-    void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, Function<String, String> x){
+    void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
         plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
     }
 
