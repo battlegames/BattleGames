@@ -56,9 +56,9 @@ public class DataManager extends BattleComponent {
 
     public void saveServerData(){
         if(serverStorage != null) {
-            serverStorage.getData().clear();
             plugin.getServerData().write(serverStorage.getData());
-            serverStorage.save();
+            if(serverStorage.getData().getChanged().get() && serverStorage.save())
+                serverStorage.getData().getChanged().set(false);
         }
     }
 
@@ -88,9 +88,9 @@ public class DataManager extends BattleComponent {
     public void savePlayerData(OfflinePlayer player){
         plugin.getPlayerData(player).ifPresent(playerData -> {
             Storage provider = PLAYER_STORAGE.get(player);
-            provider.getData().clear();
             playerData.write(provider.getData());
-            provider.save();
+            if(provider.getData().getChanged().get() && provider.save())
+                provider.getData().getChanged().set(false);
         });
     }
 
