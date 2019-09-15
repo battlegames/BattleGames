@@ -23,7 +23,6 @@ import co.aikar.commands.BukkitCommandCompletionContext;
 import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
-import com.google.common.io.ByteStreams;
 import dev.anhcraft.abm.api.*;
 import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.api.gui.Gui;
@@ -53,7 +52,9 @@ import dev.anhcraft.abm.tasks.QueueTitleTask;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
+import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
 import dev.anhcraft.jvmkit.utils.FileUtil;
+import dev.anhcraft.jvmkit.utils.IOUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
@@ -128,6 +129,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private SimpleDateFormat shortFormDate2;
     private SimpleDateFormat shortFormDate3;
     private boolean syncDataTaskNeed;
+    private File configFolder = getDataFolder();
+    private String remoteConfigUrl;
 
     @Override
     public void onEnable() {
@@ -139,9 +142,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         }
         if (!VaultApi.init()) exit("Failed to hook to Vault");
         getLogger().info("Consider to donate me if you think ABM is awesome <3");
-        localeDir = new File(getDataFolder(), "locale");
-        localeDir.mkdirs();
-        new File(getDataFolder(), "items").mkdir();
+        getDataFolder().mkdir();
 
         initConfigFiles();
         injectApiProvider();
@@ -156,7 +157,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         gameManager = new GameManager(this);
         HANDLERS.put(GunHandler.class, new GunHandler(this));
 
-        initSystem(CONFIG[0]);
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
         initMode(CONFIG[3]);
@@ -307,19 +307,36 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
-        File f = new File(getDataFolder(), fp);
+        if(remoteConfigUrl != null){
+            String url = String.format(remoteConfigUrl, fp);
+            getLogger().info("Downloading config from "+url);
+            HTTPConnectionHelper c = new HTTPConnectionHelper(url)
+                    .setProperty("User-Agent", HTTPConnectionHelper.USER_AGENT_CHROME)
+                    .connect();
+            byte[] bytes = c.read();
+            try {
+                c.getInput().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
+            return YamlConfiguration.loadConfiguration(reader);
+        }
+        File f = new File(configFolder, fp);
+        getLogger().info("Loading config file from "+f.getAbsolutePath());
         try {
             if(f.exists()) return YamlConfiguration.loadConfiguration(f);
             else if(f.createNewFile()) {
+                getLogger().info("Creating new file at "+f.getAbsolutePath());
                 InputStream in = getResource("config/"+cp);
-                byte[] bytes = ByteStreams.toByteArray(in);
+                byte[] bytes = IOUtil.toByteArray(in, FileUtil.DEFAULT_BUFF_SIZE);
                 in.close();
                 FileUtil.write(f, bytes);
                 Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
                 return YamlConfiguration.loadConfiguration(reader);
-            }
+            } else exit("Failed to create file: "+f.getAbsolutePath());
         } catch (IOException e) {
-            exit("Failed to load file: "+f.getPath());
+            exit("Failed to load file: "+f.getAbsolutePath());
             e.printStackTrace();
         }
         return null;
@@ -332,10 +349,30 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             String cp = s[0];
             if(s.length == 2) cp = s[1];
             CONFIG[i] = loadConfigFile(fp, cp);
+            if(i == 0) initSystem(CONFIG[0]);
         }
     }
 
     private void initSystem(FileConfiguration c) {
+        boolean remoteConfig = c.getBoolean("remote_config.enabled");
+        if(remoteConfig){
+            remoteConfigUrl = c.getString("remote_config.url");
+            if(remoteConfigUrl == null) getLogger().warning("Remove config url is not defined");
+            else return;
+        }
+        String cf = c.getString("config_folder");
+        if(cf != null && !cf.isEmpty()){
+            File file = new File(cf);
+            if(file.exists()){
+                if(file.isDirectory()) {
+                    configFolder = file;
+                    getLogger().info("Now using defined config folder: "+file.getAbsoluteFile());
+                }
+                else getLogger().warning("Config folder is not an directory");
+            } else file.mkdir();
+            new File(file, "locale").mkdir();
+            new File(file, "items").mkdir();
+        }
         // TODO check and upgrade db here
     }
 

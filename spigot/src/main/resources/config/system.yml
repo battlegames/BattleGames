@@ -1,6 +1,28 @@
 # This configuration is a part of ABM
-# WARNING: THIS IS THE SYSTEM FILE
-# DO NOT TOUCH ANYTHING!
+
+# Here you can specify the path to the configuration folder which contains
+# general.yml, arenas.yml, locale files, etc (except this file).
+# - If you are going to host multiple Battle servers, this option should be
+# used to share the same configuration together.
+# - If you are hosting files on the cloud, check out the remote config feature.
+# - Leave blank to use the default
+# [optional]
+config_folder: ""
+
+# Remote configuration section
+# Allows you to host the configuration files (except this file) on the cloud
+# or in another machine and download them every time this plugin is enabled.
+remote_config:
+  # Enabled this feature or not?
+  # [optional]
+  enabled: false
+
+  # The URL
+  # Use %s to replace the file name (e.g: arenas.yml, kits.yml, gui.yml, etc)
+  # [required]
+  url: "http://localhost/abm/config/%s"
+
+# DON'T TOUCH ANYTHING BELOW!
 config_version: ${config.version}
 storage_version: ${storage.version}
 plugin_version: ${project.version}
