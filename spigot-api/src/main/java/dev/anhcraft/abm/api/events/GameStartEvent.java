@@ -20,20 +20,21 @@
 package dev.anhcraft.abm.api.events;
 
 import dev.anhcraft.abm.api.game.Game;
-import org.bukkit.event.Event;
+import dev.anhcraft.abm.api.game.LocalGame;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class GameStartEvent extends Event {
+public class GameStartEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
-    private Game game;
 
-    public GameStartEvent(Game game) {
-        this.game = game;
+    public GameStartEvent(@NotNull Game game) {
+        super(game);
     }
 
-    public Game getGame() {
-        return game;
+    @Override
+    @NotNull
+    public LocalGame getGame() {
+        return (LocalGame) game;
     }
 
     @Override

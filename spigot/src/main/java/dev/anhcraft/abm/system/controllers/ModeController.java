@@ -23,7 +23,7 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleModeController;
-import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.AmmoModel;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
@@ -72,14 +72,14 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onDeath(PlayerDeathEvent event, Game game){
+    public void onDeath(PlayerDeathEvent event, LocalGame localGame){
         plugin.taskHelper.newTask(() -> {
             event.getEntity().spigot().respawn();
         });
     }
 
     @Override
-    public void onSwapHand(PlayerSwapHandItemsEvent event, Game game){
+    public void onSwapHand(PlayerSwapHandItemsEvent event, LocalGame localGame){
         BattleItem item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
         if(item instanceof Gun){
             Gun gun = (Gun) item;
@@ -89,51 +89,51 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onDropItem(PlayerDropItemEvent event, Game game){
+    public void onDropItem(PlayerDropItemEvent event, LocalGame localGame){
         BattleItem item = plugin.itemManager.read(event.getItemDrop().getItemStack());
         if(item != null) event.setCancelled(true);
     }
 
     @Override
-    public void onClickInventory(InventoryClickEvent event, Game game, Player player){
+    public void onClickInventory(InventoryClickEvent event, LocalGame localGame, Player player){
         if(event.getClickedInventory() instanceof PlayerInventory){
             BattleItem item = plugin.itemManager.read(event.getCurrentItem());
             if(item != null) event.setCancelled(true);
         }
     }
 
-    void broadcast(Game game, String localePath){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcast(LocalGame localGame, String localePath){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath));
         });
     }
 
-    void broadcast(Game game, String localePath, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcast(LocalGame localGame, String localePath, UnaryOperator<String> x){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath), x);
         });
     }
 
-    void broadcast(Game game, String localePath, ChatMessageType type){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcast(LocalGame localGame, String localePath, ChatMessageType type){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath), type);
         });
     }
 
-    void broadcast(Game game, String localePath, ChatMessageType type, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcast(LocalGame localGame, String localePath, ChatMessageType type, UnaryOperator<String> x){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.chatManager.sendPlayer(player, blp(localePath), type, x);
         });
     }
 
-    void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcastTitle(LocalGame localGame, String titleLocalePath, String subtitleLocalePath){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath));
         });
     }
 
-    void broadcastTitle(Game game, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
+    void broadcastTitle(LocalGame localGame, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
+        localGame.getPlayers().keySet().forEach(player -> {
             plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
         });
     }
@@ -142,51 +142,51 @@ public abstract class ModeController extends BattleComponent implements Listener
         plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
     }
 
-    void trackTask(Game game, String id, int task){
-        RUNNING_TASKS.put(game.getArena().getId()+id, task);
+    void trackTask(LocalGame localGame, String id, int task){
+        RUNNING_TASKS.put(localGame.getArena().getId()+id, task);
     }
 
-    boolean hasTask(Game game, String id){
-        return RUNNING_TASKS.containsKey(game.getArena().getId()+id);
+    boolean hasTask(LocalGame localGame, String id){
+        return RUNNING_TASKS.containsKey(localGame.getArena().getId()+id);
     }
 
-    void cancelTask(Game game, String id){
-        Integer x = RUNNING_TASKS.remove(game.getArena().getId()+id);
+    void cancelTask(LocalGame localGame, String id){
+        Integer x = RUNNING_TASKS.remove(localGame.getArena().getId()+id);
         if(x != null) plugin.taskHelper.cancelTask(x);
     }
 
-    void cancelAllTasks(Game game){
+    void cancelAllTasks(LocalGame localGame){
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
-                .filter(e -> e.getKey().startsWith(game.getArena().getId()))
+                .filter(e -> e.getKey().startsWith(localGame.getArena().getId()))
                 .collect(Collectors.toList());
         x.forEach(e -> plugin.taskHelper.cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
-    void playSound(Game game, Sound sound){
-        game.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
+    void playSound(LocalGame localGame, Sound sound){
+        localGame.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
     }
 
-    void playSound(Game game, String sound){
-        game.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
+    void playSound(LocalGame localGame, String sound){
+        localGame.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
     }
 
     @Nullable
-    CooldownMap getCooldownMap(Game game, String id){
-        return COOLDOWN.get(game.getArena().getId()+id);
+    CooldownMap getCooldownMap(LocalGame localGame, String id){
+        return COOLDOWN.get(localGame.getArena().getId()+id);
     }
 
     void clearCooldown(){
         COOLDOWN.clear();
     }
 
-    void performCooldownMap(Game game, String id, Consumer<CooldownMap> ifPresent){
-        String k = game.getArena().getId()+id;
+    void performCooldownMap(LocalGame localGame, String id, Consumer<CooldownMap> ifPresent){
+        String k = localGame.getArena().getId()+id;
         CooldownMap m = COOLDOWN.get(k);
         if(m != null) ifPresent.accept(m);
     }
 
-    void performCooldownMap(Game game, String id, Consumer<CooldownMap> ifPresent, Callable<CooldownMap> otherwise){
-        String k = game.getArena().getId()+id;
+    void performCooldownMap(LocalGame localGame, String id, Consumer<CooldownMap> ifPresent, Callable<CooldownMap> otherwise){
+        String k = localGame.getArena().getId()+id;
         CooldownMap m = COOLDOWN.get(k);
         if(m == null) {
             try {

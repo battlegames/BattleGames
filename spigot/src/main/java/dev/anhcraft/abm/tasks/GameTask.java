@@ -23,6 +23,7 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.GamePhase;
+import dev.anhcraft.abm.api.game.LocalGame;
 
 public class GameTask extends BattleComponent implements Runnable {
     public GameTask(BattlePlugin plugin) {
@@ -32,12 +33,14 @@ public class GameTask extends BattleComponent implements Runnable {
     @Override
     public void run() {
         plugin.gameManager.getGames().forEach(game -> {
-            BattleModeController mc = game.getMode().getController();
-            if(mc != null) mc.onTask(game);
+            if(game.isLocal()) {
+                LocalGame localGame = (LocalGame) game;
+                BattleModeController mc = localGame.getMode().getController();
+                if (mc != null) mc.onTask(localGame);
 
-            if(game.getPhase() == GamePhase.PLAYING &&
-                    game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
-                game.end();
+                if (localGame.getPhase() == GamePhase.PLAYING && localGame.getArena().getMaxTime() <= localGame.getCurrentTime().getAndIncrement()) {
+                    localGame.end();
+                }
             }
         });
     }

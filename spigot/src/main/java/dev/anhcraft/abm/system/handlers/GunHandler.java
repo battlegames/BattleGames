@@ -23,7 +23,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.entity.Bullet;
 import dev.anhcraft.abm.api.entity.BulletEntity;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Skin;
@@ -137,8 +137,8 @@ public class GunHandler extends Handler {
         return false;
     }
 
-    public boolean handleZoomIn(Game game, Player player, Gun gunItem){
-        ModeController mc = (ModeController) game.getMode().getController();
+    public boolean handleZoomIn(LocalGame localGame, Player player, Gun gunItem){
+        ModeController mc = (ModeController) localGame.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
@@ -174,11 +174,11 @@ public class GunHandler extends Handler {
         return true;
     }
 
-    public boolean shoot(Game game, Player player, Gun gunItem){
+    public boolean shoot(LocalGame localGame, Player player, Gun gunItem){
         Optional<GunModel> gmo = gunItem.getModel();
         if(!gmo.isPresent()) return false;
         GunModel gm = gmo.get();
-        ModeController mc = (ModeController) game.getMode().getController();
+        ModeController mc = (ModeController) localGame.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
@@ -235,7 +235,7 @@ public class GunHandler extends Handler {
                          LivingEntity ve = (LivingEntity) e;
                          DamageReport dr = new DamageReport(player, b.getDamage());
                          dr.setHeadshotDamage(isHeadShot(entity.getLocation(), ve));
-                         PlayerDamageEvent event = new PlayerDamageEvent(game, dr, ve, gunItem);
+                         PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
                          Bukkit.getPluginManager().callEvent(event);
                          if(event.isCancelled()) return;
 

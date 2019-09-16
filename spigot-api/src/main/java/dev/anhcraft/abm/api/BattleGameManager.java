@@ -22,19 +22,22 @@ package dev.anhcraft.abm.api;
 import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.game.LocalGame;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface BattleGameManager {
     @NotNull Optional<GamePlayer> getGamePlayer(@NotNull Player player);
-    @NotNull Optional<Game> getGame(@NotNull Player player);
+    @NotNull Optional<LocalGame> getGame(@NotNull Player player);
+    @NotNull Optional<Game> getGame(@NotNull UUID playerId);
     @NotNull Optional<Game> getGame(@NotNull Arena arena);
     boolean join(@NotNull Player player, @NotNull Arena arena);
     boolean forceJoin(@NotNull Player player, @NotNull Arena arena);
     boolean quit(@NotNull Player player);
-    void destroy(@NotNull Game game);
+    void destroy(@NotNull LocalGame localGame);
     @NotNull Collection<Game> getGames();
 }

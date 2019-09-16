@@ -42,7 +42,7 @@ import org.bukkit.metadata.MetadataValue;
 import java.util.*;
 
 public class CTFController extends TeamDeathmatchController {
-    private final Multimap<Game, TeamFlag<ABTeam>> FLAG = LinkedHashMultimap.create();
+    private final Multimap<LocalGame, TeamFlag<ABTeam>> FLAG = LinkedHashMultimap.create();
 
     public CTFController(BattlePlugin plugin) {
         super(plugin, Mode.CTF);
@@ -77,11 +77,11 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
-    protected void play(Game game) {
-        super.play(game);
+    protected void play(LocalGame localGame) {
+        super.play(localGame);
 
         plugin.taskHelper.newTask(() -> {
-            ConfigurationSection sec = game.getArena().getAttributes().getConfigurationSection("flags");
+            ConfigurationSection sec = localGame.getArena().getAttributes().getConfigurationSection("flags");
             if(sec != null){
                 int i = 0;
                 Set<String> keys = sec.getKeys(false);
@@ -108,21 +108,21 @@ public class CTFController extends TeamDeathmatchController {
                     if(startCaptureSound != null) flag.setCaptureStartSound(new SoundRecord(startCaptureSound));
                     String stopCaptureSound = sec.getString(k+".stop_capture_sound");
                     if(stopCaptureSound != null) flag.setCaptureStopSound(new SoundRecord(stopCaptureSound));
-                    FLAG.put(game, flag);
+                    FLAG.put(localGame, flag);
                 }
             }
         });
     }
 
-    private void startOccupyFlag(Game game, TeamFlag<ABTeam> flag, Player occupier){
-        ABTeam team = TEAM.get(game).getTeam(occupier);
+    private void startOccupyFlag(LocalGame localGame, TeamFlag<ABTeam> flag, Player occupier){
+        ABTeam team = TEAM.get(localGame).getTeam(occupier);
         if(flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
         flag.setCapturing(true);
         if(flag.getCaptureStartSound() != null) flag.getCaptureStartSound().play(occupier);
         String id = "ctf_flag_occupy_"+occupier.getName();
         int tid = plugin.taskHelper.newTimerTask(() -> {
             if(occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5){
-                stopOccupyFlag(game, flag, occupier);
+                stopOccupyFlag(localGame, flag, occupier);
                 return;
             }
             if(flag.getTeam() == null || flag.getTeam() == team){
@@ -131,7 +131,7 @@ public class CTFController extends TeamDeathmatchController {
                     flag.setTeam(team);
                 else if(h == flag.getMaxHealth()){
                     flag.setValid(true);
-                    stopOccupyFlag(game, flag, occupier);
+                    stopOccupyFlag(localGame, flag, occupier);
                 }
             }
             else {
@@ -147,11 +147,11 @@ public class CTFController extends TeamDeathmatchController {
                 return PlaceholderUtils.formatInfo(s, plugin.mapInfo(h));
             });
         }, 0, 20);
-        trackTask(game, id, tid);
+        trackTask(localGame, id, tid);
     }
 
-    private void stopOccupyFlag(Game game, TeamFlag<ABTeam> flag, Player occupier){
-        cancelTask(game, "ctf_flag_occupy_"+occupier.getName());
+    private void stopOccupyFlag(LocalGame localGame, TeamFlag<ABTeam> flag, Player occupier){
+        cancelTask(localGame, "ctf_flag_occupy_"+occupier.getName());
         flag.setCapturing(false);
         if(flag.getCaptureStopSound() != null) flag.getCaptureStopSound().play(occupier);
     }
@@ -191,26 +191,26 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
-    public void onEnd(Game game) {
-        super.onEnd(game);
+    public void onEnd(LocalGame localGame) {
+        super.onEnd(localGame);
 
-        FLAG.removeAll(game).forEach(f -> {
+        FLAG.removeAll(localGame).forEach(f -> {
             f.getArmorStand().remove();
             f.reset();
         });
     }
 
     @Override
-    protected ABTeam handleResult(Game game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
+    protected ABTeam handleResult(LocalGame localGame, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
         int a = 0, b = 0;
-        Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
+        Collection<TeamFlag<ABTeam>> flags = FLAG.get(localGame);
         for(TeamFlag<ABTeam> f : flags){
             if(f.isValid()){
                 if(f.getTeam() == ABTeam.TEAM_A) a++;
                 else b++;
             }
         }
-        if(a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
+        if(a == b) return super.handleResult(localGame, sa, sb, aPlayers, bPlayers);
         else return a > b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
     }
 }

@@ -24,7 +24,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.Gun;
@@ -152,25 +152,25 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void damage(PlayerDamageEvent e) {
         if(e.getEntity() instanceof Player) {
             Player ent = (Player) e.getEntity();
-            Optional<Game> g1 = plugin.gameManager.getGame(e.getDamager());
-            Optional<Game> g2 = plugin.gameManager.getGame(ent);
+            Optional<LocalGame> g1 = plugin.gameManager.getGame(e.getDamager());
+            Optional<LocalGame> g2 = plugin.gameManager.getGame(ent);
             if(g1.isPresent()){
-                Game game1 = g1.get();
+                LocalGame localGame1 = g1.get();
                 if(g2.isPresent()) {
-                    if(g2.get().equals(game1)) {
-                        GamePlayer gp1 = game1.getPlayer(e.getDamager());
-                        GamePlayer gp2 = game1.getPlayer(ent);
+                    if(g2.get().equals(localGame1)) {
+                        GamePlayer gp1 = localGame1.getPlayer(e.getDamager());
+                        GamePlayer gp2 = localGame1.getPlayer(ent);
                         if(gp1 == null || gp2 == null) return;
                         // spectators can't attack or receive damage
                         if(gp1.isSpectator() || gp2.isSpectator()){
                             e.setCancelled(true);
                             return;
                         }
-                        GamePlayerDamageEvent event = new GamePlayerDamageEvent(game1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
+                        GamePlayerDamageEvent event = new GamePlayerDamageEvent(localGame1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
                         Bukkit.getPluginManager().callEvent(event);
                         e.setCancelled(event.isCancelled());
 
-                        if(!event.isCancelled()) game1.getDamageReports().get(ent).add(event.getReport());
+                        if(!event.isCancelled()) localGame1.getDamageReports().get(ent).add(event.getReport());
                     } else
                         // can't attack players in another arena
                         e.setCancelled(true);
@@ -289,9 +289,9 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void respawn(PlayerRespawnEvent event){
         Player player = event.getPlayer();
-        Optional<Game> opt = plugin.gameManager.getGame(player);
+        Optional<LocalGame> opt = plugin.gameManager.getGame(player);
         if(opt.isPresent()){
-            Game g = opt.get();
+            LocalGame g = opt.get();
             g.getMode().getController(c -> c.onRespawn(event, g));
         } else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
     }

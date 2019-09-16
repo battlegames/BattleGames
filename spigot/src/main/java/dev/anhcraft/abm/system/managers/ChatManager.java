@@ -22,7 +22,7 @@ package dev.anhcraft.abm.system.managers;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleChatManager;
-import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -41,9 +41,9 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
     }
 
     public boolean chat(Player player, String msg){
-        Optional<Game> x = plugin.gameManager.getGame(player);
+        Optional<LocalGame> x = plugin.gameManager.getGame(player);
         if(x.isPresent()){
-            Game g = x.get();
+            LocalGame g = x.get();
             switch (g.getPhase()){
                 case WAITING:{
                     if(!g.getMode().isWaitingChatEnabled()) return false;

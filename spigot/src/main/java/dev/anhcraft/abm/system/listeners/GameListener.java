@@ -26,6 +26,7 @@ import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.api.game.GamePhase;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,10 +75,12 @@ public class GameListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void phaseChange(GamePhaseChangeEvent event){
-        BattleModeController bmc = event.getGame().getMode().getController();
-        if(bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
-            ModeController mc = (ModeController) bmc;
-            event.getGame().getPlayers().keySet().forEach(mc::cancelReloadGun);
+        if(event.getGame().isLocal()) {
+            BattleModeController bmc = event.getGame().getMode().getController();
+            if (bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
+                ModeController mc = (ModeController) bmc;
+                ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
+            }
         }
     }
 }

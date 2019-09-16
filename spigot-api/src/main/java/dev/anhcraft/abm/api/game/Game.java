@@ -17,37 +17,34 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.abm.api.game;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import dev.anhcraft.abm.api.events.GameEndEvent;
 import dev.anhcraft.abm.api.events.GamePhaseChangeEvent;
-import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.api.misc.Resettable;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Game implements Resettable, Informative {
-    private final Multimap<Player, DamageReport> damageReports = HashMultimap.create();
-    private final Map<Player, GamePlayer> players = new ConcurrentHashMap<>();
     private final AtomicLong currentTime = new AtomicLong();
+    private final AtomicInteger playerCount = new AtomicInteger();
     private GamePhase phase = GamePhase.WAITING;
     private Arena arena;
 
     public Game(@NotNull Arena arena) {
         Validate.notNull(arena, "Arena must be non-null");
         this.arena = arena;
+    }
+
+    public boolean isLocal(){
+        return this instanceof LocalGame;
     }
 
     @NotNull
@@ -58,6 +55,16 @@ public class Game implements Resettable, Informative {
     @NotNull
     public Mode getMode() {
         return arena.getMode();
+    }
+
+    @NotNull
+    public AtomicLong getCurrentTime() {
+        return currentTime;
+    }
+
+    @NotNull
+    public AtomicInteger getPlayerCount() {
+        return playerCount;
     }
 
     @NotNull
@@ -80,66 +87,11 @@ public class Game implements Resettable, Informative {
         Bukkit.getPluginManager().callEvent(new GamePhaseChangeEvent(this, this.phase, phase));
     }
 
-    @NotNull
-    public AtomicLong getCurrentTime() {
-        return currentTime;
-    }
-
-    @Nullable
-    public GamePlayer getPlayer(@Nullable Player player) {
-        return players.get(player);
-    }
-
-    @NotNull
-    public Map<Player, GamePlayer> getPlayers() {
-        return players;
-    }
-
-    public int countPlayers() {
-        return players.size();
-    }
-
-    public Multimap<Player, DamageReport> getDamageReports() {
-        return damageReports;
-    }
-
-    public void end() {
-        if(phase == GamePhase.END) return;
-        if(!Bukkit.isPrimaryThread()){
-            try {
-                throw new IllegalStateException("Don't call #end from another thread");
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-        Bukkit.getPluginManager().callEvent(new GameEndEvent(this));
-        phase = GamePhase.END;
-        arena.getMode().getController(c -> c.onEnd(this));
-    }
-
     @Override
     public void reset() {
-        players.clear();
-        phase = GamePhase.WAITING;
         currentTime.set(0);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return damageReports.equals(game.damageReports) &&
-                players.equals(game.players) &&
-                currentTime.equals(game.currentTime) &&
-                phase == game.phase &&
-                arena.equals(game.arena);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(arena); // arena is unique for each game
+        playerCount.set(0);
+        phase = GamePhase.WAITING;
     }
 
     @Override
@@ -148,7 +100,22 @@ public class Game implements Resettable, Informative {
         arena.inform(arenaHolder);
         holder.inform("current_time", currentTime.get())
                 .inform("phase", phase.name().toLowerCase())
-                .inform("player_count", players.size())
+                .inform("player_count", playerCount.get())
                 .link(arenaHolder);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game localGame = (Game) o;
+        return currentTime.equals(localGame.currentTime) &&
+                phase == localGame.phase &&
+                arena.equals(localGame.arena);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(arena); // arena is unique for each game
     }
 }

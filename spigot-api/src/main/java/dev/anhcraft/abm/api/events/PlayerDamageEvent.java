@@ -19,44 +19,48 @@
  */
 package dev.anhcraft.abm.api.events;
 
+import dev.anhcraft.abm.api.game.Game;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.Weapon;
 import dev.anhcraft.abm.api.misc.DamageReport;
-import dev.anhcraft.abm.api.game.Game;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerDamageEvent extends Event implements Cancellable {
+public class PlayerDamageEvent extends GameEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
-    private Game game;
     private DamageReport report;
     private LivingEntity entity;
     private Weapon weapon;
     private boolean cancelled;
 
-    public PlayerDamageEvent(Game game, DamageReport report, LivingEntity entity, Weapon weapon) {
-        this.game = game;
+    public PlayerDamageEvent(@NotNull Game game, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon) {
+        super(game);
         this.report = report;
         this.entity = entity;
         this.weapon = weapon;
     }
 
-    public Game getGame() {
-        return game;
+    @Override
+    @NotNull
+    public LocalGame getGame() {
+        return (LocalGame) game;
     }
 
+    @NotNull
     public DamageReport getReport() {
         return report;
     }
 
+    @NotNull
     public Player getDamager() {
         return report.getDamager();
     }
 
+    @NotNull
     public LivingEntity getEntity() {
         return entity;
     }
@@ -69,6 +73,7 @@ public class PlayerDamageEvent extends Event implements Cancellable {
         report.setDamage(damage);
     }
 
+    @NotNull
     public Weapon getWeapon() {
         return weapon;
     }

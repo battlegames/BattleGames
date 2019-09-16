@@ -19,38 +19,22 @@
  */
 package dev.anhcraft.abm.api.events;
 
-import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
-import org.bukkit.entity.Player;
+import dev.anhcraft.abm.api.game.Game;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemChooseEvent extends Event {
+public class GameEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private ItemStack itemStack;
-    private BattleItemModel itemModel;
+    protected Game game;
 
-    public ItemChooseEvent(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull BattleItemModel itemModel) {
-        this.player = player;
-        this.itemStack = itemStack;
-        this.itemModel = itemModel;
+    public GameEvent(@NotNull Game game) {
+        this.game = game;
     }
 
     @NotNull
-    public Player getPlayer() {
-        return player;
-    }
-
-    @NotNull
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
-    @NotNull
-    public BattleItemModel getItemModel() {
-        return itemModel;
+    public Game getGame() {
+        return game;
     }
 
     @Override

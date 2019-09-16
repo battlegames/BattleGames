@@ -17,33 +17,13 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.abm.api.events;
 
-import dev.anhcraft.abm.api.game.Game;
-import dev.anhcraft.abm.api.game.GamePlayer;
-import org.bukkit.event.HandlerList;
+package dev.anhcraft.abm.api.game;
+
 import org.jetbrains.annotations.NotNull;
 
-public class GameJoinEvent extends GameEvent {
-    public static final HandlerList handlers = new HandlerList();
-    private GamePlayer gamePlayer;
-
-    public GameJoinEvent(@NotNull Game game, @NotNull GamePlayer gamePlayer) {
-        super(game);
-        this.gamePlayer = gamePlayer;
-    }
-
-    @NotNull
-    public GamePlayer getGamePlayer() {
-        return gamePlayer;
-    }
-
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+public class RemoteGame extends Game {
+    public RemoteGame(@NotNull Arena arena) {
+        super(arena);
     }
 }
