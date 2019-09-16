@@ -70,8 +70,8 @@ public class Game implements Resettable, Informative {
         if(phase == this.phase) return;
         if(!Bukkit.isPrimaryThread()){
             try {
-                throw new Exception("Can't use #setPhase from another thread");
-            } catch (Exception e) {
+                throw new IllegalStateException("Don't call #setPhase from another thread");
+            } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
             return;
@@ -103,10 +103,18 @@ public class Game implements Resettable, Informative {
         return damageReports;
     }
 
-    public synchronized void end() {
+    public void end() {
         if(phase == GamePhase.END) return;
-        phase = GamePhase.END;
+        if(!Bukkit.isPrimaryThread()){
+            try {
+                throw new IllegalStateException("Don't call #end from another thread");
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         Bukkit.getPluginManager().callEvent(new GameEndEvent(this));
+        phase = GamePhase.END;
         arena.getMode().getController(c -> c.onEnd(this));
     }
 
