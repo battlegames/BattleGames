@@ -70,7 +70,7 @@ public class DeathmatchController extends ModeController {
                     int len = localGame.getMode().isWaitingScoreboardFixedLength();
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
                 }
-                if(m <= localGame.getPlayerCount().get()) countdown(localGame);
+                if(m <= localGame.getPlayerCount()) countdown(localGame);
                 break;
             }
             case PLAYING: addPlayer(localGame, player);
@@ -82,7 +82,7 @@ public class DeathmatchController extends ModeController {
         AtomicLong current = new AtomicLong(localGame.getArena().getAttributes().getLong("countdown_time")/20L);
         int m = Math.min(localGame.getArena().getAttributes().getInt("min_players"), 1);
         trackTask(localGame, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
-            if(m <= localGame.getPlayerCount().get()) {
+            if(m <= localGame.getPlayerCount()) {
                 broadcastTitle(localGame, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
                 playSound(localGame, Sound.BLOCK_FENCE_GATE_OPEN);
                 if(current.getAndDecrement() == 0) {

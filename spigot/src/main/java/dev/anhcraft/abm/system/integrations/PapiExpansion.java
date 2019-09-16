@@ -87,7 +87,7 @@ public class PapiExpansion extends PlaceholderExpansion {
                 .map(gp -> Integer.toString(gp.getDeathCounter().get()))
                 .orElse(null));
         handlers.put("game_total_players", player -> plugin.gameManager.getGame(player)
-                .map(gp -> Integer.toString(gp.getPlayerCount().get()))
+                .map(gp -> Integer.toString(gp.getPlayerCount()))
                 .orElse(null));
         handlers.put("game_current_time", player -> plugin.gameManager.getGame(player)
                 .map(gp -> Long.toString(gp.getCurrentTime().get()))

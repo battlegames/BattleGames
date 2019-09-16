@@ -26,4 +26,8 @@ public class RemoteGame extends Game {
     public RemoteGame(@NotNull Arena arena) {
         super(arena);
     }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
 }

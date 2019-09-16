@@ -50,6 +50,11 @@ public class LocalGame extends Game {
         return players;
     }
 
+    @Override
+    public int getPlayerCount() {
+        return players.size();
+    }
+
     @Nullable
     public GamePlayer getPlayer(@Nullable Player player) {
         return players.get(player);

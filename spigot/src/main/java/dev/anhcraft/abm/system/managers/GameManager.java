@@ -170,7 +170,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(localGame, gp));
             localGame.getPlayers().remove(player);
             PLAYER_GAME_MAP.remove(player.getUniqueId());
-            if(localGame.getPlayerCount().get() == 0) {
+            if(localGame.getPlayerCount() == 0) {
                 localGame.setPhase(GamePhase.CLEANING);
                 cleaner.doClean(localGame.getArena(), ARENA_GAME_MAP::remove);
             }

@@ -99,7 +99,7 @@ public class TeamDeathmatchController extends DeathmatchController {
                     int len = localGame.getMode().isWaitingScoreboardFixedLength();
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
                 }
-                if(m <= localGame.getPlayerCount().get()) countdown(localGame);
+                if(m <= localGame.getPlayerCount()) countdown(localGame);
                 break;
             }
             case PLAYING: {

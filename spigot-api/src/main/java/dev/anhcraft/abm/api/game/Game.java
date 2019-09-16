@@ -29,12 +29,11 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Game implements Resettable, Informative {
     private final AtomicLong currentTime = new AtomicLong();
-    private final AtomicInteger playerCount = new AtomicInteger();
+    protected int playerCount;
     private GamePhase phase = GamePhase.WAITING;
     private Arena arena;
 
@@ -62,8 +61,7 @@ public class Game implements Resettable, Informative {
         return currentTime;
     }
 
-    @NotNull
-    public AtomicInteger getPlayerCount() {
+    public int getPlayerCount() {
         return playerCount;
     }
 
@@ -89,8 +87,8 @@ public class Game implements Resettable, Informative {
 
     @Override
     public void reset() {
+        playerCount = 0;
         currentTime.set(0);
-        playerCount.set(0);
         phase = GamePhase.WAITING;
     }
 
@@ -100,7 +98,7 @@ public class Game implements Resettable, Informative {
         arena.inform(arenaHolder);
         holder.inform("current_time", currentTime.get())
                 .inform("phase", phase.name().toLowerCase())
-                .inform("player_count", playerCount.get())
+                .inform("player_count", playerCount)
                 .link(arenaHolder);
     }
 
