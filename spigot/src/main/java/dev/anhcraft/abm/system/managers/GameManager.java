@@ -65,7 +65,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
             Game x = PLAYER_GAME_MAP.get(player.getUniqueId());
-            if(x.isLocal()) return Optional.ofNullable(((LocalGame) getGames()).getPlayer(player));
+            if(x != null && x.isLocal()) return Optional.ofNullable(((LocalGame) x).getPlayer(player));
             else return Optional.empty();
         }
     }
@@ -114,18 +114,17 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                 return false;
             }
             Game game = ARENA_GAME_MAP.get(arena);
-            if(!game.isLocal()) return false;
-            LocalGame localGame = (LocalGame) game;
-            if(ARENA_GAME_MAP.containsKey(arena)){
-                if (localGame.getPhase() == GamePhase.END || localGame.getPhase() == GamePhase.CLEANING) {
+            if(game != null){
+                if (game.getPhase() == GamePhase.END || game.getPhase() == GamePhase.CLEANING) {
                     plugin.chatManager.sendPlayer(player, "arena.error_attendance_disabled");
                     return false;
                 }
-                if(localGame.getPlayers().size() == arena.getMaxPlayers()){
+                if(game.getPlayerCount() == arena.getMaxPlayers()){
                     plugin.chatManager.sendPlayer(player, "arena.error_full_players");
                     return false;
                 }
-            } else ARENA_GAME_MAP.put(arena, localGame = new LocalGame(arena));
+            } else ARENA_GAME_MAP.put(arena, game = new LocalGame(arena));
+            LocalGame localGame = (LocalGame) game;
             BattleModeController controller = localGame.getMode().getController();
             if (controller == null) {
                 plugin.chatManager.sendPlayer(player, "arena.error_mode_controller_unavailable");
@@ -146,7 +145,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) return false;
             Game game = ARENA_GAME_MAP.get(arena);
-            if(!game.isLocal()) return false;
+            if (game == null) return false;
             LocalGame localGame = (LocalGame) game;
             if(!ARENA_GAME_MAP.containsKey(arena)) ARENA_GAME_MAP.put(arena, localGame = new LocalGame(arena));
             BattleModeController controller = localGame.getMode().getController();
@@ -160,7 +159,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
             Game game = PLAYER_GAME_MAP.get(player.getUniqueId());
-            if (!game.isLocal()) return false;
+            if (game == null) return false;
             LocalGame localGame = (LocalGame) game;
             // don't save the player data here!!!
             // plugin.getPlayerData(player);
