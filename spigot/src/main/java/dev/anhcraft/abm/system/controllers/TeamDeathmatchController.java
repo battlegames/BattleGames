@@ -24,6 +24,7 @@ import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
+import dev.anhcraft.abm.utils.EntityUtil;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
@@ -168,12 +169,12 @@ public class TeamDeathmatchController extends DeathmatchController {
             case END:
             case WAITING: {
                 String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("waiting_spawn_points"));
-                player.teleport(LocationUtil.fromString(loc));
+                EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
                 String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("playing_spawn_points_"+ (team == ABTeam.TEAM_A ? "a" : "b")));
-                player.teleport(LocationUtil.fromString(loc));
+                EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 performCooldownMap(localGame, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));

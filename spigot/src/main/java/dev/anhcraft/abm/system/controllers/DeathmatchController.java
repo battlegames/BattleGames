@@ -22,18 +22,20 @@ package dev.anhcraft.abm.system.controllers;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
-import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
+import dev.anhcraft.abm.utils.EntityUtil;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -120,12 +122,12 @@ public class DeathmatchController extends ModeController {
             case END:
             case WAITING: {
                 String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("waiting_spawn_points"));
-                player.teleport(LocationUtil.fromString(loc));
+                EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
                 String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("playing_spawn_points"));
-                player.teleport(LocationUtil.fromString(loc));
+                EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 performCooldownMap(localGame, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
@@ -157,9 +159,11 @@ public class DeathmatchController extends ModeController {
         Player player = event.getPlayer();
         GamePlayer gp = localGame.getPlayer(player);
         if (gp != null) {
-            String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes()
+            String sl = RandomUtil.pickRandom(localGame.getArena().getAttributes()
                     .getStringList("waiting_spawn_points"));
-            event.setRespawnLocation(LocationUtil.fromString(loc));
+            Location loc = LocationUtil.fromString(sl);
+            if(loc.getWorld() == null) loc.setWorld(player.getWorld());
+            event.setRespawnLocation(loc);
             gp.setSpectator(true);
             player.setGameMode(GameMode.SPECTATOR);
             AtomicLong current = new AtomicLong(localGame.getArena().getAttributes().getLong("respawn_waiting_time")/20L);

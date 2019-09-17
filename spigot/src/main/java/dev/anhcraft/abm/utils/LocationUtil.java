@@ -23,12 +23,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class LocationUtil {
     public static String toString(@Nullable Location loc) {
         if(loc == null) return "null";
-        return Objects.requireNonNull(loc.getWorld()).getName() +
+        String n = loc.getWorld() == null ? "~" : loc.getWorld().getName();
+        return n +
                 " " + loc.getX() +
                 " " + loc.getY() +
                 " " + loc.getZ() +
@@ -37,11 +36,11 @@ public class LocationUtil {
     }
 
     public static Location fromString(@Nullable String str) {
-        if(str == null || (str = str.replaceAll("[^a-zA-Z0-9-. ]", ""))
+        if(str == null || (str = str.replaceAll("[^a-zA-Z0-9-. ~]", ""))
                 .equalsIgnoreCase("null")) return Bukkit.getWorlds().get(0).getSpawnLocation();
         String[] str2loc = str.split(" ");
         Location loc = new Location(
-                Bukkit.getWorld(str2loc[0]),
+                str2loc[0].equals("~") ? null : Bukkit.getWorld(str2loc[0]),
                 Double.parseDouble(str2loc[1]),
                 Double.parseDouble(str2loc[2]),
                 Double.parseDouble(str2loc[3]));
