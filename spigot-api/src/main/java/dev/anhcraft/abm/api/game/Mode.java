@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.abm.api.game;
 
+import com.google.common.collect.ImmutableList;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
@@ -28,8 +29,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,8 +48,12 @@ public class Mode implements Informative {
     }
 
     @NotNull
-    public static Collection<Mode> listModes(){
-        return Collections.unmodifiableCollection(MODE_REGISTRY.values());
+    public static List<Mode> listModes(){
+        return ImmutableList.copyOf(MODE_REGISTRY.values());
+    }
+
+    public static void listModes(@NotNull Consumer<Mode> consumer){
+        MODE_REGISTRY.values().forEach(consumer);
     }
 
     @Nullable
