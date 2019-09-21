@@ -35,7 +35,7 @@ public class Ammo extends BattleItem<AmmoModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        ApiProvider.consume().getAmmoModel(compound.getValue(ItemTag.AMMO_ID, StringTag.class)).ifPresent(this::setModel);
+        setModel(ApiProvider.consume().getAmmoModel(compound.getValue(ItemTag.AMMO_ID, StringTag.class)));
     }
 
     @Override

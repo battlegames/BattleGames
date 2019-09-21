@@ -19,12 +19,15 @@
  */
 package dev.anhcraft.abm.utils;
 
+import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +36,29 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlaceholderUtils {
+public class PlaceholderUtil {
     private static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
     private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
     @Contract("_, null -> null")
-    public static String formatPAPI(Player player, String str){
+    @Nullable
+    public static String formatPAPI(@NotNull Player player, @Nullable String str){
+        Condition.notNull(player);
         return PlaceholderAPI.setPlaceholders(player, str);
     }
 
-    public static List<String> formatPAPI(Player player, List<String> str){
+    @Contract("_, null -> null")
+    @Nullable
+    public static List<String> formatPAPI(@NotNull Player player, @Nullable List<String> str){
+        Condition.notNull(player);
         return PlaceholderAPI.setPlaceholders(player, str);
     }
 
-    public static String formatInfo(String str, Map<String, String> x){
-        if(str == null) return null;
+    @Contract("null, _ -> null; _, null -> null")
+    @Nullable
+    public static String formatInfo(@Nullable String str, @Nullable Map<String, String> x){
+        if(str == null || x == null) return null;
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
@@ -65,7 +75,9 @@ public class PlaceholderUtils {
         return sb.toString();
     }
 
-    public static String formatExpression(String str){
+    @Contract("null -> null")
+    @Nullable
+    public static String formatExpression(@Nullable String str){
         if(str == null) return null;
         Matcher m = EXPRESSION_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
@@ -78,7 +90,9 @@ public class PlaceholderUtils {
         return sb.toString();
     }
 
-    public static String localizeString(String str, ConfigurationSection localeConf){
+    @Contract("null, _ -> null; _, null -> null")
+    @Nullable
+    public static String localizeString(@Nullable String str, @Nullable ConfigurationSection localeConf){
         if(str == null || localeConf == null) return null;
         Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
@@ -91,7 +105,8 @@ public class PlaceholderUtils {
         return sb.toString();
     }
 
-    public static List<String> localizeStrings(List<String> strs, ConfigurationSection localeConf){
+    @NotNull
+    public static List<String> localizeStrings(@Nullable List<String> strs, @Nullable ConfigurationSection localeConf){
         if(strs == null || localeConf == null) return new ArrayList<>();
         ListIterator<String> it = strs.listIterator();
         while(it.hasNext()){

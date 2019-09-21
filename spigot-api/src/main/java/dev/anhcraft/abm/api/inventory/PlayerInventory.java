@@ -20,13 +20,18 @@
 package dev.anhcraft.abm.api.inventory;
 
 import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public class PlayerInventory {
     private final Map<ItemType, ItemStorage> INV = Collections.synchronizedMap(new HashMap<>());
 
-    public ItemStorage getStorage(ItemType type){
+    @NotNull
+    public ItemStorage getStorage(@NotNull ItemType type){
+        Condition.argNotNull("type", type);
         ItemStorage x = INV.get(type);
         if(x == null){
             x = new ItemStorage();
@@ -39,7 +44,8 @@ public class PlayerInventory {
         INV.clear();
     }
 
-    public List<Map.Entry<ItemType, ItemStorage>> getAllStorage(){
-        return new ArrayList<>(INV.entrySet());
+    public void listStorage(@NotNull BiConsumer<ItemType, ItemStorage> consumer){
+        Condition.argNotNull("consumer", consumer);
+        INV.forEach(consumer);
     }
 }

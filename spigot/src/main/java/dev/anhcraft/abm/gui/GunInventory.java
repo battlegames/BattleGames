@@ -19,7 +19,6 @@
  */
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
@@ -27,12 +26,12 @@ import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 public class GunInventory extends GuiHandler implements PaginationHandler {
     @Override
@@ -40,10 +39,9 @@ public class GunInventory extends GuiHandler implements PaginationHandler {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {
-            playerData.getInventory().getStorage(ItemType.GUN).list().forEach(ent -> {
-                Optional<GunModel> ogm = api.getGunModel(ent.getKey());
-                if (ogm.isPresent()) {
-                    GunModel gm = ogm.get();
+            playerData.getInventory().getStorage(ItemType.GUN).list((k, v) -> {
+                GunModel gm = api.getGunModel(k);
+                if (gm != null) {
                     PreparedItem pi = api.getItemManager().make(gm);
                     if(pi == null) return;
                     ItemStack item = gm.getPrimarySkin().transform(pi).build();

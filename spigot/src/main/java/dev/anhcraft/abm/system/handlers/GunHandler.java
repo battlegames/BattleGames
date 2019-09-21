@@ -54,7 +54,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GunHandler extends Handler {
-    private static final ItemStack PUMPKIN_HELMET = new ItemStack(NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? Material.valueOf("CARVED_PUMPKIN") : Material.PUMPKIN, 1);
+    private static final ItemStack PUMPKIN_HELMET = new ItemStack(NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? Material.valueOf("CARVED_PUMPKIN") : Material.PUMPKIN, 1);
 
     public GunHandler(BattlePlugin plugin) {
         super(plugin);

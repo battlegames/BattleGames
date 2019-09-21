@@ -21,9 +21,11 @@ package dev.anhcraft.abm.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LocationUtil {
+    @NotNull
     public static String toString(@Nullable Location loc) {
         if(loc == null) return "null";
         String n = loc.getWorld() == null ? "~" : loc.getWorld().getName();
@@ -35,6 +37,7 @@ public class LocationUtil {
                 " " + loc.getPitch();
     }
 
+    @NotNull
     public static Location fromString(@Nullable String str) {
         if(str == null || (str = str.replaceAll("[^a-zA-Z0-9-. ~]", ""))
                 .equalsIgnoreCase("null")) return Bukkit.getWorlds().get(0).getSpawnLocation();

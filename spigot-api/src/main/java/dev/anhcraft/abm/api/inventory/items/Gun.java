@@ -105,7 +105,7 @@ public class Gun extends Weapon<GunModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        ApiProvider.consume().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)).ifPresent(this::setModel);
+        setModel(ApiProvider.consume().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)));
         CompoundTag mag = compound.get(ItemTag.GUN_MAGAZINE, CompoundTag.class);
         if(mag != null) magazine.load(mag);
 

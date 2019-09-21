@@ -139,35 +139,35 @@ public interface BattleAPI {
      * @param id the id of the ammo
      * @return {@link AmmoModel} if found or null if not
      */
-    Optional<AmmoModel> getAmmoModel(@Nullable String id);
+    AmmoModel getAmmoModel(@Nullable String id);
 
     /**
      * Gets the gun that matches the given id.
      * @param id the id of the gun
      * @return {@link GunModel} if found or null if not
      */
-    Optional<GunModel> getGunModel(@Nullable String id);
+    GunModel getGunModel(@Nullable String id);
 
     /**
      * Gets the magazine that matches the given id.
      * @param id the id of the magazine
      * @return {@link MagazineModel} if found or null if not
      */
-    Optional<MagazineModel> getMagazineModel(@Nullable String id);
+    MagazineModel getMagazineModel(@Nullable String id);
 
     /**
      * Gets the scope that matches the given id.
      * @param id the id of the scope
      * @return {@link ScopeModel} if found or null if not
      */
-    Optional<ScopeModel> getScopeModel(@Nullable String id);
+    ScopeModel getScopeModel(@Nullable String id);
 
     /**
      * Gets the kit that matches the given id.
      * @param id the id of the kit
      * @return {@link Kit} if found or null if not
      */
-    Optional<Kit> getKit(@Nullable String id);
+    Kit getKit(@Nullable String id);
 
     /**
      * Lists all registered arenas.

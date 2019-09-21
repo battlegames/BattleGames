@@ -19,21 +19,26 @@
  */
 package dev.anhcraft.abm.utils;
 
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class CooldownMap extends HashMap<Player, Long> {
     public CooldownMap(){}
 
-    public CooldownMap(List<Player> players){
+    public CooldownMap(@NotNull List<Player> players){
+        Condition.notNull(players);
         players.forEach(this::resetTime);
     }
 
     public CooldownMap(Player... players){
-        Arrays.stream(players).forEach(this::resetTime);
+        Condition.notNull(players);
+        Arrays.stream(players).filter(Objects::nonNull).forEach(this::resetTime);
     }
 
     public void resetTime(Player player){

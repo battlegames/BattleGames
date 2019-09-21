@@ -19,38 +19,36 @@
  */
 package dev.anhcraft.abm.api.inventory;
 
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class ItemStorage {
     private Map<String, Long> MAP = new LinkedHashMap<>();
 
-    public void put(String id){
+    public void put(@Nullable String id){
         MAP.put(id, System.currentTimeMillis());
     }
 
-    public void put(String id, long owningDate) {
+    public void put(@Nullable String id, long owningDate) {
         MAP.putIfAbsent(id, owningDate);
     }
 
-    public void remove(String id){
+    public void remove(@Nullable String id){
         MAP.remove(id);
     }
 
-    public boolean has(String id){
-        return MAP.containsKey(id);
-    }
-
     @Nullable
-    public Long get(String id){
+    public Long get(@Nullable String id){
         return MAP.get(id);
     }
 
-    public List<Map.Entry<String, Long>> list(){
-        return new ArrayList<>(MAP.entrySet());
+    public void list(@NotNull BiConsumer<String, Long> consumer){
+        Condition.argNotNull("consumer", consumer);
+        MAP.forEach(consumer);
     }
 }

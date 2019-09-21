@@ -31,7 +31,7 @@ import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.abm.utils.CooldownMap;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
@@ -245,7 +245,7 @@ public abstract class ModeController extends BattleComponent implements Listener
 
                 InfoHolder info = new InfoHolder("gun_");
                 gun.inform(info);
-                playerBossBar.getBar().setTitle(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
+                playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
 
                 playerBossBar.show();
             }

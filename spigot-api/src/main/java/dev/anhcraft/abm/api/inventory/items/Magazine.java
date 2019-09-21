@@ -69,7 +69,7 @@ public class Magazine extends BattleItem<MagazineModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        ApiProvider.consume().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)).ifPresent(this::setModel);
+        setModel(ApiProvider.consume().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)));
         Integer a = compound.getValue(ItemTag.MAGAZINE_AMMO_COUNT, IntTag.class);
         if(a != null) ammoCount = a;
         CompoundTag am = compound.get(ItemTag.MAGAZINE_AMMO, CompoundTag.class);

@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.abm.system.managers;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
@@ -35,7 +36,7 @@ import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.abm.system.integrations.VaultApi;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
@@ -226,31 +227,31 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     private void runCmd(String s, Player player){
-        s = PlaceholderUtils.formatPAPI(player, s);
-        s = PlaceholderUtils.formatExpression(s);
+        s = PlaceholderUtil.formatPAPI(player, s);
+        s = PlaceholderUtil.formatExpression(s);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
     }
 
     public void rewardAndSaveCache(LocalGame localGame) {
-        localGame.getPlayers().values().forEach(gamePlayer -> {
-            PlayerData playerData = plugin.getPlayerData(gamePlayer.getPlayer());
+        localGame.getPlayers().values().forEach(gp -> {
+            PlayerData playerData = plugin.getPlayerData(gp.getPlayer());
             if(playerData != null) {
-                double m = Math.max(0, localGame.getArena().calculateFinalMoney(gamePlayer));
-                long e = Math.max(0, localGame.getArena().calculateFinalExp(gamePlayer));
-                VaultApi.getEconomyApi().depositPlayer(gamePlayer.getPlayer(), m);
+                double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));
+                long e = Math.max(0, localGame.getArena().calculateFinalExp(gp));
+                VaultApi.getEconomyApi().depositPlayer(gp.getPlayer(), m);
                 playerData.getExp().addAndGet(e);
-                plugin.chatManager.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
+                plugin.chatManager.sendPlayer(gp.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
 
-                playerData.getKillCounter().addAndGet(gamePlayer.getKillCounter().get());
-                playerData.getHeadshotCounter().addAndGet(gamePlayer.getHeadshotCounter().get());
-                playerData.getAssistCounter().addAndGet(gamePlayer.getAssistCounter().get());
-                playerData.getDeathCounter().addAndGet(gamePlayer.getDeathCounter().get());
-                if(gamePlayer.isWinner()) {
+                playerData.getKillCounter().addAndGet(gp.getKillCounter().get());
+                playerData.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
+                playerData.getAssistCounter().addAndGet(gp.getAssistCounter().get());
+                playerData.getDeathCounter().addAndGet(gp.getDeathCounter().get());
+                if(gp.isWinner()) {
                     playerData.getWinCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
+                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.getPlayer()));
                 } else {
                     playerData.getLoseCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
+                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gp.getPlayer()));
                 }
             }
         });
@@ -258,8 +259,8 @@ public class GameManager extends BattleComponent implements BattleGameManager {
 
     @NotNull
     @Override
-    public Collection<Game> listGames(){
-        return Collections.unmodifiableCollection(ARENA_GAME_MAP.values());
+    public List<Game> listGames(){
+        return ImmutableList.copyOf(ARENA_GAME_MAP.values());
     }
 
     @Override

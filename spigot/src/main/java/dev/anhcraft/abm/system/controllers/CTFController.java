@@ -26,7 +26,7 @@ import dev.anhcraft.abm.api.game.*;
 import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.LocationUtil;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -106,7 +106,7 @@ public class CTFController extends TeamDeathmatchController {
                     flag.updateDisplayName(s -> {
                         InfoHolder h = new InfoHolder("flag_");
                         flag.inform(h);
-                        return PlaceholderUtils.formatInfo(s, plugin.mapInfo(h));
+                        return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
                     });
                     String startCaptureSound = sec.getString(k+".start_capture_sound");
                     if(startCaptureSound != null) flag.setCaptureStartSound(new SoundRecord(startCaptureSound));
@@ -148,7 +148,7 @@ public class CTFController extends TeamDeathmatchController {
             flag.updateDisplayName(s -> {
                 InfoHolder h = new InfoHolder("flag_");
                 flag.inform(h);
-                return PlaceholderUtils.formatInfo(s, plugin.mapInfo(h));
+                return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
             });
         }, 0, 20);
         trackTask(localGame, id, tid);

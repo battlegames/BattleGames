@@ -19,18 +19,17 @@
  */
 package dev.anhcraft.abm.gui;
 
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.inventory.items.AmmoModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AmmoInventory extends GuiHandler implements PaginationHandler {
     @Override
@@ -38,10 +37,9 @@ public class AmmoInventory extends GuiHandler implements PaginationHandler {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {
-            playerData.getInventory().getStorage(ItemType.AMMO).list().forEach(ent -> {
-                Optional<AmmoModel> oam = api.getAmmoModel(ent.getKey());
-                if (oam.isPresent()) {
-                    AmmoModel am = oam.get();
+            playerData.getInventory().getStorage(ItemType.AMMO).list((k, v) -> {
+                AmmoModel am = api.getAmmoModel(k);
+                if (am != null) {
                     PreparedItem pi = api.getItemManager().make(am);
                     if(pi == null) return;
                     ItemStack item = am.getSkin().transform(pi).build();

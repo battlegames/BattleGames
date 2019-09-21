@@ -23,7 +23,7 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleGuiManager;
 import dev.anhcraft.abm.api.gui.*;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.kits.abif.ABIF;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
@@ -274,8 +274,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Inventory inv;
         if(bg.getGui().getTitle() == null) inv = Bukkit.createInventory(null, bg.getGui().getSize());
         else {
-            String title = PlaceholderUtils.localizeString(bg.getGui().getTitle(), plugin.getLocaleConf());
-            title = PlaceholderUtils.formatPAPI(player, title);
+            String title = PlaceholderUtil.localizeString(bg.getGui().getTitle(), plugin.getLocaleConf());
+            title = PlaceholderUtil.formatPAPI(player, title);
             inv = Bukkit.createInventory(null, bg.getGui().getSize(), title);
         }
         pg.setTopInv(inv);
@@ -320,8 +320,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     private PreparedItem formatStrings(PreparedItem pi, Player player) {
-        pi.name(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.localizeString(pi.name(), plugin.getLocaleConf())));
-        pi.lore(PlaceholderUtils.formatPAPI(player, PlaceholderUtils.localizeStrings(pi.lore(), plugin.getLocaleConf())));
+        pi.name(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.localizeString(pi.name(), plugin.getLocaleConf())));
+        pi.lore(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.localizeStrings(pi.lore(), plugin.getLocaleConf())));
         return pi;
     }
 }

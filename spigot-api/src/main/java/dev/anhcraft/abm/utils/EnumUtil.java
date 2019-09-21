@@ -21,8 +21,10 @@ package dev.anhcraft.abm.utils;
 
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 public class EnumUtil {
+    @NotNull
     public static <E extends Enum> E getEnum(E[] list, String str){
         Condition.notEmpty(list);
         Condition.notNull(str);

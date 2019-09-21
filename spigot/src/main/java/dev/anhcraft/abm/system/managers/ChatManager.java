@@ -23,7 +23,7 @@ import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleChatManager;
 import dev.anhcraft.abm.api.game.LocalGame;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -48,7 +48,7 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
             switch (g.getPhase()){
                 case WAITING:{
                     if(!g.getMode().isWaitingChatEnabled()) return false;
-                    String q = PlaceholderUtils.formatPAPI(player, g.getArena()
+                    String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                             .getMode().getWaitingChatFormat())
                             .replace("{__message__}", msg);
                     g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
@@ -56,7 +56,7 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
                 }
                 default:{
                     if(!g.getMode().isPlayingChatEnabled()) return false;
-                    String q = PlaceholderUtils.formatPAPI(player, g.getArena()
+                    String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                             .getMode().getPlayingChatFormat())
                             .replace("{__message__}", msg);
                     g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
@@ -65,7 +65,7 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
             }
         } else {
             if(!plugin.getGeneralConf().getBoolean("default_chat.enabled")) return false;
-            String q = Objects.requireNonNull(PlaceholderUtils.formatPAPI(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
             for(Player p : Bukkit.getOnlinePlayers()){
                 if(p.equals(player) || plugin.gameManager.getGame(player) == null) {
                     p.sendMessage(q);
@@ -96,9 +96,9 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
             return Collections.singletonList("null");
         }
         if(s instanceof Collection)
-            return PlaceholderUtils.formatPAPI(target, ((Collection<?>) s).stream().map((Function<Object, String>) o -> x.apply(String.valueOf(o))).collect(Collectors.toList()));
+            return PlaceholderUtil.formatPAPI(target, ((Collection<?>) s).stream().map((Function<Object, String>) o -> x.apply(String.valueOf(o))).collect(Collectors.toList()));
         else
-            return Collections.singletonList(PlaceholderUtils.formatPAPI(target, x.apply(String.valueOf(s))));
+            return Collections.singletonList(PlaceholderUtil.formatPAPI(target, x.apply(String.valueOf(s))));
     }
 
     @Override

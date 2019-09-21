@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -128,7 +128,7 @@ public interface BattleGameManager {
      * @return an immutable list of games.
      */
     @NotNull
-    Collection<Game> listGames();
+    List<Game> listGames();
 
     /**
      * Lists all active games and gets them.

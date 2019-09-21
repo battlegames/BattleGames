@@ -33,7 +33,7 @@ import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.handlers.GunHandler;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -246,13 +246,13 @@ public class PlayerListener extends BattleComponent implements Listener {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return; // ignore attackers who quit the game
                 gp.getHeadshotCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPAPI(player, hst), PlaceholderUtils.formatPAPI(player, hsst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
             });
             assistants.forEach(player -> {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
                 gp.getAssistCounter().incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtils.formatPAPI(player, ast), PlaceholderUtils.formatPAPI(player, asst)));
+                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
             });
             killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
 

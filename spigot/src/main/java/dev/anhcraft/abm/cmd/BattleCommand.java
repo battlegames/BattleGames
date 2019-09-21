@@ -29,7 +29,7 @@ import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.utils.LocationUtil;
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -39,7 +39,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 @CommandAlias("abm|b|battle")
 public class BattleCommand extends BaseCommand{
@@ -82,7 +81,7 @@ public class BattleCommand extends BaseCommand{
             InfoHolder holder = new InfoHolder("game_");
             game.inform(holder);
             Map<String, String> map = plugin.mapInfo(holder);
-            plugin.chatManager.send(sender, "game.list_section", ChatMessageType.CHAT, x -> PlaceholderUtils.formatInfo(x, map));
+            plugin.chatManager.send(sender, "game.list_section", ChatMessageType.CHAT, x -> PlaceholderUtil.formatInfo(x, map));
         });
     }
 
@@ -138,8 +137,8 @@ public class BattleCommand extends BaseCommand{
     @CommandCompletion("@gun @players")
     public void giveGun(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
         target = (target == null ? player : target);
-        Optional<GunModel> gun = plugin.getGunModel(id);
-        if(gun.isPresent()) {
+        GunModel gun = plugin.getGunModel(id);
+        if(gun != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null){
                 playerData.getInventory().getStorage(ItemType.GUN).put(id);
@@ -154,8 +153,8 @@ public class BattleCommand extends BaseCommand{
     @CommandCompletion("@magazine @players")
     public void giveMagazine(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
         target = (target == null ? player : target);
-        Optional<MagazineModel> mag = plugin.getMagazineModel(id);
-        if(mag.isPresent()) {
+        MagazineModel mag = plugin.getMagazineModel(id);
+        if(mag != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null){
                 playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id);
@@ -170,8 +169,8 @@ public class BattleCommand extends BaseCommand{
     @CommandCompletion("@ammo @players")
     public void giveAmmo(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
         target = (target == null ? player : target);
-        Optional<AmmoModel> ammo = plugin.getAmmoModel(id);
-        if(ammo.isPresent()) {
+        AmmoModel ammo = plugin.getAmmoModel(id);
+        if(ammo != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null) {
                 playerData.getInventory().getStorage(ItemType.AMMO).put(id);
@@ -186,8 +185,8 @@ public class BattleCommand extends BaseCommand{
     @CommandCompletion("@scope @players")
     public void giveScope(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
         target = (target == null ? player : target);
-        Optional<ScopeModel> sc = plugin.getScopeModel(id);
-        if(sc.isPresent()) {
+        ScopeModel sc = plugin.getScopeModel(id);
+        if(sc != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null) {
                 playerData.getInventory().getStorage(ItemType.SCOPE).put(id);

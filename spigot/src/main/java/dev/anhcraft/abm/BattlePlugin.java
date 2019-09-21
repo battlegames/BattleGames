@@ -95,7 +95,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             // END: ATTACHMENTS
             "items/guns.yml",
             "items/items.yml",
-            "gui.yml " + (NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? "gui.yml" : "gui.legacy.yml"),
+            "gui.yml " + (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
@@ -615,28 +615,28 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<AmmoModel> getAmmoModel(@Nullable String id) {
-        return Optional.ofNullable(AMMO_MAP.get(id));
+    public AmmoModel getAmmoModel(@Nullable String id) {
+        return AMMO_MAP.get(id);
     }
 
     @Override
-    public Optional<GunModel> getGunModel(@Nullable String id) {
-        return Optional.ofNullable(GUN_MAP.get(id));
+    public GunModel getGunModel(@Nullable String id) {
+        return GUN_MAP.get(id);
     }
 
     @Override
-    public Optional<MagazineModel> getMagazineModel(@Nullable String id) {
-        return Optional.ofNullable(MAGAZINE_MAP.get(id));
+    public MagazineModel getMagazineModel(@Nullable String id) {
+        return MAGAZINE_MAP.get(id);
     }
 
     @Override
-    public Optional<ScopeModel> getScopeModel(@Nullable String id) {
-        return Optional.ofNullable(SCOPE_MAP.get(id));
+    public ScopeModel getScopeModel(@Nullable String id) {
+        return SCOPE_MAP.get(id);
     }
 
     @Override
-    public Optional<Kit> getKit(@Nullable String id) {
-        return Optional.ofNullable(KIT_MAP.get(id));
+    public Kit getKit(@Nullable String id) {
+        return KIT_MAP.get(id);
     }
 
     @NotNull
@@ -736,6 +736,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    @NotNull
     public List<String> getLobbyServers() {
         return lobbyList;
     }

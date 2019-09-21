@@ -19,12 +19,12 @@
  */
 package dev.anhcraft.abm.api.storage.data;
 
-import dev.anhcraft.abm.api.inventory.PlayerInventory;
 import dev.anhcraft.abm.api.inventory.ItemStorage;
-import dev.anhcraft.abm.api.storage.Serializable;
-import dev.anhcraft.abm.api.storage.tags.StringTag;
+import dev.anhcraft.abm.api.inventory.PlayerInventory;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.misc.Resettable;
+import dev.anhcraft.abm.api.storage.Serializable;
+import dev.anhcraft.abm.api.storage.tags.StringTag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -125,13 +125,13 @@ public class PlayerData implements Resettable, Serializable {
         map.writeTag("lose", loseCounter.get());
         map.writeTag("exp", exp.get());
         List<StringTag> inv = new ArrayList<>();
-        inventory.getAllStorage().forEach(e -> {
-            String s = e.getKey().name();
+        inventory.listStorage((itemType, itemStorage) -> {
+            String s = itemType.name();
             inv.add(new StringTag(s));
             List<StringTag> items = new ArrayList<>();
-            e.getValue().list().forEach(i -> {
-                items.add(new StringTag(i.getKey()));
-                map.writeTag("inv."+s+"."+i.getKey(), i.getValue());
+            itemStorage.list((i, v) -> {
+                items.add(new StringTag(i));
+                map.writeTag("inv."+s+"."+i, v);
             });
             map.writeTag("inv."+s, items);
         });

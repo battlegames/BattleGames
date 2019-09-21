@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
-import dev.anhcraft.abm.utils.PlaceholderUtils;
+import dev.anhcraft.abm.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.jvmkit.utils.StringUtil;
 import org.bukkit.Bukkit;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerScoreboard {
-    private static final int MAX_ENTRY_LENGTH = NMSVersion.getNMSVersion().isNewerOrSame(NMSVersion.v1_13_R1) ? 64 : 16;
+    private static final int MAX_ENTRY_LENGTH = NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? 64 : 16;
     private final List<String> ENTRIES = new ArrayList<>();
     private final Player player;
     private final ScoreboardLine[] lines;
@@ -69,7 +69,7 @@ public class PlayerScoreboard {
     }
 
     public void renderTitle(){
-        objective.setDisplayName(StringUtil.cutString(PlaceholderUtils.formatPAPI(player, title), 2 * maxEntryLength));
+        objective.setDisplayName(StringUtil.cutString(PlaceholderUtil.formatPAPI(player, title), 2 * maxEntryLength));
     }
 
     public void renderLines(){
@@ -80,7 +80,7 @@ public class PlayerScoreboard {
 
     public void renderLine(int index){
         ScoreboardLine line = lines[index];
-        String content = PlaceholderUtils.formatPAPI(player, line.getContent());
+        String content = PlaceholderUtil.formatPAPI(player, line.getContent());
 
         StringBuilder prefix = new StringBuilder(StringUtil.cutString(content, maxEntryLength));
         // if the prefix ends with colors, remove it!

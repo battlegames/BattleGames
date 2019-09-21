@@ -84,7 +84,7 @@ public interface BattleGuiManager {
     /**
      * Destroys the {@link PlayerGui} of the given player.
      * <br>
-     * Calling this method is considered as useless, should only for internal uses.
+     * Calling this method is considered as useless, should only provides internal uses.
      * @param player the player
      */
     void destroyPlayerGui(@NotNull Player player);

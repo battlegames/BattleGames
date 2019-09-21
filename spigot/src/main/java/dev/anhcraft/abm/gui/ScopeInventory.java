@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ScopeInventory extends GuiHandler implements PaginationHandler {
     @Override
@@ -38,10 +37,9 @@ public class ScopeInventory extends GuiHandler implements PaginationHandler {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {
-            playerData.getInventory().getStorage(ItemType.SCOPE).list().forEach(ent -> {
-                Optional<ScopeModel> osm = api.getScopeModel(ent.getKey());
-                if (osm.isPresent()) {
-                    ScopeModel sm = osm.get();
+            playerData.getInventory().getStorage(ItemType.SCOPE).list((k, v) -> {
+                ScopeModel sm = api.getScopeModel(k);
+                if (sm != null) {
                     PreparedItem pi = api.getItemManager().make(sm);
                     if(pi == null) return;
                     ItemStack item = sm.getSkin().transform(pi).build();

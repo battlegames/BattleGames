@@ -54,7 +54,7 @@ public class Scope extends BattleItem<ScopeModel> {
 
     @Override
     public void load(CompoundTag compound) {
-        ApiProvider.consume().getScopeModel(compound.getValue(ItemTag.SCOPE_ID, StringTag.class)).ifPresent(this::setModel);
+        setModel(ApiProvider.consume().getScopeModel(compound.getValue(ItemTag.SCOPE_ID, StringTag.class)));
         Integer nextZoomLv = compound.getValue(ItemTag.SCOPE_NEXT_ZOOM_LEVEL, IntTag.class);
         if(nextZoomLv != null) nextZoomLevel = nextZoomLv;
     }
