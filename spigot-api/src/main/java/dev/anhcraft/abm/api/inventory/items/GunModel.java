@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class GunModel extends WeaponModel {
     private Skin primarySkin;
@@ -70,12 +69,8 @@ public class GunModel extends WeaponModel {
 
         String defaultMag = conf.getString("magazine.default");
         if(defaultMag == null) throw new NullPointerException("Default magazine must be specified");
-        try {
-            defaultMagazine = ApiProvider.consume().getMagazineModel(defaultMag)
-                    .orElseThrow((Supplier<Throwable>) () -> new NullPointerException("MagazineModel did not exist"));
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        defaultMagazine = ApiProvider.consume().getMagazineModel(defaultMag);
+        if(defaultMagazine == null) throw new IllegalStateException("Default magazine not found!");
 
         inventorySlot = conf.getInt("inventory_slot");
         String ss = conf.getString("sounds.on_shoot");
@@ -102,11 +97,7 @@ public class GunModel extends WeaponModel {
 
         String defaultScp = conf.getString("scope.default");
         if(defaultScp != null) {
-            try {
-                defaultScope = ApiProvider.consume().getScopeModel(defaultScp).orElseThrow((Supplier<Throwable>) () -> new NullPointerException("Scope not found"));
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
+            defaultScope = ApiProvider.consume().getScopeModel(defaultScp);
         }
 
         conf.getStringList("spray_pattern").forEach(s -> {

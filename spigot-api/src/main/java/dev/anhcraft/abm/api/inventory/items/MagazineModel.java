@@ -40,9 +40,12 @@ public class MagazineModel extends BattleItemModel implements Attachable {
         String material = conf.getString("skin.material");
         skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material), conf.getInt("skin.damage"));
 
-        ConfigurationSection am = conf.getConfigurationSection("ammo");
-        if(am != null){
-            for(String a : am.getKeys(false)) ApiProvider.consume().getAmmoModel(a).ifPresent(ammo -> ammunition.put(ammo, am.getInt(a)));
+        ConfigurationSection ams = conf.getConfigurationSection("ammo");
+        if(ams != null){
+            for(String a : ams.getKeys(false)) {
+                AmmoModel am = ApiProvider.consume().getAmmoModel(a);
+                if(am != null) ammunition.put(am, ams.getInt(a));
+            }
         }
         ammunition = Collections.unmodifiableMap(ammunition);
     }
