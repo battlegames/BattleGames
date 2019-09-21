@@ -25,24 +25,36 @@ import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.LocalGame;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface BattleGameManager {
-    @NotNull Optional<GamePlayer> getGamePlayer(@NotNull Player player);
-    @NotNull Optional<LocalGame> getGame(@NotNull Player player);
-    @NotNull Optional<Game> getGame(@NotNull UUID playerId);
-    @NotNull Optional<Game> getGame(@NotNull Arena arena);
+    @Nullable GamePlayer getGamePlayer(@NotNull Player player);
+    @Nullable LocalGame getGame(@NotNull Player player);
+    @Nullable LocalGame getGame(@NotNull UUID playerId);
+    @Nullable Game getGame(@NotNull Arena arena);
 
-    default boolean join(@NotNull Player player, @NotNull Arena arena){
+    @Nullable
+    default Game join(@NotNull Player player, @NotNull Arena arena){
         return join(player, arena, false);
     }
 
-    boolean join(@NotNull Player player, @NotNull Arena arena, boolean local);
-    boolean forceJoin(@NotNull Player player, @NotNull Arena arena);
+    @Nullable
+    Game join(@NotNull Player player, @NotNull Arena arena, boolean forceLocal);
+
+    @Nullable
+    default Game forceJoin(@NotNull Player player, @NotNull Arena arena) {
+        return forceJoin(player, arena, false);
+    }
+
+    @Nullable
+    Game forceJoin(@NotNull Player player, @NotNull Arena arena, boolean forceLocal);
+
     boolean quit(@NotNull Player player);
     void destroy(@NotNull Game game);
-    @NotNull Collection<Game> getGames();
+    @NotNull Collection<Game> listGames();
+    void listGames(@NotNull Consumer<Game> consumer);
 }

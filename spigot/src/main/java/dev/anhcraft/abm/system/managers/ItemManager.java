@@ -26,6 +26,7 @@ import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.BattleItemModel;
 import dev.anhcraft.abm.api.inventory.items.ItemTag;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
@@ -39,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ItemManager extends BattleComponent implements BattleItemManager {
     private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
@@ -58,19 +58,23 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         }
     }
 
+    @Override
     @Nullable
     public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem){
         return make(battleItem, null);
     }
 
+    @Override
     @Nullable
     public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition){
         if(battleItem == null) return null;
-        Optional<R> opt = battleItem.getModel();
-        if(opt.isPresent()){
-            Map<String, String> info = plugin.mapInfo(battleItem.collectInfo(null));
+        R model = battleItem.getModel();
+        if(model != null){
+            InfoHolder map = battleItem.collectInfo(null);
+            if(map == null) return null;
+            Map<String, String> info = plugin.mapInfo(map);
             if(addition != null) info.putAll(addition);
-            PreparedItem pi = ITEMS.get(opt.get().getItemType()).duplicate();
+            PreparedItem pi = ITEMS.get(model.getItemType()).duplicate();
             pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(pi.name(), info)));
             pi.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtils.formatInfo(s, info)));
             return pi;
@@ -78,11 +82,13 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         return null;
     }
 
+    @Override
     @Nullable
     public PreparedItem make(@Nullable BattleItemModel bim){
         return make(bim, null);
     }
 
+    @Override
     @Nullable
     public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition){
         if(bim == null) return null;
@@ -94,6 +100,7 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         return pi;
     }
 
+    @Override
     @Nullable
     public BattleItem read(@Nullable ItemStack itemStack){
         if(itemStack == null) return null;
@@ -107,14 +114,15 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         return item;
     }
 
+    @Override
     @Nullable
     public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem){
         if(itemStack == null || battleItem == null) return null;
         ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
         CompoundTag compoundTag = nbtHelper.getTag().getOrCreateDefault("abm", CompoundTag.class);
         battleItem.save(compoundTag);
-        if(battleItem.getModel().isPresent())
-            compoundTag.put(ItemTag.ITEM_TYPE, battleItem.getModel().get().getItemType().name());
+        if(battleItem.getModel() != null)
+            compoundTag.put(ItemTag.ITEM_TYPE, battleItem.getModel().getItemType().name());
         nbtHelper.getTag().put("abm", compoundTag);
         return nbtHelper.save();
     }

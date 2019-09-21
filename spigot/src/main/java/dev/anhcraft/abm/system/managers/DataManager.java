@@ -109,12 +109,13 @@ public class DataManager extends BattleComponent {
     }
 
     public synchronized void savePlayerData(OfflinePlayer player){
-        plugin.getPlayerData(player).ifPresent(playerData -> {
+        PlayerData playerData = plugin.getPlayerData(player);
+        if(playerData != null) {
             Storage provider = PLAYER_STORAGE.get(player);
             playerData.write(provider.getData());
             if(provider.getData().getChanged().get() && provider.save())
                 provider.getData().getChanged().set(false);
-        });
+        }
     }
 
     public void destroy(){

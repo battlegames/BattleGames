@@ -49,31 +49,35 @@ public class CTFController extends TeamDeathmatchController {
 
         String p = getMode().getId()+"_";
 
-        plugin.getPapiExpansion().handlers.put(p+"flags", player -> plugin.gameManager.getGame(player).map(game -> {
+        plugin.getPapiExpansion().handlers.put(p+"flags", player -> {
+            LocalGame game = plugin.gameManager.getGame(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
-            return Integer.toString(f.size());
-        }).orElse(null));
+            return f == null ? null : Integer.toString(f.size());
+        });
 
-        plugin.getPapiExpansion().handlers.put(p+"valid_flags", player -> plugin.gameManager.getGame(player).map(game -> {
+        plugin.getPapiExpansion().handlers.put(p+"valid_flags", player -> {
+            LocalGame game = plugin.gameManager.getGame(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
-            return Long.toString(FLAG.get(game).stream().filter(TeamFlag::isValid).count());
-        }).orElse(null));
+            return f == null ? null : Long.toString(f.stream().filter(TeamFlag::isValid).count());
+        });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> plugin.gameManager.getGame(player).map(game -> {
+        plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> {
+            LocalGame game = plugin.gameManager.getGame(player);
             SimpleTeam<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
-            return Long.toString(f.stream().filter(flag -> flag.getTeam() == team).count());
-        }).orElse(null));
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == team).count());
+        });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> plugin.gameManager.getGame(player).map(game -> {
+        plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> {
+            LocalGame game = plugin.gameManager.getGame(player);
             SimpleTeam<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
-            return Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == team).count());
-        }).orElse(null));
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == team).count());
+        });
     }
 
     @Override
@@ -165,7 +169,8 @@ public class CTFController extends TeamDeathmatchController {
     @EventHandler
     public void sneak(PlayerToggleSneakEvent event){
         if(event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
-        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        if(game != null){
             if(game.getMode() != getMode()) return;
             if(!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_"+event.getPlayer().getName())) return;
             List<Entity> entities = event.getPlayer().getNearbyEntities(1, 1, 1);
@@ -187,7 +192,7 @@ public class CTFController extends TeamDeathmatchController {
                     }
                 }
             }
-        });
+        }
     }
 
     @Override

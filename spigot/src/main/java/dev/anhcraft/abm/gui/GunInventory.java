@@ -38,8 +38,8 @@ public class GunInventory extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        Optional<PlayerData> pd = api.getPlayerData(player);
-        pd.ifPresent(playerData -> {
+        PlayerData playerData = api.getPlayerData(player);
+        if(playerData != null) {
             playerData.getInventory().getStorage(ItemType.GUN).list().forEach(ent -> {
                 Optional<GunModel> ogm = api.getGunModel(ent.getKey());
                 if (ogm.isPresent()) {
@@ -57,6 +57,6 @@ public class GunInventory extends GuiHandler implements PaginationHandler {
                     }));
                 }
             });
-        });
+        }
     }
 }

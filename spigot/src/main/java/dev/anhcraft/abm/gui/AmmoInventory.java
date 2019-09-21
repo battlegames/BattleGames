@@ -36,8 +36,8 @@ public class AmmoInventory extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        Optional<PlayerData> pd = api.getPlayerData(player);
-        pd.ifPresent(playerData -> {
+        PlayerData playerData = api.getPlayerData(player);
+        if(playerData != null) {
             playerData.getInventory().getStorage(ItemType.AMMO).list().forEach(ent -> {
                 Optional<AmmoModel> oam = api.getAmmoModel(ent.getKey());
                 if (oam.isPresent()) {
@@ -53,6 +53,6 @@ public class AmmoInventory extends GuiHandler implements PaginationHandler {
                     }));
                 }
             });
-        });
+        }
     }
 }

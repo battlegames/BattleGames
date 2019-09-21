@@ -36,8 +36,8 @@ public class MagazineInventory extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        Optional<PlayerData> pd = api.getPlayerData(player);
-        pd.ifPresent(playerData -> {
+        PlayerData playerData = api.getPlayerData(player);
+        if(playerData != null) {
             playerData.getInventory().getStorage(ItemType.MAGAZINE).list().forEach(ent -> {
                 Optional<MagazineModel> omm = api.getMagazineModel(ent.getKey());
                 if (omm.isPresent()) {
@@ -53,6 +53,6 @@ public class MagazineInventory extends GuiHandler implements PaginationHandler {
                     }));
                 }
             });
-        });
+        }
     }
 }

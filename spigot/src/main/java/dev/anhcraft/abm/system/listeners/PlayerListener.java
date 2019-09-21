@@ -24,10 +24,11 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
-import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.GamePlayer;
+import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
 import dev.anhcraft.abm.api.inventory.items.Gun;
+import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
@@ -90,24 +91,27 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
-        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        if(game != null){
             game.getMode().getController(c -> c.onSwapHand(event, game));
-        });
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void drop(PlayerDropItemEvent event) {
         if(plugin.guiManager.validateButton(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false)) event.setCancelled(true);
-        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        if(game != null){
             game.getMode().getController(c -> c.onDropItem(event, game));
-        });
+        }
     }
 
     @EventHandler
     public void chooseItem(ItemChooseEvent event) {
-        plugin.gameManager.getGame(event.getPlayer()).ifPresent(game -> {
+        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        if(game != null){
             game.getMode().getController(c -> c.onChooseItem(event, game));
-        });
+        }
     }
 
     @EventHandler
@@ -119,13 +123,14 @@ public class PlayerListener extends BattleComponent implements Listener {
             BattleItem item = plugin.itemManager.read(event.getItem());
             if(item != null) {
                 if (item instanceof Gun) {
-                    plugin.gameManager.getGame(p).ifPresent(game -> {
+                    LocalGame game = plugin.gameManager.getGame(p);
+                    if(game != null){
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
-                    });
+                    }
                 }
                 return;
             }
@@ -134,13 +139,14 @@ public class PlayerListener extends BattleComponent implements Listener {
             BattleItem item = plugin.itemManager.read(event.getItem());
             if(item != null) {
                 if (item instanceof Gun) {
-                    plugin.gameManager.getGame(p).ifPresent(game -> {
+                    LocalGame game = plugin.gameManager.getGame(p);
+                    if(game != null){
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
-                    });
+                    }
                 }
                 return;
             }
@@ -152,31 +158,24 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void damage(PlayerDamageEvent e) {
         if(e.getEntity() instanceof Player) {
             Player ent = (Player) e.getEntity();
-            Optional<LocalGame> g1 = plugin.gameManager.getGame(e.getDamager());
-            Optional<LocalGame> g2 = plugin.gameManager.getGame(ent);
-            if(g1.isPresent()){
-                LocalGame localGame1 = g1.get();
-                if(g2.isPresent()) {
-                    if(g2.get().equals(localGame1)) {
-                        GamePlayer gp1 = localGame1.getPlayer(e.getDamager());
-                        GamePlayer gp2 = localGame1.getPlayer(ent);
-                        if(gp1 == null || gp2 == null) return;
-                        // spectators can't attack or receive damage
-                        if(gp1.isSpectator() || gp2.isSpectator()){
-                            e.setCancelled(true);
-                            return;
-                        }
-                        GamePlayerDamageEvent event = new GamePlayerDamageEvent(localGame1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
-                        Bukkit.getPluginManager().callEvent(event);
-                        e.setCancelled(event.isCancelled());
-
-                        if(!event.isCancelled()) localGame1.getDamageReports().get(ent).add(event.getReport());
-                    } else
-                        // can't attack players in another arena
+            LocalGame g1 = plugin.gameManager.getGame(e.getDamager());
+            LocalGame g2 = plugin.gameManager.getGame(ent);
+            if(g1 != null && g2 != null){
+                if(g1.equals(g2)) {
+                    GamePlayer gp1 = g1.getPlayer(e.getDamager());
+                    GamePlayer gp2 = g1.getPlayer(ent);
+                    if(gp1 == null || gp2 == null) return;
+                    // spectators can't attack or receive damage
+                    if(gp1.isSpectator() || gp2.isSpectator()){
                         e.setCancelled(true);
-                } else
-                    // game players can't attack normal players
-                    e.setCancelled(true);
+                        return;
+                    }
+                    GamePlayerDamageEvent event = new GamePlayerDamageEvent(g1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
+                    Bukkit.getPluginManager().callEvent(event);
+                    e.setCancelled(event.isCancelled());
+
+                    if(!event.isCancelled()) g1.getDamageReports().get(ent).add(event.getReport());
+                } else e.setCancelled(true);
             }
         }
     }
@@ -190,9 +189,8 @@ public class PlayerListener extends BattleComponent implements Listener {
         BattleItem oldItem = plugin.itemManager.read(oldItemStack);
         if(newItem != null){
             if(newItem instanceof Gun) {
-                ((Gun) newItem).getModel().ifPresent(m -> {
-                    plugin.getHandler(GunHandler.class).reduceSpeed(player, m);
-                });
+                GunModel gm = ((Gun) newItem).getModel();
+                if(gm != null) plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
                 secondarySkin(player, newItem, oldItem);
             } else {
                 // OTHER ITEM TYPE PUT HERE
@@ -202,12 +200,13 @@ public class PlayerListener extends BattleComponent implements Listener {
         } else if(oldItem != null) {
             if(oldItem instanceof Gun){
                 Gun gun = (Gun) oldItem;
-                gun.getModel().ifPresent(m -> {
+                GunModel gm = gun.getModel();
+                if(gm != null){
                     if(!plugin.getHandler(GunHandler.class).handleZoomOut(player)){
                         player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
                         player.setFlySpeed(plugin.getDefaultFlyingSpeed());
                     }
-                });
+                }
             }
             secondarySkin(player, null, oldItem);
         }
@@ -221,7 +220,8 @@ public class PlayerListener extends BattleComponent implements Listener {
             e.setKeepInventory(true);
             e.setKeepLevel(true);
         }
-        plugin.gameManager.getGame(e.getEntity()).ifPresent(game -> {
+        LocalGame game = plugin.gameManager.getGame(e.getEntity());
+        if(game != null){
             e.setDeathMessage(null);
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getDeathCounter().incrementAndGet();
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
@@ -266,7 +266,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             });
 
             plugin.getHandler(GunHandler.class).handleZoomOut(e.getEntity());
-        });
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -280,19 +280,16 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
             plugin.guiManager.callEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
-            plugin.gameManager.getGame(p).ifPresent(game -> {
-                game.getMode().getController(c -> c.onClickInventory(event, game, p));
-            });
+            LocalGame game = plugin.gameManager.getGame(p);
+            if(game != null) game.getMode().getController(c -> c.onClickInventory(event, game, p));
         }
     }
 
     @EventHandler
     public void respawn(PlayerRespawnEvent event){
         Player player = event.getPlayer();
-        Optional<LocalGame> opt = plugin.gameManager.getGame(player);
-        if(opt.isPresent()){
-            LocalGame g = opt.get();
-            g.getMode().getController(c -> c.onRespawn(event, g));
-        } else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
+        LocalGame game = plugin.gameManager.getGame(player);
+        if(game != null) game.getMode().getController(c -> c.onRespawn(event, game));
+        else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
     }
 }

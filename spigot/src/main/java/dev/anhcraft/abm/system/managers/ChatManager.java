@@ -29,9 +29,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -41,9 +43,8 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
     }
 
     public boolean chat(Player player, String msg){
-        Optional<LocalGame> x = plugin.gameManager.getGame(player);
-        if(x.isPresent()){
-            LocalGame g = x.get();
+        LocalGame g = plugin.gameManager.getGame(player);
+        if(g != null){
             switch (g.getPhase()){
                 case WAITING:{
                     if(!g.getMode().isWaitingChatEnabled()) return false;
@@ -65,9 +66,11 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
         } else {
             if(!plugin.getGeneralConf().getBoolean("default_chat.enabled")) return false;
             String q = Objects.requireNonNull(PlaceholderUtils.formatPAPI(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
-            Bukkit.getOnlinePlayers().stream()
-                    .filter((Predicate<Player>) player1 -> !plugin.gameManager.getGame(player1).isPresent())
-                    .forEach(p -> p.sendMessage(q));
+            for(Player p : Bukkit.getOnlinePlayers()){
+                if(p.equals(player) || plugin.gameManager.getGame(player) == null) {
+                    p.sendMessage(q);
+                }
+            }
         }
         return true;
     }

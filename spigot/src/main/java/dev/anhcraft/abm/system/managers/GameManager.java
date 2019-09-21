@@ -27,6 +27,7 @@ import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.system.QueueServer;
 import dev.anhcraft.abm.system.cleaners.GameCleaner;
 import dev.anhcraft.abm.system.controllers.CTFController;
@@ -40,9 +41,11 @@ import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class GameManager extends BattleComponent implements BattleGameManager {
     private final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
@@ -62,72 +65,72 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Bukkit.getPluginManager().registerEvents(controller, plugin);
     }
 
-    @NotNull
     @Override
-    public Optional<GamePlayer> getGamePlayer(@NotNull Player player){
+    @Nullable
+    public GamePlayer getGamePlayer(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
             LocalGame x = PLAYER_GAME_MAP.get(player.getUniqueId());
-            if(x != null) return Optional.ofNullable(x.getPlayer(player));
-            else return Optional.empty();
+            return x == null ? null : x.getPlayer(player);
         }
     }
 
-    @NotNull
     @Override
-    public Optional<LocalGame> getGame(@NotNull Player player){
+    @Nullable
+    public LocalGame getGame(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            return Optional.ofNullable(PLAYER_GAME_MAP.get(player.getUniqueId()));
+            return PLAYER_GAME_MAP.get(player.getUniqueId());
         }
     }
 
-    @NotNull
     @Override
-    public Optional<Game> getGame(@NotNull UUID playerId){
+    @Nullable
+    public LocalGame getGame(@NotNull UUID playerId){
         Condition.argNotNull("playerId", playerId);
         synchronized (LOCK) {
-            return Optional.ofNullable(PLAYER_GAME_MAP.get(playerId));
+            return PLAYER_GAME_MAP.get(playerId);
         }
     }
 
-    @NotNull
     @Override
-    public Optional<Game> getGame(@NotNull Arena arena){
+    @Nullable
+    public Game getGame(@NotNull Arena arena){
         Condition.argNotNull("arena", arena);
-        return Optional.ofNullable(ARENA_GAME_MAP.get(arena));
+        return ARENA_GAME_MAP.get(arena);
     }
 
-    private boolean join(Player player, LocalGame localGame, BattleModeController controller) {
+    private Game join(Player player, LocalGame localGame, BattleModeController controller) {
         GamePlayer gp = new GamePlayer(player);
         localGame.getPlayers().put(player, gp);
         PLAYER_GAME_MAP.put(player.getUniqueId(), localGame);
         controller.onJoin(player, localGame);
         Bukkit.getPluginManager().callEvent(new GameJoinEvent(localGame, gp));
-        return true;
+        return localGame;
     }
 
     @Override
-    public boolean join(@NotNull Player player, @NotNull Arena arena, boolean local){
+    @Nullable
+    public Game join(@NotNull Player player, @NotNull Arena arena, boolean forceLocal){
         Condition.argNotNull("player", player);
         Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
             if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) {
                 plugin.chatManager.sendPlayer(player, "arena.error_already_joined");
-                return false;
+                return null;
             }
             Game game = ARENA_GAME_MAP.get(arena);
             if(game != null){
                 if (game.getPhase() == GamePhase.END || game.getPhase() == GamePhase.CLEANING) {
                     plugin.chatManager.sendPlayer(player, "arena.error_attendance_disabled");
-                    return false;
+                    return null;
                 }
                 if(game.getPlayerCount() == arena.getMaxPlayers()){
                     plugin.chatManager.sendPlayer(player, "arena.error_full_players");
-                    return false;
+                    return null;
                 }
             } else {
-                game = arena.hasBungeecordSupport() && !local ? new RemoteGame(arena) : new LocalGame(arena);
+                game = arena.hasBungeecordSupport() && !forceLocal ? new RemoteGame(arena) : new LocalGame(arena);
                 ARENA_GAME_MAP.put(arena, game);
             }
             if(game instanceof LocalGame) {
@@ -135,34 +138,43 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                 BattleModeController controller = localGame.getMode().getController();
                 if (controller == null) {
                     plugin.chatManager.sendPlayer(player, "arena.error_mode_controller_unavailable");
-                    return false;
                 }
-                if (!controller.canJoin(player, localGame)) {
+                else if (!controller.canJoin(player, localGame)) {
                     plugin.chatManager.sendPlayer(player, "arena.error_attendance_refused");
-                    return false;
                 }
-                return join(player, localGame, controller);
+                else {
+                    return join(player, localGame, controller);
+                }
             }
             else {
                 plugin.queueServerTask.QUEUE.add(new QueueServer(player, arena.getRemoteServers(), arena.getId()));
-                return true;
             }
+            return game;
         }
     }
 
     @Override
-    public boolean forceJoin(@NotNull Player player, @NotNull Arena arena) {
+    @Nullable
+    public Game forceJoin(@NotNull Player player, @NotNull Arena arena, boolean forceLocal) {
         Condition.argNotNull("player", player);
         Condition.argNotNull("arena", arena);
         synchronized (LOCK) {
-            if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) return false;
+            if (PLAYER_GAME_MAP.containsKey(player.getUniqueId())) return null;
             Game game = ARENA_GAME_MAP.get(arena);
-            if (game == null) return false;
-            LocalGame localGame = (LocalGame) game;
-            if(!ARENA_GAME_MAP.containsKey(arena)) ARENA_GAME_MAP.put(arena, localGame = new LocalGame(arena));
-            BattleModeController controller = localGame.getMode().getController();
-            if (controller == null) return false;
-            return join(player, localGame, controller);
+            if(game == null){
+                game = arena.hasBungeecordSupport() && !forceLocal ? new RemoteGame(arena) : new LocalGame(arena);
+                ARENA_GAME_MAP.put(arena, game);
+            }
+            if(game instanceof LocalGame) {
+                LocalGame localGame = (LocalGame) game;
+                BattleModeController controller = localGame.getMode().getController();
+                if (controller != null)
+                    return join(player, localGame, controller);
+            }
+            else {
+                plugin.queueServerTask.QUEUE.add(new QueueServer(player, arena.getRemoteServers(), arena.getId()));
+            }
+            return game;
         }
     }
 
@@ -220,30 +232,39 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     public void rewardAndSaveCache(LocalGame localGame) {
-        localGame.getPlayers().values().forEach(gamePlayer -> plugin.getPlayerData(gamePlayer.getPlayer()).ifPresent(playerData -> {
-            double m = Math.max(0, localGame.getArena().calculateFinalMoney(gamePlayer));
-            long e = Math.max(0, localGame.getArena().calculateFinalExp(gamePlayer));
-            VaultApi.getEconomyApi().depositPlayer(gamePlayer.getPlayer(), m);
-            playerData.getExp().addAndGet(e);
-            plugin.chatManager.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
+        localGame.getPlayers().values().forEach(gamePlayer -> {
+            PlayerData playerData = plugin.getPlayerData(gamePlayer.getPlayer());
+            if(playerData != null) {
+                double m = Math.max(0, localGame.getArena().calculateFinalMoney(gamePlayer));
+                long e = Math.max(0, localGame.getArena().calculateFinalExp(gamePlayer));
+                VaultApi.getEconomyApi().depositPlayer(gamePlayer.getPlayer(), m);
+                playerData.getExp().addAndGet(e);
+                plugin.chatManager.sendPlayer(gamePlayer.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
 
-            playerData.getKillCounter().addAndGet(gamePlayer.getKillCounter().get());
-            playerData.getHeadshotCounter().addAndGet(gamePlayer.getHeadshotCounter().get());
-            playerData.getAssistCounter().addAndGet(gamePlayer.getAssistCounter().get());
-            playerData.getDeathCounter().addAndGet(gamePlayer.getDeathCounter().get());
-            if(gamePlayer.isWinner()) {
-                playerData.getWinCounter().incrementAndGet();
-                localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
-            } else {
-                playerData.getLoseCounter().incrementAndGet();
-                localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
+                playerData.getKillCounter().addAndGet(gamePlayer.getKillCounter().get());
+                playerData.getHeadshotCounter().addAndGet(gamePlayer.getHeadshotCounter().get());
+                playerData.getAssistCounter().addAndGet(gamePlayer.getAssistCounter().get());
+                playerData.getDeathCounter().addAndGet(gamePlayer.getDeathCounter().get());
+                if(gamePlayer.isWinner()) {
+                    playerData.getWinCounter().incrementAndGet();
+                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
+                } else {
+                    playerData.getLoseCounter().incrementAndGet();
+                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gamePlayer.getPlayer()));
+                }
             }
-        }));
+        });
     }
 
     @NotNull
     @Override
-    public Collection<Game> getGames(){
+    public Collection<Game> listGames(){
         return Collections.unmodifiableCollection(ARENA_GAME_MAP.values());
+    }
+
+    @Override
+    public void listGames(@NotNull Consumer<Game> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        ARENA_GAME_MAP.values().forEach(consumer);
     }
 }

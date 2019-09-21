@@ -25,10 +25,7 @@ import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
-import dev.anhcraft.abm.api.inventory.items.AmmoModel;
-import dev.anhcraft.abm.api.inventory.items.BattleItem;
-import dev.anhcraft.abm.api.inventory.items.Gun;
-import dev.anhcraft.abm.api.inventory.items.GunModel;
+import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.CustomBossBar;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.system.handlers.GunHandler;
@@ -211,14 +208,12 @@ public abstract class ModeController extends BattleComponent implements Listener
     public void doReloadGun(Player player, Gun gun){
         if(RELOADING_GUN.containsKey(player.getUniqueId())) return;
 
-        Optional<GunModel> gmo = gun.getModel();
-        if(!gmo.isPresent()) return;
-        GunModel gm = gmo.get();
+        GunModel gm = gun.getModel();
+        MagazineModel mm = gun.getMagazine().getModel();
+        AmmoModel am = gun.getMagazine().getAmmo().getModel();
+        if(gm == null || mm == null || am == null) return;
 
-        int maxBullet = gun.getMagazine().getModel().map(magazineModel -> {
-            Optional<AmmoModel> aop = gun.getMagazine().getAmmo().getModel();
-            return aop.isPresent() ? magazineModel.getAmmunition().getOrDefault(aop.get(), 0) : 0;
-        }).get();
+        int maxBullet = mm.getAmmunition().getOrDefault(am, 0);
         int currentBullet = gun.getMagazine().getAmmoCount();
         if(currentBullet == maxBullet) return;
         double reloadTime = gm.getReloadTimeCalculator()

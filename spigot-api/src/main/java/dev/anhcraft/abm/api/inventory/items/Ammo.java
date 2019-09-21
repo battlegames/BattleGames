@@ -28,7 +28,9 @@ import org.jetbrains.annotations.NotNull;
 public class Ammo extends BattleItem<AmmoModel> {
     @Override
     public void save(CompoundTag compound) {
-        getModel().ifPresent(ammoModel -> compound.put(ItemTag.AMMO_ID, ammoModel.getId()));
+        if(getModel() != null){
+            compound.put(ItemTag.AMMO_ID, getModel().getId());
+        }
     }
 
     @Override
@@ -38,6 +40,7 @@ public class Ammo extends BattleItem<AmmoModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        getModel().ifPresent(ammoModel -> ammoModel.inform(holder));
+        if(getModel() != null)
+            getModel().inform(holder);
     }
 }

@@ -22,34 +22,29 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
-import org.apache.commons.lang.Validate;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public abstract class BattleItem<M extends BattleItemModel> implements Informative {
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<M> model = Optional.empty();
+    private M model;
 
-    public Optional<M> getModel() {
+    @Nullable
+    public M getModel() {
         return model;
     }
 
-    public void setModel(@NotNull M model) {
-        Validate.notNull(model, "Model must be non-null");
-        this.model = Optional.of(model);
+    public void setModel(@Nullable M model) {
+        this.model = model;
     }
 
     public abstract void save(CompoundTag compound);
     public abstract void load(CompoundTag compound);
 
+    @Nullable
     public InfoHolder collectInfo(@Nullable String prefix) {
-        if(model.isPresent()) {
-            M m = model.get();
+        if(model != null) {
             InfoHolder h = new InfoHolder((prefix == null ? "" : prefix) +
-                    m.getItemType().name().toLowerCase() + "_")
-                    .link(m.collectInfo(prefix));
+                    model.getItemType().name().toLowerCase() + "_")
+                    .link(model.collectInfo(prefix));
             inform(h);
             return h;
         }

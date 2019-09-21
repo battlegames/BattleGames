@@ -33,7 +33,7 @@ public class GameTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
-        plugin.gameManager.getGames().forEach(g -> {
+        plugin.gameManager.listGames(g -> {
             if(g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;
                 BattleModeController mc = game.getMode().getController();

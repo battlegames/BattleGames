@@ -46,27 +46,27 @@ public class TeamDeathmatchController extends DeathmatchController {
         String p = mode.getId()+"_";
 
         plugin.getPapiExpansion().handlers.put(p+"team", player -> {
-            return plugin.gameManager.getGame(player).map(game -> {
-                SimpleTeam<ABTeam> t = TEAM.get(game);
-                if(t == null)
-                    return null;
-                ABTeam dt = t.getTeam(player);
-                if(dt == null)
-                    return null;
-                return dt.getLocalizedName();
-            }).orElse(null);
+            LocalGame game = plugin.gameManager.getGame(player);
+            if(game == null) return null;
+            SimpleTeam<ABTeam> t = TEAM.get(game);
+            if(t == null)
+                return null;
+            ABTeam dt = t.getTeam(player);
+            if(dt == null)
+                return null;
+            return dt.getLocalizedName();
         });
 
         plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
-            return plugin.gameManager.getGame(player).map(game -> {
-                SimpleTeam<ABTeam> t = TEAM.get(game);
-                if(t == null)
-                    return null;
-                ABTeam dt = t.getTeam(player);
-                if(dt == null)
-                    return null;
-                return Integer.toString(t.countPlayers(dt));
-            }).orElse(null);
+            LocalGame game = plugin.gameManager.getGame(player);
+            if(game == null) return null;
+            SimpleTeam<ABTeam> t = TEAM.get(game);
+            if(t == null)
+                return null;
+            ABTeam dt = t.getTeam(player);
+            if(dt == null)
+                return null;
+            return Integer.toString(t.countPlayers(dt));
         });
     }
 

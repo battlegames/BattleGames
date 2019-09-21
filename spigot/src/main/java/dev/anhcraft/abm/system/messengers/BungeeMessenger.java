@@ -23,10 +23,7 @@ package dev.anhcraft.abm.system.messengers;
 import com.google.common.collect.Multiset;
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.game.Arena;
-import dev.anhcraft.abm.api.game.GamePhase;
-import dev.anhcraft.abm.api.game.LocalGame;
-import dev.anhcraft.abm.api.game.RemoteGame;
+import dev.anhcraft.abm.api.game.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -85,29 +82,28 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
             byte c = in.readByte();
             switch (c){
                 case 0: {
-                    String arena = in.readUTF();
+                    String arenaId = in.readUTF();
                     String phase = in.readUTF();
                     int players = in.readInt();
                     long time = in.readLong();
-                    plugin.getArena(arena).filter(Arena::hasBungeecordSupport)
-                            .flatMap(a -> plugin.gameManager.getGame(a))
-                            .ifPresent(game -> {
-                        RemoteGame rg = (RemoteGame) game;
+                    Arena arena = plugin.getArena(arenaId);
+                    if(arena != null && arena.hasBungeecordSupport()) {
+                        RemoteGame rg = (RemoteGame) plugin.gameManager.getGame(arena);
                         rg.setPhase(GamePhase.valueOf(phase));
                         rg.setPlayerCount(players);
                         rg.getCurrentTime().set(time);
-                    });
+                    }
                     break;
                 }
                 case 2: {
                     Player player = Bukkit.getPlayer(in.readUTF());
-                    String arena = in.readUTF();
+                    String arenaId = in.readUTF();
                     String server = in.readUTF();
-                    plugin.getArena(arena).ifPresent(arena1 -> {
-                        if(plugin.gameManager.join(player, arena1, true)) {
-                            plugin.gameManager.getGame(arena1).ifPresent(game -> ((LocalGame) game).getDownstreamServers().put(server, player));
-                        }
-                    });
+                    Arena arena = plugin.getArena(arenaId);
+                    if (arena != null) {
+                        Game game = plugin.gameManager.join(player, arena, true);
+                        if(game != null) ((LocalGame) game).getDownstreamServers().put(server, player);
+                    }
                 }
             }
             in.close();

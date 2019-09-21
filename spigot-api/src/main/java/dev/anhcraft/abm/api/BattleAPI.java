@@ -30,32 +30,41 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public interface BattleAPI {
-    @NotNull Map<String, String> mapInfo(InfoHolder holder);
-    @NotNull String formatLongFormDate(Date date);
+    @NotNull Map<String, String> mapInfo(@NotNull InfoHolder holder);
+    @NotNull String formatLongFormDate(@NotNull Date date);
     @NotNull String formatShortForm(long time);
-    @NotNull String formatShortFormDateHours(Date date);
-    @NotNull String formatShortFormDateMinutes(Date date);
-    @NotNull String formatShortFormDateSeconds(Date date);
+    @NotNull String formatShortFormDateHours(@NotNull Date date);
+    @NotNull String formatShortFormDateMinutes(@NotNull Date date);
+    @NotNull String formatShortFormDateSeconds(@NotNull Date date);
     float getDefaultWalkingSpeed();
     float getDefaultFlyingSpeed();
     long calculateExp(int level);
     int calculateLevel(long exp);
-    Optional<PlayerData> getPlayerData(@Nullable OfflinePlayer player);
+    @Nullable
+    PlayerData getPlayerData(@Nullable OfflinePlayer player);
     @NotNull ServerData getServerData();
-    Optional<Arena> getArena(@Nullable String id);
+    @Nullable
+    Arena getArena(@Nullable String id);
     Optional<AmmoModel> getAmmoModel(@Nullable String id);
     Optional<GunModel> getGunModel(@Nullable String id);
     Optional<MagazineModel> getMagazineModel(@Nullable String id);
     Optional<ScopeModel> getScopeModel(@Nullable String id);
     Optional<Kit> getKit(@Nullable String id);
     @NotNull List<Arena> listArenas();
+    void listArenas(@NotNull Consumer<Arena> consumer);
     @NotNull List<AmmoModel> listAmmoModels();
+    void listAmmoModels(@NotNull Consumer<AmmoModel> consumer);
     @NotNull List<GunModel> listGunModels();
+    void listGunModels(@NotNull Consumer<GunModel> consumer);
     @NotNull List<MagazineModel> listMagazineModels();
+    void listMagazineModels(@NotNull Consumer<MagazineModel> consumer);
     @NotNull List<ScopeModel> listScopes();
+    void listScopes(@NotNull Consumer<ScopeModel> consumer);
     @NotNull List<Kit> listKits();
+    void listKits(@NotNull Consumer<Kit> consumer);
     @NotNull BattleGameManager getGameManager();
     @NotNull BattleItemManager getItemManager();
     @NotNull BattleGuiManager getGuiManager();

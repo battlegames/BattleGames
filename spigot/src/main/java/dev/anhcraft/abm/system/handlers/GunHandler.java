@@ -51,7 +51,6 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GunHandler extends Handler {
@@ -61,17 +60,15 @@ public class GunHandler extends Handler {
         super(plugin);
     }
 
-    public ItemStack createGun(Gun gunItem, boolean secondarySkin){
-        return gunItem.getModel()
-                .map(gunModel -> {
-                    Skin skin = secondarySkin ? gunModel.getSecondarySkin() : gunModel.getPrimarySkin();
-                    PreparedItem pi = plugin.itemManager.make(gunItem);
-                    if(pi == null) return null;
-                    else {
-                        pi = skin.transform(pi);
-                        return plugin.itemManager.write(pi.build(), gunItem);
-                    }
-                }).orElse(null);
+    public ItemStack createGun(Gun gun, boolean secondarySkin){
+        if(gun.getModel() == null) return null;
+        Skin skin = secondarySkin ? gun.getModel().getSecondarySkin() : gun.getModel().getPrimarySkin();
+        PreparedItem pi = plugin.itemManager.make(gun);
+        if(pi == null) return null;
+        else {
+            pi = skin.transform(pi);
+            return plugin.itemManager.write(pi.build(), gun);
+        }
     }
 
     public void selectGun(Player player, GunModel g) {
@@ -145,25 +142,23 @@ public class GunHandler extends Handler {
                 return false;
             }
         }
+        GunModel gm = gunItem.getModel();
+        if(gm == null) return false;
         Scope scp = gunItem.getScope();
         if(scp == null){
-            Optional<GunModel> ogm = gunItem.getModel();
-            if(ogm.isPresent()){
-                GunModel gm = ogm.get();
-                if(gm.getDefaultScope() != null) {
-                    gunItem.setScope(scp = new Scope());
-                    scp.setModel(gm.getDefaultScope());
-                }
+            if(gm.getDefaultScope() != null) {
+                gunItem.setScope(scp = new Scope());
+                scp.setModel(gm.getDefaultScope());
             }
         }
-        if(scp == null || !scp.getModel().isPresent()) {
+        if(scp == null || scp.getModel() == null) {
             plugin.chatManager.sendPlayer(player, "gun.none_scope_message");
             return false;
         }
         int next = scp.nextZoomLevel();
         if(next == -1)  rmvZoom(player);
         else {
-            ScopeModel sm = scp.getModel().get();
+            ScopeModel sm = scp.getModel();
             int nextLv = sm.getZoomLevels().get(next);
             player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
@@ -175,9 +170,8 @@ public class GunHandler extends Handler {
     }
 
     public boolean shoot(LocalGame localGame, Player player, Gun gunItem){
-        Optional<GunModel> gmo = gunItem.getModel();
-        if(!gmo.isPresent()) return false;
-        GunModel gm = gmo.get();
+        GunModel gm = gunItem.getModel();
+        if(gm == null) return false;
         ModeController mc = (ModeController) localGame.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
@@ -186,17 +180,17 @@ public class GunHandler extends Handler {
             }
         }
         Magazine mag = gunItem.getMagazine();
-        if(!mag.getModel().isPresent()) {
+        if(mag.getModel() == null) {
             plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
             return false;
         }
-        if(!mag.getAmmo().getModel().isPresent() || mag.getAmmoCount() == 0) {
+        if(mag.getAmmo().getModel() == null || mag.getAmmoCount() == 0) {
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return false;
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
 
-        gunItem.getModel().ifPresent(s -> s.getShootSound().play(player.getWorld(), player.getLocation()));
+        gm.getShootSound().play(player.getWorld(), player.getLocation());
         Location start = player.getEyeLocation();
         Vector originVec = player.getEyeLocation().toVector();
         Vector dir = start.getDirection().normalize();
@@ -208,7 +202,7 @@ public class GunHandler extends Handler {
             sprayVec.multiply(.75);
         } else
             sprayVec = new Vector();
-        List<Bullet> bullets = mag.getAmmo().getModel().get().getBullets();
+        List<Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Bullet b : bullets){
             BulletEntity entity = new BulletEntity(start, b);
             for(double d = 0.5; d < 100; d += 0.5){

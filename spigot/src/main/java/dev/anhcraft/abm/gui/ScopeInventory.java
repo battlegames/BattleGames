@@ -36,8 +36,8 @@ public class ScopeInventory extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        Optional<PlayerData> pd = api.getPlayerData(player);
-        pd.ifPresent(playerData -> {
+        PlayerData playerData = api.getPlayerData(player);
+        if(playerData != null) {
             playerData.getInventory().getStorage(ItemType.SCOPE).list().forEach(ent -> {
                 Optional<ScopeModel> osm = api.getScopeModel(ent.getKey());
                 if (osm.isPresent()) {
@@ -53,6 +53,6 @@ public class ScopeInventory extends GuiHandler implements PaginationHandler {
                     }));
                 }
             });
-        });
+        }
     }
 }

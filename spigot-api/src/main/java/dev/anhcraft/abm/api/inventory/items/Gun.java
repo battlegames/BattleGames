@@ -67,13 +67,14 @@ public class Gun extends Weapon<GunModel> {
     }
 
     public int nextSpray() {
-        getModel().ifPresent(model -> {
-            int max = model.getSprayPattern().size();
-            if(max == 0) return;
-            if(System.currentTimeMillis() - lastSprayTime >= 500) nextSpray = 0;
-            else if(++nextSpray == max) nextSpray = max - 1;
-            lastSprayTime = System.currentTimeMillis();
-        });
+        if(getModel() != null){
+            int max = getModel().getSprayPattern().size();
+            if(max > 0) {
+                if (System.currentTimeMillis() - lastSprayTime >= 500) nextSpray = 0;
+                else if (++nextSpray == max) nextSpray = max - 1;
+                lastSprayTime = System.currentTimeMillis();
+            }
+        }
         return nextSpray;
     }
 
@@ -87,7 +88,7 @@ public class Gun extends Weapon<GunModel> {
 
     @Override
     public void save(CompoundTag compound) {
-        getModel().ifPresent(gunModel -> compound.put(ItemTag.GUN_ID, gunModel.getId()));
+        if(getModel() != null) compound.put(ItemTag.GUN_ID, getModel().getId());
 
         CompoundTag mc = new CompoundTag();
         magazine.save(mc);
@@ -120,7 +121,8 @@ public class Gun extends Weapon<GunModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        getModel().ifPresent(gunModel -> gunModel.inform(holder));
+        if(getModel() != null)
+            getModel().inform(holder);
         holder.link(magazine.collectInfo(null));
         if(scope != null)
             holder.link(scope.collectInfo(null));

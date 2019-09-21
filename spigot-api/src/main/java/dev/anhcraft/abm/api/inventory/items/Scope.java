@@ -38,15 +38,17 @@ public class Scope extends BattleItem<ScopeModel> {
     }
 
     public int nextZoomLevel() {
-        getModel().ifPresent(scopeModel -> {
-            if(++nextZoomLevel == scopeModel.getZoomLevels().size()) nextZoomLevel = -1;
-        });
+        if(getModel() != null){
+            if(++nextZoomLevel == getModel().getZoomLevels().size()) nextZoomLevel = -1;
+        }
         return nextZoomLevel;
     }
 
     @Override
     public void save(CompoundTag compound) {
-        getModel().ifPresent(m -> compound.put(ItemTag.SCOPE_ID, m.getId()));
+        if(getModel() != null){
+            compound.put(ItemTag.SCOPE_ID, getModel().getId());
+        }
         compound.put(ItemTag.SCOPE_NEXT_ZOOM_LEVEL, nextZoomLevel);
     }
 
@@ -59,6 +61,7 @@ public class Scope extends BattleItem<ScopeModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        getModel().ifPresent(m -> m.inform(holder));
+        if(getModel() != null)
+            getModel().inform(holder);
     }
 }

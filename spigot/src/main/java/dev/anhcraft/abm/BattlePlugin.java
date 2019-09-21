@@ -23,8 +23,12 @@ import co.aikar.commands.BukkitCommandCompletionContext;
 import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
 import dev.anhcraft.abm.api.*;
-import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.game.ABTeam;
+import dev.anhcraft.abm.api.game.Arena;
+import dev.anhcraft.abm.api.game.LocalGame;
+import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.gui.Gui;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.Kit;
@@ -51,10 +55,7 @@ import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
-import dev.anhcraft.jvmkit.utils.FileUtil;
-import dev.anhcraft.jvmkit.utils.IOUtil;
-import dev.anhcraft.jvmkit.utils.MathUtil;
-import dev.anhcraft.jvmkit.utils.ReflectionUtil;
+import dev.anhcraft.jvmkit.utils.*;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -62,7 +63,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -199,31 +199,31 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         manager.getCommandCompletions().registerAsyncCompletion("ammo", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return listAmmoModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+                return AMMO_MAP.keySet();
             }
         });
         manager.getCommandCompletions().registerAsyncCompletion("gun", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return listGunModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+                return GUN_MAP.keySet();
             }
         });
         manager.getCommandCompletions().registerAsyncCompletion("magazine", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return listMagazineModels().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+                return MAGAZINE_MAP.keySet();
             }
         });
         manager.getCommandCompletions().registerAsyncCompletion("scope", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return listScopes().stream().map(BattleItemModel::getId).collect(Collectors.toList());
+                return SCOPE_MAP.keySet();
             }
         });
         manager.getCommandCompletions().registerAsyncCompletion("arena", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return listArenas().stream().map(Arena::getId).collect(Collectors.toList());
+                return ARENA_MAP.keySet();
             }
         });
     }
@@ -244,28 +244,19 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public void onDisable(){
         gameManager.cleaner.destroy();
-        gameManager.getGames().forEach(new Consumer<Game>() {
-            @Override
-            public void accept(Game game) {
-                if(game instanceof LocalGame) {
-                    ((LocalGame) game).getPlayers().values().forEach(new Consumer<GamePlayer>() {
-                        @Override
-                        public void accept(GamePlayer player) {
-                            if (player.getBackupInventory() != null)
-                                player.getPlayer().getInventory().setContents(player.getBackupInventory());
-                        }
-                    });
-                }
+        gameManager.listGames(game -> {
+            if(game instanceof LocalGame) {
+                ((LocalGame) game).getPlayers().values().forEach(player -> {
+                    if (player.getBackupInventory() != null)
+                        player.getPlayer().getInventory().setContents(player.getBackupInventory());
+                });
             }
         });
         dataManager.saveServerData();
         PLAYER_MAP.keySet().forEach(dataManager::savePlayerData);
-        ServerUtil.getAllEntities().forEach(new Consumer<Entity>() {
-            @Override
-            public void accept(Entity entity) {
-                if(entity instanceof HumanEntity) return;
-                if(entity.hasMetadata("abm_temp_entity")) entity.remove();
-            }
+        ServerUtil.getAllEntities(entity -> {
+            if(entity instanceof HumanEntity) return;
+            if(entity.hasMetadata("abm_temp_entity")) entity.remove();
         });
         dataManager.destroy();
     }
@@ -514,9 +505,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         } else scoreboardRenderer.removeScoreboard(player);
     }
 
-    @NotNull
     @Override
-    public Map<String, String> mapInfo(InfoHolder holder){
+    @NotNull
+    public Map<String, String> mapInfo(@NotNull InfoHolder holder){
+        Condition.argNotNull("holder", holder);
         return holder.read().entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> {
@@ -550,7 +542,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @NotNull
     @Override
-    public String formatLongFormDate(Date date){
+    public String formatLongFormDate(@NotNull Date date){
+        Condition.argNotNull("date", date);
         return longFormDate.format(date);
     }
 
@@ -565,19 +558,22 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @NotNull
     @Override
-    public String formatShortFormDateHours(Date date){
+    public String formatShortFormDateHours(@NotNull Date date){
+        Condition.argNotNull("date", date);
         return shortFormDate1.format(date);
     }
 
     @NotNull
     @Override
-    public String formatShortFormDateMinutes(Date date){
+    public String formatShortFormDateMinutes(@NotNull Date date){
+        Condition.argNotNull("date", date);
         return shortFormDate2.format(date);
     }
 
     @NotNull
     @Override
-    public String formatShortFormDateSeconds(Date date){
+    public String formatShortFormDateSeconds(@NotNull Date date){
+        Condition.argNotNull("date", date);
         return shortFormDate3.format(date);
     }
 
@@ -602,8 +598,9 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<PlayerData> getPlayerData(@Nullable OfflinePlayer player) {
-        return Optional.ofNullable(PLAYER_MAP.get(player));
+    @Nullable
+    public PlayerData getPlayerData(@Nullable OfflinePlayer player) {
+        return PLAYER_MAP.get(player);
     }
 
     @NotNull
@@ -613,8 +610,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public Optional<Arena> getArena(@Nullable String id) {
-        return Optional.ofNullable(ARENA_MAP.get(id));
+    public Arena getArena(@Nullable String id) {
+        return ARENA_MAP.get(id);
     }
 
     @Override
@@ -645,36 +642,72 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @NotNull
     @Override
     public List<Arena> listArenas() {
-        return new ArrayList<>(ARENA_MAP.values());
+        return ImmutableList.copyOf(ARENA_MAP.values());
+    }
+
+    @Override
+    public void listArenas(@NotNull Consumer<Arena> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        ARENA_MAP.values().forEach(consumer);
     }
 
     @NotNull
     @Override
     public List<AmmoModel> listAmmoModels() {
-        return new ArrayList<>(AMMO_MAP.values());
+        return ImmutableList.copyOf(AMMO_MAP.values());
+    }
+
+    @Override
+    public void listAmmoModels(@NotNull Consumer<AmmoModel> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        AMMO_MAP.values().forEach(consumer);
     }
 
     @NotNull
     @Override
     public List<GunModel> listGunModels() {
-        return new ArrayList<>(GUN_MAP.values());
+        return ImmutableList.copyOf(GUN_MAP.values());
+    }
+
+    @Override
+    public void listGunModels(@NotNull Consumer<GunModel> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        GUN_MAP.values().forEach(consumer);
     }
 
     @NotNull
     @Override
     public List<MagazineModel> listMagazineModels() {
-        return new ArrayList<>(MAGAZINE_MAP.values());
+        return ImmutableList.copyOf(MAGAZINE_MAP.values());
+    }
+
+    @Override
+    public void listMagazineModels(@NotNull Consumer<MagazineModel> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        MAGAZINE_MAP.values().forEach(consumer);
     }
 
     @Override
     public @NotNull List<ScopeModel> listScopes() {
-        return new ArrayList<>(SCOPE_MAP.values());
+        return ImmutableList.copyOf(SCOPE_MAP.values());
+    }
+
+    @Override
+    public void listScopes(@NotNull Consumer<ScopeModel> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        SCOPE_MAP.values().forEach(consumer);
     }
 
     @NotNull
     @Override
     public List<Kit> listKits() {
-        return new ArrayList<>(KIT_MAP.values());
+        return ImmutableList.copyOf(KIT_MAP.values());
+    }
+
+    @Override
+    public void listKits(@NotNull Consumer<Kit> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        KIT_MAP.values().forEach(consumer);
     }
 
     @Override

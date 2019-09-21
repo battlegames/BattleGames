@@ -31,18 +31,17 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class ArenaChooserHandler extends GuiHandler implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        api.listArenas().forEach(arena -> {
+        api.listArenas(arena -> {
             InfoHolder infoHolder;
-            Optional<Game> gameOpt = ApiProvider.consume().getGameManager().getGame(arena);
-            if(gameOpt.isPresent()){
+            Game game = ApiProvider.consume().getGameManager().getGame(arena);
+            if(game != null){
                 infoHolder = new InfoHolder("game_");
-                gameOpt.get().inform(infoHolder);
+                game.inform(infoHolder);
             } else {
                 infoHolder = new InfoHolder("arena_");
                 arena.inform(infoHolder);

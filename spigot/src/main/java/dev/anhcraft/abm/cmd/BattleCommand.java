@@ -27,6 +27,7 @@ import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtils;
 import net.md_5.bungee.api.ChatMessageType;
@@ -75,7 +76,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("game list")
     @CommandPermission("abm.game.list")
     public void listGames(CommandSender sender){
-        Collection<Game> q = plugin.gameManager.getGames();
+        Collection<Game> q = plugin.gameManager.listGames();
         plugin.chatManager.send(sender, "game.list_header", ChatMessageType.CHAT, str -> String.format(str, Integer.toString(q.size())));
         q.forEach(game -> {
             InfoHolder holder = new InfoHolder("game_");
@@ -96,9 +97,9 @@ public class BattleCommand extends BaseCommand{
     @CommandCompletion("@arena")
     public void join(Player player, String arena, @co.aikar.commands.annotation.Optional Player target){
         Player t = (target == null) ? player : target;
-        Optional<Arena> ao = plugin.getArena(arena);
-        if(ao.isPresent()) {
-            if(plugin.gameManager.join(t, ao.get()))
+        Arena a = plugin.getArena(arena);
+        if(a != null) {
+            if(plugin.gameManager.join(t, a) != null)
                 plugin.chatManager.sendPlayer(player, "arena.join_success", str ->
                         String.format(str, t.getName()));
             else
@@ -139,10 +140,12 @@ public class BattleCommand extends BaseCommand{
         target = (target == null ? player : target);
         Optional<GunModel> gun = plugin.getGunModel(id);
         if(gun.isPresent()) {
-            plugin.getPlayerData(target).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.GUN).put(id));
-            String receiver = target.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null){
+                playerData.getInventory().getStorage(ItemType.GUN).put(id);
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -153,10 +156,12 @@ public class BattleCommand extends BaseCommand{
         target = (target == null ? player : target);
         Optional<MagazineModel> mag = plugin.getMagazineModel(id);
         if(mag.isPresent()) {
-            plugin.getPlayerData(target).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id));
-            String receiver = target.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null){
+                playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id);
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -167,10 +172,12 @@ public class BattleCommand extends BaseCommand{
         target = (target == null ? player : target);
         Optional<AmmoModel> ammo = plugin.getAmmoModel(id);
         if(ammo.isPresent()) {
-            plugin.getPlayerData(target).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.AMMO).put(id));
-            String receiver = target.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null) {
+                playerData.getInventory().getStorage(ItemType.AMMO).put(id);
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
@@ -181,10 +188,12 @@ public class BattleCommand extends BaseCommand{
         target = (target == null ? player : target);
         Optional<ScopeModel> sc = plugin.getScopeModel(id);
         if(sc.isPresent()) {
-            plugin.getPlayerData(target).ifPresent(playerData ->
-                    playerData.getInventory().getStorage(ItemType.SCOPE).put(id));
-            String receiver = target.getName();
-            plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null) {
+                playerData.getInventory().getStorage(ItemType.SCOPE).put(id);
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 

@@ -51,12 +51,16 @@ public class Magazine extends BattleItem<MagazineModel> {
     }
 
     public void resetAmmo() {
-        getModel().ifPresent(magazineModel -> ammo.getModel().ifPresent(ammoModel -> ammoCount = magazineModel.getAmmunition().getOrDefault(ammoModel, 0)));
+        if(getModel() != null && ammo.getModel() != null){
+            ammoCount = getModel().getAmmunition().getOrDefault(ammo.getModel(), 0);
+        }
     }
 
     @Override
     public void save(CompoundTag compound) {
-        getModel().ifPresent(magazineModel -> compound.put(ItemTag.MAGAZINE_ID, magazineModel.getId()));
+        if(getModel() != null){
+            compound.put(ItemTag.MAGAZINE_ID, getModel().getId());
+        }
         compound.put(ItemTag.MAGAZINE_AMMO_COUNT, ammoCount);
         CompoundTag c = new CompoundTag();
         ammo.save(c);
@@ -74,10 +78,12 @@ public class Magazine extends BattleItem<MagazineModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        getModel().ifPresent(magazineModel -> {
-            magazineModel.inform(holder);
-            ammo.getModel().ifPresent(ammoModel -> holder.inform("ammo_capacity", magazineModel.getAmmunition().getOrDefault(ammoModel, 0)));
-        });
+        if(getModel() != null){
+            getModel().inform(holder);
+            if(ammo.getModel() != null){
+                holder.inform("ammo_capacity", getModel().getAmmunition().getOrDefault(ammo.getModel(), 0));
+            }
+        }
         holder.link(ammo.collectInfo(null)).inform("ammo_count", ammoCount);
     }
 }
