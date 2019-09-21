@@ -54,7 +54,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }, 3, TimeUnit.SECONDS);
+            }, plugin.config.getLong("game_join.delay_time"), TimeUnit.SECONDS);
         }
     }
 

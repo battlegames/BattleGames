@@ -5,3 +5,8 @@ game_update:
   # When the proxy receives "Game update" signal, should we broadcast to all servers?
   # If this option is disabled, only servers that have taken part in the game are noticed
   send_all: false
+
+# Game join settings
+game_join:
+  # Delay time before the signal is sent
+  delay_time: 3
