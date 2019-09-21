@@ -29,10 +29,7 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public interface BattleAPI {
     @NotNull Map<String, String> mapInfo(InfoHolder holder);
@@ -63,4 +60,8 @@ public interface BattleAPI {
     @NotNull BattleItemManager getItemManager();
     @NotNull BattleGuiManager getGuiManager();
     @NotNull BattleChatManager getChatManager();
+    boolean hasBungeecordSupport();
+    List<String> getLobbyServers();
+    int getMaxReconnectionTries();
+    long getConnectionDelay();
 }

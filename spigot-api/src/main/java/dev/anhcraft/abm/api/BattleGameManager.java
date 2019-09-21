@@ -35,9 +35,14 @@ public interface BattleGameManager {
     @NotNull Optional<LocalGame> getGame(@NotNull Player player);
     @NotNull Optional<Game> getGame(@NotNull UUID playerId);
     @NotNull Optional<Game> getGame(@NotNull Arena arena);
-    boolean join(@NotNull Player player, @NotNull Arena arena);
+
+    default boolean join(@NotNull Player player, @NotNull Arena arena){
+        return join(player, arena, false);
+    }
+
+    boolean join(@NotNull Player player, @NotNull Arena arena, boolean local);
     boolean forceJoin(@NotNull Player player, @NotNull Arena arena);
     boolean quit(@NotNull Player player);
-    void destroy(@NotNull LocalGame localGame);
+    void destroy(@NotNull Game game);
     @NotNull Collection<Game> getGames();
 }

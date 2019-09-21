@@ -31,10 +31,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LocalGame extends Game {
     private final Multimap<Player, DamageReport> damageReports = Multimaps.synchronizedMultimap(HashMultimap.create());
     private final Map<Player, GamePlayer> players = new ConcurrentHashMap<>();
+    private final Multimap<String, Player> downstreamServers = Multimaps.synchronizedMultimap(HashMultimap.create());
+    private final AtomicInteger bungeeSyncTick = new AtomicInteger();
 
     public LocalGame(@NotNull Arena arena) {
         super(arena);
@@ -60,6 +63,16 @@ public class LocalGame extends Game {
         return players.get(player);
     }
 
+    @NotNull
+    public Multimap<String, Player> getDownstreamServers() {
+        return downstreamServers;
+    }
+
+    @NotNull
+    public AtomicInteger getBungeeSyncTick() {
+        return bungeeSyncTick;
+    }
+
     public void end() {
         if(getPhase() == GamePhase.END) return;
         if(!Bukkit.isPrimaryThread()){
@@ -78,6 +91,8 @@ public class LocalGame extends Game {
     @Override
     public void reset() {
         players.clear();
+        downstreamServers.clear();
+        bungeeSyncTick.set(0);
         super.reset();
     }
 
@@ -90,6 +105,8 @@ public class LocalGame extends Game {
                 players.equals(localGame.players) &&
                 getCurrentTime().equals(localGame.getCurrentTime()) &&
                 getPhase() == localGame.getPhase() &&
-                getArena().equals(localGame.getArena());
+                getArena().equals(localGame.getArena()) &&
+                downstreamServers.equals(localGame.downstreamServers) &&
+                bungeeSyncTick.equals(localGame.bungeeSyncTick);
     }
 }

@@ -75,7 +75,7 @@ public class GameListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void phaseChange(GamePhaseChangeEvent event){
-        if(event.getGame().isLocal()) {
+        if(event.getGame() instanceof LocalGame) {
             BattleModeController bmc = event.getGame().getMode().getController();
             if (bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
                 ModeController mc = (ModeController) bmc;

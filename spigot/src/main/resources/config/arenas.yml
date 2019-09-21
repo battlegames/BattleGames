@@ -167,3 +167,46 @@ ctf_demo:
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
           neutral: "&7Neutral"
         max_health: 15
+
+# An example for making arenas with Bungeecord support
+# Notice: You must enable the Bungeecord support first
+rmt_arena:
+  name: "&4Example Remote Arena"
+  mode: tdm
+  max_time: 8400
+  max_players: 16
+  # Bungeecord options
+  bungeecord:
+    # Enabled Bungeecord support for this arena or not?
+    enabled: true
+
+    # The server where the game will take place
+    # You can add more than one server. If the player can't connect
+    # to the first server, the second one will be chosen, and so on.
+    remote_servers:
+      - "server1"
+      - "server2"
+  icon:
+    material: diamond_sword
+    name: "{__arena_name__}"
+    lore:
+      - "&dMode &7>> &e{__mode_name__}"
+      - "&dPlayers &7>> &e{__game_current_time:0__}/{__arena_max_players__}"
+    enchant:
+      sharpness: 1
+    flag:
+      - hide_enchants
+  final_exp_formula: "a*2+b*28-c*8+d*3"
+  final_money_formula: "a*5+b*15+d*3"
+  attr:
+    min_players: 2
+    waiting_spawn_points:
+      - dm_assault 0 0 0
+    playing_spawn_points_a:
+      - dm_assault 0 0 0
+    playing_spawn_points_b:
+      - dm_assault 0 0 0
+    countdown_time: 300
+    item_selection_time: 200
+    spawn_protection_time: 40
+    respawn_waiting_time: 200

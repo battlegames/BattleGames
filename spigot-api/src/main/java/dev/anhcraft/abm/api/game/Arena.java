@@ -19,13 +19,15 @@
  */
 package dev.anhcraft.abm.api.game;
 
-import dev.anhcraft.craftkit.kits.abif.ABIF;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
+import dev.anhcraft.craftkit.kits.abif.ABIF;
+import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +49,8 @@ public class Arena implements Informative {
     private List<String> endCommandWinners;
     private List<String> endCommandLosers;
     private boolean renderGuiOnDeath;
+    private boolean bungeeSupport;
+    private List<String> remoteServers;
 
     public Arena(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -76,6 +80,13 @@ public class Arena implements Informative {
         endCommandWinners = Collections.unmodifiableList(conf.getStringList("end_commands.winners"));
         endCommandLosers = Collections.unmodifiableList(conf.getStringList("end_commands.losers"));
         renderGuiOnDeath = conf.getBoolean("render_gui_on_death", true);
+
+        if(conf.getBoolean("bungeecord.enabled")){
+            if(ApiProvider.consume().hasBungeecordSupport()){
+                bungeeSupport = true;
+                remoteServers = Collections.unmodifiableList(conf.getStringList("bungeecord.remote_servers"));
+            } else Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
+        }
     }
 
     @NotNull
@@ -145,6 +156,15 @@ public class Arena implements Informative {
 
     public boolean isRenderGuiOnDeath() {
         return renderGuiOnDeath;
+    }
+
+    @NotNull
+    public List<String> getRemoteServers(){
+        return remoteServers;
+    }
+
+    public boolean hasBungeecordSupport(){
+        return bungeeSupport;
     }
 
     @Override

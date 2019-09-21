@@ -42,13 +42,11 @@ import dev.anhcraft.abm.system.listeners.BlockListener;
 import dev.anhcraft.abm.system.listeners.GameListener;
 import dev.anhcraft.abm.system.listeners.PlayerListener;
 import dev.anhcraft.abm.system.managers.*;
+import dev.anhcraft.abm.system.messengers.BungeeMessenger;
 import dev.anhcraft.abm.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
-import dev.anhcraft.abm.tasks.DataLoadingTask;
-import dev.anhcraft.abm.tasks.DataSavingTask;
-import dev.anhcraft.abm.tasks.GameTask;
-import dev.anhcraft.abm.tasks.QueueTitleTask;
+import dev.anhcraft.abm.tasks.*;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
@@ -56,6 +54,7 @@ import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.IOUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
+import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -119,8 +118,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public GuiManager guiManager;
     public ScoreboardRenderer scoreboardRenderer;
     public BossbarRenderer bossbarRenderer;
+    public BungeeMessenger bungeeMessenger;
     public GameTask gameTask;
     public QueueTitleTask queueTitleTask;
+    public QueueServerTask queueServerTask;
     private Expression toExpConverter;
     private Expression toLevelConverter;
     private PapiExpansion papiExpansion;
@@ -131,11 +132,15 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private boolean syncDataTaskNeed;
     private File configFolder = getDataFolder();
     private String remoteConfigUrl;
+    private boolean spigotBungeeSupport;
+    private boolean supportBungee;
+    private List<String> lobbyList;
 
     @Override
     public void onEnable() {
         try {
-            Class.forName("org.spigotmc.SpigotConfig");
+            Class<?> sc = Class.forName("org.spigotmc.SpigotConfig");
+            spigotBungeeSupport = (boolean) ReflectionUtil.getStaticField(sc, "bungee");
         } catch (ClassNotFoundException e) {
             exit("ABM can only work on Spigot-based servers.");
             return;
@@ -182,6 +187,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
+        if(supportBungee){
+            taskHelper.newAsyncTimerTask(queueServerTask = new QueueServerTask(this), 0, 20);
+            getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
+            getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
+        }
 
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.enableUnstableAPI("help");
@@ -237,7 +247,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         gameManager.getGames().forEach(new Consumer<Game>() {
             @Override
             public void accept(Game game) {
-                if(game.isLocal()) {
+                if(game instanceof LocalGame) {
                     ((LocalGame) game).getPlayers().values().forEach(new Consumer<GamePlayer>() {
                         @Override
                         public void accept(GamePlayer player) {
@@ -409,6 +419,14 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         shortFormDate1 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.hours"));
         shortFormDate2 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.minutes"));
         shortFormDate3 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.seconds"));
+
+        if(getGeneralConf().getBoolean("bungeecord.enabled")){
+            if(spigotBungeeSupport) {
+                supportBungee = true;
+                lobbyList = Collections.unmodifiableList(getGeneralConf().getStringList("bungeecord.lobby_servers"));
+            }
+            else getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");
+        }
     }
 
     private void initLocale(FileConfiguration cache) {
@@ -677,6 +695,26 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public @NotNull BattleChatManager getChatManager() {
         return chatManager;
+    }
+
+    @Override
+    public boolean hasBungeecordSupport() {
+        return supportBungee;
+    }
+
+    @Override
+    public List<String> getLobbyServers() {
+        return lobbyList;
+    }
+
+    @Override
+    public int getMaxReconnectionTries() {
+        return getGeneralConf().getInt("bungeecord.reconnect_tries_per_server");
+    }
+
+    @Override
+    public long getConnectionDelay() {
+        return getGeneralConf().getLong("bungeecord.connection_delay");
     }
 
     private void exit(String msg) {

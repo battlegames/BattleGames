@@ -42,10 +42,6 @@ public class Game implements Resettable, Informative {
         this.arena = arena;
     }
 
-    public boolean isLocal(){
-        return this instanceof LocalGame;
-    }
-
     @NotNull
     public Arena getArena() {
         return arena;

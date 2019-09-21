@@ -24,6 +24,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.LocalGame;
+import dev.anhcraft.abm.api.game.RemoteGame;
 
 public class GameTask extends BattleComponent implements Runnable {
     public GameTask(BattlePlugin plugin) {
@@ -32,14 +33,22 @@ public class GameTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
-        plugin.gameManager.getGames().forEach(game -> {
-            if(game.isLocal()) {
-                LocalGame localGame = (LocalGame) game;
-                BattleModeController mc = localGame.getMode().getController();
-                if (mc != null) mc.onTask(localGame);
+        plugin.gameManager.getGames().forEach(g -> {
+            if(g instanceof LocalGame) {
+                LocalGame game = (LocalGame) g;
+                BattleModeController mc = game.getMode().getController();
+                if (mc != null) mc.onTask(game);
 
-                if (localGame.getPhase() == GamePhase.PLAYING && localGame.getArena().getMaxTime() <= localGame.getCurrentTime().getAndIncrement()) {
-                    localGame.end();
+                if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
+                    game.end();
+                } else if(plugin.hasBungeecordSupport() && game.getBungeeSyncTick().incrementAndGet() == 60) {
+                    game.getBungeeSyncTick().set(0);
+                    plugin.bungeeMessenger.sendGameUpdate(game);
+                }
+            } else if(g instanceof RemoteGame) {
+                RemoteGame game = (RemoteGame) g;
+                if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
+                    plugin.gameManager.destroy(game);
                 }
             }
         });

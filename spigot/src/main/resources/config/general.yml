@@ -126,3 +126,32 @@ misc:
     # Flying speed
     # [optional] [default: 0.2] [min: -1] [max: 1]
     fly: 0.2
+
+# Bungeecord settings
+bungeecord:
+  # Enable Bungeecord support or not?
+  # If the server is not under a proxy,
+  # this option has no effect
+  enabled: false
+
+  # List of lobby/hub servers.
+  # If the player can't connect to the first
+  # one, the second will be chosen, and so on
+  # until there is no server left
+  lobby_servers:
+    - "lobby_1"
+    - "lobby_2"
+    - "lobby_3"
+
+  # Here you can specify how many times, does the
+  # player can try to reconnect. If exceed, the
+  # next server in the given list will be chosen
+  # E.g: with the lobby server list above, players
+  # have 3 chance of connections. If you set this
+  # option to 3, they have a total of 9 chances.
+  # [optional] [default: 0]
+  reconnect_tries_per_server: 0
+
+  # The delayed time between two connections per player
+  # [optional] [default: 20] [unit: ticks]
+  connection_delay: 100

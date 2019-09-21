@@ -22,6 +22,12 @@ server:
   illegal_block_break: "&cIllegal action: You aren't allowed to break blocks!"
   illegal_block_blace: "&cIllegal action: You aren't allowed to place blocks!"
   set_spawn_success: "&aThe spawn point has been set to %s"
+  connect_failed: "&eCouldn't connect to any servers at the moment. Please contact the staffs."
+  try_reconnect: "&eTrying to reconnect... &f%s/%s"
+  switched_server:
+  - "&eLooks like the target server is down!"
+  - "&aSwitched to another server. Connecting... &f%s/%s"
+  server_connecting: "&aYou will be redirected to another server! Please wait..."
 arena:
   not_found: "&cCouldn't find that arena."
   error_already_joined: "&cYou've already joined!"
