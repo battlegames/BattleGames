@@ -22,7 +22,9 @@ package dev.anhcraft.abm.system.listeners;
 
 import dev.anhcraft.abm.BattleComponent;
 import dev.anhcraft.abm.BattlePlugin;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -69,10 +71,19 @@ public class MessageListener extends BattleComponent implements Listener {
                     out.writeInt(players);
                     out.writeLong(time);
                     byte[] bytes = s.toByteArray();
-                    int svs = in.readInt();
-                    for(int i = 0; i < svs; i++){
-                        String sv = in.readUTF();
-                        plugin.getProxy().getServerInfo(sv).sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
+                    if(ev.getSender() instanceof Server && plugin.config.getBoolean("game_update.send_all")){
+                        ServerInfo sender = ((Server) ev.getSender()).getInfo();
+                        plugin.getProxy().getServers().forEach((s1, serverInfo) -> {
+                            if(!serverInfo.equals(sender)){
+                                serverInfo.sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
+                            }
+                        });
+                    } else {
+                        int svs = in.readInt();
+                        for(int i = 0; i < svs; i++){
+                            String sv = in.readUTF();
+                            plugin.getProxy().getServerInfo(sv).sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
+                        }
                     }
                 }
             }

@@ -20,21 +20,46 @@
 
 package dev.anhcraft.abm;
 
+import com.google.common.io.ByteStreams;
 import dev.anhcraft.abm.system.listeners.MessageListener;
 import dev.anhcraft.abm.system.listeners.PlayerListener;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class BattlePlugin extends Plugin {
     public static final String BATTLE_CHANNEL = "battle:plugin";
     public final Map<ProxiedPlayer, String[]> tempJoinCache = new HashMap<>();
+    public Configuration config;
 
     @Override
     public void onEnable() {
+        File confFile = new File(getDataFolder(), "config.yml");
+        try {
+            if(!confFile.exists()) {
+                getDataFolder().mkdir();
+                confFile.createNewFile();
+
+                FileOutputStream out = new FileOutputStream(confFile);
+                InputStream in = getResourceAsStream("config.yml");
+                ByteStreams.copy(in, out);
+                in.close();
+                out.close();
+            }
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(confFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         getProxy().registerChannel(BATTLE_CHANNEL);
+
         getProxy().getPluginManager().registerListener(this, new MessageListener(this));
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
     }

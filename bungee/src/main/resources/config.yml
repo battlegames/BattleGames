@@ -1,0 +1,7 @@
+# This configuration is a part of ABM
+
+# Game update settings
+game_update:
+  # When the proxy receives "Game update" signal, should we broadcast to all servers?
+  # If this option is disabled, only servers that have taken part in the game are noticed
+  send_all: false
