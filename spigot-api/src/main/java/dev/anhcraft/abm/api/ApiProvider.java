@@ -23,6 +23,12 @@ public class ApiProvider {
     private static ApiProvider provider;
     private BattleAPI api;
 
+    /**
+     * Returns the Battle API.
+     * <br>
+     * {@link UnsupportedOperationException} may be thrown if the API is not ready.
+     * @return {@link BattleAPI}
+     */
     public static BattleAPI consume() {
         if(provider == null){
             throw new UnsupportedOperationException("API is not ready yet!");

@@ -28,10 +28,56 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public interface BattleItemManager {
-    @Nullable <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem);
-    @Nullable <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition);
-    @Nullable PreparedItem make(@Nullable BattleItemModel bim);
-    @Nullable PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition);
-    @Nullable BattleItem read(@Nullable ItemStack itemStack);
-    @Nullable ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem);
+    /**
+     * Makes a new item from {@link BattleItem}
+     * @param battleItem the Battle item
+     * @param <R> the item's model type
+     * @return {@link PreparedItem} if created successfully or null if not
+     */
+    @Nullable
+    <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem);
+
+    /**
+     * Makes a new item from {@link BattleItem}
+     * @param battleItem the Battle item
+     * @param addition additional information map for item's name and its lore
+     * @param <R> the item's model type
+     * @return {@link PreparedItem} if created successfully or null if not
+     */
+    @Nullable
+    <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition);
+
+    /**
+     * Makes a new item from {@link BattleItemModel}
+     * @param bim the item model
+     * @return {@link PreparedItem} if created successfully or null if not
+     */
+    @Nullable
+    PreparedItem make(@Nullable BattleItemModel bim);
+
+    /**
+     * Makes a new item from {@link BattleItemModel}
+     * @param bim the item model
+     * @param addition additional information map for item's name and its lore
+     * @return {@link PreparedItem} if created successfully or null if not
+     */
+    @Nullable
+    PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition);
+
+    /**
+     * Reads the data of the given item and receives {@link BattleItem}.
+     * @param itemStack the item stack
+     * @return {@link BattleItem} if read successfully or null if not
+     */
+    @Nullable
+    BattleItem read(@Nullable ItemStack itemStack);
+
+    /**
+     * Writes the data of {@link BattleItem} to the given item stack.
+     * @param itemStack the item stack
+     * @param battleItem the Battle item
+     * @return {@link ItemStack} if wrote successfully or null if not
+     */
+    @Nullable
+    ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem);
 }

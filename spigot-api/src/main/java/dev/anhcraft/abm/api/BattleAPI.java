@@ -33,44 +33,270 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public interface BattleAPI {
-    @NotNull Map<String, String> mapInfo(@NotNull InfoHolder holder);
-    @NotNull String formatLongFormDate(@NotNull Date date);
-    @NotNull String formatShortForm(long time);
-    @NotNull String formatShortFormDateHours(@NotNull Date date);
-    @NotNull String formatShortFormDateMinutes(@NotNull Date date);
-    @NotNull String formatShortFormDateSeconds(@NotNull Date date);
+    /**
+     * Creates a map represents the view of {@link InfoHolder}.
+     * @param holder the information holder
+     * @return info map
+     */
+    @NotNull
+    Map<String, String> mapInfo(@NotNull InfoHolder holder);
+
+    /**
+     * Formats the given date in long-form.
+     * @param date the date
+     * @return formatted date
+     */
+    @NotNull
+    String formatLongFormDate(@NotNull Date date);
+
+    /**
+     * Formats the given time in short-form.
+     * <br>
+     * This method will calculate to make sure that the formatted time is shortest.
+     * For instance, only seconds is displayed if the given time is below 60 seconds.
+     * Or if the given time is below 60 minutes, the hour will be hidden
+     * @param time the time in milliseconds
+     * @return formatted date
+     */
+    @NotNull
+    String formatShortForm(long time);
+
+    /**
+     * Formats the given date in short-form that stops at hours.
+     * @param date the date
+     * @return formatted date
+     */
+    @NotNull
+    String formatShortFormDateHours(@NotNull Date date);
+
+    /**
+     * Formats the given date in short-form that stops at minutes.
+     * @param date the date
+     * @return formatted date
+     */
+    @NotNull
+    String formatShortFormDateMinutes(@NotNull Date date);
+
+    /**
+     * Formats the given date in short-form that stops at seconds.
+     * @param date the date
+     * @return formatted date
+     */
+    @NotNull
+    String formatShortFormDateSeconds(@NotNull Date date);
+
+    /**
+     * Gets the default walking speed.
+     * @return walking speed
+     */
     float getDefaultWalkingSpeed();
+
+    /**
+     * Gets the default flying speed.
+     * @return flying speed
+     */
     float getDefaultFlyingSpeed();
+
+    /**
+     * Calculates the exp amount from the given level
+     * @param level the level
+     * @return the exp that equals to the level
+     */
     long calculateExp(int level);
+
+    /**
+     * Calculates the level from the given exp
+     * @param exp the exp
+     * @return the level that equals to the exp
+     */
     int calculateLevel(long exp);
+
+    /**
+     * Gets the {@link PlayerData} of the given player
+     * @param player player
+     * @return {@link PlayerData} or null if not found
+     */
     @Nullable
     PlayerData getPlayerData(@Nullable OfflinePlayer player);
-    @NotNull ServerData getServerData();
+
+    /**
+     * Gets the {@link ServerData}
+     * @return server data
+     */
+    @NotNull
+    ServerData getServerData();
+
+    /**
+     * Gets the arena that matches the given id.
+     * @param id the id of the arena
+     * @return {@link Arena} if found or null if not
+     */
     @Nullable
     Arena getArena(@Nullable String id);
+
+    /**
+     * Gets the ammo that matches the given id.
+     * @param id the id of the ammo
+     * @return {@link AmmoModel} if found or null if not
+     */
     Optional<AmmoModel> getAmmoModel(@Nullable String id);
+
+    /**
+     * Gets the gun that matches the given id.
+     * @param id the id of the gun
+     * @return {@link GunModel} if found or null if not
+     */
     Optional<GunModel> getGunModel(@Nullable String id);
+
+    /**
+     * Gets the magazine that matches the given id.
+     * @param id the id of the magazine
+     * @return {@link MagazineModel} if found or null if not
+     */
     Optional<MagazineModel> getMagazineModel(@Nullable String id);
+
+    /**
+     * Gets the scope that matches the given id.
+     * @param id the id of the scope
+     * @return {@link ScopeModel} if found or null if not
+     */
     Optional<ScopeModel> getScopeModel(@Nullable String id);
+
+    /**
+     * Gets the kit that matches the given id.
+     * @param id the id of the kit
+     * @return {@link Kit} if found or null if not
+     */
     Optional<Kit> getKit(@Nullable String id);
-    @NotNull List<Arena> listArenas();
+
+    /**
+     * Lists all registered arenas.
+     * @return an immutable list of arenas
+     */
+    @NotNull
+    List<Arena> listArenas();
+
+    /**
+     * Lists all arenas and gets them.
+     * @param consumer the consumer
+     */
     void listArenas(@NotNull Consumer<Arena> consumer);
-    @NotNull List<AmmoModel> listAmmoModels();
+
+    /**
+     * Lists all registered ammo.
+     * @return an immutable list of ammo
+     */
+    @NotNull
+    List<AmmoModel> listAmmoModels();
+
+    /**
+     * Lists all ammo and gets them.
+     * @param consumer the consumer
+     */
     void listAmmoModels(@NotNull Consumer<AmmoModel> consumer);
-    @NotNull List<GunModel> listGunModels();
+
+    /**
+     * Lists all registered guns.
+     * @return an immutable list of guns
+     */
+    @NotNull
+    List<GunModel> listGunModels();
+
+    /**
+     * Lists all guns and gets them.
+     * @param consumer the consumer
+     */
     void listGunModels(@NotNull Consumer<GunModel> consumer);
-    @NotNull List<MagazineModel> listMagazineModels();
+
+    /**
+     * Lists all registered magazines.
+     * @return an immutable list of magazines
+     */
+    @NotNull
+    List<MagazineModel> listMagazineModels();
+
+    /**
+     * Lists all magazines and gets them.
+     * @param consumer the consumer
+     */
     void listMagazineModels(@NotNull Consumer<MagazineModel> consumer);
-    @NotNull List<ScopeModel> listScopes();
+
+    /**
+     * Lists all registered scopes.
+     * @return an immutable list of scopes
+     */
+    @NotNull
+    List<ScopeModel> listScopes();
+
+    /**
+     * Lists all scopes and gets them.
+     * @param consumer the consumer
+     */
     void listScopes(@NotNull Consumer<ScopeModel> consumer);
-    @NotNull List<Kit> listKits();
+
+    /**
+     * Lists all registered kits.
+     * @return an immutable list of kits
+     */
+    @NotNull
+    List<Kit> listKits();
+
+    /**
+     * Lists all kits and gets them.
+     * @param consumer the consumer
+     */
     void listKits(@NotNull Consumer<Kit> consumer);
-    @NotNull BattleGameManager getGameManager();
-    @NotNull BattleItemManager getItemManager();
-    @NotNull BattleGuiManager getGuiManager();
-    @NotNull BattleChatManager getChatManager();
+
+    /**
+     * Gets the game manager.
+     * @return {@link BattleGameManager}
+     */
+    @NotNull
+    BattleGameManager getGameManager();
+
+    /**
+     * Gets the item manager.
+     * @return {@link BattleItemManager}
+     */
+    @NotNull
+    BattleItemManager getItemManager();
+
+    /**
+     * Gets the GUI manager.
+     * @return {@link BattleGuiManager}
+     */
+    @NotNull
+    BattleGuiManager getGuiManager();
+
+    /**
+     * Gets the chat manager.
+     * @return {@link BattleChatManager}
+     */
+    @NotNull
+    BattleChatManager getChatManager();
+
+    /**
+     * Checks if Bungeecord is supported.
+     * @return {@link true} if it is or {@link false} otherwise
+     */
     boolean hasBungeecordSupport();
+
+    /**
+     * Gets all lobby servers
+     * @return an immutable list contains lobby servers.
+     */
+    @NotNull
     List<String> getLobbyServers();
+
+    /**
+     * Gets the maximum reconnection tries.
+     * @return maximum reconnection tries
+     */
     int getMaxReconnectionTries();
+
+    /**
+     * Gets the connection delay.
+     * @return connection delay
+     */
     long getConnectionDelay();
 }

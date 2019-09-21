@@ -32,29 +32,107 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public interface BattleGameManager {
-    @Nullable GamePlayer getGamePlayer(@NotNull Player player);
-    @Nullable LocalGame getGame(@NotNull Player player);
-    @Nullable LocalGame getGame(@NotNull UUID playerId);
-    @Nullable Game getGame(@NotNull Arena arena);
+    /**
+     * Gets the {@link GamePlayer} of the given player.
+     * @param player the player
+     * @return a unique {@link GamePlayer} represents an in-game player, or null if the player has not joined the game yet
+     */
+    @Nullable
+    GamePlayer getGamePlayer(@NotNull Player player);
 
+    /**
+     * Gets the {@link Game} that the given player is currently playing on.
+     * @param player the player
+     * @return {@link Game} or null if the player has not joined the game yet
+     */
+    @Nullable
+    LocalGame getGame(@NotNull Player player);
+
+    /**
+     * Gets the {@link Game} where a certain player is currently playing on.
+     * @param playerId the id of the player
+     * @return {@link Game} or null if the player has not joined the game yet
+     */
+    @Nullable
+    LocalGame getGame(@NotNull UUID playerId);
+
+    /**
+     * Gets the {@link Game} which happens in the given arena.
+     * @param arena the arena
+     * @return {@link Arena} or null if the arena is inactive
+     */
+    @Nullable
+    Game getGame(@NotNull Arena arena);
+
+    /**
+     * Makes the given players joins the arena.
+     * @param player the player
+     * @param arena the arena
+     * @return {@link Game} or null if the action is failed
+     */
     @Nullable
     default Game join(@NotNull Player player, @NotNull Arena arena){
         return join(player, arena, false);
     }
 
+    /**
+     * Makes the given players joins the arena.
+     * @param player the player
+     * @param arena the arena
+     * @param forceLocal forces the game to be created as {@link LocalGame}
+     * @return {@link Game} or null if the action is failed
+     */
     @Nullable
     Game join(@NotNull Player player, @NotNull Arena arena, boolean forceLocal);
 
+    /**
+     * Makes the given players joins the arena.
+     * <br>
+     * This method will not send any messages to the player like {@link #join(Player, Arena)}
+     * @param player the player
+     * @param arena the arena
+     * @return {@link Game} or null if the action is failed
+     */
     @Nullable
     default Game forceJoin(@NotNull Player player, @NotNull Arena arena) {
         return forceJoin(player, arena, false);
     }
 
+    /**
+     * Makes the given players joins the arena.
+     * <br>
+     * This method will not send any messages to the player like {@link #join(Player, Arena, boolean)}
+     * @param player the player
+     * @param arena the arena
+     * @param forceLocal forces the game to be created as {@link LocalGame}
+     * @return {@link Game} or null if the action is failed
+     */
     @Nullable
     Game forceJoin(@NotNull Player player, @NotNull Arena arena, boolean forceLocal);
 
+    /**
+     * Makes the given player quit the game.
+     * @param player the player
+     * @return the status of the action, {@code true} if success or {@code false} if not
+     */
     boolean quit(@NotNull Player player);
+
+    /**
+     * Destroys the given game.
+     * @param game the game
+     */
     void destroy(@NotNull Game game);
-    @NotNull Collection<Game> listGames();
+
+    /**
+     * Lists all active games.
+     * @return an immutable list of games.
+     */
+    @NotNull
+    Collection<Game> listGames();
+
+    /**
+     * Lists all active games and gets them.
+     * @param consumer the consumer
+     */
     void listGames(@NotNull Consumer<Game> consumer);
 }
