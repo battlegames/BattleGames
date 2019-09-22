@@ -48,7 +48,7 @@ game:
     - "&eTime: &f{__game_current_time__}/{__arena_max_time__} ticks"
     - "&ePlayers: &f{__game_player_count__}/{__arena_max_players__}"
   destroy_success: "&aThe game is being destroyed!"
-  inactive_arena: "&fNo game occurs in that arena!"
+  inactive_arena: "&cNo game occurs in that arena!"
 mode_dm:
   player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
