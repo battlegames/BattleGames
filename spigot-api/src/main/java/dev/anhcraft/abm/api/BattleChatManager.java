@@ -46,6 +46,13 @@ public interface BattleChatManager {
             sendConsole(localePath);
     }
 
+    default void send(CommandSender commandSender, String localePath, UnaryOperator<String> x){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, x);
+        else
+            sendConsole(localePath, x);
+    }
+
     default void send(CommandSender commandSender, String localePath, ChatMessageType type){
         if(commandSender instanceof Player)
             sendPlayer((Player) commandSender, localePath, type, UnaryOperator.identity());
