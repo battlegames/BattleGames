@@ -228,6 +228,7 @@ public class BattleCommand extends BaseCommand{
     }
 
     @Subcommand("clearinv")
+    @CommandPermission("abm.clearinv")
     public void clearInv(Player player, @Optional OfflinePlayer target){
         target = (target == null ? player : target);
         PlayerData pd = plugin.getPlayerData(target);
