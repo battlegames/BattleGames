@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class GameManager extends BattleComponent implements BattleGameManager {
-    private final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
+    public final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
     private final Map<UUID, LocalGame> PLAYER_GAME_MAP = new HashMap<>();
     private final Object LOCK = new Object();
     public final GameCleaner cleaner = new GameCleaner();
