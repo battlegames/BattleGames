@@ -47,6 +47,8 @@ game:
     - "&eMode: &f{__mode_name__}"
     - "&eTime: &f{__game_current_time__}/{__arena_max_time__} ticks"
     - "&ePlayers: &f{__game_player_count__}/{__arena_max_players__}"
+  destroy_success: "&aThe game is being destroyed!"
+  inactive_arena: "&fNo game occurs in that arena!"
 mode_dm:
   player_join_broadcast: "&f{__target__} joined! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%abm_game_total_players%/%abm_arena_max_players%)"
@@ -85,10 +87,16 @@ gun:
 items:
   not_found: "&cCouldn't find that item"
   given: "&aGiven item &e(%s)&a to %s"
+inv:
+  cleared: "&aInventory has been cleared!"
+player_data:
+  not_found: "&cCouldn't find the player data"
 tool:
   position:
     message: "&fYour current location is: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
     location: "/%s %.2f %.2f %.2f %.2f %.2f"
+  exp2lv: "&a%d	exp = level %d"
+  lv2exp: "&aLevel %d = %d exp"
 kit:
   no_permission: "&cYou don't have permission to use this kit!"
   unavailable: "&cThis kit is currently unavailable! You need to wait until %s"

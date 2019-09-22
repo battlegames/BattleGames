@@ -48,10 +48,6 @@ public class BattleCommand extends BaseCommand{
         this.plugin = plugin;
     }
 
-    public BattlePlugin getPlugin() {
-        return plugin;
-    }
-
     @CatchUnknown
     @HelpCommand
     public void help(CommandSender sender, CommandHelp help){
@@ -85,6 +81,22 @@ public class BattleCommand extends BaseCommand{
         });
     }
 
+    @Subcommand("game destroy")
+    @CommandPermission("abm.game.destroy")
+    @CommandCompletion("@arena")
+    public void destroyGame(CommandSender sender, String arena){
+        Arena a = plugin.getArena(arena);
+        if(a != null) {
+            Game g = plugin.gameManager.getGame(a);
+            if(g != null){
+                plugin.gameManager.destroy(g);
+                plugin.chatManager.send(sender, "game.destroy_success");
+            } else
+                plugin.chatManager.send(sender, "game.inactive_arena");
+        } else
+            plugin.chatManager.send(sender, "arena.not_found");
+    }
+
     @Subcommand("arena menu")
     @CommandPermission("abm.arena.menu")
     public void arenaMenu(Player player){
@@ -94,7 +106,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("arena join")
     @CommandPermission("abm.arena.join")
     @CommandCompletion("@arena")
-    public void join(Player player, String arena, @co.aikar.commands.annotation.Optional Player target){
+    public void join(Player player, String arena, @Optional Player target){
         Player t = (target == null) ? player : target;
         Arena a = plugin.getArena(arena);
         if(a != null) {
@@ -111,7 +123,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("arena quit")
     @CommandPermission("abm.arena.quit")
     @CommandCompletion("@players")
-    public void quit(Player player, @co.aikar.commands.annotation.Optional Player target){
+    public void quit(Player player, @Optional Player target){
         Player t = (target == null) ? player : target;
         if(plugin.gameManager.quit(t))
             plugin.chatManager.sendPlayer(player, "arena.quit_success", str ->
@@ -132,10 +144,24 @@ public class BattleCommand extends BaseCommand{
         player.spigot().sendMessage(c);
     }
 
+    @Subcommand("tool exp2lv")
+    @CommandPermission("abm.tool.exp.to.level")
+    public void exp2lv(CommandSender sender, long exp){
+        int lv = plugin.calculateLevel(exp);
+        plugin.chatManager.send(sender, "tool.exp2lv", s -> String.format(s, lv));
+    }
+
+    @Subcommand("tool lv2exp")
+    @CommandPermission("abm.tool.level.to.exp")
+    public void lv2exp(CommandSender sender, int lv){
+        long exp = plugin.calculateExp(lv);
+        plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, exp));
+    }
+
     @Subcommand("give gun")
     @CommandPermission("abm.give.gun")
     @CommandCompletion("@gun @players")
-    public void giveGun(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+    public void giveGun(Player player, String id, @Optional Player target){
         target = (target == null ? player : target);
         GunModel gun = plugin.getGunModel(id);
         if(gun != null) {
@@ -151,7 +177,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("give magazine")
     @CommandPermission("abm.give.magazine")
     @CommandCompletion("@magazine @players")
-    public void giveMagazine(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+    public void giveMagazine(Player player, String id, @Optional Player target){
         target = (target == null ? player : target);
         MagazineModel mag = plugin.getMagazineModel(id);
         if(mag != null) {
@@ -167,7 +193,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("give ammo")
     @CommandPermission("abm.give.ammo")
     @CommandCompletion("@ammo @players")
-    public void giveAmmo(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+    public void giveAmmo(Player player, String id, @Optional Player target){
         target = (target == null ? player : target);
         AmmoModel ammo = plugin.getAmmoModel(id);
         if(ammo != null) {
@@ -183,7 +209,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("give scope")
     @CommandPermission("abm.give.scope")
     @CommandCompletion("@scope @players")
-    public void giveScope(Player player, String id, @co.aikar.commands.annotation.Optional Player target){
+    public void giveScope(Player player, String id, @Optional Player target){
         target = (target == null ? player : target);
         ScopeModel sc = plugin.getScopeModel(id);
         if(sc != null) {
@@ -199,6 +225,18 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("inv")
     public void inv(Player player){
         plugin.guiManager.openTopInventory(player, "inventory_menu");
+    }
+
+    @Subcommand("clearinv")
+    public void clearInv(Player player, @Optional Player target){
+        target = (target == null ? player : target);
+        PlayerData pd = plugin.getPlayerData(target);
+        if(pd == null)
+            plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        else {
+            pd.getInventory().clearInventory();
+            plugin.chatManager.sendPlayer(player, "inv.cleared");
+        }
     }
 
     @Subcommand("kit")
