@@ -30,7 +30,6 @@ import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -72,12 +71,12 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.game.list")
     public void listGames(CommandSender sender){
         Collection<Game> q = plugin.gameManager.listGames();
-        plugin.chatManager.send(sender, "game.list_header", ChatMessageType.CHAT, str -> String.format(str, Integer.toString(q.size())));
+        plugin.chatManager.send(sender, "game.list_header", str -> String.format(str, Integer.toString(q.size())));
         q.forEach(game -> {
             InfoHolder holder = new InfoHolder("game_");
             game.inform(holder);
             Map<String, String> map = plugin.mapInfo(holder);
-            plugin.chatManager.send(sender, "game.list_section", ChatMessageType.CHAT, x -> PlaceholderUtil.formatInfo(x, map));
+            plugin.chatManager.send(sender, "game.list_section", x -> PlaceholderUtil.formatInfo(x, map));
         });
     }
 
