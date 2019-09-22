@@ -47,7 +47,7 @@ public interface BattleModeController {
 
     }
 
-    default void onTask(LocalGame localGame){
+    default void onTick(LocalGame localGame){
 
     }
 
@@ -55,7 +55,7 @@ public interface BattleModeController {
 
     }
 
-    default void onSwapHand(PlayerSwapHandItemsEvent event, LocalGame localGame){
+    default void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame localGame){
 
     }
 

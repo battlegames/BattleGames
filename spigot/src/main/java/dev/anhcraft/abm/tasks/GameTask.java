@@ -37,7 +37,7 @@ public class GameTask extends BattleComponent implements Runnable {
             if(g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;
                 BattleModeController mc = game.getMode().getController();
-                if (mc != null) mc.onTask(game);
+                if (mc != null) mc.onTick(game);
 
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
                     game.end();

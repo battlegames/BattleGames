@@ -93,7 +93,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
         LocalGame game = plugin.gameManager.getGame(event.getPlayer());
         if(game != null){
-            game.getMode().getController(c -> c.onSwapHand(event, game));
+            game.getMode().getController(c -> c.onSwapItem(event, game));
         }
     }
 

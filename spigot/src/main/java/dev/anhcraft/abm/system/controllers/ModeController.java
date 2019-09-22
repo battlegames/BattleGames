@@ -76,7 +76,7 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onSwapHand(PlayerSwapHandItemsEvent event, LocalGame localGame){
+    public void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame localGame){
         BattleItem item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
         if(item instanceof Gun){
             Gun gun = (Gun) item;

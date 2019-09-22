@@ -59,7 +59,7 @@ public interface BattleAPI {
      * @return formatted date
      */
     @NotNull
-    String formatShortForm(long time);
+    String formatShortFormTime(long time);
 
     /**
      * Formats the given date in short-form that stops at hours.

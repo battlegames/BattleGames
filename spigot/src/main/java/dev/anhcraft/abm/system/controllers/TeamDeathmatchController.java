@@ -71,7 +71,7 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
-    public void onTask(LocalGame localGame){
+    public void onTick(LocalGame localGame){
         SimpleTeam<ABTeam> x = TEAM.get(localGame);
         if(x != null) {
             int a = x.countPlayers(ABTeam.TEAM_A);

@@ -112,7 +112,7 @@ public class PapiExpansion extends PlaceholderExpansion {
         });
         handlers.put("game_current_time_formatted",  player -> {
             LocalGame game = plugin.gameManager.getGame(player);
-            return game == null ? null : plugin.formatShortForm(game.getCurrentTime().get()*50);
+            return game == null ? null : plugin.formatShortFormTime(game.getCurrentTime().get()*50);
         });
         handlers.put("game_remaining_time", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
@@ -120,7 +120,7 @@ public class PapiExpansion extends PlaceholderExpansion {
         });
         handlers.put("game_remaining_time_formatted", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
-            return game == null ? null : plugin.formatShortForm((game.getArena().getMaxTime() - game.getCurrentTime().get())*50);
+            return game == null ? null : plugin.formatShortFormTime((game.getArena().getMaxTime() - game.getCurrentTime().get())*50);
         });
         handlers.put("arena_id", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
@@ -140,7 +140,7 @@ public class PapiExpansion extends PlaceholderExpansion {
         });
         handlers.put("arena_max_time_formatted", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
-            return game == null ? null : plugin.formatShortForm(game.getArena().getMaxTime()*50);
+            return game == null ? null : plugin.formatShortFormTime(game.getArena().getMaxTime()*50);
         });
         handlers.put("mode_name", player -> {
             LocalGame game = plugin.gameManager.getGame(player);

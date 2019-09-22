@@ -40,7 +40,7 @@ public class PlayerInventory {
         return x;
     }
 
-    public void clear(){
+    public void clearInventory(){
         INV.clear();
     }
 

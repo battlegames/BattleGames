@@ -549,7 +549,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @NotNull
     @Override
-    public String formatShortForm(long time){
+    public String formatShortFormTime(long time){
         final long x = 1000;
         if(time < 60 * x) return formatShortFormDateSeconds(new Date(time));
         else if(time < 60 * 60 * x) return formatShortFormDateMinutes(new Date(time));

@@ -152,6 +152,6 @@ public class PlayerData implements Resettable, Serializable {
         winCounter.set(0);
         loseCounter.set(0);
         exp.set(0);
-        inventory.clear();
+        inventory.clearInventory();
     }
 }
