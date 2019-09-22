@@ -277,7 +277,7 @@ public interface BattleAPI {
 
     /**
      * Checks if Bungeecord is supported.
-     * @return {@link true} if it is or {@link false} otherwise
+     * @return {@code true} if it is or {@code false} otherwise
      */
     boolean hasBungeecordSupport();
 
