@@ -33,6 +33,7 @@ import dev.anhcraft.abm.utils.PlaceholderUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -147,14 +148,14 @@ public class BattleCommand extends BaseCommand{
     @CommandPermission("abm.tool.exp.to.level")
     public void exp2lv(CommandSender sender, long exp){
         int lv = plugin.calculateLevel(exp);
-        plugin.chatManager.send(sender, "tool.exp2lv", s -> String.format(s, lv));
+        plugin.chatManager.send(sender, "tool.exp2lv", s -> String.format(s, exp, lv));
     }
 
     @Subcommand("tool lv2exp")
     @CommandPermission("abm.tool.level.to.exp")
     public void lv2exp(CommandSender sender, int lv){
         long exp = plugin.calculateExp(lv);
-        plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, exp));
+        plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, lv, exp));
     }
 
     @Subcommand("give gun")
@@ -227,7 +228,7 @@ public class BattleCommand extends BaseCommand{
     }
 
     @Subcommand("clearinv")
-    public void clearInv(Player player, @Optional Player target){
+    public void clearInv(Player player, @Optional OfflinePlayer target){
         target = (target == null ? player : target);
         PlayerData pd = plugin.getPlayerData(target);
         if(pd == null)

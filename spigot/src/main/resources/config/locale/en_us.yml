@@ -95,7 +95,7 @@ tool:
   position:
     message: "&fYour current location is: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
     location: "/%s %.2f %.2f %.2f %.2f %.2f"
-  exp2lv: "&a%d	exp = level %d"
+  exp2lv: "&a%d exp = level %d"
   lv2exp: "&aLevel %d = %d exp"
 kit:
   no_permission: "&cYou don't have permission to use this kit!"
