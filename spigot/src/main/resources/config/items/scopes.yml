@@ -1,25 +1,11 @@
 # This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/scope
 
-# You can configure all scopes here
-
-basic_scope: # the ID
-  # Scope's name
-  # [optional]
+basic_scope:
   name: "&aBasic scope"
-
-  # Scope's skin
   skin:
-    # The material
-    # [optional] [default: air]
     material: GLASS
-
-    # The damage
-    # [optional] [default: 0]
     damage: 0
-
-  # Zoom levels that this scope provides
-  # The level (x) must be 1 <= x <= 255
-  # Recommend values between 1 and 11
   zoom_levels:
     - 1
     - 7

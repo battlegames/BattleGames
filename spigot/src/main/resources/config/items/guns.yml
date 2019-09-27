@@ -1,114 +1,30 @@
 # This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/gun
 
-# You can modify guns here
-
-ak_47: # Gun's ID
-  # Put the name here
-  # [optional]
+ak_47:
   name: "&e&l&nAK-47"
-
-  # Configure this gun's skin
   skin:
-    # The primary skin
     primary:
-      # The material
-      # [required]
       material: diamond_axe
-
-      # The damage
-      # [optional] [default: 0]
       damage: 1
-
-    # The secondary skin
-    secondary:
-      # [optional] [default: air]
-      #material: air
-
-      # [optional] [default: 0]
-      #damage: 0
-
-  # The weight of this gun
-  # The value below is used to reduce the speed of its owner
-  # [optional] [default: 0]
   weight: 0.0479
-
-  # Configure this gun's magazine here
   magazine:
-    # The id of the default magazine
-    # [required]
     default: default_ak_47
-
-    # The maximum magazine capacity that can attach to this gun
-    # Note: The default magazine can bypass this restriction
-    # [optional] [default: 0]
     max_capacity: 90
-
-  # Configure this gun's scope
   scope:
-    # The default scope
-    # [optional]
     default: basic_scope
-
-  # The slot where this gun is put on.
-  # If the slot is out of bound, it will be overridden by default.
-  # Note: Not all modes support this option
-  # [optional] [default: 0]
   inventory_slot: 1
-
-  # List of sounds that used by this gun
-  # With Bukkit sounds, prefix the name with a dollar sign ($)
-  # Format: [$]<sound name>[:<VOLUME>[:<PITCH>]]
-  # Default volume: 2.0; pitch: 1.0
-  # Examples:
-  # - my.custom.sound
-  # - $entity_generic_explode
-  # - $entity_generic_explode:1.0
-  # - example.sound:3.0:1.5
-  # View all Bukkit sounds here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-  # Leave blank to disable sound
   sounds:
-    # The sound on shooting
-    # [optional] [default: $entity_arrow_shoot]
     on_shoot: "$entity_dragon_fireball_explode"
-
-    # When a player started to reload ammo
-    # [optional]
     on_start_reloading: "$entity_player_levelup"
-
-    # When the player finished reloading ammo
-    # [optional]
     on_end_reloading: "$entity_player_levelup"
-
-  # The formula used for calculating reloading time (in ticks)
-  # Read the documentation for further information.
-  # [required] [expression supported]
   reload_time_formula: "(b-a)*10"
-
-  # Boss bar related to guns
   bossbar:
-    # The boss bar shows on magazine-reloading
     on_reload:
-      # Where to put this bar?
-      # If set to false, this bar shows on the secondary slot
-      # [optional] [default: true]
       primary: false
-
-      # The bar's title
-      # [optional] [placeholder supported]
       title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
-
-      # The bar's color (pink, blue, red, green, yellow, purple, white)
-      # [optional] [default: green]
       color: green
-
-      # The bar's style (solid, segmented_6, segmented_10, segmented_12, segmented_20)
-      # [optional] [default: solid]
       style: segmented_20
-
-  # Spray patterns
-  # Each entry contains two values represent X offset and Y offset
-  # You can use this tool for easier creation: https://anhcraft.dev/tools/battle/spray.html
-  # [optional]
   spray_pattern:
     - "1.05 1.3"
     - "1.45 1.9"

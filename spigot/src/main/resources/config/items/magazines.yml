@@ -1,27 +1,13 @@
 # This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/magazine
 
-# You can configure all ammunition storage here
-
-default_ak_47: # The id of this magazine
-  # Next is its name
-  # [optional]
+default_ak_47:
   name: "&2AK-47 Magazine"
-
-  # Skin configuration
   skin:
-    # The material
-    # [optional] [default: air]
     material: chest
-
-    # The damage
-    # [optional] [default: 0]
     damage: 0
-
-  # All ammo can be put in
-  # Syntax: <ammo id>:<capacity>
-  # [optional]
   ammo:
-    7_62mm: 30 # it means we can have 30 rounds of 7.62mm ammo in this magazine
+    7_62mm: 30
 
 improved_ak_47:
   name: "&2AK-47 Magazine &5&l[Improved]"
@@ -36,4 +22,4 @@ default_de:
   skin:
     material: chest
   ammo:
-    _50_ae: 7 # 7 rounds of .50 AE ammo
+    _50_ae: 7

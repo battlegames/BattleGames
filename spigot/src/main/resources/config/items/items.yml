@@ -1,11 +1,7 @@
 # This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/items
 
-# Here you can customize Battle items
-# E.g: guns, ammo, magazines, etc
-# All sections below use ABIF which you can look at here to know
-# the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-
-ammo: # <-- don't change!
+ammo:
   name: "{__ammo_name__}"
   lore:
     - "&aBullets: &f{__ammo_bullet_count__}"
