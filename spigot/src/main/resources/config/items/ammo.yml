@@ -12,12 +12,6 @@
       knockback: 0.1
       particle:
         type: end_rod
-        count: 1
-        offset_x: 0
-        offset_y: 0
-        offset_z: 0
-        speed: 0
-        view_distance: 50
 
 _50_ae:
   name: "&f.50 Action Express"

@@ -23,11 +23,7 @@ import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Objects;
 
 public class ParticleEffect {
     private Particle particle;
@@ -36,7 +32,6 @@ public class ParticleEffect {
     private double offsetY;
     private double offsetZ;
     private double speed;
-    private double viewDistance;
 
     public ParticleEffect(@NotNull ConfigurationSection section) {
         this(
@@ -45,19 +40,17 @@ public class ParticleEffect {
                 section.getDouble("offset_x"),
                 section.getDouble("offset_y"),
                 section.getDouble("offset_z"),
-                section.getDouble("speed"),
-                section.getDouble("view_distance", 50)
+                section.getDouble("speed")
         );
     }
 
-    public ParticleEffect(@NotNull Particle particle, int count, double offsetX, double offsetY, double offsetZ, double speed, double viewDistance) {
+    public ParticleEffect(@NotNull Particle particle, int count, double offsetX, double offsetY, double offsetZ, double speed) {
         this.particle = particle;
         this.count = count;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
         this.speed = speed;
-        this.viewDistance = viewDistance;
     }
 
     @NotNull
@@ -85,25 +78,7 @@ public class ParticleEffect {
         return speed;
     }
 
-    public double getViewDistance() {
-        return viewDistance;
-    }
-
     public void spawn(@NotNull Location location){
-        Objects.requireNonNull(location.getWorld())
-                .getNearbyEntities(location, viewDistance, viewDistance, viewDistance)
-                .stream().filter(f -> f instanceof Player)
-                .forEach(entity -> {
-                    ((Player) entity).spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed, null);
-                });
-    }
-
-    public void spawn(@NotNull Location location, @NotNull List<Player> players){
-        Location target = location.clone();
-        double v = viewDistance * viewDistance;
-        for(Player p : players){
-            if(location.distanceSquared(p.getLocation(target)) > v) continue;
-            p.spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed, null);
-        }
+        location.getWorld().spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed, null);
     }
 }
