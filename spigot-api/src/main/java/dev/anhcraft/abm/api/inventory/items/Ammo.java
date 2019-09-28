@@ -20,10 +20,13 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
+import dev.anhcraft.abm.api.misc.ParticleEffect;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Ammo extends BattleItem<AmmoModel> {
     @Override
@@ -42,5 +45,31 @@ public class Ammo extends BattleItem<AmmoModel> {
     public void inform(@NotNull InfoHolder holder) {
         if(getModel() != null)
             getModel().inform(holder);
+    }
+
+    public static class Bullet {
+        private double damage;
+        private double knockback;
+        private ParticleEffect particleEffect;
+
+        public Bullet(double damage, double knockback, @Nullable ParticleEffect particleEffect) {
+            Condition.notNull(particleEffect);
+            this.damage = damage;
+            this.knockback = knockback;
+            this.particleEffect = particleEffect;
+        }
+
+        public double getDamage() {
+            return damage;
+        }
+
+        public double getKnockback() {
+            return knockback;
+        }
+
+        @Nullable
+        public ParticleEffect getParticleEffect() {
+            return particleEffect;
+        }
     }
 }

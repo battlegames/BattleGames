@@ -19,12 +19,11 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.entity.Bullet;
+import dev.anhcraft.abm.api.misc.ParticleEffect;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AmmoModel extends BattleItemModel implements Attachable {
-    private List<Bullet> bullets = new ArrayList<>();
+    private List<Ammo.Bullet> bullets = new ArrayList<>();
     private Skin skin;
 
     public AmmoModel(@NotNull String id, @NotNull ConfigurationSection conf) {
@@ -48,16 +47,12 @@ public class AmmoModel extends BattleItemModel implements Attachable {
             for(String bsk : bss.getKeys(false)){
                 ConfigurationSection bs = bss.getConfigurationSection(bsk);
                 if(bs == null) continue;
-                String ptn = bs.getString("particle.type");
-                Particle pt = ptn == null ? Particle.END_ROD : EnumUtil.getEnum(Particle.values(), ptn);
-                bullets.add(new Bullet(bs.getDouble("damage"),
-                        bs.getDouble("knockback"), pt,
-                        bs.getInt("particle.count", 1),
-                        bs.getDouble("particle.offset_x"),
-                        bs.getDouble("particle.offset_y"),
-                        bs.getDouble("particle.offset_z"),
-                        bs.getDouble("particle.speed"),
-                        bs.getDouble("particle.view_distance", 50)));
+                ConfigurationSection particle = bs.getConfigurationSection("particle");
+                bullets.add(new Ammo.Bullet(
+                        bs.getDouble("damage"),
+                        bs.getDouble("knockback"),
+                        particle == null ? null : new ParticleEffect(particle))
+                );
             }
         }
         bullets = Collections.unmodifiableList(bullets);
@@ -69,7 +64,7 @@ public class AmmoModel extends BattleItemModel implements Attachable {
     }
 
     @NotNull
-    public List<Bullet> getBullets() {
+    public List<Ammo.Bullet> getBullets() {
         return bullets;
     }
 
@@ -82,10 +77,10 @@ public class AmmoModel extends BattleItemModel implements Attachable {
     public void inform(@NotNull InfoHolder holder){
         super.inform(holder);
         holder.inform("bullet_count", bullets.size())
-        .inform("total_bullet_damage", bullets.stream().mapToDouble(Bullet::getDamage).sum())
-        .inform("total_bullet_knockback", bullets.stream().mapToDouble(Bullet::getKnockback).sum())
-        .inform("avg_bullet_damage", bullets.stream().mapToDouble(Bullet::getDamage).average().orElse(0))
-        .inform("avg_bullet_knockback", bullets.stream().mapToDouble(Bullet::getKnockback).average().orElse(0));
+        .inform("total_bullet_damage", bullets.stream().mapToDouble(Ammo.Bullet::getDamage).sum())
+        .inform("total_bullet_knockback", bullets.stream().mapToDouble(Ammo.Bullet::getKnockback).sum())
+        .inform("avg_bullet_damage", bullets.stream().mapToDouble(Ammo.Bullet::getDamage).average().orElse(0))
+        .inform("avg_bullet_knockback", bullets.stream().mapToDouble(Ammo.Bullet::getKnockback).average().orElse(0));
     }
 
     @Override

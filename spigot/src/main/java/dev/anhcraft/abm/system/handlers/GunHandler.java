@@ -20,8 +20,6 @@
 package dev.anhcraft.abm.system.handlers;
 
 import dev.anhcraft.abm.BattlePlugin;
-import dev.anhcraft.abm.api.entity.Bullet;
-import dev.anhcraft.abm.api.entity.BulletEntity;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.*;
@@ -49,6 +47,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -202,42 +201,40 @@ public class GunHandler extends Handler {
             sprayVec.multiply(.75);
         } else
             sprayVec = new Vector();
-        List<Bullet> bullets = mag.getAmmo().getModel().getBullets();
-        for(Bullet b : bullets){
-            BulletEntity entity = new BulletEntity(start, b);
+        Location entityLocation = start.clone();
+        Collection<LivingEntity> entities = start.getWorld().getEntitiesByClass(LivingEntity.class);
+        List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
+        for(Ammo.Bullet b : bullets){
             for(double d = 0.5; d < 100; d += 0.5){
-                Location clone = start.clone();
-                entity.setLocation(clone.add(dir.clone().multiply(d).add(sprayVec)));
+                Location loc = start.clone().add(dir.clone().multiply(d).add(sprayVec));
 
-                Block block = entity.getLocation().getBlock();
+                if(b.getParticleEffect() != null)
+                    b.getParticleEffect().spawn(loc);
+
+                Block block = loc.getBlock();
                 if(block.getType().isSolid()) {
-                    List<Player> viewers = block.getWorld()
-                            .getNearbyEntities(entity.getLocation(), 25, 25, 25)
-                            .stream()
-                            .filter(e -> e instanceof Player)
-                            .map(e -> ((Player) e))
-                            .collect(Collectors.toList());
-                    int id = entity.getLocation().hashCode();
-                    BlockUtil.createBreakAnimation(id, block, RandomUtil.randomInt(0, 9), viewers);
+                    int id = loc.hashCode();
+                    int st = RandomUtil.randomInt(0, 9);
+                    BlockUtil.createBreakAnimation(id, block, st, entities.stream()
+                            .filter(ent -> ent instanceof Player)
+                            .map(livingEntity -> (Player) livingEntity)
+                            .collect(Collectors.toList()));
                     break;
                 }
 
-                entity.spawnParticle();
-                block.getWorld().getNearbyEntities(entity.getLocation(), 0.5, 0.5, 0.5).stream()
-                     .filter(entity1 -> entity1 instanceof LivingEntity && !entity1.equals(player))
-                     .forEach(e -> {
-                         LivingEntity ve = (LivingEntity) e;
-                         DamageReport dr = new DamageReport(player, b.getDamage());
-                         dr.setHeadshotDamage(isHeadShot(entity.getLocation(), ve));
-                         PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
-                         Bukkit.getPluginManager().callEvent(event);
-                         if(event.isCancelled()) return;
+                for(LivingEntity ve : entities){
+                    if(ve.equals(player) || loc.distanceSquared(ve.getLocation(entityLocation)) >= 1) continue;
+                    DamageReport dr = new DamageReport(player, b.getDamage());
+                    dr.setHeadshotDamage(isHeadShot(loc, ve));
+                    PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if(event.isCancelled()) continue;
 
-                         ve.damage(event.getDamage(), player);
-                         Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
-                                 .normalize().multiply(b.getKnockback()));
-                         ve.setVelocity(vec);
-                     });
+                    ve.damage(event.getDamage(), player);
+                    Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
+                            .normalize().multiply(b.getKnockback()));
+                    ve.setVelocity(vec);
+                }
             }
         }
         return true;
