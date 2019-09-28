@@ -22,12 +22,14 @@ package dev.anhcraft.abm.utils;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EnumUtil {
     @NotNull
-    public static <E extends Enum> E getEnum(E[] list, String str){
+    public static <E extends Enum> E getEnum(@NotNull E[] list, @Nullable String str){
+        Condition.notNull(list);
         Condition.notEmpty(list);
-        Condition.notNull(str);
+        if(str == null) return list[0];
 
         str = str.toUpperCase();
         for(E e : list){
