@@ -40,13 +40,13 @@ public class ParticleEffect {
 
     public ParticleEffect(@NotNull ConfigurationSection section) {
         this(
-                EnumUtil.getEnum(Particle.values(), section.getString("particle.type")),
-                section.getInt("particle.count", 1),
-                section.getDouble("particle.offset_x"),
-                section.getDouble("particle.offset_y"),
-                section.getDouble("particle.offset_z"),
-                section.getDouble("particle.speed"),
-                section.getDouble("particle.view_distance", 50)
+                EnumUtil.getEnum(Particle.values(), section.getString("type")),
+                section.getInt("count", 1),
+                section.getDouble("offset_x"),
+                section.getDouble("offset_y"),
+                section.getDouble("offset_z"),
+                section.getDouble("speed"),
+                section.getDouble("view_distance", 50)
         );
     }
 
@@ -60,6 +60,7 @@ public class ParticleEffect {
         this.viewDistance = viewDistance;
     }
 
+    @NotNull
     public Particle getParticle() {
         return particle;
     }
@@ -99,8 +100,9 @@ public class ParticleEffect {
 
     public void spawn(@NotNull Location location, @NotNull List<Player> players){
         Location target = location.clone();
+        double v = viewDistance * viewDistance;
         for(Player p : players){
-            if(location.distance(p.getLocation(target)) > viewDistance) continue;
+            if(location.distanceSquared(p.getLocation(target)) > v) continue;
             p.spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed, null);
         }
     }
