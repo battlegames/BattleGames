@@ -21,8 +21,6 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.Skin;
-import dev.anhcraft.abm.utils.EnumUtil;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,8 +35,7 @@ public class MagazineModel extends BattleItemModel implements Attachable {
     public MagazineModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
 
-        String material = conf.getString("skin.material");
-        skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material), conf.getInt("skin.damage"));
+        skin = new Skin(conf.getConfigurationSection("skin"));
 
         ConfigurationSection ams = conf.getConfigurationSection("ammo");
         if(ams != null){

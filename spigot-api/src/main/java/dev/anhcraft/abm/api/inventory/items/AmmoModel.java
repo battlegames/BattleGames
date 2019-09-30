@@ -22,8 +22,6 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.misc.ParticleEffect;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
-import dev.anhcraft.abm.utils.EnumUtil;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,9 +36,7 @@ public class AmmoModel extends BattleItemModel implements Attachable {
     public AmmoModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
 
-        String material = conf.getString("skin.material");
-        skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material),
-                conf.getInt("skin.damage"));
+        skin = new Skin(conf.getConfigurationSection("skin"));
 
         ConfigurationSection bss = conf.getConfigurationSection("bullets");
         if(bss != null){

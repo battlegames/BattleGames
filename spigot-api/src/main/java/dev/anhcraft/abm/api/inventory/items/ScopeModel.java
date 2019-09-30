@@ -20,9 +20,7 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.misc.Skin;
-import dev.anhcraft.abm.utils.EnumUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,8 +34,7 @@ public class ScopeModel extends BattleItemModel implements Attachable {
     public ScopeModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
 
-        String material = conf.getString("skin.material");
-        skin = new Skin(material == null ? null : EnumUtil.getEnum(Material.values(), material), conf.getInt("skin.damage"));
+        skin = new Skin(conf.getConfigurationSection("skin"));
         zoomLevels = conf.getIntegerList("zoom_levels");
         zoomLevels.removeIf(integer -> {
             boolean b = integer < 1 || integer > 255;

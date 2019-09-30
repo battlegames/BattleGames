@@ -19,14 +19,26 @@
  */
 package dev.anhcraft.abm.api.misc;
 
+import dev.anhcraft.abm.utils.EnumUtil;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Skin {
     private Material material;
     private int damage;
+
+    public Skin(@Nullable ConfigurationSection section){
+        if(section == null){
+            material = Material.AIR;
+            return;
+        }
+        String material = section.getString("material");
+        this.material = material == null ? Material.AIR : EnumUtil.getEnum(Material.values(), material);
+        damage = section.getInt("damage");
+    }
 
     public Skin(@Nullable Material material, int damage) {
         this.material = (material == null ? Material.AIR : material);

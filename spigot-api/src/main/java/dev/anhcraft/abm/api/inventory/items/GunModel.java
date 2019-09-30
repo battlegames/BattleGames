@@ -30,7 +30,6 @@ import dev.anhcraft.jvmkit.utils.Pair;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -59,10 +58,8 @@ public class GunModel extends WeaponModel {
     public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
         super(id, conf);
 
-        String primaryMaterial = conf.getString("skin.primary.material");
-        primarySkin = new Skin(primaryMaterial == null ? null : EnumUtil.getEnum(Material.values(), primaryMaterial), conf.getInt("skin.primary.damage"));
-        String secondaryMaterial = conf.getString("skin.secondary.material");
-        secondarySkin = new Skin(secondaryMaterial == null ? null : EnumUtil.getEnum(Material.values(), secondaryMaterial), conf.getInt("skin.secondary.damage"));
+        primarySkin = new Skin(conf.getConfigurationSection("skin.primary"));
+        secondarySkin = new Skin(conf.getConfigurationSection("skin.secondary"));
 
         weight = conf.getDouble("weight");
         magazineMaxCapacity = conf.getInt("magazine.max_capacity");
