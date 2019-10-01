@@ -21,6 +21,7 @@ package dev.anhcraft.abm.api.misc;
 
 import dev.anhcraft.abm.utils.EnumUtil;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +55,9 @@ public class Skin {
         return damage;
     }
 
-    public PreparedItem transform(PreparedItem preparedItem){
+    @NotNull
+    public PreparedItem transform(@NotNull PreparedItem preparedItem){
+        Condition.argNotNull("preparedItem", preparedItem);
         preparedItem.material(material);
         preparedItem.damage(damage);
         return preparedItem;
