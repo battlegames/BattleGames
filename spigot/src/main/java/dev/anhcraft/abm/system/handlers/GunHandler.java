@@ -223,7 +223,7 @@ public class GunHandler extends Handler {
                 }
 
                 for(LivingEntity ve : entities){
-                    if(ve.equals(player) || loc.distanceSquared(ve.getLocation(entityLocation)) >= 1) continue;
+                    if(ve.equals(player) || loc.distanceSquared(ve.getLocation(entityLocation)) >= 1.5) continue;
                     DamageReport dr = new DamageReport(player, b.getDamage());
                     dr.setHeadshotDamage(isHeadShot(loc, ve));
                     PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
