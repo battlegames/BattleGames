@@ -390,9 +390,9 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 }
                 else getLogger().warning("Config folder is not an directory");
             } else file.mkdir();
-            new File(file, "locale").mkdir();
-            new File(file, "items").mkdir();
         }
+        new File(configFolder, "locale").mkdir();
+        new File(configFolder, "items").mkdir();
         // TODO check and upgrade db here
     }
 
