@@ -163,6 +163,13 @@ public interface BattleAPI {
     ScopeModel getScopeModel(@Nullable String id);
 
     /**
+     * Gets the grenade that matches the given id.
+     * @param id the id of the grenade
+     * @return {@link GrenadeModel} if found or null if not
+     */
+    GrenadeModel getGrenadeModel(@Nullable String id);
+
+    /**
      * Gets the kit that matches the given id.
      * @param id the id of the kit
      * @return {@link Kit} if found or null if not
@@ -233,6 +240,19 @@ public interface BattleAPI {
      * @param consumer the consumer
      */
     void listScopes(@NotNull Consumer<ScopeModel> consumer);
+
+    /**
+     * Lists all registered grenades.
+     * @return an immutable list of grenades
+     */
+    @NotNull
+    List<GrenadeModel> listGrenades();
+
+    /**
+     * Lists all grenades and gets them.
+     * @param consumer the consumer
+     */
+    void listGrenades(@NotNull Consumer<GrenadeModel> consumer);
 
     /**
      * Lists all registered kits.

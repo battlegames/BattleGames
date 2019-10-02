@@ -130,6 +130,9 @@ gui:
     scope_name: "&fScopes"
     scope_lore:
       - "&aClick here to view owned scopes"
+    grenade_name: "&fGrenades"
+    grenade_lore:
+      - "&aClick here to view owned grenades"
   inventory_gun:
     title: "&c&lInventory > Gun"
   inventory_magazine:
@@ -138,6 +141,8 @@ gui:
     title: "&c&lInventory > Ammunition"
   inventory_scope:
     title: "&c&lInventory > Scope"
+  inventory_grenade:
+    title: "&c&lInventory > Grenade"
   kit_menu:
     title: "&b&lKits"
   arena_chooser:

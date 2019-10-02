@@ -222,6 +222,22 @@ public class BattleCommand extends BaseCommand{
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
 
+    @Subcommand("give grenade")
+    @CommandPermission("abm.give.grenade")
+    @CommandCompletion("@grenade @players")
+    public void giveGrenade(Player player, String id, @Optional Player target){
+        target = (target == null ? player : target);
+        GrenadeModel gm = plugin.getGrenadeModel(id);
+        if(gm != null) {
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null) {
+                playerData.getInventory().getStorage(ItemType.GRENADE).put(id);
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            }
+        } else plugin.chatManager.sendPlayer(player, "items.not_found");
+    }
+
     @Subcommand("inv")
     public void inv(Player player){
         plugin.guiManager.openTopInventory(player, "inventory_menu");

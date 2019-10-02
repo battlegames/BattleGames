@@ -1,0 +1,32 @@
+# This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/grenade
+
+grenade1:
+  name: "&4Explosive &aGrenade"
+  skin:
+    material: shears
+    damage: 1
+  delay_time: 60
+  explosion_power: 3
+  velocity_multiplier: 2.7
+  inventory_slot: 2
+
+grenade2:
+  name: "&4Explosive &aGrenade &f&l[+1]"
+  skin:
+    material: shears
+    damage: 1
+  delay_time: 60
+  explosion_power: 4.5
+  velocity_multiplier: 2.8
+  inventory_slot: 2
+
+grenade3:
+  name: "&4Explosive &aGrenade &f&l[+2]"
+  skin:
+    material: shears
+    damage: 1
+  delay_time: 70
+  explosion_power: 6
+  velocity_multiplier: 3
+  inventory_slot: 2

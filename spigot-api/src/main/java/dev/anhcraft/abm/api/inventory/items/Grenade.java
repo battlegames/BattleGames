@@ -17,40 +17,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.abm.api.inventory.items;
 
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.abm.api.ApiProvider;
+import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public enum ItemType {
-    AMMO(Ammo::new),
-    GUN(Gun::new),
-    MAGAZINE(Magazine::new),
-    SCOPE(Scope::new),
-    GRENADE(Grenade::new);
-
-    Supplier<BattleItem> c;
-
-    ItemType(Supplier<BattleItem> c){
-        this.c = c;
+public class Grenade extends BattleItem<GrenadeModel> {
+    @Override
+    public void save(CompoundTag compound) {
+        if(getModel() != null){
+            compound.put(ItemTag.GRENADE_ID, getModel().getId());
+        }
     }
 
-    private String localizedName = name();
-
-    @NotNull
-    public String getLocalizedName() {
-        return localizedName;
+    @Override
+    public void load(CompoundTag compound) {
+        setModel(ApiProvider.consume().getGrenadeModel(compound.getValue(ItemTag.GRENADE_ID, StringTag.class)));
     }
 
-    public void setLocalizedName(@NotNull String localizedName) {
-        Validate.notNull(localizedName, "Localized name must be non-null");
-        this.localizedName = localizedName;
-    }
-
-    @NotNull
-    public BattleItem make(){
-        return c.get();
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        if(getModel() != null) getModel().inform(holder);
     }
 }

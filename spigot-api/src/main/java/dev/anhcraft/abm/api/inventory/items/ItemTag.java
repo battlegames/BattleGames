@@ -35,6 +35,7 @@ public class ItemTag {
     public static String MAGAZINE_AMMO;
     public static String SCOPE_ID;
     public static String SCOPE_NEXT_ZOOM_LEVEL;
+    public static String GRENADE_ID;
 
     static {
         Field[] fields = ItemTag.class.getDeclaredFields();

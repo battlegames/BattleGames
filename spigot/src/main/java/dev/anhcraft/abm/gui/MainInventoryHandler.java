@@ -49,4 +49,9 @@ public class MainInventoryHandler extends GuiHandler {
     public void openAmmoInv(Player player){
         ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_ammo");
     }
+
+    @Label("open_grenade")
+    public void openGrenadeInv(Player player){
+        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_grenade");
+    }
 }

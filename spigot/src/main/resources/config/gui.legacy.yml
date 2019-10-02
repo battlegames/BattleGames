@@ -82,7 +82,7 @@ inventory_menu: # Don't change this
       # The column which this slot is put on
       # You can use "center positions" here, e.g: 3_items_2, 2_items_1, etc
       # [optional] [default: 0] [maximum: 9]
-      column: 4_items_1
+      column: 5_items_1
 
       # This section uses ABIF which you can look at here to know
       # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
@@ -109,7 +109,7 @@ inventory_menu: # Don't change this
 
     magazine:
       row: 2
-      column: 4_items_2
+      column: 5_items_2
       item:
         material: chest
         name: "{{ gui.inventory_menu.magazine_name }}"
@@ -121,7 +121,7 @@ inventory_menu: # Don't change this
 
     ammo:
       row: 2
-      column: 4_items_3
+      column: 5_items_3
       item:
         material: arrow
         name: "{{ gui.inventory_menu.ammo_name }}"
@@ -133,7 +133,7 @@ inventory_menu: # Don't change this
 
     scope:
       row: 2
-      column: 4_items_4
+      column: 5_items_4
       item:
         material: glass
         name: "{{ gui.inventory_menu.scope_name }}"
@@ -142,6 +142,18 @@ inventory_menu: # Don't change this
       handlers:
         - "core::cancel_event"
         - "inventory_menu::open_scope"
+
+    grenade:
+      row: 2
+      column: 5_items_5
+      item:
+        material: tnt
+        name: "{{ gui.inventory_menu.grenade_name }}"
+        lore:
+          - "$$gui.inventory_menu.grenade_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open_grenade"
 
     close:
       row: 4
@@ -342,6 +354,58 @@ inventory_scope:
       left_column: 1
       right_column: 9
     handler: "inventory_scope"
+  slots:
+    prev:
+      row: 6
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    back:
+      row: 6
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.back_inv_name }}"
+        lore:
+          - "$$gui.btn.back_inv_lore"
+      handlers:
+        - "core::cancel_event"
+        - "inventory_menu::open"
+    next:
+      row: 6
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+inventory_grenade:
+  title: "{{ gui.inventory_grenade.title }}"
+  size: 54
+  background:
+    icon:
+      material: STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+      damage: 7
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 5
+      left_column: 1
+      right_column: 9
+    handler: "inventory_grenade"
   slots:
     prev:
       row: 6

@@ -27,11 +27,13 @@ import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
+import dev.anhcraft.abm.api.inventory.items.Grenade;
 import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.misc.DamageReport;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
+import dev.anhcraft.abm.system.handlers.GrenadeHandler;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
 import org.bukkit.Bukkit;
@@ -128,6 +130,21 @@ public class PlayerListener extends BattleComponent implements Listener {
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                        event.setCancelled(true);
+                        event.setUseInteractedBlock(Event.Result.DENY);
+                    }
+                }
+                else if (item instanceof Grenade) {
+                    if(plugin.getHandler(GrenadeHandler.class).throwGrenade(p, (Grenade) item)){
+                        if(event.getHand() == EquipmentSlot.HAND) {
+                            ItemStack i = p.getInventory().getItemInMainHand();
+                            i.setAmount(i.getAmount() - 1);
+                            p.getInventory().setItemInMainHand(i);
+                        } else {
+                            ItemStack i = p.getInventory().getItemInOffHand();
+                            i.setAmount(i.getAmount() - 1);
+                            p.getInventory().setItemInOffHand(i);
+                        }
                         event.setCancelled(true);
                         event.setUseInteractedBlock(Event.Result.DENY);
                     }

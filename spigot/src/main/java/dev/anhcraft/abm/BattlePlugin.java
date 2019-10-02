@@ -38,6 +38,7 @@ import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.api.storage.data.ServerData;
 import dev.anhcraft.abm.cmd.BattleCommand;
 import dev.anhcraft.abm.gui.*;
+import dev.anhcraft.abm.system.handlers.GrenadeHandler;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.handlers.Handler;
 import dev.anhcraft.abm.system.integrations.PapiExpansion;
@@ -94,6 +95,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "items/scopes.yml",
             // END: ATTACHMENTS
             "items/guns.yml",
+            "items/grenades.yml",
             "items/items.yml",
             "gui.yml " + (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml"
@@ -103,6 +105,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, Arena> ARENA_MAP = new HashMap<>();
     private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
     private final Map<String, GunModel> GUN_MAP = new HashMap<>();
+    private final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
     private final Map<String, Kit> KIT_MAP = new HashMap<>();
     private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
     private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
@@ -122,6 +125,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public GameTask gameTask;
     public QueueTitleTask queueTitleTask;
     public QueueServerTask queueServerTask;
+    public EntityTrackingTask entityTracker;
     private Expression toExpConverter;
     private Expression toLevelConverter;
     private PapiExpansion papiExpansion;
@@ -161,6 +165,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager = new GuiManager(this);
         gameManager = new GameManager(this);
         HANDLERS.put(GunHandler.class, new GunHandler(this));
+        HANDLERS.put(GrenadeHandler.class, new GrenadeHandler(this));
 
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
@@ -170,9 +175,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         initMagazine(CONFIG[6]);
         initScope(CONFIG[7]);
         initGun(CONFIG[8]);
-        //initItem(CONFIG[9]);
-        initGui(CONFIG[10]);
-        initKits(CONFIG[11]);
+        initGrenade(CONFIG[9]);
+        //initItem(CONFIG[10]);
+        initGui(CONFIG[11]);
+        initKits(CONFIG[12]);
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -187,6 +193,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
+        taskHelper.newAsyncTimerTask(entityTracker = new EntityTrackingTask(), 0, 10);
         if(supportBungee){
             taskHelper.newAsyncTimerTask(queueServerTask = new QueueServerTask(this), 0, 20);
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
@@ -224,6 +231,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
                 return ARENA_MAP.keySet();
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("grenade", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return GRENADE_MAP.keySet();
             }
         });
     }
@@ -297,16 +310,20 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return CONFIG[8];
     }
 
-    public FileConfiguration getItemConf(){
+    public FileConfiguration getGrenadeConf(){
         return CONFIG[9];
     }
 
-    public FileConfiguration getGuiConf(){
+    public FileConfiguration getItemConf(){
         return CONFIG[10];
     }
 
-    public FileConfiguration getKitConf(){
+    public FileConfiguration getGuiConf(){
         return CONFIG[11];
+    }
+
+    public FileConfiguration getKitConf(){
+        return CONFIG[12];
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
@@ -472,6 +489,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         c.getKeys(false).forEach(s -> GUN_MAP.put(s, new GunModel(s, c.getConfigurationSection(s))));
     }
 
+    private void initGrenade(FileConfiguration c) {
+        c.getKeys(false).forEach(s -> GRENADE_MAP.put(s, new GrenadeModel(s, c.getConfigurationSection(s))));
+    }
+
     private void initScope(FileConfiguration c) {
         c.getKeys(false).forEach(s -> SCOPE_MAP.put(s, new ScopeModel(s, c.getConfigurationSection(s))));
     }
@@ -483,6 +504,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory());
         guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory());
         guiManager.registerGuiHandler("inventory_scope", new ScopeInventory());
+        guiManager.registerGuiHandler("inventory_grenade", new GrenadeInventory());
         guiManager.registerGuiHandler("kit_menu", new KitMenuHandler());
         guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler());
 
@@ -635,6 +657,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    public GrenadeModel getGrenadeModel(@Nullable String id) {
+        return GRENADE_MAP.get(id);
+    }
+
+    @Override
     public Kit getKit(@Nullable String id) {
         return KIT_MAP.get(id);
     }
@@ -696,6 +723,18 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public void listScopes(@NotNull Consumer<ScopeModel> consumer) {
         Condition.argNotNull("consumer", consumer);
         SCOPE_MAP.values().forEach(consumer);
+    }
+
+    @Override
+    @NotNull
+    public List<GrenadeModel> listGrenades() {
+        return ImmutableList.copyOf(GRENADE_MAP.values());
+    }
+
+    @Override
+    public void listGrenades(@NotNull Consumer<GrenadeModel> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        GRENADE_MAP.values().forEach(consumer);
     }
 
     @NotNull

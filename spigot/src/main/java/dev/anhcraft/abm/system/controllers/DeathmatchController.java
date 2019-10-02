@@ -26,8 +26,10 @@ import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
+import dev.anhcraft.abm.api.inventory.items.GrenadeModel;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.abm.system.handlers.GrenadeHandler;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.utils.CooldownMap;
@@ -146,8 +148,11 @@ public class DeathmatchController extends ModeController {
             if(cooldownMap.isPassed(event.getPlayer(), t))
                 plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_item_selection_overtime"));
             else {
-                if (event.getItemModel().getItemType() == ItemType.GUN)
+                ItemType type = event.getItemModel().getItemType();
+                if (type == ItemType.GUN)
                     plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
+                else if (type == ItemType.GRENADE)
+                    plugin.getHandler(GrenadeHandler.class).selectGrenade(event.getPlayer(), (GrenadeModel) event.getItemModel());
                 else
                     plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_disabled_item_type"));
             }

@@ -51,3 +51,23 @@ scope:
 
 model_scope:
   name: "{__scope_name__}"
+
+model_grenade:
+  name: "{__grenade_name__}"
+  lore:
+    - "&aExplosion power: &f{__grenade_explosion_power__}"
+    - "&aDelay time: &f{__grenade_delay_time__}"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true
+
+grenade:
+  name: "{__grenade_name__}"
+  lore:
+    - "&aExplosion power: &f{__grenade_explosion_power__}"
+    - "&aDelay time: &f{__grenade_delay_time__}"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true
