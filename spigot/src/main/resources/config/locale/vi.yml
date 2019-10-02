@@ -22,6 +22,12 @@ server:
   illegal_block_break: "&cHành động bị cấm: Bạn không được phép phá block!"
   illegal_block_blace: "&cHành động bị cấm: Bạn không được phép đặt block!"
   set_spawn_success: "&aSpawn máy chủ đã được đặt thành %s"
+  connect_failed: "&eKhông thể kết nối tới bất kì máy chủ nào hiện tại. Vui lòng liên hệ staff."
+  try_reconnect: "&eĐang thử kết nối lại... &f%s/%s"
+  switched_server:
+    - "&eCó vẻ như máy chủ đích đang gặp sự cố!"
+    - "&aĐã chuyển sang máy chủ khác. Đang kết nối... &f%s/%s"
+  server_connecting: "&aBạn sẽ được kết nối tới máy chủ khác! Vui lòng chờ..."
 arena:
   not_found: "&cKhông thể tìm thấy đấu trường đó."
   error_already_joined: "&cBạn đã tham gia trò chơi!"
@@ -34,6 +40,15 @@ arena:
   join_success: "&a%s đã tham gia đấu trường!"
   quit_failed: "&cKhông thể bắt %s thoát đấu trường"
   quit_success: "&a%s đã thoát trò chơi!"
+game:
+  list_header: "&4&l--- Các trò chơi đang diễn ra: (%s) ---"
+  list_section:
+    - "&eĐấu trường: &f{__arena_name__}"
+    - "&eChế độ: &f{__mode_name__}"
+    - "&eThời gian: &f{__game_current_time__}/{__arena_max_time__} ticks"
+    - "&eNgười chơi: &f{__game_player_count__}/{__arena_max_players__}"
+  destroy_success: "&aTrò chơi đang bị phá hủy!"
+  inactive_arena: "&cKhông có trò chơi nào đang diễn ra trên đấu trường đó!"
 mode_dm:
   player_join_broadcast: "&f{__target__} đã tham gia! (%abm_game_total_players%/%abm_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} đã thoát! (%abm_game_total_players%/%abm_arena_max_players%)"
@@ -71,10 +86,17 @@ gun:
   none_scope_message: "&cKhẩu súng này chưa được trang bị kính ngắm!"
 items:
   not_found: "&cKhông tìm thấy vật phẩm"
+  given: "&aĐã trao vật phẩm &e(%s)&a cho %s"
+inv:
+  cleared: "&aTúi đồ đã được dọn dẹp!"
+player_data:
+  not_found: "&cKhông thể tìm thấy dữ liệu người chơi"
 tool:
   position:
     message: "&fVị trí hiện tại của bạn là: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
     location: "/%s %.2f %.2f %.2f %.2f %.2f"
+  exp2lv: "&a%d exp = cấp %d"
+  lv2exp: "&aCấp %d = %d exp"
 kit:
   no_permission: "&cBạn không có quyền để sử dụng kit này!"
   unavailable: "&cKit này hiện không có sẵn! Bạn phải chờ đến %s"
@@ -108,6 +130,9 @@ gui:
     scope_name: "&fKính ngắm"
     scope_lore:
       - "&aXem toàn bộ kính ngắm đã sở hữu"
+    grenade_name: "&fLựu đạn"
+    grenade_lore:
+      - "&aXem toàn bộ lựu đạn đã sở hữu"
   inventory_gun:
     title: "&c&lTúi đồ > Súng"
   inventory_magazine:
@@ -116,6 +141,8 @@ gui:
     title: "&c&lTúi đồ > Đạn dược"
   inventory_scope:
     title: "&c&lTúi đồ > Kính ngắm"
+  inventory_grenade:
+    title: "&c&lTúi đồ > Lựu đạn"
   kit_menu:
     title: "&b&lKit"
   arena_chooser:
