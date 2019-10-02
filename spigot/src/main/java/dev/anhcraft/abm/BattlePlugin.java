@@ -441,6 +441,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         String path = getGeneralConf().getString("locale");
         YamlConfiguration local = loadConfigFile("locale/"+path, "locale/"+path);
         if(local != null) {
+            boolean outdatedLocale = false;
             Set<String> keys = cache.getKeys(true);
             for (String k : keys) {
                 Object v;
@@ -448,10 +449,21 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 else {
                     getLogger().warning("The locale file is outdated. Missing path: " + k);
                     v = cache.get(k);
+                    local.set(k, v);
+                    outdatedLocale = true;
                 }
                 if (v instanceof String)
                     cache.set(k, ChatColor.translateAlternateColorCodes('&', (String) v));
                 else cache.set(k, v);
+            }
+            if(outdatedLocale){
+                File lc = new File(configFolder, "locale/temp."+path);
+                try {
+                    local.save(lc);
+                    getLogger().fine("An up-to-date locale file that filled all missing entries was saved to "+lc.getAbsolutePath()+"!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else getLogger().warning("Locale file not found.");
 
