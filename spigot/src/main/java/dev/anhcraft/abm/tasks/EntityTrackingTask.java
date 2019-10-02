@@ -40,7 +40,10 @@ public class EntityTrackingTask implements Runnable {
 
         default void untrack(Entity entity){
             EntityTracker x = task.MAP.get(entity);
-            if(x != null) x.callbacks.remove(this);
+            if(x != null) {
+                x.callbacks.remove(this);
+                if(x.callbacks.isEmpty()) task.MAP.remove(entity);
+            }
         }
     }
 
