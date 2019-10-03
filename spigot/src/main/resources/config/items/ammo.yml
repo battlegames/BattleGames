@@ -21,3 +21,5 @@ _50_ae:
     '1':
       damage: 10.8
       knockback: 0.102
+      particle:
+        type: end_rod
