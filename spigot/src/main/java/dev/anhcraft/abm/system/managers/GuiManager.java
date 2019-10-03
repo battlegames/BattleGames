@@ -205,6 +205,10 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                 if (guiHandler == null) continue;
 
                 GuiListener<? extends GuiReport> listener = guiHandler.getEventListeners().get(args[1]);
+                if(listener == null) {
+                    plugin.getLogger().warning("GUI listener ("+ eh +") not found");
+                    continue;
+                }
                 listeners.add(listener);
             }
             slots[i] = new BattleGuiSlot(i, s, listeners);
