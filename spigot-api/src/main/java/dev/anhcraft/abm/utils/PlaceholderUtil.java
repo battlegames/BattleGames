@@ -42,21 +42,18 @@ public class PlaceholderUtil {
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
     @Contract("_, null -> null")
-    @Nullable
     public static String formatPAPI(@NotNull Player player, @Nullable String str){
         Condition.notNull(player);
         return PlaceholderAPI.setPlaceholders(player, str);
     }
 
     @Contract("_, null -> null")
-    @Nullable
     public static List<String> formatPAPI(@NotNull Player player, @Nullable List<String> str){
         Condition.notNull(player);
         return PlaceholderAPI.setPlaceholders(player, str);
     }
 
     @Contract("null, _ -> null; _, null -> null")
-    @Nullable
     public static String formatInfo(@Nullable String str, @Nullable Map<String, String> x){
         if(str == null || x == null) return null;
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
@@ -76,7 +73,6 @@ public class PlaceholderUtil {
     }
 
     @Contract("null -> null")
-    @Nullable
     public static String formatExpression(@Nullable String str){
         if(str == null) return null;
         Matcher m = EXPRESSION_PLACEHOLDER_PATTERN.matcher(str);
@@ -91,7 +87,6 @@ public class PlaceholderUtil {
     }
 
     @Contract("null, _ -> null; _, null -> null")
-    @Nullable
     public static String localizeString(@Nullable String str, @Nullable ConfigurationSection localeConf){
         if(str == null || localeConf == null) return null;
         Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
