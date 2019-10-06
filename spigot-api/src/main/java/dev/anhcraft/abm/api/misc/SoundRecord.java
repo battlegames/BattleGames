@@ -64,4 +64,12 @@ public class SoundRecord {
         else if(bukkitSound != null)
             world.playSound(location, bukkitSound, volume, pitch);
     }
+
+    @Override
+    public String toString(){
+        if(bukkitSound != null)
+            return "$"+bukkitSound.name()+":"+volume+":"+pitch;
+        else
+            return "$"+soundName+":"+volume+":"+pitch;
+    }
 }
