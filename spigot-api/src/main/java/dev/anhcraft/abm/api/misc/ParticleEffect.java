@@ -19,43 +19,56 @@
  */
 package dev.anhcraft.abm.api.misc;
 
-import dev.anhcraft.abm.utils.EnumUtil;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
+@Schema
 public class ParticleEffect {
-    private Particle particle;
-    private int count;
+    public static final ConfigSchema<ParticleEffect> SCHEMA = ConfigSchema.of(ParticleEffect.class);
+
+    @Key("type")
+    @Explanation("The type of particle")
+    @PrettyEnum
+    @IgnoreValue(ifNull = true)
+    private Particle type = Particle.CLOUD;
+
+    @Key("count")
+    @Explanation("The number of particles")
+    private int count = 1;
+
+    @Key("offset_x")
+    @Explanation({
+            "The maximum random offset on the X axis",
+            "Or the Red value in RGB (with colored dust particle)"
+    })
     private double offsetX;
+
+    @Key("offset_y")
+    @Explanation({
+            "The maximum random offset on the Y axis",
+            "Or the Green value in RGB (with colored dust particle)"
+    })
     private double offsetY;
+
+    @Key("offset_z")
+    @Explanation({
+            "The maximum random offset on the Z axis",
+            "Or the Blue value in RGB (with colored dust particle)"
+    })
     private double offsetZ;
+
+    @Key("speed")
+    @Explanation({
+            "Particle speed"
+    })
     private double speed;
 
-    public ParticleEffect(@NotNull ConfigurationSection section) {
-        this(
-                EnumUtil.getEnum(Particle.values(), section.getString("type")),
-                section.getInt("count", 1),
-                section.getDouble("offset_x"),
-                section.getDouble("offset_y"),
-                section.getDouble("offset_z"),
-                section.getDouble("speed")
-        );
-    }
-
-    public ParticleEffect(@NotNull Particle particle, int count, double offsetX, double offsetY, double offsetZ, double speed) {
-        this.particle = particle;
-        this.count = count;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.offsetZ = offsetZ;
-        this.speed = speed;
-    }
-
     @NotNull
-    public Particle getParticle() {
-        return particle;
+    public Particle getType() {
+        return type;
     }
 
     public int getCount() {
@@ -79,6 +92,6 @@ public class ParticleEffect {
     }
 
     public void spawn(@NotNull Location location){
-        location.getWorld().spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed, null);
+        location.getWorld().spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null);
     }
 }

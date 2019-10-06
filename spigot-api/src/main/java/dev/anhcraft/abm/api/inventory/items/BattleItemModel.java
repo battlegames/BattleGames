@@ -19,25 +19,32 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.abm.api.misc.info.Informative;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.IgnoreValue;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 import org.apache.commons.lang.Validate;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Schema
 public abstract class BattleItemModel implements Informative {
     private String id;
+
+    @Key("name")
+    @Explanation("Give a name for the item")
+    @IgnoreValue(ifNull = true, ifEmptyString = true)
     private String name;
+
     private InfoHolder cachedInfoHolder;
 
-    protected BattleItemModel(@NotNull String id, @NotNull ConfigurationSection conf) {
+    protected BattleItemModel(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         Validate.isTrue(id.matches("[A-Za-z0-9_]+"), "Id must only contains A-Z,a-z, 0-9 and underscore only");
-        Validate.notNull(conf, "Conf must be non-null");
-
         this.id = id;
-        this.name = conf.getString("name", id);
+        name = id;
     }
 
     @NotNull

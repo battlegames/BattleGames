@@ -19,32 +19,26 @@
  */
 package dev.anhcraft.abm.api.misc;
 
-import dev.anhcraft.abm.utils.EnumUtil;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+@Schema
 public class Skin {
-    private Material material;
+    public static final ConfigSchema<Skin> SCHEMA = ConfigSchema.of(Skin.class);
+
+    @Key("material")
+    @Explanation("Set the material")
+    @PrettyEnum
+    @IgnoreValue(ifNull = true)
+    private Material material = Material.AIR;
+
+    @Key("damage")
+    @Explanation("Set the damage")
     private int damage;
-
-    public Skin(@Nullable ConfigurationSection section){
-        if(section == null){
-            material = Material.AIR;
-            return;
-        }
-        String material = section.getString("material");
-        this.material = material == null ? Material.AIR : EnumUtil.getEnum(Material.values(), material);
-        damage = section.getInt("damage");
-    }
-
-    public Skin(@Nullable Material material, int damage) {
-        this.material = (material == null ? Material.AIR : material);
-        this.damage = damage;
-    }
 
     @NotNull
     public Material getMaterial() {

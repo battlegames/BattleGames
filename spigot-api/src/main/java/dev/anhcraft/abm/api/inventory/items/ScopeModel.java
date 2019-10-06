@@ -19,34 +19,29 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ScopeModel extends BattleItemModel implements Attachable {
-    private Skin skin;
-    private List<Integer> zoomLevels;
+@Schema
+public class ScopeModel extends SingleSkinItem implements Attachable {
+    public static final ConfigSchema<ScopeModel> SCHEMA = ConfigSchema.of(ScopeModel.class);
 
-    public ScopeModel(@NotNull String id, @NotNull ConfigurationSection conf) {
-        super(id, conf);
+    @Key("zoom_levels")
+    @Explanation({
+            "Set the zoom levels",
+            "The zoom level must be between 1 and 255",
+            "It is recommended to keep them between 1 and 11"
+    })
+    @IgnoreValue(ifNull = true)
+    private List<Integer> zoomLevels = new ArrayList<>();
 
-        skin = new Skin(conf.getConfigurationSection("skin"));
-        zoomLevels = conf.getIntegerList("zoom_levels");
-        zoomLevels.removeIf(integer -> {
-            boolean b = integer < 1 || integer > 255;
-            if(b) Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, id));
-            return b;
-        });
-        zoomLevels = Collections.unmodifiableList(zoomLevels);
-    }
-
-    @NotNull
-    public Skin getSkin() {
-        return skin;
+    public ScopeModel(@NotNull String id) {
+        super(id);
     }
 
     @NotNull
@@ -64,5 +59,19 @@ public class ScopeModel extends BattleItemModel implements Attachable {
     @Override
     public @NotNull ItemType getItemType() {
         return ItemType.SCOPE;
+    }
+
+    @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
+    private Object handle(ConfigSchema.Entry entry, Object value){
+        if(value != null && entry.getKey().equals("zoom_levels")){
+            List<Integer> x = (List<Integer>) value;
+            x.removeIf(integer -> {
+                boolean b = integer < 1 || integer > 255;
+                if(b) Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, getId()));
+                return b;
+            });
+            return x;
+        }
+        return value;
     }
 }

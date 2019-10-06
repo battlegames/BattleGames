@@ -19,51 +19,49 @@
  */
 package dev.anhcraft.abm.api.misc;
 
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
+@Schema
 public class CustomBossBar {
-    private boolean primarySlot;
-    private String title;
-    private BarColor color;
-    private BarStyle style;
+    public static final ConfigSchema<CustomBossBar> SCHEMA = ConfigSchema.of(CustomBossBar.class);
 
-    public CustomBossBar(boolean primarySlot, String title, BarColor color, BarStyle style) {
-        this.primarySlot = primarySlot;
-        this.title = title;
-        this.color = color;
-        this.style = style;
-    }
+    @Key("primary")
+    @Explanation("Make the bar appeared on the primary slot")
+    private boolean primarySlot = true;
+
+    @Key("title")
+    @Explanation("Set the title")
+    @Validation(notNull = true)
+    private String title;
+
+    @Key("color")
+    @Explanation("Set the color")
+    @PrettyEnum
+    @IgnoreValue(ifNull = true)
+    private BarColor color = BarColor.RED;
+
+    @Key("style")
+    @Explanation("Set the style")
+    @PrettyEnum
+    @IgnoreValue(ifNull = true)
+    private BarStyle style = BarStyle.SOLID;
 
     public boolean isPrimarySlot() {
         return primarySlot;
-    }
-
-    public void setPrimarySlot(boolean primarySlot) {
-        this.primarySlot = primarySlot;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public BarColor getColor() {
         return color;
     }
 
-    public void setColor(BarColor color) {
-        this.color = color;
-    }
-
     public BarStyle getStyle() {
         return style;
-    }
-
-    public void setStyle(BarStyle style) {
-        this.style = style;
     }
 }

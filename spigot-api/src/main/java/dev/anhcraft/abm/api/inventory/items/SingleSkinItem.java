@@ -17,12 +17,27 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.abm.api.inventory.items;
 
+import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Validation;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class WeaponModel extends BattleItemModel {
-    protected WeaponModel(@NotNull String id) {
+public abstract class SingleSkinItem extends BattleItemModel {
+    @Key("skin")
+    @Explanation("Set the item's skin")
+    @Validation(notNull = true)
+    private Skin skin;
+
+    protected SingleSkinItem(@NotNull String id) {
         super(id);
+    }
+
+    @NotNull
+    public Skin getSkin() {
+        return skin;
     }
 }

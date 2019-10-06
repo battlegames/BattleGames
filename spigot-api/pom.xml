@@ -38,5 +38,11 @@
             <version>2.10.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>dev.anhcraft</groupId>
+            <artifactId>confighelper</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

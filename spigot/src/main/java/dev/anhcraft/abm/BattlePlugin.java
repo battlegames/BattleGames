@@ -52,6 +52,8 @@ import dev.anhcraft.abm.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.abm.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.abm.tasks.*;
+import dev.anhcraft.confighelper.ConfigHelper;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
@@ -490,23 +492,68 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initAmmo(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> AMMO_MAP.put(s, new AmmoModel(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            AmmoModel a = new AmmoModel(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, AmmoModel.SCHEMA, a);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            AMMO_MAP.put(s, a);
+        });
     }
 
     private void initMagazine(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> MAGAZINE_MAP.put(s, new MagazineModel(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            MagazineModel m = new MagazineModel(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, MagazineModel.SCHEMA, m);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            MAGAZINE_MAP.put(s, m);
+        });
     }
 
     private void initGun(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> GUN_MAP.put(s, new GunModel(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            GunModel g = new GunModel(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, GunModel.SCHEMA, g);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            GUN_MAP.put(s, g);
+        });
     }
 
     private void initGrenade(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> GRENADE_MAP.put(s, new GrenadeModel(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            GrenadeModel g = new GrenadeModel(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, GrenadeModel.SCHEMA, g);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            GRENADE_MAP.put(s, g);
+        });
     }
 
     private void initScope(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> SCOPE_MAP.put(s, new ScopeModel(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            ScopeModel sm = new ScopeModel(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, ScopeModel.SCHEMA, sm);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            SCOPE_MAP.put(s, sm);
+        });
     }
 
     private void initGui(FileConfiguration c) {

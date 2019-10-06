@@ -20,41 +20,36 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
-import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.IgnoreValue;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MagazineModel extends BattleItemModel implements Attachable {
+@Schema
+public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayMiddleware {
+    public static final ConfigSchema<MagazineModel> SCHEMA = ConfigSchema.of(MagazineModel.class);
+
+    @Key("ammo")
+    @Explanation("All ammo types can be stored in this magazine")
+    @IgnoreValue(ifNull = true)
     private Map<AmmoModel, Integer> ammunition = new HashMap<>();
-    private Skin skin;
 
-    public MagazineModel(@NotNull String id, @NotNull ConfigurationSection conf) {
-        super(id, conf);
-
-        skin = new Skin(conf.getConfigurationSection("skin"));
-
-        ConfigurationSection ams = conf.getConfigurationSection("ammo");
-        if(ams != null){
-            for(String a : ams.getKeys(false)) {
-                AmmoModel am = ApiProvider.consume().getAmmoModel(a);
-                if(am != null) ammunition.put(am, ams.getInt(a));
-            }
-        }
-        ammunition = Collections.unmodifiableMap(ammunition);
+    public MagazineModel(@NotNull String id) {
+        super(id);
     }
 
     @Override
     public @NotNull ItemType getItemType() {
         return ItemType.MAGAZINE;
-    }
-
-    @NotNull
-    public Skin getSkin() {
-        return skin;
     }
 
     @NotNull
@@ -67,5 +62,34 @@ public class MagazineModel extends BattleItemModel implements Attachable {
         return new ItemType[]{
                 ItemType.GUN
         };
+    }
+
+    @Override
+    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+        if(o != null && entry.getKey().equals("ammo")){
+            ConfigurationSection cs = (ConfigurationSection) o;
+            Map<AmmoModel, Integer> ammo = new HashMap<>();
+            for(String a : cs.getKeys(false)){
+                AmmoModel am = ApiProvider.consume().getAmmoModel(a);
+                if(am != null) {
+                    ammo.put(am, cs.getInt(a));
+                }
+            }
+            return ammo;
+        }
+        return o;
+    }
+
+    @Override
+    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+        if(o != null && entry.getKey().equals("ammo")){
+            ConfigurationSection parent = new YamlConfiguration();
+            Map<AmmoModel, Integer> map = (Map<AmmoModel, Integer>) o;
+            for(Map.Entry<AmmoModel, Integer> x : map.entrySet()){
+                parent.set(x.getKey().getId(), x.getValue());
+            }
+            return parent;
+        }
+        return o;
     }
 }

@@ -24,93 +24,101 @@ import dev.anhcraft.abm.api.misc.CustomBossBar;
 import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.SoundRecord;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
-import dev.anhcraft.abm.utils.EnumUtil;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import dev.anhcraft.jvmkit.lang.enumeration.RegEx;
 import dev.anhcraft.jvmkit.utils.Pair;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class GunModel extends WeaponModel {
+@Schema
+public class GunModel extends WeaponModel implements TwoWayMiddleware {
+    private static final SoundRecord DEF_SHOOT_SOUND = new SoundRecord("$entity_arrow_shoot");
+    public static final ConfigSchema<GunModel> SCHEMA = ConfigSchema.of(GunModel.class);
+
+    @Key("skin.primary")
+    @Explanation("Set the primary skin")
+    @Validation(notNull = true)
     private Skin primarySkin;
-    private Skin secondarySkin;
+
+    @Key("skin.secondary")
+    @Explanation("Set the primary skin")
+    @IgnoreValue(ifNull = true)
+    private Skin secondarySkin = new Skin();
+
+    @Key("weight")
+    @Explanation({
+            "Set the gun's weight",
+            "This value reduces the speed while someone is holding the gun"
+    })
     private double weight;
+
+    @Key("magazine.default")
+    @Explanation("The default magazine")
+    @Validation(notNull = true)
     private MagazineModel defaultMagazine;
-    private ScopeModel defaultScope;
+
+    @Key("magazine.max_capacity")
+    @Explanation({
+            "Set the maximum magazine's capacity",
+            "This option has no effect with the default magazine"
+    })
     private int magazineMaxCapacity;
+
+    @Key("scope.default")
+    @Explanation("The default scope")
+    private ScopeModel defaultScope;
+
+    @Key("inventory_slot")
+    @Explanation({
+            "The slot where the grenade is put into",
+            "Only supported by a few game modes"
+    })
     private int inventorySlot;
-    private SoundRecord shootSound;
+
+    @Key("sounds.on_shoot")
+    @Explanation("Set the sound that is played when shooting")
+    @IgnoreValue(ifNull = true)
+    private SoundRecord shootSound = DEF_SHOOT_SOUND;
+
+    @Key("sounds.on_start_reloading")
+    @Explanation("Set the sound that is played when starting to reload ammo")
     private SoundRecord reloadStartSound;
+
+    @Key("sounds.on_end_reloading")
+    @Explanation("Set the sound that is played when finished reloading ammo")
     private SoundRecord reloadEndSound;
+
+    private String reloadTimeFormula;
+
+    @Key("reload_time_formula")
+    @Explanation("Set the formula used for calculating the reloading time")
+    @Validation(notNull = true)
     private Expression reloadTimeCalculator;
+
+    @Key("bossbar.on_reload")
+    @Explanation("Set the boss bar used during the reloading time")
+    @Validation(notNull = true)
     private CustomBossBar reloadBar;
+
+    @Key("spray_pattern")
+    @Explanation({
+            "Set the spray pattern",
+            "With two numbers represent two offsets on the X axis and Y axis",
+            "<a href=https://anhcraft.dev/tools/battle/spray.html>Spray pattern generator tool</a>"
+    })
+    @IgnoreValue(ifNull = true)
     private List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
 
-    public GunModel(@NotNull String id, @NotNull ConfigurationSection conf) {
-        super(id, conf);
-
-        primarySkin = new Skin(conf.getConfigurationSection("skin.primary"));
-        secondarySkin = new Skin(conf.getConfigurationSection("skin.secondary"));
-
-        weight = conf.getDouble("weight");
-        magazineMaxCapacity = conf.getInt("magazine.max_capacity");
-
-        String defaultMag = conf.getString("magazine.default");
-        if(defaultMag == null) throw new NullPointerException("Default magazine must be specified");
-        defaultMagazine = ApiProvider.consume().getMagazineModel(defaultMag);
-        if(defaultMagazine == null) throw new IllegalStateException("Default magazine not found!");
-
-        inventorySlot = conf.getInt("inventory_slot");
-        String ss = conf.getString("sounds.on_shoot");
-        shootSound = new SoundRecord(ss == null ? "$entity_arrow_shoot" : ss);
-        String rss = conf.getString("sounds.on_start_reloading");
-        if(rss != null) reloadStartSound = new SoundRecord(rss);
-        String res = conf.getString("sounds.on_end_reloading");
-        if(res != null) reloadEndSound = new SoundRecord(res);
-
-        reloadBar = new CustomBossBar(true, null, BarColor.GREEN, BarStyle.SOLID);
-        ConfigurationSection rbs = conf.getConfigurationSection("bossbar.on_reload");
-        if(rbs != null){
-            reloadBar.setPrimarySlot(rbs.getBoolean("primary", true));
-            reloadBar.setTitle(rbs.getString("title"));
-            String barColor = rbs.getString("color");
-            if(barColor != null) reloadBar.setColor(EnumUtil.getEnum(BarColor.values(), barColor));
-            String barStyle = rbs.getString("style");
-            if(barStyle != null) reloadBar.setStyle(EnumUtil.getEnum(BarStyle.values(), barStyle));
-        }
-
-        String rtf = conf.getString("reload_time_formula");
-        if(rtf == null) throw new NullPointerException("Reloading time formula must be specified");
-        reloadTimeCalculator = new ExpressionBuilder(rtf).variables("a", "b").build();
-
-        String defaultScp = conf.getString("scope.default");
-        if(defaultScp != null) {
-            defaultScope = ApiProvider.consume().getScopeModel(defaultScp);
-        }
-
-        conf.getStringList("spray_pattern").forEach(s -> {
-            String[] args = s.trim().split(" ");
-            double x = 0, y = 0;
-            if(args.length >= 1){
-                if(RegEx.DECIMAL.valid(args[0])) x = Double.parseDouble(args[0]);
-                else Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], id));
-            }
-            if(args.length >= 2){
-                if(RegEx.DECIMAL.valid(args[1])) y = Double.parseDouble(args[1]);
-                else Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], id));
-            }
-            sprayPattern.add(new Pair<>(x, y));
-        });
-        sprayPattern = Collections.unmodifiableList(sprayPattern);
+    public GunModel(@NotNull String id) {
+        super(id);
     }
 
     @Override
@@ -186,5 +194,76 @@ public class GunModel extends WeaponModel {
     @NotNull
     public List<Pair<Double, Double>> getSprayPattern() {
         return sprayPattern;
+    }
+
+    @Override
+    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+        if(o != null){
+            if(entry.getKey().startsWith("sounds.")) {
+                return new SoundRecord((String) o);
+            }
+            switch (entry.getKey()){
+                case "magazine.default": {
+                    return ApiProvider.consume().getMagazineModel((String) o);
+                }
+                case "scope.default": {
+                    return ApiProvider.consume().getScopeModel((String) o);
+                }
+                case "reload_time_formula": {
+                    reloadTimeFormula = (String) o;
+                    return new ExpressionBuilder(reloadTimeFormula).variables("a", "b").build();
+                }
+                case "spray_pattern": {
+                    List<Pair<Double, Double>> sp = new ArrayList<>();
+                    List<?> list = (List<?>) o;
+                    for(Object object : list){
+                        String[] args = String.valueOf(object).split(" ");
+                        double x = 0, y = 0;
+                        if(args.length >= 1){
+                            if(RegEx.DECIMAL.valid(args[0]))
+                                x = Double.parseDouble(args[0]);
+                            else
+                                Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], getId()));
+                        }
+                        if(args.length >= 2){
+                            if(RegEx.DECIMAL.valid(args[1]))
+                                y = Double.parseDouble(args[1]);
+                            else
+                                Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], getId()));
+                        }
+                        sp.add(new Pair<>(x, y));
+                    }
+                    return sp;
+                }
+            }
+        }
+        return o;
+    }
+
+    @Override
+    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+        if(o != null){
+            if(entry.getKey().startsWith("sounds.")) {
+                return o.toString();
+            }
+            switch (entry.getKey()){
+                case "scope.default":
+                case "magazine.default": {
+                    return ((BattleItemModel) o).getId();
+                }
+                case "reload_time_formula": {
+                    return reloadTimeFormula;
+                }
+                case "spray_pattern": {
+                    List<Pair<Double, Double>> sp = (List<Pair<Double, Double>>) o;
+                    List<String> list = new ArrayList<>();
+                    for(Pair<Double, Double> p : sp){
+                        list.add(p.getFirst()+" "+p.getSecond());
+                    }
+                    return list;
+                }
+            }
+        }
+        return o;
     }
 }

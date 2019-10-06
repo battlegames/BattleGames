@@ -21,8 +21,8 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class WeaponModel extends BattleItemModel {
-    protected WeaponModel(@NotNull String id) {
+public abstract class SingleSkinWeapon extends SingleSkinItem {
+    protected SingleSkinWeapon(@NotNull String id) {
         super(id);
     }
 }

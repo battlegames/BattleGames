@@ -19,39 +19,34 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.ParticleEffect;
-import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.confighelper.ConfigHelper;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.IgnoreValue;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class AmmoModel extends BattleItemModel implements Attachable {
+@Schema
+public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddleware {
+    public static final ConfigSchema<AmmoModel> SCHEMA = ConfigSchema.of(AmmoModel.class);
+
+    @Key("bullets")
+    @Explanation("Define bullets in this ammunition")
+    @IgnoreValue(ifNull = true)
     private List<Ammo.Bullet> bullets = new ArrayList<>();
-    private Skin skin;
 
-    public AmmoModel(@NotNull String id, @NotNull ConfigurationSection conf) {
-        super(id, conf);
-
-        skin = new Skin(conf.getConfigurationSection("skin"));
-
-        ConfigurationSection bss = conf.getConfigurationSection("bullets");
-        if(bss != null){
-            for(String bsk : bss.getKeys(false)){
-                ConfigurationSection bs = bss.getConfigurationSection(bsk);
-                if(bs == null) continue;
-                ConfigurationSection particle = bs.getConfigurationSection("particle");
-                bullets.add(new Ammo.Bullet(
-                        bs.getDouble("damage"),
-                        bs.getDouble("knockback"),
-                        particle == null ? null : new ParticleEffect(particle))
-                );
-            }
-        }
-        bullets = Collections.unmodifiableList(bullets);
+    public AmmoModel(@NotNull String id) {
+        super(id);
     }
 
     @Override
@@ -62,11 +57,6 @@ public class AmmoModel extends BattleItemModel implements Attachable {
     @NotNull
     public List<Ammo.Bullet> getBullets() {
         return bullets;
-    }
-
-    @NotNull
-    public Skin getSkin() {
-        return skin;
     }
 
     @Override
@@ -84,5 +74,37 @@ public class AmmoModel extends BattleItemModel implements Attachable {
         return new ItemType[]{
                 ItemType.MAGAZINE
         };
+    }
+
+    @Override
+    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object value) {
+        if(value != null && entry.getKey().equals("bullets")){
+            ConfigurationSection cs = (ConfigurationSection) value;
+            List<Ammo.Bullet> bullets = new ArrayList<>();
+            for(String s : cs.getKeys(false)){
+                try {
+                    bullets.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), Ammo.Bullet.SCHEMA));
+                } catch (InvalidValueException e) {
+                    e.printStackTrace();
+                }
+            }
+            return bullets;
+        }
+        return value;
+    }
+
+    @Override
+    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object value) {
+        if(value != null && entry.getKey().equals("bullets")){
+            ConfigurationSection parent = new YamlConfiguration();
+            int i = 0;
+            for(Ammo.Bullet b : (List<Ammo.Bullet>) value){
+                YamlConfiguration c = new YamlConfiguration();
+                ConfigHelper.writeConfig(c, Ammo.Bullet.SCHEMA, b);
+                parent.set(String.valueOf(i++), c);
+            }
+            return parent;
+        }
+        return value;
     }
 }

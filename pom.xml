@@ -62,6 +62,10 @@
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>dev.anhcraft.abm.hikari</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>dev.anhcraft.confighelper</pattern>
+                            <shadedPattern>dev.anhcraft.abm.confighelper</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

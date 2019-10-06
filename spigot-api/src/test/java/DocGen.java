@@ -17,12 +17,26 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.abm.api.inventory.items;
 
-import org.jetbrains.annotations.NotNull;
+import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.CustomBossBar;
+import dev.anhcraft.abm.api.misc.ParticleEffect;
+import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.confighelper.ConfigDoc;
 
-public abstract class WeaponModel extends BattleItemModel {
-    protected WeaponModel(@NotNull String id) {
-        super(id);
+import java.io.File;
+
+public class DocGen {
+    public static void main(String[] args){
+        new ConfigDoc()
+                .withSchema(ParticleEffect.SCHEMA)
+                .withSchema(Skin.SCHEMA)
+                .withSchema(CustomBossBar.SCHEMA)
+                .withSchema(AmmoModel.SCHEMA)
+                .withSchema(GrenadeModel.SCHEMA)
+                .withSchema(GunModel.SCHEMA)
+                .withSchema(MagazineModel.SCHEMA)
+                .withSchema(ScopeModel.SCHEMA)
+                .generate(new File("docs"));
     }
 }

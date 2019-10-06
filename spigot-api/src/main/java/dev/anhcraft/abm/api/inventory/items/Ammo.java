@@ -22,6 +22,10 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.ParticleEffect;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
@@ -46,16 +50,21 @@ public class Ammo extends BattleItem<AmmoModel> {
             getModel().inform(holder);
     }
 
+    @Schema
     public static class Bullet {
-        private double damage;
-        private double knockback;
-        private ParticleEffect particleEffect;
+        public static final ConfigSchema<Bullet> SCHEMA = ConfigSchema.of(Bullet.class);
 
-        public Bullet(double damage, double knockback, @Nullable ParticleEffect particleEffect) {
-            this.damage = damage;
-            this.knockback = knockback;
-            this.particleEffect = particleEffect;
-        }
+        @Key("damage")
+        @Explanation("The damage that this bullet will cause")
+        private double damage;
+
+        @Key("knockback")
+        @Explanation("The knockback power that applied for the target")
+        private double knockback;
+
+        @Key("particle")
+        @Explanation("The particle to be shown when flying")
+        private ParticleEffect particleEffect;
 
         public double getDamage() {
             return damage;

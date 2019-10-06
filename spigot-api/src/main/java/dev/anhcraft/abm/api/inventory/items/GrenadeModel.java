@@ -21,30 +21,49 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.misc.ParticleEffect;
-import dev.anhcraft.abm.api.misc.Skin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
-import org.bukkit.configuration.ConfigurationSection;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GrenadeModel extends WeaponModel {
-    private Skin skin;
+@Schema
+public class GrenadeModel extends SingleSkinWeapon {
+    public static final ConfigSchema<GrenadeModel> SCHEMA = ConfigSchema.of(GrenadeModel.class);
+
+    @Key("explosion_effect.particle")
+    @Explanation("The explosion effect")
     private ParticleEffect explosionEffect;
+
+    @Key("delay_time")
+    @Explanation({
+            "The delay time before the grenade is going to 'boom'",
+            "Set to 0 to disable this feature"
+    })
     private long delayTime;
-    private double velocityMultiplier;
+
+    @Key("velocity_multiplier")
+    @Explanation("The multiplier applies to the directional velocity")
+    private double velocityMultiplier = 2.0;
+
+    @Key("explosion_power")
+    @Explanation({
+            "The power of the explosion",
+            "Set to 0 to prevent the explosion"
+    })
     private double explosionPower;
+
+    @Key("inventory_slot")
+    @Explanation({
+            "The slot where the grenade is put into",
+            "Only supported by a few game modes"
+    })
     private int inventorySlot;
 
-    public GrenadeModel(@NotNull String id, @NotNull ConfigurationSection conf) {
-        super(id, conf);
-
-        skin = new Skin(conf.getConfigurationSection("skin"));
-        delayTime = conf.getLong("delay_time");
-        ConfigurationSection ee = conf.getConfigurationSection("explosion_effect.particle");
-        if(ee != null) explosionEffect = new ParticleEffect(ee);
-        velocityMultiplier = conf.getDouble("velocity_multiplier", 2.0);
-        explosionPower = conf.getDouble("explosion_power");
-        inventorySlot = conf.getInt("inventory_slot");
+    public GrenadeModel(@NotNull String id) {
+        super(id);
     }
 
     @Override
@@ -59,11 +78,6 @@ public class GrenadeModel extends WeaponModel {
 
     public double getExplosionPower() {
         return explosionPower;
-    }
-
-    @NotNull
-    public Skin getSkin() {
-        return skin;
     }
 
     @Nullable
