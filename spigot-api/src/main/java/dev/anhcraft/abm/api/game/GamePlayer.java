@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GamePlayer implements Resettable {
@@ -33,19 +34,23 @@ public class GamePlayer implements Resettable {
     private final AtomicInteger killCounter = new AtomicInteger();
     private final AtomicInteger deathCounter = new AtomicInteger();
     private final AtomicInteger assistCounter = new AtomicInteger();
-    private Player player;
+    private WeakReference<Player> player;
     private boolean spectator;
     private boolean winner;
     private ItemStack[] backupInventory;
 
     public GamePlayer(@NotNull Player player) {
         Validate.notNull(player, "Player must be non-null");
-        this.player = player;
+        this.player = new WeakReference<>(player);
     }
 
     @NotNull
     public Player getPlayer() {
-        return player;
+        Player p = player.get();
+        if(p == null) {
+            throw new IllegalStateException("The player is not online anymore, thus this game player should be removed previously?");
+        }
+        return p;
     }
 
     public boolean isSpectator() {
