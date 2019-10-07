@@ -44,6 +44,7 @@ public class PlayerData implements Resettable, Serializable {
     private AtomicLong exp = new AtomicLong();
     private PlayerInventory inventory = new PlayerInventory();
     private Map<String, Long> kits = new ConcurrentHashMap<>();
+    private List<String> receivedFirstJoinKits = new ArrayList<>();
 
     @NotNull
     public AtomicInteger getHeadshotCounter() {
@@ -90,6 +91,11 @@ public class PlayerData implements Resettable, Serializable {
         return kits;
     }
 
+    @NotNull
+    public List<String> getReceivedFirstJoinKits() {
+        return receivedFirstJoinKits;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
@@ -112,6 +118,10 @@ public class PlayerData implements Resettable, Serializable {
         map.readTag("kits", List.class).forEach(o -> {
             String k = ((StringTag) o).getValue();
             kits.put(k, map.readTag("kit."+k, Long.class));
+        });
+        map.readTag("first_join_kits", List.class).forEach(o -> {
+            String k = ((StringTag) o).getValue();
+            receivedFirstJoinKits.add(k);
         });
     }
 
@@ -142,6 +152,9 @@ public class PlayerData implements Resettable, Serializable {
             map.writeTag("kit."+key, value);
         });
         map.writeTag("kits", kts);
+        List<StringTag> rfjk = new ArrayList<>();
+        receivedFirstJoinKits.forEach(v -> rfjk.add(new StringTag(v)));
+        map.writeTag("first_join_kits", rfjk);
     }
 
     @Override
@@ -153,5 +166,6 @@ public class PlayerData implements Resettable, Serializable {
         loseCounter.set(0);
         exp.set(0);
         inventory.clearInventory();
+        receivedFirstJoinKits.clear();
     }
 }

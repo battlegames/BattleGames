@@ -44,6 +44,10 @@ starter: # This kit's ID
   # [optional] [default: -1]
   renew_time: -1
 
+  # Players will be received this kit automatically
+  # on the first join.
+  first_join: true
+
 food:
   icon:
     material: cake

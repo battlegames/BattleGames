@@ -31,6 +31,7 @@ import dev.anhcraft.abm.api.inventory.items.Grenade;
 import dev.anhcraft.abm.api.inventory.items.Gun;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.misc.DamageReport;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.system.QueueTitle;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.handlers.GrenadeHandler;
@@ -70,7 +71,18 @@ public class PlayerListener extends BattleComponent implements Listener {
             player.setFlySpeed(plugin.getDefaultFlyingSpeed());
             plugin.guiManager.setBottomInv(player, "main_player_inv");
             plugin.resetScoreboard(player);
-            plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.loadPlayerData(player));
+            plugin.taskHelper.newAsyncTask(() -> {
+                PlayerData playerData = plugin.dataManager.loadPlayerData(player);
+                // back to main thread
+                plugin.taskHelper.newTask(() -> {
+                    plugin.listKits(kit -> {
+                        if(kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())){
+                            kit.givePlayer(player, playerData);
+                            playerData.getReceivedFirstJoinKits().add(kit.getId());
+                        }
+                    });
+                });
+            });
         }, 60);
     }
 

@@ -22,7 +22,6 @@ package dev.anhcraft.abm.gui;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.BattleAPI;
 import dev.anhcraft.abm.api.gui.*;
-import dev.anhcraft.abm.api.inventory.ItemStorage;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.entity.Player;
@@ -75,11 +74,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                     @Override
                     public void call(SlotClickReport event) {
                         event.getClickEvent().setCancelled(true);
-                        event.getPlayer().getInventory().addItem(kit.getVanillaItems()).values().forEach(itemStack -> event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), itemStack));
-                        kit.getAbmItems().forEach((type, x) -> {
-                            ItemStorage is = pd.getInventory().getStorage(type);
-                            is.put(x);
-                        });
+                        kit.givePlayer(event.getPlayer(), pd);
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
                         api.getGuiManager().openTopInventory(event.getPlayer(), "kit_menu");
                     }

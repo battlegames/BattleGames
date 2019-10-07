@@ -21,12 +21,16 @@ package dev.anhcraft.abm.api.misc;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import dev.anhcraft.abm.api.inventory.ItemStorage;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.kits.abif.ABIF;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +45,7 @@ public class Kit {
     private String permission;
     private int renewTime;
     private ItemStack[] vanillaItems;
+    private boolean firstJoin;
 
     public Kit(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -74,6 +79,8 @@ public class Kit {
                 abmItems.putAll(type, ia.getStringList(s));
             }
         }
+
+        firstJoin = conf.getBoolean("first_join");
     }
 
     @NotNull
@@ -108,5 +115,20 @@ public class Kit {
     @NotNull
     public ItemStack[] getVanillaItems() {
         return vanillaItems;
+    }
+
+    public boolean isFirstJoin() {
+        return firstJoin;
+    }
+
+    public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
+        Location loc = player.getLocation();
+        player.getInventory().addItem(vanillaItems).values().forEach(itemStack -> {
+            player.getWorld().dropItemNaturally(loc, itemStack);
+        });
+        abmItems.forEach((type, x) -> {
+            ItemStorage is = playerData.getInventory().getStorage(type);
+            is.put(x);
+        });
     }
 }
