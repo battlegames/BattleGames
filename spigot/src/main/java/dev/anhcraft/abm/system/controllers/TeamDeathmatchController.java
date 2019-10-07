@@ -221,8 +221,7 @@ public class TeamDeathmatchController extends DeathmatchController {
             team.reset();
         }
 
-        plugin.gameManager.rewardAndSaveCache(localGame);
-        plugin.gameManager.destroy(localGame);
+        plugin.gameManager.handleEnd(localGame);
     }
 
     protected ABTeam handleResult(LocalGame localGame, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {

@@ -222,7 +222,7 @@ public class DeathmatchController extends ModeController {
             respw(localGame, x.getPlayer());
         } while(players.hasNext()); // we use do-while since there is always at least one player
         winner.setWinner(true);
-        plugin.gameManager.rewardAndSaveCache(localGame);
-        plugin.gameManager.destroy(localGame);
+
+        plugin.gameManager.handleEnd(localGame);
     }
 }

@@ -28,6 +28,7 @@ import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.events.GameJoinEvent;
 import dev.anhcraft.abm.api.events.GameQuitEvent;
 import dev.anhcraft.abm.api.game.*;
+import dev.anhcraft.abm.api.misc.BattleFirework;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.system.QueueServer;
 import dev.anhcraft.abm.system.cleaners.GameCleaner;
@@ -44,7 +45,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -232,7 +236,8 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
     }
 
-    public void rewardAndSaveCache(LocalGame localGame) {
+    public void handleEnd(LocalGame localGame) {
+        BattleFirework ebf = localGame.getArena().getEndFirework();
         localGame.getPlayers().values().forEach(gp -> {
             PlayerData playerData = plugin.getPlayerData(gp.getPlayer());
             if(playerData != null) {
@@ -249,12 +254,15 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                 if(gp.isWinner()) {
                     playerData.getWinCounter().incrementAndGet();
                     localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.getPlayer()));
+                    if(ebf != null) ebf.spawn(gp.getPlayer().getLocation());
                 } else {
                     playerData.getLoseCounter().incrementAndGet();
                     localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gp.getPlayer()));
                 }
             }
         });
+
+        plugin.gameManager.destroy(localGame);
     }
 
     @NotNull

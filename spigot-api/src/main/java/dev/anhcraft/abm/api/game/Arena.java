@@ -20,8 +20,11 @@
 package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abm.api.ApiProvider;
+import dev.anhcraft.abm.api.misc.BattleFirework;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
+import dev.anhcraft.confighelper.ConfigHelper;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.kits.abif.ABIF;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
@@ -31,6 +34,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +55,7 @@ public class Arena implements Informative {
     private boolean renderGuiOnDeath;
     private boolean bungeeSupport;
     private List<String> remoteServers;
+    private BattleFirework endFirework;
 
     public Arena(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -86,6 +91,14 @@ public class Arena implements Informative {
                 bungeeSupport = true;
                 remoteServers = Collections.unmodifiableList(conf.getStringList("bungeecord.remote_servers"));
             } else Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
+        }
+        ConfigurationSection efc = conf.getConfigurationSection("end_firework");
+        if(efc != null) {
+            try {
+                endFirework = ConfigHelper.readConfig(efc, BattleFirework.SCHEMA);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -165,6 +178,11 @@ public class Arena implements Informative {
 
     public boolean hasBungeecordSupport(){
         return bungeeSupport;
+    }
+
+    @Nullable
+    public BattleFirework getEndFirework() {
+        return endFirework;
     }
 
     @Override
