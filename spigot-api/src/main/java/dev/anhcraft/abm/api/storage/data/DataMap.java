@@ -20,7 +20,9 @@
 package dev.anhcraft.abm.api.storage.data;
 
 import dev.anhcraft.abm.api.storage.tags.*;
-import org.apache.commons.lang.ClassUtils;
+import dev.anhcraft.jvmkit.utils.DataTypeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,13 +32,18 @@ public class DataMap<T> {
     private Map<T, DataTag> map = new HashMap<>();
     private AtomicBoolean changed = new AtomicBoolean();
 
-    @SuppressWarnings("unchecked")
+    @Nullable
     public <C> C readTag(T key, Class<? extends C> clazz){
-        clazz = ClassUtils.primitiveToWrapper(clazz);
+        return readTag(key, clazz, null);
+    }
+
+    @NotNull
+    public <C> C readTag(T key, Class<? extends C> clazz, C def){
+        Class<?> c = DataTypeUtil.getObjectClass(clazz);
         DataTag q = map.get(key);
-        if(q == null) return null;
+        if(q == null) return def;
         Object a = q.getValue();
-        return clazz.isAssignableFrom(a.getClass()) ? (C) a : null;
+        return c.isAssignableFrom(a.getClass()) ? (C) a : def;
     }
 
     public void forEach(BiConsumer<T, DataTag> consumer){

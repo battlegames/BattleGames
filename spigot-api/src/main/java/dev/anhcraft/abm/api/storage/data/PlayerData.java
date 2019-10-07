@@ -99,30 +99,42 @@ public class PlayerData implements Resettable, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
-        headshotCounter.set(map.readTag("hs", Integer.class));
-        assistCounter.set(map.readTag("ast", Integer.class));
-        killCounter.set(map.readTag("kill", Integer.class));
-        deathCounter.set(map.readTag("death", Integer.class));
-        winCounter.set(map.readTag("win", Integer.class));
-        loseCounter.set(map.readTag("lose", Integer.class));
-        exp.set(map.readTag("exp", Long.class));
-        map.readTag("inv", List.class).forEach(o -> {
-            String q = ((StringTag) o).getValue();
-            ItemStorage storage = inventory.getStorage(ItemType.valueOf(q));
-            map.readTag("inv."+q, List.class).forEach(o1 -> {
-                String v = ((StringTag) o1).getValue();
-                long t = map.readTag("inv."+q+"."+v, Long.class);
-                storage.put(v, t);
+        headshotCounter.set(map.readTag("hs", Integer.class, 0));
+        assistCounter.set(map.readTag("ast", Integer.class, 0));
+        killCounter.set(map.readTag("kill", Integer.class, 0));
+        deathCounter.set(map.readTag("death", Integer.class, 0));
+        winCounter.set(map.readTag("win", Integer.class, 0));
+        loseCounter.set(map.readTag("lose", Integer.class, 0));
+        exp.set(map.readTag("exp", Long.class, 0L));
+        List inv = map.readTag("inv", List.class);
+        if(inv != null) {
+            inv.forEach(o -> {
+                String q = ((StringTag) o).getValue();
+                ItemStorage storage = inventory.getStorage(ItemType.valueOf(q));
+                List is = map.readTag("inv." + q, List.class);
+                if(is != null) {
+                    is.forEach(o1 -> {
+                        String v = ((StringTag) o1).getValue();
+                        long t = map.readTag("inv." + q + "." + v, Long.class, 0L);
+                        storage.put(v, t);
+                    });
+                }
             });
-        });
-        map.readTag("kits", List.class).forEach(o -> {
-            String k = ((StringTag) o).getValue();
-            kits.put(k, map.readTag("kit."+k, Long.class));
-        });
-        map.readTag("first_join_kits", List.class).forEach(o -> {
-            String k = ((StringTag) o).getValue();
-            receivedFirstJoinKits.add(k);
-        });
+        }
+        List kl = map.readTag("kits", List.class);
+        if(kl != null){
+            kl.forEach(o -> {
+                String k = ((StringTag) o).getValue();
+                kits.put(k, map.readTag("kit."+k, Long.class));
+            });
+        }
+        List fjkl = map.readTag("first_join_kits", List.class);
+        if(fjkl != null) {
+            fjkl.forEach(o -> {
+                String k = ((StringTag) o).getValue();
+                receivedFirstJoinKits.add(k);
+            });
+        }
     }
 
     @Override

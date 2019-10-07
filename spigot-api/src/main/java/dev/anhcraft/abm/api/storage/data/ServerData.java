@@ -50,11 +50,11 @@ public class ServerData implements Resettable, Serializable {
     public void read(DataMap<String> map) {
         spawnPoint = new Location(
                 Bukkit.getWorld(map.readTag("sp.w", String.class)),
-                map.readTag("sp.x", Double.class),
-                map.readTag("sp.y", Double.class),
-                map.readTag("sp.z", Double.class),
-                map.readTag("sp.yw", Float.class),
-                map.readTag("sp.pt", Float.class)
+                map.readTag("sp.x", Double.class, 0d),
+                map.readTag("sp.y", Double.class, 0d),
+                map.readTag("sp.z", Double.class, 0d),
+                map.readTag("sp.yw", Float.class, 0f),
+                map.readTag("sp.pt", Float.class, 0f)
         );
     }
 
