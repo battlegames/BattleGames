@@ -20,6 +20,7 @@
 
 package dev.anhcraft.abm.api.misc;
 
+import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,8 @@ import java.util.List;
 
 @Schema
 public class BattleFireworkEffect {
+    public static ConfigSchema<BattleFireworkEffect> SCHEMA = ConfigSchema.of(BattleFireworkEffect.class);
+
     @Key("type")
     @Explanation("The firework type")
     @PrettyEnum

@@ -19,9 +19,7 @@
  */
 
 import dev.anhcraft.abm.api.inventory.items.*;
-import dev.anhcraft.abm.api.misc.BattleBar;
-import dev.anhcraft.abm.api.misc.BattleParticle;
-import dev.anhcraft.abm.api.misc.ItemSkin;
+import dev.anhcraft.abm.api.misc.*;
 import dev.anhcraft.confighelper.ConfigDoc;
 
 import java.io.File;
@@ -37,6 +35,8 @@ public class DocGen {
                 .withSchema(GunModel.SCHEMA)
                 .withSchema(MagazineModel.SCHEMA)
                 .withSchema(ScopeModel.SCHEMA)
+                .withSchema(BattleFirework.SCHEMA)
+                .withSchema(BattleFireworkEffect.SCHEMA)
                 .generate(new File("docs"));
     }
 }
