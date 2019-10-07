@@ -80,6 +80,33 @@ dm_demo: # The id of this arena
   # [default: true]
   render_gui_on_death: true
 
+  # Firework to be spawned when the game ends
+  end_firework:
+    # The firework power
+    power: 3
+
+    # List of firework effects
+    effects:
+      '1':
+        type: ball_large
+        trail: true
+        primary_colors:
+          - red
+          - green
+          - yellow
+        fade_colors:
+          - teal
+          - purple
+          - aqua
+          - fuchsia
+      '2':
+        type: burst
+        primary_colors:
+          - lime
+          - yellow
+          - aqua
+          - orange
+
 tdm_demo:
   name: "&aExample Arena 2"
   mode: tdm # tdm is the ID of team deathmatch mode
