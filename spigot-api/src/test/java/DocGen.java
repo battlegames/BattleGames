@@ -31,6 +31,7 @@ public class DocGen {
                 .withSchema(ItemSkin.SCHEMA)
                 .withSchema(BattleBar.SCHEMA)
                 .withSchema(AmmoModel.SCHEMA)
+                .withSchema(Ammo.Bullet.SCHEMA)
                 .withSchema(GrenadeModel.SCHEMA)
                 .withSchema(GunModel.SCHEMA)
                 .withSchema(MagazineModel.SCHEMA)
