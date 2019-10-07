@@ -20,7 +20,7 @@
 
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.ParticleEffect;
+import dev.anhcraft.abm.api.misc.BattleParticle;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
@@ -35,7 +35,7 @@ public class GrenadeModel extends SingleSkinWeapon {
 
     @Key("explosion_effect.particle")
     @Explanation("The explosion effect")
-    private ParticleEffect explosionEffect;
+    private BattleParticle explosionEffect;
 
     @Key("delay_time")
     @Explanation({
@@ -81,7 +81,7 @@ public class GrenadeModel extends SingleSkinWeapon {
     }
 
     @Nullable
-    public ParticleEffect getExplosionEffect() {
+    public BattleParticle getExplosionEffect() {
         return explosionEffect;
     }
 

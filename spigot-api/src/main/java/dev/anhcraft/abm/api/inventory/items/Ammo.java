@@ -20,7 +20,7 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
-import dev.anhcraft.abm.api.misc.ParticleEffect;
+import dev.anhcraft.abm.api.misc.BattleParticle;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
@@ -64,7 +64,7 @@ public class Ammo extends BattleItem<AmmoModel> {
 
         @Key("particle")
         @Explanation("The particle to be shown when flying")
-        private ParticleEffect particleEffect;
+        private BattleParticle particleEffect;
 
         public double getDamage() {
             return damage;
@@ -75,7 +75,7 @@ public class Ammo extends BattleItem<AmmoModel> {
         }
 
         @Nullable
-        public ParticleEffect getParticleEffect() {
+        public BattleParticle getParticleEffect() {
             return particleEffect;
         }
     }

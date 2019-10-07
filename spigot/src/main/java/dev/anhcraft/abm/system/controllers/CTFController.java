@@ -23,7 +23,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.*;
-import dev.anhcraft.abm.api.misc.SoundRecord;
+import dev.anhcraft.abm.api.misc.BattleSound;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
@@ -109,9 +109,9 @@ public class CTFController extends TeamDeathmatchController {
                         return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
                     });
                     String startCaptureSound = sec.getString(k+".start_capture_sound");
-                    if(startCaptureSound != null) flag.setCaptureStartSound(new SoundRecord(startCaptureSound));
+                    if(startCaptureSound != null) flag.setCaptureStartSound(new BattleSound(startCaptureSound));
                     String stopCaptureSound = sec.getString(k+".stop_capture_sound");
-                    if(stopCaptureSound != null) flag.setCaptureStopSound(new SoundRecord(stopCaptureSound));
+                    if(stopCaptureSound != null) flag.setCaptureStopSound(new BattleSound(stopCaptureSound));
                     FLAG.put(localGame, flag);
                 }
             }

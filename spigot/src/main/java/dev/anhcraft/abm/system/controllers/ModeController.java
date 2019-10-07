@@ -26,7 +26,7 @@ import dev.anhcraft.abm.api.BattleModeController;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.inventory.items.*;
-import dev.anhcraft.abm.api.misc.CustomBossBar;
+import dev.anhcraft.abm.api.misc.BattleBar;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.renderers.bossbar.PlayerBossBar;
@@ -226,7 +226,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         double maxTime = reloadTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
         int bullerPerTime = (int) Math.floor((maxBullet - currentBullet) / maxTime);
         AtomicLong currentTime = new AtomicLong();
-        CustomBossBar cb = gm.getReloadBar();
+        BattleBar cb = gm.getReloadBar();
 
         int slot = player.getInventory().getHeldItemSlot();
 

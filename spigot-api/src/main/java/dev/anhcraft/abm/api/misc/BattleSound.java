@@ -25,13 +25,13 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class SoundRecord {
+public class BattleSound {
     private String soundName;
     private Sound bukkitSound;
     private float volume = 2;
     private float pitch = 1;
 
-    public SoundRecord(String s) {
+    public BattleSound(String s) {
         if(s.length() == 0) return;
         String[] x = s.split(":");
         if(x.length >= 1){

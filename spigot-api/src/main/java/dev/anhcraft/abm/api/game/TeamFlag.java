@@ -21,7 +21,7 @@
 package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abm.api.misc.Resettable;
-import dev.anhcraft.abm.api.misc.SoundRecord;
+import dev.anhcraft.abm.api.misc.BattleSound;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
@@ -42,8 +42,8 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
     private T team;
     private int maxHealth;
     private boolean capturing;
-    private SoundRecord captureStartSound;
-    private SoundRecord captureStopSound;
+    private BattleSound captureStartSound;
+    private BattleSound captureStopSound;
 
     public TeamFlag(@NotNull ArmorStand armorStand, int maxHealth) {
         Condition.argNotNull("armorStand", armorStand);
@@ -101,20 +101,20 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
     }
 
     @Nullable
-    public SoundRecord getCaptureStartSound() {
+    public BattleSound getCaptureStartSound() {
         return captureStartSound;
     }
 
-    public void setCaptureStartSound(@Nullable SoundRecord captureStartSound) {
+    public void setCaptureStartSound(@Nullable BattleSound captureStartSound) {
         this.captureStartSound = captureStartSound;
     }
 
     @Nullable
-    public SoundRecord getCaptureStopSound() {
+    public BattleSound getCaptureStopSound() {
         return captureStopSound;
     }
 
-    public void setCaptureStopSound(@Nullable SoundRecord captureStopSound) {
+    public void setCaptureStopSound(@Nullable BattleSound captureStopSound) {
         this.captureStopSound = captureStopSound;
     }
 

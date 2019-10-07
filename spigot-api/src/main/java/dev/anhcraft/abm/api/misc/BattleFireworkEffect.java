@@ -47,13 +47,13 @@ public class BattleFireworkEffect {
     @Explanation("All primary colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<Color> primaryColors = new ArrayList<>();
+    private List<BattleColor> primaryColors = new ArrayList<>();
 
     @Key("fade_colors")
     @Explanation("All fade colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<Color> fadeColors = new ArrayList<>();
+    private List<BattleColor> fadeColors = new ArrayList<>();
 
     private FireworkEffect cached;
 
@@ -71,12 +71,12 @@ public class BattleFireworkEffect {
     }
 
     @NotNull
-    public List<Color> getPrimaryColors() {
+    public List<BattleColor> getPrimaryColors() {
         return primaryColors;
     }
 
     @NotNull
-    public List<Color> getFadeColors() {
+    public List<BattleColor> getFadeColors() {
         return fadeColors;
     }
 
@@ -84,10 +84,10 @@ public class BattleFireworkEffect {
     public FireworkEffect getFireworkEffect() {
         if(cached == null) {
             FireworkEffect.Builder b = FireworkEffect.builder().with(type).flicker(flicker).trail(trail);
-            for (Color c : primaryColors) {
+            for (BattleColor c : primaryColors) {
                 b.withColor(c.asBukkitColor());
             }
-            for (Color c : fadeColors) {
+            for (BattleColor c : fadeColors) {
                 b.withFade(c.asBukkitColor());
             }
             cached = b.build();

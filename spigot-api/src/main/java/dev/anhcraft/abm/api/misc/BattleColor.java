@@ -23,7 +23,7 @@ package dev.anhcraft.abm.api.misc;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
 
-public enum Color {
+public enum BattleColor {
     WHITE,
     SILVER,
     GRAY,
@@ -44,7 +44,7 @@ public enum Color {
 
     private org.bukkit.Color color;
 
-    Color(){
+    BattleColor(){
         color = (org.bukkit.Color) ReflectionUtil.getStaticField(org.bukkit.Color.class, name());
     }
 

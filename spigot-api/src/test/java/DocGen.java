@@ -19,9 +19,9 @@
  */
 
 import dev.anhcraft.abm.api.inventory.items.*;
-import dev.anhcraft.abm.api.misc.CustomBossBar;
-import dev.anhcraft.abm.api.misc.ParticleEffect;
-import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.abm.api.misc.BattleBar;
+import dev.anhcraft.abm.api.misc.BattleParticle;
+import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.confighelper.ConfigDoc;
 
 import java.io.File;
@@ -29,9 +29,9 @@ import java.io.File;
 public class DocGen {
     public static void main(String[] args){
         new ConfigDoc()
-                .withSchema(ParticleEffect.SCHEMA)
-                .withSchema(Skin.SCHEMA)
-                .withSchema(CustomBossBar.SCHEMA)
+                .withSchema(BattleParticle.SCHEMA)
+                .withSchema(ItemSkin.SCHEMA)
+                .withSchema(BattleBar.SCHEMA)
                 .withSchema(AmmoModel.SCHEMA)
                 .withSchema(GrenadeModel.SCHEMA)
                 .withSchema(GunModel.SCHEMA)

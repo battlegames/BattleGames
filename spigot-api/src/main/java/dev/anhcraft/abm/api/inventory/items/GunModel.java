@@ -20,9 +20,9 @@
 package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
-import dev.anhcraft.abm.api.misc.CustomBossBar;
-import dev.anhcraft.abm.api.misc.Skin;
-import dev.anhcraft.abm.api.misc.SoundRecord;
+import dev.anhcraft.abm.api.misc.BattleBar;
+import dev.anhcraft.abm.api.misc.ItemSkin;
+import dev.anhcraft.abm.api.misc.BattleSound;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -40,18 +40,18 @@ import java.util.List;
 
 @Schema
 public class GunModel extends WeaponModel implements TwoWayMiddleware {
-    private static final SoundRecord DEF_SHOOT_SOUND = new SoundRecord("$entity_arrow_shoot");
+    private static final BattleSound DEF_SHOOT_SOUND = new BattleSound("$entity_arrow_shoot");
     public static final ConfigSchema<GunModel> SCHEMA = ConfigSchema.of(GunModel.class);
 
     @Key("skin.primary")
     @Explanation("Set the primary skin")
     @Validation(notNull = true)
-    private Skin primarySkin;
+    private ItemSkin primarySkin;
 
     @Key("skin.secondary")
     @Explanation("Set the primary skin")
     @IgnoreValue(ifNull = true)
-    private Skin secondarySkin = new Skin();
+    private ItemSkin secondarySkin = new ItemSkin();
 
     @Key("weight")
     @Explanation({
@@ -86,15 +86,15 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     @Key("sounds.on_shoot")
     @Explanation("Set the sound that is played when shooting")
     @IgnoreValue(ifNull = true)
-    private SoundRecord shootSound = DEF_SHOOT_SOUND;
+    private BattleSound shootSound = DEF_SHOOT_SOUND;
 
     @Key("sounds.on_start_reloading")
     @Explanation("Set the sound that is played when starting to reload ammo")
-    private SoundRecord reloadStartSound;
+    private BattleSound reloadStartSound;
 
     @Key("sounds.on_end_reloading")
     @Explanation("Set the sound that is played when finished reloading ammo")
-    private SoundRecord reloadEndSound;
+    private BattleSound reloadEndSound;
 
     private String reloadTimeFormula;
 
@@ -106,7 +106,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     @Key("bossbar.on_reload")
     @Explanation("Set the boss bar used during the reloading time")
     @Validation(notNull = true)
-    private CustomBossBar reloadBar;
+    private BattleBar reloadBar;
 
     @Key("spray_pattern")
     @Explanation({
@@ -127,12 +127,12 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @NotNull
-    public Skin getPrimarySkin() {
+    public ItemSkin getPrimarySkin() {
         return primarySkin;
     }
 
     @NotNull
-    public Skin getSecondarySkin() {
+    public ItemSkin getSecondarySkin() {
         return secondarySkin;
     }
 
@@ -162,12 +162,12 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @NotNull
-    public SoundRecord getShootSound() {
+    public BattleSound getShootSound() {
         return shootSound;
     }
 
     @NotNull
-    public CustomBossBar getReloadBar() {
+    public BattleBar getReloadBar() {
         return reloadBar;
     }
 
@@ -177,12 +177,12 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @Nullable
-    public SoundRecord getReloadStartSound() {
+    public BattleSound getReloadStartSound() {
         return reloadStartSound;
     }
 
     @Nullable
-    public SoundRecord getReloadEndSound() {
+    public BattleSound getReloadEndSound() {
         return reloadEndSound;
     }
 
@@ -200,7 +200,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null){
             if(entry.getKey().startsWith("sounds.")) {
-                return new SoundRecord((String) o);
+                return new BattleSound((String) o);
             }
             switch (entry.getKey()){
                 case "magazine.default": {

@@ -26,8 +26,8 @@ import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
 @Schema
-public class ParticleEffect {
-    public static final ConfigSchema<ParticleEffect> SCHEMA = ConfigSchema.of(ParticleEffect.class);
+public class BattleParticle {
+    public static final ConfigSchema<BattleParticle> SCHEMA = ConfigSchema.of(BattleParticle.class);
 
     @Key("type")
     @Explanation("The type of particle")

@@ -25,8 +25,8 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
 @Schema
-public class CustomBossBar {
-    public static final ConfigSchema<CustomBossBar> SCHEMA = ConfigSchema.of(CustomBossBar.class);
+public class BattleBar {
+    public static final ConfigSchema<BattleBar> SCHEMA = ConfigSchema.of(BattleBar.class);
 
     @Key("primary")
     @Explanation("Make the bar appeared on the primary slot")

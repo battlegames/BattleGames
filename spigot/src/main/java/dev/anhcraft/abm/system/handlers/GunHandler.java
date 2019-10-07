@@ -24,7 +24,7 @@ import dev.anhcraft.abm.api.events.PlayerDamageEvent;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.DamageReport;
-import dev.anhcraft.abm.api.misc.Skin;
+import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.utils.VectUtil;
 import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
@@ -61,7 +61,7 @@ public class GunHandler extends Handler {
 
     public ItemStack createGun(Gun gun, boolean secondarySkin){
         if(gun.getModel() == null) return null;
-        Skin skin = secondarySkin ? gun.getModel().getSecondarySkin() : gun.getModel().getPrimarySkin();
+        ItemSkin skin = secondarySkin ? gun.getModel().getSecondarySkin() : gun.getModel().getPrimarySkin();
         PreparedItem pi = plugin.itemManager.make(gun);
         if(pi == null) return null;
         else {

@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.abm.api.gui;
 
-import dev.anhcraft.abm.api.misc.SoundRecord;
+import dev.anhcraft.abm.api.misc.BattleSound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,13 +34,13 @@ public class Gui {
     private int size;
     private GuiSlot[] slots;
     private Pagination pagination;
-    private SoundRecord sound;
+    private BattleSound sound;
 
     public Gui(ConfigurationSection conf){
         title = conf.getString("title");
         size = conf.getInt("size", 9);
         String snd = conf.getString("sound");
-        sound = new SoundRecord(snd == null ? "$block_chest_open" : snd.toUpperCase());
+        sound = new BattleSound(snd == null ? "$block_chest_open" : snd.toUpperCase());
 
         slots = new GuiSlot[size];
         ConfigurationSection sc = conf.getConfigurationSection("slots");
@@ -110,7 +110,7 @@ public class Gui {
     }
 
     @NotNull
-    public SoundRecord getSound() {
+    public BattleSound getSound() {
         return sound;
     }
 }
