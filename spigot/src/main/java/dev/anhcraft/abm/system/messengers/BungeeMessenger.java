@@ -89,9 +89,11 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
                     Arena arena = plugin.getArena(arenaId);
                     if(arena != null && arena.hasBungeecordSupport()) {
                         RemoteGame rg = (RemoteGame) plugin.gameManager.getGame(arena);
-                        rg.setPhase(GamePhase.valueOf(phase));
-                        rg.setPlayerCount(players);
-                        rg.getCurrentTime().set(time);
+                        if (rg != null) {
+                            rg.setPhase(GamePhase.valueOf(phase));
+                            rg.setPlayerCount(players);
+                            rg.getCurrentTime().set(time);
+                        }
                     }
                     break;
                 }
