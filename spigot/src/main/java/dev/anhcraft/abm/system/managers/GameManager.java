@@ -262,7 +262,9 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             }
         });
 
-        plugin.gameManager.destroy(localGame);
+        long ed = localGame.getArena().getEndDelay();
+        if(ed <= 0) plugin.gameManager.destroy(localGame);
+        else plugin.taskHelper.newDelayedTask(() -> plugin.gameManager.destroy(localGame), ed);
     }
 
     @NotNull

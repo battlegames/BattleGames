@@ -56,6 +56,7 @@ public class Arena implements Informative {
     private boolean bungeeSupport;
     private List<String> remoteServers;
     private BattleFirework endFirework;
+    private long endDelay;
 
     public Arena(@NotNull String id, @NotNull ConfigurationSection conf) {
         Validate.notNull(id, "Id must be non-null");
@@ -100,6 +101,7 @@ public class Arena implements Informative {
                 e.printStackTrace();
             }
         }
+        endDelay = conf.getLong("end_delay", 60);
     }
 
     @NotNull
@@ -183,6 +185,10 @@ public class Arena implements Informative {
     @Nullable
     public BattleFirework getEndFirework() {
         return endFirework;
+    }
+
+    public long getEndDelay() {
+        return endDelay;
     }
 
     @Override

@@ -107,6 +107,10 @@ dm_demo: # The id of this arena
           - aqua
           - orange
 
+  # The delayed time before the game actually ends
+  # [default: 60]
+  end_delay: 60
+
 tdm_demo:
   name: "&aExample Arena 2"
   mode: tdm # tdm is the ID of team deathmatch mode
