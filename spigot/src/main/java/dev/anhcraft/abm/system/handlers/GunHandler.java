@@ -231,6 +231,7 @@ public class GunHandler extends Handler {
                     if(event.isCancelled()) continue;
 
                     ve.damage(event.getDamage(), player);
+                    if(b.getFireTicks() > 0) ve.setFireTicks(b.getFireTicks());
                     Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
                             .normalize().multiply(b.getKnockback()));
                     ve.setVelocity(vec);

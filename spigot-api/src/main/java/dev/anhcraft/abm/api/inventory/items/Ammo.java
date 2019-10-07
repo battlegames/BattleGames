@@ -62,6 +62,13 @@ public class Ammo extends BattleItem<AmmoModel> {
         @Explanation("The knockback power that applied for the target")
         private double knockback;
 
+        @Key("fire_ticks")
+        @Explanation({
+                "How long does the fire remain on the target",
+                "Set to 0 to prevent the fire"
+        })
+        private int fireTicks;
+
         @Key("particle")
         @Explanation("The particle to be shown when flying")
         private BattleParticle particleEffect;
@@ -74,9 +81,14 @@ public class Ammo extends BattleItem<AmmoModel> {
             return knockback;
         }
 
+        public int getFireTicks() {
+            return fireTicks;
+        }
+
         @Nullable
         public BattleParticle getParticleEffect() {
             return particleEffect;
         }
+
     }
 }
