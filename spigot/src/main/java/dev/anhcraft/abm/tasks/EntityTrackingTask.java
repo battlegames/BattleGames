@@ -25,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityTrackingTask implements Runnable {
     private static EntityTrackingTask task;
@@ -42,7 +43,9 @@ public class EntityTrackingTask implements Runnable {
             EntityTracker x = task.MAP.get(entity);
             if(x != null) {
                 x.callbacks.remove(this);
-                if(x.callbacks.isEmpty()) task.MAP.remove(entity);
+                if(x.callbacks.isEmpty()) {
+                    task.MAP.remove(entity);
+                }
             }
         }
     }
@@ -86,7 +89,7 @@ public class EntityTrackingTask implements Runnable {
         }
     }
 
-    private final Map<Entity, EntityTracker> MAP = new WeakHashMap<>();
+    private final Map<Entity, EntityTracker> MAP = new ConcurrentHashMap<>();
 
     public void track(Entity entity, EntityTrackCallback callback){
         MAP.computeIfAbsent(entity, entity1 -> new EntityTracker(entity)).callbacks.add(callback);
@@ -94,21 +97,22 @@ public class EntityTrackingTask implements Runnable {
 
     @Override
     public void run() {
-        for (Iterator<Map.Entry<Entity, EntityTracker>> it = MAP.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Entity, EntityTracker> e = it.next();
-            if(e.getKey().isDead()) it.remove();
+        for (Map.Entry<Entity, EntityTracker> e : MAP.entrySet()) {
+            if (e.getKey().isDead()) {
+                MAP.remove(e.getKey());
+            }
             else {
                 Location currentLocation = e.getKey().getLocation();
                 EntityTracker track = e.getValue();
                 boolean b = false;
-                if(currentLocation.distanceSquared(track.lastLocation) >= 1.5){
+                if (currentLocation.distanceSquared(track.lastLocation) >= 1.5) {
                     track.lastMoveTime = System.currentTimeMillis();
                     track.lastLocation = currentLocation;
                     b = true;
                 }
-                for(EntityTrackCallback c : track.callbacks) {
+                for (EntityTrackCallback c : track.callbacks) {
                     c.onCheck(track, c, e.getKey());
-                    if(b) c.onMove(track, c, e.getKey());
+                    if (b) c.onMove(track, c, e.getKey());
                 }
             }
         }
