@@ -30,6 +30,7 @@ import dev.anhcraft.abm.storage.handlers.FileStorage;
 import dev.anhcraft.abm.storage.handlers.MySQLStorage;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -81,7 +82,8 @@ public class DataManager extends BattleComponent {
         }
     }
 
-    public synchronized void loadPlayerData(OfflinePlayer player){
+    @NotNull
+    public synchronized PlayerData loadPlayerData(OfflinePlayer player){
         Storage provider = PLAYER_STORAGE.get(player);
         if(provider == null) {
             switch (storageType) {
@@ -101,6 +103,7 @@ public class DataManager extends BattleComponent {
         PlayerData pd = new PlayerData();
         if(provider.load()) pd.read(provider.getData());
         plugin.PLAYER_MAP.put(player, pd);
+        return pd;
     }
 
     public synchronized void unloadPlayerData(OfflinePlayer player){
