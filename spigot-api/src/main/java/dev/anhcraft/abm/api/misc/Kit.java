@@ -19,6 +19,8 @@
  */
 package dev.anhcraft.abm.api.misc;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import dev.anhcraft.craftkit.kits.abif.ABIF;
 import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class Kit {
-    private Map<ItemType, List<String>> abmItems = new HashMap<>();
+    private Multimap<ItemType, String> abmItems = HashMultimap.create();
     private String id;
     private PreparedItem icon;
     private PreparedItem noAccessIcon;
@@ -69,10 +71,9 @@ public class Kit {
             Set<String> keys = ia.getKeys(false);
             for(String s : keys){
                 ItemType type = ItemType.valueOf(s.toUpperCase());
-                abmItems.put(type, ia.getStringList(s));
+                abmItems.putAll(type, ia.getStringList(s));
             }
         }
-        abmItems = Collections.unmodifiableMap(abmItems);
     }
 
     @NotNull
@@ -100,7 +101,7 @@ public class Kit {
     }
 
     @NotNull
-    public Map<ItemType, List<String>> getAbmItems() {
+    public Multimap<ItemType, String> getAbmItems() {
         return abmItems;
     }
 

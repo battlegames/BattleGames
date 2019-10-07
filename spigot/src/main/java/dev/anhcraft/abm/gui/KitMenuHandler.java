@@ -78,7 +78,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                         event.getPlayer().getInventory().addItem(kit.getVanillaItems()).values().forEach(itemStack -> event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), itemStack));
                         kit.getAbmItems().forEach((type, x) -> {
                             ItemStorage is = pd.getInventory().getStorage(type);
-                            x.forEach(is::put);
+                            is.put(x);
                         });
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
                         api.getGuiManager().openTopInventory(event.getPlayer(), "kit_menu");
