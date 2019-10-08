@@ -24,6 +24,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.events.GamePlayerDamageEvent;
 import dev.anhcraft.abm.api.events.ItemChooseEvent;
 import dev.anhcraft.abm.api.events.PlayerDamageEvent;
+import dev.anhcraft.abm.api.game.GamePhase;
 import dev.anhcraft.abm.api.game.GamePlayer;
 import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.inventory.items.BattleItem;
@@ -190,7 +191,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             LocalGame g1 = plugin.gameManager.getGame(e.getDamager());
             LocalGame g2 = plugin.gameManager.getGame(ent);
             if(g1 != null && g2 != null){
-                if(g1.equals(g2)) {
+                if(g1.equals(g2) && g1.getPhase() == GamePhase.PLAYING) {
                     GamePlayer gp1 = g1.getPlayer(e.getDamager());
                     GamePlayer gp2 = g1.getPlayer(ent);
                     if(gp1 == null || gp2 == null) return;
