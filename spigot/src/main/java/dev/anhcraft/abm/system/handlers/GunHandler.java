@@ -198,7 +198,7 @@ public class GunHandler extends Handler {
             Pair<Double, Double> pair = gm.getSprayPattern().get(gunItem.getNextSpray());
             sprayVec = new Vector(pair.getFirst(), pair.getSecond(), 0).normalize();
             VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
-            sprayVec.multiply(.75);
+            sprayVec.multiply(player.isSneaking() ? .3 : .5);
         } else
             sprayVec = new Vector();
         Location entityLocation = start.clone();
