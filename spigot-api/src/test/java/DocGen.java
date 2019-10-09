@@ -38,6 +38,7 @@ public class DocGen {
                 .withSchema(ScopeModel.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
+                .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")
                 .generate(new File("docs"));
     }
 }
