@@ -29,16 +29,13 @@ import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,9 +44,14 @@ import java.util.List;
 import java.util.Set;
 
 @Schema
-public class Kit implements TwoWayMiddleware {
+public class Kit extends ConfigurableObject {
     public static final ConfigSchema<Kit> SCHEMA = ConfigSchema.of(Kit.class);
-    private static final PreparedItem DEF_NO_ACCESS = PreparedItem.of(new ItemStack(Material.BARRIER, 1));
+    private static final PreparedItem DEF_NO_ACCESS = new PreparedItem();
+
+    static {
+        DEF_NO_ACCESS.material(Material.BARRIER);
+    }
+
     private String id;
 
     @Key("icon")
@@ -145,20 +147,9 @@ public class Kit implements TwoWayMiddleware {
 
     @Override
     public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+        o = super.conf2schema(entry, o);
         if(o != null) {
             switch (entry.getKey()) {
-                case "icon":
-                case "no_access_icon": {
-                    ConfigurationSection section = (ConfigurationSection) o;
-                    try {
-                        PreparedItem pi = ConfigHelper.readConfig(section, PreparedItem.SCHEMA);
-                        pi.name(ChatUtil.formatColorCodes(pi.name()));
-                        pi.lore(ChatUtil.formatColorCodes(pi.lore()));
-                        return pi;
-                    } catch (InvalidValueException e) {
-                        e.printStackTrace();
-                    }
-                }
                 case "items.vanilla": {
                     ConfigurationSection cs = (ConfigurationSection) o;
                     Set<String> keys = cs.getKeys(false);
@@ -166,10 +157,7 @@ public class Kit implements TwoWayMiddleware {
                     int i = 0;
                     for(String s : keys){
                         try {
-                            PreparedItem pi = ConfigHelper.readConfig(cs.getConfigurationSection(s), PreparedItem.SCHEMA);
-                            pi.name(ChatUtil.formatColorCodes(pi.name()));
-                            pi.lore(ChatUtil.formatColorCodes(pi.lore()));
-                            vanillaItems[i++] = pi;
+                            vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), PreparedItem.SCHEMA);
                         } catch (InvalidValueException e) {
                             e.printStackTrace();
                         }
