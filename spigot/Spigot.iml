@@ -22,18 +22,17 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="spigot-api" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:confighelper:1.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.spigot:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.common:1.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.spigot:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.common:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:JvmKit:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_common:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_9_r2:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_10_r1:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_11_r1:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_12_r1:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r1:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r2:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_14_r1:1.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_common:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_9_r2:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_10_r1:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_11_r1:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_12_r1:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r1:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_13_r2:1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.cb_1_14_r1:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-paper:0.5.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-bukkit:0.5.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:acf-core:0.5.0-SNAPSHOT" level="project" />
@@ -42,6 +41,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:locales:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.jodah:expiringmap:0.5.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:minecraft-timings:1.0.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:confighelper:1.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
