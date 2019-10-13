@@ -78,7 +78,17 @@ public class Kit extends ConfigurableObject {
     private PreparedItem[] vanillaItems = new PreparedItem[0];
 
     @Key("items.abm")
-    @Explanation("All Battle items in this kit")
+    @Explanation({
+            "All Battle items in this kit",
+            "Example:",
+            "<code>gun:",
+            "- ak_47",
+            "grenade:",
+            "- grenade2",
+            "ammo:",
+            "- 7_62mm",
+            "- _50_ae</code>"
+    })
     @IgnoreValue(ifNull = true)
     private Multimap<ItemType, String> abmItems = HashMultimap.create();
 
