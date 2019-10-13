@@ -28,18 +28,18 @@ import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.utils.VectUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.utils.BlockUtil;
+import dev.anhcraft.craftkit.utils.EntityUtil;
 import dev.anhcraft.jvmkit.utils.Pair;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -47,7 +47,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -97,19 +97,10 @@ public class GunHandler extends Handler {
         player.setFlySpeed(f);
     }
 
-    private double getBodyHeight(LivingEntity e) {
-        if (e instanceof Player) {
-            Player p = (Player)e;
-            double z = p.isSleeping() ? 0.2 : (p.isSneaking() ? 1.65 : (p.isGliding() ? 0.6 : 1.8));
-            return z * 0.9;
-        }
-        if (e instanceof Ageable && !((Ageable)e).isAdult()) return 1.35;
-        if (e instanceof Zombie && ((Zombie)e).isBaby()) return 1.35;
-        return 2.2;
-    }
-
-    private boolean isHeadShot(Location q, LivingEntity ve) {
-        return q.getY() - ve.getLocation().getY() > getBodyHeight(ve);
+    private boolean isHeadShot(Location q, BoundingBox box) {
+        double d1 = box.getHeight();
+        double d2 = box.getMaxY() - q.getY();
+        return d2 < d1 / 4;
     }
 
     private void rmvZoom(Player player){
@@ -188,8 +179,8 @@ public class GunHandler extends Handler {
             return false;
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
-
         gm.getShootSound().play(player.getWorld(), player.getLocation());
+
         Location start = player.getEyeLocation();
         Vector originVec = player.getEyeLocation().toVector();
         Vector dir = start.getDirection().normalize();
@@ -201,8 +192,12 @@ public class GunHandler extends Handler {
             sprayVec.multiply(player.isSneaking() ? .3 : .5);
         } else
             sprayVec = new Vector();
-        Location entityLocation = start.clone();
-        Collection<LivingEntity> entities = start.getWorld().getEntitiesByClass(LivingEntity.class);
+
+        Map<LivingEntity, BoundingBox> entities = new HashMap<>();
+        for (LivingEntity livingEntity : start.getWorld().getEntitiesByClass(LivingEntity.class)){
+            entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity));
+        }
+
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Ammo.Bullet b : bullets){
             for(double d = 0.5; d < 100; d += 0.5){
@@ -215,17 +210,18 @@ public class GunHandler extends Handler {
                 if(block.getType().isSolid()) {
                     int id = loc.hashCode();
                     int st = RandomUtil.randomInt(0, 9);
-                    BlockUtil.createBreakAnimation(id, block, st, entities.stream()
+                    BlockUtil.createBreakAnimation(id, block, st, entities.keySet().stream()
                             .filter(ent -> ent instanceof Player)
                             .map(livingEntity -> (Player) livingEntity)
                             .collect(Collectors.toList()));
                     break;
                 }
 
-                for(LivingEntity ve : entities){
-                    if(ve.equals(player) || loc.distanceSquared(ve.getLocation(entityLocation)) >= 1.5) continue;
+                for(Map.Entry<LivingEntity, BoundingBox> ent : entities.entrySet()){
+                    LivingEntity ve = ent.getKey();
+                    if(ve.equals(player) || !ent.getValue().contains(loc)) continue;
                     DamageReport dr = new DamageReport(player, b.getDamage());
-                    dr.setHeadshotDamage(isHeadShot(loc, ve));
+                    dr.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
                     PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) continue;
