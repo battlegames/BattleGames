@@ -574,7 +574,16 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initKits(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> KIT_MAP.put(s, new Kit(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            Kit kit = new Kit(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, Kit.SCHEMA, kit);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            KIT_MAP.put(s, kit);
+        });
     }
 
     public void resetScoreboard(Player player) {

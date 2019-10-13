@@ -24,35 +24,43 @@ import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.api.inventory.ItemStorage;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
+import dev.anhcraft.abm.utils.EnumUtil;
+import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
-import dev.anhcraft.craftkit.abif.ABIF;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Schema
 public class Kit implements TwoWayMiddleware {
+    public static final ConfigSchema<Kit> SCHEMA = ConfigSchema.of(Kit.class);
+    private static final PreparedItem DEF_NO_ACCESS = PreparedItem.of(new ItemStack(Material.BARRIER, 1));
     private String id;
 
     @Key("icon")
     @Explanation("The kit's icon (when players can get it)")
+    @Validation(notNull = true)
     private PreparedItem icon;
 
     @Key("no_access_icon")
     @Explanation("The icon to be showed when players can't access the kit")
-    private PreparedItem noAccessIcon;
+    @IgnoreValue(ifNull = true)
+    private PreparedItem noAccessIcon = DEF_NO_ACCESS;
 
     @Key("permission")
     @Explanation("The permission that players must have to get the kit")
@@ -64,50 +72,21 @@ public class Kit implements TwoWayMiddleware {
 
     @Key("items.vanilla")
     @Explanation("All vanilla items in this kit")
-    private ItemStack[] vanillaItems;
+    @IgnoreValue(ifNull = true)
+    private PreparedItem[] vanillaItems = new PreparedItem[0];
 
     @Key("items.abm")
     @Explanation("All Battle items in this kit")
+    @IgnoreValue(ifNull = true)
     private Multimap<ItemType, String> abmItems = HashMultimap.create();
 
     @Key("first_join")
     @Explanation("Players receive the kit automatically on their first joins")
     private boolean firstJoin;
 
-    public Kit(@NotNull String id, @NotNull ConfigurationSection conf) {
+    public Kit(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
-        Validate.notNull(conf, "Conf must be non-null");
         this.id = id;
-
-        ConfigurationSection ic = conf.getConfigurationSection("icon");
-        if(ic == null) throw new NullPointerException("Icon must be specified");
-        icon = ABIF.read(ic);
-        ConfigurationSection naic = conf.getConfigurationSection("no_access_icon");
-        noAccessIcon = naic == null ? PreparedItem.of(new ItemStack(Material.BARRIER, 1)) : ABIF.read(naic);
-        permission = conf.getString("permission");
-        renewTime = conf.getInt("renew_time", -1);
-
-        ConfigurationSection iv = conf.getConfigurationSection("items.vanilla");
-        if(iv != null){
-            Set<String> keys = iv.getKeys(false);
-            vanillaItems = new ItemStack[keys.size()];
-            int i = 0;
-            for(String k : keys){
-                ConfigurationSection x = iv.getConfigurationSection(k);
-                if(x != null) vanillaItems[i++] = ABIF.read(x).build();
-            }
-        } else vanillaItems = new ItemStack[0];
-
-        ConfigurationSection ia = conf.getConfigurationSection("items.abm");
-        if(ia != null){
-            Set<String> keys = ia.getKeys(false);
-            for(String s : keys){
-                ItemType type = ItemType.valueOf(s.toUpperCase());
-                abmItems.putAll(type, ia.getStringList(s));
-            }
-        }
-
-        firstJoin = conf.getBoolean("first_join");
     }
 
     @NotNull
@@ -140,7 +119,7 @@ public class Kit implements TwoWayMiddleware {
     }
 
     @NotNull
-    public ItemStack[] getVanillaItems() {
+    public PreparedItem[] getVanillaItems() {
         return vanillaItems;
     }
 
@@ -150,9 +129,14 @@ public class Kit implements TwoWayMiddleware {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
         Location loc = player.getLocation();
-        player.getInventory().addItem(vanillaItems).values().forEach(itemStack -> {
-            player.getWorld().dropItemNaturally(loc, itemStack);
-        });
+        for(PreparedItem pi : vanillaItems){
+            int in = player.getInventory().firstEmpty();
+            if(in == -1){
+                player.getWorld().dropItemNaturally(loc, pi.build());
+            } else {
+                player.getInventory().setItem(in, pi.build());
+            }
+        }
         abmItems.forEach((type, x) -> {
             ItemStorage is = playerData.getInventory().getStorage(type);
             is.put(x);
@@ -161,11 +145,74 @@ public class Kit implements TwoWayMiddleware {
 
     @Override
     public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
-        return null;
+        if(o != null) {
+            switch (entry.getKey()) {
+                case "icon":
+                case "no_access_icon": {
+                    PreparedItem pi = (PreparedItem) o;
+                    pi.name(ChatUtil.formatColorCodes(pi.name()));
+                    pi.lore(ChatUtil.formatColorCodes(pi.lore()));
+                    return pi;
+                }
+                case "items.vanilla": {
+                    ConfigurationSection cs = (ConfigurationSection) o;
+                    Set<String> keys = cs.getKeys(false);
+                    PreparedItem[] vanillaItems = new PreparedItem[keys.size()];
+                    int i = 0;
+                    for(String s : keys){
+                        try {
+                            PreparedItem pi = ConfigHelper.readConfig(cs.getConfigurationSection(s), PreparedItem.SCHEMA);
+                            pi.name(ChatUtil.formatColorCodes(pi.name()));
+                            pi.lore(ChatUtil.formatColorCodes(pi.lore()));
+                            vanillaItems[i++] = pi;
+                        } catch (InvalidValueException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return vanillaItems;
+                }
+                case "items.abm": {
+                    ConfigurationSection cs = (ConfigurationSection) o;
+                    Multimap<ItemType, String> items = HashMultimap.create();
+                    Set<String> keys = cs.getKeys(false);
+                    for(String s : keys){
+                        ItemType type = EnumUtil.getEnum(ItemType.values(), s);
+                        items.putAll(type, cs.getStringList(s));
+                    }
+                    return items;
+                }
+            }
+        }
+        return o;
     }
 
     @Override
     public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
-        return null;
+        if(o != null) {
+            switch (entry.getKey()) {
+                case "items.vanilla": {
+                    ConfigurationSection parent = new YamlConfiguration();
+                    int i = 0;
+                    for(PreparedItem item : (PreparedItem[]) o){
+                        YamlConfiguration c = new YamlConfiguration();
+                        ConfigHelper.writeConfig(c, PreparedItem.SCHEMA, item);
+                        parent.set(String.valueOf(i++), c);
+                    }
+                    return parent;
+                }
+                case "items.abm": {
+                    Multimap<ItemType, String> map = (Multimap<ItemType, String>) o;
+                    ConfigurationSection parent = new YamlConfiguration();
+                    for (ItemType type : map.keys()){
+                        // hashMultimap returns set, that is not friendly with yaml
+                        // we have to change it to array list
+                        List<String> x = new ArrayList<>(map.get(type));
+                        parent.set(type.name().toLowerCase(), x);
+                    }
+                    return parent;
+                }
+            }
+        }
+        return o;
     }
 }

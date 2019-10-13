@@ -32,8 +32,8 @@ import dev.anhcraft.craftkit.abif.ABIF;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
+import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -75,8 +75,8 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
             Map<String, String> info = plugin.mapInfo(map);
             if(addition != null) info.putAll(addition);
             PreparedItem pi = ITEMS.get(model.getItemType()).duplicate();
-            pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(pi.name(), info)));
-            pi.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(s, info)));
+            pi.name(ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(pi.name(), info)));
+            pi.lore().replaceAll(s -> ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(s, info)));
             return pi;
         }
         return null;
@@ -95,8 +95,8 @@ public class ItemManager extends BattleComponent implements BattleItemManager {
         Map<String, String> info = plugin.mapInfo(bim.collectInfo(null));
         if(addition != null) info.putAll(addition);
         PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
-        pi.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(pi.name(), info)));
-        pi.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(s, info)));
+        pi.name(ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(pi.name(), info)));
+        pi.lore().replaceAll(s -> ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(s, info)));
         return pi;
     }
 

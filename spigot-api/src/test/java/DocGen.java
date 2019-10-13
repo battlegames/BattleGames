@@ -21,12 +21,19 @@
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.*;
 import dev.anhcraft.confighelper.ConfigDoc;
+import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.attribute.ItemModifier;
+import dev.anhcraft.craftkit.attribute.Modifier;
 
 import java.io.File;
 
 public class DocGen {
     public static void main(String[] args){
         new ConfigDoc()
+                .withSchema(PreparedItem.SCHEMA)
+                .withSchema(Modifier.SCHEMA)
+                .withSchema(ItemModifier.SCHEMA)
+                .withSchema(Kit.SCHEMA)
                 .withSchema(BattleParticle.SCHEMA)
                 .withSchema(ItemSkin.SCHEMA)
                 .withSchema(BattleBar.SCHEMA)
@@ -39,6 +46,7 @@ public class DocGen {
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
                 .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")
+                .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));
     }
 }
