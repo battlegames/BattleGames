@@ -149,10 +149,15 @@ public class Kit implements TwoWayMiddleware {
             switch (entry.getKey()) {
                 case "icon":
                 case "no_access_icon": {
-                    PreparedItem pi = (PreparedItem) o;
-                    pi.name(ChatUtil.formatColorCodes(pi.name()));
-                    pi.lore(ChatUtil.formatColorCodes(pi.lore()));
-                    return pi;
+                    ConfigurationSection section = (ConfigurationSection) o;
+                    try {
+                        PreparedItem pi = ConfigHelper.readConfig(section, PreparedItem.SCHEMA);
+                        pi.name(ChatUtil.formatColorCodes(pi.name()));
+                        pi.lore(ChatUtil.formatColorCodes(pi.lore()));
+                        return pi;
+                    } catch (InvalidValueException e) {
+                        e.printStackTrace();
+                    }
                 }
                 case "items.vanilla": {
                     ConfigurationSection cs = (ConfigurationSection) o;
