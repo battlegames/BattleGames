@@ -139,7 +139,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             if(item != null) {
                 if (item instanceof Gun) {
                     LocalGame game = plugin.gameManager.getGame(p);
-                    if(game != null){
+                    if(game != null && game.getPhase() == GamePhase.PLAYING){
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
@@ -170,7 +170,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             if(item != null) {
                 if (item instanceof Gun) {
                     LocalGame game = plugin.gameManager.getGame(p);
-                    if(game != null){
+                    if(game != null && game.getPhase() == GamePhase.PLAYING){
                         Gun gun = (Gun) item;
                         if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun))
                             p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));

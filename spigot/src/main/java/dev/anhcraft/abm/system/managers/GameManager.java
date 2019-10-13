@@ -36,6 +36,7 @@ import dev.anhcraft.abm.system.controllers.CTFController;
 import dev.anhcraft.abm.system.controllers.DeathmatchController;
 import dev.anhcraft.abm.system.controllers.ModeController;
 import dev.anhcraft.abm.system.controllers.TeamDeathmatchController;
+import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.integrations.VaultApi;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -239,6 +240,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public void handleEnd(LocalGame localGame) {
         BattleFirework ebf = localGame.getArena().getEndFirework();
         localGame.getPlayers().values().forEach(gp -> {
+            plugin.getHandler(GunHandler.class).handleZoomOut(gp.getPlayer());
             PlayerData playerData = plugin.getPlayerData(gp.getPlayer());
             if(playerData != null) {
                 double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));
