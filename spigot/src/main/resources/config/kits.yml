@@ -1,51 +1,25 @@
 # This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/kit
 
-# This is the place where you can make kits
-
-starter: # This kit's ID
-  # This kit's icon
-  # This section uses ABIF which you can look at here to know
-  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-  # [required]
+starter:
   icon:
     material: redstone
     name: "&eStarter kit"
     lore:
       - "&fA kit which includes essential items for beginners"
-
-  # The icon which is display when players have no access
-  # to this kit.
-  # [optional]
   no_access_icon:
     material: barrier
     name: "&c&lYou don't have access to this kit!"
-
-  # You can restrict access to this kit by adding permission
-  # [optional]
   permission: "abm.kits.starter"
-
-  # All items in this kit
   items:
-    # Vanilla items (in Minecraft)
-    # [optional]
     vanilla:
-      '1': # Write anything you want here
-        # This section also uses ABIF!
+      '1':
         material: bread
         amount: 16
-    # Custom items provided by ABM
     abm:
-      # [optional]
       gun:
         - ak_47
-
-  # How long does a player need to wait to open this kit again?
-  # Write the duration in ticks (or '-1' to mean 'never')
-  # [optional] [default: -1]
   renew_time: -1
-
-  # Players will be received this kit automatically
-  # on the first join.
   first_join: true
 
 food:
