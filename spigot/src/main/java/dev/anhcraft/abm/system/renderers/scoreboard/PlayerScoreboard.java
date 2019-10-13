@@ -20,7 +20,7 @@
 package dev.anhcraft.abm.system.renderers.scoreboard;
 
 import dev.anhcraft.abm.utils.PlaceholderUtil;
-import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
+import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

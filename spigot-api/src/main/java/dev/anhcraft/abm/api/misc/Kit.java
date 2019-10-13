@@ -22,10 +22,15 @@ package dev.anhcraft.abm.api.misc;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.abm.api.inventory.ItemStorage;
-import dev.anhcraft.abm.api.storage.data.PlayerData;
-import dev.anhcraft.craftkit.kits.abif.ABIF;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
+import dev.anhcraft.abm.api.storage.data.PlayerData;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
+import dev.anhcraft.craftkit.abif.ABIF;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,16 +40,38 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Set;
 
-public class Kit {
-    private Multimap<ItemType, String> abmItems = HashMultimap.create();
+@Schema
+public class Kit implements TwoWayMiddleware {
     private String id;
+
+    @Key("icon")
+    @Explanation("The kit's icon (when players can get it)")
     private PreparedItem icon;
+
+    @Key("no_access_icon")
+    @Explanation("The icon to be showed when players can't access the kit")
     private PreparedItem noAccessIcon;
+
+    @Key("permission")
+    @Explanation("The permission that players must have to get the kit")
     private String permission;
+
+    @Key("renew_time")
+    @Explanation("The delay time that players have to wait before get the kit again")
     private int renewTime;
+
+    @Key("items.vanilla")
+    @Explanation("All vanilla items in this kit")
     private ItemStack[] vanillaItems;
+
+    @Key("items.abm")
+    @Explanation("All Battle items in this kit")
+    private Multimap<ItemType, String> abmItems = HashMultimap.create();
+
+    @Key("first_join")
+    @Explanation("Players receive the kit automatically on their first joins")
     private boolean firstJoin;
 
     public Kit(@NotNull String id, @NotNull ConfigurationSection conf) {
@@ -130,5 +157,15 @@ public class Kit {
             ItemStorage is = playerData.getInventory().getStorage(type);
             is.put(x);
         });
+    }
+
+    @Override
+    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+        return null;
+    }
+
+    @Override
+    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+        return null;
     }
 }

@@ -24,7 +24,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.inventory.items.Grenade;
 import dev.anhcraft.abm.api.inventory.items.GrenadeModel;
 import dev.anhcraft.abm.tasks.EntityTrackingTask;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;

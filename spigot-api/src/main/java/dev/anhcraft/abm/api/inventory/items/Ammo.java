@@ -26,8 +26,8 @@ import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
+import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -54,7 +54,7 @@ import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.abm.tasks.*;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
-import dev.anhcraft.craftkit.cb_common.lang.enumeration.NMSVersion;
+import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;

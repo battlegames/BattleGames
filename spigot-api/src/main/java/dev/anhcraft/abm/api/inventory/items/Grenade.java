@@ -22,8 +22,8 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.kits.nbt.StringTag;
+import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
 
 public class Grenade extends BattleItem<GrenadeModel> {

@@ -21,7 +21,7 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
-import dev.anhcraft.craftkit.cb_common.kits.nbt.CompoundTag;
+import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BattleItem<M extends BattleItemModel> implements Informative {

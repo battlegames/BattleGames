@@ -21,7 +21,7 @@ package dev.anhcraft.abm.api.misc;
 
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;

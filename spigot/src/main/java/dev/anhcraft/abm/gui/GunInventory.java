@@ -26,7 +26,7 @@ import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.inventory.items.GunModel;
 import dev.anhcraft.abm.api.inventory.items.ItemType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

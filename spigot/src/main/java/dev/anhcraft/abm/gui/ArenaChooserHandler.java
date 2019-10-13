@@ -25,7 +25,7 @@ import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.gui.*;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
-import dev.anhcraft.craftkit.kits.abif.PreparedItem;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
