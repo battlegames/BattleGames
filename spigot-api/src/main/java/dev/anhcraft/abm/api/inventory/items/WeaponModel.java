@@ -19,8 +19,10 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
+import dev.anhcraft.confighelper.annotation.Schema;
 import org.jetbrains.annotations.NotNull;
 
+@Schema
 public abstract class WeaponModel extends BattleItemModel {
     protected WeaponModel(@NotNull String id) {
         super(id);

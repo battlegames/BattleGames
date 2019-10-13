@@ -35,7 +35,7 @@ public abstract class BattleItemModel implements Informative {
 
     @Key("name")
     @Explanation("Give a name for the item")
-    @IgnoreValue(ifNull = true, ifEmptyString = true)
+    @IgnoreValue(ifNull = true)
     private String name;
 
     private InfoHolder cachedInfoHolder;

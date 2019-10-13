@@ -23,9 +23,11 @@ package dev.anhcraft.abm.api.inventory.items;
 import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.annotation.Validation;
 import org.jetbrains.annotations.NotNull;
 
+@Schema
 public abstract class SingleSkinItem extends BattleItemModel {
     @Key("skin")
     @Explanation("Set the item's skin")
