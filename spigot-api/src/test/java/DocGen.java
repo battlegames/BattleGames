@@ -18,6 +18,7 @@
  *
  */
 
+import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.*;
 import dev.anhcraft.confighelper.ConfigDoc;
@@ -45,6 +46,7 @@ public class DocGen {
                 .withSchema(ScopeModel.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
+                .withSchema(Arena.SCHEMA)
                 .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));

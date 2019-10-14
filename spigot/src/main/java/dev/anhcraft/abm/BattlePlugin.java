@@ -488,7 +488,16 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initArena(FileConfiguration c) {
-        c.getKeys(false).forEach(s -> ARENA_MAP.put(s, new Arena(s, c.getConfigurationSection(s))));
+        c.getKeys(false).forEach(s -> {
+            Arena arena = new Arena(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, Arena.SCHEMA, arena);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            ARENA_MAP.put(s, arena);
+        });
     }
 
     private void initAmmo(FileConfiguration c) {

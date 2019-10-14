@@ -21,11 +21,11 @@ package dev.anhcraft.abm.api.game;
 
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.BattleFirework;
+import dev.anhcraft.abm.api.misc.ConfigurableObject;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-import dev.anhcraft.craftkit.abif.ABIF;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -36,72 +36,122 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Arena implements Informative {
+@Schema
+public class Arena extends ConfigurableObject implements Informative {
+    public static final ConfigSchema<Arena> SCHEMA = ConfigSchema.of(Arena.class);
     private String id;
+    private String finalExpExpression;
+    private String finalMoneyExpression;
+
+    @Key("name")
+    @Explanation("The name of this arena")
+    @IgnoreValue(ifNull = true)
     private String name;
+
+    @Key("mode")
+    @Explanation("The game mode")
+    @Validation(notNull = true)
     private Mode mode;
+
+    @Key("icon")
+    @Explanation("The icon of this arena")
+    @Validation(notNull = true)
     private PreparedItem icon;
+
+    @Key("max_time")
+    @Explanation("The maximum playing time in this arena")
     private long maxTime;
+
+    @Key("max_players")
+    @Explanation("The maximum players in this arena")
     private int maxPlayers;
+
+    @Key("final_exp_formula")
+    @Explanation({
+            "The formula for calculating the final exp",
+            "- a: number of headshots",
+            "- b: number of kills",
+            "- c: number of deaths",
+            "- d: <b>1</b> if won or <b>0</b> if lost"
+    })
+    @Validation(notNull = true)
     private Expression finalExpCalculator;
+
+    @Key("final_money_formula")
+    @Explanation({
+            "The formula for calculating the final money",
+            "- a: number of headshots",
+            "- b: number of kills",
+            "- c: number of deaths",
+            "- d: <b>1</b> if won or <b>0</b> if lost"
+    })
+    @Validation(notNull = true)
     private Expression finalMoneyCalculator;
-    private ConfigurationSection attrSection;
-    private List<String> endCommandWinners;
-    private List<String> endCommandLosers;
-    private boolean renderGuiOnDeath;
+
+    @Key("attr")
+    @Explanation({
+            "The attributes of this arena",
+            "Attributes are settings for the mode"
+    })
+    @IgnoreValue(ifNull = true)
+    private ConfigurationSection attrSection = new YamlConfiguration();
+
+    @Key("end_commands.winners")
+    @Explanation({
+            "Commands to be executed by the console at the end",
+            "Placeholders can be used within the command with",
+            "values parsed from each <b>winner</b>"
+    })
+    @IgnoreValue(ifNull = true)
+    private List<String> endCommandWinners = new ArrayList<>();
+
+    @Key("end_commands.losers")
+    @Explanation({
+            "Commands to be executed by the console at the end",
+            "Placeholders can be used within the command with",
+            "values parsed from each <b>loser</b>"
+    })
+    @IgnoreValue(ifNull = true)
+    private List<String> endCommandLosers = new ArrayList<>();
+
+    @Key("render_gui_on_death")
+    @Explanation({
+            "Re-renders the GUI on death",
+            "This option can prevent players from reusing old items"
+    })
+    private boolean renderGuiOnDeath = true;
+
+    @Key("bungeecord.enabled")
+    @Explanation({
+            "Enable the Bungeecord support for this arena",
+            "<b>Note: You must enable the Bungeecord support for",
+            "the whole plugin first (see general.yml)</b>"
+    })
     private boolean bungeeSupport;
-    private List<String> remoteServers;
+
+    @Key("bungeecord.remote_servers")
+    @Explanation({
+            "List of remote servers",
+            "Remote servers are places where the game happens"
+    })
+    @IgnoreValue(ifNull = true)
+    private List<String> remoteServers = new ArrayList<>();
+
+    @Key("end_firework")
+    @Explanation("The firework to be spawned when the game ends")
     private BattleFirework endFirework;
-    private long endDelay;
 
-    public Arena(@NotNull String id, @NotNull ConfigurationSection conf) {
+    @Key("end_delay")
+    @Explanation("The delay time before the game actually ends")
+    private long endDelay = 60;
+
+    public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
-        Validate.notNull(conf, "Conf must be non-null");
-
         this.id = id;
-        name = conf.getString("name");
-        if(name == null) throw new NullPointerException("Name must be specified");
-        String m = conf.getString("mode");
-        if(m == null) throw new NullPointerException("Mode must be specified");
-        mode = Mode.getMode(m);
-        String fec = conf.getString("final_exp_formula");
-        if(fec == null) throw new NullPointerException("Final experience formula must be specified");
-        else finalExpCalculator = new ExpressionBuilder(fec).variables("a", "b", "c", "d").build();
-        String fmc = conf.getString("final_money_formula");
-        if(fmc == null) throw new NullPointerException("Final money formula must be specified");
-        else finalMoneyCalculator = new ExpressionBuilder(fmc).variables("a", "b", "c", "d").build();
-
-        ConfigurationSection ic = conf.getConfigurationSection("icon");
-        if(ic == null) throw new NullPointerException("Icon must be specified");
-        icon = ABIF.read(ic);
-        maxTime = conf.getLong("max_time");
-        maxPlayers = conf.getInt("max_players");
-
-        attrSection = conf.getConfigurationSection("attr");
-        if(attrSection == null) attrSection = new YamlConfiguration();
-        endCommandWinners = Collections.unmodifiableList(conf.getStringList("end_commands.winners"));
-        endCommandLosers = Collections.unmodifiableList(conf.getStringList("end_commands.losers"));
-        renderGuiOnDeath = conf.getBoolean("render_gui_on_death", true);
-
-        if(conf.getBoolean("bungeecord.enabled")){
-            if(ApiProvider.consume().hasBungeecordSupport()){
-                bungeeSupport = true;
-                remoteServers = Collections.unmodifiableList(conf.getStringList("bungeecord.remote_servers"));
-            } else Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
-        }
-        ConfigurationSection efc = conf.getConfigurationSection("end_firework");
-        if(efc != null) {
-            try {
-                endFirework = ConfigHelper.readConfig(efc, BattleFirework.SCHEMA);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
-        }
-        endDelay = conf.getLong("end_delay", 60);
     }
 
     @NotNull
@@ -213,5 +263,50 @@ public class Arena implements Informative {
                 .inform("max_time", maxTime)
                 .inform("max_players", maxPlayers)
                 .link(modeInfo);
+    }
+
+    @Nullable
+    protected Object readConfig(ConfigSchema.Entry entry, @Nullable Object value){
+        if(value != null) {
+            switch (entry.getKey()) {
+                case "mode": {
+                    return Mode.getMode((String) value);
+                }
+                case "final_exp_formula": {
+                    finalExpExpression = (String) value;
+                    return new ExpressionBuilder(finalExpExpression).variables("a", "b", "c", "d").build();
+                }
+                case "final_money_formula": {
+                    finalMoneyExpression = (String) value;
+                    return new ExpressionBuilder(finalMoneyExpression).variables("a", "b", "c", "d").build();
+                }
+                case "bungeecord.enabled": {
+                    boolean b = (Boolean) value;
+                    if(b && !ApiProvider.consume().hasBungeecordSupport()){
+                        Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
+                        return false;
+                    }
+                }
+            }
+        }
+        return value;
+    }
+
+    @Nullable
+    protected Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value){
+        if(value != null) {
+            switch (entry.getKey()) {
+                case "mode": {
+                    return ((Mode) value).getId();
+                }
+                case "final_exp_formula": {
+                    return finalExpExpression;
+                }
+                case "final_money_formula": {
+                    return finalMoneyExpression;
+                }
+            }
+        }
+        return value;
     }
 }
