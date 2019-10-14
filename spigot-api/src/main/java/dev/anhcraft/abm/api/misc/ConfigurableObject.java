@@ -21,6 +21,7 @@
 package dev.anhcraft.abm.api.misc;
 
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Schema
 public class ConfigurableObject implements TwoWayMiddleware {
     private Object colorize(Object value){
         if(value != null) {
