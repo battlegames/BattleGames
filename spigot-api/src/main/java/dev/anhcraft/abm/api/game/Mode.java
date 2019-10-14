@@ -69,8 +69,19 @@ public class Mode implements Informative {
         if(m != null) consumer.accept(m);
     }
 
+    /**
+     * ID: <b>dm</b>
+     */
     public static final Mode DEATHMATCH = registerMode(new Mode("dm"));
+
+    /**
+     * ID: <b>tdm</b>
+     */
     public static final Mode TEAM_DEATHMATCH = registerMode(new Mode("tdm"));
+
+    /**
+     * ID: <b>ctf</b>
+     */
     public static final Mode CTF = registerMode(new Mode("ctf"));
 
     private String id;
