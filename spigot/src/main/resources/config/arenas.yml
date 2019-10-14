@@ -1,52 +1,19 @@
 # This configuration is a part of ABM
+# https://anhcraft.dev/cd/abm/Arena.html
 
-# Use this configuration to set up your arenas
-# Lets start with the first one
-
-dm_demo: # The id of this arena
-  # This is the name of this arena
-  # [required]
+dm_demo:
   name: "&aExample Arena 1"
-
-  # The mode of this arena
-  # [required] [case-insensitive]
-  mode: dm # dm is the ID of deathmatch mode
-
-  # The formula which is used to calculate the final experience
-  # that players receive when finishing the game.
-  # Read the documentation for further information.
-  # [required] [expression supported]
+  mode: dm
   final_exp_formula: "a+b*30-c*10+d*5"
-
-  # The formula which is used to calculate the final money that players
-  # receive when finishing the game.
-  # Read the documentation for further information.
-  # [required] [expression supported]
   final_money_formula: "a*4+b*12+d*5"
-
-  # Arenas icon.
-  # This section uses ABIF which you can look at here to know
-  # the format: https://github.com/anhcraft/ABIF/blob/master/README.md
-  # [required] [placeholder supported]
   icon:
     material: GRASS
     name: "{__arena_name__}"
     lore:
       - "&4Mode: &f{__mode_name__}"
       - "&4Players: &f{__game_current_time:0__}/{__arena_max_players__}"
-
-  # Maximum playing time
-  # [optional] [default: 0] [time unit: ticks]
   max_time: 8400
-
-  # The maximum amount of players
-  # [optional] [default: 0]
   max_players: 15
-
-  # Arenas attributes configuration
-  # Attributes depend on the mode, so make sure you have
-  # read the documentation to fill this section completely.
-  # And don't copy/paste as options should be UNIQUE for EACH arena.
   attr:
     min_players: 2
     waiting_spawn_points:
@@ -57,35 +24,14 @@ dm_demo: # The id of this arena
     item_selection_time: 200
     spawn_protection_time: 40
     respawn_waiting_time: 200
-
-  # Commands to be executed by the console at the end
-  # You can use expressions within commands.
-  # The format is: <? your expression ?> (e.g: <? 5^3+2 ?>)
-  # Placeholders inside expressions are allowed.
-  # Make sure returning values are numbers!!!
-  # [expression supported] [placeholder supported]
   end_commands:
-    # For winners.
-    # [optional]
     winners:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
-
-    # For losers.
-    # [optional]
     losers:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
-
-  # When a player dies, should we re-render his bottom gui?
-  # This option can prevent players from using previous Battle items
-  # [default: true]
   render_gui_on_death: true
-
-  # Firework to be spawned when the game ends
   end_firework:
-    # The firework power
     power: 3
-
-    # List of firework effects
     effects:
       '1':
         type: ball_large
@@ -106,14 +52,11 @@ dm_demo: # The id of this arena
           - yellow
           - aqua
           - orange
-
-  # The delayed time before the game actually ends
-  # [default: 60]
   end_delay: 60
 
 tdm_demo:
   name: "&aExample Arena 2"
-  mode: tdm # tdm is the ID of team deathmatch mode
+  mode: tdm
   max_time: 8400
   max_players: 10
   icon:
@@ -144,7 +87,7 @@ tdm_demo:
 
 ctf_demo:
   name: "&aExample Arena 3"
-  mode: ctf # ctf is the ID of capture the flag
+  mode: ctf
   max_time: 12000
   max_players: 8
   icon:
@@ -199,21 +142,13 @@ ctf_demo:
           neutral: "&7Neutral"
         max_health: 15
 
-# An example for making arenas with Bungeecord support
-# Notice: You must enable the Bungeecord support first
 rmt_arena:
   name: "&4Example Remote Arena"
   mode: tdm
   max_time: 8400
   max_players: 16
-  # Bungeecord options
   bungeecord:
-    # Enabled Bungeecord support for this arena or not?
     enabled: true
-
-    # The server where the game will take place
-    # You can add more than one server. If the player can't connect
-    # to the first server, the second one will be chosen, and so on.
     remote_servers:
       - "server1"
       - "server2"
