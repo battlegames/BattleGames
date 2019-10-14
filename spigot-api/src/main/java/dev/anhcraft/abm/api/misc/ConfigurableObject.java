@@ -53,11 +53,21 @@ public class ConfigurableObject implements TwoWayMiddleware {
 
     @Nullable
     public Object conf2schema(ConfigSchema.Entry entry, @Nullable Object value){
-        return colorize(value);
+        return readConfig(entry, colorize(value));
     }
 
     @Nullable
     public Object schema2conf(ConfigSchema.Entry entry, @Nullable Object value){
+        return writeConfig(entry, value);
+    }
+
+    @Nullable
+    protected Object readConfig(ConfigSchema.Entry entry, @Nullable Object value){
+        return value;
+    }
+
+    @Nullable
+    protected Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value){
         return value;
     }
 }

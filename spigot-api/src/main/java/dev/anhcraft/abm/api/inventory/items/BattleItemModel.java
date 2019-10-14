@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.abm.api.inventory.items;
 
+import dev.anhcraft.abm.api.misc.ConfigurableObject;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.confighelper.annotation.Explanation;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Schema
-public abstract class BattleItemModel implements Informative {
+public abstract class BattleItemModel extends ConfigurableObject implements Informative {
     private String id;
 
     @Key("name")

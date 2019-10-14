@@ -197,7 +197,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @Override
-    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null){
             if(entry.getKey().startsWith("sounds.")) {
                 return new BattleSound((String) o);
@@ -241,7 +241,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @Override
-    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null){
             if(entry.getKey().startsWith("sounds.")) {
                 return o.toString();

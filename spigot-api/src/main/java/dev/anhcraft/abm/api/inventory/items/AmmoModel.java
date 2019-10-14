@@ -77,7 +77,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddl
     }
 
     @Override
-    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object value) {
         if(value != null && entry.getKey().equals("bullets")){
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Ammo.Bullet> bullets = new ArrayList<>();
@@ -94,7 +94,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddl
     }
 
     @Override
-    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value) {
         if(value != null && entry.getKey().equals("bullets")){
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;

@@ -65,7 +65,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayM
     }
 
     @Override
-    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null && entry.getKey().equals("ammo")){
             ConfigurationSection cs = (ConfigurationSection) o;
             Map<AmmoModel, Integer> ammo = new HashMap<>();
@@ -81,7 +81,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayM
     }
 
     @Override
-    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null && entry.getKey().equals("ammo")){
             ConfigurationSection parent = new YamlConfiguration();
             Map<AmmoModel, Integer> map = (Map<AmmoModel, Integer>) o;

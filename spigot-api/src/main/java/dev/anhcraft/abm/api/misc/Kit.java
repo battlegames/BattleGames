@@ -156,8 +156,8 @@ public class Kit extends ConfigurableObject {
     }
 
     @Override
-    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object o) {
-        o = super.conf2schema(entry, o);
+    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object o) {
+        o = super.readConfig(entry, o);
         if(o != null) {
             switch (entry.getKey()) {
                 case "items.vanilla": {
@@ -190,7 +190,7 @@ public class Kit extends ConfigurableObject {
     }
 
     @Override
-    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object o) {
         if(o != null) {
             switch (entry.getKey()) {
                 case "items.vanilla": {

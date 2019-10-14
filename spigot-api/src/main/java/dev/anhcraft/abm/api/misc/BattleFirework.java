@@ -27,7 +27,6 @@ import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Schema
-public class BattleFirework implements TwoWayMiddleware {
+public class BattleFirework extends ConfigurableObject {
     public static ConfigSchema<BattleFirework> SCHEMA = ConfigSchema.of(BattleFirework.class);
 
     @Key("effects")
@@ -72,7 +71,7 @@ public class BattleFirework implements TwoWayMiddleware {
     }
 
     @Override
-    public @Nullable Object conf2schema(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object value) {
         if(value != null && entry.getKey().equals("effects")){
             ConfigurationSection cs = (ConfigurationSection) value;
             List<BattleFireworkEffect> list = new ArrayList<>();
@@ -89,7 +88,7 @@ public class BattleFirework implements TwoWayMiddleware {
     }
 
     @Override
-    public @Nullable Object schema2conf(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value) {
         if(value != null && entry.getKey().equals("effects")){
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
