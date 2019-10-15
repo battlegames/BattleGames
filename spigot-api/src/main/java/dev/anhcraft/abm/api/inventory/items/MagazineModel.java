@@ -25,7 +25,6 @@ import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Schema
-public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayMiddleware {
+public class MagazineModel extends SingleSkinItem implements Attachable {
     public static final ConfigSchema<MagazineModel> SCHEMA = ConfigSchema.of(MagazineModel.class);
 
     @Key("ammo")
@@ -65,7 +64,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayM
     }
 
     @Override
-    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null && entry.getKey().equals("ammo")){
             ConfigurationSection cs = (ConfigurationSection) o;
             Map<AmmoModel, Integer> ammo = new HashMap<>();
@@ -81,7 +80,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable, TwoWayM
     }
 
     @Override
-    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null && entry.getKey().equals("ammo")){
             ConfigurationSection parent = new YamlConfiguration();
             Map<AmmoModel, Integer> map = (Map<AmmoModel, Integer>) o;

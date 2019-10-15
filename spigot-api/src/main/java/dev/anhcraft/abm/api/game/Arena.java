@@ -276,7 +276,7 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @Nullable
-    protected Object readConfig(ConfigSchema.Entry entry, @Nullable Object value){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
         if(value != null) {
             switch (entry.getKey()) {
                 case "mode": {
@@ -303,7 +303,7 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @Nullable
-    protected Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
         if(value != null) {
             switch (entry.getKey()) {
                 case "mode": {

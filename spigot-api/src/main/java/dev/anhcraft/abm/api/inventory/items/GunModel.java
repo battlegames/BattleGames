@@ -21,12 +21,11 @@ package dev.anhcraft.abm.api.inventory.items;
 
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.BattleBar;
-import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.abm.api.misc.BattleSound;
+import dev.anhcraft.abm.api.misc.ItemSkin;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import dev.anhcraft.jvmkit.lang.enumeration.RegEx;
 import dev.anhcraft.jvmkit.utils.Pair;
 import net.objecthunter.exp4j.Expression;
@@ -39,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Schema
-public class GunModel extends WeaponModel implements TwoWayMiddleware {
+public class GunModel extends WeaponModel {
     private static final BattleSound DEF_SHOOT_SOUND = new BattleSound("$entity_arrow_shoot");
     public static final ConfigSchema<GunModel> SCHEMA = ConfigSchema.of(GunModel.class);
 
@@ -197,7 +196,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @Override
-    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null){
             if(entry.getKey().startsWith("sounds.")) {
                 return new BattleSound((String) o);
@@ -241,7 +240,7 @@ public class GunModel extends WeaponModel implements TwoWayMiddleware {
     }
 
     @Override
-    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object o) {
+    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null){
             if(entry.getKey().startsWith("sounds.")) {
                 return o.toString();

@@ -21,8 +21,8 @@
 package dev.anhcraft.abm.api.misc;
 
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Middleware;
 import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @Schema
-public class ConfigurableObject implements TwoWayMiddleware {
+public class ConfigurableObject {
     private Object colorize(Object value){
         if(value != null) {
             if (value instanceof String) {
@@ -53,23 +53,25 @@ public class ConfigurableObject implements TwoWayMiddleware {
         return value;
     }
 
+    @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
     @Nullable
-    public Object conf2schema(ConfigSchema.Entry entry, @Nullable Object value){
-        return readConfig(entry, colorize(value));
+    private Object c2s(ConfigSchema.Entry entry, @Nullable Object value){
+        return conf2schema(colorize(value), entry);
+    }
+
+    @Middleware(Middleware.Direction.SCHEMA_TO_CONFIG)
+    @Nullable
+    private Object s2c(ConfigSchema.Entry entry, @Nullable Object value){
+        return schema2conf(value, entry);
     }
 
     @Nullable
-    public Object schema2conf(ConfigSchema.Entry entry, @Nullable Object value){
-        return writeConfig(entry, value);
-    }
-
-    @Nullable
-    protected Object readConfig(ConfigSchema.Entry entry, @Nullable Object value){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
         return value;
     }
 
     @Nullable
-    protected Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
         return value;
     }
 }

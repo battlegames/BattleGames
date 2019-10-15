@@ -71,7 +71,7 @@ public class BattleFirework extends ConfigurableObject {
     }
 
     @Override
-    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null && entry.getKey().equals("effects")){
             ConfigurationSection cs = (ConfigurationSection) value;
             List<BattleFireworkEffect> list = new ArrayList<>();
@@ -88,7 +88,7 @@ public class BattleFirework extends ConfigurableObject {
     }
 
     @Override
-    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null && entry.getKey().equals("effects")){
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;

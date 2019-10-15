@@ -27,7 +27,6 @@ import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
-import dev.anhcraft.confighelper.impl.TwoWayMiddleware;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Schema
-public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddleware {
+public class AmmoModel extends SingleSkinItem implements Attachable {
     public static final ConfigSchema<AmmoModel> SCHEMA = ConfigSchema.of(AmmoModel.class);
 
     @Key("bullets")
@@ -77,7 +76,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddl
     }
 
     @Override
-    protected @Nullable Object readConfig(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null && entry.getKey().equals("bullets")){
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Ammo.Bullet> bullets = new ArrayList<>();
@@ -94,7 +93,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable, TwoWayMiddl
     }
 
     @Override
-    protected @Nullable Object writeConfig(ConfigSchema.Entry entry, @Nullable Object value) {
+    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null && entry.getKey().equals("bullets")){
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
