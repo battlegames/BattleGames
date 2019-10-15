@@ -319,4 +319,10 @@ public interface BattleAPI {
      * @return connection delay
      */
     long getConnectionDelay();
+
+    /**
+     * Checks if the plugin has SlimeWorldManager support.
+     * @return {@code true} if it has or {@code false} otherwise
+     */
+    boolean hasSlimeWorldManagerSupport();
 }

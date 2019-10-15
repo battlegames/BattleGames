@@ -47,6 +47,7 @@ public class DocGen {
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
                 .withSchema(Arena.SCHEMA)
+                .withSchema(Rollback.SCHEMA)
                 .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));

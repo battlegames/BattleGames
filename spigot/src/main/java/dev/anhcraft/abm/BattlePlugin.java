@@ -42,6 +42,7 @@ import dev.anhcraft.abm.system.handlers.GrenadeHandler;
 import dev.anhcraft.abm.system.handlers.GunHandler;
 import dev.anhcraft.abm.system.handlers.Handler;
 import dev.anhcraft.abm.system.integrations.PapiExpansion;
+import dev.anhcraft.abm.system.integrations.SWMIntegration;
 import dev.anhcraft.abm.system.integrations.VaultApi;
 import dev.anhcraft.abm.system.listeners.BlockListener;
 import dev.anhcraft.abm.system.listeners.GameListener;
@@ -141,6 +142,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private boolean spigotBungeeSupport;
     private boolean supportBungee;
     private List<String> lobbyList;
+    public SWMIntegration SWMIntegration;
+    private boolean slimeWorldManagerSupport;
 
     @Override
     public void onEnable() {
@@ -157,6 +160,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         initConfigFiles();
         injectApiProvider();
+
+        if(getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")){
+            slimeWorldManagerSupport = true;
+            SWMIntegration = new SWMIntegration();
+            getLogger().fine("Hooked to SlimeWorldManager");
+        }
 
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
@@ -865,6 +874,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public long getConnectionDelay() {
         return getGeneralConf().getLong("bungeecord.connection_delay");
+    }
+
+    @Override
+    public boolean hasSlimeWorldManagerSupport() {
+        return slimeWorldManagerSupport;
     }
 
     private void exit(String msg) {

@@ -19,23 +19,39 @@
  */
 package dev.anhcraft.abm.system.cleaners;
 
+import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
-import dev.anhcraft.abm.system.cleaners.works.BlockRestoration;
+import dev.anhcraft.abm.system.cleaners.works.RollbackWork;
+import dev.anhcraft.abm.system.cleaners.works.Work;
 
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-public class GameCleaner {
-    private final ExecutorService POOL = Executors.newFixedThreadPool(3);
-    private final BlockRestoration[] WORKS = new BlockRestoration[]{
-            new BlockRestoration()
+public class GameCleaner extends BattleComponent {
+    private final ExecutorService POOL = Executors.newCachedThreadPool();
+    private final Work[] works = new Work[]{
+            new RollbackWork()
     };
+
+    public GameCleaner(BattlePlugin plugin) {
+        super(plugin);
+    }
 
     public void doClean(Arena arena, Consumer<Arena> onFinished){
         POOL.submit(() -> {
-            Arrays.stream(WORKS).forEach(x -> x.accept(arena));
+            plugin.getLogger().info("Cleaning arena " + arena.getId());
+            int i = 1;
+            for(Work work : works){
+                long start = System.currentTimeMillis();
+                plugin.getLogger().info("Starting work #"+i);
+                work.handle(plugin, arena);
+                long end = System.currentTimeMillis();
+                plugin.getLogger().info(String.format("Finished work #%s in %s ms", i, start - end));
+                i++;
+            }
+            plugin.getLogger().info("Finished works! Arena "+arena.getId()+" is now ready.");
             onFinished.accept(arena);
         });
     }

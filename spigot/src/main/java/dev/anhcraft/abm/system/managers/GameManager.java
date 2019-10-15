@@ -57,10 +57,11 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
     private final Map<UUID, LocalGame> PLAYER_GAME_MAP = new HashMap<>();
     private final Object LOCK = new Object();
-    public final GameCleaner cleaner = new GameCleaner();
+    public final GameCleaner cleaner;
 
     public GameManager(BattlePlugin plugin) {
         super(plugin);
+        cleaner = new GameCleaner(plugin);
         initController(Mode.DEATHMATCH, new DeathmatchController(plugin));
         initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
         initController(Mode.CTF, new CTFController(plugin));

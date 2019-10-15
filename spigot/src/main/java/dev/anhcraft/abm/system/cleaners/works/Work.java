@@ -17,15 +17,13 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.abm.system.cleaners.works;
 
+import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
-public class BlockRestoration implements Consumer<Arena> {
-    @Override
-    public void accept(Arena arena) {
-        // TODO implement this
-    }
+public interface Work {
+    void handle(@NotNull BattlePlugin plugin, @NotNull Arena arena);
 }

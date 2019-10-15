@@ -22,6 +22,7 @@ package dev.anhcraft.abm.api.game;
 import dev.anhcraft.abm.api.ApiProvider;
 import dev.anhcraft.abm.api.misc.BattleFirework;
 import dev.anhcraft.abm.api.misc.ConfigurableObject;
+import dev.anhcraft.abm.api.misc.Rollback;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.confighelper.ConfigSchema;
@@ -149,6 +150,10 @@ public class Arena extends ConfigurableObject implements Informative {
     @Explanation("The delay time before the game actually ends")
     private long endDelay = 60;
 
+    @Key("rollback")
+    @Explanation("Rollback settings")
+    private Rollback rollback;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -239,6 +244,11 @@ public class Arena extends ConfigurableObject implements Informative {
 
     public long getEndDelay() {
         return endDelay;
+    }
+
+    @Nullable
+    public Rollback getRollback() {
+        return rollback;
     }
 
     @Override
