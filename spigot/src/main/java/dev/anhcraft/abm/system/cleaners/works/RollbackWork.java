@@ -35,9 +35,11 @@ public class RollbackWork implements Work {
                 switch (plugin.SWMIntegration.isReadOnly(w)){
                     case -1: {
                         plugin.getLogger().warning("[Rollback/SWM] World not found: "+w);
+                        continue;
                     }
                     case 0: {
                         plugin.getLogger().warning("[Rollback/SWM] World is not in read-only mode: "+w);
+                        continue;
                     }
                     case 1: {
                         plugin.getLogger().info("[Rollback/SWM] Reloading world: "+w);
