@@ -32,6 +32,7 @@ import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import dev.anhcraft.craftkit.utils.EntityUtil;
+import dev.anhcraft.craftkit.utils.ItemUtil;
 import dev.anhcraft.jvmkit.utils.Pair;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
@@ -46,6 +47,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -103,20 +105,37 @@ public class GunHandler extends Handler {
         return d2 < d1 / 4;
     }
 
-    private void rmvZoom(Player player){
-        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+    private void rmvZoom(Player player, @Nullable GunModel gunModel){
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
         player.removeMetadata("zoom", plugin);
+        if(gunModel == null) {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (!ItemUtil.isNull(item)) {
+                BattleItem battleItem = plugin.itemManager.read(item);
+                if(battleItem instanceof Gun){
+                    GunModel gm = ((Gun) battleItem).getModel();
+                    if (gm != null) {
+                        reduceSpeed(player, gm);
+                        return;
+                    }
+                }
+            }
+            player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+            player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+        } else reduceSpeed(player, gunModel);
     }
 
     public boolean handleZoomOut(Player player){
+        return handleZoomOut(player, null);
+    }
+
+    public boolean handleZoomOut(Player player, @Nullable GunModel gunModel){
         if(player.hasMetadata("zoom")) {
             List<MetadataValue> x = player.getMetadata("zoom");
             for(MetadataValue v : x){
                 if(v.getOwningPlugin() == plugin && v.asInt() != -1) {
-                    rmvZoom(player);
+                    rmvZoom(player, gunModel);
                     return true;
                 }
             }
@@ -146,7 +165,7 @@ public class GunHandler extends Handler {
             return false;
         }
         int next = scp.nextZoomLevel();
-        if(next == -1)  rmvZoom(player);
+        if(next == -1)  rmvZoom(player, gm);
         else {
             ScopeModel sm = scp.getModel();
             int nextLv = sm.getZoomLevels().get(next);

@@ -221,7 +221,7 @@ public abstract class ModeController extends BattleComponent implements Listener
                 .setVariable("b", maxBullet).evaluate();
         if(reloadTime <= 0) return;
 
-        plugin.getHandler(GunHandler.class).handleZoomOut(player);
+        plugin.getHandler(GunHandler.class).handleZoomOut(player, gm);
 
         double maxTime = reloadTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
         int bullerPerTime = (int) Math.floor((maxBullet - currentBullet) / maxTime);
