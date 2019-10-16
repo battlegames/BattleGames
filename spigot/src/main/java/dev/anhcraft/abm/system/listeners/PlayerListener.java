@@ -232,7 +232,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                 Gun gun = (Gun) oldItem;
                 GunModel gm = gun.getModel();
                 if(gm != null){
-                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, gm)){
+                    // although there is gun model, we must NOT set it to the second param!
+                    // as the model belongs to the OLD ITEM!!!!!!!!!!!!!!
+                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
                         player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
                         player.setFlySpeed(plugin.getDefaultFlyingSpeed());
                     }
