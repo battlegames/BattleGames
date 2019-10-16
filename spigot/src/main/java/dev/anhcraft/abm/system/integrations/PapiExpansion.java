@@ -78,6 +78,10 @@ public class PapiExpansion extends PlaceholderExpansion {
             PlayerData pd = plugin.getPlayerData(player);
             return pd == null ? null : Integer.toString(pd.getAssistCounter().get());
         });
+        handlers.put("stats_first_kills", player -> {
+            PlayerData pd = plugin.getPlayerData(player);
+            return pd == null ? null : Integer.toString(pd.getFirstKillCounter().get());
+        });
         handlers.put("stats_kills", player -> {
             PlayerData pd = plugin.getPlayerData(player);
             return pd == null ? null : Integer.toString(pd.getKillCounter().get());

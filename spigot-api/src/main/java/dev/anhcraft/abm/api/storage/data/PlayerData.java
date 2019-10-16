@@ -39,6 +39,7 @@ public class PlayerData implements Resettable, Serializable {
     private AtomicInteger killCounter = new AtomicInteger();
     private AtomicInteger deathCounter = new AtomicInteger();
     private AtomicInteger assistCounter = new AtomicInteger();
+    private AtomicInteger firstKillCounter = new AtomicInteger();
     private AtomicInteger winCounter = new AtomicInteger();
     private AtomicInteger loseCounter = new AtomicInteger();
     private AtomicLong exp = new AtomicLong();
@@ -54,6 +55,11 @@ public class PlayerData implements Resettable, Serializable {
     @NotNull
     public AtomicInteger getAssistCounter() {
         return assistCounter;
+    }
+
+    @NotNull
+    public AtomicInteger getFirstKillCounter() {
+        return firstKillCounter;
     }
 
     @NotNull
@@ -101,6 +107,7 @@ public class PlayerData implements Resettable, Serializable {
     public void read(DataMap<String> map) {
         headshotCounter.set(map.readTag("hs", Integer.class, 0));
         assistCounter.set(map.readTag("ast", Integer.class, 0));
+        firstKillCounter.set(map.readTag("fsk", Integer.class, 0));
         killCounter.set(map.readTag("kill", Integer.class, 0));
         deathCounter.set(map.readTag("death", Integer.class, 0));
         winCounter.set(map.readTag("win", Integer.class, 0));
@@ -141,6 +148,7 @@ public class PlayerData implements Resettable, Serializable {
     public void write(DataMap<String> map) {
         map.writeTag("hs", headshotCounter.get());
         map.writeTag("ast", assistCounter.get());
+        map.writeTag("fsk", firstKillCounter.get());
         map.writeTag("kill", killCounter.get());
         map.writeTag("death", deathCounter.get());
         map.writeTag("win", winCounter.get());
@@ -174,10 +182,13 @@ public class PlayerData implements Resettable, Serializable {
         headshotCounter.set(0);
         killCounter.set(0);
         deathCounter.set(0);
+        assistCounter.set(0);
+        firstKillCounter.set(0);
         winCounter.set(0);
         loseCounter.set(0);
         exp.set(0);
         inventory.clearInventory();
+        kits.clear();
         receivedFirstJoinKits.clear();
     }
 }

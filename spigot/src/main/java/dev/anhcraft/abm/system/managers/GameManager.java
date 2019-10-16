@@ -254,6 +254,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                 playerData.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
                 playerData.getAssistCounter().addAndGet(gp.getAssistCounter().get());
                 playerData.getDeathCounter().addAndGet(gp.getDeathCounter().get());
+                if(gp.isHasFirstKill()) playerData.getFirstKillCounter().incrementAndGet();
                 if(gp.isWinner()) {
                     playerData.getWinCounter().incrementAndGet();
                     localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.toBukkit()));

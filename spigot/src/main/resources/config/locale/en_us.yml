@@ -18,6 +18,8 @@ medal:
   headshot_subtitle: "&bHeadshot"
   assist_title: "&l%abm_icon_assist%"
   assist_subtitle: "&cAssist"
+  first_kill_title: "&l%abm_icon_gold_cup%"
+  first_kill_subtitle: "&eFirst kill"
 server:
   illegal_block_break: "&cIllegal action: You aren't allowed to break blocks!"
   illegal_block_blace: "&cIllegal action: You aren't allowed to place blocks!"

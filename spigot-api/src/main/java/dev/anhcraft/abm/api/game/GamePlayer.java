@@ -34,6 +34,7 @@ public class GamePlayer implements Resettable {
     private final AtomicInteger killCounter = new AtomicInteger();
     private final AtomicInteger deathCounter = new AtomicInteger();
     private final AtomicInteger assistCounter = new AtomicInteger();
+    private boolean hasFirstKill;
     private WeakReference<Player> player;
     private boolean spectator;
     private boolean winner;
@@ -98,6 +99,14 @@ public class GamePlayer implements Resettable {
         this.backupInventory = backupInventory;
     }
 
+    public boolean isHasFirstKill() {
+        return hasFirstKill;
+    }
+
+    public void setHasFirstKill(boolean hasFirstKill) {
+        this.hasFirstKill = hasFirstKill;
+    }
+
     @Override
     public void reset() {
         spectator = false;
@@ -105,5 +114,6 @@ public class GamePlayer implements Resettable {
         killCounter.set(0);
         deathCounter.set(0);
         backupInventory = null;
+        hasFirstKill = false;
     }
 }

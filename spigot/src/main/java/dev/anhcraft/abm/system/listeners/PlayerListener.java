@@ -254,37 +254,60 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(game != null){
             e.setDeathMessage(null);
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getDeathCounter().incrementAndGet();
+
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
             DoubleSummaryStatistics stats = reports
                     .stream()
                     .mapToDouble(DamageReport::getDamage)
                     .summaryStatistics();
-            Set<Player> headshooters = new HashSet<>();
-            Set<Player> killers = new HashSet<>();
-            Set<Player> assistants = new HashSet<>();
-            for(DamageReport report : reports){
-                if(report.getDamage() >= stats.getAverage()) {
-                    killers.add(report.getDamager());
-                    if(report.isHeadshotDamage()) headshooters.add(report.getDamager());
-                } else assistants.add(report.getDamager());
-            }
+            double avgDamage = stats.getAverage();
+
             String hst = plugin.getLocaleConf().getString("medal.headshot_title");
             String hsst = plugin.getLocaleConf().getString("medal.headshot_subtitle");
             String ast = plugin.getLocaleConf().getString("medal.assist_title");
             String asst = plugin.getLocaleConf().getString("medal.assist_subtitle");
-            headshooters.forEach(player -> {
+            String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
+            String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
+            Set<Player> headshooters = new HashSet<>();
+            Set<Player> killers = new HashSet<>();
+            Set<Player> assistants = new HashSet<>();
+            double mostDamage = 0;
+            Player mostDamager = null;
+
+            for(DamageReport report : reports){
+                if(report.getDamage() >= avgDamage) {
+                    killers.add(report.getDamager());
+                    if(report.getDamage() > mostDamage){
+                        mostDamage = report.getDamage();
+                        mostDamager = report.getDamager();
+                    }
+                    if(report.isHeadshotDamage()) headshooters.add(report.getDamager());
+                } else assistants.add(report.getDamager());
+            }
+
+            for(Player player : headshooters){
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return; // ignore attackers who quit the game
                 gp.getHeadshotCounter().incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
-            });
-            assistants.forEach(player -> {
+            }
+
+            for(Player player : assistants){
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
                 gp.getAssistCounter().incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
-            });
-            killers.forEach(player -> Objects.requireNonNull(game.getPlayer(player)).getKillCounter().incrementAndGet());
+            }
+
+            for(Player player : killers){
+                GamePlayer gp = game.getPlayer(player);
+                if(gp == null) return;
+                gp.getKillCounter().incrementAndGet();
+                if(player.equals(mostDamager)){
+                    gp.setHasFirstKill(true);
+                    plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, fkt), PlaceholderUtil.formatPAPI(player, fkst)));
+                }
+            }
 
             if(game.getArena().isRenderGuiOnDeath()){
                 plugin.guiManager.renderBottomInv(e.getEntity(), plugin.guiManager.getPlayerGui(e.getEntity()));
