@@ -89,7 +89,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private static final String[] CONFIG_FILES = new String[]{
             "system.yml",
             "general.yml",
-            "locale/en_us.yml", // PUT DEFAULT LOCALE HERE
+            "_ locale/en_us.yml", // PUT DEFAULT LOCALE HERE
             "modes.yml",
             "arenas.yml",
             // START: ATTACHMENTS
@@ -377,7 +377,13 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             String[] s = CONFIG_FILES[i].split(" ");
             String fp = s[0];
             String cp = s[0];
-            if(s.length == 2) cp = s[1];
+            if(s.length == 2) {
+                cp = s[1];
+                if(fp.equals("_")) {
+                    CONFIG[i] = YamlConfiguration.loadConfiguration(getTextResource("config/"+cp));
+                    continue;
+                }
+            }
             CONFIG[i] = loadConfigFile(fp, cp);
             if(i == 0) initSystem(CONFIG[0]);
         }
@@ -469,8 +475,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             if(outdatedLocale){
                 File lc = new File(configFolder, "locale/temp."+path);
                 try {
-                    local.save(lc);
-                    getLogger().fine("An up-to-date locale file that filled all missing entries was saved to "+lc.getAbsolutePath()+"!");
+                    cache.save(lc);
+                    getLogger().info("An up-to-date locale file that filled all missing entries was saved to "+lc.getAbsolutePath()+"!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
