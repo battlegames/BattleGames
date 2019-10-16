@@ -36,7 +36,7 @@ public class QueueTitleTask implements Runnable {
             x = new ConcurrentLinkedQueue<>();
             QUEUE.put(p, x);
         }
-        x.add(title);
+        x.offer(title);
     }
 
     public void remove(Player p){
@@ -47,7 +47,9 @@ public class QueueTitleTask implements Runnable {
     public void run() {
         QUEUE.forEach((player, queueTitles) -> {
             QueueTitle title = queueTitles.poll();
-            if (title != null) player.sendTitle(title.getTitle(), title.getSubtitle(), 10, 70, 20);
+            if (title != null) {
+                player.sendTitle(title.getTitle(), title.getSubtitle(), 10, 70, 20);
+            }
         });
     }
 }
