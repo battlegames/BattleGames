@@ -271,7 +271,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {
                     if (player.getBackupInventory() != null)
-                        player.getPlayer().getInventory().setContents(player.getBackupInventory());
+                        player.toBukkit().getInventory().setContents(player.getBackupInventory());
                 });
             }
         });

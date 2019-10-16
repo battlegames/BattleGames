@@ -102,8 +102,8 @@ public class DeathmatchController extends ModeController {
         plugin.taskHelper.newTask(() -> {
             localGame.setPhase(GamePhase.PLAYING);
             localGame.getPlayers().values().forEach(p -> {
-                cancelTask(localGame, "respawn::"+p.getPlayer().getName());
-                addPlayer(localGame, p.getPlayer());
+                cancelTask(localGame, "respawn::"+p.toBukkit().getName());
+                addPlayer(localGame, p.toBukkit());
             });
         });
     }
@@ -219,7 +219,7 @@ public class DeathmatchController extends ModeController {
                 }
             }
             x.setSpectator(false);
-            respw(localGame, x.getPlayer());
+            respw(localGame, x.toBukkit());
         } while(players.hasNext()); // we use do-while since there is always at least one player
         winner.setWinner(true);
 

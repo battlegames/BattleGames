@@ -241,14 +241,14 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public void handleEnd(LocalGame localGame) {
         BattleFirework ebf = localGame.getArena().getEndFirework();
         localGame.getPlayers().values().forEach(gp -> {
-            plugin.getHandler(GunHandler.class).handleZoomOut(gp.getPlayer());
-            PlayerData playerData = plugin.getPlayerData(gp.getPlayer());
+            plugin.getHandler(GunHandler.class).handleZoomOut(gp.toBukkit());
+            PlayerData playerData = plugin.getPlayerData(gp.toBukkit());
             if(playerData != null) {
                 double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));
                 long e = Math.max(0, localGame.getArena().calculateFinalExp(gp));
-                VaultApi.getEconomyApi().depositPlayer(gp.getPlayer(), m);
+                VaultApi.getEconomyApi().depositPlayer(gp.toBukkit(), m);
                 playerData.getExp().addAndGet(e);
-                plugin.chatManager.sendPlayer(gp.getPlayer(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
+                plugin.chatManager.sendPlayer(gp.toBukkit(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
 
                 playerData.getKillCounter().addAndGet(gp.getKillCounter().get());
                 playerData.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
@@ -256,11 +256,11 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                 playerData.getDeathCounter().addAndGet(gp.getDeathCounter().get());
                 if(gp.isWinner()) {
                     playerData.getWinCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.getPlayer()));
-                    if(ebf != null) ebf.spawn(gp.getPlayer().getLocation());
+                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.toBukkit()));
+                    if(ebf != null) ebf.spawn(gp.toBukkit().getLocation());
                 } else {
                     playerData.getLoseCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gp.getPlayer()));
+                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gp.toBukkit()));
                 }
             }
         });

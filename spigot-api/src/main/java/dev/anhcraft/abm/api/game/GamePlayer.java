@@ -45,7 +45,7 @@ public class GamePlayer implements Resettable {
     }
 
     @NotNull
-    public Player getPlayer() {
+    public Player toBukkit() {
         Player p = player.get();
         if(p == null) {
             throw new IllegalStateException("The player is not online anymore, thus this game player should be removed previously?");

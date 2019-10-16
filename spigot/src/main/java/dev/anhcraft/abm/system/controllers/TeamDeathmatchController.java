@@ -207,12 +207,12 @@ public class TeamDeathmatchController extends DeathmatchController {
         List<GamePlayer> bPlayers = map.get(ABTeam.TEAM_B);
         if(aPlayers != null & bPlayers != null) {
             IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
-                respw(localGame, value.getPlayer(), ABTeam.TEAM_A);
+                respw(localGame, value.toBukkit(), ABTeam.TEAM_A);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
             IntSummaryStatistics sb = bPlayers.stream().mapToInt(value -> {
-                respw(localGame, value.getPlayer(), ABTeam.TEAM_B);
+                respw(localGame, value.toBukkit(), ABTeam.TEAM_B);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();

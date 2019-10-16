@@ -43,7 +43,7 @@ public class GameListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void join(GameJoinEvent event){
-        Player p = event.getGamePlayer().getPlayer();
+        Player p = event.getGamePlayer().toBukkit();
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
@@ -52,7 +52,7 @@ public class GameListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void quit(GameQuitEvent event){
-        Player p = event.getGamePlayer().getPlayer();
+        Player p = event.getGamePlayer().toBukkit();
         ItemStack[] inv = event.getGamePlayer().getBackupInventory();
         if(inv != null) p.getInventory().setContents(inv);
         // although the inventory got backup, its handler still
