@@ -57,9 +57,9 @@
         </dependency>
         <dependency>
             <groupId>com.grinderwolf</groupId>
-            <artifactId>slimeworldmanager-api</artifactId>
+            <artifactId>slimeworldmanager-plugin</artifactId>
             <version>2.1.2</version>
-            <systemPath>${basedir}/../lib/slimeworldmanager-api-2.1.2.jar</systemPath>
+            <systemPath>${basedir}/../lib/slimeworldmanager-plugin-2.1.2.jar</systemPath>
             <scope>system</scope>
         </dependency>
     </dependencies>

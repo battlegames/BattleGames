@@ -22,8 +22,10 @@ package dev.anhcraft.abm.system.cleaners.works;
 
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
+import dev.anhcraft.abm.system.cleaners.WorkSession;
 import org.jetbrains.annotations.NotNull;
 
 public interface Work {
-    void handle(@NotNull BattlePlugin plugin, @NotNull Arena arena);
+    String id();
+    void handle(@NotNull BattlePlugin plugin, WorkSession session, @NotNull Arena arena);
 }

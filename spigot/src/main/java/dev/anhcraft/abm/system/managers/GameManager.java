@@ -208,7 +208,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             PLAYER_GAME_MAP.remove(player.getUniqueId());
             if(localGame.getPlayerCount() == 0) {
                 localGame.setPhase(GamePhase.CLEANING);
-                cleaner.doClean(localGame.getArena(), ARENA_GAME_MAP::remove);
+                cleaner.newSession(localGame.getArena(), ARENA_GAME_MAP::remove);
             }
             return true;
         }
@@ -224,7 +224,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                     PLAYER_GAME_MAP.remove(player.getUniqueId());
                 });
                 game.setPhase(GamePhase.CLEANING);
-                cleaner.doClean(game.getArena(), ARENA_GAME_MAP::remove);
+                cleaner.newSession(game.getArena(), ARENA_GAME_MAP::remove);
             } else {
                 game.setPhase(GamePhase.END);
                 ARENA_GAME_MAP.remove(game.getArena());

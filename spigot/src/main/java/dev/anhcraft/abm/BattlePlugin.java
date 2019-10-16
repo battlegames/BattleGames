@@ -163,8 +163,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         if(getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")){
             slimeWorldManagerSupport = true;
-            SWMIntegration = new SWMIntegration();
-            getLogger().fine("Hooked to SlimeWorldManager");
+            SWMIntegration = new SWMIntegration(this);
+            getLogger().info("Hooked to SlimeWorldManager");
         }
 
         papiExpansion = new PapiExpansion(this);
@@ -267,7 +267,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @Override
     public void onDisable(){
-        gameManager.cleaner.destroy();
         gameManager.listGames(game -> {
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {

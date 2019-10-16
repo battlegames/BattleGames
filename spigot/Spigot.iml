@@ -41,6 +41,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:locales:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.jodah:expiringmap:0.5.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.aikar:minecraft-timings:1.0.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:confighelper.bukkit:1.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:confighelper.common:1.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
@@ -56,16 +58,14 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.grinderwolf:slimeworldmanager-api:2.1.2">
+      <library name="Maven: com.grinderwolf:slimeworldmanager-plugin:2.1.2">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/slimeworldmanager-api-2.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../lib/slimeworldmanager-plugin-2.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:17.0.0" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:confighelper.bukkit:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:confighelper.common:1.0.2" level="project" />
   </component>
 </module>

@@ -23,30 +23,45 @@ package dev.anhcraft.abm.system.cleaners.works;
 import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.misc.Rollback;
+import dev.anhcraft.abm.system.cleaners.WorkSession;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CountDownLatch;
 
 public class RollbackWork implements Work {
     @Override
-    public void handle(@NotNull BattlePlugin plugin, @NotNull Arena arena) {
+    public String id() {
+        return "rollback";
+    }
+
+    @Override
+    public void handle(@NotNull BattlePlugin plugin, WorkSession session, @NotNull Arena arena) {
         if(arena.getRollback() == null) return;
         Rollback rollback = arena.getRollback();
         if(rollback.getProvider() == Rollback.Provider.SLIME_WORLD && plugin.hasSlimeWorldManagerSupport()){
             for(String w : rollback.getWorlds()){
-                switch (plugin.SWMIntegration.isReadOnly(w)){
+                CountDownLatch countDownLatch = new CountDownLatch(1);
+                switch (plugin.SWMIntegration.isReadOnly(w)) {
                     case -1: {
-                        plugin.getLogger().warning("[Rollback/SWM] World not found: "+w);
+                        plugin.getLogger().warning("[Rollback/SWM] World not found: " + w);
                         continue;
                     }
                     case 0: {
-                        plugin.getLogger().warning("[Rollback/SWM] World is not in read-only mode: "+w);
+                        plugin.getLogger().warning("[Rollback/SWM] World is not in read-only mode: " + w);
                         continue;
                     }
                     case 1: {
-                        plugin.getLogger().info("[Rollback/SWM] Reloading world: "+w);
-                        plugin.SWMIntegration.reloadWorld(w);
+                        plugin.getLogger().info("[Rollback/SWM] Reloading world: " + w);
+                        plugin.SWMIntegration.reloadWorld(countDownLatch, w);
                     }
+                }
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
+        session.done(this);
     }
 }

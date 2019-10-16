@@ -28,47 +28,59 @@ import com.grinderwolf.swm.api.exceptions.WorldInUseException;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
+import com.grinderwolf.swm.plugin.config.ConfigManager;
+import com.grinderwolf.swm.plugin.config.WorldData;
+import dev.anhcraft.abm.BattleComponent;
+import dev.anhcraft.abm.BattlePlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
-public class SWMIntegration {
-    private final SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-    private List<SlimeWorld> slimeWorlds;
+public class SWMIntegration extends BattleComponent {
+    private final SlimePlugin api = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
-    public SWMIntegration(){
-        try {
-            Class<?> slimeClazz = Class.forName("com.grinderwolf.swm.plugin.SWMPlugin");
-            Field field = slimeClazz.getDeclaredField("worlds");
-            field.setAccessible(true);
-            slimeWorlds = (List<SlimeWorld>) field.get(plugin);
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Optional<SlimeWorld> getWorld(String world){
-        return slimeWorlds.stream().filter(w -> w.getName().equals(world)).findFirst();
+    public SWMIntegration(BattlePlugin plugin) {
+        super(plugin);
     }
 
     public int isReadOnly(String world){
-        return getWorld(world).map(value -> value.isReadOnly() ? 1 : 0).orElse(-1);
+        WorldData worldData = ConfigManager.getWorldConfig().getWorlds().get(world);
+        return worldData == null ? -1 : (worldData.isReadOnly() ? 1 : 0);
     }
 
-    public void reloadWorld(String world){
-        getWorld(world).ifPresent(w -> {
-            SlimeLoader loader = w.getLoader();
-            SlimePropertyMap map = w.getPropertyMap();
-            if(Bukkit.unloadWorld(w.getName(), false)){
-                try {
-                    plugin.loadWorld(loader, w.getName(), true, map);
-                } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | IOException | WorldInUseException e) {
-                    e.printStackTrace();
+    public void reloadWorld(CountDownLatch countDownLatch, String world){
+        WorldData worldData = ConfigManager.getWorldConfig().getWorlds().get(world);
+        if(worldData != null){
+            SlimeLoader loader = api.getLoader(worldData.getDataSource());
+            SlimePropertyMap map = worldData.toPropertyMap();
+            plugin.taskHelper.newTask(() -> {
+                World w = Bukkit.getWorld(world);
+                if(w == null){
+                    countDownLatch.countDown();
+                    return;
                 }
-            }
-        });
+                w.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
+                if(Bukkit.unloadWorld(w, false)) {
+                    plugin.taskHelper.newAsyncTask(() -> {
+                        try {
+                            SlimeWorld slimeWorld = api.loadWorld(loader, world, true, map);
+                            plugin.taskHelper.newTask(() -> {
+                                api.generateWorld(slimeWorld);
+                                countDownLatch.countDown();
+                            });
+                        } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | IOException | WorldInUseException e) {
+                            e.printStackTrace();
+                            countDownLatch.countDown();
+                        }
+                    });
+                } else {
+                    countDownLatch.countDown();
+                }
+            });
+        } else {
+            countDownLatch.countDown();
+        }
     }
 }
