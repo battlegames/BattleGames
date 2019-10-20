@@ -27,17 +27,15 @@ import dev.anhcraft.abm.api.misc.BattleSound;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.utils.LocationUtil;
 import dev.anhcraft.abm.utils.PlaceholderUtil;
+import dev.anhcraft.craftkit.entity.ArmorStand;
+import dev.anhcraft.craftkit.entity.TrackedEntity;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.*;
 
@@ -81,25 +79,47 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
+    public void onJoin(Player player, LocalGame localGame) {
+        super.onJoin(player, localGame);
+
+        Collection<TeamFlag<ABTeam>> flags = FLAG.get(localGame);
+        if(flags != null) {
+            for(TeamFlag<ABTeam> f : flags){
+                f.getArmorStand().addViewer(player);
+            }
+        }
+    }
+
+    @Override
+    public void onQuit(Player player, LocalGame localGame){
+        super.onQuit(player, localGame);
+
+        Collection<TeamFlag<ABTeam>> flags = FLAG.get(localGame);
+        if(flags != null) {
+            for(TeamFlag<ABTeam> f : flags){
+                f.getArmorStand().removeViewer(player);
+            }
+        }
+    }
+
+    @Override
     protected void play(LocalGame localGame) {
         super.play(localGame);
 
         plugin.taskHelper.newTask(() -> {
             ConfigurationSection sec = localGame.getArena().getAttributes().getConfigurationSection("flags");
             if(sec != null){
-                int i = 0;
                 Set<String> keys = sec.getKeys(false);
                 for(String k : keys){
                     Location loc = LocationUtil.fromString(sec.getString(k+".location"));
                     int mh = sec.getInt(k+".max_health");
-                    ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
-                    armorStand.setMetadata("abm_ctf_flag", new FixedMetadataValue(plugin, i++));
-                    armorStand.setMetadata("abm_temp_entity", new FixedMetadataValue(plugin, true));
+                    ArmorStand armorStand = ArmorStand.spawn(loc);
                     armorStand.setVisible(false);
-                    armorStand.setInvulnerable(true);
-                    armorStand.setMarker(true);
-                    armorStand.setCustomNameVisible(true);
-                    TeamFlag<ABTeam> flag = new TeamFlag<>(armorStand, mh);
+                    armorStand.setNameVisible(true);
+                    TrackedEntity<ArmorStand> te = plugin.extension.trackEntity(armorStand);
+                    te.setViewDistance(50);
+                    te.setViewers(new ArrayList<>(localGame.getPlayers().keySet()));
+                    TeamFlag<ABTeam> flag = new TeamFlag<>(te, mh);
                     flag.getDisplayNames()[0] = sec.getString(k+".display_name.valid");
                     flag.getDisplayNames()[1] = sec.getString(k+".display_name.invalid");
                     flag.getDisplayNames()[2] = sec.getString(k+".display_name.neutral");
@@ -172,24 +192,17 @@ public class CTFController extends TeamDeathmatchController {
         LocalGame game = plugin.gameManager.getGame(event.getPlayer());
         if(game != null){
             if(game.getMode() != getMode()) return;
-            if(!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_"+event.getPlayer().getName())) return;
-            List<Entity> entities = event.getPlayer().getNearbyEntities(1, 1, 1);
-            for(Entity e : entities){
-                if(e instanceof ArmorStand && e.hasMetadata("abm_ctf_flag")){
-                    List<MetadataValue> metadata = e.getMetadata("abm_ctf_flag");
-                    for(MetadataValue v : metadata){
-                        if(!v.getOwningPlugin().equals(plugin)) continue;
-                        int id = v.asInt();
-                        Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-                        Optional<TeamFlag<ABTeam>> of = flags.stream().skip(id).findFirst();
-                        of.ifPresent(flag -> {
-                            if(event.isSneaking())
-                                startOccupyFlag(game, flag, event.getPlayer());
-                            else
-                                stopOccupyFlag(game, flag, event.getPlayer());
-                        });
-                        break;
-                    }
+            if(!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_"+event.getPlayer().getName())){
+                return;
+            }
+            Location loc = event.getPlayer().getLocation();
+            Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
+            for(TeamFlag<ABTeam> flag : flags){
+                if(flag.getArmorStand().getLocation().distanceSquared(loc) >= 3) continue;
+                if(event.isSneaking()) {
+                    startOccupyFlag(game, flag, event.getPlayer());
+                } else {
+                    stopOccupyFlag(game, flag, event.getPlayer());
                 }
             }
         }
@@ -200,7 +213,8 @@ public class CTFController extends TeamDeathmatchController {
         super.onEnd(localGame);
 
         FLAG.removeAll(localGame).forEach(f -> {
-            f.getArmorStand().remove();
+            f.getArmorStand().kill();
+            plugin.extension.untrackEntity(f.getArmorStand());
             f.reset();
         });
     }

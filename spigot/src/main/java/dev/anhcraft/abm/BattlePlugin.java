@@ -55,6 +55,7 @@ import dev.anhcraft.abm.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.abm.tasks.*;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.craftkit.CraftExtension;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
@@ -115,6 +116,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private File localeDir;
+    public CraftExtension extension;
     public ChatManager chatManager;
     public TitleManager titleProvider;
     public GameManager gameManager;
@@ -167,6 +169,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             getLogger().info("Hooked to SlimeWorldManager");
         }
 
+        extension = CraftExtension.of(BattlePlugin.class);
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
         taskHelper = new TaskHelper(this);
@@ -282,6 +285,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             if(entity.hasMetadata("abm_temp_entity")) entity.remove();
         });
         dataManager.destroy();
+        CraftExtension.unregister(BattlePlugin.class);
     }
 
     public FileConfiguration getSystemConf(){

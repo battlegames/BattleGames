@@ -20,13 +20,14 @@
 
 package dev.anhcraft.abm.api.game;
 
-import dev.anhcraft.abm.api.misc.Resettable;
 import dev.anhcraft.abm.api.misc.BattleSound;
+import dev.anhcraft.abm.api.misc.Resettable;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.misc.info.Informative;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
+import dev.anhcraft.craftkit.entity.ArmorStand;
+import dev.anhcraft.craftkit.entity.TrackedEntity;
 import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,7 @@ import java.util.function.UnaryOperator;
 public class TeamFlag<T extends Enum & Team> implements Informative, Resettable {
     private final String[] displayNames = new String[3];
     private final AtomicInteger health = new AtomicInteger();
-    private final ArmorStand armorStand;
+    private final TrackedEntity<ArmorStand> armorStand;
     private boolean valid;
     private T team;
     private int maxHealth;
@@ -45,7 +46,7 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
     private BattleSound captureStartSound;
     private BattleSound captureStopSound;
 
-    public TeamFlag(@NotNull ArmorStand armorStand, int maxHealth) {
+    public TeamFlag(@NotNull TrackedEntity<ArmorStand> armorStand, int maxHealth) {
         Condition.argNotNull("armorStand", armorStand);
         this.armorStand = armorStand;
         this.maxHealth = maxHealth;
@@ -61,7 +62,7 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
     }
 
     @NotNull
-    public ArmorStand getArmorStand() {
+    public TrackedEntity<ArmorStand> getArmorStand() {
         return armorStand;
     }
 
@@ -93,7 +94,8 @@ public class TeamFlag<T extends Enum & Team> implements Informative, Resettable 
 
     public void updateDisplayName(UnaryOperator<String> uo){
         String n = uo.apply(displayNames[team != null ? (valid ? 0 : 1) : 2]);
-        armorStand.setCustomName(ChatUtil.formatColorCodes(n));
+        armorStand.getEntity().setName(ChatUtil.formatColorCodes(n));
+        armorStand.getEntity().sendUpdate();
     }
 
     public int getMaxHealth() {
