@@ -31,9 +31,9 @@ import java.io.File;
 public class DocGen {
     public static void main(String[] args){
         new ConfigDoc()
-                .withSchema(PreparedItem.SCHEMA)
-                .withSchema(Modifier.SCHEMA)
-                .withSchema(ItemModifier.SCHEMA)
+                .withSchemaOf(PreparedItem.class)
+                .withSchemaOf(Modifier.class)
+                .withSchemaOf(ItemModifier.class)
                 .withSchema(Kit.SCHEMA)
                 .withSchema(BattleParticle.SCHEMA)
                 .withSchema(ItemSkin.SCHEMA)

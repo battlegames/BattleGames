@@ -167,7 +167,7 @@ public class Kit extends ConfigurableObject {
                     int i = 0;
                     for(String s : keys){
                         try {
-                            vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), PreparedItem.SCHEMA);
+                            vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), ConfigSchema.of(PreparedItem.class));
                         } catch (InvalidValueException e) {
                             e.printStackTrace();
                         }
@@ -198,7 +198,7 @@ public class Kit extends ConfigurableObject {
                     int i = 0;
                     for(PreparedItem item : (PreparedItem[]) o){
                         YamlConfiguration c = new YamlConfiguration();
-                        ConfigHelper.writeConfig(c, PreparedItem.SCHEMA, item);
+                        ConfigHelper.writeConfig(c, ConfigSchema.of(PreparedItem.class), item);
                         parent.set(String.valueOf(i++), c);
                     }
                     return parent;
