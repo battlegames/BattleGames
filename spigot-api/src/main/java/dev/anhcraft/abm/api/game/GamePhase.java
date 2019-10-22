@@ -28,16 +28,15 @@ public enum GamePhase {
      */
     WAITING,
     /**
-     * Players are playing during this phase.<br>
-     * The parameter {@code playable} isn't totally correct since some modes prevent you from joining it in this phase.
+     * Players are playing during this phase.
      */
     PLAYING,
     /**
-     * The game is finished now.<br>
+     * The game is finished now.
      */
     END,
     /**
-     * The server puts the room into the queue and cleans it.
+     * The server put the arena into the cleaning queue.
      */
     CLEANING
 }
