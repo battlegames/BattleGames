@@ -189,7 +189,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public boolean quit(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            LocalGame localGame = PLAYER_GAME_MAP.remove(player.getUniqueId());
+            LocalGame localGame = PLAYER_GAME_MAP.get(player.getUniqueId()); // don't remove instantly! we'll handle later
             if (localGame == null) return false;
             // don't save the player data here!!!
             // plugin.getPlayerData(player);
@@ -205,6 +205,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                     break;
                 }
             }
+            PLAYER_GAME_MAP.remove(player.getUniqueId());
             if(localGame.getPlayerCount() == 0) {
                 if(localGame.getPhase() == GamePhase.END) {
                     localGame.setPhase(GamePhase.CLEANING);
