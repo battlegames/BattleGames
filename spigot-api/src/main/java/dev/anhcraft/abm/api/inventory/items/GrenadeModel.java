@@ -62,6 +62,27 @@ public class GrenadeModel extends SingleSkinWeapon {
     })
     private int inventorySlot;
 
+    @Key("fire.block_radius")
+    @Explanation({
+            "The radius that inner blocks get ignited",
+            "Set to 0 to prevent the fire (for blocks)"
+    })
+    private int fireBlockRadius;
+
+    @Key("fire.mob_radius")
+    @Explanation({
+            "The radius that inner mobs get ignited",
+            "Set to 0 to prevent the fire (for mobs)"
+    })
+    private double fireMobRadius;
+
+    @Key("fire.mob_ticks")
+    @Explanation({
+            "How long do mobs get ignited",
+            "Set to 0 to prevent the fire (for mobs)"
+    })
+    private int fireMobTicks;
+
     public GrenadeModel(@NotNull String id) {
         super(id);
     }
@@ -99,5 +120,17 @@ public class GrenadeModel extends SingleSkinWeapon {
         holder.inform("delay_time", delayTime)
                 .inform("velocity_multiplier", velocityMultiplier)
                 .inform("explosion_power", explosionPower);
+    }
+
+    public int getFireBlockRadius() {
+        return fireBlockRadius;
+    }
+
+    public double getFireMobRadius() {
+        return fireMobRadius;
+    }
+
+    public int getFireMobTicks() {
+        return fireMobTicks;
     }
 }

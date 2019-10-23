@@ -25,9 +25,13 @@ import dev.anhcraft.abm.api.inventory.items.Grenade;
 import dev.anhcraft.abm.api.inventory.items.GrenadeModel;
 import dev.anhcraft.abm.tasks.EntityTrackingTask;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -71,8 +75,28 @@ public class GrenadeHandler extends Handler {
                     Location eloc = entity.getLocation();
                     plugin.taskHelper.newTask(() -> {
                         entity.remove();
-                        if(gm.getExplosionPower() > 0)
+                        if(gm.getExplosionPower() > 0) {
                             entity.getWorld().createExplosion(eloc.getX(), eloc.getY(), eloc.getZ(), (float) gm.getExplosionPower(), false, false);
+                        }
+                        int fbr = gm.getFireBlockRadius();
+                        if(fbr > 0) {
+                            for (Block b : BlockUtil.getNearbyBlocks(eloc, fbr, 1, fbr)) {
+                                if (b.getType() == Material.AIR || b.getType().name().endsWith("_AIR")) {
+                                    b.setType(Material.FIRE);
+                                }
+                            }
+                        }
+                        double fmr = gm.getFireMobRadius();
+                        int fmt = gm.getFireMobTicks();
+                        if(fmr > 0 && fmt > 0) {
+                            eloc.getWorld().getNearbyEntities(eloc, fmr, fmr, fmr).forEach(c -> {
+                                if(c.getEntityId() != player.getEntityId()
+                                        && c.getEntityId() != entity.getEntityId()
+                                        && c instanceof LivingEntity){
+                                    entity.setFireTicks(fmt);
+                                }
+                            });
+                        }
                     });
                     if(gm.getExplosionEffect() != null)
                         gm.getExplosionEffect().spawn(eloc);

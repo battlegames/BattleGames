@@ -30,3 +30,16 @@ grenade3:
   explosion_power: 6
   velocity_multiplier: 3
   inventory_slot: 2
+
+grenade4:
+  name: "&cFire &fGrenade"
+  skin:
+    material: shears
+    damage: 1
+  delay_time: 70
+  velocity_multiplier: 2.5
+  inventory_slot: 2
+  fire:
+    mob_ticks: 100
+    mob_radius: 3.5
+    block_radius: 2
