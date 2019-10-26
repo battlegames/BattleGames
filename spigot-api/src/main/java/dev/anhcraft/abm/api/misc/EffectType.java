@@ -44,7 +44,7 @@ public enum EffectType {
                 for (double rad2 = 0; rad2 < 2 * Math.PI; rad2 += delta) {
                     double x = Math.cos(rad2) * r; // tìm ra x
                     double z = Math.sin(rad2) * r; // tìm ra z
-                    bf.getParticle().spawn(loc.clone().add(x, y, z));
+                    bf.spawn(loc.clone().add(x, y, z));
                 }
             }
         }
@@ -58,7 +58,7 @@ public enum EffectType {
             for(double rad2 = 0; rad2 < 2 * Math.PI; rad2 += delta){
                 double x = Math.cos(rad2) * r;
                 double z = Math.sin(rad2) * r;
-                bf.getParticle().spawn(loc.clone().add(x, y, z));
+                bf.spawn(loc.clone().add(x, y, z));
             }
         }
     });

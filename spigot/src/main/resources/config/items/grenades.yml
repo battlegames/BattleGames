@@ -43,3 +43,20 @@ grenade4:
     mob_ticks: 100
     mob_radius: 3.5
     block_radius: 2
+
+grenade5:
+  name: "&7Smoke &aGrenade"
+  skin:
+    material: shears
+    damage: 1
+  velocity_multiplier: 2.4
+  inventory_slot: 2
+  explosion_effect:
+    particle:
+      type: smoke_large
+      count: 3
+    type: sphere
+    options:
+      repeat_delay: 20
+      repeat_times: 10
+      sphere_radius: 3

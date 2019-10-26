@@ -22,6 +22,8 @@ package dev.anhcraft.abm.api.misc;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.utils.EnumUtil;
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +38,11 @@ public class BattleEffect extends ConfigurableObject {
 
     @Key("particle")
     @Explanation("The particle that used to make up this effect")
-    @Validation(notNull = true)
     private BattleParticle particle;
+
+    @Key("block_effect")
+    @Explanation("Fake block effect")
+    private FakeBlockEffect blockEffect;
 
     @Key("type")
     @Explanation("The effect's type")
@@ -65,9 +70,14 @@ public class BattleEffect extends ConfigurableObject {
         return type;
     }
 
-    @NotNull
+    @Nullable
     public BattleParticle getParticle() {
         return particle;
+    }
+
+    @Nullable
+    public FakeBlockEffect getBlockEffect() {
+        return blockEffect;
     }
 
     @Nullable
@@ -96,5 +106,15 @@ public class BattleEffect extends ConfigurableObject {
             return cs;
         }
         return value;
+    }
+
+    public void spawn(@NotNull Location location){
+        Condition.argNotNull("location", location);
+        if(particle != null){
+            particle.spawn(location);
+        }
+        if(blockEffect != null){
+            blockEffect.spawn(location);
+        }
     }
 }
