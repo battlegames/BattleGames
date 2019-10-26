@@ -54,10 +54,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class GameManager extends BattleComponent implements BattleGameManager {
-    public final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
+    private final Map<Arena, Game> ARENA_GAME_MAP = new ConcurrentHashMap<>();
     private final Map<UUID, LocalGame> PLAYER_GAME_MAP = new HashMap<>();
     private final Object LOCK = new Object();
-    public final GameCleaner cleaner;
+    private final GameCleaner cleaner;
 
     public GameManager(BattlePlugin plugin) {
         super(plugin);
@@ -189,30 +189,30 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public boolean quit(@NotNull Player player){
         Condition.argNotNull("player", player);
         synchronized (LOCK) {
-            LocalGame localGame = PLAYER_GAME_MAP.get(player.getUniqueId()); // don't remove instantly! we'll handle later
-            if (localGame == null) return false;
+            LocalGame game = PLAYER_GAME_MAP.get(player.getUniqueId()); // don't remove instantly! we'll handle later
+            if (game == null) return false;
             // don't save the player data here!!!
             // plugin.getPlayerData(player);
-            localGame.getMode().getController(c -> c.onQuit(player, localGame));
-            GamePlayer gp = localGame.getPlayer(player);
+            game.getMode().getController(c -> c.onQuit(player, game));
+            GamePlayer gp = game.getPlayer(player);
             if(gp == null) return false;
-            Bukkit.getPluginManager().callEvent(new GameQuitEvent(localGame, gp));
-            localGame.getPlayers().remove(player);
-            Multiset<String> servers = localGame.getDownstreamServers().keys();
+            Bukkit.getPluginManager().callEvent(new GameQuitEvent(game, gp));
+            game.getPlayers().remove(player);
+            Multiset<String> servers = game.getDownstreamServers().keys();
             for(String s : servers) {
-                if (localGame.getDownstreamServers().remove(s, player)) {
+                if (game.getDownstreamServers().remove(s, player)) {
                     plugin.queueServerTask.QUEUE.add(new QueueServer(player, plugin.getLobbyServers(), null));
                     break;
                 }
             }
             PLAYER_GAME_MAP.remove(player.getUniqueId());
-            if(localGame.getPlayerCount() == 0) {
-                if(localGame.getPhase() == GamePhase.END) {
-                    localGame.setPhase(GamePhase.CLEANING);
-                    cleaner.newSession(localGame.getArena(), ARENA_GAME_MAP::remove);
+            if(game.getPlayerCount() == 0) {
+                if(game.getPhase() == GamePhase.PLAYING || game.getPhase() == GamePhase.END) {
+                    game.setPhase(GamePhase.CLEANING);
+                    cleaner.newSession(game.getArena(), ARENA_GAME_MAP::remove);
                 } else {
-                    localGame.setPhase(GamePhase.END);
-                    ARENA_GAME_MAP.remove(localGame.getArena());
+                    game.setPhase(GamePhase.END);
+                    ARENA_GAME_MAP.remove(game.getArena());
                 }
             }
             return true;
@@ -228,7 +228,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                     Bukkit.getPluginManager().callEvent(new GameQuitEvent(game, gp));
                     PLAYER_GAME_MAP.remove(player.getUniqueId());
                 });
-                if(game.getPhase() == GamePhase.END) {
+                if(game.getPhase() == GamePhase.PLAYING || game.getPhase() == GamePhase.END) {
                     game.setPhase(GamePhase.CLEANING);
                     cleaner.newSession(game.getArena(), ARENA_GAME_MAP::remove);
                     return;
