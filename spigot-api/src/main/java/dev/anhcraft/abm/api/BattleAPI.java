@@ -21,15 +21,19 @@ package dev.anhcraft.abm.api;
 
 import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.BattleEffect;
 import dev.anhcraft.abm.api.misc.Kit;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.api.storage.data.ServerData;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public interface BattleAPI {
@@ -325,4 +329,11 @@ public interface BattleAPI {
      * @return {@code true} if it has or {@code false} otherwise
      */
     boolean hasSlimeWorldManagerSupport();
+
+    /**
+     * Plays the given effect.
+     * @param location where the effect will be seen
+     * @param effect the effect
+     */
+    void playEffect(@NotNull Location location, @NotNull BattleEffect effect);
 }

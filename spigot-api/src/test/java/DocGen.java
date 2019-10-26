@@ -46,6 +46,7 @@ public class DocGen {
                 .withSchema(ScopeModel.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
+                .withSchema(BattleEffect.SCHEMA)
                 .withSchema(Arena.SCHEMA)
                 .withSchema(Rollback.SCHEMA)
                 .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")

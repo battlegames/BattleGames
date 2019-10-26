@@ -31,6 +31,8 @@ import dev.anhcraft.abm.api.game.LocalGame;
 import dev.anhcraft.abm.api.game.Mode;
 import dev.anhcraft.abm.api.gui.Gui;
 import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.BattleEffect;
+import dev.anhcraft.abm.api.misc.EffectOption;
 import dev.anhcraft.abm.api.misc.Kit;
 import dev.anhcraft.abm.api.misc.info.*;
 import dev.anhcraft.abm.api.storage.StorageType;
@@ -64,6 +66,7 @@ import dev.anhcraft.jvmkit.utils.*;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -80,6 +83,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -888,6 +893,26 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public boolean hasSlimeWorldManagerSupport() {
         return slimeWorldManagerSupport;
+    }
+
+    @Override
+    public void playEffect(@NotNull Location location, @NotNull BattleEffect effect) {
+        Number delayTime = ((Number) effect.getOptions().getOrDefault(EffectOption.REPEAT_DELAY, 0));
+        int maxRepeat = (int) effect.getOptions().getOrDefault(EffectOption.REPEAT_TIMES, 0);
+        BiConsumer<Location, BattleEffect> consumer = effect.getType().getEffectConsumer();
+        AtomicInteger id = new AtomicInteger();
+        id.set(taskHelper.newAsyncTimerTask(new Runnable() {
+            private int counter;
+
+            @Override
+            public void run() {
+                if(counter++ == maxRepeat){
+                    taskHelper.cancelTask(id.get());
+                    return;
+                }
+                consumer.accept(location, effect);
+            }
+        }, 0, delayTime.longValue()));
     }
 
     private void exit(String msg) {

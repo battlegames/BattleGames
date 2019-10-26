@@ -20,7 +20,7 @@
 
 package dev.anhcraft.abm.api.inventory.items;
 
-import dev.anhcraft.abm.api.misc.BattleParticle;
+import dev.anhcraft.abm.api.misc.BattleEffect;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
@@ -33,9 +33,9 @@ import org.jetbrains.annotations.Nullable;
 public class GrenadeModel extends SingleSkinWeapon {
     public static final ConfigSchema<GrenadeModel> SCHEMA = ConfigSchema.of(GrenadeModel.class);
 
-    @Key("explosion_effect.particle")
+    @Key("explosion_effect")
     @Explanation("The explosion effect")
-    private BattleParticle explosionEffect;
+    private BattleEffect explosionEffect;
 
     @Key("delay_time")
     @Explanation({
@@ -102,7 +102,7 @@ public class GrenadeModel extends SingleSkinWeapon {
     }
 
     @Nullable
-    public BattleParticle getExplosionEffect() {
+    public BattleEffect getExplosionEffect() {
         return explosionEffect;
     }
 
@@ -119,7 +119,10 @@ public class GrenadeModel extends SingleSkinWeapon {
         super.inform(holder);
         holder.inform("delay_time", delayTime)
                 .inform("velocity_multiplier", velocityMultiplier)
-                .inform("explosion_power", explosionPower);
+                .inform("explosion_power", explosionPower)
+                .inform("fire_block_radius", fireBlockRadius)
+                .inform("fire_mob_radius", fireMobRadius)
+                .inform("fire_mob_ticks", fireMobTicks);
     }
 
     public int getFireBlockRadius() {

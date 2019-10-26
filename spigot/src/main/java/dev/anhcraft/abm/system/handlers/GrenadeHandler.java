@@ -98,8 +98,9 @@ public class GrenadeHandler extends Handler {
                             });
                         }
                     });
-                    if(gm.getExplosionEffect() != null)
-                        gm.getExplosionEffect().spawn(eloc);
+                    if(gm.getExplosionEffect() != null){
+                        plugin.playEffect(eloc, gm.getExplosionEffect());
+                    }
                 }
             }
 
