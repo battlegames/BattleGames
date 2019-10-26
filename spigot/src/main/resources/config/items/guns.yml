@@ -26,6 +26,7 @@ ak_47:
       color: green
       style: segmented_20
   spray_pattern:
+    - "0 0"
     - "1.05 1.3"
     - "1.45 1.9"
     - "1.75 3"
@@ -33,7 +34,6 @@ ak_47:
     - "0.45 3.9"
     - "-0.25 4.4"
     - "-1.05 4.8"
-    - "-1.45 5.7"
     - "-1.45 6.8"
     - "-1.25 7.6"
     - "-0.65 8.3"
@@ -74,10 +74,10 @@ desert_eagle:
       title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
       color: red
   spray_pattern:
+    - "0 0"
     - "1.65 0.6"
     - "0.15 1.6"
     - "-4.45 6.3"
     - "1.75 5.2"
-    - "3.05 4.3"
     - "3.65 7.2"
     - "-1.35 11.5"
