@@ -143,6 +143,7 @@ public interface BattleAPI {
      * @param id the id of the ammo
      * @return {@link AmmoModel} if found or null if not
      */
+    @Nullable
     AmmoModel getAmmoModel(@Nullable String id);
 
     /**
@@ -150,6 +151,7 @@ public interface BattleAPI {
      * @param id the id of the gun
      * @return {@link GunModel} if found or null if not
      */
+    @Nullable
     GunModel getGunModel(@Nullable String id);
 
     /**
@@ -157,6 +159,7 @@ public interface BattleAPI {
      * @param id the id of the magazine
      * @return {@link MagazineModel} if found or null if not
      */
+    @Nullable
     MagazineModel getMagazineModel(@Nullable String id);
 
     /**
@@ -164,6 +167,7 @@ public interface BattleAPI {
      * @param id the id of the scope
      * @return {@link ScopeModel} if found or null if not
      */
+    @Nullable
     ScopeModel getScopeModel(@Nullable String id);
 
     /**
@@ -171,6 +175,7 @@ public interface BattleAPI {
      * @param id the id of the grenade
      * @return {@link GrenadeModel} if found or null if not
      */
+    @Nullable
     GrenadeModel getGrenadeModel(@Nullable String id);
 
     /**
@@ -178,6 +183,7 @@ public interface BattleAPI {
      * @param id the id of the kit
      * @return {@link Kit} if found or null if not
      */
+    @Nullable
     Kit getKit(@Nullable String id);
 
     /**
