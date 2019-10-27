@@ -28,7 +28,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 @Schema
-public class FakeBlockEffect {
+public class FakeBlockEffect extends ConfigurableObject {
     public static final ConfigSchema<FakeBlockEffect> SCHEMA = ConfigSchema.of(FakeBlockEffect.class);
 
     @Key("material")

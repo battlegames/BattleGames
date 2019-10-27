@@ -25,7 +25,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
 @Schema
-public class BattleBar {
+public class BattleBar extends ConfigurableObject {
     public static final ConfigSchema<BattleBar> SCHEMA = ConfigSchema.of(BattleBar.class);
 
     @Key("primary")

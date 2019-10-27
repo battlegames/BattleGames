@@ -26,7 +26,7 @@ import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
 @Schema
-public class BattleParticle {
+public class BattleParticle extends ConfigurableObject {
     public static final ConfigSchema<BattleParticle> SCHEMA = ConfigSchema.of(BattleParticle.class);
 
     @Key("type")

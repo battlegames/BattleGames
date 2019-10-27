@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Schema
-public class BattleFireworkEffect {
+public class BattleFireworkEffect extends ConfigurableObject {
     public static ConfigSchema<BattleFireworkEffect> SCHEMA = ConfigSchema.of(BattleFireworkEffect.class);
 
     @Key("type")

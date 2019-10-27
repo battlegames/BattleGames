@@ -27,7 +27,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 @Schema
-public class ItemSkin {
+public class ItemSkin extends ConfigurableObject {
     public static final ConfigSchema<ItemSkin> SCHEMA = ConfigSchema.of(ItemSkin.class);
 
     @Key("material")
