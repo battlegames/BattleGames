@@ -34,6 +34,7 @@ import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.BattleEffect;
 import dev.anhcraft.abm.api.misc.EffectOption;
 import dev.anhcraft.abm.api.misc.Kit;
+import dev.anhcraft.abm.api.misc.Perk;
 import dev.anhcraft.abm.api.misc.info.*;
 import dev.anhcraft.abm.api.storage.StorageType;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
@@ -107,7 +108,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "items/grenades.yml",
             "items/items.yml",
             "gui.yml " + (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"),
-            "kits.yml"
+            "kits.yml",
+            "perks.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
@@ -116,6 +118,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, GunModel> GUN_MAP = new HashMap<>();
     private final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
     private final Map<String, Kit> KIT_MAP = new HashMap<>();
+    private final Map<String, Perk> PERK_MAP = new HashMap<>();
     private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
     private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
@@ -198,6 +201,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         //initItem(CONFIG[10]);
         initGui(CONFIG[11]);
         initKits(CONFIG[12]);
+        initPerks(CONFIG[13]);
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -256,6 +260,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
                 return GRENADE_MAP.keySet();
+            }
+        });
+        manager.getCommandCompletions().registerAsyncCompletion("perk", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return PERK_MAP.keySet();
             }
         });
     }
@@ -343,6 +353,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     public FileConfiguration getKitConf(){
         return CONFIG[12];
+    }
+
+    public FileConfiguration getPerkConf(){
+        return CONFIG[13];
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
@@ -618,6 +632,19 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         });
     }
 
+    private void initPerks(FileConfiguration c) {
+        c.getKeys(false).forEach(s -> {
+            Perk perk = new Perk(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, Perk.SCHEMA, perk);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            PERK_MAP.put(s, perk);
+        });
+    }
+
     public void resetScoreboard(Player player) {
         if(getGeneralConf().getBoolean("default_scoreboard.enabled")) {
             String title = getGeneralConf().getString("default_scoreboard.title");
@@ -766,6 +793,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return KIT_MAP.get(id);
     }
 
+    @Override
+    public @Nullable Perk getPerk(@Nullable String id) {
+        return PERK_MAP.get(id);
+    }
+
     @NotNull
     @Override
     public List<Arena> listArenas() {
@@ -847,6 +879,18 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public void listKits(@NotNull Consumer<Kit> consumer) {
         Condition.argNotNull("consumer", consumer);
         KIT_MAP.values().forEach(consumer);
+    }
+
+    @Override
+    @NotNull
+    public List<Perk> listPerks() {
+        return ImmutableList.copyOf(PERK_MAP.values());
+    }
+
+    @Override
+    public void listPerks(@NotNull Consumer<Perk> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        PERK_MAP.values().forEach(consumer);
     }
 
     @Override

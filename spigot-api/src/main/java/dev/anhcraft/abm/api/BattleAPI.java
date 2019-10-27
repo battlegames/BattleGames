@@ -23,6 +23,7 @@ import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.BattleEffect;
 import dev.anhcraft.abm.api.misc.Kit;
+import dev.anhcraft.abm.api.misc.Perk;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.api.storage.data.ServerData;
@@ -187,6 +188,14 @@ public interface BattleAPI {
     Kit getKit(@Nullable String id);
 
     /**
+     * Gets the perk that matches the given id.
+     * @param id the id of the perk
+     * @return {@link Perk} if found or null if not
+     */
+    @Nullable
+    Perk getPerk(@Nullable String id);
+
+    /**
      * Lists all registered arenas.
      * @return an immutable list of arenas
      */
@@ -276,6 +285,19 @@ public interface BattleAPI {
      * @param consumer the consumer
      */
     void listKits(@NotNull Consumer<Kit> consumer);
+
+    /**
+     * Lists all registered perks.
+     * @return an immutable list of perks
+     */
+    @NotNull
+    List<Perk> listPerks();
+
+    /**
+     * Lists all perks and gets them.
+     * @param consumer the consumer
+     */
+    void listPerks(@NotNull Consumer<Perk> consumer);
 
     /**
      * Gets the game manager.

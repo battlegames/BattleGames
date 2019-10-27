@@ -22,31 +22,28 @@ import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.inventory.items.*;
 import dev.anhcraft.abm.api.misc.*;
 import dev.anhcraft.confighelper.ConfigDoc;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.attribute.ItemModifier;
-import dev.anhcraft.craftkit.attribute.Modifier;
 
 import java.io.File;
 
 public class DocGen {
     public static void main(String[] args){
         new ConfigDoc()
-                .withSchemaOf(PreparedItem.class)
-                .withSchemaOf(Modifier.class)
-                .withSchemaOf(ItemModifier.class)
-                .withSchema(Kit.SCHEMA)
-                .withSchema(BattleParticle.SCHEMA)
-                .withSchema(ItemSkin.SCHEMA)
-                .withSchema(BattleBar.SCHEMA)
-                .withSchema(AmmoModel.SCHEMA)
                 .withSchema(Ammo.Bullet.SCHEMA)
+                .withSchema(AmmoModel.SCHEMA)
+                .withSchema(MagazineModel.SCHEMA)
                 .withSchema(GrenadeModel.SCHEMA)
                 .withSchema(GunModel.SCHEMA)
-                .withSchema(MagazineModel.SCHEMA)
                 .withSchema(ScopeModel.SCHEMA)
+                .withSchema(Kit.SCHEMA)
+                .withSchema(ItemSkin.SCHEMA)
+                .withSchema(BattleBar.SCHEMA)
+                .withSchema(BattleEffect.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
-                .withSchema(BattleEffect.SCHEMA)
+                .withSchema(BattlePotionEffect.SCHEMA)
+                .withSchema(BattleParticle.SCHEMA)
+                .withSchema(FakeBlockEffect.SCHEMA)
+                .withSchema(Perk.SCHEMA)
                 .withSchema(Arena.SCHEMA)
                 .withSchema(Rollback.SCHEMA)
                 .addJavadoc("dev.anhcraft.abm.*", "https://anhcraft.dev/jd/battle")

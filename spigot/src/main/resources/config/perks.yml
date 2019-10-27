@@ -1,0 +1,41 @@
+# This configuration is a part of ABM
+# https://wiki.anhcraft.dev/en/battle/perk
+
+speed:
+  name: "&aSpeed"
+  description:
+    - "&eThis perk&f increases the movement speed"
+    - "&eAvailable until the game ends"
+  executions:
+    give_effects:
+      '1':
+        type: speed
+        duration: 99999
+        particles: false
+
+speed_plus:
+  name: "&aSpeed+"
+  description:
+    - "&eThis perk&f increases the movement speed"
+    - "&eAvailable until the game ends"
+  executions:
+    give_effects:
+      '1':
+        type: speed
+        amplifier: 1
+        duration: 99999
+        particles: false
+
+health_boost:
+  name: "&dHealth boost"
+  description:
+    - "&fBoost your health!"
+  executions:
+    set_health: 20
+
+no_hunger:
+  name: "&bNo hunger"
+  description:
+    - "&4Stop your hunger!"
+  executions:
+    set_food_level: 20

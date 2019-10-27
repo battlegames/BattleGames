@@ -21,36 +21,46 @@
 package dev.anhcraft.abm.api.misc;
 
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
-import org.bukkit.Color;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public enum BattleColor {
-    WHITE,
-    SILVER,
-    GRAY,
-    BLACK,
-    RED,
-    MAROON,
-    YELLOW,
-    OLIVE,
-    LIME,
-    GREEN,
-    AQUA,
-    TEAL,
-    BLUE,
-    NAVY,
-    FUCHSIA,
-    PURPLE,
-    ORANGE;
+public enum BattlePotionEffectType {
+    SPEED,
+    SLOW,
+    FAST_DIGGING,
+    SLOW_DIGGING,
+    INCREASE_DAMAGE,
+    HEAL,
+    HARM,
+    JUMP,
+    CONFUSION,
+    REGENERATION,
+    DAMAGE_RESISTANCE,
+    FIRE_RESISTANCE,
+    WATER_BREATHING,
+    INVISIBILITY,
+    BLINDNESS,
+    NIGHT_VISION,
+    HUNGER,
+    WEAKNESS,
+    POISON,
+    WITHER,
+    HEALTH_BOOST,
+    ABSORPTION,
+    SATURATION,
+    GLOWING,
+    LEVITATION,
+    LUCK,
+    UNLUCK;
 
-    private Color color;
+    private PotionEffectType potionEffectType;
 
-    BattleColor(){
-        color = (Color) ReflectionUtil.getStaticField(Color.class, name());
+    BattlePotionEffectType(){
+        potionEffectType = (PotionEffectType) ReflectionUtil.getStaticField(PotionEffectType.class, name());
     }
 
     @NotNull
-    public Color asBukkitColor(){
-        return color;
+    public PotionEffectType asBukkit(){
+        return potionEffectType;
     }
 }

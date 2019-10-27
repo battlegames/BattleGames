@@ -86,6 +86,9 @@ gun:
   out_of_ammo: "&cThis gun is out of ammunition."
   reloading_warn: "&cYou are reloading gun ammo!"
   none_scope_message: "&cNo scope is attached to this gun!"
+perks:
+  not_found: "&cCouldn't find that perk"
+  given: "&aThe perk was given to player &f%s"
 items:
   not_found: "&cCouldn't find that item"
   given: "&aGiven item &e(%s)&a to %s"

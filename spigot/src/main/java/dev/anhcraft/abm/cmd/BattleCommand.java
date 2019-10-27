@@ -26,6 +26,7 @@ import dev.anhcraft.abm.BattlePlugin;
 import dev.anhcraft.abm.api.game.Arena;
 import dev.anhcraft.abm.api.game.Game;
 import dev.anhcraft.abm.api.inventory.items.*;
+import dev.anhcraft.abm.api.misc.Perk;
 import dev.anhcraft.abm.api.misc.info.InfoHolder;
 import dev.anhcraft.abm.api.storage.data.PlayerData;
 import dev.anhcraft.abm.utils.LocationUtil;
@@ -236,6 +237,19 @@ public class BattleCommand extends BaseCommand{
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
+    }
+
+    @Subcommand("give perk")
+    @CommandPermission("abm.give.perk")
+    @CommandCompletion("@perk @players")
+    public void givePerk(Player player, String id, @Optional Player target){
+        target = (target == null ? player : target);
+        Perk perk = plugin.getPerk(id);
+        if(perk != null) {
+            perk.give(target);
+            String receiver = target.getName();
+            plugin.chatManager.sendPlayer(player, "perks.given", str -> String.format(str, receiver));
+        } else plugin.chatManager.sendPlayer(player, "perks.not_found");
     }
 
     @Subcommand("inv")
