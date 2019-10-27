@@ -1,4 +1,4 @@
 name: Battle
-main: dev.anhcraft.abm.BattlePlugin
+main: dev.anhcraft.battle.BattlePlugin
 version: ${project.version}
 author: anhcraft

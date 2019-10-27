@@ -1,4 +1,4 @@
-# This configuration is a part of ABM
+# This configuration is a part of BattleGames
 
 # ================= EXTRA =================
 # You dont need to configure here!
@@ -549,7 +549,7 @@ arena_chooser:
 # Sections below are for players inventory
 # Note: Slots from 0 to 9 will be displayed
 # on the hot-bar.
-# ABM only overrides items that were defined.
+# The plugin only overrides items that were defined.
 # Remaining will not get affected.
 
 main_player_inv:

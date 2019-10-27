@@ -1,4 +1,4 @@
-# This configuration is a part of ABM
+# This configuration is a part of BattleGames
 
 # Here you can specify the path to the configuration folder which contains
 # general.yml, arenas.yml, locale files, etc (except this file).
@@ -20,7 +20,7 @@ remote_config:
   # The URL
   # Use %s to replace the file name (e.g: arenas.yml, kits.yml, gui.yml, etc)
   # [required]
-  url: "http://localhost/abm/config/%s"
+  url: "http://localhost/battle/config/%s"
 
 # DON'T TOUCH ANYTHING BELOW!
 config_version: ${config.version}

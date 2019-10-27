@@ -2,7 +2,7 @@ name: Battle
 description: ${project.parent.description}
 author: anhcraft
 version: ${project.version}
-main: dev.anhcraft.abm.BattlePlugin
+main: dev.anhcraft.battle.BattlePlugin
 api-version: "1.13"
 depend: [CraftKit, PlaceholderAPI, Vault]
 softdepend: [SlimeWorldManager]

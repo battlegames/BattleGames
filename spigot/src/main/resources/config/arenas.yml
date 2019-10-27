@@ -1,5 +1,5 @@
-# This configuration is a part of ABM
-# https://anhcraft.dev/cd/abm/Arena.html
+# This configuration is a part of BattleGames
+# https://anhcraft.dev/cd/battle/Arena.html
 
 dm_demo:
   name: "&aExample Arena 1"
@@ -26,9 +26,9 @@ dm_demo:
     respawn_waiting_time: 200
   end_commands:
     winners:
-      - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
+      - "msg %player_name% &aYour last K/D ratio: &e<? (%battle_game_stats_kills%+1)/(%battle_game_stats_deaths%+1) ?>"
     losers:
-      - "msg %player_name% &aYour last K/D ratio: &e<? (%abm_game_stats_kills%+1)/(%abm_game_stats_deaths%+1) ?>"
+      - "msg %player_name% &aYour last K/D ratio: &e<? (%battle_game_stats_kills%+1)/(%battle_game_stats_deaths%+1) ?>"
   render_gui_on_death: true
   end_firework:
     power: 3

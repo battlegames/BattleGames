@@ -1,12 +1,12 @@
-# This configuration is a part of ABM
+# This configuration is a part of BattleGames
 # General plugin configuration
 
-# The locale file which ABM uses for messages and texts
+# The locale file which are used for messages and texts
 # Available: en_us.yml, vi.yml
 locale: "en_us.yml"
 
 
-# Date format to be used by ABM
+# Date format
 # Read more about the date format here:
 # https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 date_format:
@@ -47,14 +47,14 @@ default_scoreboard:
   # [placeholder supported] [maximum lines: 15]
   content:
     - "&a&f"
-    - "%abm_icon_user% &aName:&r &b%player_displayname%"
-    - "%abm_icon_medal% &aLevel:&r &b%abm_level% (%abm_level_progress%%)"
-    - "%abm_icon_money_bag% &aMoney:&r &b$%vault_eco_balance_formatted%"
-    - "%abm_icon_gold_cup% &aW/L:&r &b%abm_stats_win_matches%/%abm_stats_lose_matches%"
-    - "%abm_icon_headshot% &aHS/AS:&r &b%abm_stats_headshots%/%abm_stats_assists%"
-    - "%abm_icon_gun% &aK/D:&r &b%abm_stats_kills%/%abm_stats_deaths%"
-    - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
-    - "%abm_icon_online% &aOnline:&r &b%server_online%/%server_max_players%"
+    - "%battle_icon_user% &aName:&r &b%player_displayname%"
+    - "%battle_icon_medal% &aLevel:&r &b%battle_level% (%battle_level_progress%%)"
+    - "%battle_icon_money_bag% &aMoney:&r &b$%vault_eco_balance_formatted%"
+    - "%battle_icon_gold_cup% &aW/L:&r &b%battle_stats_win_matches%/%battle_stats_lose_matches%"
+    - "%battle_icon_headshot% &aHS/AS:&r &b%battle_stats_headshots%/%battle_stats_assists%"
+    - "%battle_icon_gun% &aK/D:&r &b%battle_stats_kills%/%battle_stats_deaths%"
+    - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+    - "%battle_icon_online% &aOnline:&r &b%server_online%/%server_max_players%"
     - "&c&a"
     - "&dminecraft.net"
 
@@ -73,7 +73,7 @@ default_chat:
 
   # Chat format
   # [placeholder supported]
-  format: "&7[%abm_icon_medal%&r%abm_level%&7] &8%player_displayname%&f: {__message__}"
+  format: "&7[%battle_icon_medal%&r%battle_level%&7] &8%player_displayname%&f: {__message__}"
 
 
 # Storage settings

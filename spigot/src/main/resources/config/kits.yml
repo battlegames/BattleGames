@@ -1,4 +1,4 @@
-# This configuration is a part of ABM
+# This configuration is a part of BattleGames
 # https://wiki.anhcraft.dev/en/battle/kit
 
 starter:
@@ -10,13 +10,13 @@ starter:
   no_access_icon:
     material: barrier
     name: "&c&lYou don't have access to this kit!"
-  permission: "abm.kits.starter"
+  permission: "battle.kits.starter"
   items:
     vanilla:
       '1':
         material: bread
         amount: 16
-    abm:
+    battle:
       gun:
         - ak_47
   renew_time: -1

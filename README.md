@@ -1,6 +1,4 @@
-# Battle
-
-anhcraft's Battle minigame (shortly ABM)
+# BattleGames
 
 Spigot: https://spigotmc.org/resources/69463/
 

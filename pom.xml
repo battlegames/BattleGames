@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.anhcraft</groupId>
-    <artifactId>abm</artifactId>
+    <artifactId>battle</artifactId>
     <version>1.1.4</version>
     <packaging>pom</packaging>
 
@@ -64,23 +64,23 @@
                         </relocation>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>dev.anhcraft.abm.ext.hikari</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.hikari</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.objecthunter.exp4j</pattern>
-                            <shadedPattern>dev.anhcraft.abm.ext.exp4j</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.exp4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.slf4j</pattern>
-                            <shadedPattern>dev.anhcraft.abm.ext.slf4j</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.slf4j</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.intellij.lang.annotations</pattern>
-                            <shadedPattern>dev.anhcraft.abm.ext.annotations</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.annotations</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.jetbrains.annotations</pattern>
-                            <shadedPattern>dev.anhcraft.abm.ext.annotations</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.annotations</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

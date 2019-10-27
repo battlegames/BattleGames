@@ -36,7 +36,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.trove4j:core:3.1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:20.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:17.0.0" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:confighelper.bukkit:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:confighelper.common:1.0.2" level="project" />
   </component>
 </module>

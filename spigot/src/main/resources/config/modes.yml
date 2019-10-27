@@ -1,4 +1,4 @@
-# This configuration is a part of ABM
+# This configuration is a part of BattleGames
 
 # You'll configure modes here
 dm: # <-- This mode's id (do not change)
@@ -41,10 +41,10 @@ dm: # <-- This mode's id (do not change)
     # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
-      - "&aDeathmatch - %abm_arena_name%"
+      - "&aDeathmatch - %battle_arena_name%"
       - "&b"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
 
@@ -69,13 +69,13 @@ dm: # <-- This mode's id (do not change)
     # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
-      - "&aDeathmatch - %abm_arena_name%"
-      - "&c%abm_game_remaining_time_formatted% left"
+      - "&aDeathmatch - %battle_arena_name%"
+      - "&c%battle_game_remaining_time_formatted% left"
       - "&b"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
-      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_headshot% &aCurrent HS/AS:&r &b%battle_game_stats_headshots%/%battle_game_stats_assists%"
+      - "%battle_icon_gun% &aCurrent K/D:&r &b%battle_game_stats_kills%/%battle_game_stats_deaths%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
 
@@ -95,16 +95,16 @@ tdm:
     format: "&8%player_displayname%&f: {__message__}"
   playing_chat:
     enabled: true
-    format: "&7[%abm_tdm_team%] &8%player_displayname%&f: {__message__}"
+    format: "&7[%battle_tdm_team%] &8%player_displayname%&f: {__message__}"
   waiting_scoreboard:
     enabled: true
     title: "&a &c&lBATTLE"
     content:
       - "&e"
-      - "&aTeam Deathmatch - %abm_arena_name%"
+      - "&aTeam Deathmatch - %battle_arena_name%"
       - "&b"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
   playing_scoreboard:
@@ -112,14 +112,14 @@ tdm:
     title: "&a &c&lBATTLE"
     content:
       - "&e"
-      - "&aTeam Deathmatch - %abm_arena_name%"
-      - "&c%abm_game_remaining_time_formatted% left"
+      - "&aTeam Deathmatch - %battle_arena_name%"
+      - "&c%battle_game_remaining_time_formatted% left"
       - "&b"
-      - "%abm_icon_letter% &aTeam: &f%abm_tdm_team% &e(%abm_tdm_team_players% players)"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
-      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_letter% &aTeam: &f%battle_tdm_team% &e(%battle_tdm_team_players% players)"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_headshot% &aCurrent HS/AS:&r &b%battle_game_stats_headshots%/%battle_game_stats_assists%"
+      - "%battle_icon_gun% &aCurrent K/D:&r &b%battle_game_stats_kills%/%battle_game_stats_deaths%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
 
@@ -131,16 +131,16 @@ ctf:
     format: "&8%player_displayname%&f: {__message__}"
   playing_chat:
     enabled: true
-    format: "&7[%abm_ctf_team%] &8%player_displayname%&f: {__message__}"
+    format: "&7[%battle_ctf_team%] &8%player_displayname%&f: {__message__}"
   waiting_scoreboard:
     enabled: true
     title: "&a &c&lBATTLE"
     content:
       - "&f"
-      - "&cCTF - %abm_arena_name%"
+      - "&cCTF - %battle_arena_name%"
       - "&d"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&e"
       - "&eminecraft.net"
     fixed_length: 32
@@ -149,15 +149,15 @@ ctf:
     title: "&a &c&lBATTLE"
     content:
       - "&f"
-      - "&cCTF - %abm_arena_name%"
-      - "&c%abm_game_remaining_time_formatted% left"
+      - "&cCTF - %battle_arena_name%"
+      - "&c%battle_game_remaining_time_formatted% left"
       - "&d"
-      - "%abm_icon_letter% &aTeam: &f%abm_ctf_team% &e(%abm_ctf_team_players% players)"
-      - "%abm_icon_medal% &aFlags: &f%abm_ctf_team_valid_flags%/%abm_ctf_team_all_flags%/%abm_ctf_flags%"
-      - "%abm_icon_user% &aTotal players: &f%abm_game_total_players%/%abm_arena_max_players%"
-      - "%abm_icon_headshot% &aCurrent HS/AS:&r &b%abm_game_stats_headshots%/%abm_game_stats_assists%"
-      - "%abm_icon_gun% &aCurrent K/D:&r &b%abm_game_stats_kills%/%abm_game_stats_deaths%"
-      - "%abm_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "%battle_icon_letter% &aTeam: &f%battle_ctf_team% &e(%battle_ctf_team_players% players)"
+      - "%battle_icon_medal% &aFlags: &f%battle_ctf_team_valid_flags%/%battle_ctf_team_all_flags%/%battle_ctf_flags%"
+      - "%battle_icon_user% &aTotal players: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_headshot% &aCurrent HS/AS:&r &b%battle_game_stats_headshots%/%battle_game_stats_assists%"
+      - "%battle_icon_gun% &aCurrent K/D:&r &b%battle_game_stats_kills%/%battle_game_stats_deaths%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&e"
       - "&eminecraft.net"
     fixed_length: 32
