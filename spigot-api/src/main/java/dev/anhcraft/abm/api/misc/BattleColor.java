@@ -50,7 +50,7 @@ public enum BattleColor {
     }
 
     @NotNull
-    public Color asBukkitColor(){
+    public Color asBukkit(){
         return color;
     }
 }
