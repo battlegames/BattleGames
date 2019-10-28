@@ -130,12 +130,12 @@ public class GunHandler extends Handler {
         return handleZoomOut(player, null);
     }
 
-    public boolean handleZoomOut(Player player, @Nullable GunModel gunModel){
+    public boolean handleZoomOut(Player player, @Nullable GunModel currentModel){
         if(player.hasMetadata("zoom")) {
             List<MetadataValue> x = player.getMetadata("zoom");
             for(MetadataValue v : x){
                 if(v.getOwningPlugin() == plugin && v.asInt() != -1) {
-                    rmvZoom(player, gunModel);
+                    rmvZoom(player, currentModel);
                     return true;
                 }
             }

@@ -38,6 +38,7 @@ import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -93,14 +94,6 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.gameManager.quit(event.getPlayer());
         plugin.getHandler(GunHandler.class).handleZoomOut(event.getPlayer());
         plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
-    }
-
-    public void secondarySkin(Player player, BattleItem newItem, BattleItem oldItem){
-        if(newItem instanceof Gun)
-            player.getInventory().setItemInOffHand(plugin.getHandler(GunHandler.class).createGun(
-                    (Gun) newItem, true));
-        else if(newItem == null && oldItem instanceof Gun)
-            player.getInventory().setItemInOffHand(null);
     }
 
     @EventHandler
@@ -210,6 +203,17 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
     }
 
+    private void updateSecondaryGunSkin(Player player, GunModel newModel){
+        if(newModel == null) {
+            player.getInventory().setItemInOffHand(null);
+        } else {
+            PreparedItem item = plugin.itemManager.make(newModel);
+            if(item != null) {
+                player.getInventory().setItemInOffHand(newModel.getSecondarySkin().transform(item).build());
+            }
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void held(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
@@ -217,30 +221,50 @@ public class PlayerListener extends BattleComponent implements Listener {
         ItemStack newItemStack = player.getInventory().getItem(event.getNewSlot());
         BattleItem newItem = plugin.itemManager.read(newItemStack);
         BattleItem oldItem = plugin.itemManager.read(oldItemStack);
-        if(newItem != null){
-            if(newItem instanceof Gun) {
-                GunModel gm = ((Gun) newItem).getModel();
-                if(gm != null) plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
-                secondarySkin(player, newItem, oldItem);
-            } else {
-                // OTHER ITEM TYPE PUT HERE
-                // .........................
-                secondarySkin(player, null, oldItem);
+        if(oldItem == null){
+            // old == null & new != null
+            if(newItem != null){
+                if(newItem instanceof Gun) {
+                    GunModel gm = ((Gun) newItem).getModel();
+                    if(gm != null) {
+                        plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
+                        updateSecondaryGunSkin(player, gm);
+                    }
+                }
             }
-        } else if(oldItem != null) {
-            if(oldItem instanceof Gun){
-                Gun gun = (Gun) oldItem;
-                GunModel gm = gun.getModel();
-                if(gm != null){
-                    // although there is gun model, we must NOT set it to the second param!
-                    // as the model belongs to the OLD ITEM!!!!!!!!!!!!!!
+        } else {
+            // old != null & new != null
+            if(newItem != null){
+                if(newItem instanceof Gun) {
+                    GunModel gm = ((Gun) newItem).getModel();
+                    if(gm != null) {
+                        if(oldItem instanceof Gun){
+                            if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, gm)){
+                                player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+                                player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+                            }
+                        }
+                        plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
+                        updateSecondaryGunSkin(player, gm);
+                    }
+                } else if(oldItem instanceof Gun){
+                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
+                        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
+                        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+                    }
+                    updateSecondaryGunSkin(player, null);
+                }
+            }
+            // old != null & new == null
+            else {
+                if(oldItem instanceof Gun){
+                    updateSecondaryGunSkin(player, null);
                     if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
                         player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
                         player.setFlySpeed(plugin.getDefaultFlyingSpeed());
                     }
                 }
             }
-            secondarySkin(player, null, oldItem);
         }
     }
 
