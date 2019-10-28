@@ -165,8 +165,9 @@ public class GunHandler extends Handler {
             return false;
         }
         int next = scp.nextZoomLevel();
-        if(next == -1)  rmvZoom(player, gm);
-        else {
+        if(next == -1) {
+            rmvZoom(player, gm);
+        } else {
             ScopeModel sm = scp.getModel();
             int nextLv = sm.getZoomLevels().get(next);
             player.getInventory().setHelmet(PUMPKIN_HELMET);
@@ -206,6 +207,9 @@ public class GunHandler extends Handler {
         Vector sprayVec;
         if(gunItem.nextSpray() != -1){
             Pair<Double, Double> pair = gm.getSprayPattern().get(gunItem.getNextSpray());
+            if(pair.getFirst() == null || pair.getSecond() == null){
+                throw new IllegalStateException();
+            }
             sprayVec = new Vector(pair.getFirst(), pair.getSecond(), 0).normalize();
             VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
             sprayVec.multiply(player.isSneaking() ? .3 : .5);
@@ -217,10 +221,17 @@ public class GunHandler extends Handler {
             entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity));
         }
 
+        final double length = 100;
+        final double offset = 0.5;
+        final double maxSprayMulti = 0.75;
+        final double minSprayMulti = 0.1;
+        final double deltaSprayMulti = maxSprayMulti - minSprayMulti;
+
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Ammo.Bullet b : bullets){
-            for(double d = 0.5; d < 100; d += 0.5){
-                Location loc = start.clone().add(dir.clone().multiply(d).add(sprayVec));
+            for(double d = offset; d < length; d += offset){
+                Vector sv = sprayVec.clone().multiply((length - d) * deltaSprayMulti / length + minSprayMulti);
+                Location loc = start.clone().add(dir.clone().multiply(d).add(sv));
 
                 if(b.getParticleEffect() != null)
                     b.getParticleEffect().spawn(loc);
