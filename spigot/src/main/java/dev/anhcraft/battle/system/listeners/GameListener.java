@@ -33,6 +33,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.Arrays;
 
@@ -58,6 +59,10 @@ public class GameListener extends BattleComponent implements Listener {
         // although the inventory got backup, its handler still
         // didn't change so we must set it again
         plugin.guiManager.setBottomInv(p, "main_player_inv");
+
+        for (PotionEffect pe : p.getActivePotionEffects()){
+            p.removePotionEffect(pe.getType());
+        }
 
         plugin.queueTitleTask.remove(p);
 
