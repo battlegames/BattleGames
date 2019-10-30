@@ -49,11 +49,6 @@ public class Perk extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private String name;
 
-    @Key("description")
-    @Explanation("A short details about this perk")
-    @IgnoreValue(ifNull = true, ifEmptyList = true)
-    private List<String> description = new ArrayList<>();
-
     @Key("executions.give_effects")
     @Explanation("Potion effects to be applied on the player")
     @IgnoreValue(ifNull = true, ifEmptyList = true)
@@ -81,11 +76,6 @@ public class Perk extends ConfigurableObject {
     @NotNull
     public String getName() {
         return name;
-    }
-
-    @NotNull
-    public List<String> getDescription() {
-        return description;
     }
 
     @NotNull

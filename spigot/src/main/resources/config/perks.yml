@@ -3,9 +3,6 @@
 
 speed:
   name: "&aSpeed"
-  description:
-    - "&eThis perk&f increases the movement speed"
-    - "&eAvailable until the game ends"
   executions:
     give_effects:
       '1':
@@ -15,9 +12,6 @@ speed:
 
 speed_plus:
   name: "&aSpeed+"
-  description:
-    - "&eThis perk&f increases the movement speed"
-    - "&eAvailable until the game ends"
   executions:
     give_effects:
       '1':
@@ -28,14 +22,10 @@ speed_plus:
 
 health_boost:
   name: "&dHealth boost"
-  description:
-    - "&fBoost your health!"
   executions:
     set_health: 20
 
 no_hunger:
   name: "&bNo hunger"
-  description:
-    - "&4Stop your hunger!"
   executions:
     set_food_level: 20
