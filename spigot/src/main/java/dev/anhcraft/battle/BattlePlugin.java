@@ -41,6 +41,9 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.BattleCommand;
 import dev.anhcraft.battle.gui.*;
+import dev.anhcraft.battle.gui.handlers.CoreListener;
+import dev.anhcraft.battle.gui.handlers.MainInventoryListener;
+import dev.anhcraft.battle.gui.inventory.*;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.system.handlers.Handler;
@@ -603,15 +606,15 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initGui(FileConfiguration c) {
-        guiManager.registerGuiHandler("core", new CoreHandler());
-        guiManager.registerGuiHandler("inventory_menu", new MainInventoryHandler());
+        guiManager.registerGuiHandler("core", new CoreListener());
+        guiManager.registerGuiHandler("inventory_menu", new MainInventoryListener());
         guiManager.registerGuiHandler("inventory_gun", new GunInventory());
         guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory());
         guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory());
         guiManager.registerGuiHandler("inventory_scope", new ScopeInventory());
         guiManager.registerGuiHandler("inventory_grenade", new GrenadeInventory());
-        guiManager.registerGuiHandler("kit_menu", new KitMenuHandler());
-        guiManager.registerGuiHandler("arena_chooser", new ArenaChooserHandler());
+        guiManager.registerGuiHandler("kit_menu", new KitMenu());
+        guiManager.registerGuiHandler("arena_chooser", new ArenaChooser());
 
         c.getKeys(false).forEach(s -> {
             if(s.length() > 0 && s.charAt(0) != '$')

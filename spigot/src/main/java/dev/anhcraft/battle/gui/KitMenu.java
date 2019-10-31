@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import java.util.Date;
 import java.util.List;
 
-public class KitMenuHandler extends GuiHandler implements PaginationHandler {
+public class KitMenu extends GuiListener implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
@@ -37,7 +37,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
         if(pd != null) {
             api.listKits(kit -> {
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
-                    data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                    data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                         @Override
                         public void call(SlotClickReport event) {
                             api.getChatManager().sendPlayer(event.getPlayer(), "kit.no_permission");
@@ -49,7 +49,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                 long last = pd.getKits().getOrDefault(kit.getId(), 0L);
                 if(last != 0){
                     if(kit.getRenewTime() == -1){
-                        data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                        data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
                                 api.getChatManager().sendPlayer(event.getPlayer(), "kit.one_time_use");
@@ -60,7 +60,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                     }
                     long next = last + kit.getRenewTime()*50;
                     if(next > System.currentTimeMillis()){
-                        data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                        data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
                                 api.getChatManager().sendPlayer(event.getPlayer(), "kit.unavailable", ChatMessageType.CHAT, x -> String.format(x, api.formatLongFormDate(new Date(next))));
@@ -70,7 +70,7 @@ public class KitMenuHandler extends GuiHandler implements PaginationHandler {
                         return;
                     }
                 }
-                data.add(new PaginationItem(kit.getIcon().build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                data.add(new PaginationItem(kit.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                     @Override
                     public void call(SlotClickReport event) {
                         event.getClickEvent().setCancelled(true);

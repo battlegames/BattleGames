@@ -17,14 +17,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.gui;
+package dev.anhcraft.battle.gui.handlers;
 
 import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.gui.GuiHandler;
+import dev.anhcraft.battle.api.gui.GuiListener;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
 import org.bukkit.entity.Player;
 
-public class MainInventoryHandler extends GuiHandler {
+public class MainInventoryListener extends GuiListener {
     @Label("open")
     public void open(Player player){
         ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_menu");

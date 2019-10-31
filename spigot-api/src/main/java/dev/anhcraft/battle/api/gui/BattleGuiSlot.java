@@ -27,10 +27,10 @@ import java.util.Collection;
 public class BattleGuiSlot {
     private int index;
     private GuiSlot slot;
-    private Collection<GuiListener<? extends GuiReport>> events;
+    private Collection<GuiCallback<? extends GuiReport>> events;
     private ItemStack cachedItem;
 
-    public BattleGuiSlot(int index, GuiSlot slot, Collection<GuiListener<? extends GuiReport>> events) {
+    public BattleGuiSlot(int index, GuiSlot slot, Collection<GuiCallback<? extends GuiReport>> events) {
         this.index = index;
         this.slot = slot;
         this.events = events;
@@ -40,7 +40,7 @@ public class BattleGuiSlot {
         return slot;
     }
 
-    public Collection<GuiListener<? extends GuiReport>> getEvents() {
+    public Collection<GuiCallback<? extends GuiReport>> getEvents() {
         return events;
     }
 

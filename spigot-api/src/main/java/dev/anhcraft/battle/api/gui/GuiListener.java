@@ -19,16 +19,13 @@
  */
 package dev.anhcraft.battle.api.gui;
 
-public abstract class GuiListener<T extends GuiReport> {
-    private Class<T> clazz;
+import java.util.HashMap;
+import java.util.Map;
 
-    protected GuiListener(Class<T> clazz) {
-        this.clazz = clazz;
-    }
+public abstract class GuiListener {
+    private final Map<String, GuiCallback<? extends GuiReport>> eventListeners = new HashMap<>();
 
-    public abstract void call(T event);
-
-    public Class<T> getClazz() {
-        return clazz;
+    public Map<String, GuiCallback<? extends GuiReport>> getEventListeners() {
+        return eventListeners;
     }
 }

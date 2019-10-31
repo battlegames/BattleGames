@@ -26,23 +26,23 @@ import java.util.Collections;
 
 public class PaginationItem {
     private ItemStack itemStack;
-    private Collection<GuiListener<? extends SlotReport>> guiListeners;
+    private Collection<GuiCallback<? extends SlotReport>> guiCallbacks;
 
-    public PaginationItem(ItemStack itemStack, GuiListener<? extends SlotReport> guiListener) {
+    public PaginationItem(ItemStack itemStack, GuiCallback<? extends SlotReport> guiCallback) {
         this.itemStack = itemStack;
-        this.guiListeners = Collections.singleton(guiListener);
+        this.guiCallbacks = Collections.singleton(guiCallback);
     }
 
-    public PaginationItem(ItemStack itemStack, Collection<GuiListener<? extends SlotReport>> guiListeners) {
+    public PaginationItem(ItemStack itemStack, Collection<GuiCallback<? extends SlotReport>> guiCallbacks) {
         this.itemStack = itemStack;
-        this.guiListeners = guiListeners;
+        this.guiCallbacks = guiCallbacks;
     }
 
     public ItemStack getItemStack() {
         return itemStack;
     }
 
-    public Collection<GuiListener<? extends SlotReport>> getGuiListeners() {
-        return guiListeners;
+    public Collection<GuiCallback<? extends SlotReport>> getGuiCallbacks() {
+        return guiCallbacks;
     }
 }

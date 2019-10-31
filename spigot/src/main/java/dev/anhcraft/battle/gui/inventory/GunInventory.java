@@ -17,36 +17,40 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.gui;
+package dev.anhcraft.battle.gui.inventory;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
-import dev.anhcraft.battle.api.inventory.items.ScopeModel;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class ScopeInventory extends GuiHandler implements PaginationHandler {
+public class GunInventory extends GuiListener implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {
-            playerData.getInventory().getStorage(ItemType.SCOPE).list((k, v) -> {
-                ScopeModel sm = api.getScopeModel(k);
-                if (sm != null) {
-                    PreparedItem pi = api.getItemManager().make(sm);
+            playerData.getInventory().getStorage(ItemType.GUN).list((k, v) -> {
+                GunModel gm = api.getGunModel(k);
+                if (gm != null) {
+                    PreparedItem pi = api.getItemManager().make(gm);
                     if(pi == null) return;
-                    ItemStack item = sm.getSkin().transform(pi).build();
-                    data.add(new PaginationItem(item, new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                    ItemStack item = gm.getPrimarySkin().transform(pi).build();
+                    data.add(new PaginationItem(item, new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                         @Override
                         public void call(SlotClickReport event) {
                             event.getClickEvent().setCancelled(true);
+                            ItemChooseEvent e = new ItemChooseEvent(event.getPlayer(), event.getClickEvent().getCurrentItem(), gm);
+                            Bukkit.getPluginManager().callEvent(e);
                         }
                     }));
                 }

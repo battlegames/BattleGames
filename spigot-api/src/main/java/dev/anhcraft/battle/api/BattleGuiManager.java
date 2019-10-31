@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.api.gui.Gui;
-import dev.anhcraft.battle.api.gui.GuiHandler;
+import dev.anhcraft.battle.api.gui.GuiListener;
 import dev.anhcraft.battle.api.gui.PlayerGui;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public interface BattleGuiManager {
      * @param id the id
      * @param handler the handler instance
      */
-    void registerGuiHandler(@NotNull String id, @NotNull GuiHandler handler);
+    void registerGuiHandler(@NotNull String id, @NotNull GuiListener handler);
 
     /**
      * Gets the {@link PlayerGui} of the given player.<br>

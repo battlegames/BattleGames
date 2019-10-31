@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 
-public class ArenaChooserHandler extends GuiHandler implements PaginationHandler {
+public class ArenaChooser extends GuiListener implements PaginationHandler {
     @Override
     public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
@@ -50,7 +50,7 @@ public class ArenaChooserHandler extends GuiHandler implements PaginationHandler
             PreparedItem icon = arena.getIcon();
             icon.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(icon.name(), infoMap)));
             icon.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(s, infoMap)));
-            data.add(new PaginationItem(icon.build(), new GuiListener<SlotClickReport>(SlotClickReport.class) {
+            data.add(new PaginationItem(icon.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
                 public void call(SlotClickReport event) {
                     event.getPlayer().closeInventory();

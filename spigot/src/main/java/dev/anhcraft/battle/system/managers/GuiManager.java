@@ -45,7 +45,7 @@ import java.util.*;
 
 public class GuiManager extends BattleComponent implements BattleGuiManager {
     private final Map<String, Gui> GUI = new HashMap<>();
-    private final Map<String, GuiHandler> GUI_HANDLERS = new HashMap<>();
+    private final Map<String, GuiListener> GUI_HANDLERS = new HashMap<>();
     private final Map<UUID, PlayerGui> PLAYER_GUI = new HashMap<>();
 
     public GuiManager(BattlePlugin plugin) {
@@ -60,7 +60,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     @Override
-    public void registerGuiHandler(@NotNull String id, @NotNull GuiHandler handler){
+    public void registerGuiHandler(@NotNull String id, @NotNull GuiListener handler){
         Condition.argNotNull("id", id);
         Condition.argNotNull("handler", handler);
         GUI_HANDLERS.put(id, handler);
@@ -73,7 +73,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             int count = m.getParameterCount();
             String[] args = m.getAnnotation(Label.class).value();
             if(args.length == 1){
-                handler.getEventListeners().put(args[0], new GuiListener<GuiReport>(GuiReport.class) {
+                handler.getEventListeners().put(args[0], new GuiCallback<GuiReport>(GuiReport.class) {
                     @Override
                     public void call(GuiReport event) {
                         try {
@@ -88,7 +88,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                 String event = args[1];
                 switch (event){
                     case "onSlot":{
-                        handler.getEventListeners().put(args[0], new GuiListener<SlotReport>(SlotReport.class) {
+                        handler.getEventListeners().put(args[0], new GuiCallback<SlotReport>(SlotReport.class) {
                             @Override
                             public void call(SlotReport event) {
                                 try {
@@ -101,7 +101,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                         break;
                     }
                     case "onClickSlot":{
-                        handler.getEventListeners().put(args[0], new GuiListener<SlotClickReport>(SlotClickReport.class) {
+                        handler.getEventListeners().put(args[0], new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                             @Override
                             public void call(SlotClickReport event) {
                                 try {
@@ -114,7 +114,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                         break;
                     }
                     case "onCancellableSlot":{
-                        handler.getEventListeners().put(args[0], new GuiListener<SlotCancelReport>(SlotCancelReport.class) {
+                        handler.getEventListeners().put(args[0], new GuiCallback<SlotCancelReport>(SlotCancelReport.class) {
                             @Override
                             public void call(SlotCancelReport event) {
                                 try {
@@ -161,19 +161,19 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             if(s == null) return;
             s.getEvents().forEach(gl -> {
                 if(gl.getClazz() == GuiReport.class){
-                    ((GuiListener<GuiReport>) gl).call(new GuiReport(p, bg));
+                    ((GuiCallback<GuiReport>) gl).call(new GuiReport(p, bg));
                 }
                 else if(gl.getClazz() == SlotReport.class){
-                    ((GuiListener<SlotReport>) gl).call(new SlotReport(p, bg, s));
+                    ((GuiCallback<SlotReport>) gl).call(new SlotReport(p, bg, s));
                 }
                 else if(gl.getClazz() == SlotClickReport.class){
                     if(event instanceof InventoryClickEvent)
-                        ((GuiListener<SlotClickReport>) gl).call(
+                        ((GuiCallback<SlotClickReport>) gl).call(
                                 new SlotClickReport(p, bg, s, (InventoryClickEvent) event));
                 }
                 else if(gl.getClazz() == SlotCancelReport.class){
                     if(event instanceof Cancellable)
-                        ((GuiListener<SlotCancelReport>) gl).call(
+                        ((GuiCallback<SlotCancelReport>) gl).call(
                                 new SlotCancelReport(p, bg, s, (Cancellable) event));
                 }
             });
@@ -192,7 +192,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     private BattleGui setupGui(Player player, PlayerGui pg, Gui gui){
         BattleGuiSlot[] slots = new BattleGuiSlot[gui.getSize()];
         for(int i = 0; i < gui.getSize(); i++){
-            List<GuiListener<? extends GuiReport>> listeners = new ArrayList<>();
+            List<GuiCallback<? extends GuiReport>> listeners = new ArrayList<>();
             // only handling on normal slots
             GuiSlot s = gui.getSlots()[i];
             if(s.isPaginationSlot()) continue;
@@ -201,10 +201,10 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                 String[] args = eh.split("::");
                 if (args.length < 2) continue;
 
-                GuiHandler guiHandler = GUI_HANDLERS.get(args[0]);
-                if (guiHandler == null) continue;
+                GuiListener guiListener = GUI_HANDLERS.get(args[0]);
+                if (guiListener == null) continue;
 
-                GuiListener<? extends GuiReport> listener = guiHandler.getEventListeners().get(args[1]);
+                GuiCallback<? extends GuiReport> listener = guiListener.getEventListeners().get(args[1]);
                 if(listener == null) {
                     plugin.getLogger().warning("GUI listener ("+ eh +") not found");
                     continue;
@@ -215,7 +215,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         }
 
         if(gui.getPagination() != null){
-            GuiHandler gh = GUI_HANDLERS.get(gui.getPagination().getHandler());
+            GuiListener gh = GUI_HANDLERS.get(gui.getPagination().getHandler());
             if (gh instanceof PaginationHandler) {
                 List<PaginationItem> data = new ArrayList<>();
                 // get data
@@ -230,10 +230,10 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                     int index = pageSlots[j++]; // get slot index
                     BattleGuiSlot s = slots[index];
                     if(s == null) {
-                        slots[index] = (s = new BattleGuiSlot(index, new GuiSlot(null, new ArrayList<>(), true), Collections.unmodifiableCollection(elem.getGuiListeners())));
+                        slots[index] = (s = new BattleGuiSlot(index, new GuiSlot(null, new ArrayList<>(), true), Collections.unmodifiableCollection(elem.getGuiCallbacks())));
                     } else {
                         s.getEvents().clear();
-                        s.getEvents().addAll(elem.getGuiListeners());
+                        s.getEvents().addAll(elem.getGuiCallbacks());
                     }
                     s.setCachedItem(elem.getItemStack()); // cache item
                     // put to temp pagination slots
