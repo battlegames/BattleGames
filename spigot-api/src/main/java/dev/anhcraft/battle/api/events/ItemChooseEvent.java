@@ -21,26 +21,21 @@ package dev.anhcraft.battle.api.events;
 
 import dev.anhcraft.battle.api.inventory.items.BattleItemModel;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemChooseEvent extends Event {
+public class ItemChooseEvent extends PlayerEvent {
     public static final HandlerList handlers = new HandlerList();
-    private Player player;
     private ItemStack itemStack;
     private BattleItemModel itemModel;
 
     public ItemChooseEvent(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull BattleItemModel itemModel) {
+        super(player);
         this.player = player;
         this.itemStack = itemStack;
         this.itemModel = itemModel;
-    }
-
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     @NotNull
