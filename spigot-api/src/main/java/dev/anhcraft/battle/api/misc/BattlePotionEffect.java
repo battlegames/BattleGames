@@ -26,7 +26,6 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Schema
 public class BattlePotionEffect extends ConfigurableObject {
@@ -54,11 +53,6 @@ public class BattlePotionEffect extends ConfigurableObject {
     @Explanation("Shows particle effects or not")
     private boolean particles;
 
-    @Key("color")
-    @Explanation("Set the color for the particles")
-    @PrettyEnum
-    private BattleColor color;
-
     @NotNull
     public BattlePotionEffectType getType() {
         return type;
@@ -80,14 +74,9 @@ public class BattlePotionEffect extends ConfigurableObject {
         return particles;
     }
 
-    @Nullable
-    public BattleColor getColor() {
-        return color;
-    }
-
     @NotNull
     public PotionEffect build(){
-        return new PotionEffect(type.asBukkit(), duration, amplifier, ambient, particles, color == null ? null : color.asBukkit());
+        return new PotionEffect(type.asBukkit(), duration, amplifier, ambient, particles);
     }
 
     public void give(@NotNull Player player){
