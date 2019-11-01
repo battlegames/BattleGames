@@ -96,7 +96,7 @@ public class DataMap<T> {
         put(key, new ListTag<>(value));
     }
 
-    public AtomicBoolean getChanged() {
+    public AtomicBoolean hasChanged() {
         return changed;
     }
 
