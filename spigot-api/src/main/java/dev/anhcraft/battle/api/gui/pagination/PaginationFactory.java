@@ -17,29 +17,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.pagination;
 
-import dev.anhcraft.jvmkit.utils.Condition;
-import org.jetbrains.annotations.NotNull;
+import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.api.gui.window.Window;
+import org.bukkit.entity.Player;
 
-public class Pagination {
-    private int[] slots;
-    private String handler;
+import java.util.List;
 
-    public Pagination(@NotNull int[] slots, @NotNull String handler) {
-        Condition.argNotNull("slots", slots);
-        Condition.argNotNull("handler", handler);
-        this.slots = slots;
-        this.handler = handler;
-    }
-
-    @NotNull
-    public int[] getSlots() {
-        return slots;
-    }
-
-    @NotNull
-    public String getHandler() {
-        return handler;
-    }
+public interface PaginationFactory {
+    void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data);
 }

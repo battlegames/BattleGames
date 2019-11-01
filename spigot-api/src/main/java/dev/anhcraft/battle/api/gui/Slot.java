@@ -20,21 +20,35 @@
 package dev.anhcraft.battle.api.gui;
 
 import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class SlotCancelReport extends SlotReport {
-    private Cancellable cancelEvent;
+import java.util.Collection;
 
-    public SlotCancelReport(@NotNull Player player, @NotNull BattleGui gui, @NotNull BattleGuiSlot slot, @NotNull Cancellable clickEvent) {
-        super(player, gui, slot);
-        Condition.argNotNull("clickEvent", clickEvent);
-        this.cancelEvent = clickEvent;
+public class Slot {
+    private ConfigurationSection itemConf;
+    private Collection<String> eventHandlers;
+    private boolean isPaginationSlot;
+
+    public Slot(@Nullable ConfigurationSection itemConf, @NotNull Collection<String> eventHandlers, boolean isPaginationSlot) {
+        Condition.argNotNull("eventHandlers", eventHandlers);
+        this.isPaginationSlot = isPaginationSlot;
+        this.itemConf = itemConf;
+        this.eventHandlers = eventHandlers;
+    }
+
+    @Nullable
+    public ConfigurationSection getItemConf() {
+        return itemConf;
     }
 
     @NotNull
-    public Cancellable getCancelEvent() {
-        return cancelEvent;
+    public Collection<String> getEventHandlers() {
+        return eventHandlers;
+    }
+
+    public boolean isPaginationSlot() {
+        return isPaginationSlot;
     }
 }

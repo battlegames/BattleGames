@@ -17,8 +17,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.pagination;
 
+import dev.anhcraft.battle.api.gui.GuiCallback;
+import dev.anhcraft.battle.api.gui.reports.SlotReport;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;

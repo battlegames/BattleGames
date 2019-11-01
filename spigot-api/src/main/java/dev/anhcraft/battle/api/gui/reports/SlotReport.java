@@ -17,19 +17,25 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.reports;
 
-import dev.anhcraft.battle.api.gui.reports.GuiReport;
+import dev.anhcraft.battle.api.gui.window.View;
+import dev.anhcraft.battle.api.gui.window.Button;
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+public class SlotReport extends GuiReport {
+    private Button slot;
 
-public abstract class GuiListener {
-    private final Map<String, GuiCallback<? extends GuiReport>> eventListeners = new HashMap<>();
+    public SlotReport(@NotNull Player player, @NotNull View gui, @NotNull Button slot) {
+        super(player, gui);
+        Condition.argNotNull("slot", slot);
+        this.slot = slot;
+    }
 
     @NotNull
-    public Map<String, GuiCallback<? extends GuiReport>> getEventListeners() {
-        return eventListeners;
+    public Button getSlot() {
+        return slot;
     }
 }

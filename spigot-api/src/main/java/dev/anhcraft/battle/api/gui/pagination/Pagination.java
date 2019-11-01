@@ -17,23 +17,29 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.pagination;
 
 import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SlotReport extends GuiReport {
-    private BattleGuiSlot slot;
+public class Pagination {
+    private int[] slots;
+    private String handler;
 
-    public SlotReport(@NotNull Player player, @NotNull BattleGui gui, @NotNull BattleGuiSlot slot) {
-        super(player, gui);
-        Condition.argNotNull("slot", slot);
-        this.slot = slot;
+    public Pagination(@NotNull int[] slots, @NotNull String handler) {
+        Condition.argNotNull("slots", slots);
+        Condition.argNotNull("handler", handler);
+        this.slots = slots;
+        this.handler = handler;
     }
 
     @NotNull
-    public BattleGuiSlot getSlot() {
-        return slot;
+    public int[] getSlots() {
+        return slots;
+    }
+
+    @NotNull
+    public String getHandler() {
+        return handler;
     }
 }

@@ -19,10 +19,10 @@
  */
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.api.gui.BattleGui;
+import dev.anhcraft.battle.api.gui.window.View;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiListener;
-import dev.anhcraft.battle.api.gui.PlayerGui;
+import dev.anhcraft.battle.api.gui.window.Window;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,13 +43,13 @@ public interface BattleGuiManager {
     void registerGuiHandler(@NotNull String id, @NotNull GuiListener handler);
 
     /**
-     * Gets the {@link PlayerGui} of the given player.<br>
+     * Gets the {@link Window} of the given player.<br>
      * If it does not exist yet, a new instance will be created automatically.
      * @param player the player
-     * @return a unique {@link PlayerGui} that belongs to the player
+     * @return a unique {@link Window} that belongs to the player
      */
     @NotNull
-    PlayerGui getPlayerGui(@NotNull Player player);
+    Window getWindow(@NotNull Player player);
 
     /**
      * Sets the GUI for the bottom inventory.
@@ -59,15 +59,15 @@ public interface BattleGuiManager {
      * @param name the name of the GUI
      */
     @NotNull
-    BattleGui setBottomInv(@NotNull Player player, @NotNull String name);
+    View setBottomGui(@NotNull Player player, @NotNull String name);
 
     /**
      * Re-renders the bottom GUI.
      * @param player the player
-     * @param apg the {@link PlayerGui}
+     * @param window the {@link Window}
      */
     @Nullable
-    BattleGui renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg);
+    View renderBottomView(@NotNull Player player, @NotNull Window window);
 
     /**
      * Opens a GUI as the top inventory.
@@ -77,21 +77,21 @@ public interface BattleGuiManager {
      * @param name the name of the GUI
      */
     @NotNull
-    BattleGui openTopInventory(@NotNull Player player, @NotNull String name);
+    View openTopGui(@NotNull Player player, @NotNull String name);
 
     /**
      * Re-renders the top GUI.
      * @param player the player
-     * @param apg the {@link PlayerGui}
+     * @param window the {@link Window}
      */
     @Nullable
-    BattleGui renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg);
+    View renderTopView(@NotNull Player player, @NotNull Window window);
 
     /**
-     * Destroys the {@link PlayerGui} of the given player.
+     * Destroys the {@link Window} of the given player.
      * <br>
      * Calling this method is considered as useless, should only provides internal uses.
      * @param player the player
      */
-    void destroyPlayerGui(@NotNull Player player);
+    void destroyWindow(@NotNull Player player);
 }

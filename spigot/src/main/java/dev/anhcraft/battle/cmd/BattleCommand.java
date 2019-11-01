@@ -101,7 +101,7 @@ public class BattleCommand extends BaseCommand{
     @Subcommand("arena menu")
     @CommandPermission("battle.arena.menu")
     public void arenaMenu(Player player){
-        plugin.guiManager.openTopInventory(player, "arena_chooser");
+        plugin.guiManager.openTopGui(player, "arena_chooser");
     }
 
     @Subcommand("arena join")
@@ -254,12 +254,12 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("inv")
     public void inv(Player player){
-        plugin.guiManager.openTopInventory(player, "inventory_menu");
+        plugin.guiManager.openTopGui(player, "inventory_menu");
     }
 
     @Subcommand("market")
     public void market(Player player){
-        plugin.guiManager.openTopInventory(player, "market_category_menu");
+        plugin.guiManager.openTopGui(player, "market_category_menu");
     }
 
     @Subcommand("clearinv")
@@ -277,6 +277,6 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("kit")
     public void kit(Player player){
-        plugin.guiManager.openTopInventory(player, "kit_menu");
+        plugin.guiManager.openTopGui(player, "kit_menu");
     }
 }

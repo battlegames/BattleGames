@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.window;
 
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -26,28 +26,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerGui {
-    private BattleGui topGui;
-    private BattleGui bottomGui;
+public class Window {
+    private View topView;
+    private View bottomView;
     private Inventory topInv;
     private Map<String, Object> sharedData;
 
     @Nullable
-    public BattleGui getTopGui() {
-        return topGui;
+    public View getTopView() {
+        return topView;
     }
 
-    public void setTopGui(@Nullable BattleGui topGui) {
-        this.topGui = topGui;
+    public void setTopView(@Nullable View topView) {
+        this.topView = topView;
     }
 
     @Nullable
-    public BattleGui getBottomGui() {
-        return bottomGui;
+    public View getBottomView() {
+        return bottomView;
     }
 
-    public void setBottomGui(@Nullable BattleGui bottomGui) {
-        this.bottomGui = bottomGui;
+    public void setBottomView(@Nullable View bottomView) {
+        this.bottomView = bottomView;
     }
 
     @Nullable

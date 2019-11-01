@@ -19,15 +19,21 @@
  */
 package dev.anhcraft.battle.api.gui;
 
+import dev.anhcraft.battle.api.gui.reports.GuiReport;
+import dev.anhcraft.jvmkit.utils.Condition;
+import org.jetbrains.annotations.NotNull;
+
 public abstract class GuiCallback<T extends GuiReport> {
     private Class<T> clazz;
 
-    protected GuiCallback(Class<T> clazz) {
+    protected GuiCallback(@NotNull Class<T> clazz) {
+        Condition.argNotNull("clazz", clazz);
         this.clazz = clazz;
     }
 
-    public abstract void call(T event);
+    public abstract void call(@NotNull T event);
 
+    @NotNull
     public Class<T> getClazz() {
         return clazz;
     }

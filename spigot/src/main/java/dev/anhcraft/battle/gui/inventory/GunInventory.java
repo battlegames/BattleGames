@@ -23,6 +23,11 @@ import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
+import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
+import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
+import dev.anhcraft.battle.api.gui.window.Window;
 import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
@@ -30,12 +35,13 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GunInventory extends GuiListener implements PaginationHandler {
+public class GunInventory extends GuiListener implements PaginationFactory {
     @Override
-    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {
@@ -47,7 +53,7 @@ public class GunInventory extends GuiListener implements PaginationHandler {
                     ItemStack item = gm.getPrimarySkin().transform(pi).build();
                     data.add(new PaginationItem(item, new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                         @Override
-                        public void call(SlotClickReport event) {
+                        public void call(@NotNull SlotClickReport event) {
                             event.getClickEvent().setCancelled(true);
                             ItemChooseEvent e = new ItemChooseEvent(event.getPlayer(), event.getClickEvent().getCurrentItem(), gm);
                             Bukkit.getPluginManager().callEvent(e);

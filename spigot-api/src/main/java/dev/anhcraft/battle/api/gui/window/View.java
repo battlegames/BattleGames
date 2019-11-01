@@ -17,45 +17,54 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.window;
 
+import com.google.common.base.Preconditions;
+import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BattleGui {
+public class View {
     private Gui gui;
-    private PlayerGui playerGui;
-    private BattleGuiSlot[] slots;
-    private PaginationHelper<BattleGuiSlot> pagination;
+    private Window window;
+    private Button[] buttons;
+    private PaginationHelper<Button> pagination;
 
-    public BattleGui(Gui gui, PlayerGui playerGui, BattleGuiSlot[] slots) {
+    public View(@NotNull Gui gui, @NotNull Window window, @NotNull Button[] buttons) {
+        Preconditions.checkNotNull(gui);
+        Preconditions.checkNotNull(window);
+        Preconditions.checkNotNull(buttons);
         this.gui = gui;
-        this.playerGui = playerGui;
-        this.slots = slots;
+        this.window = window;
+        this.buttons = buttons;
     }
 
+    @NotNull
     public Gui getGui() {
         return gui;
     }
 
-    public BattleGuiSlot[] getSlots() {
-        return slots;
+    @NotNull
+    public Button[] getButtons() {
+        return buttons;
     }
 
     @Nullable
-    public PaginationHelper<BattleGuiSlot> getPagination() {
+    public PaginationHelper<Button> getPagination() {
         return pagination;
     }
 
-    public PlayerGui getPlayerGui() {
-        return playerGui;
+    @NotNull
+    public Window getWindow() {
+        return window;
     }
 
-    public void setPagination(@Nullable PaginationHelper<BattleGuiSlot> pagination) {
+    public void setPagination(@Nullable PaginationHelper<Button> pagination) {
         this.pagination = pagination;
     }
 
     public void updatePagination(){
-        pagination.each(battleGuiSlot -> slots[battleGuiSlot.getIndex()] = battleGuiSlot);
+        pagination.each(battleGuiSlot -> buttons[battleGuiSlot.getIndex()] = battleGuiSlot);
     }
 }

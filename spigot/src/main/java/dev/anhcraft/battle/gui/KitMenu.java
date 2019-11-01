@@ -22,16 +22,22 @@ package dev.anhcraft.battle.gui;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
+import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
+import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
+import dev.anhcraft.battle.api.gui.window.Window;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
-public class KitMenu extends GuiListener implements PaginationHandler {
+public class KitMenu extends GuiListener implements PaginationFactory {
     @Override
-    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
         if(pd != null) {
@@ -39,7 +45,7 @@ public class KitMenu extends GuiListener implements PaginationHandler {
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
                     data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                         @Override
-                        public void call(SlotClickReport event) {
+                        public void call(@NotNull SlotClickReport event) {
                             api.getChatManager().sendPlayer(event.getPlayer(), "kit.no_permission");
                             event.getClickEvent().setCancelled(true);
                         }
@@ -51,7 +57,7 @@ public class KitMenu extends GuiListener implements PaginationHandler {
                     if(kit.getRenewTime() == -1){
                         data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                             @Override
-                            public void call(SlotClickReport event) {
+                            public void call(@NotNull SlotClickReport event) {
                                 api.getChatManager().sendPlayer(event.getPlayer(), "kit.one_time_use");
                                 event.getClickEvent().setCancelled(true);
                             }
@@ -62,7 +68,7 @@ public class KitMenu extends GuiListener implements PaginationHandler {
                     if(next > System.currentTimeMillis()){
                         data.add(new PaginationItem(kit.getNoAccessIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                             @Override
-                            public void call(SlotClickReport event) {
+                            public void call(@NotNull SlotClickReport event) {
                                 api.getChatManager().sendPlayer(event.getPlayer(), "kit.unavailable", ChatMessageType.CHAT, x -> String.format(x, api.formatLongFormDate(new Date(next))));
                                 event.getClickEvent().setCancelled(true);
                             }
@@ -72,11 +78,11 @@ public class KitMenu extends GuiListener implements PaginationHandler {
                 }
                 data.add(new PaginationItem(kit.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                     @Override
-                    public void call(SlotClickReport event) {
+                    public void call(@NotNull SlotClickReport event) {
                         event.getClickEvent().setCancelled(true);
                         kit.givePlayer(event.getPlayer(), pd);
                         pd.getKits().put(kit.getId(), System.currentTimeMillis());
-                        api.getGuiManager().openTopInventory(event.getPlayer(), "kit_menu");
+                        api.getGuiManager().openTopGui(event.getPlayer(), "kit_menu");
                     }
                 }));
             });

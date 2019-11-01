@@ -21,9 +21,9 @@ package dev.anhcraft.battle.gui.handlers;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleGuiManager;
-import dev.anhcraft.battle.api.gui.BattleGui;
+import dev.anhcraft.battle.api.gui.window.View;
 import dev.anhcraft.battle.api.gui.GuiListener;
-import dev.anhcraft.battle.api.gui.SlotCancelReport;
+import dev.anhcraft.battle.api.gui.reports.SlotCancelReport;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
 import org.bukkit.entity.Player;
 
@@ -38,50 +38,50 @@ public class CoreListener extends GuiListener {
         player.closeInventory();
     }
 
-    private void renderGui(Player player, BattleGui gui){
+    private void renderGui(Player player, View v){
         BattleGuiManager guiManager = ApiProvider.consume().getGuiManager();
-        if(gui.getPlayerGui().getTopGui() == gui)
-            guiManager.renderTopInventory(player, gui.getPlayerGui());
-        else if(gui.getPlayerGui().getBottomGui() == gui)
-            guiManager.renderBottomInv(player, gui.getPlayerGui());
+        if(v.getWindow().getTopView() == v)
+            guiManager.renderTopView(player, v.getWindow());
+        else if(v.getWindow().getBottomView() == v)
+            guiManager.renderBottomView(player, v.getWindow());
     }
 
     @Label("prev_page")
-    public void prevPage(Player player, BattleGui gui){
-        if(gui.getPagination() != null) {
-            gui.getPagination().prev();
-            gui.updatePagination(); // refresh listener
-            renderGui(player, gui);
+    public void prevPage(Player player, View v){
+        if(v.getPagination() != null) {
+            v.getPagination().prev();
+            v.updatePagination(); // refresh listener
+            renderGui(player, v);
         }
     }
 
     @Label("next_page")
-    public void nextPage(Player player, BattleGui gui){
-        if(gui.getPagination() != null) {
-            gui.getPagination().next();
-            gui.updatePagination();
-            renderGui(player, gui);
+    public void nextPage(Player player, View v){
+        if(v.getPagination() != null) {
+            v.getPagination().next();
+            v.updatePagination();
+            renderGui(player, v);
         }
     }
 
     @Label("choose_arena")
     public void chooseArena(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "arena_chooser");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "arena_chooser");
     }
 
     @Label("open_kit_menu")
     public void openKitMenu(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "kit_menu");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "kit_menu");
     }
 
     @Label("open_inventory")
     public void openInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_menu");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_menu");
     }
 
     @Label("open_market")
     public void openMarket(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "market_category_menu");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "market_category_menu");
     }
 
     @Label("quit_game")

@@ -22,6 +22,11 @@ package dev.anhcraft.battle.gui.market;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
+import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
+import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
+import dev.anhcraft.battle.api.gui.window.Window;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
@@ -33,15 +38,16 @@ import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class ProductMenu extends GuiListener implements PaginationHandler {
+public class ProductMenu extends GuiListener implements PaginationFactory {
     @Override
-    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
-        Category ctg = (Category) playerGui.getSharedData().remove("category");
+        Category ctg = (Category) window.getSharedData().remove("category");
         if(ctg == null) return;
         Market mk = api.getMarket();
         for(Product p : ctg.getProducts()){
@@ -56,7 +62,7 @@ public class ProductMenu extends GuiListener implements PaginationHandler {
             }
             data.add(new PaginationItem(ic.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
-                public void call(SlotClickReport event) {
+                public void call(@NotNull SlotClickReport event) {
                     event.getClickEvent().setCancelled(true);
                     if(!mk.isInGameShoppingAllowed() && api.getGameManager().getGame(player) != null){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.ig_shop_not_allowed");

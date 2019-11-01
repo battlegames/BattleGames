@@ -23,18 +23,24 @@ import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.game.Game;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
+import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
+import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
+import dev.anhcraft.battle.api.gui.window.Window;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class ArenaChooser extends GuiListener implements PaginationHandler {
+public class ArenaChooser extends GuiListener implements PaginationFactory {
     @Override
-    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         api.listArenas(arena -> {
             InfoHolder infoHolder;
@@ -52,7 +58,7 @@ public class ArenaChooser extends GuiListener implements PaginationHandler {
             icon.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(s, infoMap)));
             data.add(new PaginationItem(icon.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
-                public void call(SlotClickReport event) {
+                public void call(@NotNull SlotClickReport event) {
                     event.getPlayer().closeInventory();
                     api.getGameManager().join(event.getPlayer(), arena);
                 }

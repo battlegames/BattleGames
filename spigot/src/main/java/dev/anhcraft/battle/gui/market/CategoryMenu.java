@@ -22,23 +22,29 @@ package dev.anhcraft.battle.gui.market;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
+import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
+import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
+import dev.anhcraft.battle.api.gui.window.Window;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CategoryMenu extends GuiListener implements PaginationHandler {
+public class CategoryMenu extends GuiListener implements PaginationFactory {
     @Override
-    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         Market mk = api.getMarket();
         for(Category c : mk.getCategories()){
             data.add(new PaginationItem(c.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
-                public void call(SlotClickReport event) {
-                    playerGui.getSharedData().put("category", c);
-                    api.getGuiManager().openTopInventory(player, "market_product_menu");
+                public void call(@NotNull SlotClickReport event) {
+                    window.getSharedData().put("category", c);
+                    api.getGuiManager().openTopGui(player, "market_product_menu");
                 }
             }));
         }

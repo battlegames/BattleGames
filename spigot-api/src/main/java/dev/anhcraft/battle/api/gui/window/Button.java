@@ -17,29 +17,38 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
+package dev.anhcraft.battle.api.gui.window;
 
+import com.google.common.base.Preconditions;
+import dev.anhcraft.battle.api.gui.GuiCallback;
+import dev.anhcraft.battle.api.gui.Slot;
+import dev.anhcraft.battle.api.gui.reports.GuiReport;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class BattleGuiSlot {
+public class Button {
     private int index;
-    private GuiSlot slot;
+    private Slot slot;
     private Collection<GuiCallback<? extends GuiReport>> events;
     private ItemStack cachedItem;
 
-    public BattleGuiSlot(int index, GuiSlot slot, Collection<GuiCallback<? extends GuiReport>> events) {
+    public Button(int index, @NotNull Slot slot, @NotNull Collection<GuiCallback<? extends GuiReport>> events) {
+        Preconditions.checkNotNull(slot);
+        Preconditions.checkNotNull(events);
         this.index = index;
         this.slot = slot;
         this.events = events;
     }
 
-    public GuiSlot getSlot() {
+    @NotNull
+    public Slot getSlot() {
         return slot;
     }
 
+    @NotNull
     public Collection<GuiCallback<? extends GuiReport>> getEvents() {
         return events;
     }

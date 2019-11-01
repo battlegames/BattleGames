@@ -71,7 +71,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             player.teleport(plugin.getServerData().getSpawnPoint());
             player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
             player.setFlySpeed(plugin.getDefaultFlyingSpeed());
-            plugin.guiManager.setBottomInv(player, "main_player_inv");
+            plugin.guiManager.setBottomGui(player, "main_player_inv");
             plugin.resetScoreboard(player);
             plugin.taskHelper.newAsyncTask(() -> {
                 PlayerData playerData = plugin.dataManager.loadPlayerData(player);
@@ -90,7 +90,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void quit(PlayerQuitEvent event){
-        plugin.guiManager.destroyPlayerGui(event.getPlayer());
+        plugin.guiManager.destroyWindow(event.getPlayer());
         plugin.gameManager.quit(event.getPlayer());
         plugin.getHandler(GunHandler.class).handleZoomOut(event.getPlayer());
         plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
@@ -336,7 +336,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
 
             if(game.getArena().isRenderGuiOnDeath()){
-                plugin.guiManager.renderBottomInv(e.getEntity(), plugin.guiManager.getPlayerGui(e.getEntity()));
+                plugin.guiManager.renderBottomView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()));
             }
 
             game.getMode().getController(c -> {

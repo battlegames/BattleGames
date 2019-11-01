@@ -27,31 +27,31 @@ import org.bukkit.entity.Player;
 public class MainInventoryListener extends GuiListener {
     @Label("open")
     public void open(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_menu");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_menu");
     }
 
     @Label("open_scope")
     public void openScopeInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_scope");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_scope");
     }
 
     @Label("open_gun")
     public void openGunInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_gun");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_gun");
     }
 
     @Label("open_magazine")
     public void openMagazineInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_magazine");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_magazine");
     }
 
     @Label("open_ammo")
     public void openAmmoInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_ammo");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_ammo");
     }
 
     @Label("open_grenade")
     public void openGrenadeInv(Player player){
-        ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_grenade");
+        ApiProvider.consume().getGuiManager().openTopGui(player, "inventory_grenade");
     }
 }

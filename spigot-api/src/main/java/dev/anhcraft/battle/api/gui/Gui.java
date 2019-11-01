@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.gui;
 
+import dev.anhcraft.battle.api.gui.pagination.Pagination;
 import dev.anhcraft.battle.api.misc.BattleSound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ import java.util.Set;
 public class Gui {
     private String title;
     private int size;
-    private GuiSlot[] slots;
+    private Slot[] slots;
     private Pagination pagination;
     private BattleSound sound;
 
@@ -42,7 +43,7 @@ public class Gui {
         String snd = conf.getString("sound");
         sound = new BattleSound(snd == null ? "$block_chest_open" : snd.toUpperCase());
 
-        slots = new GuiSlot[size];
+        slots = new Slot[size];
         ConfigurationSection sc = conf.getConfigurationSection("slots");
         if(sc != null){
             Set<String> keys = sc.getKeys(false);
@@ -56,7 +57,7 @@ public class Gui {
                 int pos = sc.getInt(k+".row") * 9 + cl - 10;
                 ConfigurationSection item = sc.getConfigurationSection(k+".item");
                 List<String> handlers = sc.getStringList(k+".handlers");
-                slots[pos] = new GuiSlot(item, handlers, false);
+                slots[pos] = new Slot(item, handlers, false);
             }
         }
 
@@ -77,7 +78,7 @@ public class Gui {
                 for(int j = minX; j <= maxX; j++){
                     int pos = i * 9 + j - 10;
                     ps[in++] = pos;
-                    slots[pos] = new GuiSlot(null, new ArrayList<>(), true);
+                    slots[pos] = new Slot(null, new ArrayList<>(), true);
                 }
             }
             pagination = new Pagination(ps, handlerId);
@@ -86,7 +87,7 @@ public class Gui {
         ConfigurationSection bgIcon = conf.getConfigurationSection("background.item");
         List<String> bgHandlers = conf.getStringList("background.handlers");
         for(int i = 0; i < slots.length; i++){
-            if(slots[i] == null) slots[i] = new GuiSlot(bgIcon, bgHandlers, false);
+            if(slots[i] == null) slots[i] = new Slot(bgIcon, bgHandlers, false);
         }
     }
 
@@ -100,7 +101,7 @@ public class Gui {
     }
 
     @NotNull
-    public GuiSlot[] getSlots() {
+    public Slot[] getSlots() {
         return slots;
     }
 

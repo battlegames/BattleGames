@@ -48,7 +48,7 @@ public class GameListener extends BattleComponent implements Listener {
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
-        plugin.guiManager.setBottomInv(p, "game_player_inv");
+        plugin.guiManager.setBottomGui(p, "game_player_inv");
     }
 
     @EventHandler
@@ -58,7 +58,7 @@ public class GameListener extends BattleComponent implements Listener {
         if(inv != null) p.getInventory().setContents(inv);
         // although the inventory got backup, its handler still
         // didn't change so we must set it again
-        plugin.guiManager.setBottomInv(p, "main_player_inv");
+        plugin.guiManager.setBottomGui(p, "main_player_inv");
 
         for (PotionEffect pe : p.getActivePotionEffects()){
             p.removePotionEffect(pe.getType());
