@@ -26,12 +26,16 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.market.Transaction;
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.integrations.VaultApi;
+import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 
 public class ProductMenu extends GuiListener implements PaginationHandler {
     @Override
@@ -41,10 +45,16 @@ public class ProductMenu extends GuiListener implements PaginationHandler {
         if(ctg == null) return;
         Market mk = api.getMarket();
         for(Product p : ctg.getProducts()){
+            PreparedItem ic = p.getIcon();
             if(mk.isSummaryProductInfoEnabled() && mk.getSummaryProductLore() != null){
-                p.getIcon().lore().addAll(mk.getSummaryProductLore());
+                InfoHolder holder = new InfoHolder("product_");
+                p.inform(holder);
+                Map<String, String> map = api.mapInfo(holder);
+                for (String s : mk.getSummaryProductLore()){
+                    ic.lore().add(PlaceholderUtil.formatInfo(s, map));
+                }
             }
-            data.add(new PaginationItem(p.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
+            data.add(new PaginationItem(ic.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
                 public void call(SlotClickReport event) {
                     event.getClickEvent().setCancelled(true);

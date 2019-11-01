@@ -8,7 +8,7 @@ options:
     enabled: true
     lore:
       - "&f"
-      - "&fPrice: &d{__product_price__}"
+      - "&fPrice: &d${__product_price__}"
       - "&f"
       - "&e>> Click to purchase <<"
 
@@ -20,10 +20,10 @@ categories:
       lore:
         - "&fHere you can buy perks with&a cheap price"
         - "&fCurrently, sale off &e30%&f for all perks!"
-    enchant:
-      unbreaking: 1
-    flag:
-      - hide_enchants
+      enchant:
+        unbreaking: 1
+      flag:
+        - hide_enchants
     products:
       '1':
         icon:
