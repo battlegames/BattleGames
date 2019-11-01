@@ -31,6 +31,7 @@ import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.BattleEffect;
 import dev.anhcraft.battle.api.misc.EffectOption;
 import dev.anhcraft.battle.api.misc.Kit;
@@ -44,6 +45,8 @@ import dev.anhcraft.battle.gui.*;
 import dev.anhcraft.battle.gui.handlers.CoreListener;
 import dev.anhcraft.battle.gui.handlers.MainInventoryListener;
 import dev.anhcraft.battle.gui.inventory.*;
+import dev.anhcraft.battle.gui.market.CategoryMenu;
+import dev.anhcraft.battle.gui.market.ProductMenu;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.system.handlers.Handler;
@@ -112,7 +115,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "items/items.yml",
             "gui.yml " + (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml",
-            "perks.yml"
+            "perks.yml",
+            "market.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
@@ -126,6 +130,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
+    private final Market MARKET = new Market();
     private File localeDir;
     public CraftExtension extension;
     public ChatManager chatManager;
@@ -205,6 +210,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         initGui(CONFIG[11]);
         initKits(CONFIG[12]);
         initPerks(CONFIG[13]);
+        initMarket(CONFIG[14]);
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -360,6 +366,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     public FileConfiguration getPerkConf(){
         return CONFIG[13];
+    }
+
+    public FileConfiguration getMarketConf(){
+        return CONFIG[14];
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
@@ -615,6 +625,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager.registerGuiHandler("inventory_grenade", new GrenadeInventory());
         guiManager.registerGuiHandler("kit_menu", new KitMenu());
         guiManager.registerGuiHandler("arena_chooser", new ArenaChooser());
+        guiManager.registerGuiHandler("market_category_menu", new CategoryMenu());
+        guiManager.registerGuiHandler("market_product_menu", new ProductMenu());
 
         c.getKeys(false).forEach(s -> {
             if(s.length() > 0 && s.charAt(0) != '$')
@@ -646,6 +658,14 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             }
             PERK_MAP.put(s, perk);
         });
+    }
+
+    private void initMarket(FileConfiguration c) {
+        try {
+            ConfigHelper.readConfig(c, Market.SCHEMA, MARKET);
+        } catch (InvalidValueException e) {
+            e.printStackTrace();
+        }
     }
 
     public void resetScoreboard(Player player) {
@@ -960,6 +980,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 consumer.accept(location, effect);
             }
         }, 0, delayTime.longValue()));
+    }
+
+    @Override
+    public @NotNull Market getMarket() {
+        return MARKET;
     }
 
     private void exit(String msg) {

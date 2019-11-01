@@ -537,6 +537,108 @@ arena_chooser:
         - "core::cancel_event"
         - "core::next_page"
 
+market_category_menu:
+  title: "{{ gui.market_category_menu.title }}"
+  size: 36
+  background:
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 3
+      left_column: 1
+      right_column: 9
+    handler: "market_category_menu"
+  slots:
+    prev:
+      row: 4
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    close:
+      row: 4
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.btn.close_name }}"
+        lore:
+          - "$$gui.btn.close_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::close"
+    next:
+      row: 4
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
+market_product_menu:
+  title: "{{ gui.market_product_menu.title }}"
+  size: 45
+  background:
+    icon:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "{{ gui.empty }}"
+    handlers:
+      - "core::cancel_event"
+  pagination:
+    region:
+      top_row: 1
+      bottom_row: 4
+      left_column: 1
+      right_column: 9
+    handler: "market_product_menu"
+  slots:
+    prev:
+      row: 5
+      column: 3_items_1
+      item:
+        material: arrow
+        name: "{{ gui.btn.prev_name }}"
+        lore:
+          - "$$gui.btn.prev_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::prev_page"
+    back:
+      row: 5
+      column: 3_items_2
+      item:
+        material: barrier
+        name: "{{ gui.market_product_menu.back_name }}"
+        lore:
+          - "$$gui.market_product_menu.back_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::open_market"
+    next:
+      row: 5
+      column: 3_items_3
+      item:
+        material: arrow
+        name: "{{ gui.btn.next_name }}"
+        lore:
+          - "$$gui.btn.next_lore"
+      handlers:
+        - "core::cancel_event"
+        - "core::next_page"
+
 # =========================================
 # Sections below are for players inventory
 # Note: Slots from 0 to 9 will be displayed

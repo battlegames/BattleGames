@@ -46,6 +46,12 @@ public class DataMap<T> {
         return c.isAssignableFrom(a.getClass()) ? (C) a : def;
     }
 
+    @NotNull
+    public <C> C readRequiredTag(T key, Class<? extends C> clazz){
+        C v = readTag(key, clazz);
+        return Objects.requireNonNull(v);
+    }
+
     public void forEach(BiConsumer<T, DataTag> consumer){
         map.forEach(consumer);
     }

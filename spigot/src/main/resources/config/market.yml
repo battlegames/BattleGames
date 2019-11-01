@@ -1,0 +1,116 @@
+# This configuration is a part of BattleGames
+# https://wiki.anhcraft.dev/en/battle/market
+
+options:
+  log_transactions: true
+  allow_in_game_shopping: true
+  summary_product_info:
+    enabled: true
+    lore:
+      - "&f"
+      - "&fPrice: &d{__product_price__}"
+      - "&f"
+      - "&e>> Click to purchase <<"
+
+categories:
+  perks:
+    icon:
+      material: emerald
+      name: "&b&lPerk shop"
+      lore:
+        - "&fHere you can buy perks with&a cheap price"
+        - "&fCurrently, sale off &e30%&f for all perks!"
+    enchant:
+      unbreaking: 1
+    flag:
+      - hide_enchants
+    products:
+      '1':
+        icon:
+          name: "&c&lHealth boost"
+          material: redstone
+          lore:
+            - "&fBoost your health!"
+        price: 75
+        executions:
+          give_perks:
+            - health_boost
+      '2':
+        icon:
+          name: "&a&lSpeed"
+          material: redstone
+          lore:
+            - "&aSpeed up your movement!"
+            - "&eAvailable until the game ends"
+        price: 150
+        executions:
+          give_perks:
+            - speed
+  food:
+    icon:
+      material: apple
+      name: "&6&lFood shop"
+      lore:
+        - "&bHere you can buy tasty food to provide energy"
+        - "&bfor the battle"
+    products:
+      '1':
+        icon:
+          name: "&aSnacks"
+          material: cookie
+        price: 20
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cookie
+                amount: 16
+              '2':
+                material: apple
+                amount: 16
+      '2':
+        icon:
+          name: "&4Meat"
+          material: cookie
+        price: 36
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cooked_beef
+                amount: 16
+              '2':
+                material: cooked_chicken
+                amount: 16
+  misc:
+    icon:
+      material: redstone
+      name: "&5&lMiscellaneous shop"
+    products:
+      '1':
+        icon:
+          name: "&aBuy 200 in-game exp"
+          material: ice
+        price: 5000
+        executions:
+          give_exp:
+            vanilla: 200
+      '2':
+        icon:
+          name: "&aBuy 1000 in-game exp"
+          material: ice
+          lore:
+            - "&eBonus: Get 20% Battle exp"
+        price: 25000
+        executions:
+          give_exp:
+            vanilla: 1000
+            battle: 200
+      '3':
+        icon:
+          name: "&bFlying&f ability"
+          material: feather
+        price: 10000
+        executions:
+          perform_commands:
+            - "fly %player_name%"

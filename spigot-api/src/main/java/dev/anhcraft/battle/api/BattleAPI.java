@@ -21,6 +21,7 @@ package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.BattleEffect;
 import dev.anhcraft.battle.api.misc.Kit;
 import dev.anhcraft.battle.api.misc.Perk;
@@ -364,4 +365,7 @@ public interface BattleAPI {
      * @param effect the effect
      */
     void playEffect(@NotNull Location location, @NotNull BattleEffect effect);
+
+    @NotNull
+    Market getMarket();
 }

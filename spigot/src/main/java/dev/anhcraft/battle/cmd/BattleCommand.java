@@ -257,6 +257,11 @@ public class BattleCommand extends BaseCommand{
         plugin.guiManager.openTopInventory(player, "inventory_menu");
     }
 
+    @Subcommand("market")
+    public void market(Player player){
+        plugin.guiManager.openTopInventory(player, "market_category_menu");
+    }
+
     @Subcommand("clearinv")
     @CommandPermission("battle.clearinv")
     public void clearInv(Player player, @Optional OfflinePlayer target){

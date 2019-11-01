@@ -27,8 +27,8 @@ server:
   connect_failed: "&eCouldn't connect to any servers at the moment. Please contact the staffs."
   try_reconnect: "&eTrying to reconnect... &f%s/%s"
   switched_server:
-  - "&eLooks like the target server is down!"
-  - "&aSwitched to another server. Connecting... &f%s/%s"
+    - "&eLooks like the target server is down!"
+    - "&aSwitched to another server. Connecting... &f%s/%s"
   server_connecting: "&aYou will be redirected to another server! Please wait..."
 arena:
   not_found: "&cCouldn't find that arena."
@@ -106,6 +106,11 @@ kit:
   no_permission: "&cYou don't have permission to use this kit!"
   unavailable: "&cThis kit is currently unavailable! You need to wait until %s"
   one_time_use: "&cThis kit can only be used one-time!"
+market:
+  ig_shop_not_allowed: "&cIn-game shopping is not allowed!"
+  not_enough_money: "&cSorry, you can't afford this product! You only have &f$%.2f&c in wallet."
+  purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
+  purchase_success: "&aPurchased successfully!"
 gui:
   empty: "&f"
   btn:
@@ -168,3 +173,11 @@ gui:
     quit_name: "&c&lQuit"
     quit_lore:
       - "&eQuit this game"
+  market_product_menu:
+    title: "&4&lMARKET"
+    back_name: "&eBack"
+    back_lore:
+      - "&fClick to view the market menu"
+      - "&fOr you can use &d/b market"
+  market_category_menu:
+    title: "&4&lMARKET"

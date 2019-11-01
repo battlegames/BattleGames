@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.storage.data;
 import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.PlayerInventory;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
+import dev.anhcraft.battle.api.market.Transaction;
 import dev.anhcraft.battle.api.misc.Resettable;
 import dev.anhcraft.battle.api.storage.Serializable;
 import dev.anhcraft.battle.api.storage.tags.StringTag;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -46,6 +48,7 @@ public class PlayerData implements Resettable, Serializable {
     private PlayerInventory inventory = new PlayerInventory();
     private Map<String, Long> kits = new ConcurrentHashMap<>();
     private List<String> receivedFirstJoinKits = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @NotNull
     public AtomicInteger getHeadshotCounter() {
@@ -102,6 +105,11 @@ public class PlayerData implements Resettable, Serializable {
         return receivedFirstJoinKits;
     }
 
+    @NotNull
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
@@ -142,6 +150,18 @@ public class PlayerData implements Resettable, Serializable {
                 receivedFirstJoinKits.add(k);
             });
         }
+        int mkts = map.readTag("mkts", Integer.class, 0);
+        for (int i = 0; i < mkts; i++){
+            String pre = "mkts."+i;
+            UUID buyer = new UUID(
+                    map.readRequiredTag(pre+".buyer.ms", Long.class),
+                    map.readRequiredTag(pre+".buyer.ls", Long.class)
+            );
+            long date = map.readRequiredTag(pre+".date", Long.class);
+            double price = map.readRequiredTag(pre+".price", Double.class);
+            String product = map.readRequiredTag(pre+".product", String.class);
+            transactions.add(new Transaction(buyer, product, price, date));
+        }
     }
 
     @Override
@@ -175,6 +195,17 @@ public class PlayerData implements Resettable, Serializable {
         List<StringTag> rfjk = new ArrayList<>();
         receivedFirstJoinKits.forEach(v -> rfjk.add(new StringTag(v)));
         map.writeTag("first_join_kits", rfjk);
+        map.writeTag("mkts", transactions.size());
+        int tsi = 0;
+        for(Transaction ts : transactions){
+            String pre = "mkts."+tsi;
+            map.writeTag(pre+".buyer.ms", ts.getBuyer().getMostSignificantBits());
+            map.writeTag(pre+".buyer.ls", ts.getBuyer().getLeastSignificantBits());
+            map.writeTag(pre+".date", ts.getDate());
+            map.writeTag(pre+".product", ts.getProduct());
+            map.writeTag(pre+".price", ts.getPrice());
+            tsi++;
+        }
     }
 
     @Override
@@ -190,5 +221,6 @@ public class PlayerData implements Resettable, Serializable {
         inventory.clearInventory();
         kits.clear();
         receivedFirstJoinKits.clear();
+        transactions.clear();
     }
 }

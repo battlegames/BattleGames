@@ -79,6 +79,11 @@ public class CoreListener extends GuiListener {
         ApiProvider.consume().getGuiManager().openTopInventory(player, "inventory_menu");
     }
 
+    @Label("open_market")
+    public void openMarket(Player player){
+        ApiProvider.consume().getGuiManager().openTopInventory(player, "market_category_menu");
+    }
+
     @Label("quit_game")
     public void quitGame(Player player){
         ApiProvider.consume().getGameManager().quit(player);
