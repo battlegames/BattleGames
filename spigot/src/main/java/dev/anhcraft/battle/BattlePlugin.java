@@ -426,6 +426,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initSystem(FileConfiguration c) {
+        if(c.getString("plugin_version").chars().sum() < "1.1.4".chars().sum()){
+            getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
+            getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
+            getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
+            getLogger().warning("1. Backup all the config files");
+            getLogger().warning("2. Remove the entire Battle folder");
+            getLogger().warning("3. Check out the new files");
+            getLogger().warning("4. Compare with the old files");
+            getLogger().warning("5. Re-configure");
+            getLogger().warning("If you need help, contact me via Discord: https://discord.gg/QSpc5xH");
+        }
         boolean remoteConfig = c.getBoolean("remote_config.enabled");
         if(remoteConfig){
             remoteConfigUrl = c.getString("remote_config.url");
