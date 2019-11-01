@@ -24,5 +24,5 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public interface PaginationHandler {
-    void pullData(Pagination pagination, Player player, List<PaginationItem> data);
+    void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data);
 }

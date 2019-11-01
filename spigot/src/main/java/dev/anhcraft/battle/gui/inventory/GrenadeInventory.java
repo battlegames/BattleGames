@@ -35,7 +35,7 @@ import java.util.List;
 
 public class GrenadeInventory extends GuiListener implements PaginationHandler {
     @Override
-    public void pullData(Pagination pagination, Player player, List<PaginationItem> data) {
+    public void pullData(Player player, PlayerGui playerGui, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         PlayerData playerData = api.getPlayerData(player);
         if(playerData != null) {

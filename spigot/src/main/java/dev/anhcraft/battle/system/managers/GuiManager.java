@@ -219,7 +219,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             if (gh instanceof PaginationHandler) {
                 List<PaginationItem> data = new ArrayList<>();
                 // get data
-                ((PaginationHandler) gh).pullData(gui.getPagination(), player, data);
+                ((PaginationHandler) gh).pullData(player, pg, gui, gui.getPagination(), data);
                 // slots per page
                 int[] pageSlots = gui.getPagination().getSlots();
                 // all pagination slots
