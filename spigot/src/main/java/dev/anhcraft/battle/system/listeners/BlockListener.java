@@ -33,7 +33,7 @@ public class BlockListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void breakBlock(BlockBreakEvent event){
-        if(!event.getPlayer().hasPermission("abm.block.break")){
+        if(!event.getPlayer().hasPermission("battle.block.break")){
             plugin.chatManager.sendPlayer(event.getPlayer(), "server.illegal_block_break");
             event.setCancelled(true);
             event.setDropItems(false);
@@ -44,7 +44,7 @@ public class BlockListener extends BattleComponent implements Listener {
     @EventHandler
     public void placeBlock(BlockPlaceEvent event){
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
-        if(!event.isCancelled() && !event.getPlayer().hasPermission("abm.block.place")){
+        if(!event.isCancelled() && !event.getPlayer().hasPermission("battle.block.place")){
             plugin.chatManager.sendPlayer(event.getPlayer(), "server.illegal_block_place");
             event.setCancelled(true);
             event.setBuild(false);
