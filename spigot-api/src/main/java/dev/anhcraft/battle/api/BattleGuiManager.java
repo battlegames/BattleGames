@@ -57,6 +57,7 @@ public interface BattleGuiManager {
      * Calling this method will reset the current handlers and also rerender the bottom inventory of the given player.
      * @param player the player
      * @param name the name of the GUI
+     * @return the view
      */
     @NotNull
     View setBottomGui(@NotNull Player player, @NotNull String name);
@@ -65,6 +66,7 @@ public interface BattleGuiManager {
      * Re-renders the bottom GUI.
      * @param player the player
      * @param window the {@link Window}
+     * @return the view
      */
     @Nullable
     View renderBottomView(@NotNull Player player, @NotNull Window window);
@@ -75,6 +77,7 @@ public interface BattleGuiManager {
      * Calling this method will reset the current handlers and also rerender the top inventory of the given player.
      * @param player the player
      * @param name the name of the GUI
+     * @return the view
      */
     @NotNull
     View openTopGui(@NotNull Player player, @NotNull String name);
@@ -83,6 +86,7 @@ public interface BattleGuiManager {
      * Re-renders the top GUI.
      * @param player the player
      * @param window the {@link Window}
+     * @return the view
      */
     @Nullable
     View renderTopView(@NotNull Player player, @NotNull Window window);
