@@ -249,27 +249,30 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     @Override
-    public void setBottomInv(@NotNull Player player, @NotNull String name){
+    public BattleGui setBottomInv(@NotNull Player player, @NotNull String name){
         Condition.argNotNull("player", player);
         Condition.argNotNull("name", name);
         PlayerGui gui = getPlayerGui(player);
-        gui.setBottomGui(setupGui(player, gui, GUI.get(name)));
+        BattleGui bg = setupGui(player, gui, GUI.get(name));
+        gui.setBottomGui(bg);
         renderBottomInv(player, gui);
+        return bg;
     }
 
     @Override
-    public void renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg){
+    public BattleGui renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg){
         Condition.argNotNull("player", player);
         Condition.argNotNull("apg", apg);
         BattleGui bg = apg.getBottomGui();
-        if(bg == null) return;
+        if(bg == null) return null;
         ItemStack[] items = renderItems(player, bg);
         for(int i = 0; i < items.length; i++)
             player.getInventory().setItem(i, items[i]);
+        return bg;
     }
 
     @Override
-    public void openTopInventory(@NotNull Player player, @NotNull String name){
+    public BattleGui openTopInventory(@NotNull Player player, @NotNull String name){
         Condition.argNotNull("player", player);
         Condition.argNotNull("name", name);
         PlayerGui pg = getPlayerGui(player);
@@ -286,15 +289,17 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         renderTopInventory(player, pg);
         player.openInventory(inv);
         bg.getGui().getSound().play(player);
+        return bg;
     }
 
     @Override
-    public void renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg){
+    public BattleGui renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg){
         Condition.argNotNull("player", player);
         Condition.argNotNull("apg", apg);
         BattleGui gui = apg.getTopGui();
-        if(gui == null || apg.getTopInv() == null) return;
+        if(gui == null || apg.getTopInv() == null) return null;
         apg.getTopInv().setContents(renderItems(player, gui));
+        return gui;
     }
 
     @Override

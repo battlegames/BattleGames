@@ -19,11 +19,13 @@
  */
 package dev.anhcraft.battle.api;
 
+import dev.anhcraft.battle.api.gui.BattleGui;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiListener;
 import dev.anhcraft.battle.api.gui.PlayerGui;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface BattleGuiManager {
     /**
@@ -56,14 +58,16 @@ public interface BattleGuiManager {
      * @param player the player
      * @param name the name of the GUI
      */
-    void setBottomInv(@NotNull Player player, @NotNull String name);
+    @NotNull
+    BattleGui setBottomInv(@NotNull Player player, @NotNull String name);
 
     /**
      * Re-renders the bottom GUI.
      * @param player the player
      * @param apg the {@link PlayerGui}
      */
-    void renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg);
+    @Nullable
+    BattleGui renderBottomInv(@NotNull Player player, @NotNull PlayerGui apg);
 
     /**
      * Opens a GUI as the top inventory.
@@ -72,14 +76,16 @@ public interface BattleGuiManager {
      * @param player the player
      * @param name the name of the GUI
      */
-    void openTopInventory(@NotNull Player player, @NotNull String name);
+    @NotNull
+    BattleGui openTopInventory(@NotNull Player player, @NotNull String name);
 
     /**
      * Re-renders the top GUI.
      * @param player the player
      * @param apg the {@link PlayerGui}
      */
-    void renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg);
+    @Nullable
+    BattleGui renderTopInventory(@NotNull Player player, @NotNull PlayerGui apg);
 
     /**
      * Destroys the {@link PlayerGui} of the given player.
