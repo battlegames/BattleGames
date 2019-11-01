@@ -52,10 +52,13 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("level_progress", player -> {
             PlayerData pd = plugin.getPlayerData(player);
             if(pd != null) {
-                long current = pd.getExp().get();
-                int nextLv = plugin.calculateLevel(current) + 1;
-                long next = plugin.calculateExp(nextLv);
-                return MathUtil.formatRound(100d/next*current);
+                long midExp = pd.getExp().get();
+                int lv = plugin.calculateLevel(midExp);
+                long startExp = plugin.calculateExp(lv);
+                long endExp = plugin.calculateExp(lv + 1);
+                long delta1 = endExp - startExp;
+                long delta2 = midExp - startExp;
+                return MathUtil.formatRound(100d/delta1*delta2);
             } else return null;
         });
         handlers.put("stats_win_matches", player -> {
