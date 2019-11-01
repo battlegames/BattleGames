@@ -20,13 +20,18 @@
 package dev.anhcraft.battle.api.gui;
 
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BattleGui {
     private Gui gui;
     private PlayerGui playerGui;
     private BattleGuiSlot[] slots;
     private PaginationHelper<BattleGuiSlot> pagination;
+    private Map<String, Object> sharedData;
 
     public BattleGui(Gui gui, PlayerGui playerGui, BattleGuiSlot[] slots) {
         this.gui = gui;
@@ -57,5 +62,13 @@ public class BattleGui {
 
     public void updatePagination(){
         pagination.each(battleGuiSlot -> slots[battleGuiSlot.getIndex()] = battleGuiSlot);
+    }
+
+    @NotNull
+    public Map<String, Object> getSharedData() {
+        if(sharedData == null){
+            sharedData = new HashMap<>();
+        }
+        return sharedData;
     }
 }
