@@ -21,6 +21,7 @@ package dev.anhcraft.battle.gui.market;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
 import dev.anhcraft.battle.api.gui.*;
 import dev.anhcraft.battle.api.gui.pagination.Pagination;
 import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
@@ -37,6 +38,7 @@ import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,6 +78,11 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                     }
                     PlayerData pd = api.getPlayerData(player);
                     if(pd == null) return;
+
+                    PlayerPurchaseEvent ev = new PlayerPurchaseEvent(player, mk, ctg, p);
+                    Bukkit.getPluginManager().callEvent(ev);
+                    if(ev.isCancelled()) return;
+
                     EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, p.getPrice());
                     if(!er.transactionSuccess()){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.purchase_failed");
