@@ -20,12 +20,17 @@
 package dev.anhcraft.battle.api.gui;
 
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerGui {
     private BattleGui topGui;
     private BattleGui bottomGui;
     private Inventory topInv;
+    private Map<String, Object> sharedData;
 
     @Nullable
     public BattleGui getTopGui() {
@@ -52,5 +57,13 @@ public class PlayerGui {
 
     public void setTopInv(@Nullable Inventory topInv) {
         this.topInv = topInv;
+    }
+
+    @NotNull
+    public Map<String, Object> getSharedData() {
+        if(sharedData == null){
+            sharedData = new HashMap<>();
+        }
+        return sharedData;
     }
 }
