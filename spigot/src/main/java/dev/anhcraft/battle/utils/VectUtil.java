@@ -22,25 +22,40 @@ package dev.anhcraft.battle.utils;
 import org.bukkit.util.Vector;
 
 public class VectUtil {
-    // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/pull-requests/358/overview
-    public static Vector rotate(Vector vec, float yaw, float pitch) {
-        double yawRadians = Math.toRadians(yaw);
-        double pitchRadians = Math.toRadians(-pitch);
+    public static Vector rotate(Vector v, float yawDegrees, float pitchDegrees) {
+        double yaw = Math.toRadians(-1.0f * (yawDegrees + 90.0f));
+        double pitch = Math.toRadians(- pitchDegrees);
+        double cosYaw = Math.cos(yaw);
+        double cosPitch = Math.cos(pitch);
+        double sinYaw = Math.sin(yaw);
+        double sinPitch = Math.sin(pitch);
+        double initialX = v.getX();
+        double initialY = v.getY();
+        double x = initialX * cosPitch - initialY * sinPitch;
+        double y = initialX * sinPitch + initialY * cosPitch;
+        double initialZ = v.getZ();
+        initialX = x;
+        double z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
+        return new Vector(x, y, z);
+    }
 
-        double cosYaw = Math.cos(yawRadians);
-        double cosPitch = Math.cos(pitchRadians);
-        double sinYaw = Math.sin(yawRadians);
-        double sinPitch = Math.sin(pitchRadians);
+    public static void rotateNew(Vector vec, float yawDeg, float pitchDeg){
+        double yaw = Math.toRadians(yawDeg); // trái - phải
+        double pitch = Math.toRadians(pitchDeg); // trên - dưới
 
-        double initialX = vec.getX();
-        double initialY = vec.getY();
-        double initialZ = vec.getZ();
-        vec.setX(initialX * cosPitch - initialY * sinPitch);
-        vec.setY(initialX * sinPitch + initialY * cosPitch);
+        double x = vec.getX();
+        double z = vec.getZ();
+        double y = vec.getY();
 
-        initialX = vec.getX();
-        vec.setZ(initialZ * cosYaw + initialX * sinYaw);
-        vec.setX(initialX * cosYaw - initialZ * sinYaw);
-        return vec;
+        // Xét mặt XZ với X là trục cos, Z là trục sin
+        double angleXZ = Math.atan2(z, x) + yaw;
+        vec.setX(x * Math.cos(angleXZ));
+        vec.setZ(z * Math.sin(angleXZ));
+
+        // Xét mặt YZ với Z là trục cos, Y là trục sin
+        double angleYZ = Math.atan2(y, z) + pitch;
+        vec.setY(y * Math.sin(angleYZ));
+        vec.setZ(z * Math.cos(angleYZ));
     }
 }

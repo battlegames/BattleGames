@@ -73,9 +73,10 @@ public class Gun extends Weapon<GunModel> {
                 if (System.currentTimeMillis() - lastSprayTime >= 500) nextSpray = 0;
                 else if (++nextSpray == max) nextSpray = max - 1;
                 lastSprayTime = System.currentTimeMillis();
+                return nextSpray;
             }
         }
-        return nextSpray;
+        return -1;
     }
 
     public long getLastSprayTime() {

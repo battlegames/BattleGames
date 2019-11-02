@@ -210,9 +210,12 @@ public class GunHandler extends Handler {
             if(pair.getFirst() == null || pair.getSecond() == null){
                 throw new IllegalStateException();
             }
-            sprayVec = new Vector(pair.getFirst(), pair.getSecond(), 0).normalize();
+            sprayVec = new Vector(pair.getFirst(), pair.getSecond(), pair.getFirst());
+            if(sprayVec.length() > 0){
+                sprayVec.normalize();
+            }
             VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
-            sprayVec.multiply(player.isSneaking() ? .3 : .5);
+            sprayVec.multiply(player.isSneaking() ? 0.25 : 0.5);
         } else
             sprayVec = new Vector();
 
@@ -221,17 +224,22 @@ public class GunHandler extends Handler {
             entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity));
         }
 
-        final double length = 100;
-        final double offset = 0.5;
-        final double maxSprayMulti = 0.75;
-        final double minSprayMulti = 0.1;
-        final double deltaSprayMulti = maxSprayMulti - minSprayMulti;
+        final double maxHeight = player.getWorld().getMaxHeight();
+        final double angle = Math.toRadians(-start.getPitch());
+        final double cosA = Math.cos(angle);
+        final double sinA = Math.sin(angle);
+        final double speed = 25;
+        final long timeOffset = 25;
 
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Ammo.Bullet b : bullets){
-            for(double d = offset; d < length; d += offset){
-                Vector sv = sprayVec.clone().multiply((length - d) * deltaSprayMulti / length + minSprayMulti);
-                Location loc = start.clone().add(dir.clone().multiply(d).add(sv));
+            long currentTime = 0;
+            while (true){
+                double deltaTime = (currentTime += timeOffset) / 1000d;
+                double x = speed * cosA * deltaTime;
+                double y = speed * sinA * deltaTime - 0.5 * 9.8 * deltaTime * deltaTime;
+                Location loc = start.clone().add(dir.clone().multiply(x).add(sprayVec)).add(0, y, 0);
+                if(loc.getY() > maxHeight || loc.getY() < 0) break;
 
                 if(b.getParticleEffect() != null)
                     b.getParticleEffect().spawn(loc);
