@@ -228,7 +228,6 @@ public class GunHandler extends Handler {
         final double angle = Math.toRadians(-start.getPitch());
         final double cosA = Math.cos(angle);
         final double sinA = Math.sin(angle);
-        final double speed = 25;
         final long timeOffset = 25;
 
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
@@ -236,8 +235,8 @@ public class GunHandler extends Handler {
             long currentTime = 0;
             while (true){
                 double deltaTime = (currentTime += timeOffset) / 1000d;
-                double x = speed * cosA * deltaTime;
-                double y = speed * sinA * deltaTime - 0.5 * 9.8 * deltaTime * deltaTime;
+                double x = gm.getMuzzleVelocity() * cosA * deltaTime;
+                double y = gm.getMuzzleVelocity() * sinA * deltaTime - 0.5 * 9.8 * deltaTime * deltaTime;
                 Location loc = start.clone().add(dir.clone().multiply(x).add(sprayVec)).add(0, y, 0);
                 if(loc.getY() > maxHeight || loc.getY() < 0) break;
 

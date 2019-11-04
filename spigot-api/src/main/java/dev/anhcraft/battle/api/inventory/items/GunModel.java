@@ -59,6 +59,10 @@ public class GunModel extends WeaponModel {
     })
     private double weight;
 
+    @Key("muzzle_velocity")
+    @Explanation("The initial velocity of a bullet when it is shot out of the gun")
+    private double muzzleVelocity = 25;
+
     @Key("magazine.default")
     @Explanation("The default magazine")
     @Validation(notNull = true)
@@ -137,6 +141,10 @@ public class GunModel extends WeaponModel {
 
     public double getWeight() {
         return weight;
+    }
+
+    public double getMuzzleVelocity() {
+        return muzzleVelocity;
     }
 
     @NotNull
