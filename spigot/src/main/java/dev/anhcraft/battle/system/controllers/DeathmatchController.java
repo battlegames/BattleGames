@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.GamePlayerDamageEvent;
+import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
@@ -188,7 +188,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @EventHandler
-    public void damage(GamePlayerDamageEvent e) {
+    public void damage(PlayerWeaponDamageEvent e) {
         if(e.getGame().getMode() != getMode()) return;
         performCooldownMap(e.getGame(), "spawn_protection",
             cooldownMap -> {

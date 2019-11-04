@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.system.handlers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.PlayerDamageEvent;
+import dev.anhcraft.battle.api.events.WeaponDamageEvent;
 import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.DamageReport;
@@ -260,7 +260,7 @@ public class GunHandler extends Handler {
                     if(ve.equals(player) || !ent.getValue().contains(loc)) continue;
                     DamageReport dr = new DamageReport(player, b.getDamage());
                     dr.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
-                    PlayerDamageEvent event = new PlayerDamageEvent(localGame, dr, ve, gunItem);
+                    WeaponDamageEvent event = new WeaponDamageEvent(localGame, dr, ve, gunItem);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) continue;
 

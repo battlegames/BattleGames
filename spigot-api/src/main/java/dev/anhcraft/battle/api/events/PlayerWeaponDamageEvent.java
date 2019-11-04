@@ -19,73 +19,39 @@
  */
 package dev.anhcraft.battle.api.events;
 
-import dev.anhcraft.battle.api.game.Game;
-import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.items.Weapon;
 import dev.anhcraft.battle.api.misc.DamageReport;
+import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.game.GamePlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerDamageEvent extends GameEvent implements Cancellable {
+public class PlayerWeaponDamageEvent extends WeaponDamageEvent {
     public static final HandlerList handlers = new HandlerList();
+    private GamePlayer gp1;
+    private GamePlayer gp2;
 
-    private DamageReport report;
-    private LivingEntity entity;
-    private Weapon weapon;
-    private boolean cancelled;
-
-    public PlayerDamageEvent(@NotNull Game game, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon) {
-        super(game);
-        this.report = report;
-        this.entity = entity;
-        this.weapon = weapon;
-    }
-
-    @Override
-    @NotNull
-    public LocalGame getGame() {
-        return (LocalGame) game;
+    public PlayerWeaponDamageEvent(@NotNull LocalGame localGame, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon, @NotNull GamePlayer gp1, @NotNull GamePlayer gp2) {
+        super(localGame, report, entity, weapon);
+        this.gp1 = gp1;
+        this.gp2 = gp2;
     }
 
     @NotNull
-    public DamageReport getReport() {
-        return report;
+    public Player getPlayer(){
+        return (Player) getEntity();
     }
 
     @NotNull
-    public Player getDamager() {
-        return report.getDamager();
+    public GamePlayer getGameDamager() {
+        return gp1;
     }
 
     @NotNull
-    public LivingEntity getEntity() {
-        return entity;
-    }
-
-    public double getDamage() {
-        return report.getDamage();
-    }
-
-    public void setDamage(double damage) {
-        report.setDamage(damage);
-    }
-
-    @NotNull
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public GamePlayer getGamePlayer() {
+        return gp2;
     }
 
     @Override
