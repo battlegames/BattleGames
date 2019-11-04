@@ -36,29 +36,30 @@ public class RollbackWork implements Work {
 
     @Override
     public void handle(@NotNull BattlePlugin plugin, WorkSession session, @NotNull Arena arena) {
-        if(arena.getRollback() == null) return;
-        Rollback rollback = arena.getRollback();
-        if(rollback.getProvider() == Rollback.Provider.SLIME_WORLD && plugin.hasSlimeWorldManagerSupport()){
-            for(String w : rollback.getWorlds()){
-                CountDownLatch countDownLatch = new CountDownLatch(1);
-                switch (plugin.SWMIntegration.isReadOnly(w)) {
-                    case -1: {
-                        plugin.getLogger().warning("[Rollback/SWM] World not found: " + w);
-                        continue;
+        if(arena.getRollback() != null) {
+            Rollback rollback = arena.getRollback();
+            if (rollback.getProvider() == Rollback.Provider.SLIME_WORLD && plugin.hasSlimeWorldManagerSupport()) {
+                for (String w : rollback.getWorlds()) {
+                    CountDownLatch countDownLatch = new CountDownLatch(1);
+                    switch (plugin.SWMIntegration.isReadOnly(w)) {
+                        case -1: {
+                            plugin.getLogger().warning("[Rollback/SWM] World not found: " + w);
+                            continue;
+                        }
+                        case 0: {
+                            plugin.getLogger().warning("[Rollback/SWM] World is not in read-only mode: " + w);
+                            continue;
+                        }
+                        case 1: {
+                            plugin.getLogger().info("[Rollback/SWM] Reloading world: " + w);
+                            plugin.SWMIntegration.reloadWorld(countDownLatch, w);
+                        }
                     }
-                    case 0: {
-                        plugin.getLogger().warning("[Rollback/SWM] World is not in read-only mode: " + w);
-                        continue;
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    case 1: {
-                        plugin.getLogger().info("[Rollback/SWM] Reloading world: " + w);
-                        plugin.SWMIntegration.reloadWorld(countDownLatch, w);
-                    }
-                }
-                try {
-                    countDownLatch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
