@@ -22,7 +22,9 @@ package dev.anhcraft.battle.gui.market;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
-import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.api.gui.GuiCallback;
+import dev.anhcraft.battle.api.gui.GuiListener;
 import dev.anhcraft.battle.api.gui.pagination.Pagination;
 import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
 import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
@@ -52,7 +54,11 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
         Category ctg = (Category) window.getSharedData().remove("category");
         if(ctg == null) return;
         Market mk = api.getMarket();
+        boolean inGame = api.getGameManager().getGame(player) != null;
         for(Product p : ctg.getProducts()){
+            if(p.isInGameOnly() && !inGame){
+                continue;
+            }
             PreparedItem ic = p.getIcon();
             if(mk.isSummaryProductInfoEnabled() && mk.getSummaryProductLore() != null){
                 InfoHolder holder = new InfoHolder("product_");

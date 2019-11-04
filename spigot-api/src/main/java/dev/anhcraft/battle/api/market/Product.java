@@ -65,6 +65,10 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("How much does this product cost")
     private double price;
 
+    @Key("in_game_only")
+    @Explanation("Make this product only available during the game")
+    private boolean inGameOnly;
+
     @Key("executions.perform_commands")
     @Explanation({
             "The commands to be performed by the console later",
@@ -114,6 +118,10 @@ public class Product extends ConfigurableObject implements Informative {
 
     public double getPrice() {
         return price;
+    }
+
+    public boolean isInGameOnly() {
+        return inGameOnly;
     }
 
     @NotNull
