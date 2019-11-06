@@ -86,11 +86,14 @@ gun:
   out_of_ammo: "&cThis gun is out of ammunition."
   reloading_warn: "&cYou are reloading gun ammo!"
   none_scope_message: "&cNo scope is attached to this gun!"
+  ammo_reloaded: "&aAmmunition has been filled. Your gun is now ready!"
 perks:
   not_found: "&cCouldn't find that perk"
   given: "&aThe perk was given to player &f%s"
 items:
+  is_null: "&cYou must hold an item in your hand!"
   not_found: "&cCouldn't find that item"
+  not_gun: "&cThe item is not a gun"
   given: "&aGiven item &e(%s)&a to %s"
 inv:
   cleared: "&aInventory has been cleared!"

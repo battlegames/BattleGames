@@ -29,14 +29,17 @@ import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.craftkit.utils.ItemUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Map;
@@ -161,8 +164,8 @@ public class BattleCommand extends BaseCommand{
 
     @Subcommand("give exp")
     @CommandPermission("battle.give.exp")
-    public void giveExp(Player player, long exp, @Optional Player target){
-        PlayerData playerData = plugin.getPlayerData(target == null ? player : target);
+    public void giveExp(CommandSender sender, long exp, Player player){
+        PlayerData playerData = plugin.getPlayerData(player);
         if(playerData != null) {
             playerData.getExp().addAndGet(exp);
         }
@@ -281,6 +284,25 @@ public class BattleCommand extends BaseCommand{
         else {
             pd.getInventory().clearInventory();
             plugin.chatManager.sendPlayer(player, "inv.cleared");
+        }
+    }
+
+    @Subcommand("gun reload")
+    @CommandPermission("battle.gun.reload")
+    public void reloadGun(Player player){
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if(ItemUtil.isNull(item)){
+            plugin.chatManager.sendPlayer(player, "items.is_null");
+            return;
+        }
+        BattleItem bi = plugin.itemManager.read(item);
+        if(bi instanceof Gun){
+            Gun g = (Gun) bi;
+            g.getMagazine().resetAmmo();
+            player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(g, false));
+            plugin.chatManager.sendPlayer(player, "gun.ammo_reloaded");
+        } else {
+            plugin.chatManager.sendPlayer(player, "items.not_gun");
         }
     }
 
