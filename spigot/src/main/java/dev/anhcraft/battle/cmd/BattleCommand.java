@@ -159,6 +159,15 @@ public class BattleCommand extends BaseCommand{
         plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, lv, exp));
     }
 
+    @Subcommand("give exp")
+    @CommandPermission("battle.give.exp")
+    public void giveExp(Player player, long exp, @Optional Player target){
+        PlayerData playerData = plugin.getPlayerData(target == null ? player : target);
+        if(playerData != null) {
+            playerData.getExp().addAndGet(exp);
+        }
+    }
+
     @Subcommand("give gun")
     @CommandPermission("battle.give.gun")
     @CommandCompletion("@gun @players")
