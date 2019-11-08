@@ -269,6 +269,11 @@ public class BattleCommand extends BaseCommand{
         plugin.guiManager.openTopGui(player, "inventory_menu");
     }
 
+    @Subcommand("booster")
+    public void booster(Player player){
+        plugin.guiManager.openTopGui(player, "booster_menu");
+    }
+
     @Subcommand("market")
     public void market(Player player){
         plugin.guiManager.openTopGui(player, "market_category_menu");

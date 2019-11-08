@@ -78,7 +78,7 @@ public class Booster extends ConfigurableObject {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon;
+        return icon.duplicate();
     }
 
     public int getExpiryTime() {

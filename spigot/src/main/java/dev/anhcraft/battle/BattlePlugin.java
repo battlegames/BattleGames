@@ -38,6 +38,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.BattleCommand;
 import dev.anhcraft.battle.gui.ArenaChooser;
+import dev.anhcraft.battle.gui.BoosterMenu;
 import dev.anhcraft.battle.gui.KitMenu;
 import dev.anhcraft.battle.gui.handlers.CoreListener;
 import dev.anhcraft.battle.gui.handlers.MainInventoryListener;
@@ -650,6 +651,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager.registerGuiHandler("arena_chooser", new ArenaChooser());
         guiManager.registerGuiHandler("market_category_menu", new CategoryMenu());
         guiManager.registerGuiHandler("market_product_menu", new ProductMenu());
+        guiManager.registerGuiHandler("booster_menu", new BoosterMenu());
 
         c.getKeys(false).forEach(s -> {
             if(s.length() > 0 && s.charAt(0) != '$')

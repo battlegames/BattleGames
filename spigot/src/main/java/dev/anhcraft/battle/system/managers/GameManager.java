@@ -260,7 +260,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
                     Booster booster = plugin.getBooster(ab);
                     Long abd = playerData.getBoosters().get(ab);
                     if(abd != null && booster != null) {
-                        if(System.currentTimeMillis() - abd <= booster.getExpiryTime()){
+                        if(System.currentTimeMillis() - abd <= booster.getExpiryTime()*50){
                             m *= booster.getMoneyMultiplier();
                             e *= booster.getExpMultiplier();
                             if(booster.getMoneyLimit() > 0){

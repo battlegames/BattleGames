@@ -126,7 +126,6 @@ public class PlayerData implements Resettable, Serializable {
 
     public void setActiveBooster(@NotNull String id) {
         Condition.argNotNull("id", id);
-        Condition.check(boosters.containsKey(id), "This booster is not present in the booster list");
         activeBooster = id;
     }
 

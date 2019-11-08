@@ -114,6 +114,10 @@ market:
   not_enough_money: "&cSorry, you can't afford this product! You only have &f$%.2f&c in wallet."
   purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
   purchase_success: "&aPurchased successfully!"
+booster:
+  already_used: "&eYou are using this booster!"
+  another_used: "&cAnother booster is activated at the moment!"
+  active_success: "&aThe booster is activated successfully!"
 gui:
   empty: "&f"
   btn:
@@ -184,3 +188,5 @@ gui:
       - "&fOr you can use &d/b market"
   market_category_menu:
     title: "&4&lMARKET"
+  booster_menu:
+    title: "&e&lBoosters"
