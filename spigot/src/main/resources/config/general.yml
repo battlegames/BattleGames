@@ -65,3 +65,8 @@ bungeecord:
     - "lobby_3"
   reconnect_tries_per_server: 0
   connection_delay: 100
+
+control:
+  gun_shoot: left_click
+  gun_zoom: right_click
+  grenade_throw: left_click

@@ -21,8 +21,8 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
+import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
 import dev.anhcraft.battle.api.events.WeaponDamageEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
@@ -32,6 +32,7 @@ import dev.anhcraft.battle.api.inventory.items.Grenade;
 import dev.anhcraft.battle.api.inventory.items.Gun;
 import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.misc.DamageReport;
+import dev.anhcraft.battle.api.misc.MouseClick;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
@@ -125,52 +126,47 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void interact(PlayerInteractEvent event) {
         Player p = event.getPlayer();
-        if(event.getHand() == EquipmentSlot.OFF_HAND)
-            return;
-        if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
+        if(event.getAction() != Action.PHYSICAL) {
             BattleItem item = plugin.itemManager.read(event.getItem());
             if(item != null) {
-                if (item instanceof Gun) {
-                    LocalGame game = plugin.gameManager.getGame(p);
-                    if(game != null && game.getPhase() == GamePhase.PLAYING){
+                LocalGame game = plugin.gameManager.getGame(p);
+                if(game != null && game.getPhase() == GamePhase.PLAYING){
+                    boolean left = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
+                    boolean right = event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK;
+                    boolean act1 = (left && plugin.GENERAL_CONF.getGunShootClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.GENERAL_CONF.getGunShootClick() == MouseClick.RIGHT_CLICK);
+                    boolean act2 = (left && plugin.GENERAL_CONF.getGunZoomClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.GENERAL_CONF.getGunZoomClick() == MouseClick.RIGHT_CLICK);
+                    boolean act3 = (left && plugin.GENERAL_CONF.getGrenadeThrowClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.GENERAL_CONF.getGrenadeThrowClick() == MouseClick.RIGHT_CLICK);
+                    if(item instanceof Gun && (act1 || act2)){
                         Gun gun = (Gun) item;
-                        if(plugin.getHandler(GunHandler.class).shoot(game, p, gun))
-                            p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
-                        event.setCancelled(true);
-                        event.setUseInteractedBlock(Event.Result.DENY);
-                    }
-                }
-                else if (item instanceof Grenade) {
-                    if(plugin.getHandler(GrenadeHandler.class).throwGrenade(p, (Grenade) item)){
-                        if(event.getHand() == EquipmentSlot.HAND) {
-                            ItemStack i = p.getInventory().getItemInMainHand();
-                            i.setAmount(i.getAmount() - 1);
-                            p.getInventory().setItemInMainHand(i);
+                        if(act1){
+                            if(plugin.getHandler(GunHandler.class).shoot(game, p, gun)) {
+                                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                            }
                         } else {
-                            ItemStack i = p.getInventory().getItemInOffHand();
-                            i.setAmount(i.getAmount() - 1);
-                            p.getInventory().setItemInOffHand(i);
+                            if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun)) {
+                                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                            }
                         }
-                        event.setCancelled(true);
-                        event.setUseInteractedBlock(Event.Result.DENY);
+                    } else if(item instanceof Grenade && act3){
+                        if(plugin.getHandler(GrenadeHandler.class).throwGrenade(p, (Grenade) item)){
+                            if(event.getHand() == EquipmentSlot.HAND) {
+                                ItemStack i = p.getInventory().getItemInMainHand();
+                                i.setAmount(i.getAmount() - 1);
+                                p.getInventory().setItemInMainHand(i);
+                            } else {
+                                ItemStack i = p.getInventory().getItemInOffHand();
+                                i.setAmount(i.getAmount() - 1);
+                                p.getInventory().setItemInOffHand(i);
+                            }
+                        }
                     }
                 }
-                return;
-            }
-        }
-        else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            BattleItem item = plugin.itemManager.read(event.getItem());
-            if(item != null) {
-                if (item instanceof Gun) {
-                    LocalGame game = plugin.gameManager.getGame(p);
-                    if(game != null && game.getPhase() == GamePhase.PLAYING){
-                        Gun gun = (Gun) item;
-                        if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun))
-                            p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
-                        event.setCancelled(true);
-                        event.setUseInteractedBlock(Event.Result.DENY);
-                    }
-                }
+                event.setCancelled(true);
+                event.setUseInteractedBlock(Event.Result.DENY);
                 return;
             }
         }

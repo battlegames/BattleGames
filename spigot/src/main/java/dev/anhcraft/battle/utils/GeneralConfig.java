@@ -23,6 +23,7 @@ package dev.anhcraft.battle.utils;
 import dev.anhcraft.battle.api.misc.BattleChat;
 import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
+import dev.anhcraft.battle.api.misc.MouseClick;
 import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -176,6 +177,24 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("The delayed time between two connections per player")
     private long connectionDelay = 100;
 
+    @Key("control.gun_shoot")
+    @Explanation("The type of mouse click for shooting gun")
+    @IgnoreValue(ifNull = true)
+    @PrettyEnum
+    private MouseClick gunShootClick = MouseClick.LEFT_CLICK;
+
+    @Key("control.gun_zoom")
+    @Explanation("The type of mouse click for zooming in (with scope attached to gun)")
+    @IgnoreValue(ifNull = true)
+    @PrettyEnum
+    private MouseClick gunZoomClick = MouseClick.RIGHT_CLICK;
+
+    @Key("control.grenade_throw")
+    @Explanation("The type of mouse click for throwing grenade")
+    @IgnoreValue(ifNull = true)
+    @PrettyEnum
+    private MouseClick grenadeThrowClick = MouseClick.LEFT_CLICK;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -287,5 +306,20 @@ public class GeneralConfig extends ConfigurableObject {
 
     public long getConnectionDelay() {
         return connectionDelay;
+    }
+
+    @NotNull
+    public MouseClick getGrenadeThrowClick() {
+        return grenadeThrowClick;
+    }
+
+    @NotNull
+    public MouseClick getGunShootClick() {
+        return gunShootClick;
+    }
+
+    @NotNull
+    public MouseClick getGunZoomClick() {
+        return gunZoomClick;
     }
 }
