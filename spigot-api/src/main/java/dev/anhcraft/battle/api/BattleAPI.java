@@ -23,6 +23,7 @@ import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.BattleEffect;
+import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Kit;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
@@ -197,6 +198,14 @@ public interface BattleAPI {
     Perk getPerk(@Nullable String id);
 
     /**
+     * Gets the booster that matches the given id.
+     * @param id the id of the booster
+     * @return {@link Booster} if found or null if not
+     */
+    @Nullable
+    Booster getBooster(@Nullable String id);
+
+    /**
      * Lists all registered arenas.
      * @return an immutable list of arenas
      */
@@ -299,6 +308,19 @@ public interface BattleAPI {
      * @param consumer the consumer
      */
     void listPerks(@NotNull Consumer<Perk> consumer);
+
+    /**
+     * Lists all registered boosters.
+     * @return an immutable list of boosters
+     */
+    @NotNull
+    List<Booster> listBoosters();
+
+    /**
+     * Lists all boosters and gets them.
+     * @param consumer the consumer
+     */
+    void listBoosters(@NotNull Consumer<Booster> consumer);
 
     /**
      * Gets the game manager.

@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.events.GameJoinEvent;
 import dev.anhcraft.battle.api.events.GameQuitEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.api.misc.BattleFirework;
+import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
@@ -254,9 +255,31 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             if(playerData != null) {
                 double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));
                 long e = Math.max(0, localGame.getArena().calculateFinalExp(gp));
+                String ab = playerData.getActiveBooster();
+                if(ab != null){
+                    Booster booster = plugin.getBooster(ab);
+                    Long abd = playerData.getBoosters().get(ab);
+                    if(abd != null && booster != null) {
+                        if(System.currentTimeMillis() - abd <= booster.getExpiryTime()){
+                            m *= booster.getMoneyMultiplier();
+                            e *= booster.getExpMultiplier();
+                            if(booster.getMoneyLimit() > 0){
+                                m = Math.min(m, booster.getMoneyLimit());
+                            }
+                            if(booster.getExpLimit() > 0){
+                                e = Math.min(e, booster.getExpLimit());
+                            }
+                        } else {
+                            playerData.getBoosters().remove(ab);
+                        }
+                    }
+                }
                 VaultApi.getEconomyApi().depositPlayer(gp.toBukkit(), m);
                 playerData.getExp().addAndGet(e);
-                plugin.chatManager.sendPlayer(gp.toBukkit(), "arena.reward_message", s -> s.replace("{__money__}", MathUtil.formatRound(m)).replace("{__exp__}", Long.toString(e)));
+
+                String mf = MathUtil.formatRound(m);
+                String ef = Long.toString(e);
+                plugin.chatManager.sendPlayer(gp.toBukkit(), "arena.reward_message", s -> s.replace("{__money__}", mf).replace("{__exp__}", ef));
 
                 playerData.getKillCounter().addAndGet(gp.getKillCounter().get());
                 playerData.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());

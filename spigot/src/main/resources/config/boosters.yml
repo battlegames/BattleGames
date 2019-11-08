@@ -1,0 +1,41 @@
+# This configuration is a part of BattleGames
+# https://wiki.anhcraft.dev/en/battle/booster
+
+booster1:
+  icon:
+    name: "&aMoney booster"
+    lore:
+      - "&eThis booster multiplies your money by &ax1.75"
+    material: grass
+  expiry_time: 72000
+  money:
+    multiplier: 1.75
+    limit: 0
+
+booster2:
+  icon:
+    name: "&6&lVIP&f booster"
+    lore:
+      - "&bThis booster multiplies your money by&a x2"
+      - "&band your exp by&a x1.2"
+    material: diamond
+  expiry_time: 72000
+  money:
+    multiplier: 2
+  exp:
+    multiplier: 1.2
+
+booster3:
+  icon:
+    name: "&c&lPremium booster"
+    lore:
+      - "&4This booster multiplies your money by&a x2.5"
+      - "&4and doubles your exp"
+    material: emerald
+  expiry_time: 216000
+  money:
+    multiplier: 2.5
+    limit: 1000
+  exp:
+    multiplier: 2
+    limit: 1000

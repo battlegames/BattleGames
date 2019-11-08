@@ -114,7 +114,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             "gui.yml " + (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"),
             "kits.yml",
             "perks.yml",
-            "market.yml"
+            "market.yml",
+            "boosters.yml"
     };
     private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
@@ -124,6 +125,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
     private final Map<String, Kit> KIT_MAP = new HashMap<>();
     private final Map<String, Perk> PERK_MAP = new HashMap<>();
+    private final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
     private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
     private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
@@ -209,6 +211,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         initKits(CONFIG[12]);
         initPerks(CONFIG[13]);
         initMarket(CONFIG[14]);
+        initBooster(CONFIG[15]);
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -368,6 +371,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     public FileConfiguration getMarketConf(){
         return CONFIG[14];
+    }
+
+    public FileConfiguration getBoosterConf(){
+        return CONFIG[15];
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
@@ -684,6 +691,19 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         }
     }
 
+    private void initBooster(FileConfiguration c) {
+        c.getKeys(false).forEach(s -> {
+            Booster booster = new Booster(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, Booster.SCHEMA, booster);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            BOOSTER_MAP.put(s, booster);
+        });
+    }
+
     public void resetScoreboard(Player player) {
         BattleScoreboard sb = GENERAL_CONF.getDefaultScoreboard();
         if(sb == null || !sb.isEnabled()) {
@@ -838,6 +858,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return PERK_MAP.get(id);
     }
 
+    @Override
+    public @Nullable Booster getBooster(@Nullable String id) {
+        return BOOSTER_MAP.get(id);
+    }
+
     @NotNull
     @Override
     public List<Arena> listArenas() {
@@ -931,6 +956,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public void listPerks(@NotNull Consumer<Perk> consumer) {
         Condition.argNotNull("consumer", consumer);
         PERK_MAP.values().forEach(consumer);
+    }
+
+    @Override
+    public @NotNull List<Booster> listBoosters() {
+        return ImmutableList.copyOf(BOOSTER_MAP.values());
+    }
+
+    @Override
+    public void listBoosters(@NotNull Consumer<Booster> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        BOOSTER_MAP.values().forEach(consumer);
     }
 
     @Override

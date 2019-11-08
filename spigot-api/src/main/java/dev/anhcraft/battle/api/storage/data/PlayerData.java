@@ -26,7 +26,9 @@ import dev.anhcraft.battle.api.market.Transaction;
 import dev.anhcraft.battle.api.misc.Resettable;
 import dev.anhcraft.battle.api.storage.Serializable;
 import dev.anhcraft.battle.api.storage.tags.StringTag;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,8 @@ public class PlayerData implements Resettable, Serializable {
     private Map<String, Long> kits = new ConcurrentHashMap<>();
     private List<String> receivedFirstJoinKits = new ArrayList<>();
     private List<Transaction> transactions = new ArrayList<>();
+    private Map<String, Long> boosters = new ConcurrentHashMap<>();
+    private String activeBooster;
 
     @NotNull
     public AtomicInteger getHeadshotCounter() {
@@ -110,6 +114,22 @@ public class PlayerData implements Resettable, Serializable {
         return transactions;
     }
 
+    @NotNull
+    public Map<String, Long> getBoosters() {
+        return boosters;
+    }
+
+    @Nullable
+    public String getActiveBooster() {
+        return activeBooster;
+    }
+
+    public void setActiveBooster(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        Condition.check(boosters.containsKey(id), "This booster is not present in the booster list");
+        activeBooster = id;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
@@ -162,6 +182,17 @@ public class PlayerData implements Resettable, Serializable {
             String product = map.readRequiredTag(pre+".product", String.class);
             transactions.add(new Transaction(buyer, product, price, date));
         }
+        List boosterList = map.readTag("bst", List.class);
+        if(boosterList != null){
+            boosterList.forEach(o -> {
+                String k = ((StringTag) o).getValue();
+                boosters.put(k, map.readTag("bst."+k, Long.class));
+            });
+        }
+        String atvBooster = map.readTag("abst", String.class);
+        if(atvBooster != null && boosters.containsKey(atvBooster)){
+            activeBooster = atvBooster;
+        }
     }
 
     @Override
@@ -205,6 +236,15 @@ public class PlayerData implements Resettable, Serializable {
             map.writeTag(pre+".product", ts.getProduct());
             map.writeTag(pre+".price", ts.getPrice());
             tsi++;
+        }
+        List<StringTag> bst = new ArrayList<>();
+        boosters.forEach((key, value) -> {
+            bst.add(new StringTag(key));
+            map.writeTag("bst."+key, value);
+        });
+        map.writeTag("bst", bst);
+        if(activeBooster != null){
+            map.writeTag("abst", activeBooster);
         }
     }
 

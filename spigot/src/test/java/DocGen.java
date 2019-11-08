@@ -50,6 +50,7 @@ public class DocGen {
                 .withSchema(BattleParticle.SCHEMA)
                 .withSchema(FakeBlockEffect.SCHEMA)
                 .withSchema(Perk.SCHEMA)
+                .withSchema(Booster.SCHEMA)
                 .withSchema(Arena.SCHEMA)
                 .withSchema(Rollback.SCHEMA)
                 .withSchema(Product.SCHEMA)
