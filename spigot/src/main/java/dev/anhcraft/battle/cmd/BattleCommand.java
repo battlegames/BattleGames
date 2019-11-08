@@ -169,6 +169,8 @@ public class BattleCommand extends BaseCommand{
         PlayerData playerData = plugin.getPlayerData(player);
         if(playerData != null) {
             playerData.getExp().addAndGet(exp);
+        } else {
+            plugin.chatManager.sendPlayer(player, "player_data.not_found");
         }
     }
 
@@ -184,6 +186,8 @@ public class BattleCommand extends BaseCommand{
                 playerData.getInventory().getStorage(ItemType.GUN).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
@@ -200,6 +204,8 @@ public class BattleCommand extends BaseCommand{
                 playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
@@ -216,6 +222,8 @@ public class BattleCommand extends BaseCommand{
                 playerData.getInventory().getStorage(ItemType.AMMO).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
@@ -232,6 +240,8 @@ public class BattleCommand extends BaseCommand{
                 playerData.getInventory().getStorage(ItemType.SCOPE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
@@ -248,6 +258,8 @@ public class BattleCommand extends BaseCommand{
                 playerData.getInventory().getStorage(ItemType.GRENADE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
         } else plugin.chatManager.sendPlayer(player, "items.not_found");
     }
