@@ -175,7 +175,7 @@ public class GeneralConfig extends ConfigurableObject {
 
     @Key("bungeecord.connection_delay")
     @Explanation("The delayed time between two connections per player")
-    private long connectionDelay = 100;
+    private long bungeeConnectDelay = 100;
 
     @Key("control.gun_shoot")
     @Explanation("The type of mouse click for shooting gun")
@@ -304,8 +304,8 @@ public class GeneralConfig extends ConfigurableObject {
         return bungeeReconnectTries;
     }
 
-    public long getConnectionDelay() {
-        return connectionDelay;
+    public long getBungeeConnectDelay() {
+        return bungeeConnectDelay;
     }
 
     @NotNull

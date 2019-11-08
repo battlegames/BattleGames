@@ -971,7 +971,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @Override
     public long getConnectionDelay() {
-        return GENERAL_CONF.getConnectionDelay();
+        return GENERAL_CONF.getBungeeConnectDelay();
     }
 
     @Override
