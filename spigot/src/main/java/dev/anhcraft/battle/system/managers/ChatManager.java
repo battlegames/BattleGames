@@ -23,6 +23,7 @@ import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleChatManager;
 import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.misc.BattleChat;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -64,8 +65,10 @@ public class ChatManager extends BattleComponent implements BattleChatManager {
                 }
             }
         } else {
-            if(!plugin.getGeneralConf().getBoolean("default_chat.enabled")) return false;
-            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.getGeneralConf().getString("default_chat.format"))).replace("{__message__}", msg);
+            BattleChat bc = plugin.GENERAL_CONF.getDefaultChat();
+            if(bc == null || !bc.isEnabled()) return false;
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, bc.getFormat()))
+                    .replace("{__message__}", msg);
             for(Player p : Bukkit.getOnlinePlayers()){
                 if(p.equals(player) || plugin.gameManager.getGame(player) == null) {
                     p.sendMessage(q);

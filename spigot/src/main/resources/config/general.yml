@@ -1,50 +1,22 @@
 # This configuration is a part of BattleGames
 # General plugin configuration
 
-# The locale file which are used for messages and texts
-# Available: en_us.yml, vi.yml
 locale: "en_us.yml"
 
-
-# Date format
-# Read more about the date format here:
-# https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 date_format:
-  # Long-form date format with day, month, year, etc
   long_form: "dd/MM/yyyy HH:mm:ss"
-
-  # Short-form (which is used for things like countdown)
   short_form:
-    # For time which can be displayed as hours, remaining is converted to lower units
     hours: "HH:mm:ss"
-
-    # For time which can be displayed as minutes, remaining is converted to lower units
     minutes: "mm:ss"
-
-    # For time which can be displayed as seconds, remaining is converted to lower units
     seconds: "ss"
 
-
-# Level system configuration
 level_system:
-  # The formula that converts X exp to Y level
   exp_to_level_formula: "floor(sqrt(x/20)/2)"
-
-  # The reverse formula
   level_to_exp_formula: "floor(x*x*4*20)"
 
-
-# Default built-in scoreboard
 default_scoreboard:
-  # Enables it?
   enabled: true
-
-  # This scoreboard's title
-  # [placeholder supported]
   title: "&a &c&lBATTLE"
-
-  # The content of this scoreboard
-  # [placeholder supported] [maximum lines: 15]
   content:
     - "&a&f"
     - "%battle_icon_user% &aName:&r &b%player_displayname%"
@@ -57,101 +29,39 @@ default_scoreboard:
     - "%battle_icon_online% &aOnline:&r &b%server_online%/%server_max_players%"
     - "&c&a"
     - "&dminecraft.net"
-
-  # The fixed length of this scoreboard
-  # Set to 0 if you wanna disabling this option
-  # Maximum length for a scoreboard is:
-  # - 128 characters (1.13+)
-  # - 32 characters (1.12)
-  # [optional] [default: 0]
   fixed_length: 0
 
-# Default chat settings
 default_chat:
-  # Allows it to work?
   enabled: true
-
-  # Chat format
-  # [placeholder supported]
   format: "&7[%battle_icon_medal%&r%battle_level%&7] &8%player_displayname%&f: {__message__}"
 
-
-# Storage settings
 storage:
-  # Available storage types: file, mysql
-  # [case-insensitive]
   type: file
-
-  # Configuration for file-based storage
   file:
-    # The path to the directory where we store data
     data_path: ".battle"
-
-  # Configuration for MySQL storage
   mysql:
-    # Hostname or IP
     hostname: localhost
-
-    # The port which MySQL listens to
     port: 3306
-
-    # The database where the data should store in
     database: minecraft
-
-    # The username
     username: root
-
-    # The password
     password: ""
-
-    # External configuration for HikariCP's data source
     datasource_properties:
       prepStmtCacheSize: 250
       prepStmtCacheSqlLimit: 2048
       cachePrepStmts: true
       useServerPrepStmts: true
 
-# Miscellaneous settings
 misc:
-  # Basic anti death drops
-  # This option prevents player items and exp from dropping
   anti_death_drops: true
-
-  # Default movement speed
   default_speed:
-    # Walking speed
-    # [optional] [default: 0.2] [min: -1] [max: 1]
     walk: 0.2
-
-    # Flying speed
-    # [optional] [default: 0.2] [min: -1] [max: 1]
     fly: 0.2
 
-# Bungeecord settings
 bungeecord:
-  # Enable Bungeecord support or not?
-  # If the server is not under a proxy,
-  # this option has no effect
   enabled: false
-
-  # List of lobby/hub servers.
-  # If the player can't connect to the first
-  # one, the second will be chosen, and so on
-  # until there is no server left
   lobby_servers:
     - "lobby_1"
     - "lobby_2"
     - "lobby_3"
-
-  # Here you can specify how many times, does the
-  # player can try to reconnect. If exceed, the
-  # next server in the given list will be chosen
-  # E.g: with the lobby server list above, players
-  # have 3 chance of connections. If you set this
-  # option to 3, they have a total of 9 chances.
-  # [optional] [default: 0]
   reconnect_tries_per_server: 0
-
-  # The delayed time between two connections per player
-  # [optional] [default: 20] [unit: ticks]
   connection_delay: 100

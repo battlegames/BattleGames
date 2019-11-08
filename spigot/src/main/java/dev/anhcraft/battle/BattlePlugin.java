@@ -32,16 +32,13 @@ import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.BattleEffect;
-import dev.anhcraft.battle.api.misc.EffectOption;
-import dev.anhcraft.battle.api.misc.Kit;
-import dev.anhcraft.battle.api.misc.Perk;
+import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.battle.api.misc.info.*;
-import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.BattleCommand;
-import dev.anhcraft.battle.gui.*;
+import dev.anhcraft.battle.gui.ArenaChooser;
+import dev.anhcraft.battle.gui.KitMenu;
 import dev.anhcraft.battle.gui.handlers.CoreListener;
 import dev.anhcraft.battle.gui.handlers.MainInventoryListener;
 import dev.anhcraft.battle.gui.inventory.*;
@@ -62,6 +59,7 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
+import dev.anhcraft.battle.utils.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -131,6 +129,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private final Market MARKET = new Market();
+    public final GeneralConfig GENERAL_CONF = new GeneralConfig();
     private File localeDir;
     public CraftExtension extension;
     public ChatManager chatManager;
@@ -159,7 +158,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private String remoteConfigUrl;
     private boolean spigotBungeeSupport;
     private boolean supportBungee;
-    private List<String> lobbyList;
     public SWMIntegration SWMIntegration;
     private boolean slimeWorldManagerSupport;
 
@@ -316,7 +314,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         return CONFIG[0];
     }
 
-    public FileConfiguration getGeneralConf(){
+    private FileConfiguration getGeneralConf(){
         return CONFIG[1];
     }
 
@@ -459,49 +457,56 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         // TODO check and upgrade db here
     }
 
-    private void initGeneral(FileConfiguration c) {
-        StorageType storageType = StorageType.valueOf(c.getString("storage.type").toUpperCase());
-        dataManager = new DataManager(this, storageType);
-        switch (storageType){
+    private void initGeneral(FileConfiguration conf) {
+        try {
+            ConfigHelper.readConfig(conf, GeneralConfig.SCHEMA, GENERAL_CONF);
+        } catch (InvalidValueException e) {
+            e.printStackTrace();
+        }
+
+        dataManager = new DataManager(this, GENERAL_CONF.getStorageType());
+        switch (GENERAL_CONF.getStorageType()){
             case FILE: {
-                File f = new File(c.getString("storage.file.data_path"));
+                File f = new File(GENERAL_CONF.getStorageFilePath());
                 f.mkdir();
                 dataManager.initFileStorage(f);
                 break;
             }
             case MYSQL: {
-                String host = c.getString("storage.mysql.hostname");
-                int port = c.getInt("storage.mysql.port");
-                String database = c.getString("storage.mysql.database");
-                String username = c.getString("storage.mysql.username");
-                String password = c.getString("storage.mysql.password");
-                ConfigurationSection dsp = c.getConfigurationSection("storage.mysql.datasource_properties");
-                String url = new StringBuilder("jdbc:mysql://").append(host).append(':').append(port).append('/').append(database).toString();
-                dataManager.initMySQLStorage(url, username, password, dsp);
+                ConfigurationSection dsp = GENERAL_CONF.getStorageMySQLProperties();
+                String url = new StringBuilder("jdbc:mysql://")
+                        .append(GENERAL_CONF.getStorageMySQLHost()).append(':')
+                        .append(GENERAL_CONF.getStorageMySQLPort()).append('/')
+                        .append(GENERAL_CONF.getStorageMySQLDatabase()).toString();
+                dataManager.initMySQLStorage(
+                        url,
+                        GENERAL_CONF.getStorageMySQLUser(),
+                        GENERAL_CONF.getStorageMySQLPass(),
+                        dsp
+                );
                 syncDataTaskNeed = true;
                 break;
             }
         }
         dataManager.loadServerData();
 
-        toLevelConverter = new ExpressionBuilder(CONFIG[1].getString("level_system.exp_to_level_formula")).variables("x").build();
-        toExpConverter = new ExpressionBuilder(CONFIG[1].getString("level_system.level_to_exp_formula")).variables("x").build();
-        longFormDate = new SimpleDateFormat(getGeneralConf().getString("date_format.long_form"));
-        shortFormDate1 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.hours"));
-        shortFormDate2 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.minutes"));
-        shortFormDate3 = new SimpleDateFormat(getGeneralConf().getString("date_format.short_form.seconds"));
+        toLevelConverter = new ExpressionBuilder(GENERAL_CONF.getExp2LvFormula()).variables("x").build();
+        toExpConverter = new ExpressionBuilder(GENERAL_CONF.getLv2ExpFormula()).variables("x").build();
+        longFormDate = new SimpleDateFormat(GENERAL_CONF.getDateFormatLong());
+        shortFormDate1 = new SimpleDateFormat(GENERAL_CONF.getDateFormatShortHours());
+        shortFormDate2 = new SimpleDateFormat(GENERAL_CONF.getDateFormatShortMinutes());
+        shortFormDate3 = new SimpleDateFormat(GENERAL_CONF.getDateFormatShortSeconds());
 
-        if(getGeneralConf().getBoolean("bungeecord.enabled")){
-            if(spigotBungeeSupport) {
-                supportBungee = true;
-                lobbyList = Collections.unmodifiableList(getGeneralConf().getStringList("bungeecord.lobby_servers"));
+        if(GENERAL_CONF.isBungeeEnabled()){
+            if(spigotBungeeSupport) supportBungee = true;
+            else {
+                getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");
             }
-            else getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");
         }
     }
 
     private void initLocale(FileConfiguration cache) {
-        String path = getGeneralConf().getString("locale");
+        String path = GENERAL_CONF.getLocaleFile();
         YamlConfiguration local = loadConfigFile("locale/"+path, "locale/"+path);
         if(local != null) {
             boolean outdatedLocale = false;
@@ -680,12 +685,13 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     public void resetScoreboard(Player player) {
-        if(getGeneralConf().getBoolean("default_scoreboard.enabled")) {
-            String title = getGeneralConf().getString("default_scoreboard.title");
-            List<String> content = getGeneralConf().getStringList("default_scoreboard.content");
-            int len = getGeneralConf().getInt("default_scoreboard.fixed_length");
-            scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
-        } else scoreboardRenderer.removeScoreboard(player);
+        BattleScoreboard sb = GENERAL_CONF.getDefaultScoreboard();
+        if(sb == null || !sb.isEnabled()) {
+            scoreboardRenderer.removeScoreboard(player);
+            return;
+        }
+        PlayerScoreboard ps = new PlayerScoreboard(player, sb.getTitle(), sb.getContent(), sb.getFixedLength());
+        scoreboardRenderer.setScoreboard(ps);
     }
 
     @Override
@@ -762,12 +768,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @Override
     public float getDefaultWalkingSpeed() {
-        return (float) getGeneralConf().getDouble("misc.default_speed.walk", 0.2);
+        return (float) GENERAL_CONF.getWalkSpeed();
     }
 
     @Override
     public float getDefaultFlyingSpeed() {
-        return (float) getGeneralConf().getDouble("misc.default_speed.fly", 0.2);
+        return (float) GENERAL_CONF.getFlySpeed();
     }
 
     @Override
@@ -955,17 +961,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     @NotNull
     public List<String> getLobbyServers() {
-        return lobbyList;
+        return GENERAL_CONF.getBungeeLobbies();
     }
 
     @Override
     public int getMaxReconnectionTries() {
-        return getGeneralConf().getInt("bungeecord.reconnect_tries_per_server");
+        return GENERAL_CONF.getBungeeReconnectTries();
     }
 
     @Override
     public long getConnectionDelay() {
-        return getGeneralConf().getLong("bungeecord.connection_delay");
+        return GENERAL_CONF.getConnectionDelay();
     }
 
     @Override

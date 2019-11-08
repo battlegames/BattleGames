@@ -270,7 +270,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void death(PlayerDeathEvent e) {
-        if(plugin.getGeneralConf().getBoolean("misc.anti_death_drops")){
+        if(plugin.GENERAL_CONF.shouldAntiDeathDrops()){
             e.getDrops().clear();
             e.setDroppedExp(0);
             e.setKeepInventory(true);

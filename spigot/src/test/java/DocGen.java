@@ -24,6 +24,7 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.misc.*;
+import dev.anhcraft.battle.utils.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigDoc;
 
 import java.io.File;
@@ -39,6 +40,8 @@ public class DocGen {
                 .withSchema(ScopeModel.SCHEMA)
                 .withSchema(Kit.SCHEMA)
                 .withSchema(ItemSkin.SCHEMA)
+                .withSchema(BattleScoreboard.SCHEMA)
+                .withSchema(BattleChat.SCHEMA)
                 .withSchema(BattleBar.SCHEMA)
                 .withSchema(BattleEffect.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
@@ -52,6 +55,7 @@ public class DocGen {
                 .withSchema(Product.SCHEMA)
                 .withSchema(Category.SCHEMA)
                 .withSchema(Market.SCHEMA)
+                .withSchema(GeneralConfig.SCHEMA)
                 .addJavadoc("dev.anhcraft.battle.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));
