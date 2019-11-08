@@ -279,6 +279,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 return PERK_MAP.keySet();
             }
         });
+        manager.getCommandCompletions().registerAsyncCompletion("booster", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return BOOSTER_MAP.keySet();
+            }
+        });
     }
 
     private void injectApiProvider() {

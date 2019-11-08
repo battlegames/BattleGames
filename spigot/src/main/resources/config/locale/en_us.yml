@@ -115,6 +115,8 @@ market:
   purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
   purchase_success: "&aPurchased successfully!"
 booster:
+  not_found: "&cCouldn't find that booster"
+  given: "&aThe booster was given to player &f%s"
   already_used: "&eYou are using this booster!"
   another_used: "&cAnother booster is activated at the moment!"
   active_success: "&aThe booster is activated successfully!"

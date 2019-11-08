@@ -26,6 +26,7 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.game.Game;
 import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
@@ -262,6 +263,24 @@ public class BattleCommand extends BaseCommand{
             String receiver = target.getName();
             plugin.chatManager.sendPlayer(player, "perks.given", str -> String.format(str, receiver));
         } else plugin.chatManager.sendPlayer(player, "perks.not_found");
+    }
+
+    @Subcommand("give booster")
+    @CommandPermission("battle.give.booster")
+    @CommandCompletion("@booster @players")
+    public void giveBooster(Player player, String id, @Optional Player target){
+        target = (target == null ? player : target);
+        Booster b = plugin.getBooster(id);
+        if(b != null) {
+            PlayerData playerData = plugin.getPlayerData(target);
+            if(playerData != null) {
+                playerData.getBoosters().putIfAbsent(id, System.currentTimeMillis());
+                String receiver = target.getName();
+                plugin.chatManager.sendPlayer(player, "booster.given", str -> String.format(str, receiver));
+            } else {
+                plugin.chatManager.sendPlayer(player, "player_data.not_found");
+            }
+        } else plugin.chatManager.sendPlayer(player, "booster.not_found");
     }
 
     @Subcommand("inv")
