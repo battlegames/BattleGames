@@ -12,8 +12,7 @@ default_ak_47:
 improved_ak_47:
   name: "&2AK-47 Magazine &5&l[Improved]"
   skin:
-    material: diamond_axe
-    damage: 2
+    material: chest
   ammo:
     7_62mm: 45
 
@@ -23,3 +22,10 @@ default_de:
     material: chest
   ammo:
     _50_ae: 7
+
+default_awm:
+  name: "&4AWM Magazine"
+  skin:
+    material: chest
+  ammo:
+    308_Winchester: 10

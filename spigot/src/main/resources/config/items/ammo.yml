@@ -23,3 +23,14 @@ _50_ae:
       knockback: 0.102
       particle:
         type: end_rod
+
+308_Winchester:
+  name: "&f.308 Winchester"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 25
+      knockback: 0.2
+      particle:
+        type: end_rod
