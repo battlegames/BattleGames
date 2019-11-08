@@ -83,6 +83,11 @@ public class Product extends ConfigurableObject implements Informative {
     @IgnoreValue(ifNull = true)
     private List<String> perks = new ArrayList<>();
 
+    @Key("executions.give_boosters")
+    @Explanation("The boosters to be given later")
+    @IgnoreValue(ifNull = true)
+    private List<String> boosters = new ArrayList<>();
+
     @Key("executions.give_items.vanilla")
     @Explanation("The vanilla items to be given later")
     @IgnoreValue(ifNull = true)
@@ -179,6 +184,9 @@ public class Product extends ConfigurableObject implements Informative {
         }
         if(battleExp > 0){
             playerData.getExp().addAndGet(battleExp);
+        }
+        for(String booster : boosters){
+            playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());
         }
     }
 

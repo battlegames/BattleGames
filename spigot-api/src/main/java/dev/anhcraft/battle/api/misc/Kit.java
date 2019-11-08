@@ -92,6 +92,11 @@ public class Kit extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
+    @Key("boosters")
+    @Explanation("The boosters to be given")
+    @IgnoreValue(ifNull = true)
+    private List<String> boosters = new ArrayList<>();
+
     @Key("first_join")
     @Explanation("Players receive the kit automatically on their first joins")
     private boolean firstJoin;
@@ -139,6 +144,11 @@ public class Kit extends ConfigurableObject {
         return firstJoin;
     }
 
+    @NotNull
+    public List<String> getBoosters() {
+        return boosters;
+    }
+
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
         Location loc = player.getLocation();
         for(PreparedItem pi : vanillaItems){
@@ -153,6 +163,7 @@ public class Kit extends ConfigurableObject {
             ItemStorage is = playerData.getInventory().getStorage(type);
             is.put(x);
         });
+        boosters.forEach(s -> playerData.getBoosters().putIfAbsent(s, System.currentTimeMillis()));
     }
 
     @Override
