@@ -72,11 +72,6 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                 @Override
                 public void call(@NotNull SlotClickReport event) {
                     event.getClickEvent().setCancelled(true);
-                    if(!mk.isInGameShoppingAllowed() && api.getGameManager().getGame(player) != null){
-                        api.getChatManager().sendPlayer(event.getPlayer(), "market.ig_shop_not_allowed");
-                        event.getPlayer().closeInventory();
-                        return;
-                    }
                     double balance = VaultApi.getEconomyApi().getBalance(player);
                     if(balance < p.getPrice()){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.not_enough_money", s -> String.format(s, balance));

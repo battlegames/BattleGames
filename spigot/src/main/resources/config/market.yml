@@ -3,7 +3,6 @@
 
 options:
   log_transactions: true
-  allow_in_game_shopping: true
   summary_product_info:
     enabled: true
     lore:

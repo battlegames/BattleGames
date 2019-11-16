@@ -43,9 +43,6 @@ public class Market extends ConfigurableObject {
     @Key("options.log_transactions")
     private boolean logTransactions;
 
-    @Key("options.allow_in_game_shopping")
-    private boolean inGameShoppingAllowed;
-
     @Key("options.summary_product_info.enabled")
     @Explanation("Should we summarize the details of each product")
     private boolean summaryProductInfoEnabled;
@@ -61,10 +58,6 @@ public class Market extends ConfigurableObject {
 
     public boolean shouldLogTransactions() {
         return logTransactions;
-    }
-
-    public boolean isInGameShoppingAllowed() {
-        return inGameShoppingAllowed;
     }
 
     public boolean isSummaryProductInfoEnabled() {

@@ -110,7 +110,6 @@ kit:
   unavailable: "&cThis kit is currently unavailable! You need to wait until %s"
   one_time_use: "&cThis kit can only be used one-time!"
 market:
-  ig_shop_not_allowed: "&cIn-game shopping is not allowed!"
   not_enough_money: "&cSorry, you can't afford this product! You only have &f$%.2f&c in wallet."
   purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
   purchase_success: "&aPurchased successfully!"
