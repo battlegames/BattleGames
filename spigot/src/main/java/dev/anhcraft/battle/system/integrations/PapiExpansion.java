@@ -157,6 +157,11 @@ public class PapiExpansion extends PlaceholderExpansion {
             LocalGame game = plugin.gameManager.getGame(player);
             return game == null ? null : game.getArena().getMode().getDescription();
         });
+        handlers.put("ig_eco_currency", player -> plugin.GENERAL_CONF.getIgEcoCurrencyName());
+        handlers.put("ig_eco_balance", player -> {
+            GamePlayer gp = plugin.gameManager.getGamePlayer(player);
+            return gp == null ? null : String.format(plugin.GENERAL_CONF.getIgEcoCurrencyFormat(), gp.getIgBalance().get());
+        });
     }
 
     @Override

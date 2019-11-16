@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.game;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import dev.anhcraft.battle.api.misc.Resettable;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -34,6 +35,7 @@ public class GamePlayer implements Resettable {
     private final AtomicInteger killCounter = new AtomicInteger();
     private final AtomicInteger deathCounter = new AtomicInteger();
     private final AtomicInteger assistCounter = new AtomicInteger();
+    private final AtomicDouble igBalance = new AtomicDouble();
     private boolean hasFirstKill;
     private WeakReference<Player> player;
     private boolean spectator;
@@ -107,6 +109,11 @@ public class GamePlayer implements Resettable {
         this.hasFirstKill = hasFirstKill;
     }
 
+    @NotNull
+    public AtomicDouble getIgBalance() {
+        return igBalance;
+    }
+
     @Override
     public void reset() {
         spectator = false;
@@ -115,5 +122,6 @@ public class GamePlayer implements Resettable {
         deathCounter.set(0);
         backupInventory = null;
         hasFirstKill = false;
+        igBalance.set(0);
     }
 }

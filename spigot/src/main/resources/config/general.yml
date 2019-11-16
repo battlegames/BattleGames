@@ -70,3 +70,9 @@ control:
   gun_shoot: left_click
   gun_zoom: right_click
   grenade_throw: left_click
+
+in_game_economy:
+  currency:
+    name: "&aCoins"
+    format: "%.2f coins"
+  init_balance: 0

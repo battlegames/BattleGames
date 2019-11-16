@@ -195,6 +195,20 @@ public class GeneralConfig extends ConfigurableObject {
     @PrettyEnum
     private MouseClick grenadeThrowClick = MouseClick.LEFT_CLICK;
 
+    @Key("in_game_economy.currency.name")
+    @Explanation("The name of the currency that used in-game")
+    @Validation(notNull = true)
+    private String igEcoCurrencyName;
+
+    @Key("in_game_economy.currency.format")
+    @Explanation("The price format (contains the symbol and the cost)")
+    @Validation(notNull = true)
+    private String igEcoCurrencyFormat;
+
+    @Key("in_game_economy.init_balance")
+    @Explanation("The initial balance (given on starting a game)")
+    private double igEcoInitBalance;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -321,5 +335,19 @@ public class GeneralConfig extends ConfigurableObject {
     @NotNull
     public MouseClick getGunZoomClick() {
         return gunZoomClick;
+    }
+
+    @NotNull
+    public String getIgEcoCurrencyName() {
+        return igEcoCurrencyName;
+    }
+
+    @NotNull
+    public String getIgEcoCurrencyFormat() {
+        return igEcoCurrencyFormat;
+    }
+
+    public double getIgEcoInitBalance() {
+        return igEcoInitBalance;
     }
 }
