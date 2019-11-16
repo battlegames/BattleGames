@@ -49,6 +49,10 @@ public class Category extends ConfigurableObject {
     @Validation(notNull = true)
     private PreparedItem icon;
 
+    @Key("in_game_only")
+    @Explanation("Make this category only available during the game")
+    private boolean inGameOnly;
+
     @Key("products")
     @Explanation("Products in this category")
     private List<Product> products = new ArrayList<>();
@@ -71,6 +75,10 @@ public class Category extends ConfigurableObject {
     @NotNull
     public List<Product> getProducts() {
         return products;
+    }
+
+    public boolean isInGameOnly() {
+        return inGameOnly;
     }
 
     @Override

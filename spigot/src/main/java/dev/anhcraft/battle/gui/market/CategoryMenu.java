@@ -39,7 +39,11 @@ public class CategoryMenu extends GuiListener implements PaginationFactory {
     public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
         BattleAPI api = ApiProvider.consume();
         Market mk = api.getMarket();
+        boolean inGame = api.getGameManager().getGame(player) != null;
         for(Category c : mk.getCategories()){
+            if(c.isInGameOnly() && !inGame){
+                continue;
+            }
             data.add(new PaginationItem(c.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
                 public void call(@NotNull SlotClickReport event) {
