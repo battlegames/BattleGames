@@ -197,13 +197,13 @@ public class GeneralConfig extends ConfigurableObject {
 
     @Key("in_game_economy.currency.name")
     @Explanation("The name of the currency that used in-game")
-    @Validation(notNull = true)
-    private String igEcoCurrencyName;
+    @IgnoreValue(ifNull = true)
+    private String igEcoCurrencyName = "&aCoins";
 
     @Key("in_game_economy.currency.format")
     @Explanation("The price format (contains the symbol and the cost)")
-    @Validation(notNull = true)
-    private String igEcoCurrencyFormat;
+    @IgnoreValue(ifNull = true)
+    private String igEcoCurrencyFormat = "%.2f coins";
 
     @Key("in_game_economy.init_balance")
     @Explanation("The initial balance (given on starting a game)")
