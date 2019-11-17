@@ -65,6 +65,13 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("The cost of this product (in case of trading through Vault)")
     private double priceVault;
 
+    @Key("price.in_game")
+    @Explanation({
+            "The cost of this product when purchasing in-game",
+            "Set to -1 to disable this option"
+    })
+    private double priceIgn = -1;
+
     @Key("in_game_only")
     @Explanation("Make this product only available during the game")
     private boolean inGameOnly;
@@ -123,6 +130,10 @@ public class Product extends ConfigurableObject implements Informative {
 
     public double getPriceVault() {
         return priceVault;
+    }
+
+    public double getPriceIgn() {
+        return priceIgn;
     }
 
     public boolean isInGameOnly() {
@@ -258,6 +269,7 @@ public class Product extends ConfigurableObject implements Informative {
         holder.inform("id", id)
                 .inform("price", priceVault) // LEGACY
                 .inform("price_vault", priceVault)
+                .inform("price_ign", priceIgn)
                 .inform("command_count", commands.size())
                 .inform("perk_count", perks.size())
                 .inform("vanilla_item_count", vanillaItems.length)

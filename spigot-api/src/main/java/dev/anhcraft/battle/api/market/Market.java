@@ -51,6 +51,13 @@ public class Market extends ConfigurableObject {
     @Explanation("Additional lore that contains common stuff about the product (e.g: price)")
     private List<String> summaryProductLore;
 
+    @Key("options.summary_product_info.ign_lore")
+    @Explanation({
+            "Additional lore that contains common stuff about the product (e.g: price)",
+            "This will be appeared while playing the game"
+    })
+    private List<String> summaryProductIgnLore;
+
     @Key("categories")
     @Explanation("All categories")
     @IgnoreValue(ifNull = true)
@@ -67,6 +74,11 @@ public class Market extends ConfigurableObject {
     @Nullable
     public List<String> getSummaryProductLore() {
         return summaryProductLore;
+    }
+
+    @Nullable
+    public List<String> getSummaryProductIgnLore() {
+        return summaryProductIgnLore;
     }
 
     @NotNull

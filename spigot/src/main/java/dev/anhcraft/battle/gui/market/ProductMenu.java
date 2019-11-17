@@ -22,6 +22,7 @@ package dev.anhcraft.battle.gui.market;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
+import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiCallback;
 import dev.anhcraft.battle.api.gui.GuiListener;
@@ -54,26 +55,38 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
         Category ctg = (Category) window.getSharedData().remove("category");
         if(ctg == null) return;
         Market mk = api.getMarket();
-        boolean inGame = api.getGameManager().getGame(player) != null;
+        GamePlayer gp = api.getGameManager().getGamePlayer(player);
         for(Product p : ctg.getProducts()){
-            if(p.isInGameOnly() && !inGame){
+            if(p.isInGameOnly() && gp == null){
                 continue;
             }
+
+            boolean useInGamePrice = gp != null && p.getPriceIgn() >= 0;
+
             PreparedItem ic = p.getIcon();
-            if(mk.isSummaryProductInfoEnabled() && mk.getSummaryProductLore() != null){
-                InfoHolder holder = new InfoHolder("product_");
-                p.inform(holder);
-                Map<String, String> map = api.mapInfo(holder);
-                for (String s : mk.getSummaryProductLore()){
-                    ic.lore().add(PlaceholderUtil.formatInfo(s, map));
+            if(mk.isSummaryProductInfoEnabled()){
+                List<String> lore = gp != null && mk.getSummaryProductIgnLore() != null ? mk.getSummaryProductIgnLore() : mk.getSummaryProductLore();
+                if(lore != null) {
+                    InfoHolder holder = new InfoHolder("product_");
+                    p.inform(holder);
+                    Map<String, String> map = api.mapInfo(holder);
+                    for (String s : lore) {
+                        ic.lore().add(PlaceholderUtil.formatInfo(s, map));
+                    }
                 }
             }
+
             data.add(new PaginationItem(ic.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
                 @Override
                 public void call(@NotNull SlotClickReport event) {
                     event.getClickEvent().setCancelled(true);
-                    double balance = VaultApi.getEconomyApi().getBalance(player);
-                    if(balance < p.getPriceVault()){
+
+                    final double balance = useInGamePrice ? gp.getIgBalance().get() :
+                            VaultApi.getEconomyApi().getBalance(player);
+                    final double price = useInGamePrice ? p.getPriceIgn() :
+                            p.getPriceVault();
+
+                    if(balance < price){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.not_enough_money", s -> String.format(s, balance));
                         return;
                     }
@@ -84,18 +97,23 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                     Bukkit.getPluginManager().callEvent(ev);
                     if(ev.isCancelled()) return;
 
-                    EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, p.getPriceVault());
-                    if(!er.transactionSuccess()){
-                        api.getChatManager().sendPlayer(event.getPlayer(), "market.purchase_failed");
-                        return;
+                    if(useInGamePrice){
+                        gp.getIgBalance().addAndGet(-price);
+                    } else {
+                        EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, price);
+                        if(!er.transactionSuccess()){
+                            api.getChatManager().sendPlayer(event.getPlayer(), "market.purchase_failed");
+                            return;
+                        }
                     }
+
                     p.givePlayer(player, pd);
                     api.getChatManager().sendPlayer(event.getPlayer(), "market.purchase_success");
                     if(mk.shouldLogTransactions()){
                         pd.getTransactions().add(new Transaction(
                                 player.getUniqueId(),
                                 p.getId(),
-                                p.getPriceVault(),
+                                price,
                                 System.currentTimeMillis()
                         ));
                     }

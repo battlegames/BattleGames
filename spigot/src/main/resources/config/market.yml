@@ -10,6 +10,11 @@ options:
       - "&fPrice: &d${__product_price_vault__}"
       - "&f"
       - "&e>> Click to purchase <<"
+    ign_lore:
+      - "&f"
+      - "&fPrice: &d{__product_price_ign__} coins"
+      - "&f"
+      - "&e>> Click to purchase <<"
 
 categories:
   perks:
@@ -30,7 +35,8 @@ categories:
           material: redstone
           lore:
             - "&fBoost your health!"
-        price: 75
+        price:
+          vault: 75
         executions:
           give_perks:
             - health_boost
@@ -41,7 +47,8 @@ categories:
           lore:
             - "&aSpeed up your movement!"
             - "&eAvailable until the game ends"
-        price: 150
+        price:
+          vault: 150
         executions:
           give_perks:
             - speed
@@ -57,7 +64,8 @@ categories:
         icon:
           name: "&aSnacks"
           material: cookie
-        price: 20
+        price:
+          vault: 20
         executions:
           give_items:
             vanilla:
@@ -71,7 +79,8 @@ categories:
         icon:
           name: "&4Meat"
           material: cookie
-        price: 36
+        price:
+          vault: 36
         executions:
           give_items:
             vanilla:
@@ -90,7 +99,8 @@ categories:
         icon:
           name: "&aBuy 200 in-game exp"
           material: ice
-        price: 5000
+        price:
+          vault: 5000
         executions:
           give_exp:
             vanilla: 200
@@ -100,7 +110,8 @@ categories:
           material: ice
           lore:
             - "&eBonus: Get 20% Battle exp"
-        price: 25000
+        price:
+          vault: 25000
         executions:
           give_exp:
             vanilla: 1000
@@ -109,7 +120,9 @@ categories:
         icon:
           name: "&bFlying&f ability"
           material: feather
-        price: 10000
+        price:
+          in_game: 100
+        in_game_only: true
         executions:
           perform_commands:
             - "fly %player_name%"
