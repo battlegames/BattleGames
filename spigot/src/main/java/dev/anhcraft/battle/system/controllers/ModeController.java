@@ -54,9 +54,9 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
-    private final Map<String, Integer> RUNNING_TASKS = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, Integer> RUNNING_TASKS = new ConcurrentHashMap<>();
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
-    public final Map<UUID, Runnable> RELOADING_GUN = Collections.synchronizedMap(new HashMap<>());
+    public final Map<UUID, Runnable> RELOADING_GUN = new ConcurrentHashMap<>();
     private final Mode mode;
 
     ModeController(BattlePlugin plugin, Mode mode) {
