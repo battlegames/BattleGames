@@ -7,7 +7,7 @@ options:
     enabled: true
     lore:
       - "&f"
-      - "&fPrice: &d${__product_price__}"
+      - "&fPrice: &d${__product_price_vault__}"
       - "&f"
       - "&e>> Click to purchase <<"
 

@@ -73,7 +73,7 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                 public void call(@NotNull SlotClickReport event) {
                     event.getClickEvent().setCancelled(true);
                     double balance = VaultApi.getEconomyApi().getBalance(player);
-                    if(balance < p.getPrice()){
+                    if(balance < p.getPriceVault()){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.not_enough_money", s -> String.format(s, balance));
                         return;
                     }
@@ -84,7 +84,7 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                     Bukkit.getPluginManager().callEvent(ev);
                     if(ev.isCancelled()) return;
 
-                    EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, p.getPrice());
+                    EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, p.getPriceVault());
                     if(!er.transactionSuccess()){
                         api.getChatManager().sendPlayer(event.getPlayer(), "market.purchase_failed");
                         return;
@@ -95,7 +95,7 @@ public class ProductMenu extends GuiListener implements PaginationFactory {
                         pd.getTransactions().add(new Transaction(
                                 player.getUniqueId(),
                                 p.getId(),
-                                p.getPrice(),
+                                p.getPriceVault(),
                                 System.currentTimeMillis()
                         ));
                     }

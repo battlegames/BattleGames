@@ -60,6 +60,7 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
+import dev.anhcraft.battle.utils.ConfigUpdater;
 import dev.anhcraft.battle.utils.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
@@ -692,6 +693,14 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initMarket(FileConfiguration c) {
+        ConfigUpdater u = new ConfigUpdater(getLogger());
+        u.getPathRelocating().add(
+                new ConfigUpdater.PathRelocating()
+                .oldPath("categories.*.products.*.price")
+                .newPath("categories.#0.products.#1.price.vault")
+                .type(Number.class)
+        );
+        u.update(c);
         try {
             ConfigHelper.readConfig(c, Market.SCHEMA, MARKET);
         } catch (InvalidValueException e) {

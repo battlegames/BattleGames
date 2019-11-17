@@ -61,9 +61,9 @@ public class Product extends ConfigurableObject implements Informative {
     @Validation(notNull = true)
     private PreparedItem icon;
 
-    @Key("price")
-    @Explanation("How much does this product cost")
-    private double price;
+    @Key("price.vault")
+    @Explanation("The cost of this product (in case of trading through Vault)")
+    private double priceVault;
 
     @Key("in_game_only")
     @Explanation("Make this product only available during the game")
@@ -121,8 +121,8 @@ public class Product extends ConfigurableObject implements Informative {
         return icon.duplicate();
     }
 
-    public double getPrice() {
-        return price;
+    public double getPriceVault() {
+        return priceVault;
     }
 
     public boolean isInGameOnly() {
@@ -256,7 +256,8 @@ public class Product extends ConfigurableObject implements Informative {
     @Override
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id)
-                .inform("price", price)
+                .inform("price", priceVault) // LEGACY
+                .inform("price_vault", priceVault)
                 .inform("command_count", commands.size())
                 .inform("perk_count", perks.size())
                 .inform("vanilla_item_count", vanillaItems.length)
