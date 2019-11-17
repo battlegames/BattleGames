@@ -24,7 +24,7 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.utils.GeneralConfig;
+import dev.anhcraft.battle.api.misc.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigDoc;
 
 import java.io.File;

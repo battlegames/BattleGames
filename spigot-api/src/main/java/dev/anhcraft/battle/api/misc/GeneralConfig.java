@@ -18,12 +18,8 @@
  *
  */
 
-package dev.anhcraft.battle.utils;
+package dev.anhcraft.battle.api.misc;
 
-import dev.anhcraft.battle.api.misc.BattleChat;
-import dev.anhcraft.battle.api.misc.BattleScoreboard;
-import dev.anhcraft.battle.api.misc.ConfigurableObject;
-import dev.anhcraft.battle.api.misc.MouseClick;
 import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;

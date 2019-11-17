@@ -203,7 +203,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
             Multiset<String> servers = game.getDownstreamServers().keys();
             for(String s : servers) {
                 if (game.getDownstreamServers().remove(s, player)) {
-                    plugin.queueServerTask.QUEUE.add(new QueueServer(player, plugin.getLobbyServers(), null));
+                    plugin.queueServerTask.QUEUE.add(new QueueServer(player, plugin.GENERAL_CONF.getBungeeLobbies(), null));
                     break;
                 }
             }

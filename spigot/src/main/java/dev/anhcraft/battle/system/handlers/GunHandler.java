@@ -91,12 +91,12 @@ public class GunHandler extends Handler {
     }
 
     public void reduceSpeed(Player player, GunModel g){
-        float w = plugin.getDefaultWalkingSpeed();
-        w = (float) Math.max(-1f, w - g.getWeight());
-        float f = plugin.getDefaultFlyingSpeed();
-        f = (float) Math.max(-1f, f - g.getWeight());
-        player.setWalkSpeed(w);
-        player.setFlySpeed(f);
+        double w = plugin.GENERAL_CONF.getWalkSpeed();
+        w = Math.max(-1f, w - g.getWeight());
+        double f = plugin.GENERAL_CONF.getFlySpeed();
+        f = Math.max(-1f, f - g.getWeight());
+        player.setWalkSpeed((float) w);
+        player.setFlySpeed((float) f);
     }
 
     private boolean isHeadShot(Location q, BoundingBox box) {
@@ -121,8 +121,8 @@ public class GunHandler extends Handler {
                     }
                 }
             }
-            player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-            player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+            player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
+            player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
         } else reduceSpeed(player, gunModel);
     }
 

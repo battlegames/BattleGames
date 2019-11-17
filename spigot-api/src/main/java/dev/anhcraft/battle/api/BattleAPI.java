@@ -22,10 +22,7 @@ package dev.anhcraft.battle.api;
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.BattleEffect;
-import dev.anhcraft.battle.api.misc.Booster;
-import dev.anhcraft.battle.api.misc.Kit;
-import dev.anhcraft.battle.api.misc.Perk;
+import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
@@ -40,6 +37,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public interface BattleAPI {
+    /**
+     * Gets the general configuration.
+     * @return general config
+     */
+    @NotNull
+    GeneralConfig getGeneralConfig();
+
     /**
      * Creates a map represents the view of {@link InfoHolder}.
      * @param holder the information holder
@@ -94,14 +98,18 @@ public interface BattleAPI {
 
     /**
      * Gets the default walking speed.
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      * @return walking speed
      */
+    @Deprecated
     float getDefaultWalkingSpeed();
 
     /**
      * Gets the default flying speed.
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      * @return flying speed
      */
+    @Deprecated
     float getDefaultFlyingSpeed();
 
     /**
@@ -354,25 +362,32 @@ public interface BattleAPI {
      * Checks if Bungeecord is supported.
      * @return {@code true} if it is or {@code false} otherwise
      */
+    // NOTE: THIS METHOD IS [DIFFERENT] THAN THE SIMILAR ONE IN GENERAL CONFIG
     boolean hasBungeecordSupport();
 
     /**
      * Gets all lobby servers
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      * @return an immutable list contains lobby servers.
      */
+    @Deprecated
     @NotNull
     List<String> getLobbyServers();
 
     /**
      * Gets the maximum reconnection tries.
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      * @return maximum reconnection tries
      */
+    @Deprecated
     int getMaxReconnectionTries();
 
     /**
      * Gets the connection delay.
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      * @return connection delay
      */
+    @Deprecated
     long getConnectionDelay();
 
     /**

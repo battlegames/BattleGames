@@ -38,7 +38,7 @@ public class QueueServer {
     private String arena;
 
     public QueueServer(Player player, List<String> serverList, String arena) {
-        this(player, serverList, ApiProvider.consume().getMaxReconnectionTries(), ApiProvider.consume().getConnectionDelay(), arena);
+        this(player, serverList, ApiProvider.consume().getGeneralConfig().getBungeeReconnectTries(), ApiProvider.consume().getGeneralConfig().getBungeeConnectDelay(), arena);
     }
 
     public QueueServer(Player player, List<String> serverList, int maxReconnect, long connectInterval, String arena) {

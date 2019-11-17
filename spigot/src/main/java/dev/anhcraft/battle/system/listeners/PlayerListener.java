@@ -70,8 +70,8 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.taskHelper.newDelayedTask(() -> {
             if(!player.isOnline()) return;
             player.teleport(plugin.getServerData().getSpawnPoint());
-            player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-            player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+            player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
+            player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
             plugin.guiManager.setBottomGui(player, "main_player_inv");
             plugin.resetScoreboard(player);
             plugin.taskHelper.newAsyncTask(() -> {
@@ -245,8 +245,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                     }
                 } else if(oldItem instanceof Gun){
                     if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
-                        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-                        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+                        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
+                        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
                     }
                     updateSecondaryGunSkin(player, null);
                 }
@@ -256,8 +256,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(oldItem instanceof Gun){
                     updateSecondaryGunSkin(player, null);
                     if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
-                        player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-                        player.setFlySpeed(plugin.getDefaultFlyingSpeed());
+                        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
+                        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
                     }
                 }
             }

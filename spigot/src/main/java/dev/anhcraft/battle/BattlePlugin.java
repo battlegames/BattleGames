@@ -61,7 +61,7 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.battle.utils.GeneralConfig;
+import dev.anhcraft.battle.api.misc.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
