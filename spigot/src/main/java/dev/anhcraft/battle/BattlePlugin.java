@@ -228,7 +228,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
-        taskHelper.newAsyncTimerTask(entityTracker = new EntityTrackingTask(), 0, 10);
+        taskHelper.newAsyncTimerTask(entityTracker = new EntityTrackingTask(this), 0, 10);
         if(supportBungee){
             taskHelper.newAsyncTimerTask(queueServerTask = new QueueServerTask(this), 0, 20);
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));

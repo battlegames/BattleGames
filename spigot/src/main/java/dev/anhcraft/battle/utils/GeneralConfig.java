@@ -153,6 +153,10 @@ public class GeneralConfig extends ConfigurableObject {
     })
     private double flySpeed = 0.2;
 
+    @Key("misc.entity_track_min_distance")
+    @Explanation("The minimum distance to ensure a tracked entity has moved")
+    private double entityTrackMinDistance = 1.5;
+
     @Key("bungeecord.enabled")
     @Explanation("Should we enable the Bungeecord support?")
     private boolean bungeeEnabled;
@@ -349,5 +353,9 @@ public class GeneralConfig extends ConfigurableObject {
 
     public double getIgEcoInitBalance() {
         return igEcoInitBalance;
+    }
+
+    public double getEntityTrackMinDistance() {
+        return entityTrackMinDistance;
     }
 }

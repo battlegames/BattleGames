@@ -56,6 +56,7 @@ misc:
   default_speed:
     walk: 0.2
     fly: 0.2
+  entity_track_min_distance: 1.5
 
 bungeecord:
   enabled: false

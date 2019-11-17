@@ -20,6 +20,8 @@
 
 package dev.anhcraft.battle.tasks;
 
+import dev.anhcraft.battle.BattleComponent;
+import dev.anhcraft.battle.BattlePlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -27,10 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EntityTrackingTask implements Runnable {
+public class EntityTrackingTask extends BattleComponent implements Runnable {
     private static EntityTrackingTask task;
 
-    public EntityTrackingTask(){
+    public EntityTrackingTask(BattlePlugin plugin){
+        super(plugin);
         if(task != null) throw new UnsupportedOperationException();
         task = this;
     }
@@ -52,19 +55,19 @@ public class EntityTrackingTask implements Runnable {
 
     public static class EntityTracker{
         private Entity entity;
-        private Location lastLocation;
+        private Location lastLoc;
         private final List<EntityTrackCallback> callbacks = new LinkedList<>();
         private long originTime = System.currentTimeMillis();
         private long lastMoveTime = System.currentTimeMillis();
 
         public EntityTracker(Entity entity) {
             this.entity = entity;
-            lastLocation = entity.getLocation();
+            lastLoc = entity.getLocation();
         }
 
         @NotNull
         public Location getLastLocation(){
-            return lastLocation;
+            return lastLoc;
         }
 
         @NotNull
@@ -102,12 +105,12 @@ public class EntityTrackingTask implements Runnable {
                 MAP.remove(e.getKey());
             }
             else {
-                Location currentLocation = e.getKey().getLocation();
+                Location loc = e.getKey().getLocation();
                 EntityTracker track = e.getValue();
                 boolean b = false;
-                if (currentLocation.distanceSquared(track.lastLocation) >= 1.5) {
+                if (loc.distanceSquared(track.lastLoc) >= plugin.GENERAL_CONF.getEntityTrackMinDistance()) {
                     track.lastMoveTime = System.currentTimeMillis();
-                    track.lastLocation = currentLocation;
+                    track.lastLoc = loc;
                     b = true;
                 }
                 for (EntityTrackCallback c : track.callbacks) {
