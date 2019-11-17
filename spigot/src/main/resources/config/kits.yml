@@ -19,6 +19,7 @@ starter:
     battle:
       gun:
         - ak_47
+        - desert_eagle
   renew_time: -1
   first_join: true
 
@@ -27,7 +28,7 @@ food:
     material: cake
     name: "&fHot food"
     lore:
-      - "&fGuess what? Free food here. Yummy!"
+      - "&fFree food here!"
   items:
     vanilla:
       '1':
