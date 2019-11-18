@@ -36,7 +36,8 @@ import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.battle.api.misc.info.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
-import dev.anhcraft.battle.cmd.BattleCommand;
+import dev.anhcraft.battle.cmd.EditorCommand;
+import dev.anhcraft.battle.cmd.MainCommand;
 import dev.anhcraft.battle.gui.ArenaChooser;
 import dev.anhcraft.battle.gui.BoosterMenu;
 import dev.anhcraft.battle.gui.KitMenu;
@@ -237,7 +238,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.enableUnstableAPI("help");
-        manager.registerCommand(new BattleCommand(this));
+        manager.registerCommand(new MainCommand(this));
+        manager.registerCommand(new EditorCommand(this));
         manager.getCommandCompletions().registerAsyncCompletion("ammo", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
             @Override
             public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {

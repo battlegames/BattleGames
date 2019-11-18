@@ -46,10 +46,10 @@ import java.util.Collection;
 import java.util.Map;
 
 @CommandAlias("b|bg|battle|battlegames")
-public class BattleCommand extends BaseCommand{
+public class MainCommand extends BaseCommand{
     private BattlePlugin plugin;
 
-    public BattleCommand(BattlePlugin plugin){
+    public MainCommand(BattlePlugin plugin){
         this.plugin = plugin;
     }
 
