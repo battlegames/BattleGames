@@ -24,6 +24,7 @@ import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Middleware;
 import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,6 +54,28 @@ public class ConfigurableObject {
         return value;
     }
 
+    private Object uncolorize(Object value){
+        if(value != null) {
+            if (value instanceof String) {
+                return ((String) value).replace(ChatColor.COLOR_CHAR, '&');
+            } else if (value instanceof List) {
+                List<Object> list = (List<Object>) value;
+                if (!list.isEmpty() && list.get(0) instanceof String) {
+                    list.replaceAll(o -> ((String) o).replace(ChatColor.COLOR_CHAR, '&'));
+                    return list;
+                }
+            } else if (value instanceof ConfigurationSection) {
+                ConfigurationSection cs = (ConfigurationSection) value;
+                for (String s : cs.getKeys(false)) {
+                    Object k = cs.get(s);
+                    cs.set(s, uncolorize(k));
+                }
+                return cs;
+            }
+        }
+        return value;
+    }
+
     @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
     @Nullable
     private Object c2s(ConfigSchema.Entry entry, @Nullable Object value){
@@ -62,7 +85,7 @@ public class ConfigurableObject {
     @Middleware(Middleware.Direction.SCHEMA_TO_CONFIG)
     @Nullable
     private Object s2c(ConfigSchema.Entry entry, @Nullable Object value){
-        return schema2conf(value, entry);
+        return uncolorize(schema2conf(value, entry));
     }
 
     @Nullable
