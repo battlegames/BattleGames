@@ -22,7 +22,10 @@ package dev.anhcraft.battle.system.managers;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleGuiManager;
-import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.api.gui.GuiCallback;
+import dev.anhcraft.battle.api.gui.GuiListener;
+import dev.anhcraft.battle.api.gui.Slot;
 import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
 import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
 import dev.anhcraft.battle.api.gui.reports.GuiReport;
@@ -32,9 +35,7 @@ import dev.anhcraft.battle.api.gui.reports.SlotReport;
 import dev.anhcraft.battle.api.gui.window.Button;
 import dev.anhcraft.battle.api.gui.window.View;
 import dev.anhcraft.battle.api.gui.window.Window;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.ABIF;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.helpers.PaginationHelper;
 import dev.anhcraft.jvmkit.lang.annotation.Label;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -51,6 +52,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+
+import static dev.anhcraft.battle.utils.PlaceholderUtil.*;
 
 public class GuiManager extends BattleComponent implements BattleGuiManager {
     private final Map<String, Gui> GUI = new HashMap<>();
@@ -293,8 +296,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Inventory inv;
         if(v.getGui().getTitle() == null) inv = Bukkit.createInventory(null, v.getGui().getSize());
         else {
-            String title = PlaceholderUtil.localizeString(v.getGui().getTitle(), plugin.getLocaleConf());
-            title = PlaceholderUtil.formatPAPI(player, title);
+            String title = localizeString(v.getGui().getTitle(), plugin.getLocaleConf());
+            title = formatPAPI(player, title);
             inv = Bukkit.createInventory(null, v.getGui().getSize(), title);
         }
         w.setTopInv(inv);
@@ -326,7 +329,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         for(int i = 0; i < buttons.length; i++){
             Button x = buttons[i];
             if(x != null && x.getSlot().getItemConf() != null)
-                items[i] = formatStrings(ABIF.read(x.getSlot().getItemConf()), player).build();
+                items[i] = formatPAPI(formatTranslations(ABIF.read(x.getSlot().getItemConf()), plugin.getLocaleConf()), player).build();
         }
         if(v.getPagination() != null && v.getGui().getPagination() != null){
             Button[] bt = v.getPagination().collect(); // get all slots in current page
@@ -338,11 +341,5 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             }
         }
         return items;
-    }
-
-    private PreparedItem formatStrings(PreparedItem pi, Player player) {
-        pi.name(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.localizeString(pi.name(), plugin.getLocaleConf())));
-        pi.lore(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.localizeStrings(pi.lore(), plugin.getLocaleConf())));
-        return pi;
     }
 }
