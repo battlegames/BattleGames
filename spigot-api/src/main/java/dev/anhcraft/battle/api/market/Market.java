@@ -67,8 +67,16 @@ public class Market extends ConfigurableObject {
         return logTransactions;
     }
 
+    public void setLogTransactions(boolean logTransactions) {
+        this.logTransactions = logTransactions;
+    }
+
     public boolean isSummaryProductInfoEnabled() {
         return summaryProductInfoEnabled;
+    }
+
+    public void setSummaryProductInfoEnabled(boolean summaryProductInfoEnabled) {
+        this.summaryProductInfoEnabled = summaryProductInfoEnabled;
     }
 
     @Nullable

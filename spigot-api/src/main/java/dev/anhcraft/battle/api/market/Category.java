@@ -23,15 +23,14 @@ package dev.anhcraft.battle.api.market;
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,14 +39,15 @@ import java.util.List;
 
 @Schema
 public class Category extends ConfigurableObject {
+    private static final PreparedItem DEFAULT_ICON = PreparedItem.of(new ItemStack(Material.STONE, 1));
     public static final ConfigSchema<Category> SCHEMA = ConfigSchema.of(Category.class);
 
     private String id;
 
     @Key("icon")
     @Explanation("Category's icon")
-    @Validation(notNull = true)
-    private PreparedItem icon;
+    @IgnoreValue(ifNull = true)
+    private PreparedItem icon = DEFAULT_ICON;
 
     @Key("in_game_only")
     @Explanation("Make this category only available during the game")
@@ -72,6 +72,11 @@ public class Category extends ConfigurableObject {
         return icon.duplicate();
     }
 
+    public void setIcon(@NotNull PreparedItem icon) {
+        Condition.argNotNull("icon", icon);
+        this.icon = icon;
+    }
+
     @NotNull
     public List<Product> getProducts() {
         return products;
@@ -79,6 +84,10 @@ public class Category extends ConfigurableObject {
 
     public boolean isInGameOnly() {
         return inGameOnly;
+    }
+
+    public void setInGameOnly(boolean inGameOnly) {
+        this.inGameOnly = inGameOnly;
     }
 
     @Override

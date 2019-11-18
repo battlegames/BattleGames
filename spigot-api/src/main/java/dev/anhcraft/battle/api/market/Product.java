@@ -40,9 +40,11 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,14 +54,15 @@ import java.util.Set;
 
 @Schema
 public class Product extends ConfigurableObject implements Informative {
+    private static final PreparedItem DEFAULT_ICON = PreparedItem.of(new ItemStack(Material.STONE, 1));
     public static final ConfigSchema<Product> SCHEMA = ConfigSchema.of(Product.class);
 
     private String id;
 
     @Key("icon")
     @Explanation("Product's icon")
-    @Validation(notNull = true)
-    private PreparedItem icon;
+    @IgnoreValue(ifNull = true)
+    private PreparedItem icon = DEFAULT_ICON;
 
     @Key("price.vault")
     @Explanation("The cost of this product (in case of trading through Vault)")
@@ -132,12 +135,24 @@ public class Product extends ConfigurableObject implements Informative {
         return priceVault;
     }
 
+    public void setPriceVault(double priceVault) {
+        this.priceVault = priceVault;
+    }
+
     public double getPriceIgn() {
         return priceIgn;
     }
 
+    public void setPriceIgn(double priceIgn) {
+        this.priceIgn = priceIgn;
+    }
+
     public boolean isInGameOnly() {
         return inGameOnly;
+    }
+
+    public void setInGameOnly(boolean inGameOnly) {
+        this.inGameOnly = inGameOnly;
     }
 
     @NotNull
@@ -155,6 +170,11 @@ public class Product extends ConfigurableObject implements Informative {
         return vanillaItems;
     }
 
+    public void setVanillaItems(@NotNull PreparedItem[] vanillaItems) {
+        Condition.argNotNull("vanillaItems", vanillaItems);
+        this.vanillaItems = vanillaItems;
+    }
+
     @NotNull
     public Multimap<ItemType, String> getBattleItems() {
         return battleItems;
@@ -164,8 +184,16 @@ public class Product extends ConfigurableObject implements Informative {
         return vanillaExp;
     }
 
+    public void setVanillaExp(int vanillaExp) {
+        this.vanillaExp = vanillaExp;
+    }
+
     public double getBattleExp() {
         return battleExp;
+    }
+
+    public void setBattleExp(long battleExp) {
+        this.battleExp = battleExp;
     }
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
