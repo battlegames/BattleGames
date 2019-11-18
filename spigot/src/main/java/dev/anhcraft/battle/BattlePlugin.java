@@ -732,6 +732,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    public @NotNull GeneralConfig getGeneralConfig() {
+        return GENERAL_CONF;
+    }
+
+    @Override
     @NotNull
     public Map<String, String> mapInfo(@NotNull InfoHolder holder){
         Condition.argNotNull("holder", holder);
