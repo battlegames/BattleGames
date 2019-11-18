@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.utils;
 
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -41,6 +42,40 @@ public class PlaceholderUtil {
     private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
+    @NotNull
+    public static PreparedItem formatPAPI(@NotNull PreparedItem pi, @NotNull Player player){
+        Condition.notNull(pi);
+        Condition.notNull(player);
+        pi.name(formatPAPI(player, pi.name()));
+        pi.lore().replaceAll(s -> formatPAPI(player, s));
+        return pi;
+    }
+
+    @NotNull
+    public static PreparedItem formatInfo(@NotNull PreparedItem pi, @NotNull Map<String, String> x){
+        Condition.notNull(pi);
+        Condition.notNull(x);
+        pi.name(formatInfo(pi.name(), x));
+        pi.lore().replaceAll(s -> formatInfo(s, x));
+        return pi;
+    }
+
+    @NotNull
+    public static PreparedItem formatExpression(@NotNull PreparedItem pi){
+        Condition.notNull(pi);
+        pi.name(formatExpression(pi.name()));
+        pi.lore().replaceAll(PlaceholderUtil::formatExpression);
+        return pi;
+    }
+
+    @NotNull
+    public static PreparedItem formatTranslations(@NotNull PreparedItem pi, @Nullable ConfigurationSection localeConf){
+        Condition.notNull(pi);
+        pi.name(localizeString(pi.name(), localeConf));
+        pi.lore(localizeStrings(pi.lore(), localeConf));
+        return pi;
+    }
+
     @Contract("_, null -> null")
     public static String formatPAPI(@NotNull Player player, @Nullable String str){
         Condition.notNull(player);
@@ -50,7 +85,9 @@ public class PlaceholderUtil {
     @Contract("_, null -> null")
     public static List<String> formatPAPI(@NotNull Player player, @Nullable List<String> str){
         Condition.notNull(player);
-        return PlaceholderAPI.setPlaceholders(player, str);
+        if(str == null) return null;
+        str.replaceAll(s -> formatPAPI(player, s)); // use #replaceAll is better than the provided PAPI method
+        return str;
     }
 
     @Contract("null, _ -> null; _, null -> null")
