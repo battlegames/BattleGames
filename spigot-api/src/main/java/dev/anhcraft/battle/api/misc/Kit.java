@@ -113,7 +113,7 @@ public class Kit extends ConfigurableObject {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.duplicate();
+        return icon;
     }
 
     @NotNull

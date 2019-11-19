@@ -178,7 +178,7 @@ public class Arena extends ConfigurableObject implements Informative {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.duplicate();
+        return icon;
     }
 
     public long getMaxTime() {

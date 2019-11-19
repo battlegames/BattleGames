@@ -69,7 +69,7 @@ public class Category extends ConfigurableObject {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.duplicate();
+        return icon;
     }
 
     public void setIcon(@NotNull PreparedItem icon) {

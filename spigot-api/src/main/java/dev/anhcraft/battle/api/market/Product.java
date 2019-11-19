@@ -128,7 +128,7 @@ public class Product extends ConfigurableObject implements Informative {
 
     @NotNull
     public PreparedItem getIcon() {
-        return icon.duplicate();
+        return icon;
     }
 
     public double getPriceVault() {
