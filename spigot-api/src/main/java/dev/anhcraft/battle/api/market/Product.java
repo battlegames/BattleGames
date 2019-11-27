@@ -34,7 +34,10 @@ import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.IgnoreValue;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -44,7 +47,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,8 +56,12 @@ import java.util.Set;
 
 @Schema
 public class Product extends ConfigurableObject implements Informative {
-    private static final PreparedItem DEFAULT_ICON = PreparedItem.of(new ItemStack(Material.STONE, 1));
+    private static final PreparedItem DEFAULT_ICON = new PreparedItem();
     public static final ConfigSchema<Product> SCHEMA = ConfigSchema.of(Product.class);
+
+    static {
+        DEFAULT_ICON.material(Material.STONE);
+    }
 
     private String id;
 
