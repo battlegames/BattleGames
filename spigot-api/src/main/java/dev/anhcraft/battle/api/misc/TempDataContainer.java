@@ -17,19 +17,22 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui;
 
-import dev.anhcraft.battle.api.gui.reports.GuiReport;
+package dev.anhcraft.battle.api.misc;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class GuiListener {
-    private final Map<String, GuiCallback<? extends GuiReport>> eventListeners = new HashMap<>();
+public class TempDataContainer {
+    private Map<String, Object> dataContainer;
 
     @NotNull
-    public Map<String, GuiCallback<? extends GuiReport>> getEventListeners() {
-        return eventListeners;
+    public Map<String, Object> getDataContainer() {
+        if(dataContainer == null){
+            dataContainer = new HashMap<>();
+        }
+        return dataContainer;
     }
 }
