@@ -17,25 +17,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.reports;
 
-import dev.anhcraft.battle.api.gui.window.View;
-import dev.anhcraft.battle.api.gui.window.Button;
-import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+package dev.anhcraft.battle.utils.functions;
 
-public class SlotReport extends GuiReport {
-    private Button slot;
+import org.bukkit.event.Event;
 
-    public SlotReport(@NotNull Player player, @NotNull View gui, @NotNull Button slot) {
-        super(player, gui);
-        Condition.argNotNull("slot", slot);
-        this.slot = slot;
-    }
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @NotNull
-    public Button getSlot() {
-        return slot;
-    }
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Function {
+    String value();
+    Class<?> event() default Event.class;
 }

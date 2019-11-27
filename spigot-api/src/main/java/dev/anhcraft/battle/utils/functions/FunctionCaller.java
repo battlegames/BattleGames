@@ -17,29 +17,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.pagination;
 
-import dev.anhcraft.jvmkit.utils.Condition;
+package dev.anhcraft.battle.utils.functions;
+
 import org.jetbrains.annotations.NotNull;
 
-public class Pagination {
-    private int[] slots;
-    private String handler;
-
-    public Pagination(@NotNull int[] slots, @NotNull String handler) {
-        Condition.argNotNull("slots", slots);
-        Condition.argNotNull("handler", handler);
-        this.slots = slots;
-        this.handler = handler;
-    }
-
-    @NotNull
-    public int[] getSlots() {
-        return slots;
-    }
-
-    @NotNull
-    public String getHandler() {
-        return handler;
-    }
+public interface FunctionCaller<T> {
+    void call(@NotNull T object);
 }
