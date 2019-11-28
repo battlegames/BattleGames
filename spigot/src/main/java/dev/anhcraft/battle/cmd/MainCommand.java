@@ -25,6 +25,7 @@ import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.game.Game;
+import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
@@ -105,7 +106,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("arena menu")
     @CommandPermission("battle.arena.menu")
     public void arenaMenu(Player player){
-        plugin.guiManager.openTopGui(player, "arena_chooser");
+        plugin.guiManager.openTopGui(player, NativeGui.ARENA_CHOOSER);
     }
 
     @Subcommand("arena join")
@@ -297,17 +298,17 @@ public class MainCommand extends BaseCommand{
 
     @Subcommand("inv")
     public void inv(Player player){
-        plugin.guiManager.openTopGui(player, "inventory_menu");
+        plugin.guiManager.openTopGui(player, NativeGui.PLAYER_INV);
     }
 
     @Subcommand("booster")
     public void booster(Player player){
-        plugin.guiManager.openTopGui(player, "booster_menu");
+        plugin.guiManager.openTopGui(player, NativeGui.BOOSTER_MENU);
     }
 
     @Subcommand("market")
     public void market(Player player){
-        plugin.guiManager.openTopGui(player, "market_category_menu");
+        plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU);
     }
 
     @Subcommand("clearinv")
@@ -344,6 +345,6 @@ public class MainCommand extends BaseCommand{
 
     @Subcommand("kit")
     public void kit(Player player){
-        plugin.guiManager.openTopGui(player, "kit_menu");
+        plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
     }
 }

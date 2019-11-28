@@ -17,20 +17,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.window;
+package dev.anhcraft.battle.api.gui.screen;
 
-import org.bukkit.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
+import dev.anhcraft.battle.api.misc.TempDataContainer;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Window {
+public class Window extends TempDataContainer {
     private View topView;
     private View bottomView;
-    private Inventory topInv;
-    private Map<String, Object> sharedData;
 
     @Nullable
     public View getTopView() {
@@ -48,22 +42,5 @@ public class Window {
 
     public void setBottomView(@Nullable View bottomView) {
         this.bottomView = bottomView;
-    }
-
-    @Nullable
-    public Inventory getTopInv() {
-        return topInv;
-    }
-
-    public void setTopInv(@Nullable Inventory topInv) {
-        this.topInv = topInv;
-    }
-
-    @NotNull
-    public Map<String, Object> getSharedData() {
-        if(sharedData == null){
-            sharedData = new HashMap<>();
-        }
-        return sharedData;
     }
 }

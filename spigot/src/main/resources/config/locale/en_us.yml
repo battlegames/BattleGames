@@ -120,8 +120,7 @@ booster:
   another_used: "&cAnother booster is activated at the moment!"
   active_success: "&aThe booster is activated successfully!"
 gui:
-  empty: "&f"
-  btn:
+  common:
     close_name: "&cClose"
     close_lore:
       - "&aClick here to close this inventory"
@@ -134,7 +133,10 @@ gui:
     next_name: "&aNext page"
     next_lore:
       - "&fTurn to the next page"
-  inventory_menu:
+    your_inv_name: "&b&lYour inventory"
+    your_inv_lore:
+      - "&aOpen your inventory"
+  player_inv:
     title: "&e&lInventory"
     gun_name: "&fGun"
     gun_lore:
@@ -151,15 +153,15 @@ gui:
     grenade_name: "&fGrenades"
     grenade_lore:
       - "&aClick here to view owned grenades"
-  inventory_gun:
+  player_gun_inv:
     title: "&c&lInventory > Gun"
-  inventory_magazine:
+  player_magazine_inv:
     title: "&c&lInventory > Magazine"
-  inventory_ammo:
+  player_ammo_inv:
     title: "&c&lInventory > Ammunition"
-  inventory_scope:
+  player_scope_inv:
     title: "&c&lInventory > Scope"
-  inventory_grenade:
+  player_grenade_inv:
     title: "&c&lInventory > Grenade"
   kit_menu:
     title: "&b&lKits"
@@ -170,14 +172,8 @@ gui:
     arena_chooser_name: "&e&lChoose arena"
     arena_chooser_lore:
       - "&aSelect an arena to play on"
-    your_inventory_name: "&b&lYour inventory"
-    your_inventory_lore:
-      - "&aOpen your inventory"
   game_player_inv:
     title: "&c&lGame hotbar"
-    your_inventory_name: "&b&lYour inventory"
-    your_inventory_lore:
-      - "&aOpen your inventory"
     quit_name: "&c&lQuit"
     quit_lore:
       - "&eQuit this game"

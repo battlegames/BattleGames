@@ -19,81 +19,56 @@
  */
 package dev.anhcraft.battle.api.gui;
 
-import dev.anhcraft.battle.api.gui.pagination.Pagination;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.misc.BattleSound;
+import dev.anhcraft.battle.api.misc.ConfigurableObject;
+import dev.anhcraft.confighelper.ConfigHelper;
+import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.IgnoreValue;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.jvmkit.utils.MathUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-public class Gui {
-    private String title;
+@Schema
+public class Gui extends ConfigurableObject {
+    public static final ConfigSchema<Gui> SCHEMA = ConfigSchema.of(Gui.class);
+
+    private final Map<Integer, Component> S2C = new HashMap<>();
+    private final Multimap<String, Component> P2C = HashMultimap.create();
+    private String id;
     private int size;
-    private Slot[] slots;
-    private Pagination pagination;
+
+    @Key("title")
+    @Validation(notNull = true)
+    private String title;
+
+    @Key("components")
+    @IgnoreValue(ifNull = true)
+    private List<Component> components = new ArrayList<>();
+
+    @Key("sound")
     private BattleSound sound;
 
-    public Gui(ConfigurationSection conf){
-        title = conf.getString("title");
-        size = conf.getInt("size", 9);
-        String snd = conf.getString("sound");
-        sound = new BattleSound(snd == null ? "$block_chest_open" : snd.toUpperCase());
-
-        slots = new Slot[size];
-        ConfigurationSection sc = conf.getConfigurationSection("slots");
-        if(sc != null){
-            Set<String> keys = sc.getKeys(false);
-            for(String k : keys){
-                Object col = sc.get(k+".column");
-                int cl;
-                if(col instanceof String) cl = Objects.requireNonNull(conf.getParent())
-                        .getInt("$center_items."+col);
-                else cl = (int) col;
-
-                int pos = sc.getInt(k+".row") * 9 + cl - 10;
-                ConfigurationSection item = sc.getConfigurationSection(k+".item");
-                List<String> handlers = sc.getStringList(k+".handlers");
-                slots[pos] = new Slot(item, handlers, false);
-            }
-        }
-
-        ConfigurationSection pg = conf.getConfigurationSection("pagination");
-        if(pg != null){
-            String handlerId = pg.getString("handler");
-            if(handlerId == null) throw new NullPointerException("Pagination handler must be specified");
-
-            int minX = pg.getInt("region.left_column");
-            int maxX = pg.getInt("region.right_column");
-            int minY = pg.getInt("region.top_row");
-            int maxY = pg.getInt("region.bottom_row");
-            int lenX = Math.min(9, Math.max(0, maxX - minX + 1));
-            int lenY = Math.min(9, Math.max(0, maxY - minY + 1));
-            int[] ps = new int[lenX * lenY];
-            int in = 0;
-            for(int i = minY; i <= maxY; i++){
-                for(int j = minX; j <= maxX; j++){
-                    int pos = i * 9 + j - 10;
-                    ps[in++] = pos;
-                    slots[pos] = new Slot(null, new ArrayList<>(), true);
-                }
-            }
-            pagination = new Pagination(ps, handlerId);
-        }
-
-        ConfigurationSection bgIcon = conf.getConfigurationSection("background.item");
-        List<String> bgHandlers = conf.getStringList("background.handlers");
-        for(int i = 0; i < slots.length; i++){
-            if(slots[i] == null) slots[i] = new Slot(bgIcon, bgHandlers, false);
-        }
+    public Gui(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        this.id = id;
     }
 
-    @Nullable
-    public String getTitle() {
-        return title;
+    @NotNull
+    public String getId() {
+        return id;
     }
 
     public int getSize() {
@@ -101,17 +76,93 @@ public class Gui {
     }
 
     @NotNull
-    public Slot[] getSlots() {
-        return slots;
-    }
-
-    @Nullable
-    public Pagination getPagination() {
-        return pagination;
+    public String getTitle() {
+        return title;
     }
 
     @NotNull
+    public List<Component> getComponents() {
+        return components;
+    }
+
+    @Nullable
     public BattleSound getSound() {
         return sound;
+    }
+
+    @Nullable
+    public Component getComponentAt(int pos) {
+        return S2C.get(pos);
+    }
+
+    @NotNull
+    public Collection<Component> getComponentOf(@NotNull String pagination) {
+        return P2C.get(pagination);
+    }
+
+    @NotNull
+    public Collection<String> getAllPagination() {
+        return P2C.keys();
+    }
+
+    @Override
+    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if(value != null) {
+            switch (entry.getKey()) {
+                case "components": {
+                    ConfigurationSection cs = (ConfigurationSection) value;
+                    List<Component> components = new ArrayList<>();
+                    int highestSlot = 0;
+                    for(String s : cs.getKeys(false)){
+                        try {
+                            Component c = ConfigHelper.readConfig(cs.getConfigurationSection(s), Component.SCHEMA, new Component(s));
+                            c.getSlots().forEach(it -> S2C.put(it, c));
+                            if(c.getPagination() != null){
+                                if(!P2C.put(c.getPagination(), c)){
+                                    Bukkit.getLogger().warning("Pagination should not be duplicated! `"+c.getPagination()+"` in component: "+c.getId());
+                                }
+                            }
+                            int hs = Collections.max(c.getSlots());
+                            if(hs > highestSlot) highestSlot = hs;
+                            components.add(c);
+                        } catch (InvalidValueException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    size = (int) MathUtil.nextMultiple(highestSlot, 9);
+                    if(size > 54){
+                        Bukkit.getLogger().warning("The inventory size is out of bound: "+size);
+                        size = 54;
+                    }
+                    return components;
+                }
+                case "sound": {
+                    return new BattleSound((String) value);
+                }
+            }
+        }
+        return value;
+    }
+
+    @Override
+    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if(value != null) {
+            switch (entry.getKey()) {
+                case "components": {
+                    ConfigurationSection parent = new YamlConfiguration();
+                    int i = 0;
+                    for(Component cpn : (List<Component>) value){
+                        YamlConfiguration c = new YamlConfiguration();
+                        ConfigHelper.writeConfig(c, Component.SCHEMA, cpn);
+                        parent.set(String.valueOf(i++), c);
+                    }
+                    return parent;
+                }
+                case "sound": {
+                    return value.toString();
+                }
+            }
+        }
+        return value;
     }
 }

@@ -38,14 +38,13 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
 import dev.anhcraft.battle.cmd.MainCommand;
-import dev.anhcraft.battle.gui.ArenaChooser;
-import dev.anhcraft.battle.gui.BoosterMenu;
-import dev.anhcraft.battle.gui.KitMenu;
-import dev.anhcraft.battle.gui.handlers.CoreListener;
-import dev.anhcraft.battle.gui.handlers.MainInventoryListener;
-import dev.anhcraft.battle.gui.inventory.*;
-import dev.anhcraft.battle.gui.market.CategoryMenu;
-import dev.anhcraft.battle.gui.market.ProductMenu;
+import dev.anhcraft.battle.gui.CommonHandler;
+import dev.anhcraft.battle.gui.menu.ArenaChooser;
+import dev.anhcraft.battle.gui.menu.BoosterMenu;
+import dev.anhcraft.battle.gui.menu.KitMenu;
+import dev.anhcraft.battle.gui.menu.inventory.*;
+import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
+import dev.anhcraft.battle.gui.menu.market.ProductMenu;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.system.handlers.Handler;
@@ -62,7 +61,6 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.battle.api.misc.GeneralConfig;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -649,22 +647,27 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     private void initGui(FileConfiguration c) {
-        guiManager.registerGuiHandler("core", new CoreListener());
-        guiManager.registerGuiHandler("inventory_menu", new MainInventoryListener());
-        guiManager.registerGuiHandler("inventory_gun", new GunInventory());
-        guiManager.registerGuiHandler("inventory_magazine", new MagazineInventory());
-        guiManager.registerGuiHandler("inventory_ammo", new AmmoInventory());
-        guiManager.registerGuiHandler("inventory_scope", new ScopeInventory());
-        guiManager.registerGuiHandler("inventory_grenade", new GrenadeInventory());
-        guiManager.registerGuiHandler("kit_menu", new KitMenu());
-        guiManager.registerGuiHandler("arena_chooser", new ArenaChooser());
-        guiManager.registerGuiHandler("market_category_menu", new CategoryMenu());
-        guiManager.registerGuiHandler("market_product_menu", new ProductMenu());
-        guiManager.registerGuiHandler("booster_menu", new BoosterMenu());
+        guiManager.registerGuiHandler("common", new CommonHandler());
+        guiManager.registerPagination("player_gun", new GunInventory());
+        guiManager.registerPagination("player_magazine", new MagazineInventory());
+        guiManager.registerPagination("player_ammo", new AmmoInventory());
+        guiManager.registerPagination("player_scope", new ScopeInventory());
+        guiManager.registerPagination("player_grenade", new GrenadeInventory());
+        guiManager.registerPagination("kits", new KitMenu());
+        guiManager.registerPagination("arena_chooser", new ArenaChooser());
+        guiManager.registerPagination("market_category", new CategoryMenu());
+        guiManager.registerPagination("market_product", new ProductMenu());
+        guiManager.registerPagination("boosters", new BoosterMenu());
 
         c.getKeys(false).forEach(s -> {
-            if(s.length() > 0 && s.charAt(0) != '$')
-                guiManager.registerGui(s, new Gui(c.getConfigurationSection(s)));
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            Gui gui = new Gui(s);
+            try {
+                ConfigHelper.readConfig(cs, Gui.SCHEMA, gui);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            guiManager.GUI.put(s, gui); // put directly for better performance
         });
     }
 
@@ -848,6 +851,11 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
+    public @Nullable Gui getGui(@Nullable String id) {
+        return guiManager.GUI.get(id);
+    }
+
+    @Override
     public AmmoModel getAmmoModel(@Nullable String id) {
         return AMMO_MAP.get(id);
     }
@@ -897,6 +905,17 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public void listArenas(@NotNull Consumer<Arena> consumer) {
         Condition.argNotNull("consumer", consumer);
         ARENA_MAP.values().forEach(consumer);
+    }
+
+    @Override
+    public @NotNull List<Gui> listGui() {
+        return ImmutableList.copyOf(guiManager.GUI.values());
+    }
+
+    @Override
+    public void listGui(@NotNull Consumer<Gui> consumer) {
+        Condition.argNotNull("consumer", consumer);
+        guiManager.GUI.values().forEach(consumer);
     }
 
     @NotNull

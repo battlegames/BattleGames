@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.api.game.Arena;
+import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
@@ -150,6 +151,14 @@ public interface BattleAPI {
     Arena getArena(@Nullable String id);
 
     /**
+     * Gets the GUI that matches the given id.
+     * @param id the id of the GUI
+     * @return {@link Gui} if found or null if not
+     */
+    @Nullable
+    Gui getGui(@Nullable String id);
+
+    /**
      * Gets the ammo that matches the given id.
      * @param id the id of the ammo
      * @return {@link AmmoModel} if found or null if not
@@ -225,6 +234,19 @@ public interface BattleAPI {
      * @param consumer the consumer
      */
     void listArenas(@NotNull Consumer<Arena> consumer);
+
+    /**
+     * Lists all registered gui.
+     * @return an immutable list of gui
+     */
+    @NotNull
+    List<Gui> listGui();
+
+    /**
+     * Lists all gui and gets them.
+     * @param consumer the consumer
+     */
+    void listGui(@NotNull Consumer<Gui> consumer);
 
     /**
      * Lists all registered ammo.

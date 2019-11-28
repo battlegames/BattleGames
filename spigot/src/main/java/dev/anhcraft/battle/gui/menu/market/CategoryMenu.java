@@ -17,40 +17,38 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.gui.market;
+package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
-import dev.anhcraft.battle.api.gui.*;
-import dev.anhcraft.battle.api.gui.pagination.Pagination;
-import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
-import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
-import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
-import dev.anhcraft.battle.api.gui.window.Window;
+import dev.anhcraft.battle.api.gui.NativeGui;
+import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.page.Pagination;
+import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.battle.gui.GDataRegistry;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class CategoryMenu extends GuiListener implements PaginationFactory {
+public class CategoryMenu implements Pagination {
     @Override
-    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleAPI api = ApiProvider.consume();
         Market mk = api.getMarket();
         boolean inGame = api.getGameManager().getGame(player) != null;
         for(Category c : mk.getCategories()){
-            if(c.isInGameOnly() && !inGame){
+            if(!chain.hasNext()) break;
+            if((c.isInGameOnly() && !inGame) || chain.shouldSkip()){
                 continue;
             }
-            data.add(new PaginationItem(c.getIcon().build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
-                @Override
-                public void call(@NotNull SlotClickReport event) {
-                    window.getSharedData().put("category", c);
-                    api.getGuiManager().openTopGui(player, "market_product_menu");
-                }
-            }));
+            Slot slot = chain.next();
+            slot.setPaginationItem(c.getIcon().duplicate());
+            slot.setAdditionalFunction(report -> {
+                view.getWindow().getDataContainer().put(GDataRegistry.MARKET_CATEGORY, c);
+                api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_MENU);
+            });
         }
     }
 }

@@ -32,14 +32,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlaceholderUtil {
     private static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
-    private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([ A-Za-z0-9._\\-])+}}");
+    private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\[([ A-Za-z0-9._-])+]");
     private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
     @NotNull
@@ -130,7 +129,7 @@ public class PlaceholderUtil {
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
             String p = m.group();
-            String s = localeConf.getString(p.substring(2, p.length()-2).trim());
+            String s = localeConf.getString(p.substring(1, p.length()-1).trim());
             m.appendReplacement(sb, s == null ? p : s);
         }
         m.appendTail(sb);
@@ -140,16 +139,24 @@ public class PlaceholderUtil {
     @NotNull
     public static List<String> localizeStrings(@Nullable List<String> strs, @Nullable ConfigurationSection localeConf){
         if(strs == null || localeConf == null) return new ArrayList<>();
-        ListIterator<String> it = strs.listIterator();
-        while(it.hasNext()){
-            String q = it.next();
-            String s = q.trim();
-            if(s.startsWith("$$")){
-                it.remove();
-                List<String> rpc = localeConf.getStringList(s.substring(2));
-                for(String r : rpc) it.add(r);
-            } else it.set(localizeString(q, localeConf));
+        List<String> out = new ArrayList<>();
+        outer:
+        for (String str : strs){
+            Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
+            StringBuffer sb = new StringBuffer(str.length());
+            while(m.find()){
+                String p = m.group();
+                Object obj = localeConf.get(p.substring(1, p.length()-1).trim());
+                if(obj instanceof List){
+                    for(Object o : (List) obj)
+                        out.add(o.toString());
+                    continue outer;
+                }
+                m.appendReplacement(sb, obj == null ? p : obj.toString());
+            }
+            m.appendTail(sb);
+            out.add(sb.toString());
         }
-        return strs;
+        return out;
     }
 }

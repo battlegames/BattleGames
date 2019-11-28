@@ -23,6 +23,7 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -50,5 +51,10 @@ public class ItemStorage {
     public void list(@NotNull BiConsumer<String, Long> consumer){
         Condition.argNotNull("consumer", consumer);
         MAP.forEach(consumer);
+    }
+
+    @NotNull
+    public Collection<Map.Entry<String, Long>> list(){
+        return MAP.entrySet();
     }
 }

@@ -17,32 +17,32 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.gui;
+package dev.anhcraft.battle.gui.menu;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.game.Game;
-import dev.anhcraft.battle.api.gui.*;
-import dev.anhcraft.battle.api.gui.pagination.Pagination;
-import dev.anhcraft.battle.api.gui.pagination.PaginationFactory;
-import dev.anhcraft.battle.api.gui.pagination.PaginationItem;
-import dev.anhcraft.battle.api.gui.reports.SlotClickReport;
-import dev.anhcraft.battle.api.gui.window.Window;
+import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.page.Pagination;
+import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Map;
 
-public class ArenaChooser extends GuiListener implements PaginationFactory {
+public class ArenaChooser implements Pagination {
     @Override
-    public void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data) {
+    public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleAPI api = ApiProvider.consume();
-        api.listArenas(arena -> {
+        for (Arena arena : api.listArenas()){
+            if(!chain.hasNext()) break;
+            if(chain.shouldSkip()) continue;
+            Slot slot = chain.next();
             InfoHolder infoHolder;
             Game game = ApiProvider.consume().getGameManager().getGame(arena);
             if(game != null){
@@ -53,16 +53,11 @@ public class ArenaChooser extends GuiListener implements PaginationFactory {
                 arena.inform(infoHolder);
             }
             Map<String, String> infoMap = ApiProvider.consume().mapInfo(infoHolder);
-            PreparedItem icon = arena.getIcon();
-            icon.name(ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(icon.name(), infoMap)));
-            icon.lore().replaceAll(s -> ChatColor.translateAlternateColorCodes('&', PlaceholderUtil.formatInfo(s, infoMap)));
-            data.add(new PaginationItem(icon.build(), new GuiCallback<SlotClickReport>(SlotClickReport.class) {
-                @Override
-                public void call(@NotNull SlotClickReport event) {
-                    event.getPlayer().closeInventory();
-                    api.getGameManager().join(event.getPlayer(), arena);
-                }
-            }));
-        });
+            PreparedItem icon = arena.getIcon().duplicate();
+            icon.name(PlaceholderUtil.formatInfo(icon.name(), infoMap));
+            icon.lore().replaceAll(s -> PlaceholderUtil.formatInfo(s, infoMap));
+            slot.setPaginationItem(icon);
+            slot.setAdditionalFunction(object -> api.getGameManager().join(object.getPlayer(), arena));
+        }
     }
 }

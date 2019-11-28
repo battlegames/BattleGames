@@ -27,6 +27,7 @@ import dev.anhcraft.battle.api.events.WeaponDamageEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.items.BattleItem;
 import dev.anhcraft.battle.api.inventory.items.Grenade;
 import dev.anhcraft.battle.api.inventory.items.Gun;
@@ -72,7 +73,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             player.teleport(plugin.getServerData().getSpawnPoint());
             player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
             player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
-            plugin.guiManager.setBottomGui(player, "main_player_inv");
+            plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
             plugin.resetScoreboard(player);
             plugin.taskHelper.newAsyncTask(() -> {
                 PlayerData playerData = plugin.dataManager.loadPlayerData(player);
@@ -108,11 +109,13 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void drop(PlayerDropItemEvent event) {
-        if(plugin.guiManager.validateButton(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false)) event.setCancelled(true);
-        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        Player p = event.getPlayer();
+        LocalGame game = plugin.gameManager.getGame(p);
         if(game != null){
             game.getMode().getController(c -> c.onDropItem(event, game));
         }
+        // TODO check inventory crafting (survival) ^ creative (cre
+        // then call gui events here
     }
 
     @EventHandler
@@ -332,7 +335,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
 
             if(game.getArena().isRenderGuiOnDeath()){
-                plugin.guiManager.renderBottomView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()));
+                plugin.guiManager.renderView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()).getBottomView());
             }
 
             game.getMode().getController(c -> {

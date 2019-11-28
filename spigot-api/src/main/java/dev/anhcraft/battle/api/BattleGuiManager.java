@@ -19,10 +19,11 @@
  */
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.api.gui.window.View;
-import dev.anhcraft.battle.api.gui.Gui;
-import dev.anhcraft.battle.api.gui.GuiListener;
-import dev.anhcraft.battle.api.gui.window.Window;
+import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.page.Pagination;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.screen.Window;
+import dev.anhcraft.battle.api.gui.struct.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,17 +31,34 @@ import org.jetbrains.annotations.Nullable;
 public interface BattleGuiManager {
     /**
      * Registers the given GUI.
-     * @param id the id
-     * @param gui the GUI instance
+     * @param gui the GUI
+     * @return {@code true} if success, or {@code false} if not
      */
-    void registerGui(@NotNull String id, @NotNull Gui gui);
+    boolean registerGui(@NotNull Gui gui);
 
     /**
      * Registers a new GUI handler.
-     * @param id the id
-     * @param handler the handler instance
+     * @param namespace the namespace
+     * @param handler the handler
+     * @return {@code true} if success, or {@code false} if not
      */
-    void registerGuiHandler(@NotNull String id, @NotNull GuiListener handler);
+    boolean registerGuiHandler(@NotNull String namespace, @NotNull GuiHandler handler);
+
+    /**
+     * Registers the given pagination.
+     * @param id the identifier
+     * @param pagination the pagination
+     * @return {@code true} if success, or {@code false} if not
+     */
+    boolean registerPagination(@NotNull String id, @NotNull Pagination pagination);
+
+    /**
+     * Gets the gui handler from its namespace.
+     * @param namespace the namespace
+     * @return the gui handler (or {@code null} if not exist)
+     */
+    @Nullable
+    GuiHandler getGuiHandler(@Nullable String namespace);
 
     /**
      * Gets the {@link Window} of the given player.<br>
@@ -52,50 +70,56 @@ public interface BattleGuiManager {
     Window getWindow(@NotNull Player player);
 
     /**
+     * Renders the given view.
+     * @param player who is viewing
+     * @param view the view
+     */
+    void renderView(@NotNull Player player, @Nullable View view);
+
+    /**
+     * Renders all pagination that present on the given view.
+     * @param player who is viewing
+     * @param view the view
+     */
+    void renderPagination(@NotNull Player player, @Nullable View view);
+
+    /**
+     * Renders the given component .
+     * @param player who is viewing
+     * @param view the view
+     * @param component the component
+     */
+    void renderComponent(@NotNull Player player, @Nullable View view, @Nullable Component component);
+
+    /**
+     * Updates all pagination that present on the given view.<br>
+     * This method will also render the pagination.
+     * @param player who is viewing
+     * @param view the view
+     */
+    void updatePagination(@NotNull Player player, @Nullable View view);
+
+    /**
      * Sets the GUI for the bottom inventory.
      * <br>
-     * Calling this method will reset the current handlers and also rerender the bottom inventory of the given player.
+     * Calling this method will reset the current handlers and
+     * re-render the bottom inventory of the given player.
      * @param player the player
      * @param name the name of the GUI
      * @return the view
      */
-    @NotNull
-    View setBottomGui(@NotNull Player player, @NotNull String name);
-
-    /**
-     * Re-renders the bottom GUI.
-     * @param player the player
-     * @param window the {@link Window}
-     * @return the view
-     */
     @Nullable
-    View renderBottomView(@NotNull Player player, @NotNull Window window);
+    View setBottomGui(@NotNull Player player, @NotNull String name);
 
     /**
      * Opens a GUI as the top inventory.
      * <br>
-     * Calling this method will reset the current handlers and also rerender the top inventory of the given player.
+     * Calling this method will reset the current handlers and
+     * re-render the top inventory of the given player.
      * @param player the player
      * @param name the name of the GUI
      * @return the view
      */
-    @NotNull
-    View openTopGui(@NotNull Player player, @NotNull String name);
-
-    /**
-     * Re-renders the top GUI.
-     * @param player the player
-     * @param window the {@link Window}
-     * @return the view
-     */
     @Nullable
-    View renderTopView(@NotNull Player player, @NotNull Window window);
-
-    /**
-     * Destroys the {@link Window} of the given player.
-     * <br>
-     * Calling this method is considered as useless, should only provides internal uses.
-     * @param player the player
-     */
-    void destroyWindow(@NotNull Player player);
+    View openTopGui(@NotNull Player player, @NotNull String name);
 }

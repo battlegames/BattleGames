@@ -17,26 +17,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.reports;
+package dev.anhcraft.battle.api.gui.page;
 
-import dev.anhcraft.battle.api.gui.window.View;
-import dev.anhcraft.battle.api.gui.window.Button;
-import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.battle.api.gui.screen.View;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class SlotClickReport extends SlotReport {
-    private InventoryClickEvent clickEvent;
-
-    public SlotClickReport(@NotNull Player player, @NotNull View gui, @NotNull Button slot, @NotNull InventoryClickEvent clickEvent) {
-        super(player, gui, slot);
-        Condition.argNotNull("clickEvent", clickEvent);
-        this.clickEvent = clickEvent;
-    }
-
-    @NotNull
-    public InventoryClickEvent getClickEvent() {
-        return clickEvent;
-    }
+public interface Pagination {
+    void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain);
 }

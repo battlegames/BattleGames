@@ -17,31 +17,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.reports;
 
-import dev.anhcraft.battle.api.gui.window.View;
-import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+package dev.anhcraft.battle.gui;
 
-public class GuiReport {
-    private Player player;
-    private View gui;
-
-    public GuiReport(@NotNull Player player, @NotNull View gui) {
-        Condition.argNotNull("player", player);
-        Condition.argNotNull("gui", gui);
-        this.player = player;
-        this.gui = gui;
-    }
-
-    @NotNull
-    public Player getPlayer() {
-        return player;
-    }
-
-    @NotNull
-    public View getGui() {
-        return gui;
-    }
+public class GDataRegistry {
+    public static final String MARKET_CATEGORY = "mk_ctg";
 }

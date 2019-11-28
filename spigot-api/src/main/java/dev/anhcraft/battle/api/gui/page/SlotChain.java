@@ -17,14 +17,16 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.gui.pagination;
+package dev.anhcraft.battle.api.gui.page;
 
-import dev.anhcraft.battle.api.gui.Gui;
-import dev.anhcraft.battle.api.gui.window.Window;
-import org.bukkit.entity.Player;
+import dev.anhcraft.battle.api.gui.struct.Slot;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+public interface SlotChain {
+    @NotNull
+    Slot next();
 
-public interface PaginationFactory {
-    void pullData(Player player, Window window, Gui gui, Pagination pagination, List<PaginationItem> data);
+    boolean hasNext();
+
+    boolean shouldSkip();
 }

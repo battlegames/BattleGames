@@ -27,6 +27,7 @@ import dev.anhcraft.battle.api.events.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.events.GameQuitEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +49,7 @@ public class GameListener extends BattleComponent implements Listener {
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
-        plugin.guiManager.setBottomGui(p, "game_player_inv");
+        plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV);
     }
 
     @EventHandler
@@ -58,7 +59,7 @@ public class GameListener extends BattleComponent implements Listener {
         if(inv != null) p.getInventory().setContents(inv);
         // although the inventory got backup, its handler still
         // didn't change so we must set it again
-        plugin.guiManager.setBottomGui(p, "main_player_inv");
+        plugin.guiManager.setBottomGui(p, NativeGui.MAIN_PLAYER_INV);
 
         for (PotionEffect pe : p.getActivePotionEffects()){
             p.removePotionEffect(pe.getType());
