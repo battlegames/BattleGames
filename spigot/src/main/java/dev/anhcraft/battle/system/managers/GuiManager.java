@@ -93,18 +93,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         }
     }
 
-    private void drawItems(Player player, View view, boolean paginationOnly){
-        for(Component c : view.getGui().getComponents()){
-            if(c.getPagination() == null && paginationOnly) {
-                continue;
-            }
-            drawComponent(player, view, c);
-        }
-    }
-
     private View prepareView(Player player, Window window, Gui gui){
         return prepareView(
-                player,
                 window, gui,
                 Bukkit.createInventory(
                         null,
@@ -114,21 +104,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         );
     }
 
-    private View prepareView(Player player, Window window, Gui gui, Inventory inventory){
-        View view = new View(gui, window, inventory);
-        for(Component c : view.getGui().getComponents()){
-            if(c.getPagination() == null) {
-                continue;
-            }
-            Pagination pagination = PAGES.get(c.getPagination());
-            if(pagination == null){
-                plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
-                continue;
-            }
-            updatePagination(player, view, c, pagination, c.getPagination());
-            drawComponent(player, view, c);
-        }
-        return view;
+    private View prepareView(Window window, Gui gui, Inventory inventory){
+        return new View(gui, window, inventory);
     }
 
     public GuiManager(BattlePlugin plugin) {
@@ -181,42 +158,33 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     @Override
-    public void renderView(@NotNull Player player, @Nullable View view){
-        Condition.argNotNull("player", player);
-        if (view == null) return;
-        drawItems(player, view, false);
-    }
-
-    @Override
-    public void renderPagination(@NotNull Player player, @Nullable View view) {
-        Condition.argNotNull("player", player);
-        if (view == null) return;
-        drawItems(player, view, true);
-    }
-
-    @Override
-    public void renderComponent(@NotNull Player player, @Nullable View view, @Nullable Component component) {
-        Condition.argNotNull("player", player);
-        if (view == null || component == null) return;
-        drawComponent(player, view, component);
-    }
-
-    @Override
-    public void updatePagination(@NotNull Player player, @Nullable View view) {
+    public void updateView(@NotNull Player player, @Nullable View view){
         Condition.argNotNull("player", player);
         if (view == null) return;
         for(Component c : view.getGui().getComponents()){
-            if(c.getPagination() == null) {
-                continue;
+            if(c.getPagination() != null) {
+                Pagination pagination = PAGES.get(c.getPagination());
+                if(pagination == null)
+                    plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
+                else
+                    updatePagination(player, view, c, pagination, c.getPagination());
             }
-            Pagination pagination = PAGES.get(c.getPagination());
-            if(pagination == null){
-                plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
-                continue;
-            }
-            updatePagination(player, view, c, pagination, c.getPagination());
             drawComponent(player, view, c);
         }
+    }
+
+    @Override
+    public void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component c) {
+        Condition.argNotNull("player", player);
+        if (view == null || c == null) return;
+        if(c.getPagination() != null) {
+            Pagination pagination = PAGES.get(c.getPagination());
+            if(pagination == null)
+                plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
+            else
+                updatePagination(player, view, c, pagination, c.getPagination());
+        }
+        drawComponent(player, view, c);
     }
 
     @Override
@@ -226,9 +194,9 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Window gui = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
-        View v = prepareView(player, gui, g, player.getInventory());
+        View v = prepareView(gui, g, player.getInventory());
         gui.setBottomView(v);
-        renderView(player, v);
+        updateView(player, v);
         return v;
     }
 
@@ -241,7 +209,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         if(g == null) return null;
         View v = prepareView(player, w, g);
         w.setTopView(v);
-        renderView(player, v);
+        updateView(player, v);
         player.openInventory(v.getInventory());
         if (v.getGui().getSound() != null) {
             v.getGui().getSound().play(player);

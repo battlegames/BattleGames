@@ -38,6 +38,11 @@ public class CommonHandler extends GuiHandler {
         report.getPlayer().closeInventory();
     }
 
+    @Function("refresh")
+    public void refresh(SlotReport report) {
+        ApiProvider.consume().getGuiManager().updateView(report.getPlayer(), report.getView());
+    }
+
     @Function("open_top_gui")
     public void openTop(SlotReport report, String gui) {
         ApiProvider.consume().getGuiManager().openTopGui(report.getPlayer(), gui);
@@ -51,14 +56,14 @@ public class CommonHandler extends GuiHandler {
     @Function("prev_page")
     public void prevPage(SlotReport report, String pagination){
         if(report.getView().prevPage(pagination)) {
-            ApiProvider.consume().getGuiManager().updatePagination(report.getPlayer(), report.getView());
+            ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), report.getComponent());
         }
     }
 
     @Function("next_page")
     public void nextPage(SlotReport report, String pagination){
         if(report.getView().nextPage(pagination)) {
-            ApiProvider.consume().getGuiManager().updatePagination(report.getPlayer(), report.getView());
+            ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), report.getComponent());
         }
     }
 

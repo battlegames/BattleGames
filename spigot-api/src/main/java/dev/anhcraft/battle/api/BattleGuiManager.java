@@ -70,34 +70,19 @@ public interface BattleGuiManager {
     Window getWindow(@NotNull Player player);
 
     /**
-     * Renders the given view.
+     * Updates the given view.
      * @param player who is viewing
      * @param view the view
      */
-    void renderView(@NotNull Player player, @Nullable View view);
+    void updateView(@NotNull Player player, @Nullable View view);
 
     /**
-     * Renders all pagination that present on the given view.
-     * @param player who is viewing
-     * @param view the view
-     */
-    void renderPagination(@NotNull Player player, @Nullable View view);
-
-    /**
-     * Renders the given component .
+     * Updates the given component .
      * @param player who is viewing
      * @param view the view
      * @param component the component
      */
-    void renderComponent(@NotNull Player player, @Nullable View view, @Nullable Component component);
-
-    /**
-     * Updates all pagination that present on the given view.<br>
-     * This method will also render the pagination.
-     * @param player who is viewing
-     * @param view the view
-     */
-    void updatePagination(@NotNull Player player, @Nullable View view);
+    void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component component);
 
     /**
      * Sets the GUI for the bottom inventory.
