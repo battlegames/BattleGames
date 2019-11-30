@@ -42,6 +42,7 @@ import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -49,6 +50,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -114,8 +116,10 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(game != null){
             game.getMode().getController(c -> c.onDropItem(event, game));
         }
-        // TODO check inventory crafting (survival) ^ creative (cre
-        // then call gui events here
+        InventoryType f = p.getOpenInventory().getType();
+        if(f == InventoryType.CRAFTING || (f == InventoryType.CREATIVE && p.getGameMode() == GameMode.CREATIVE)){
+            plugin.guiManager.callEvent(p, p.getInventory().getHeldItemSlot(), false, event);
+        }
     }
 
     @EventHandler
