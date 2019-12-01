@@ -24,11 +24,20 @@ import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface BattleGuiManager {
+    /**
+     * Collects the info of the given {@link View}
+     * @param view view
+     * @return info holder
+     */
+    @NotNull
+    InfoHolder collectInfo(@NotNull View view);
+
     /**
      * Registers the given GUI.
      * @param gui the GUI

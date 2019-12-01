@@ -103,14 +103,11 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         return wdHolder;
     }
 
-    private InfoHolder collectInfo(View view){
-        return collectInfo(view, collectInfo(view.getWindow()));
-    }
-
     private InfoHolder collectInfo(View view, InfoHolder holder){
         InfoHolder vwHolder = new InfoHolder("view_");
         view.inform(vwHolder);
-        return vwHolder;
+        holder.link(vwHolder);
+        return holder;
     }
 
     private void refreshComponent(Player player, View view, Component c, Map<String, String> infoMap){
@@ -156,6 +153,12 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
 
     public GuiManager(BattlePlugin plugin) {
         super(plugin);
+    }
+
+    @NotNull
+    public InfoHolder collectInfo(@NotNull View view){
+        Condition.argNotNull("view", view);
+        return collectInfo(view, collectInfo(view.getWindow()));
     }
 
     @Override
