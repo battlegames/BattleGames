@@ -105,7 +105,7 @@ public class Component extends ConfigurableObject {
     @NotNull
     public synchronized List<FunctionLinker<SlotReport>> getFunctions() {
         if(functions == null) functions = new ArrayList<>();
-        if(functions.size() < rawFunctions.size()){
+        if(!rawFunctions.isEmpty()){
             BattleGuiManager bgm = ApiProvider.consume().getGuiManager();
             for (Iterator<String> it = rawFunctions.iterator(); it.hasNext(); ) {
                 String str = it.next();
@@ -113,7 +113,7 @@ public class Component extends ConfigurableObject {
                 if(fn != null) {
                     GuiHandler gh = bgm.getGuiHandler(fn.getNamespace());
                     // if gui handler does not exist, don't remove immediately
-                    // we can get it in the future
+                    // it may be available in the future
                     if (gh == null) continue;
                     functions.add(new FunctionLinker<>(
                             fn,
