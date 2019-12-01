@@ -119,6 +119,10 @@ booster:
   already_used: "&eYou are using this booster!"
   another_used: "&cAnother booster is activated at the moment!"
   active_success: "&aThe booster is activated successfully!"
+editor:
+  market:
+    category_created: "&aNew category named&f#%s&a created."
+    product_created: "&aNew product named&f#%s&a created."
 gui:
   common:
     close_name: "&cClose"
@@ -187,3 +191,13 @@ gui:
     title: "&4&lMARKET"
   booster_menu:
     title: "&e&lBoosters"
+  market_category_editor:
+    title: "&5&lCategory Editor"
+    create_name: "&eCreate new category"
+    create_lore:
+      - "&aClick here to make a new category"
+  market_product_editor:
+    title: "&4&lProduct Editor"
+    create_name: "&eCreate new product"
+    create_lore:
+      - "&aClick here to add a new product"

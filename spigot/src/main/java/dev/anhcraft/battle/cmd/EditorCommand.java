@@ -21,11 +21,11 @@ package dev.anhcraft.battle.cmd;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.CatchUnknown;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.HelpCommand;
+import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.gui.NativeGui;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("bge")
 public class EditorCommand extends BaseCommand{
@@ -39,5 +39,11 @@ public class EditorCommand extends BaseCommand{
     @HelpCommand
     public void help(CommandSender sender, CommandHelp help){
         help.showHelp();
+    }
+
+    @Subcommand("market")
+    @CommandPermission("battle.editor.market")
+    public void market(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_EDITOR);
     }
 }

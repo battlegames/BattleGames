@@ -39,11 +39,14 @@ import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
 import dev.anhcraft.battle.cmd.MainCommand;
 import dev.anhcraft.battle.gui.CommonHandler;
+import dev.anhcraft.battle.gui.MarketHandler;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.inventory.*;
+import dev.anhcraft.battle.gui.menu.market.CategoryEditor;
 import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
+import dev.anhcraft.battle.gui.menu.market.ProductEditor;
 import dev.anhcraft.battle.gui.menu.market.ProductMenu;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
@@ -648,6 +651,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     private void initGui(FileConfiguration c) {
         guiManager.registerGuiHandler("common", new CommonHandler());
+        guiManager.registerGuiHandler("market", new MarketHandler());
         guiManager.registerPagination("player_gun", new GunInventory());
         guiManager.registerPagination("player_magazine", new MagazineInventory());
         guiManager.registerPagination("player_ammo", new AmmoInventory());
@@ -658,6 +662,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager.registerPagination("market_category", new CategoryMenu());
         guiManager.registerPagination("market_product", new ProductMenu());
         guiManager.registerPagination("boosters", new BoosterMenu());
+        guiManager.registerPagination("editor_market_category", new CategoryEditor());
+        guiManager.registerPagination("editor_market_product", new ProductEditor());
 
         c.getKeys(false).forEach(s -> {
             ConfigurationSection cs = c.getConfigurationSection(s);

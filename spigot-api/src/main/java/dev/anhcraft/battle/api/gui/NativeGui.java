@@ -29,6 +29,8 @@ public class NativeGui {
     public static final String PLAYER_INV_GRENADE = "player_grenade_inv";
     public static final String MARKET_CATEGORY_MENU = "market_category_menu";
     public static final String MARKET_PRODUCT_MENU = "market_product_menu";
+    public static final String MARKET_CATEGORY_EDITOR = "market_category_editor";
+    public static final String MARKET_PRODUCT_EDITOR = "market_product_editor";
     public static final String KIT_MENU = "kit_menu";
     public static final String BOOSTER_MENU = "booster_menu";
     public static final String ARENA_CHOOSER = "arena_chooser";
