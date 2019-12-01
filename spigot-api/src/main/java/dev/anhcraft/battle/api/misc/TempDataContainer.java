@@ -43,19 +43,19 @@ public class TempDataContainer implements Informative {
         for(Map.Entry<String, Object> ent : getDataContainer().entrySet()){
             Object v = ent.getValue();
             if(v instanceof String){
-                holder.inform(ent.getKey(), (String) v);
+                holder.inform("data_"+ent.getKey(), (String) v);
             }
             else if(v instanceof Boolean){
-                holder.inform(ent.getKey(), (Boolean) v);
+                holder.inform("data_"+ent.getKey(), (Boolean) v);
             }
             else if(v instanceof Integer){
-                holder.inform(ent.getKey(), (Integer) v);
+                holder.inform("data_"+ent.getKey(), (Integer) v);
             }
             else if(v instanceof Double){
-                holder.inform(ent.getKey(), (Double) v);
+                holder.inform("data_"+ent.getKey(), (Double) v);
             }
             else if(v instanceof Long){
-                holder.inform(ent.getKey(), (Long) v);
+                holder.inform("data_"+ent.getKey(), (Long) v);
             }
         }
     }
