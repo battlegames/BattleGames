@@ -77,8 +77,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         }
     }
 
-    private void drawComponent(Player player, View view, Component c, InfoHolder info){
-        Map<String, String> map = plugin.mapInfo(info);
+    private void drawComponent(Player player, View view, Component c, Map<String, String> info){
         for (int slot : c.getSlots()) {
             PreparedItem item = c.getItem();
             if(c.getPagination() != null){
@@ -91,40 +90,67 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
                     formatPAPI(
                             formatInfo(
                                 formatTranslations(item.duplicate(), plugin.getLocaleConf()),
-                                map
+                                info
                             ),
                             player
                     ).build());
         }
     }
 
-    private void refreshComponent(Player player, View view, Component c){
+    private InfoHolder collectInfo(Window window){
+        InfoHolder wdHolder = new InfoHolder("window_");
+        window.inform(wdHolder);
+        return wdHolder;
+    }
+
+    private InfoHolder collectInfo(View view){
+        return collectInfo(view, collectInfo(view.getWindow()));
+    }
+
+    private InfoHolder collectInfo(View view, InfoHolder holder){
+        InfoHolder vwHolder = new InfoHolder("view_");
+        view.inform(vwHolder);
+        return vwHolder;
+    }
+
+    private void refreshComponent(Player player, View view, Component c, Map<String, String> infoMap){
         if(c.getPagination() != null) {
             Pagination pagination = PAGES.get(c.getPagination());
             if(pagination == null) {
                 plugin.getLogger().warning("Unknown pagination in component: " + c.getId());
             } else updatePagination(player, view, c, pagination, c.getPagination());
         }
-        InfoHolder vwHolder = new InfoHolder("view_");
-        view.inform(vwHolder);
-        InfoHolder wdHolder = new InfoHolder("window_");
-        view.getWindow().inform(wdHolder);
-        vwHolder.link(wdHolder);
-        drawComponent(player, view, c, vwHolder);
+        drawComponent(player, view, c, infoMap);
     }
 
-    private View prepareView(Player player, Window window, Gui gui){
-        return prepareView(
+    private void refreshView(Player player, View view){
+        refreshView(player, view, plugin.mapInfo(collectInfo(view)));
+    }
+
+    private void refreshView(Player player, View view, Map<String, String> infoMap){
+        for(Component c : view.getGui().getComponents()) {
+            refreshComponent(player, view, c, infoMap);
+        }
+    }
+
+    private View createView(Player player, Window window, Gui gui, Map<String, String> infoMap){
+        return createView(
                 window, gui,
                 Bukkit.createInventory(
                         null,
                         gui.getSize(),
-                        formatPAPI(player, localizeString(gui.getTitle(), plugin.getLocaleConf()))
+                        formatPAPI(
+                                player,
+                                formatInfo(
+                                        localizeString(gui.getTitle(), plugin.getLocaleConf()),
+                                        infoMap
+                                )
+                        )
                 )
         );
     }
 
-    private View prepareView(Window window, Gui gui, Inventory inventory){
+    private View createView(Window window, Gui gui, Inventory inventory){
         return new View(gui, window, inventory);
     }
 
@@ -181,15 +207,14 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     public void updateView(@NotNull Player player, @Nullable View view){
         Condition.argNotNull("player", player);
         if (view == null) return;
-        for(Component c : view.getGui().getComponents())
-            refreshComponent(player, view, c);
+        refreshView(player, view);
     }
 
     @Override
     public void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component component) {
         Condition.argNotNull("player", player);
         if (view == null || component == null) return;
-        refreshComponent(player, view, component);
+        refreshComponent(player, view, component, plugin.mapInfo(collectInfo(view)));
     }
 
     @Override
@@ -199,9 +224,9 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Window gui = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
-        View v = prepareView(gui, g, player.getInventory());
+        View v = createView(gui, g, player.getInventory());
         gui.setBottomView(v);
-        updateView(player, v);
+        refreshView(player, v);
         return v;
     }
 
@@ -212,9 +237,10 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Window w = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
-        View v = prepareView(player, w, g);
+        Map<String, String> info = plugin.mapInfo(collectInfo(w));
+        View v = createView(player, w, g, info);
         w.setTopView(v);
-        updateView(player, v);
+        refreshView(player, v, info);
         player.openInventory(v.getInventory());
         if (v.getGui().getSound() != null) {
             v.getGui().getSound().play(player);
