@@ -116,7 +116,13 @@ public class Gui extends ConfigurableObject {
                     for(String s : cs.getKeys(false)){
                         try {
                             Component c = ConfigHelper.readConfig(cs.getConfigurationSection(s), Component.SCHEMA, new Component(s));
-                            c.getSlots().forEach(it -> S2C.put(it, c));
+                            for(Integer i : c.getSlots()){
+                                Component prev = S2C.put(i, c);
+                                // if this slot exists in previous component, we will remove it
+                                if(prev != null){
+                                    prev.getSlots().remove(i);
+                                }
+                            }
                             if(c.getPagination() != null){
                                 if(!P2C.put(c.getPagination(), c)){
                                     Bukkit.getLogger().warning("Pagination should not be duplicated! `"+c.getPagination()+"` in component: "+c.getId());

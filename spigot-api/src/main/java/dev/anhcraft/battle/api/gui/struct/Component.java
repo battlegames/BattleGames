@@ -97,11 +97,6 @@ public class Component extends ConfigurableObject {
         return positions;
     }
 
-    public void setSlots(@NotNull List<Integer> slots) {
-        Condition.argNotNull("slots", slots);
-        this.positions = slots;
-    }
-
     @NotNull
     public PreparedItem getItem() {
         return item;
