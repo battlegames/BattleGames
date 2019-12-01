@@ -17,10 +17,16 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
-public class InfoLongData extends InfoData<Long> {
-    public InfoLongData(Long value) {
-        super(value);
+public abstract class InfoData<T> {
+    private T value;
+
+    protected InfoData(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
+        return value;
     }
 }

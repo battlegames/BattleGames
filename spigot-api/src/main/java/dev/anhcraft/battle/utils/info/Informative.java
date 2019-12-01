@@ -17,10 +17,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
-public class InfoStringData extends InfoData<String> {
-    public InfoStringData(String value) {
-        super(value);
-    }
+import org.jetbrains.annotations.NotNull;
+
+public interface Informative {
+    void inform(@NotNull InfoHolder holder);
 }

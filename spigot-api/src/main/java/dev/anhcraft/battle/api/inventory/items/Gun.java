@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.api.inventory.items;
 
 import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
 import dev.anhcraft.craftkit.cb_common.nbt.LongTag;

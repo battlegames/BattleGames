@@ -24,7 +24,7 @@ import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.api.misc.BattleSound;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.entity.ArmorStand;

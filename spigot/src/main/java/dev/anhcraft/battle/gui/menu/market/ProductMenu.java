@@ -31,7 +31,7 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.market.Transaction;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.system.integrations.VaultApi;

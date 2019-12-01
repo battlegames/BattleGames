@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;

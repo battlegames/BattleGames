@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.misc;
 
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
-import dev.anhcraft.battle.api.misc.info.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.Informative;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

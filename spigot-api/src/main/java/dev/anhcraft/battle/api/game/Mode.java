@@ -21,8 +21,8 @@ package dev.anhcraft.battle.api.game;
 
 import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.BattleModeController;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
-import dev.anhcraft.battle.api.misc.info.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.Informative;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;

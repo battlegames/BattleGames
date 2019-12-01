@@ -20,8 +20,8 @@
 package dev.anhcraft.battle.api.inventory.items;
 
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
-import dev.anhcraft.battle.api.misc.info.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.Informative;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;

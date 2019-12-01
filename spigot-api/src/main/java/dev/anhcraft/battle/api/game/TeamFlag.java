@@ -22,8 +22,8 @@ package dev.anhcraft.battle.api.game;
 
 import dev.anhcraft.battle.api.misc.BattleSound;
 import dev.anhcraft.battle.api.misc.Resettable;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
-import dev.anhcraft.battle.api.misc.info.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.Informative;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;

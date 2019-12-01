@@ -27,7 +27,7 @@ import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.BattleBar;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.battle.utils.CooldownMap;

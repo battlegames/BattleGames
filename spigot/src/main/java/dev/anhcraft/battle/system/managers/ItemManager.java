@@ -26,7 +26,7 @@ import dev.anhcraft.battle.api.inventory.items.BattleItem;
 import dev.anhcraft.battle.api.inventory.items.BattleItemModel;
 import dev.anhcraft.battle.api.inventory.items.ItemTag;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.ABIF;
 import dev.anhcraft.craftkit.abif.PreparedItem;

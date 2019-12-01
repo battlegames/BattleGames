@@ -22,8 +22,8 @@ package dev.anhcraft.battle.api.game;
 
 import dev.anhcraft.battle.api.events.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.misc.Resettable;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
-import dev.anhcraft.battle.api.misc.info.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.Informative;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;

@@ -21,7 +21,7 @@
 package dev.anhcraft.battle.api.inventory.items;
 
 import dev.anhcraft.battle.api.misc.BattleEffect;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;

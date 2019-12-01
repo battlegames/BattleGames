@@ -17,10 +17,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
-import org.jetbrains.annotations.NotNull;
-
-public interface Informative {
-    void inform(@NotNull InfoHolder holder);
+public class InfoBooleanData extends InfoData<Boolean> {
+    public InfoBooleanData(Boolean value) {
+        super(value);
+    }
 }

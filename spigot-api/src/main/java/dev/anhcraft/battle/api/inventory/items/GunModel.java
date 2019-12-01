@@ -23,7 +23,7 @@ import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.api.misc.BattleSound;
 import dev.anhcraft.battle.api.misc.ItemSkin;
-import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.jvmkit.lang.enumeration.RegEx;

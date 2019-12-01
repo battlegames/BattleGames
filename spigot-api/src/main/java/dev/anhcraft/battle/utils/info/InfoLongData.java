@@ -17,10 +17,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
-public class InfoBooleanData extends InfoData<Boolean> {
-    public InfoBooleanData(Boolean value) {
+public class InfoLongData extends InfoData<Long> {
+    public InfoLongData(Long value) {
         super(value);
     }
 }

@@ -17,10 +17,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.misc.info;
+package dev.anhcraft.battle.utils.info;
 
-public class InfoDoubleData extends InfoData<Double> {
-    public InfoDoubleData(Double value) {
+public class InfoIntData extends InfoData<Integer> {
+    public InfoIntData(Integer value) {
         super(value);
     }
 }
