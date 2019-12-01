@@ -20,12 +20,14 @@
 
 package dev.anhcraft.battle.api.misc;
 
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.api.misc.info.Informative;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TempDataContainer {
+public class TempDataContainer implements Informative {
     private Map<String, Object> dataContainer;
 
     @NotNull
@@ -34,5 +36,27 @@ public class TempDataContainer {
             dataContainer = new HashMap<>();
         }
         return dataContainer;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        for(Map.Entry<String, Object> ent : getDataContainer().entrySet()){
+            Object v = ent.getValue();
+            if(v instanceof String){
+                holder.inform(ent.getKey(), (String) v);
+            }
+            else if(v instanceof Boolean){
+                holder.inform(ent.getKey(), (Boolean) v);
+            }
+            else if(v instanceof Integer){
+                holder.inform(ent.getKey(), (Integer) v);
+            }
+            else if(v instanceof Double){
+                holder.inform(ent.getKey(), (Double) v);
+            }
+            else if(v instanceof Long){
+                holder.inform(ent.getKey(), (Long) v);
+            }
+        }
     }
 }

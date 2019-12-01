@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -76,7 +77,8 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         }
     }
 
-    private void drawComponent(Player player, View view, Component c){
+    private void drawComponent(Player player, View view, Component c, InfoHolder info){
+        Map<String, String> map = plugin.mapInfo(info);
         for (int slot : c.getSlots()) {
             PreparedItem item = c.getItem();
             if(c.getPagination() != null){
@@ -87,10 +89,28 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             }
             view.getInventory().setItem(slot,
                     formatPAPI(
-                            formatTranslations(item.duplicate(), plugin.getLocaleConf()),
+                            formatInfo(
+                                formatTranslations(item.duplicate(), plugin.getLocaleConf()),
+                                map
+                            ),
                             player
                     ).build());
         }
+    }
+
+    private void refreshComponent(Player player, View view, Component c){
+        if(c.getPagination() != null) {
+            Pagination pagination = PAGES.get(c.getPagination());
+            if(pagination == null) {
+                plugin.getLogger().warning("Unknown pagination in component: " + c.getId());
+            } else updatePagination(player, view, c, pagination, c.getPagination());
+        }
+        InfoHolder vwHolder = new InfoHolder("view_");
+        view.inform(vwHolder);
+        InfoHolder wdHolder = new InfoHolder("window_");
+        view.getWindow().inform(wdHolder);
+        vwHolder.link(wdHolder);
+        drawComponent(player, view, c, vwHolder);
     }
 
     private View prepareView(Player player, Window window, Gui gui){
@@ -161,30 +181,15 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     public void updateView(@NotNull Player player, @Nullable View view){
         Condition.argNotNull("player", player);
         if (view == null) return;
-        for(Component c : view.getGui().getComponents()){
-            if(c.getPagination() != null) {
-                Pagination pagination = PAGES.get(c.getPagination());
-                if(pagination == null)
-                    plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
-                else
-                    updatePagination(player, view, c, pagination, c.getPagination());
-            }
-            drawComponent(player, view, c);
-        }
+        for(Component c : view.getGui().getComponents())
+            refreshComponent(player, view, c);
     }
 
     @Override
-    public void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component c) {
+    public void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component component) {
         Condition.argNotNull("player", player);
-        if (view == null || c == null) return;
-        if(c.getPagination() != null) {
-            Pagination pagination = PAGES.get(c.getPagination());
-            if(pagination == null)
-                plugin.getLogger().warning("Unknown pagination in component: "+c.getId());
-            else
-                updatePagination(player, view, c, pagination, c.getPagination());
-        }
-        drawComponent(player, view, c);
+        if (view == null || component == null) return;
+        refreshComponent(player, view, component);
     }
 
     @Override
