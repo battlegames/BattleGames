@@ -24,6 +24,8 @@ import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.misc.BattleSound;
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
+import dev.anhcraft.battle.api.misc.info.Informative;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
@@ -42,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 @Schema
-public class Gui extends ConfigurableObject {
+public class Gui extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Gui> SCHEMA = ConfigSchema.of(Gui.class);
 
     private final Map<Integer, Component> S2C = new HashMap<>();
@@ -170,5 +172,10 @@ public class Gui extends ConfigurableObject {
             }
         }
         return value;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        holder.inform("id", id).inform("size", size);
     }
 }

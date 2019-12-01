@@ -24,6 +24,7 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.misc.TempDataContainer;
+import dev.anhcraft.battle.api.misc.info.InfoHolder;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,5 +116,13 @@ public class View extends TempDataContainer {
         } else {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
         }
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        super.inform(holder);
+        InfoHolder gh = new InfoHolder("gui_");
+        gui.inform(gh);
+        holder.link(gh);
     }
 }
