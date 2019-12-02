@@ -27,7 +27,17 @@ import dev.anhcraft.battle.utils.functions.Function;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.function.Consumer;
+
 public class CommonHandler extends GuiHandler {
+    @Function("apply_value")
+    public void applyVal(SlotReport report, String val) {
+        Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
+        if(f instanceof Consumer){
+            ((Consumer<ValueResult>) f).accept(new ValueResult(val));
+        }
+    }
+
     private void add(String key, String val, TempDataContainer tdc){
         Object o = tdc.getDataContainer().get(key);
         if(o instanceof Integer){
@@ -35,6 +45,8 @@ public class CommonHandler extends GuiHandler {
             tdc.getDataContainer().put(key, ((Integer) o) + f);
         } else if(o instanceof Double){
             tdc.getDataContainer().put(key, ((Double) o) + Double.parseDouble(val));
+        } else if(o instanceof Float){
+            tdc.getDataContainer().put(key, ((Float) o) + Float.parseFloat(val));
         } else if(o instanceof Long){
             long f = (long) Double.parseDouble(val);
             tdc.getDataContainer().put(key, ((Long) o) + f);
@@ -59,6 +71,8 @@ public class CommonHandler extends GuiHandler {
             tdc.getDataContainer().put(key, -((Integer) o));
         } else if(o instanceof Double){
             tdc.getDataContainer().put(key, -((Double) o));
+        } else if(o instanceof Float){
+            tdc.getDataContainer().put(key, -((Float) o));
         } else if(o instanceof Long){
             tdc.getDataContainer().put(key, -((Long) o));
         }
