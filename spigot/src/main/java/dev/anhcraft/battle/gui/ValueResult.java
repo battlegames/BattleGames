@@ -36,7 +36,7 @@ public class ValueResult {
     }
 
     public int asInt(){
-        return Integer.parseInt(val);
+        return (int) Double.parseDouble(val);
     }
 
     public double asDouble(){
@@ -48,7 +48,7 @@ public class ValueResult {
     }
 
     public long asLong(){
-        return Long.parseLong(val);
+        return (long) Double.parseDouble(val);
     }
 
     @Override
