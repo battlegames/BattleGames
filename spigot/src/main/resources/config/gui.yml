@@ -1,3 +1,347 @@
+boolean_value_editor:
+  title: '[ gui.value_editor.boolean_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+      functions:
+        - common::cancel_event
+    '1':
+      positions: 1/2; 2
+      item:
+        name: '&f{__window_data_value:false__}'
+        material: paper
+        unbreakable: true
+        enchant:
+          sharpness: 1
+        flag:
+          - hide_enchants
+      functions:
+        - common::cancel_event
+        - common::flip_window_data { value }
+        - common::refresh
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        - common::cancel_event
+        - common::apply_value { {__window_data_value:false__} }
+        - common::switch_gui { {__window_data_lastgui__} }
+
+int_value_editor:
+  title: '[ gui.value_editor.int_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+      functions:
+        - common::cancel_event
+    '1':
+      positions: 1/2; 2
+      item:
+        name: '&f{__window_data_value:0__}'
+        material: paper
+        unbreakable: true
+        enchant:
+          sharpness: 1
+        flag:
+          - hide_enchants
+      functions:
+        - common::cancel_event
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        - common::cancel_event
+        - common::apply_value { {__window_data_value:0__} }
+        - common::switch_gui { {__window_data_lastgui__} }
+    '3':
+      positions: 1; 4
+      item:
+        name: '&f-10'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -10 }
+        - common::refresh
+    '4':
+      positions: 2; 4
+      item:
+        name: '&f-5'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -5 }
+        - common::refresh
+    '5':
+      positions: 3; 4
+      item:
+        name: '&f-2'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -2 }
+        - common::refresh
+    '6':
+      positions: 4; 4
+      item:
+        name: '&f-1'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -1 }
+        - common::refresh
+    '7':
+      positions: 5; 4
+      item:
+        name: '&c[ gui.value_editor.flip_number_btn ]'
+        material: light_blue_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::flip_window_data { value }
+        - common::refresh
+    '8':
+      positions: 1; 4
+      item:
+        name: '&f+1'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 1 }
+        - common::refresh
+    '9':
+      positions: 2; 4
+      item:
+        name: '&f+2'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 2 }
+        - common::refresh
+    '10':
+      positions: 3; 4
+      item:
+        name: '&f+5'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 5 }
+        - common::refresh
+    '11':
+      positions: 4; 4
+      item:
+        name: '&f+10'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 10 }
+        - common::refresh
+
+real_value_editor:
+  title: '[ gui.value_editor.real_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+      functions:
+        - common::cancel_event
+    '1':
+      positions: 1/2; 2
+      item:
+        name: '&f{__window_data_value:0__}'
+        material: paper
+        unbreakable: true
+        enchant:
+          sharpness: 1
+        flag:
+          - hide_enchants
+      functions:
+        - common::cancel_event
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        - common::cancel_event
+        - common::apply_value { {__window_data_value:0__} }
+        - common::switch_gui { {__window_data_lastgui__} }
+    '3':
+      positions: 1; 4
+      item:
+        name: '&f-10'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -10 }
+        - common::refresh
+    '4':
+      positions: 2; 4
+      item:
+        name: '&f-5'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -5 }
+        - common::refresh
+    '5':
+      positions: 3; 4
+      item:
+        name: '&f-2'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -2 }
+        - common::refresh
+    '6':
+      positions: 4; 4
+      item:
+        name: '&f-1'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -1 }
+        - common::refresh
+    '7':
+      positions: 5; 4
+      item:
+        name: '&c[ gui.value_editor.flip_number_btn ]'
+        material: light_blue_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::flip_window_data { value }
+        - common::refresh
+    '8':
+      positions: 1; 4
+      item:
+        name: '&f+1'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 1 }
+        - common::refresh
+    '9':
+      positions: 2; 4
+      item:
+        name: '&f+2'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 2 }
+        - common::refresh
+    '10':
+      positions: 3; 4
+      item:
+        name: '&f+5'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 5 }
+        - common::refresh
+    '11':
+      positions: 4; 4
+      item:
+        name: '&f+10'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 10 }
+        - common::refresh
+    '12':
+      positions: 1; 5
+      item:
+        name: '&f-0.01'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -0.01 }
+        - common::refresh
+    '13':
+      positions: 2; 5
+      item:
+        name: '&f-0.5'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -0.5 }
+        - common::refresh
+    '14':
+      positions: 3; 5
+      item:
+        name: '&f-0.2'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -0.2 }
+        - common::refresh
+    '15':
+      positions: 4; 5
+      item:
+        name: '&f-0.1'
+        material: red_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; -0.1 }
+        - common::refresh
+    '16':
+      positions: 5; 5
+      item:
+        name: '&c[ gui.value_editor.flip_number_btn ]'
+        material: light_blue_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::flip_window_data { value }
+        - common::refresh
+    '17':
+      positions: 1; 5
+      item:
+        name: '&f+0.1'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 0.1 }
+        - common::refresh
+    '18':
+      positions: 2; 5
+      item:
+        name: '&f+0.2'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 0.2 }
+        - common::refresh
+    '19':
+      positions: 3; 5
+      item:
+        name: '&f+0.5'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 0.5 }
+        - common::refresh
+    '20':
+      positions: 4; 5
+      item:
+        name: '&f+0.01'
+        material: lime_stained_glass_pane
+      functions:
+        - common::cancel_event
+        - common::add_window_data { value; 0.01 }
+        - common::refresh
+
 player_inv:
   title: '[ gui.player_inv.title ]'
   sound: $block_chest_open
@@ -23,7 +367,7 @@ player_inv:
           - hide_unbreakable
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_gun_inv }
+        - common::switch_gui { player_gun_inv }
     '2':
       positions: 2/5; 2
       item:
@@ -33,7 +377,7 @@ player_inv:
         material: chest
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_magazine_inv }
+        - common::switch_gui { player_magazine_inv }
     '3':
       positions: 3/5; 2
       item:
@@ -43,7 +387,7 @@ player_inv:
           - '[ gui.player_inv.ammo_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_ammo_inv }
+        - common::switch_gui { player_ammo_inv }
     '4':
       positions: 4/5; 2
       item:
@@ -53,7 +397,7 @@ player_inv:
           - '[ gui.player_inv.scope_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_scope_inv }
+        - common::switch_gui { player_scope_inv }
     '5':
       positions: 5/5; 2
       item:
@@ -63,7 +407,7 @@ player_inv:
           - '[ gui.player_inv.grenade_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_grenade_inv }
+        - common::switch_gui { player_grenade_inv }
     '6':
       positions: 1/1; 4
       item:
@@ -124,7 +468,7 @@ player_gun_inv:
         lore:
           - '[ gui.common.back_inv_lore ]'
       functions:
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 player_magazine_inv:
   title: '[ gui.player_magazine_inv.title ]'
@@ -175,7 +519,7 @@ player_magazine_inv:
         lore:
           - '[ gui.common.back_inv_lore ]'
       functions:
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 player_ammo_inv:
   title: '[ gui.player_ammo_inv.title ]'
@@ -226,7 +570,7 @@ player_ammo_inv:
         lore:
           - '[ gui.common.back_inv_lore ]'
       functions:
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 player_scope_inv:
   title: '[ gui.player_scope_inv.title ]'
@@ -277,7 +621,7 @@ player_scope_inv:
         lore:
           - '[ gui.common.back_inv_lore ]'
       functions:
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 player_grenade_inv:
   title: '[ gui.player_grenade_inv.title ]'
@@ -328,7 +672,7 @@ player_grenade_inv:
         lore:
           - '[ gui.common.back_inv_lore ]'
       functions:
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 kit_menu:
   title: '[ gui.kit_menu.title ]'
@@ -588,7 +932,7 @@ market_product_menu:
           - '[ gui.market_product_menu.back_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { market_category_menu }
+        - common::switch_gui { market_category_menu }
 
 market_category_editor:
   title: '[ gui.market_category_editor.title ]'
@@ -714,7 +1058,7 @@ market_product_editor:
           - '[ gui.market_product_menu.back_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { market_category_editor }
+        - common::switch_gui { market_category_editor }
 
 main_player_inv:
   title: '[ gui.main_player_inv.title ]'
@@ -729,7 +1073,7 @@ main_player_inv:
           - '[ gui.main_player_inv.arena_chooser_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { arena_chooser }
+        - common::switch_gui { arena_chooser }
     '1':
       positions: 2; 1
       item:
@@ -739,7 +1083,7 @@ main_player_inv:
           - '[ gui.common.your_inv_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
 
 game_player_inv:
   title: '[ gui.game_player_inv.title ]'
@@ -754,7 +1098,7 @@ game_player_inv:
           - '[ gui.common.your_inv_lore ]'
       functions:
         - common::cancel_event
-        - common::open_top_gui { player_inv }
+        - common::switch_gui { player_inv }
     '1':
       positions: 9; 1
       item:
