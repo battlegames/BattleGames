@@ -201,3 +201,10 @@ gui:
     create_name: "&eCreate new product"
     create_lore:
       - "&aClick here to add a new product"
+  value_editor:
+    done_btn: "&a✔ Done"
+    flip_number_btn: "&cFlip number: &eNegative <=> Positive"
+    boolean_title: "&d&lValue editor &e&l[Boolean]"
+    int_title: "&d&lValue editor &e&l[Integer]"
+    real_title: "&d&lValue editor &e&l[Real]"
+

@@ -36,4 +36,7 @@ public class NativeGui {
     public static final String ARENA_CHOOSER = "arena_chooser";
     public static final String MAIN_PLAYER_INV = "main_player_inv";
     public static final String GAME_PLAYER_INV = "game_player_inv";
+    public static final String BOOL_VAL_EDITOR = "boolean_value_editor";
+    public static final String INT_VAL_EDITOR = "int_value_editor";
+    public static final String REAL_VAL_EDITOR = "real_value_editor";
 }

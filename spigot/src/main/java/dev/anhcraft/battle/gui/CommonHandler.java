@@ -22,10 +22,78 @@ package dev.anhcraft.battle.gui;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
+import dev.anhcraft.battle.api.misc.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.Function;
 import org.bukkit.event.Cancellable;
+import org.bukkit.inventory.PlayerInventory;
 
 public class CommonHandler extends GuiHandler {
+    private void add(String key, String val, TempDataContainer tdc){
+        Object o = tdc.getDataContainer().get(key);
+        if(o instanceof Integer){
+            int f = (int) Double.parseDouble(val);
+            tdc.getDataContainer().put(key, ((Integer) o) + f);
+        } else if(o instanceof Double){
+            tdc.getDataContainer().put(key, ((Double) o) + Double.parseDouble(val));
+        } else if(o instanceof Long){
+            long f = (long) Double.parseDouble(val);
+            tdc.getDataContainer().put(key, ((Long) o) + f);
+        }
+    }
+
+    @Function("add_window_data")
+    public void addWindowData(SlotReport report, String key, String delta) {
+        add(key, delta, report.getView().getWindow());
+    }
+
+    @Function("add_view_data")
+    public void addViewData(SlotReport report, String key, String delta) {
+        add(key, delta, report.getView());
+    }
+
+    private void flip(String key, TempDataContainer tdc){
+        Object o = tdc.getDataContainer().get(key);
+        if(o instanceof Boolean){
+            tdc.getDataContainer().put(key, !((Boolean) o));
+        } else if(o instanceof Integer){
+            tdc.getDataContainer().put(key, -((Integer) o));
+        } else if(o instanceof Double){
+            tdc.getDataContainer().put(key, -((Double) o));
+        } else if(o instanceof Long){
+            tdc.getDataContainer().put(key, -((Long) o));
+        }
+    }
+
+    @Function("flip_window_data")
+    public void flipWindowData(SlotReport report, String key) {
+        flip(key, report.getView().getWindow());
+    }
+
+    @Function("flip_view_data")
+    public void flipViewData(SlotReport report, String key) {
+        flip(key, report.getView());
+    }
+
+    @Function("set_view_data")
+    public void setViewData(SlotReport report, String key, String value) {
+        report.getView().getDataContainer().put(key, value);
+    }
+
+    @Function("set_window_data")
+    public void setWindowData(SlotReport report, String key, String value) {
+        report.getView().getWindow().getDataContainer().put(key, value);
+    }
+
+    @Function("del_view_data")
+    public void delViewData(SlotReport report, String key) {
+        report.getView().getDataContainer().remove(key);
+    }
+
+    @Function("del_window_data")
+    public void delWindowData(SlotReport report, String key) {
+        report.getView().getWindow().getDataContainer().remove(key);
+    }
+
     @Function("cancel_event")
     public void prevent(SlotReport report) {
         if(report.getEvent() instanceof Cancellable) {
@@ -41,6 +109,15 @@ public class CommonHandler extends GuiHandler {
     @Function("refresh")
     public void refresh(SlotReport report) {
         ApiProvider.consume().getGuiManager().updateView(report.getPlayer(), report.getView());
+    }
+
+    @Function("switch_gui")
+    public void switchGui(SlotReport report, String gui) {
+        if(report.getView().getInventory() instanceof PlayerInventory){
+            setBottom(report, gui);
+        } else {
+            openTop(report, gui);
+        }
     }
 
     @Function("open_top_gui")

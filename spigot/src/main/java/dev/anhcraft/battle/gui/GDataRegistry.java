@@ -23,4 +23,6 @@ package dev.anhcraft.battle.gui;
 public class GDataRegistry {
     public static final String MARKET_CATEGORY = "mk_ctg";
     public static final String MARKET_CATEGORY_EDITOR = "mk_ctge";
+    public static final String EDITOR_VALUE = "value";
+    public static final String LAST_GUI = "lastgui";
 }
