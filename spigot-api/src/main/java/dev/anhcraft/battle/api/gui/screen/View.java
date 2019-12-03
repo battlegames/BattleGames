@@ -110,8 +110,8 @@ public class View extends TempDataContainer {
     public boolean prevPage(@Nullable String pagination){
         if(gui.getAllPagination().contains(pagination)){
             int f = PAGE.getOrDefault(pagination, 0);
-            if(f <= 0) return false;
-            PAGE.put(pagination, f - 1);
+            if(f == 0) return false;
+            PAGE.put(pagination, Math.abs(f) - 1);
             return true;
         } else {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");

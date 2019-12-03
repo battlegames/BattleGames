@@ -68,12 +68,28 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn){
-        int page = view.getPage(pgn);
-        if(page < 0) page *= -1;
-        PagedSlotChain chain = new PagedSlotChain(cpn.getSlots().iterator(), view, page * cpn.getSlots().size());
+        int page = Math.abs(view.getPage(pgn));
+        Iterator<Integer> it = cpn.getSlots().iterator();
+        PagedSlotChain chain = new PagedSlotChain(it, view, page * cpn.getSlots().size());
         pg.supply(player, view, chain);
-        if(chain.getAllocatedSlot() < cpn.getSlots().size()){
-            view.setPage(pgn, -page);
+        if(page > 0) {
+            if (chain.getAllocatedSlot() == 0) {
+                // empty page is something special
+                view.setPage(pgn, page - 1);
+            } else if (chain.getAllocatedSlot() < cpn.getSlots().size()) {
+                view.setPage(pgn, -page);
+                while (it.hasNext()) {
+                    Slot x = view.getSlot(it.next());
+                    if(x != null){
+                        x.setAdditionalFunction(null);
+                        x.setPaginationItem(null);
+                    }
+                }
+            } else if (chain.getAllocatedSlot() == cpn.getSlots().size()) {
+                // if run out of the chain, it MAY have a new page
+                // we will set it again to ensure the page number is POSITIVE
+                view.setPage(pgn, page);
+            }
         }
     }
 
@@ -270,7 +286,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
             if(s == null){
                 throw new IllegalStateException("Pagination slot is null");
             }
-            as--;
+            as++;
             return s;
         }
 
