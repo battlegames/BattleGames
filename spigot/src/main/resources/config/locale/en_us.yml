@@ -191,12 +191,12 @@ gui:
     title: "&4&lMARKET"
   booster_menu:
     title: "&e&lBoosters"
-  market_category_editor:
+  market_category_menu_editor:
     title: "&5&lCategory Editor"
     create_name: "&eCreate new category"
     create_lore:
       - "&aClick here to make a new category"
-  market_product_editor:
+  market_product_menu_editor:
     title: "&4&lProduct Editor"
     create_name: "&eCreate new product"
     create_lore:

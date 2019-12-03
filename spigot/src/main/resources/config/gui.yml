@@ -934,8 +934,8 @@ market_product_menu:
         - common::cancel_event
         - common::switch_gui { market_category_menu }
 
-market_category_editor:
-  title: '[ gui.market_category_editor.title ]'
+market_category_menu_editor:
+  title: '[ gui.market_category_menu_editor.title ]'
   sound: $block_chest_open
   components:
     '0':
@@ -950,9 +950,9 @@ market_category_editor:
       positions: 1; 4
       item:
         material: diamond
-        name: '[ gui.market_category_editor.create_name ]'
+        name: '[ gui.market_category_menu_editor.create_name ]'
         lore:
-          - '[ gui.market_category_editor.create_lore ]'
+          - '[ gui.market_category_menu_editor.create_lore ]'
       functions:
         - common::cancel_event
         - market::create_category
@@ -997,8 +997,8 @@ market_category_editor:
         - common::cancel_event
         - common::close_gui
 
-market_product_editor:
-  title: '[ gui.market_product_editor.title ]'
+market_product_menu_editor:
+  title: '[ gui.market_product_menu_editor.title ]'
   sound: $block_chest_open
   components:
     '0':
@@ -1013,9 +1013,9 @@ market_product_editor:
       positions: 1; 4
       item:
         material: diamond
-        name: '[ gui.market_product_editor.create_name ]'
+        name: '[ gui.market_product_menu_editor.create_name ]'
         lore:
-          - '[ gui.market_product_editor.create_lore ]'
+          - '[ gui.market_product_menu_editor.create_lore ]'
       functions:
         - common::cancel_event
         - market::create_product
