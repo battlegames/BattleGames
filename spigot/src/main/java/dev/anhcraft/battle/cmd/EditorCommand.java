@@ -24,10 +24,15 @@ import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.gui.NativeGui;
+import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.confighelper.ConfigHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("bge")
+import java.io.File;
+import java.io.IOException;
+
+@CommandAlias("be|bge")
 public class EditorCommand extends BaseCommand{
     private BattlePlugin plugin;
 
@@ -41,9 +46,22 @@ public class EditorCommand extends BaseCommand{
         help.showHelp();
     }
 
-    @Subcommand("market")
-    @CommandPermission("battle.editor.market")
-    public void market(Player player){
+    @Subcommand("market open")
+    @CommandPermission("battle.editor.market.open")
+    public void marketOpen(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU_EDITOR);
+    }
+
+    @Subcommand("market save")
+    @CommandPermission("battle.editor.market.save")
+    public void marketSave(CommandSender sender){
+        ConfigHelper.writeConfig(plugin.getMarketConf(), Market.SCHEMA, plugin.getMarket());
+        File f = new File(plugin.getEditorFolder(), "market."+System.currentTimeMillis()+".yml");
+        try {
+            plugin.getMarketConf().save(f);
+            plugin.chatManager.send(sender, "editor.market.saved", s -> String.format(s, f.getAbsolutePath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

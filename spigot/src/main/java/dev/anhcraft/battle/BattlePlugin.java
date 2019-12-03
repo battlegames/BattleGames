@@ -304,6 +304,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         }
     }
 
+    public File getEditorFolder(){
+        return new File(configFolder, "editor");
+    }
+
     @Override
     public void onDisable(){
         gameManager.listGames(game -> {
@@ -472,6 +476,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         }
         new File(configFolder, "locale").mkdir();
         new File(configFolder, "items").mkdir();
+        new File(configFolder, "editor").mkdir();
         // TODO check and upgrade db here
     }
 

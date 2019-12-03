@@ -123,6 +123,7 @@ editor:
   market:
     category_created: "&aNew category named &f#%s&a created."
     product_created: "&aNew product named &f#%s&a created."
+    saved: "&aThe market's config file was saved to %s"
 gui:
   common:
     close_name: "&cClose"
