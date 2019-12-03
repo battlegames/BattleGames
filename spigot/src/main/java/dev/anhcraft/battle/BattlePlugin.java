@@ -289,6 +289,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                 return BOOSTER_MAP.keySet();
             }
         });
+        manager.getCommandCompletions().registerAsyncCompletion("gui", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
+            @Override
+            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
+                return guiManager.GUI.keySet();
+            }
+        });
     }
 
     private void injectApiProvider() {

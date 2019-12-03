@@ -74,6 +74,13 @@ public class MainCommand extends BaseCommand{
         player.teleport(plugin.getServerData().getSpawnPoint());
     }
 
+    @Subcommand("open")
+    @CommandPermission("battle.open")
+    @CommandCompletion("@gui")
+    public void openGui(Player player, String name, @Optional Player target){
+        plugin.guiManager.openTopGui(target == null ? player : target, name);
+    }
+
     @Subcommand("game list")
     @CommandPermission("battle.game.list")
     public void listGames(CommandSender sender){
