@@ -44,9 +44,9 @@ import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.inventory.*;
-import dev.anhcraft.battle.gui.menu.market.CategoryEditor;
+import dev.anhcraft.battle.gui.menu.market.CategoryMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
-import dev.anhcraft.battle.gui.menu.market.ProductEditor;
+import dev.anhcraft.battle.gui.menu.market.ProductMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.ProductMenu;
 import dev.anhcraft.battle.system.handlers.GrenadeHandler;
 import dev.anhcraft.battle.system.handlers.GunHandler;
@@ -662,8 +662,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         guiManager.registerPagination("market_category", new CategoryMenu());
         guiManager.registerPagination("market_product", new ProductMenu());
         guiManager.registerPagination("boosters", new BoosterMenu());
-        guiManager.registerPagination("editor_market_category", new CategoryEditor());
-        guiManager.registerPagination("editor_market_product", new ProductEditor());
+        guiManager.registerPagination("editor_market_category", new CategoryMenuEditor());
+        guiManager.registerPagination("editor_market_product", new ProductMenuEditor());
 
         c.getKeys(false).forEach(s -> {
             ConfigurationSection cs = c.getConfigurationSection(s);

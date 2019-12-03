@@ -32,7 +32,7 @@ import dev.anhcraft.battle.gui.GDataRegistry;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CategoryEditor implements Pagination {
+public class CategoryMenuEditor implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleAPI api = ApiProvider.consume();
@@ -47,7 +47,7 @@ public class CategoryEditor implements Pagination {
             slot.setPaginationItem(c.getIcon().duplicate());
             slot.setAdditionalFunction(report -> {
                 view.getWindow().getDataContainer().put(GDataRegistry.MARKET_CATEGORY_EDITOR, c);
-                api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_EDITOR);
+                api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_MENU_EDITOR);
             });
         }
     }

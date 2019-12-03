@@ -31,7 +31,7 @@ import dev.anhcraft.battle.gui.GDataRegistry;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class ProductEditor implements Pagination {
+public class ProductMenuEditor implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleAPI api = ApiProvider.consume();
