@@ -26,7 +26,6 @@ import dev.anhcraft.battle.api.BattleGuiManager;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.functions.Instruction;
@@ -42,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Schema
 public class Component extends ConfigurableObject {
@@ -119,24 +117,21 @@ public class Component extends ConfigurableObject {
                     // if gui handler does not exist, don't remove immediately
                     // it may be available in the future
                     if (gh == null) continue;
-                    AtomicReference<Map<String, String>> info = new AtomicReference<>();
                     functions.add(new FunctionLinker<>(
-                            fn,
-                            event -> {
-                                Map<String, String> f = info.get();
-                                if(f == null){
-                                    BattleAPI a = ApiProvider.consume();
-                                    InfoHolder i = a.getGuiManager().collectInfo(event.getView());
-                                    info.set(f = a.mapInfo(i));
-                                }
-                                String[] args = new String[fn.getArgs().length];
-                                for(int i = 0; i < args.length; i++){
-                                    args[i] = PlaceholderUtil.formatInfo(fn.getArgs()[i], f);
-                                }
-                                if(!gh.fireEvent(fn.getTarget(), event, args)){
-                                    throw new IllegalStateException("Event fired failed");
-                                }
-                            })
+                        fn,
+                        event -> {
+                            BattleAPI a = ApiProvider.consume();
+                            Map<String, String> f = a.mapInfo(
+                                    a.getGuiManager().collectInfo(event.getView())
+                            );
+                            String[] args = new String[fn.getArgs().length];
+                            for(int i = 0; i < args.length; i++){
+                                args[i] = PlaceholderUtil.formatInfo(fn.getArgs()[i], f);
+                            }
+                            if(!gh.fireEvent(fn.getTarget(), event, args)){
+                                throw new IllegalStateException("Event fired failed");
+                            }
+                        })
                     );
                 }
                 it.remove();
