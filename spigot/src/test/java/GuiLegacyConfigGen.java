@@ -34,9 +34,17 @@ public class GuiLegacyConfigGen {
             for (String k : cs.getKeys(false)){
                 System.out.println("  | Visiting component "+k);
                 String q = cs.getString(k + ".item.material");
-                if(q != null && q.equals("GRAY_STAINED_GLASS_PANE")){
+                if(q != null && q.equalsIgnoreCase("GRAY_STAINED_GLASS_PANE")){
                     cs.set(k + ".item.material", "STAINED_GLASS_PANE");
                     cs.set(k + ".item.damage", 7);
+                }
+                else if(q != null && q.equalsIgnoreCase("RED_STAINED_GLASS_PANE")){
+                    cs.set(k + ".item.material", "STAINED_GLASS_PANE");
+                    cs.set(k + ".item.damage", 14);
+                }
+                else if(q != null && q.equalsIgnoreCase("LIME_STAINED_GLASS_PANE")){
+                    cs.set(k + ".item.material", "STAINED_GLASS_PANE");
+                    cs.set(k + ".item.damage", 5);
                 }
             }
         }
