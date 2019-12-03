@@ -121,8 +121,8 @@ booster:
   active_success: "&aThe booster is activated successfully!"
 editor:
   market:
-    category_created: "&aNew category named&f#%s&a created."
-    product_created: "&aNew product named&f#%s&a created."
+    category_created: "&aNew category named &f#%s&a created."
+    product_created: "&aNew product named &f#%s&a created."
 gui:
   common:
     close_name: "&cClose"
