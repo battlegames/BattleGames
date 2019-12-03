@@ -339,6 +339,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
 
             if(game.getArena().isRenderGuiOnDeath()){
+                e.getEntity().getInventory().clear();
                 plugin.guiManager.updateView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()).getBottomView());
             }
 
