@@ -46,7 +46,7 @@ public class TempDataContainer implements Informative {
                 holder.inform("data_"+ent.getKey(), (String) v);
             }
             else if(v instanceof Boolean){
-                holder.inform("data_"+ent.getKey(), (Boolean) v);
+                holder.inform("data_"+ent.getKey(), v.toString()); // fixed bug
             }
             else if(v instanceof Integer){
                 holder.inform("data_"+ent.getKey(), (Integer) v);
