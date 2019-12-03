@@ -203,8 +203,8 @@ gui:
     set_igo_lore:
       - "&aClick here to change the 'in-game only' option"
       - "&f"
-      - "&bThis option restricts players from viewing products"
-      - "&bwhile they are playing a game."
+      - "&bThis option only allows who are attending a game"
+      - "&bable to view this category."
       - "&f"
       - "&7It affects all the products inside but it does"
       - "&7not change their options in any way."
@@ -233,8 +233,8 @@ gui:
     set_igo_lore:
       - "&aClick here to change the 'in-game only' option"
       - "&f"
-      - "&bThis option restricts players from viewing this"
-      - "&bproduct while they are playing a game."
+      - "&bThis option only allows who are attending a game"
+      - "&bable to view this product."
     set_pv_name: "&dSet price (Vault)"
     set_pv_lore:
       - "&fClick here to set the price of this item"
