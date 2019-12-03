@@ -53,7 +53,7 @@ public class Category extends ConfigurableObject {
     @Key("icon")
     @Explanation("Category's icon")
     @IgnoreValue(ifNull = true)
-    private PreparedItem icon = DEFAULT_ICON;
+    private PreparedItem icon = DEFAULT_ICON.duplicate();
 
     @Key("in_game_only")
     @Explanation("Make this category only available during the game")

@@ -68,7 +68,7 @@ public class Product extends ConfigurableObject implements Informative {
     @Key("icon")
     @Explanation("Product's icon")
     @IgnoreValue(ifNull = true)
-    private PreparedItem icon = DEFAULT_ICON;
+    private PreparedItem icon = DEFAULT_ICON.duplicate();
 
     @Key("price.vault")
     @Explanation("The cost of this product (in case of trading through Vault)")

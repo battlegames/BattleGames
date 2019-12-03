@@ -62,7 +62,7 @@ public class Kit extends ConfigurableObject {
     @Key("no_access_icon")
     @Explanation("The icon to be showed when players can't access the kit")
     @IgnoreValue(ifNull = true)
-    private PreparedItem noAccessIcon = DEF_NO_ACCESS;
+    private PreparedItem noAccessIcon = DEF_NO_ACCESS.duplicate();
 
     @Key("permission")
     @Explanation("The permission that players must have to get the kit")
