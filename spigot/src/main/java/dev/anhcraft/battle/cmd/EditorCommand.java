@@ -44,6 +44,6 @@ public class EditorCommand extends BaseCommand{
     @Subcommand("market")
     @CommandPermission("battle.editor.market")
     public void market(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_EDITOR);
+        plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU_EDITOR);
     }
 }

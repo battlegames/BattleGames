@@ -21,6 +21,7 @@ package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
@@ -45,7 +46,8 @@ public class ProductMenuEditor implements Pagination {
             Slot slot = chain.next();
             slot.setPaginationItem(p.getIcon().duplicate());
             slot.setAdditionalFunction(report -> {
-
+                view.getWindow().getDataContainer().put(GDataRegistry.MARKET_PRODUCT_EDITOR, p);
+                api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_EDITOR);
             });
         }
     }

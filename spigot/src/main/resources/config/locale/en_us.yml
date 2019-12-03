@@ -196,11 +196,58 @@ gui:
     create_name: "&eCreate new category"
     create_lore:
       - "&aClick here to make a new category"
+  market_category_editor:
+    title: "&5&lCategory Editor"
+    set_igo_name: "&eSet 'in-game only'"
+    set_igo_lore:
+      - "&aClick here to change the 'in-game only' option"
+      - "&f"
+      - "&bThis option restricts players from viewing products"
+      - "&bwhile they are playing a game."
+      - "&f"
+      - "&7It affects all the products inside but it does"
+      - "&7not change their options in any way."
+    edit_item_name: "&dEdit items"
+    edit_item_lore:
+      - "&fClick here if you want to modify items"
+      - "&fin this category"
+    remove_name: "&cRemove"
+    remove_lore:
+      - "&fClick here to remove this category"
+      - "&eWarning: All products inside will be removed too"
+    back_name: "&cBack"
+    back_lore:
+      - "&fClick here to open the category menu"
   market_product_menu_editor:
     title: "&4&lProduct Editor"
     create_name: "&eCreate new product"
     create_lore:
       - "&aClick here to add a new product"
+    back_name: "&cBack"
+    back_lore:
+      - "&fClick here to back to the category editor"
+  market_product_editor:
+    title: "&4&lProduct Editor"
+    set_igo_name: "&eSet 'in-game only'"
+    set_igo_lore:
+      - "&aClick here to change the 'in-game only' option"
+      - "&f"
+      - "&bThis option restricts players from viewing this"
+      - "&bproduct while they are playing a game."
+    set_pv_name: "&dSet price (Vault)"
+    set_pv_lore:
+      - "&fClick here to set the price of this item"
+      - "&f(with economy provided by Vault)"
+    set_pign_name: "&dSet in-game price"
+    set_pign_lore:
+      - "&fClick here to set the price of this item"
+      - "&fwhen buying in-game"
+    remove_name: "&cRemove"
+    remove_lore:
+      - "&fClick here to remove this product"
+    back_name: "&cBack"
+    back_lore:
+      - "&fClick here to open the product menu"
   value_editor:
     done_btn: "&a✔ Done"
     flip_number_btn: "&cFlip number: &eNegative <=> Positive"
