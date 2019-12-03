@@ -22,6 +22,7 @@ package dev.anhcraft.battle.gui;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
+import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.misc.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.Function;
 import org.bukkit.event.Cancellable;
@@ -147,14 +148,18 @@ public class CommonHandler extends GuiHandler {
     @Function("prev_page")
     public void prevPage(SlotReport report, String pagination){
         if(report.getView().prevPage(pagination)) {
-            ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), report.getComponent());
+            for (Component c : report.getView().getGui().getComponentOf(pagination)) {
+                ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), c);
+            }
         }
     }
 
     @Function("next_page")
     public void nextPage(SlotReport report, String pagination){
         if(report.getView().nextPage(pagination)) {
-            ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), report.getComponent());
+            for (Component c : report.getView().getGui().getComponentOf(pagination)) {
+                ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), c);
+            }
         }
     }
 
