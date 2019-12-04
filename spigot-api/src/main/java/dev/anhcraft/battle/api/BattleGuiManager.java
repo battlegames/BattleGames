@@ -25,6 +25,7 @@ import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +77,7 @@ public interface BattleGuiManager {
      * @return a unique {@link Window} that belongs to the player
      */
     @NotNull
-    Window getWindow(@NotNull Player player);
+    Window getWindow(@NotNull HumanEntity player);
 
     /**
      * Updates the given view.

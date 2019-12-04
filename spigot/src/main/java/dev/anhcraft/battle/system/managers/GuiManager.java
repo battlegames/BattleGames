@@ -34,6 +34,7 @@ import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
@@ -215,7 +216,7 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
 
     @Override
     @NotNull
-    public Window getWindow(@NotNull Player player){
+    public Window getWindow(@NotNull HumanEntity player){
         Condition.argNotNull("player", player);
         Window x = WINDOWS.get(player.getUniqueId());
         if(x == null) WINDOWS.put(player.getUniqueId(), x = new Window());

@@ -50,6 +50,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
@@ -366,6 +367,11 @@ public class PlayerListener extends BattleComponent implements Listener {
             LocalGame game = plugin.gameManager.getGame(p);
             if(game != null) game.getMode().getController(c -> c.onClickInventory(event, game, p));
         }
+    }
+
+    @EventHandler
+    public void closeInv(InventoryCloseEvent event) {
+        plugin.guiManager.getWindow(event.getPlayer()).setTopView(null);
     }
 
     @EventHandler
