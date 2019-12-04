@@ -60,9 +60,9 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onQuit(Player player, LocalGame localGame){
-        broadcast(localGame, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        for (Player p : localGame.getPlayers().keySet()){
+    public void onQuit(Player player, LocalGame game){
+        broadcast(game, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        for (Player p : game.getPlayers().keySet()){
             PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
             if (ps != null) {
                 ps.removeTeamPlayer("global", player);
@@ -71,28 +71,28 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onJoin(Player player, LocalGame localGame) {
-        broadcast(localGame, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.min(localGame.getArena().getAttributes().getInt("min_players"), 1);
-        switch (localGame.getPhase()){
+    public void onJoin(Player player, LocalGame game) {
+        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
+        switch (game.getPhase()){
             case WAITING:{
-                respw(localGame, player);
-                if(localGame.getMode().isWaitingScoreboardEnabled()) {
-                    String title = localGame.getMode().getWaitingScoreboardTitle();
-                    List<String> content = localGame.getMode().getWaitingScoreboardContent();
-                    int len = localGame.getMode().isWaitingScoreboardFixedLength();
+                respw(game, player);
+                if(game.getMode().isWaitingScoreboardEnabled()) {
+                    String title = game.getMode().getWaitingScoreboardTitle();
+                    List<String> content = game.getMode().getWaitingScoreboardContent();
+                    int len = game.getMode().isWaitingScoreboardFixedLength();
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
                 }
-                if(m <= localGame.getPlayerCount()) countdown(localGame);
+                if(m <= game.getPlayerCount()) countdown(game);
                 break;
             }
             case PLAYING: {
-                PlayerScoreboard sps = addPlayer(localGame, player);
+                PlayerScoreboard sps = addPlayer(game, player);
                 if(sps != null) {
-                    sps.addTeamPlayers("global", localGame.getPlayers().keySet());
+                    sps.addTeamPlayers("global", game.getPlayers().keySet());
                 }
                 List<Player> lc = Collections.singletonList(player);
-                for (Player p : localGame.getPlayers().keySet()){
+                for (Player p : game.getPlayers().keySet()){
                     if(p.equals(player)) continue;
                     PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
                     if (ps != null) {
@@ -103,65 +103,65 @@ public class DeathmatchController extends ModeController {
         }
     }
 
-    protected void countdown(LocalGame localGame) {
-        if(hasTask(localGame, "countdown")) return;
-        AtomicLong current = new AtomicLong(localGame.getArena().getAttributes().getLong("countdown_time")/20L);
-        int m = Math.min(localGame.getArena().getAttributes().getInt("min_players"), 1);
-        trackTask(localGame, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
-            if(m <= localGame.getPlayerCount()) {
-                broadcastTitle(localGame, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
-                playSound(localGame, Sound.BLOCK_FENCE_GATE_OPEN);
+    protected void countdown(LocalGame game) {
+        if(hasTask(game, "countdown")) return;
+        AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
+        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
+        trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
+            if(m <= game.getPlayerCount()) {
+                broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
+                playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                 if(current.getAndDecrement() == 0) {
-                    cancelTask(localGame, "countdown");
-                    play(localGame);
+                    cancelTask(game, "countdown");
+                    play(game);
                 }
-            } else cancelTask(localGame, "countdown");
+            } else cancelTask(game, "countdown");
         }, 0, 20));
     }
 
-    protected void play(LocalGame localGame) {
-        broadcast(localGame,"game_start_broadcast");
+    protected void play(LocalGame game) {
+        broadcast(game,"game_start_broadcast");
         plugin.taskHelper.newTask(() -> {
-            localGame.setPhase(GamePhase.PLAYING);
-            localGame.getPlayers().values().forEach(p -> {
-                cancelTask(localGame, "respawn::"+p.toBukkit().getName());
-                PlayerScoreboard ps = addPlayer(localGame, p.toBukkit());
-                if(ps != null) ps.addTeamPlayers("global", localGame.getPlayers().keySet());
+            game.setPhase(GamePhase.PLAYING);
+            game.getPlayers().values().forEach(p -> {
+                cancelTask(game, "respawn::"+p.toBukkit().getName());
+                PlayerScoreboard ps = addPlayer(game, p.toBukkit());
+                if(ps != null) ps.addTeamPlayers("global", game.getPlayers().keySet());
             });
         });
     }
 
     @Nullable
-    private PlayerScoreboard addPlayer(LocalGame localGame, Player player) {
+    private PlayerScoreboard addPlayer(LocalGame game, Player player) {
         PlayerScoreboard ps = null;
-        if(localGame.getMode().isPlayingScoreboardEnabled()) {
-            String title = localGame.getMode().getPlayingScoreboardTitle();
-            List<String> content = localGame.getMode().getPlayingScoreboardContent();
-            int len = localGame.getMode().isPlayingScoreboardFixedLength();
+        if(game.getMode().isPlayingScoreboardEnabled()) {
+            String title = game.getMode().getPlayingScoreboardTitle();
+            List<String> content = game.getMode().getPlayingScoreboardContent();
+            int len = game.getMode().isPlayingScoreboardFixedLength();
             ps = new PlayerScoreboard(player, title, content, len);
             ps.setNameTagVisibility(Team.OptionStatus.NEVER);
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
-        respw(localGame, player);
+        respw(game, player);
         return ps;
     }
 
-    protected void respw(LocalGame localGame, Player player) {
+    protected void respw(LocalGame game, Player player) {
         player.setGameMode(GameMode.SURVIVAL);
-        switch (localGame.getPhase()) {
+        switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("waiting_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
                 EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("playing_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points"));
                 EntityUtil.teleport(player, LocationUtil.fromString(loc));
-                performCooldownMap(localGame, "spawn_protection",
+                performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
-                performCooldownMap(localGame, "item_selection",
+                performCooldownMap(game, "item_selection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
             }
@@ -169,10 +169,10 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onChooseItem(ItemChooseEvent event, LocalGame localGame){
-        if(localGame.getPhase() != GamePhase.PLAYING) return;
-        performCooldownMap(localGame, "item_selection", cooldownMap -> {
-            int t = localGame.getArena().getAttributes().getInt("item_selection_time");
+    public void onChooseItem(ItemChooseEvent event, LocalGame game){
+        if(game.getPhase() != GamePhase.PLAYING) return;
+        performCooldownMap(game, "item_selection", cooldownMap -> {
+            int t = game.getArena().getAttributes().getInt("item_selection_time");
             if(cooldownMap.isPassed(event.getPlayer(), t))
                 plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_item_selection_overtime"));
             else {
@@ -188,29 +188,29 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onRespawn(PlayerRespawnEvent event, LocalGame localGame) {
+    public void onRespawn(PlayerRespawnEvent event, LocalGame game) {
         Player player = event.getPlayer();
-        GamePlayer gp = localGame.getPlayer(player);
+        GamePlayer gp = game.getPlayer(player);
         if (gp != null) {
-            String sl = RandomUtil.pickRandom(localGame.getArena().getAttributes()
+            String sl = RandomUtil.pickRandom(game.getArena().getAttributes()
                     .getStringList("waiting_spawn_points"));
             Location loc = LocationUtil.fromString(sl);
             if(loc.getWorld() == null) loc.setWorld(player.getWorld());
             event.setRespawnLocation(loc);
             gp.setSpectator(true);
             player.setGameMode(GameMode.SPECTATOR);
-            AtomicLong current = new AtomicLong(localGame.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
+            AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
             String task = "respawn::"+player.getName();
-            trackTask(localGame, task, plugin.taskHelper.newAsyncTimerTask(() -> {
+            trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
                     sendTitle(player, "respawn_title", "respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
-                    playSound(localGame, Sound.BLOCK_FENCE_GATE_OPEN);
+                    playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
-                        cancelTask(localGame, task);
+                        cancelTask(game, task);
                         gp.setSpectator(false);
-                        plugin.taskHelper.newTask(() -> respw(localGame, player));
+                        plugin.taskHelper.newTask(() -> respw(game, player));
                     }
-                } else cancelTask(localGame, task);
+                } else cancelTask(game, task);
             }, 0, 20));
         }
     }
@@ -226,13 +226,13 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onEnd(LocalGame localGame) {
-        cancelAllTasks(localGame);
+    public void onEnd(LocalGame game) {
+        cancelAllTasks(game);
         clearCooldown();
 
         GamePlayer winner = null;
         int maxKill = 0; // cache (don't use #get frequently)
-        Iterator<GamePlayer> players = localGame.getPlayers().values().iterator();
+        Iterator<GamePlayer> players = game.getPlayers().values().iterator();
         do {
             GamePlayer x = players.next();
             if(winner == null) {
@@ -247,10 +247,10 @@ public class DeathmatchController extends ModeController {
                 }
             }
             x.setSpectator(false);
-            respw(localGame, x.toBukkit());
+            respw(game, x.toBukkit());
         } while(players.hasNext()); // we use do-while since there is always at least one player
         winner.setWinner(true);
 
-        plugin.gameManager.handleEnd(localGame);
+        plugin.gameManager.handleEnd(game);
     }
 }

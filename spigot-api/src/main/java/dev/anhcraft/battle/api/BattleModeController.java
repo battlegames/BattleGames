@@ -31,43 +31,43 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface BattleModeController {
-    default boolean canJoin(Player player, LocalGame localGame){
+    default boolean canJoin(Player player, LocalGame game){
         return true;
     }
 
-    void onJoin(Player player, LocalGame localGame);
+    void onJoin(Player player, LocalGame game);
 
-    void onEnd(LocalGame localGame);
+    void onEnd(LocalGame game);
 
-    default void onQuit(Player player, LocalGame localGame){
-
-    }
-
-    default void onRespawn(PlayerRespawnEvent event, LocalGame localGame){
+    default void onQuit(Player player, LocalGame game){
 
     }
 
-    default void onTick(LocalGame localGame){
+    default void onRespawn(PlayerRespawnEvent event, LocalGame game){
 
     }
 
-    default void onDeath(PlayerDeathEvent event, LocalGame localGame){
+    default void onTick(LocalGame game){
 
     }
 
-    default void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame localGame){
+    default void onDeath(PlayerDeathEvent event, LocalGame game){
 
     }
 
-    default void onDropItem(PlayerDropItemEvent event, LocalGame localGame){
+    default void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame game){
 
     }
 
-    default void onClickInventory(InventoryClickEvent event, LocalGame localGame, Player player){
+    default void onDropItem(PlayerDropItemEvent event, LocalGame game){
 
     }
 
-    default void onChooseItem(ItemChooseEvent event, LocalGame localGame){
+    default void onClickInventory(InventoryClickEvent event, LocalGame game, Player player){
+
+    }
+
+    default void onChooseItem(ItemChooseEvent event, LocalGame game){
 
     }
 

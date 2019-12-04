@@ -72,46 +72,46 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
-    public void onTick(LocalGame localGame){
-        SimpleTeam<ABTeam> x = TEAM.get(localGame);
+    public void onTick(LocalGame game){
+        SimpleTeam<ABTeam> x = TEAM.get(game);
         if(x != null) {
             int a = x.countPlayers(ABTeam.TEAM_A);
             int b = x.countPlayers(ABTeam.TEAM_B);
-            if (a == 0 || b == 0) localGame.end();
+            if (a == 0 || b == 0) game.end();
         }
     }
 
-    private ABTeam nextTeam(LocalGame localGame) {
-        SimpleTeam<ABTeam> x = TEAM.get(localGame);
+    private ABTeam nextTeam(LocalGame game) {
+        SimpleTeam<ABTeam> x = TEAM.get(game);
         int a = x.countPlayers(ABTeam.TEAM_A);
         int b = x.countPlayers(ABTeam.TEAM_B);
         return a <= b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
     }
 
     @Override
-    public void onJoin(Player player, LocalGame localGame) {
-        broadcast(localGame, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.max(localGame.getArena().getAttributes().getInt("min_players"), 1);
-        switch (localGame.getPhase()){
+    public void onJoin(Player player, LocalGame game) {
+        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        int m = Math.max(game.getArena().getAttributes().getInt("min_players"), 1);
+        switch (game.getPhase()){
             case WAITING:{
-                respw(localGame, player, null);
-                if(localGame.getMode().isWaitingScoreboardEnabled()) {
-                    String title = localGame.getMode().getWaitingScoreboardTitle();
-                    List<String> content = localGame.getMode().getWaitingScoreboardContent();
-                    int len = localGame.getMode().isWaitingScoreboardFixedLength();
+                respw(game, player, null);
+                if(game.getMode().isWaitingScoreboardEnabled()) {
+                    String title = game.getMode().getWaitingScoreboardTitle();
+                    List<String> content = game.getMode().getWaitingScoreboardContent();
+                    int len = game.getMode().isWaitingScoreboardFixedLength();
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
                 }
-                if(m <= localGame.getPlayerCount()) countdown(localGame);
+                if(m <= game.getPlayerCount()) countdown(game);
                 break;
             }
             case PLAYING: {
-                ABTeam t = nextTeam(localGame);
-                SimpleTeam<ABTeam> tm = TEAM.get(localGame);
+                ABTeam t = nextTeam(game);
+                SimpleTeam<ABTeam> tm = TEAM.get(game);
                 tm.addPlayer(player, t);
 
                 List<Player> ta = tm.getPlayers(ABTeam.TEAM_A);
                 List<Player> tb = tm.getPlayers(ABTeam.TEAM_B);
-                PlayerScoreboard sps = addPlayer(localGame, player, t);
+                PlayerScoreboard sps = addPlayer(game, player, t);
                 if (sps != null) {
                     sps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
                     sps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
@@ -139,9 +139,9 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
-    public void onQuit(Player player, LocalGame localGame){
-        super.onQuit(player, localGame);
-        SimpleTeam<ABTeam> team = TEAM.get(localGame);
+    public void onQuit(Player player, LocalGame game){
+        super.onQuit(player, game);
+        SimpleTeam<ABTeam> team = TEAM.get(game);
         if(team != null) {
             ABTeam abTeam = team.removePlayer(player);
             for(Map.Entry<Player, ABTeam> ent : team.getPlayerTeam()) {
@@ -154,10 +154,10 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
-    protected void play(LocalGame localGame) {
-        broadcast(localGame,"game_start_broadcast");
+    protected void play(LocalGame game) {
+        broadcast(game,"game_start_broadcast");
 
-        List<Player> x = new ArrayList<>(localGame.getPlayers().keySet());
+        List<Player> x = new ArrayList<>(game.getPlayers().keySet());
         int sz = Math.floorDiv(x.size(), 2);
         List<Player> ta = x.subList(0, sz);
         List<Player> tb = x.subList(sz, x.size());
@@ -165,21 +165,21 @@ public class TeamDeathmatchController extends DeathmatchController {
         SimpleTeam<ABTeam> team = new SimpleTeam<>();
         team.addPlayers(ta, ABTeam.TEAM_A);
         team.addPlayers(tb, ABTeam.TEAM_B);
-        TEAM.put(localGame, team);
+        TEAM.put(game, team);
 
         plugin.taskHelper.newTask(() -> {
-            localGame.setPhase(GamePhase.PLAYING);
+            game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
-                cancelTask(localGame, "respawn::"+p.getName());
-                PlayerScoreboard ps = addPlayer(localGame, p, ABTeam.TEAM_A);
+                cancelTask(game, "respawn::"+p.getName());
+                PlayerScoreboard ps = addPlayer(game, p, ABTeam.TEAM_A);
                 if (ps != null) {
                     ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
                     ps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
                 }
             });
             tb.forEach(p -> {
-                cancelTask(localGame, "respawn::"+p.getName());
-                PlayerScoreboard ps = addPlayer(localGame, p, ABTeam.TEAM_B);
+                cancelTask(game, "respawn::"+p.getName());
+                PlayerScoreboard ps = addPlayer(game, p, ABTeam.TEAM_B);
                 if (ps != null) {
                     ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
                     ps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
@@ -189,41 +189,41 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Nullable
-    private PlayerScoreboard addPlayer(LocalGame localGame, Player player, ABTeam dt) {
+    private PlayerScoreboard addPlayer(LocalGame game, Player player, ABTeam dt) {
         PlayerScoreboard ps = null;
-        if(localGame.getMode().isPlayingScoreboardEnabled()) {
-            String title = localGame.getMode().getPlayingScoreboardTitle();
-            List<String> content = localGame.getMode().getPlayingScoreboardContent();
-            int len = localGame.getMode().isPlayingScoreboardFixedLength();
+        if(game.getMode().isPlayingScoreboardEnabled()) {
+            String title = game.getMode().getPlayingScoreboardTitle();
+            List<String> content = game.getMode().getPlayingScoreboardContent();
+            int len = game.getMode().isPlayingScoreboardFixedLength();
             ps = new PlayerScoreboard(player, title, content, len);
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
-        respw(localGame, player, dt);
+        respw(game, player, dt);
         return ps;
     }
 
     @Override
-    protected void respw(LocalGame localGame, Player player) {
-        SimpleTeam<ABTeam> t = TEAM.get(localGame);
-        respw(localGame, player, t == null ? null : t.getTeam(player));
+    protected void respw(LocalGame game, Player player) {
+        SimpleTeam<ABTeam> t = TEAM.get(game);
+        respw(game, player, t == null ? null : t.getTeam(player));
     }
 
-    private void respw(LocalGame localGame, Player player, ABTeam team) {
+    private void respw(LocalGame game, Player player, ABTeam team) {
         player.setGameMode(GameMode.SURVIVAL);
-        switch (localGame.getPhase()) {
+        switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("waiting_spawn_points"));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
                 EntityUtil.teleport(player, LocationUtil.fromString(loc));
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(localGame.getArena().getAttributes().getStringList("playing_spawn_points_"+ (team == ABTeam.TEAM_A ? "a" : "b")));
+                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points_"+ (team == ABTeam.TEAM_A ? "a" : "b")));
                 EntityUtil.teleport(player, LocationUtil.fromString(loc));
-                performCooldownMap(localGame, "spawn_protection",
+                performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
-                performCooldownMap(localGame, "item_selection",
+                performCooldownMap(game, "item_selection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
             }
@@ -243,33 +243,33 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @Override
-    public void onEnd(LocalGame localGame) {
-        cancelAllTasks(localGame);
-        SimpleTeam<ABTeam> team = TEAM.remove(localGame);
+    public void onEnd(LocalGame game) {
+        cancelAllTasks(game);
+        SimpleTeam<ABTeam> team = TEAM.remove(game);
 
-        Map<ABTeam, List<GamePlayer>> map = team.reverse(localGame::getPlayer);
+        Map<ABTeam, List<GamePlayer>> map = team.reverse(game::getPlayer);
         List<GamePlayer> aPlayers = map.get(ABTeam.TEAM_A);
         List<GamePlayer> bPlayers = map.get(ABTeam.TEAM_B);
         if(aPlayers != null & bPlayers != null) {
             IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
-                respw(localGame, value.toBukkit(), ABTeam.TEAM_A);
+                respw(game, value.toBukkit(), ABTeam.TEAM_A);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
             IntSummaryStatistics sb = bPlayers.stream().mapToInt(value -> {
-                respw(localGame, value.toBukkit(), ABTeam.TEAM_B);
+                respw(game, value.toBukkit(), ABTeam.TEAM_B);
                 value.setSpectator(false);
                 return value.getKillCounter().get();
             }).summaryStatistics();
-            ABTeam winner = handleResult(localGame, sa, sb, aPlayers, bPlayers);
+            ABTeam winner = handleResult(game, sa, sb, aPlayers, bPlayers);
             map.get(winner).forEach(player -> player.setWinner(true));
             team.reset();
         }
 
-        plugin.gameManager.handleEnd(localGame);
+        plugin.gameManager.handleEnd(game);
     }
 
-    protected ABTeam handleResult(LocalGame localGame, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
+    protected ABTeam handleResult(LocalGame game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
         if (sa.getSum() == sb.getSum())
             return sa.getAverage() > sb.getAverage() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
         else
