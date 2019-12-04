@@ -49,9 +49,11 @@ public class SimpleTeam<T extends Team> implements Resettable {
         }
     }
 
-    public void removePlayer(Player player){
+    public T removePlayer(Player player){
         synchronized (LOCK){
-            PLAYER_COUNTER.merge(PLAYER_MAP.remove(player), -1, Integer::sum);
+            T last = PLAYER_MAP.remove(player);
+            PLAYER_COUNTER.merge(last, -1, Integer::sum);
+            return last;
         }
     }
 
@@ -61,6 +63,17 @@ public class SimpleTeam<T extends Team> implements Resettable {
 
     public int countPlayers(T team) {
         return PLAYER_COUNTER.getOrDefault(team, 0);
+    }
+
+    public List<Player> getPlayers(T team) {
+        return PLAYER_MAP.entrySet().stream()
+                .filter(p -> p.getValue() == team)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public Set<Map.Entry<Player, T>> getPlayerTeam() {
+        return Collections.unmodifiableSet(PLAYER_MAP.entrySet());
     }
 
     public Map<T, List<Player>> reverse(){

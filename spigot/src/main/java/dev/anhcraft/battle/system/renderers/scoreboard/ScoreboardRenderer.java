@@ -21,6 +21,7 @@ package dev.anhcraft.battle.system.renderers.scoreboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ScoreboardRenderer implements Runnable {
     private final Map<Player, PlayerScoreboard> ACTIVE = new ConcurrentHashMap<>();
+
+    @Nullable
+    public PlayerScoreboard getScoreboard(Player player){
+        return ACTIVE.get(player);
+    }
 
     public void setScoreboard(PlayerScoreboard newScoreboard){
         PlayerScoreboard currentScoreboard = ACTIVE.get(newScoreboard.getPlayer());

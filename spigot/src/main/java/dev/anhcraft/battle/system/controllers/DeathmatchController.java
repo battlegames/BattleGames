@@ -42,7 +42,10 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -59,6 +62,12 @@ public class DeathmatchController extends ModeController {
     @Override
     public void onQuit(Player player, LocalGame localGame){
         broadcast(localGame, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        for (Player p : localGame.getPlayers().keySet()){
+            PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
+            if (ps != null) {
+                ps.removeTeamPlayer("global", player);
+            }
+        }
     }
 
     @Override
@@ -77,7 +86,20 @@ public class DeathmatchController extends ModeController {
                 if(m <= localGame.getPlayerCount()) countdown(localGame);
                 break;
             }
-            case PLAYING: addPlayer(localGame, player);
+            case PLAYING: {
+                PlayerScoreboard sps = addPlayer(localGame, player);
+                if(sps != null) {
+                    sps.addTeamPlayers("global", localGame.getPlayers().keySet());
+                }
+                List<Player> lc = Collections.singletonList(player);
+                for (Player p : localGame.getPlayers().keySet()){
+                    if(p.equals(player)) continue;
+                    PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
+                    if (ps != null) {
+                        ps.addTeamPlayers("global", lc);
+                    }
+                }
+            }
         }
     }
 
@@ -103,19 +125,25 @@ public class DeathmatchController extends ModeController {
             localGame.setPhase(GamePhase.PLAYING);
             localGame.getPlayers().values().forEach(p -> {
                 cancelTask(localGame, "respawn::"+p.toBukkit().getName());
-                addPlayer(localGame, p.toBukkit());
+                PlayerScoreboard ps = addPlayer(localGame, p.toBukkit());
+                if(ps != null) ps.addTeamPlayers("global", localGame.getPlayers().keySet());
             });
         });
     }
 
-    private void addPlayer(LocalGame localGame, Player player) {
+    @Nullable
+    private PlayerScoreboard addPlayer(LocalGame localGame, Player player) {
+        PlayerScoreboard ps = null;
         if(localGame.getMode().isPlayingScoreboardEnabled()) {
             String title = localGame.getMode().getPlayingScoreboardTitle();
             List<String> content = localGame.getMode().getPlayingScoreboardContent();
             int len = localGame.getMode().isPlayingScoreboardFixedLength();
-            plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
+            ps = new PlayerScoreboard(player, title, content, len);
+            ps.setNameTagVisibility(Team.OptionStatus.NEVER);
+            plugin.scoreboardRenderer.setScoreboard(ps);
         }
         respw(localGame, player);
+        return ps;
     }
 
     protected void respw(LocalGame localGame, Player player) {

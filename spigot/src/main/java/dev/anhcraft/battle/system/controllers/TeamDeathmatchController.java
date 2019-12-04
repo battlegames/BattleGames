@@ -30,6 +30,7 @@ import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -105,8 +106,34 @@ public class TeamDeathmatchController extends DeathmatchController {
             }
             case PLAYING: {
                 ABTeam t = nextTeam(localGame);
-                TEAM.get(localGame).addPlayer(player, t);
-                addPlayer(localGame, player, t);
+                SimpleTeam<ABTeam> tm = TEAM.get(localGame);
+                tm.addPlayer(player, t);
+
+                List<Player> ta = tm.getPlayers(ABTeam.TEAM_A);
+                List<Player> tb = tm.getPlayers(ABTeam.TEAM_B);
+                PlayerScoreboard sps = addPlayer(localGame, player, t);
+                if (sps != null) {
+                    sps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
+                    sps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
+                }
+
+                List<Player> lc = Collections.singletonList(player);
+
+                for(Player p : ta) {
+                    if(p.equals(player)) continue;
+                    PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
+                    if (ps != null) {
+                        ps.addTeamPlayers(t.name(), lc);
+                    }
+                }
+
+                for(Player p : tb) {
+                    if(p.equals(player)) continue;
+                    PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
+                    if (ps != null) {
+                        ps.addTeamPlayers(t.name(), lc);
+                    }
+                }
             }
         }
     }
@@ -115,8 +142,15 @@ public class TeamDeathmatchController extends DeathmatchController {
     public void onQuit(Player player, LocalGame localGame){
         super.onQuit(player, localGame);
         SimpleTeam<ABTeam> team = TEAM.get(localGame);
-        if(team != null)
-            team.removePlayer(player);
+        if(team != null) {
+            ABTeam abTeam = team.removePlayer(player);
+            for(Map.Entry<Player, ABTeam> ent : team.getPlayerTeam()) {
+                PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(ent.getKey());
+                if (ps != null) {
+                    ps.removeTeamPlayer(abTeam.name(), player);
+                }
+            }
+        }
     }
 
     @Override
@@ -137,24 +171,35 @@ public class TeamDeathmatchController extends DeathmatchController {
             localGame.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(localGame, "respawn::"+p.getName());
-                addPlayer(localGame, p, ABTeam.TEAM_A);
+                PlayerScoreboard ps = addPlayer(localGame, p, ABTeam.TEAM_A);
+                if (ps != null) {
+                    ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
+                    ps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
+                }
             });
             tb.forEach(p -> {
                 cancelTask(localGame, "respawn::"+p.getName());
-                addPlayer(localGame, p, ABTeam.TEAM_B);
+                PlayerScoreboard ps = addPlayer(localGame, p, ABTeam.TEAM_B);
+                if (ps != null) {
+                    ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
+                    ps.addTeamPlayers(ABTeam.TEAM_B.name(), tb);
+                }
             });
         });
     }
 
-    private void addPlayer(LocalGame localGame, Player player, ABTeam dt) {
+    @Nullable
+    private PlayerScoreboard addPlayer(LocalGame localGame, Player player, ABTeam dt) {
+        PlayerScoreboard ps = null;
         if(localGame.getMode().isPlayingScoreboardEnabled()) {
             String title = localGame.getMode().getPlayingScoreboardTitle();
             List<String> content = localGame.getMode().getPlayingScoreboardContent();
             int len = localGame.getMode().isPlayingScoreboardFixedLength();
-            plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
+            ps = new PlayerScoreboard(player, title, content, len);
+            plugin.scoreboardRenderer.setScoreboard(ps);
         }
-        // TODO ADD SPERATE SCOREBOARD TO HIDE NAMETAG HERE
         respw(localGame, player, dt);
+        return ps;
     }
 
     @Override

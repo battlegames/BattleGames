@@ -28,8 +28,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +45,7 @@ public class PlayerScoreboard {
     private final String title;
     private final int maxEntryLength;
     private boolean fixedLength;
+    private Team.OptionStatus nameTagVisibility = Team.OptionStatus.FOR_OTHER_TEAMS;
 
     public PlayerScoreboard(Player player, String title, List<String> lines, int fixedLength) {
         this.player = player;
@@ -165,5 +168,31 @@ public class PlayerScoreboard {
     void render() {
         renderTitle();
         renderLines();
+    }
+
+    public void addTeamPlayers(String team, Collection<Player> players){
+        Team t = scoreboard.getTeam(team);
+        if(t == null) {
+            t = scoreboard.registerNewTeam(team);
+            t.setOption(Team.Option.NAME_TAG_VISIBILITY, nameTagVisibility);
+        }
+        for(Player p : players){
+            t.addEntry(p.getName());
+        }
+    }
+
+    public void removeTeamPlayer(String team, Player player){
+        Team t = scoreboard.getTeam(team);
+        if(t == null) return;
+        t.removeEntry(player.getName());
+        if(t.getSize() == 0) t.unregister();
+    }
+
+    public Team.OptionStatus getNameTagVisibility() {
+        return nameTagVisibility;
+    }
+
+    public void setNameTagVisibility(Team.OptionStatus nameTagVisibility) {
+        this.nameTagVisibility = nameTagVisibility;
     }
 }
