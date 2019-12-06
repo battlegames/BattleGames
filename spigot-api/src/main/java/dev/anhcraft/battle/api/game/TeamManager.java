@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public class SimpleTeam<T extends Team> implements Resettable {
+public class TeamManager<T extends Team> implements Resettable {
     private final Map<Player, T> PLAYER_MAP = new WeakHashMap<>();
     private final Map<T, Integer> PLAYER_COUNTER = new HashMap<>();
     private final Object LOCK = new Object();

@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class TeamDeathmatchController extends DeathmatchController {
-    protected final Map<LocalGame, SimpleTeam<ABTeam>> TEAM = new HashMap<>();
+    protected final Map<LocalGame, TeamManager<ABTeam>> TEAM = new HashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
         this(plugin, Mode.TEAM_DEATHMATCH);
@@ -49,7 +49,7 @@ public class TeamDeathmatchController extends DeathmatchController {
         plugin.getPapiExpansion().handlers.put(p+"team", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
             if(game == null) return null;
-            SimpleTeam<ABTeam> t = TEAM.get(game);
+            TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)
                 return null;
             ABTeam dt = t.getTeam(player);
@@ -61,7 +61,7 @@ public class TeamDeathmatchController extends DeathmatchController {
         plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
             if(game == null) return null;
-            SimpleTeam<ABTeam> t = TEAM.get(game);
+            TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)
                 return null;
             ABTeam dt = t.getTeam(player);
@@ -73,7 +73,7 @@ public class TeamDeathmatchController extends DeathmatchController {
 
     @Override
     public void onTick(LocalGame game){
-        SimpleTeam<ABTeam> x = TEAM.get(game);
+        TeamManager<ABTeam> x = TEAM.get(game);
         if(x != null) {
             int a = x.countPlayers(ABTeam.TEAM_A);
             int b = x.countPlayers(ABTeam.TEAM_B);
@@ -82,7 +82,7 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     private ABTeam nextTeam(LocalGame game) {
-        SimpleTeam<ABTeam> x = TEAM.get(game);
+        TeamManager<ABTeam> x = TEAM.get(game);
         int a = x.countPlayers(ABTeam.TEAM_A);
         int b = x.countPlayers(ABTeam.TEAM_B);
         return a <= b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
@@ -106,11 +106,11 @@ public class TeamDeathmatchController extends DeathmatchController {
             }
             case PLAYING: {
                 ABTeam t = nextTeam(game);
-                SimpleTeam<ABTeam> tm = TEAM.get(game);
-                tm.addPlayer(player, t);
+                TeamManager<ABTeam> teamManager = TEAM.get(game);
+                teamManager.addPlayer(player, t);
 
-                List<Player> ta = tm.getPlayers(ABTeam.TEAM_A);
-                List<Player> tb = tm.getPlayers(ABTeam.TEAM_B);
+                List<Player> ta = teamManager.getPlayers(ABTeam.TEAM_A);
+                List<Player> tb = teamManager.getPlayers(ABTeam.TEAM_B);
                 PlayerScoreboard sps = addPlayer(game, player, t);
                 if (sps != null) {
                     sps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
@@ -141,10 +141,10 @@ public class TeamDeathmatchController extends DeathmatchController {
     @Override
     public void onQuit(Player player, LocalGame game){
         super.onQuit(player, game);
-        SimpleTeam<ABTeam> team = TEAM.get(game);
-        if(team != null) {
-            ABTeam abTeam = team.removePlayer(player);
-            for(Map.Entry<Player, ABTeam> ent : team.getPlayerTeam()) {
+        TeamManager<ABTeam> teamManager = TEAM.get(game);
+        if(teamManager != null) {
+            ABTeam abTeam = teamManager.removePlayer(player);
+            for(Map.Entry<Player, ABTeam> ent : teamManager.getPlayerTeam()) {
                 PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(ent.getKey());
                 if (ps != null) {
                     ps.removeTeamPlayer(abTeam.name(), player);
@@ -162,10 +162,10 @@ public class TeamDeathmatchController extends DeathmatchController {
         List<Player> ta = x.subList(0, sz);
         List<Player> tb = x.subList(sz, x.size());
 
-        SimpleTeam<ABTeam> team = new SimpleTeam<>();
-        team.addPlayers(ta, ABTeam.TEAM_A);
-        team.addPlayers(tb, ABTeam.TEAM_B);
-        TEAM.put(game, team);
+        TeamManager<ABTeam> teamManager = new TeamManager<>();
+        teamManager.addPlayers(ta, ABTeam.TEAM_A);
+        teamManager.addPlayers(tb, ABTeam.TEAM_B);
+        TEAM.put(game, teamManager);
 
         plugin.taskHelper.newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
@@ -204,7 +204,7 @@ public class TeamDeathmatchController extends DeathmatchController {
 
     @Override
     protected void respw(LocalGame game, Player player) {
-        SimpleTeam<ABTeam> t = TEAM.get(game);
+        TeamManager<ABTeam> t = TEAM.get(game);
         respw(game, player, t == null ? null : t.getTeam(player));
     }
 
@@ -233,8 +233,8 @@ public class TeamDeathmatchController extends DeathmatchController {
     @EventHandler
     public void damage(PlayerWeaponDamageEvent e) {
         if(e.getGame().getMode() != getMode()) return;
-        SimpleTeam<ABTeam> x = TEAM.get(e.getGame());
-        if(x.getTeam(e.getDamager()) == x.getTeam(e.getPlayer())) e.setCancelled(true);
+        TeamManager<ABTeam> teamManager = TEAM.get(e.getGame());
+        if(teamManager.getTeam(e.getDamager()) == teamManager.getTeam(e.getPlayer())) e.setCancelled(true);
         else performCooldownMap(e.getGame(), "spawn_protection",
                 cooldownMap -> {
                     int t = e.getGame().getArena().getAttributes().getInt("spawn_protection_time");
@@ -245,9 +245,9 @@ public class TeamDeathmatchController extends DeathmatchController {
     @Override
     public void onEnd(LocalGame game) {
         cancelAllTasks(game);
-        SimpleTeam<ABTeam> team = TEAM.remove(game);
+        TeamManager<ABTeam> teamManager = TEAM.remove(game);
 
-        Map<ABTeam, List<GamePlayer>> map = team.reverse(game::getPlayer);
+        Map<ABTeam, List<GamePlayer>> map = teamManager.reverse(game::getPlayer);
         List<GamePlayer> aPlayers = map.get(ABTeam.TEAM_A);
         List<GamePlayer> bPlayers = map.get(ABTeam.TEAM_B);
         if(aPlayers != null & bPlayers != null) {
@@ -263,7 +263,7 @@ public class TeamDeathmatchController extends DeathmatchController {
             }).summaryStatistics();
             ABTeam winner = handleResult(game, sa, sb, aPlayers, bPlayers);
             map.get(winner).forEach(player -> player.setWinner(true));
-            team.reset();
+            teamManager.reset();
         }
 
         plugin.gameManager.handleEnd(game);

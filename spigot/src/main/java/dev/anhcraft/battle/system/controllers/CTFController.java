@@ -61,7 +61,7 @@ public class CTFController extends TeamDeathmatchController {
 
         plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
-            SimpleTeam<ABTeam> t = TEAM.get(game);
+            TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
@@ -70,7 +70,7 @@ public class CTFController extends TeamDeathmatchController {
 
         plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> {
             LocalGame game = plugin.gameManager.getGame(player);
-            SimpleTeam<ABTeam> t = TEAM.get(game);
+            TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
