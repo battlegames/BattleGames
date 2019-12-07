@@ -74,10 +74,8 @@ public class TeamDeathmatchController extends DeathmatchController {
     @Override
     public void onTick(LocalGame game){
         TeamManager<ABTeam> x = TEAM.get(game);
-        if(x != null) {
-            int a = x.countPlayers(ABTeam.TEAM_A);
-            int b = x.countPlayers(ABTeam.TEAM_B);
-            if (a == 0 || b == 0) game.end();
+        if(x != null && x.nextEmptyTeam().isPresent()) {
+            game.end();
         }
     }
 
