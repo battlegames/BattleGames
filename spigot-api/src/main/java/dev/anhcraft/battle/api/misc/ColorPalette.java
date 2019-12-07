@@ -24,7 +24,7 @@ import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
 
-public enum BattleColor {
+public enum ColorPalette {
     WHITE,
     SILVER,
     GRAY,
@@ -45,7 +45,7 @@ public enum BattleColor {
 
     private Color color;
 
-    BattleColor(){
+    ColorPalette(){
         color = (Color) ReflectionUtil.getStaticField(Color.class, name());
     }
 
