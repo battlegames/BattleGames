@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
-public class TeamFlag<T extends Enum & Team> implements Informative, Resettable {
+public class TeamFlag<T extends Team> implements Informative, Resettable {
     private final String[] displayNames = new String[3];
     private final AtomicInteger health = new AtomicInteger();
     private final TrackedEntity<ArmorStand> armorStand;

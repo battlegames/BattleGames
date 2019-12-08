@@ -22,11 +22,13 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
+import dev.anhcraft.battle.api.events.game.BedBreakEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -239,7 +241,9 @@ public class BedWarController extends DeathmatchController {
                 BWTeam pteam = tm.getTeam(event.getPlayer());
                 if(pteam == null) return;
                 BWTeam targetTeam = BEDS.get(BlockPosition.of(b));
-                if(pteam.equals(targetTeam)){
+                BedBreakEvent e = new BedBreakEvent(game, event.getPlayer(), b, pteam, targetTeam);
+                Bukkit.getPluginManager().callEvent(e);
+                if(pteam.equals(targetTeam) || e.isCancelled()){
                     event.setCancelled(true);
                     event.setDropItems(false);
                     event.setExpToDrop(0);

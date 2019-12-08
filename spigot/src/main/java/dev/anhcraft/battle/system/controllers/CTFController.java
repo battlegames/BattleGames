@@ -22,13 +22,15 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.api.misc.BattleSound;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -140,7 +142,7 @@ public class CTFController extends TeamDeathmatchController {
 
     private void startOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier){
         ABTeam team = TEAM.get(game).getTeam(occupier);
-        if(flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
+        if(team == null || flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
         flag.setCapturing(true);
         if(flag.getCaptureStartSound() != null) flag.getCaptureStartSound().play(occupier);
         String id = "ctf_flag_occupy_"+occupier.getName();
@@ -151,8 +153,7 @@ public class CTFController extends TeamDeathmatchController {
             }
             if(flag.getTeam() == null || flag.getTeam() == team){
                 int h = flag.getHealth().incrementAndGet();
-                if(h == 1)
-                    flag.setTeam(team);
+                if(h == 1) flag.setTeam(team);
                 else if(h == flag.getMaxHealth()){
                     flag.setValid(true);
                     stopOccupyFlag(game, flag, occupier);
@@ -160,16 +161,16 @@ public class CTFController extends TeamDeathmatchController {
             }
             else {
                 int h = flag.getHealth().decrementAndGet();
-                if(h == 0)
-                    flag.setTeam(null);
-                else if(h == flag.getMaxHealth() - 1)
-                    flag.setValid(false);
+                if(h == 0) flag.setTeam(null);
+                else if(h == flag.getMaxHealth() - 1) flag.setValid(false);
             }
             flag.updateDisplayName(s -> {
                 InfoHolder h = new InfoHolder("flag_");
                 flag.inform(h);
                 return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
             });
+            FlagUpdateEvent e = new FlagUpdateEvent(game, occupier, team, flag);
+            Bukkit.getPluginManager().callEvent(e);
         }, 0, 20);
         trackTask(game, id, tid);
     }
