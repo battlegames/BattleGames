@@ -7,7 +7,7 @@ options:
     enabled: true
     lore:
       - "&f"
-      - "&fPrice: &d$formatted_price$"
+      - "&fPrice: &d%s"
       - "&f"
       - "&e>> Click to purchase <<"
 

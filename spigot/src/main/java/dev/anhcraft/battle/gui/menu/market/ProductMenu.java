@@ -58,15 +58,17 @@ public class ProductMenu implements Pagination {
                 continue;
             }
 
+            String pf = ApiProvider.consume().getChatManager().getFormattedMessages("price_format."+p.getCurrency().name().toLowerCase()).get(0);
             PreparedItem ic = p.getIcon().duplicate();
             if(mk.isSummaryProductInfoEnabled()){
-                List<String> lore = gp != null && mk.getSummaryProductIgnLore() != null ? mk.getSummaryProductIgnLore() : mk.getSummaryProductLore();
+                List<String> lore = mk.getSummaryProductLore();
                 if(lore != null) {
+                    String x = String.format(pf, p.getPrice());
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);
                     Map<String, String> map = api.mapInfo(holder);
                     for (String s : lore) {
-                        ic.lore().add(PlaceholderUtil.formatInfo(s, map));
+                        ic.lore().add(PlaceholderUtil.formatInfo(String.format(s, x), map));
                     }
                 }
             }
@@ -78,7 +80,7 @@ public class ProductMenu implements Pagination {
                 final double balance = c.getBalance(player);
 
                 if(balance < p.getPrice()){
-                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, balance));
+                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, String.format(pf, balance)));
                     return;
                 }
                 PlayerData pd = api.getPlayerData(player);

@@ -13,9 +13,13 @@ item_type:
 ab_team:
   team_a: Team A
   team_b: Team B
-currency:
-  vault: $%s
-  ing: %s coins
+price_format:
+  vault: "$%s"
+  ing: "%s coins"
+  iron: "%s irons"
+  gold: "%s golds"
+  diamond: "%s diamonds"
+  emerald: "%s emeralds"
 medal:
   headshot_title: "&l%battle_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
@@ -126,7 +130,7 @@ kit:
   unavailable: "&cThis kit is currently unavailable! You need to wait until %s"
   one_time_use: "&cThis kit can only be used one-time!"
 market:
-  not_enough_money: "&cSorry, you can't afford this product! You only have &f$%.2f&c in wallet."
+  not_enough_money: "&cSorry, you can't afford this product! You only have &f%s&c in wallet."
   purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
   purchase_success: "&aPurchased successfully!"
 booster:
