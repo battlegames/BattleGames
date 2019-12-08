@@ -22,6 +22,9 @@ package dev.anhcraft.battle.system.managers;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleGuiManager;
+import dev.anhcraft.battle.api.events.gui.ComponentRenderEvent;
+import dev.anhcraft.battle.api.events.gui.GuiOpenEvent;
+import dev.anhcraft.battle.api.events.gui.ViewRenderEvent;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
@@ -130,6 +133,9 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     private void refreshComponent(Player player, View view, Component c, Map<String, String> infoMap){
+        ComponentRenderEvent event = new ComponentRenderEvent(player, view.getGui(), view.getWindow(), view, c);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
         if(c.getPagination() != null) {
             Pagination pagination = PAGES.get(c.getPagination());
             if(pagination == null) {
@@ -140,6 +146,9 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     }
 
     private void refreshView(Player player, View view){
+        ViewRenderEvent event = new ViewRenderEvent(player, view.getGui(), view.getWindow(), view);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
         refreshView(player, view, plugin.mapInfo(collectInfo(view)));
     }
 
@@ -243,11 +252,14 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
     public View setBottomGui(@NotNull Player player, @NotNull String name){
         Condition.argNotNull("player", player);
         Condition.argNotNull("name", name);
-        Window gui = getWindow(player);
+        Window w = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
-        View v = createView(gui, g, player.getInventory());
-        gui.setBottomView(v);
+        GuiOpenEvent event = new GuiOpenEvent(player, g, w);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return null;
+        View v = createView(w, g, player.getInventory());
+        w.setBottomView(v);
         refreshView(player, v);
         return v;
     }
@@ -259,11 +271,14 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Window w = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
+        GuiOpenEvent event = new GuiOpenEvent(player, g, w);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return null;
+        Map<String, String> info = plugin.mapInfo(collectInfo(w));
+        View v = createView(player, w, g, info);
         if(w.getTopView() != null){
             player.closeInventory();
         }
-        Map<String, String> info = plugin.mapInfo(collectInfo(w));
-        View v = createView(player, w, g, info);
         w.setTopView(v);
         refreshView(player, v, info);
         player.openInventory(v.getInventory());
