@@ -22,15 +22,17 @@ package dev.anhcraft.battle.system.managers;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleGuiManager;
-import dev.anhcraft.battle.api.gui.*;
+import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.api.gui.GuiHandler;
+import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
@@ -257,6 +259,9 @@ public class GuiManager extends BattleComponent implements BattleGuiManager {
         Window w = getWindow(player);
         Gui g = GUI.get(name);
         if(g == null) return null;
+        if(w.getTopView() != null){
+            player.closeInventory();
+        }
         Map<String, String> info = plugin.mapInfo(collectInfo(w));
         View v = createView(player, w, g, info);
         w.setTopView(v);
