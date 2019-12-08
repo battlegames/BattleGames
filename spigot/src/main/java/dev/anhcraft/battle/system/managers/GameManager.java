@@ -34,7 +34,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
 import dev.anhcraft.battle.system.controllers.*;
-import dev.anhcraft.battle.system.handlers.GunHandler;
+import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -249,7 +249,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     public void handleEnd(LocalGame localGame) {
         BattleFirework ebf = localGame.getArena().getEndFirework();
         localGame.getPlayers().values().forEach(gp -> {
-            plugin.getHandler(GunHandler.class).handleZoomOut(gp.toBukkit());
+            plugin.gunManager.handleZoomOut(gp.toBukkit());
             PlayerData playerData = plugin.getPlayerData(gp.toBukkit());
             if(playerData != null) {
                 double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));

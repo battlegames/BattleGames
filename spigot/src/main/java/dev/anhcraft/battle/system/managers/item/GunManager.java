@@ -17,8 +17,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.system.handlers;
+package dev.anhcraft.battle.system.managers.item;
 
+import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.WeaponDamageEvent;
 import dev.anhcraft.battle.api.game.LocalGame;
@@ -54,10 +55,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class GunHandler extends Handler {
+public class GunManager extends BattleComponent {
     private static final ItemStack PUMPKIN_HELMET = new ItemStack(NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? Material.valueOf("CARVED_PUMPKIN") : Material.PUMPKIN, 1);
 
-    public GunHandler(BattlePlugin plugin) {
+    public GunManager(BattlePlugin plugin) {
         super(plugin);
     }
 

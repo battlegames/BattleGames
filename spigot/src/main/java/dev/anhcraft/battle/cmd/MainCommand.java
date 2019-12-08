@@ -31,7 +31,7 @@ import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.battle.system.handlers.GunHandler;
+import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.utils.ItemUtil;
@@ -343,7 +343,7 @@ public class MainCommand extends BaseCommand{
         if(bi instanceof Gun){
             Gun g = (Gun) bi;
             g.getMagazine().resetAmmo();
-            player.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(g, false));
+            player.getInventory().setItemInMainHand(plugin.gunManager.createGun(g, false));
             plugin.chatManager.sendPlayer(player, "gun.ammo_reloaded");
         } else {
             plugin.chatManager.sendPlayer(player, "items.not_gun");

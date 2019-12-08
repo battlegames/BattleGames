@@ -29,8 +29,8 @@ import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.inventory.items.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
-import dev.anhcraft.battle.system.handlers.GrenadeHandler;
-import dev.anhcraft.battle.system.handlers.GunHandler;
+import dev.anhcraft.battle.system.managers.item.GrenadeManager;
+import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -178,9 +178,9 @@ public class DeathmatchController extends ModeController {
             else {
                 ItemType type = event.getItemModel().getItemType();
                 if (type == ItemType.GUN)
-                    plugin.getHandler(GunHandler.class).selectGun(event.getPlayer(), (GunModel) event.getItemModel());
+                    plugin.gunManager.selectGun(event.getPlayer(), (GunModel) event.getItemModel());
                 else if (type == ItemType.GRENADE)
-                    plugin.getHandler(GrenadeHandler.class).selectGrenade(event.getPlayer(), (GrenadeModel) event.getItemModel());
+                    plugin.grenadeManager.selectGrenade(event.getPlayer(), (GrenadeModel) event.getItemModel());
                 else
                     plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_disabled_item_type"));
             }

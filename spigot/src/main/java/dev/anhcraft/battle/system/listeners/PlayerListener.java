@@ -37,8 +37,6 @@ import dev.anhcraft.battle.api.misc.MouseClick;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
-import dev.anhcraft.battle.system.handlers.GrenadeHandler;
-import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
@@ -97,7 +95,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void quit(PlayerQuitEvent event){
         plugin.guiManager.destroyWindow(event.getPlayer());
         plugin.gameManager.quit(event.getPlayer());
-        plugin.getHandler(GunHandler.class).handleZoomOut(event.getPlayer());
+        plugin.gunManager.handleZoomOut(event.getPlayer());
         plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
 
@@ -151,16 +149,16 @@ public class PlayerListener extends BattleComponent implements Listener {
                     if(item instanceof Gun && (act1 || act2)){
                         Gun gun = (Gun) item;
                         if(act1){
-                            if(plugin.getHandler(GunHandler.class).shoot(game, p, gun)) {
-                                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                            if(plugin.gunManager.shoot(game, p, gun)) {
+                                p.getInventory().setItemInMainHand(plugin.gunManager.createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                             }
                         } else {
-                            if(plugin.getHandler(GunHandler.class).handleZoomIn(game, p, gun)) {
-                                p.getInventory().setItemInMainHand(plugin.getHandler(GunHandler.class).createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
+                            if(plugin.gunManager.handleZoomIn(game, p, gun)) {
+                                p.getInventory().setItemInMainHand(plugin.gunManager.createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                             }
                         }
                     } else if(item instanceof Grenade && act3){
-                        if(plugin.getHandler(GrenadeHandler.class).throwGrenade(p, (Grenade) item)){
+                        if(plugin.grenadeManager.throwGrenade(p, (Grenade) item)){
                             if(event.getHand() == EquipmentSlot.HAND) {
                                 ItemStack i = p.getInventory().getItemInMainHand();
                                 i.setAmount(i.getAmount() - 1);
@@ -231,7 +229,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(newItem instanceof Gun) {
                     GunModel gm = ((Gun) newItem).getModel();
                     if(gm != null) {
-                        plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
+                        plugin.gunManager.reduceSpeed(player, gm);
                         updateSecondaryGunSkin(player, gm);
                     }
                 }
@@ -243,16 +241,16 @@ public class PlayerListener extends BattleComponent implements Listener {
                     GunModel gm = ((Gun) newItem).getModel();
                     if(gm != null) {
                         if(oldItem instanceof Gun){
-                            if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, gm)){
+                            if(!plugin.gunManager.handleZoomOut(player, gm)){
                                 player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
                                 player.setFlySpeed(plugin.getDefaultFlyingSpeed());
                             }
                         }
-                        plugin.getHandler(GunHandler.class).reduceSpeed(player, gm);
+                        plugin.gunManager.reduceSpeed(player, gm);
                         updateSecondaryGunSkin(player, gm);
                     }
                 } else if(oldItem instanceof Gun){
-                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
+                    if(!plugin.gunManager.handleZoomOut(player, null)){
                         player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
                         player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
                     }
@@ -263,7 +261,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             else {
                 if(oldItem instanceof Gun){
                     updateSecondaryGunSkin(player, null);
-                    if(!plugin.getHandler(GunHandler.class).handleZoomOut(player, null)){
+                    if(!plugin.gunManager.handleZoomOut(player, null)){
                         player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
                         player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
                     }
@@ -349,7 +347,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 ((ModeController) c).cancelReloadGun(e.getEntity());
             });
 
-            plugin.getHandler(GunHandler.class).handleZoomOut(e.getEntity());
+            plugin.gunManager.handleZoomOut(e.getEntity());
         }
     }
 

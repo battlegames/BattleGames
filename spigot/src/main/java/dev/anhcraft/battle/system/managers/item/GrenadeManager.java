@@ -18,8 +18,9 @@
  *
  */
 
-package dev.anhcraft.battle.system.handlers;
+package dev.anhcraft.battle.system.managers.item;
 
+import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.inventory.items.Grenade;
 import dev.anhcraft.battle.api.inventory.items.GrenadeModel;
@@ -35,8 +36,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GrenadeHandler extends Handler {
-    public GrenadeHandler(BattlePlugin plugin) {
+public class GrenadeManager extends BattleComponent {
+    public GrenadeManager(BattlePlugin plugin) {
         super(plugin);
     }
 

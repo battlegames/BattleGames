@@ -28,7 +28,7 @@ import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.system.handlers.GunHandler;
+import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
@@ -221,7 +221,7 @@ public abstract class ModeController extends BattleComponent implements Listener
                 .setVariable("b", maxBullet).evaluate();
         if(reloadTime <= 0) return;
 
-        plugin.getHandler(GunHandler.class).handleZoomOut(player, gm);
+        plugin.gunManager.handleZoomOut(player, gm);
 
         double maxTime = reloadTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
         int bullerPerTime = (int) Math.floor((maxBullet - currentBullet) / maxTime);
@@ -235,7 +235,7 @@ public abstract class ModeController extends BattleComponent implements Listener
             if(now > maxTime){
                 gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
                 gun.setNextSpray(-1);
-                player.getInventory().setItem(slot, plugin.getHandler(GunHandler.class).createGun(gun, false));
+                player.getInventory().setItem(slot, plugin.gunManager.createGun(gun, false));
                 RELOADING_GUN.remove(player.getUniqueId()).run();
             } else {
                 playerBossBar.getBar().setProgress(MathUtil.clampDouble(now / maxTime, 0, 1));

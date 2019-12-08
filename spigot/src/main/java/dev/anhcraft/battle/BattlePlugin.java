@@ -33,6 +33,7 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
+import dev.anhcraft.battle.system.managers.item.ItemManager;
 import dev.anhcraft.battle.utils.info.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
@@ -48,9 +49,8 @@ import dev.anhcraft.battle.gui.menu.market.CategoryMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
 import dev.anhcraft.battle.gui.menu.market.ProductMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.ProductMenu;
-import dev.anhcraft.battle.system.handlers.GrenadeHandler;
-import dev.anhcraft.battle.system.handlers.GunHandler;
-import dev.anhcraft.battle.system.handlers.Handler;
+import dev.anhcraft.battle.system.managers.item.GrenadeManager;
+import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
 import dev.anhcraft.battle.system.integrations.VaultApi;
@@ -132,7 +132,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     private final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
     private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
     private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
-    private final Map<Class<? extends Handler>, Handler> HANDLERS = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private final Market MARKET = new Market();
     public final GeneralConfig GENERAL_CONF = new GeneralConfig();
@@ -144,6 +143,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public DataManager dataManager;
     public TaskHelper taskHelper;
     public ItemManager itemManager;
+    public GunManager gunManager;
+    public GrenadeManager grenadeManager;
     public GuiManager guiManager;
     public ScoreboardRenderer scoreboardRenderer;
     public BossbarRenderer bossbarRenderer;
@@ -196,10 +197,10 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         chatManager = new ChatManager(this);
         titleProvider = new TitleManager(this);
         itemManager = new ItemManager(this);
+        gunManager = new GunManager(this);
+        grenadeManager = new GrenadeManager(this);
         guiManager = new GuiManager(this);
         gameManager = new GameManager(this);
-        HANDLERS.put(GunHandler.class, new GunHandler(this));
-        HANDLERS.put(GrenadeHandler.class, new GrenadeHandler(this));
 
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
@@ -783,10 +784,6 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
                     return "Error! (data class="+data.getClass().getSimpleName()+")";
                 }
         ));
-    }
-
-    public <T extends Handler> T getHandler(Class<T> clazz){
-        return (T) HANDLERS.get(clazz);
     }
 
     public PapiExpansion getPapiExpansion() {
