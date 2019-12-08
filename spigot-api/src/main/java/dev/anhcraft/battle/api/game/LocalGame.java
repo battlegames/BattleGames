@@ -22,7 +22,7 @@ package dev.anhcraft.battle.api.game;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import dev.anhcraft.battle.api.events.GameEndEvent;
+import dev.anhcraft.battle.api.events.game.GameEndEvent;
 import dev.anhcraft.battle.api.misc.DamageReport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

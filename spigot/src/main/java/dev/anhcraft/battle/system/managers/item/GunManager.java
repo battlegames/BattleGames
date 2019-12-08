@@ -21,7 +21,7 @@ package dev.anhcraft.battle.system.managers.item;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.WeaponDamageEvent;
+import dev.anhcraft.battle.api.events.game.GameWeaponEvent;
 import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.misc.DamageReport;
@@ -260,7 +260,7 @@ public class GunManager extends BattleComponent {
                     if(ve.equals(player) || !ent.getValue().contains(loc)) continue;
                     DamageReport dr = new DamageReport(player, b.getDamage());
                     dr.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
-                    WeaponDamageEvent event = new WeaponDamageEvent(localGame, dr, ve, gunItem);
+                    GameWeaponEvent event = new GameWeaponEvent(localGame, dr, ve, gunItem);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) continue;
 

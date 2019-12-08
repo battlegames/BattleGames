@@ -22,7 +22,7 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
@@ -293,7 +293,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @EventHandler
-    public void damage(PlayerWeaponDamageEvent e) {
+    public void damage(GamePlayerWeaponEvent e) {
         if(e.getGame().getMode() != getMode()) return;
         TeamManager<BWTeam> x = TEAM.get(e.getGame());
         if(x.getTeam(e.getDamager()) == x.getTeam(e.getPlayer())) e.setCancelled(true);

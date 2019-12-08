@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.events;
+package dev.anhcraft.battle.api.events.game;
 
 import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.items.Weapon;
@@ -28,7 +28,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class WeaponDamageEvent extends GameEvent implements Cancellable {
+public class GameWeaponEvent extends GameEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
     private DamageReport report;
@@ -36,7 +36,7 @@ public class WeaponDamageEvent extends GameEvent implements Cancellable {
     private Weapon weapon;
     private boolean cancelled;
 
-    public WeaponDamageEvent(@NotNull LocalGame game, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon) {
+    public GameWeaponEvent(@NotNull LocalGame game, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon) {
         super(game);
         this.report = report;
         this.entity = entity;

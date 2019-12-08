@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
@@ -29,8 +29,6 @@ import dev.anhcraft.battle.api.game.Mode;
 import dev.anhcraft.battle.api.inventory.items.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
-import dev.anhcraft.battle.system.managers.item.GrenadeManager;
-import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -221,7 +219,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @EventHandler
-    public void damage(PlayerWeaponDamageEvent e) {
+    public void damage(GamePlayerWeaponEvent e) {
         if(e.getGame().getMode() != getMode()) return;
         performCooldownMap(e.getGame(), "spawn_protection",
             cooldownMap -> {

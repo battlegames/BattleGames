@@ -17,24 +17,41 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.events;
+package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.game.Game;
+import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.inventory.items.Weapon;
+import dev.anhcraft.battle.api.misc.DamageReport;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class GameStartEvent extends GameEvent {
+public class GamePlayerWeaponEvent extends GameWeaponEvent {
     public static final HandlerList handlers = new HandlerList();
+    private GamePlayer gp1;
+    private GamePlayer gp2;
 
-    public GameStartEvent(@NotNull Game game) {
-        super(game);
+    public GamePlayerWeaponEvent(@NotNull LocalGame localGame, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon, @NotNull GamePlayer gp1, @NotNull GamePlayer gp2) {
+        super(localGame, report, entity, weapon);
+        this.gp1 = gp1;
+        this.gp2 = gp2;
     }
 
-    @Override
     @NotNull
-    public LocalGame getGame() {
-        return (LocalGame) game;
+    public Player getPlayer(){
+        return (Player) getEntity();
+    }
+
+    @NotNull
+    public GamePlayer getGameDamager() {
+        return gp1;
+    }
+
+    @NotNull
+    public GamePlayer getGamePlayer() {
+        return gp2;
     }
 
     @Override

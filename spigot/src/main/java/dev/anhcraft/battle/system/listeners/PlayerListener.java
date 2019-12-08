@@ -22,8 +22,8 @@ package dev.anhcraft.battle.system.listeners;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
-import dev.anhcraft.battle.api.events.WeaponDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
+import dev.anhcraft.battle.api.events.game.GameWeaponEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
@@ -180,7 +180,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void useWeapon(WeaponDamageEvent e) {
+    public void useWeapon(GameWeaponEvent e) {
         if(e.getEntity() instanceof Player) {
             Player ent = (Player) e.getEntity();
             LocalGame g1 = plugin.gameManager.getGame(e.getDamager());
@@ -195,7 +195,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                         e.setCancelled(true);
                         return;
                     }
-                    PlayerWeaponDamageEvent event = new PlayerWeaponDamageEvent(g1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
+                    GamePlayerWeaponEvent event = new GamePlayerWeaponEvent(g1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
                     Bukkit.getPluginManager().callEvent(event);
                     e.setCancelled(event.isCancelled());
 

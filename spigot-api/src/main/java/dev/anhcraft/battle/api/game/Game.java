@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.api.game;
 
-import dev.anhcraft.battle.api.events.GamePhaseChangeEvent;
+import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.misc.Resettable;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.Informative;

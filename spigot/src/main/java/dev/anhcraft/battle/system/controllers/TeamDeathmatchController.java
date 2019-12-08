@@ -20,7 +20,7 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.PlayerWeaponDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
@@ -226,7 +226,7 @@ public class TeamDeathmatchController extends DeathmatchController {
     }
 
     @EventHandler
-    public void damage(PlayerWeaponDamageEvent e) {
+    public void damage(GamePlayerWeaponEvent e) {
         if(e.getGame().getMode() != getMode()) return;
         TeamManager<ABTeam> teamManager = TEAM.get(e.getGame());
         if(teamManager.getTeam(e.getDamager()) == teamManager.getTeam(e.getPlayer())) e.setCancelled(true);

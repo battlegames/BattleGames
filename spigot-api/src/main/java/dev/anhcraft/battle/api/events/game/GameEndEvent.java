@@ -17,24 +17,17 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.events;
+package dev.anhcraft.battle.api.events.game;
 
 import dev.anhcraft.battle.api.game.Game;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class GameEvent extends Event {
+public class GameEndEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
-    protected Game game;
 
-    public GameEvent(@NotNull Game game) {
-        this.game = game;
-    }
-
-    @NotNull
-    public Game getGame() {
-        return game;
+    public GameEndEvent(@NotNull Game game) {
+        super(game);
     }
 
     @Override

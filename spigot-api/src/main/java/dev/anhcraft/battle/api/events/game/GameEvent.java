@@ -17,32 +17,24 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.events;
+package dev.anhcraft.battle.api.events.game;
 
 import dev.anhcraft.battle.api.game.Game;
-import dev.anhcraft.battle.api.game.GamePhase;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class GamePhaseChangeEvent extends GameEvent {
+public class GameEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
-    private GamePhase oldPhase;
-    private GamePhase newPhase;
+    protected Game game;
 
-    public GamePhaseChangeEvent(@NotNull Game game, @NotNull GamePhase oldPhase, @NotNull GamePhase newPhase) {
-        super(game);
-        this.oldPhase = oldPhase;
-        this.newPhase = newPhase;
+    public GameEvent(@NotNull Game game) {
+        this.game = game;
     }
 
     @NotNull
-    public GamePhase getOldPhase() {
-        return oldPhase;
-    }
-
-    @NotNull
-    public GamePhase getNewPhase() {
-        return newPhase;
+    public Game getGame() {
+        return game;
     }
 
     @Override
