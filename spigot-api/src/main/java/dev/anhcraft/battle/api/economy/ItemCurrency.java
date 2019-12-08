@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public abstract class ItemCurrency implements Currency {
     @NotNull
@@ -33,7 +34,7 @@ public abstract class ItemCurrency implements Currency {
 
     @Override
     public double getBalance(@NotNull Player player) {
-        return Arrays.stream(player.getInventory().getContents()).filter(i -> i.getType() == getItemType()).count();
+        return Arrays.stream(player.getInventory().getContents()).filter(Objects::nonNull).filter(i -> i.getType() == getItemType()).mapToInt(ItemStack::getAmount).sum();
     }
 
     @Override
