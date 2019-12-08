@@ -21,23 +21,22 @@ package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.economy.Currency;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
 import dev.anhcraft.battle.api.game.GamePlayer;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.market.Transaction;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.gui.GDataRegistry;
-import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +58,6 @@ public class ProductMenu implements Pagination {
                 continue;
             }
 
-            boolean useInGamePrice = gp != null && p.getPriceIgn() >= 0;
-
             PreparedItem ic = p.getIcon().duplicate();
             if(mk.isSummaryProductInfoEnabled()){
                 List<String> lore = gp != null && mk.getSummaryProductIgnLore() != null ? mk.getSummaryProductIgnLore() : mk.getSummaryProductLore();
@@ -77,12 +74,10 @@ public class ProductMenu implements Pagination {
             Slot slot = chain.next();
             slot.setPaginationItem(ic);
             slot.setAdditionalFunction(report -> {
-                final double balance = useInGamePrice ? gp.getIgBalance().get() :
-                        VaultApi.getEconomyApi().getBalance(player);
-                final double price = useInGamePrice ? p.getPriceIgn() :
-                        p.getPriceVault();
+                Currency c = p.getCurrency().get();
+                final double balance = c.getBalance(player);
 
-                if(balance < price){
+                if(balance < p.getPrice()){
                     api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, balance));
                     return;
                 }
@@ -93,14 +88,9 @@ public class ProductMenu implements Pagination {
                 Bukkit.getPluginManager().callEvent(ev);
                 if(ev.isCancelled()) return;
 
-                if(useInGamePrice){
-                    gp.getIgBalance().addAndGet(-price);
-                } else {
-                    EconomyResponse er = VaultApi.getEconomyApi().withdrawPlayer(player, price);
-                    if(!er.transactionSuccess()){
-                        api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_failed");
-                        return;
-                    }
+                if(!c.withdraw(player, p.getPrice())){
+                    api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_failed");
+                    return;
                 }
 
                 p.givePlayer(player, pd);
@@ -109,7 +99,7 @@ public class ProductMenu implements Pagination {
                     pd.getTransactions().add(new Transaction(
                             player.getUniqueId(),
                             p.getId(),
-                            price,
+                            p.getPrice(),
                             System.currentTimeMillis()
                     ));
                 }

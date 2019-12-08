@@ -13,6 +13,9 @@ item_type:
 ab_team:
   team_a: Team A
   team_b: Team B
+currency:
+  vault: $%s
+  ing: %s coins
 medal:
   headshot_title: "&l%battle_icon_headshot%"
   headshot_subtitle: "&bHeadshot"
@@ -248,14 +251,9 @@ gui:
       - "&f"
       - "&bThis option only allows who are attending a game"
       - "&bable to view this product."
-    set_pv_name: "&dSet price (Vault)"
-    set_pv_lore:
+    set_price_name: "&dSet price"
+    set_price_lore:
       - "&fClick here to set the price of this item"
-      - "&f(with economy provided by Vault)"
-    set_pign_name: "&dSet in-game price"
-    set_pign_lore:
-      - "&fClick here to set the price of this item"
-      - "&fwhen buying in-game"
     remove_name: "&cRemove"
     remove_lore:
       - "&fClick here to remove this product"

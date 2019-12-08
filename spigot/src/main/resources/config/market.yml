@@ -7,12 +7,7 @@ options:
     enabled: true
     lore:
       - "&f"
-      - "&fPrice: &d${__product_price_vault__}"
-      - "&f"
-      - "&e>> Click to purchase <<"
-    ign_lore:
-      - "&f"
-      - "&fPrice: &d{__product_price_ign__} coins"
+      - "&fPrice: &d$formatted_price$"
       - "&f"
       - "&e>> Click to purchase <<"
 
@@ -35,8 +30,8 @@ categories:
           material: redstone
           lore:
             - "&fBoost your health!"
-        price:
-          vault: 75
+        currency: vault
+        price: 75
         executions:
           give_perks:
             - health_boost
@@ -47,8 +42,8 @@ categories:
           lore:
             - "&aSpeed up your movement!"
             - "&eAvailable until the game ends"
-        price:
-          vault: 150
+        currency: vault
+        price: 150
         executions:
           give_perks:
             - speed
@@ -64,8 +59,8 @@ categories:
         icon:
           name: "&aSnacks"
           material: cookie
-        price:
-          vault: 20
+        currency: vault
+        price: 20
         executions:
           give_items:
             vanilla:
@@ -79,8 +74,8 @@ categories:
         icon:
           name: "&4Meat"
           material: cookie
-        price:
-          vault: 36
+        currency: vault
+        price: 36
         executions:
           give_items:
             vanilla:
@@ -99,8 +94,8 @@ categories:
         icon:
           name: "&aBuy 200 in-game exp"
           material: ice
-        price:
-          vault: 5000
+        currency: vault
+        price: 5000
         executions:
           give_exp:
             vanilla: 200
@@ -110,8 +105,8 @@ categories:
           material: ice
           lore:
             - "&eBonus: Get 20% Battle exp"
-        price:
-          vault: 25000
+        currency: vault
+        price: 25000
         executions:
           give_exp:
             vanilla: 1000
@@ -120,8 +115,8 @@ categories:
         icon:
           name: "&bFlying&f ability"
           material: feather
-        price:
-          in_game: 100
+        currency: ing
+        price: 200
         in_game_only: true
         executions:
           perform_commands:

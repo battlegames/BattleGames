@@ -70,25 +70,14 @@ public class MarketHandler extends GuiHandler {
         }
     }
 
-    @Function("price_vault_editor")
+    @Function("price_editor")
     public void pve(SlotReport report){
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
         if(p == null) return;
-        w.getDataContainer().put(GDataRegistry.VALUE, p.getPriceVault());
+        w.getDataContainer().put(GDataRegistry.VALUE, p.getPrice());
         w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
-            p.setPriceVault(r.asDouble());
-        });
-    }
-
-    @Function("price_ign_editor")
-    public void pie(SlotReport report){
-        Window w = report.getView().getWindow();
-        Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(p == null) return;
-        w.getDataContainer().put(GDataRegistry.VALUE, p.getPriceIgn());
-        w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
-            p.setPriceIgn(r.asDouble());
+            p.setPrice(r.asDouble());
         });
     }
 

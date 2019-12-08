@@ -23,6 +23,7 @@ package dev.anhcraft.battle.api.market;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.api.ApiProvider;
+import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
 import dev.anhcraft.battle.api.misc.ConfigurableObject;
@@ -34,10 +35,7 @@ import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -70,16 +68,14 @@ public class Product extends ConfigurableObject implements Informative {
     @IgnoreValue(ifNull = true)
     private PreparedItem icon = DEFAULT_ICON.duplicate();
 
-    @Key("price.vault")
-    @Explanation("The cost of this product (in case of trading through Vault)")
-    private double priceVault;
+    @Key("currency")
+    @Explanation("The currency to be used")
+    @Validation(notNull = true)
+    private CurrencyType currency;
 
-    @Key("price.in_game")
-    @Explanation({
-            "The cost of this product when purchasing in-game",
-            "Set to -1 to disable this option"
-    })
-    private double priceIgn = -1;
+    @Key("price")
+    @Explanation("The cost of this product")
+    private double price;
 
     @Key("in_game_only")
     @Explanation("Make this product only available during the game")
@@ -137,20 +133,22 @@ public class Product extends ConfigurableObject implements Informative {
         return icon;
     }
 
-    public double getPriceVault() {
-        return priceVault;
+    public double getPrice() {
+        return price;
     }
 
-    public void setPriceVault(double priceVault) {
-        this.priceVault = priceVault;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public double getPriceIgn() {
-        return priceIgn;
+    @NotNull
+    public CurrencyType getCurrency() {
+        return currency;
     }
 
-    public void setPriceIgn(double priceIgn) {
-        this.priceIgn = priceIgn;
+    public void setCurrency(@NotNull CurrencyType currency) {
+        Condition.argNotNull("currency", currency);
+        this.currency = currency;
     }
 
     public boolean isInGameOnly() {
@@ -301,9 +299,8 @@ public class Product extends ConfigurableObject implements Informative {
     @Override
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id)
-                .inform("price", priceVault) // LEGACY
-                .inform("price_vault", priceVault)
-                .inform("price_ign", priceIgn)
+                .inform("price", price)
+                .inform("currency", currency.name().toLowerCase())
                 .inform("command_count", commands.size())
                 .inform("perk_count", perks.size())
                 .inform("vanilla_item_count", vanillaItems.length)

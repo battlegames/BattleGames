@@ -1127,7 +1127,7 @@ market_product_editor:
       functions:
         - common::cancel_event
     '1':
-      positions: 1/4; 2
+      positions: 1/3; 2
       item:
         material: paper
         name: '[ gui.market_product_editor.set_igo_name ]'
@@ -1139,31 +1139,19 @@ market_product_editor:
         - common::set_window_data { lastgui; market_product_editor }
         - common::switch_gui { boolean_value_editor }
     '2':
-      positions: 2/4; 2
+      positions: 2/3; 2
       item:
         material: diamond
-        name: '[ gui.market_product_editor.set_pv_name ]'
+        name: '[ gui.market_product_editor.set_price_name ]'
         lore:
-          - '[ gui.market_product_editor.set_pv_lore ]'
+          - '[ gui.market_product_editor.set_price_lore ]'
       functions:
         - common::cancel_event
-        - market::price_vault_editor
+        - market::price_editor
         - common::set_window_data { lastgui; market_product_editor }
         - common::switch_gui { real_value_editor }
     '3':
-      positions: 3/4; 2
-      item:
-        material: diamond
-        name: '[ gui.market_product_editor.set_pign_name ]'
-        lore:
-          - '[ gui.market_product_editor.set_pign_lore ]'
-      functions:
-        - common::cancel_event
-        - market::price_ign_editor
-        - common::set_window_data { lastgui; market_product_editor }
-        - common::switch_gui { real_value_editor }
-    '4':
-      positions: 4/4; 2
+      positions: 3/3; 2
       item:
         material: barrier
         name: '[ gui.market_product_editor.remove_name ]'
@@ -1173,7 +1161,7 @@ market_product_editor:
         - common::cancel_event
         - market::remove_product
         - common::switch_gui { market_product_menu_editor }
-    '5':
+    '4':
       positions: 1/1; 4
       item:
         material: emerald
