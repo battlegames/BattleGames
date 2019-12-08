@@ -79,13 +79,6 @@ public class TeamDeathmatchController extends DeathmatchController {
         }
     }
 
-    private ABTeam nextTeam(LocalGame game) {
-        TeamManager<ABTeam> x = TEAM.get(game);
-        int a = x.countPlayers(ABTeam.TEAM_A);
-        int b = x.countPlayers(ABTeam.TEAM_B);
-        return a <= b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
-    }
-
     @Override
     public void onJoin(Player player, LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
@@ -103,10 +96,14 @@ public class TeamDeathmatchController extends DeathmatchController {
                 break;
             }
             case PLAYING: {
-                ABTeam t = nextTeam(game);
                 TeamManager<ABTeam> teamManager = TEAM.get(game);
+                int a = teamManager.countPlayers(ABTeam.TEAM_A);
+                int b = teamManager.countPlayers(ABTeam.TEAM_B);
+                ABTeam t = a <= b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
                 teamManager.addPlayer(player, t);
 
+                // don't stack these functions with the player count above
+                // this one already include the new player...
                 List<Player> ta = teamManager.getPlayers(ABTeam.TEAM_A);
                 List<Player> tb = teamManager.getPlayers(ABTeam.TEAM_B);
                 PlayerScoreboard sps = addPlayer(game, player, t);
