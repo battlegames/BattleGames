@@ -178,8 +178,9 @@ public class PlayerData implements Resettable, Serializable {
             );
             long date = map.readRequiredTag(pre+".date", Long.class);
             double price = map.readRequiredTag(pre+".price", Double.class);
+            String currency = map.readTag(pre+".currency", String.class);
             String product = map.readRequiredTag(pre+".product", String.class);
-            transactions.add(new Transaction(buyer, product, price, date));
+            transactions.add(new Transaction(buyer, product, price, currency == null ? "VAULT" : currency, date));
         }
         List boosterList = map.readTag("bst", List.class);
         if(boosterList != null){

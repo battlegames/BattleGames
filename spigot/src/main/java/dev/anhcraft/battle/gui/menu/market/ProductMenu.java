@@ -100,6 +100,7 @@ public class ProductMenu implements Pagination {
                             player.getUniqueId(),
                             p.getId(),
                             p.getPrice(),
+                            p.getCurrency().name(),
                             System.currentTimeMillis()
                     ));
                 }

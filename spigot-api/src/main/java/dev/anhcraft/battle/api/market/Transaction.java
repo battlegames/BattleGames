@@ -30,15 +30,18 @@ import java.util.UUID;
 public class Transaction implements Informative {
     private UUID buyer;
     private String product;
+    private String currency;
     private double price;
     private long date;
 
-    public Transaction(@NotNull UUID buyer, @NotNull String product, double price, long date) {
+    public Transaction(@NotNull UUID buyer, @NotNull String product, double price, @NotNull String currency, long date) {
         Condition.argNotNull("buyer", buyer);
         Condition.argNotNull("product", product);
+        Condition.argNotNull("currency", currency);
         this.buyer = buyer;
         this.product = product;
         this.price = price;
+        this.currency = currency;
         this.date = date;
     }
 
@@ -56,6 +59,11 @@ public class Transaction implements Informative {
         return price;
     }
 
+    @NotNull
+    public String getCurrency() {
+        return currency;
+    }
+
     public long getDate() {
         return date;
     }
@@ -64,6 +72,7 @@ public class Transaction implements Informative {
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("buyer", buyer.toString())
                 .inform("product", product)
+                .inform("currency", currency)
                 .inform("price", price)
                 .inform("date", date);
     }
