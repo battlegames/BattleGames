@@ -81,6 +81,19 @@ mode_ctf:
   error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
   respawn_title: "&6&lRespawn in"
   respawn_subtitle: "&e&l{__current__}"
+mode_bw:
+  player_join_broadcast: "&f{__target__} joined! (%battle_game_total_players%/%battle_arena_max_players%)"
+  player_quit_broadcast: "&f{__target__} left! (%battle_game_total_players%/%battle_arena_max_players%)"
+  countdown_title: "&a&lStart in"
+  countdown_subtitle: "&f&l{__current__}"
+  game_start_broadcast: "&bStarted the game!"
+  respawn_title: "&e&lRespawn in"
+  respawn_subtitle: "&f&l{__current__}"
+  bed_status:
+    present: "&a✔"
+    destroyed: "&c✘"
+  bed_destroy_broadcast: "&e%s&c has destroyed the bed of team &e%s"
+  respawn_unable: "&bYou are no longer able to respawn after death. Be careful!"
 gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."

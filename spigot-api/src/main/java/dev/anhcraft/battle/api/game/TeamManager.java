@@ -19,6 +19,10 @@
  */
 package dev.anhcraft.battle.api.game;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import dev.anhcraft.battle.api.misc.Resettable;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -37,6 +42,10 @@ public class TeamManager<T extends Team> implements Resettable {
     @Nullable
     public Collection<T> getTeams() {
         return PLAYER_COUNTER.keySet();
+    }
+
+    public void initTeam(@Nullable T team) {
+        PLAYER_COUNTER.put(team, 0);
     }
 
     public void addPlayer(@NotNull Player player, @NotNull T team){
@@ -56,6 +65,7 @@ public class TeamManager<T extends Team> implements Resettable {
         }
     }
 
+    @Nullable
     public T removePlayer(@NotNull Player player){
         synchronized (LOCK){
             T last = PLAYER_MAP.remove(player);
@@ -73,13 +83,25 @@ public class TeamManager<T extends Team> implements Resettable {
         return PLAYER_COUNTER.getOrDefault(team, 0);
     }
 
+    public long countPresentTeams() {
+        return PLAYER_COUNTER.entrySet().stream().filter(f -> f.getValue() > 0).count();
+    }
+
     @NotNull
     public Optional<T> nextEmptyTeam() {
         return PLAYER_COUNTER.entrySet().stream().filter(f -> f.getValue() == 0).findFirst().map(Map.Entry::getKey);
     }
 
     @NotNull
+    public Optional<T> nextAvailableTeam(int maxTeammates) {
+        return PLAYER_COUNTER.entrySet().stream()
+                .filter(f -> f.getValue() >= 0 && f.getValue() < maxTeammates)
+                .findFirst().map(Map.Entry::getKey);
+    }
+
+    @NotNull
     public List<Player> getPlayers(@NotNull T team) {
+        Preconditions.checkNotNull(team);
         return PLAYER_MAP.entrySet().stream()
                 .filter(p -> p.getValue() == team)
                 .map(Map.Entry::getKey)
@@ -106,6 +128,18 @@ public class TeamManager<T extends Team> implements Resettable {
                             item -> new ArrayList<>(item.stream().map(Map.Entry::getKey)
                                     .map(valueFunc).collect(Collectors.toList())))
                     );
+        }
+    }
+
+    @NotNull
+    public Multimap<T, Player> toMultimap(){
+        return toMultimap(UnaryOperator.identity());
+    }
+
+    @NotNull
+    public <R> Multimap<T, R> toMultimap(@NotNull Function<Player, R> valueFunc){
+        synchronized (LOCK) {
+            return PLAYER_MAP.entrySet().stream().collect(Multimaps.toMultimap(Map.Entry::getValue, playerTEntry -> valueFunc.apply(playerTEntry.getKey()), (Supplier<Multimap<T, R>>) HashMultimap::create));
         }
     }
 

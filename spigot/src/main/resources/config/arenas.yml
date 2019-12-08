@@ -176,3 +176,113 @@ rmt_arena:
     item_selection_time: 200
     spawn_protection_time: 40
     respawn_waiting_time: 200
+
+bw_demo:
+  name: "&aExample Arena 4"
+  mode: bw
+  max_time: 72000
+  max_players: 24
+  icon:
+    material: grass
+    name: "{__arena_name__}"
+    lore:
+      - "&bMode: &f{__mode_name__}"
+      - "&bPlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
+  final_exp_formula: "a*3+b*20-c*7.7+d*15.75"
+  final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
+  rollback:
+    enabled: true
+    provider: SLIME_WORLD
+    worlds:
+      - lighthouse
+  end_firework:
+    power: 4
+    effects:
+      '1':
+        type: ball_large
+        primary_colors:
+          - red
+          - green
+          - yellow
+        fade_colors:
+          - teal
+          - purple
+          - aqua
+  end_delay: 100
+  attr:
+    min_players: 6
+    countdown_time: 300
+    waiting_spawn_points:
+      - lighthouse 3.35 127 -3.43 -2.10 3.60
+      - lighthouse -0.43 127 0.52 -91.95 2.25
+      - lighthouse 3.44 127 4.45 -179.40 2.85
+      - lighthouse 6.79 127 0.35 -271.35 2.70
+    respawn_waiting_time: 300
+    spawn_protection_time: 60
+    team_size: 3
+    teams:
+      '1':
+        name: "&fWhite"
+        color: white
+        spawn_points:
+          - lighthouse 30.39 65 -88.76 -0.45 -1.05
+          - lighthouse 27.80 65 -88.75 -0.45 -1.05
+          - lighthouse 29.36 65 -88.07 -0.45 -1.05
+        bed_location: lighthouse 29.53 66.56 -74.76 0 0
+      '2':
+        name: "&bCyan"
+        color: cyan
+        spawn_points:
+          - lighthouse -20.62 65 -88.37 -359.85 -0.30
+          - lighthouse -22.97 65 -88.38 -359.85 -0.30
+          - lighthouse -21.98 65 -87.81 -357.75 -0.60
+        bed_location: lighthouse -22.44 66.56 -76.01 0 0
+      '3':
+        name: "&eYellow"
+        color: yellow
+        spawn_points:
+          - lighthouse -84.87 65 -26.37 -85.80 -3.30
+          - lighthouse -85.03 65 -24.21 -93 -1.05
+          - lighthouse -84.43 65 -25.50 -88.95 -2.70
+        bed_location: lighthouse -71.96 66.56 -25.58 0 0
+      '4':
+        name: "&aLime"
+        color: lime
+        spawn_points:
+          - lighthouse -85.88 65 26.93 -89.85 6.30
+          - lighthouse -85.88 65 24.35 -89.85 6.30
+          - lighthouse -85.42 65 25.89 -89.40 -3.15
+        bed_location: lighthouse -71.94 66.56 26.50 0 0
+      '5':
+        name: "&1Blue"
+        color: blue
+        spawn_points:
+          - lighthouse -23.21 65 89.21 -175.65 -0.45
+          - lighthouse -21.11 65 89.18 -184.05 -1.20
+          - lighthouse -22.58 65 88.23 -179.25 -0.60
+        bed_location: lighthouse -22.55 66.56 76.02 0 0
+      '6':
+        name: "&cRed"
+        color: red
+        spawn_points:
+          - lighthouse 30.28 65 88.80 -181.35 -2.55
+          - lighthouse 28.65 65 89.59 -178.95 -2.25
+          - lighthouse 26.95 65 89.26 -167.10 -1.20
+        bed_location: lighthouse 29.50 66.56 76.25 0 0
+      '7':
+        name: "&7Gray"
+        color: gray
+        spawn_points:
+          - lighthouse 92.52 65 23.56 -271.20 -0.90
+          - lighthouse 93.10 65 26.30 -271.20 -0.90
+          - lighthouse 92.48 65 28.64 -255.60 -0.75
+        bed_location: lighthouse 79.16 66.56 26.43 0 0
+      '8':
+        name: "&dPink"
+        color: pink
+        spawn_points:
+          - lighthouse 91.98 65 -23.18 -263.25 -1.35
+          - lighthouse 92.67 65 -27.31 -277.20 -0.30
+          - lighthouse 92.03 65 -25.16 -269.55 -0.75
+        bed_location: lighthouse 79.12 66.56 -25.70 0 0
+

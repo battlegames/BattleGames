@@ -84,6 +84,11 @@ public class Mode implements Informative {
      */
     public static final Mode CTF = registerMode(new Mode("ctf"));
 
+    /**
+     * ID: <b>bw</b>
+     */
+    public static final Mode BEDWAR = registerMode(new Mode("bw"));
+
     private String id;
     private String name;
     private String description;

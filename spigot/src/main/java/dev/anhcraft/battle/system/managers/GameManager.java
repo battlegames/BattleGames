@@ -33,10 +33,7 @@ import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
-import dev.anhcraft.battle.system.controllers.CTFController;
-import dev.anhcraft.battle.system.controllers.DeathmatchController;
-import dev.anhcraft.battle.system.controllers.ModeController;
-import dev.anhcraft.battle.system.controllers.TeamDeathmatchController;
+import dev.anhcraft.battle.system.controllers.*;
 import dev.anhcraft.battle.system.handlers.GunHandler;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
@@ -66,6 +63,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         initController(Mode.DEATHMATCH, new DeathmatchController(plugin));
         initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
         initController(Mode.CTF, new CTFController(plugin));
+        initController(Mode.BEDWAR, new BedWarController(plugin));
     }
 
     private void initController(Mode mode, ModeController controller) {
