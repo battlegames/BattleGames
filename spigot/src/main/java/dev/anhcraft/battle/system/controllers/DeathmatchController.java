@@ -187,7 +187,7 @@ public class DeathmatchController extends ModeController {
         });
     }
 
-    public boolean shouldAcceptRespawn(LocalGame game, GamePlayer gp, Player p){
+    public boolean shouldAcceptRespawn(PlayerRespawnEvent event, LocalGame game, GamePlayer gp){
         return true;
     }
 
@@ -202,8 +202,8 @@ public class DeathmatchController extends ModeController {
             if(loc.getWorld() == null) loc.setWorld(player.getWorld());
             event.setRespawnLocation(loc);
             gp.setSpectator(true);
+            if(!shouldAcceptRespawn(event, game, gp)) return;
             player.setGameMode(GameMode.SPECTATOR);
-            if(!shouldAcceptRespawn(game, gp, player)) return;
             AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
