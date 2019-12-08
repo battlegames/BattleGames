@@ -70,8 +70,8 @@ public class Product extends ConfigurableObject implements Informative {
 
     @Key("currency")
     @Explanation("The currency to be used")
-    @Validation(notNull = true)
-    private CurrencyType currency;
+    @PrettyEnum
+    private CurrencyType currency = CurrencyType.VAULT;
 
     @Key("price")
     @Explanation("The cost of this product")
