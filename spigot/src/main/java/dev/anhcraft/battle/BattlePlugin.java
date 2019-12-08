@@ -719,8 +719,8 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         ConfigUpdater u = new ConfigUpdater(getLogger());
         u.getPathRelocating().add(
                 new ConfigUpdater.PathRelocating()
-                .oldPath("categories.*.products.*.price")
-                .newPath("categories.#0.products.#1.price.vault")
+                .oldPath("categories.*.products.*.price.vault")
+                .newPath("categories.#0.products.#1.price")
                 .type(Number.class)
         );
         u.update(c);
