@@ -22,9 +22,11 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.mode.BattleCTF;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.api.misc.BattleSound;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -39,10 +41,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CTFController extends TeamDeathmatchController {
+public class CTFController extends TeamDeathmatchController implements BattleCTF {
     private final Multimap<LocalGame, TeamFlag<ABTeam>> FLAG = LinkedHashMultimap.create();
 
     public CTFController(BattlePlugin plugin) {
@@ -233,5 +236,10 @@ public class CTFController extends TeamDeathmatchController {
         }
         if(a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
         else return a > b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
+    }
+
+    @Override
+    public @NotNull Collection<TeamFlag<ABTeam>> getFlags(@Nullable LocalGame game) {
+        return FLAG.get(game);
     }
 }

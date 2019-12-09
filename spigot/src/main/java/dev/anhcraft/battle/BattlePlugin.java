@@ -28,7 +28,7 @@ import dev.anhcraft.battle.api.*;
 import dev.anhcraft.battle.api.game.ABTeam;
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.game.Mode;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;

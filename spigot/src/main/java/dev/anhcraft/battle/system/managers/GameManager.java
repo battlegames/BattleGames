@@ -30,6 +30,7 @@ import dev.anhcraft.battle.api.events.game.GameQuitEvent;
 import dev.anhcraft.battle.api.game.*;
 import dev.anhcraft.battle.api.misc.BattleFirework;
 import dev.anhcraft.battle.api.misc.Booster;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;

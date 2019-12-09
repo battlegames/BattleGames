@@ -20,8 +20,10 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.mode.BattleTeamDeathmatch;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.game.*;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -35,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class TeamDeathmatchController extends DeathmatchController {
+public class TeamDeathmatchController extends DeathmatchController implements BattleTeamDeathmatch {
     protected final Map<LocalGame, TeamManager<ABTeam>> TEAM = new HashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
@@ -270,5 +272,10 @@ public class TeamDeathmatchController extends DeathmatchController {
             return sa.getAverage() > sb.getAverage() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
         else
             return sa.getSum() > sb.getSum() ? ABTeam.TEAM_A : ABTeam.TEAM_B;
+    }
+
+    @Override
+    public @Nullable TeamManager<ABTeam> getTeamManager(@Nullable LocalGame game) {
+        return TEAM.get(game);
     }
 }

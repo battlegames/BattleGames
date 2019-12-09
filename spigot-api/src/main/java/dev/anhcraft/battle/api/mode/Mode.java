@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api.game;
+package dev.anhcraft.battle.api.mode;
 
 import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.BattleModeController;

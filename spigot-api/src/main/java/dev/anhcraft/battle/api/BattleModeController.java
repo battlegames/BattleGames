@@ -22,7 +22,7 @@ package dev.anhcraft.battle.api;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.game.Mode;
+import dev.anhcraft.battle.api.mode.Mode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;

@@ -21,10 +21,12 @@ package dev.anhcraft.battle.system.controllers;
 
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.mode.BattleBedWar;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.game.*;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -42,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class BedWarController extends DeathmatchController {
+public class BedWarController extends DeathmatchController implements BattleBedWar {
     protected final Map<LocalGame, TeamManager<BWTeam>> TEAM = new HashMap<>();
     protected final Map<BlockPosition, BWTeam> BEDS = new HashMap<>();
 
@@ -337,5 +339,15 @@ public class BedWarController extends DeathmatchController {
         tm.reset();
 
         plugin.gameManager.handleEnd(game);
+    }
+
+    @Override
+    public @Nullable TeamManager<BWTeam> getTeamManager(@NotNull LocalGame game) {
+        return TEAM.get(game);
+    }
+
+    @Override
+    public @Nullable BWTeam getTeamFromBed(@NotNull BlockPosition position) {
+        return BEDS.get(position);
     }
 }

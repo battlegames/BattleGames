@@ -25,7 +25,7 @@ import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.game.GamePhase;
 import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.game.Mode;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.inventory.items.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.items.GunModel;
 import dev.anhcraft.battle.api.inventory.items.ItemType;
