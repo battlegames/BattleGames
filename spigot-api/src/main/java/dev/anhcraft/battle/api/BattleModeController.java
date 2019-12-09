@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
+import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.game.LocalGame;
 import dev.anhcraft.battle.api.game.Mode;
 import org.bukkit.entity.Player;
@@ -31,43 +32,48 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface BattleModeController {
-    default boolean canJoin(Player player, LocalGame game){
+    @NotNull
+    default GamePlayer makeGamePlayer(@NotNull Player player){
+        return new GamePlayer(player);
+    }
+
+    default boolean canJoin(@NotNull Player player, @NotNull LocalGame game){
         return true;
     }
 
-    void onJoin(Player player, LocalGame game);
+    void onJoin(@NotNull Player player, @NotNull LocalGame game);
 
-    void onEnd(LocalGame game);
+    void onEnd(@NotNull LocalGame game);
 
-    default void onQuit(Player player, LocalGame game){
-
-    }
-
-    default void onRespawn(PlayerRespawnEvent event, LocalGame game){
+    default void onQuit(@NotNull Player player, @NotNull LocalGame game){
 
     }
 
-    default void onTick(LocalGame game){
+    default void onRespawn(@NotNull PlayerRespawnEvent event, @NotNull LocalGame game){
 
     }
 
-    default void onDeath(PlayerDeathEvent event, LocalGame game){
+    default void onTick(@NotNull LocalGame game){
 
     }
 
-    default void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame game){
+    default void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
 
     }
 
-    default void onDropItem(PlayerDropItemEvent event, LocalGame game){
+    default void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game){
 
     }
 
-    default void onClickInventory(InventoryClickEvent event, LocalGame game, Player player){
+    default void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game){
 
     }
 
-    default void onChooseItem(ItemChooseEvent event, LocalGame game){
+    default void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player){
+
+    }
+
+    default void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
 
     }
 

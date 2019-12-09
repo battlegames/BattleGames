@@ -106,7 +106,7 @@ public class GameManager extends BattleComponent implements BattleGameManager {
     }
 
     private Game join(Player player, LocalGame localGame, BattleModeController controller) {
-        GamePlayer gp = new GamePlayer(player);
+        GamePlayer gp = controller.makeGamePlayer(player);
         gp.getIgBalance().set(plugin.GENERAL_CONF.getIgEcoInitBalance());
         localGame.getPlayers().put(player, gp);
         PLAYER_GAME_MAP.put(player.getUniqueId(), localGame);

@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -94,7 +95,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @Override
-    public void onTick(LocalGame game){
+    public void onTick(@NotNull LocalGame game){
         TeamManager<BWTeam> x = TEAM.get(game);
         if(x != null && game.getCurrentTime().get() > 100 && x.countPresentTeams() <= 1) {
             game.end();
@@ -102,7 +103,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @Override
-    public void onJoin(Player player, LocalGame game) {
+    public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
         int m = Math.max(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
@@ -148,7 +149,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @Override
-    public void onQuit(Player player, LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
         super.onQuit(player, game);
         TeamManager<BWTeam> team = TEAM.get(game);
         if(team != null) {
@@ -226,7 +227,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @Override
-    public void onChooseItem(ItemChooseEvent event, LocalGame game){
+    public void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
         // prevent use battle items
     }
 
@@ -309,7 +310,7 @@ public class BedWarController extends DeathmatchController {
     }
 
     @Override
-    public void onEnd(LocalGame game) {
+    public void onEnd(@NotNull LocalGame game) {
         cancelAllTasks(game);
         TeamManager<BWTeam> tm = TEAM.remove(game);
 

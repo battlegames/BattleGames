@@ -38,6 +38,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -81,7 +82,7 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
-    public void onJoin(Player player, LocalGame game) {
+    public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         super.onJoin(player, game);
 
         Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
@@ -93,7 +94,7 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
-    public void onQuit(Player player, LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
         super.onQuit(player, game);
 
         Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
@@ -210,7 +211,7 @@ public class CTFController extends TeamDeathmatchController {
     }
 
     @Override
-    public void onEnd(LocalGame game) {
+    public void onEnd(@NotNull LocalGame game) {
         super.onEnd(game);
 
         FLAG.removeAll(game).forEach(f -> {

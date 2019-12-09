@@ -69,14 +69,14 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onDeath(PlayerDeathEvent event, LocalGame game){
+    public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
         plugin.taskHelper.newTask(() -> {
             event.getEntity().spigot().respawn();
         });
     }
 
     @Override
-    public void onSwapItem(PlayerSwapHandItemsEvent event, LocalGame game){
+    public void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game){
         BattleItem item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
         if(item instanceof Gun){
             Gun gun = (Gun) item;
@@ -86,13 +86,13 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onDropItem(PlayerDropItemEvent event, LocalGame game){
+    public void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game){
         BattleItem item = plugin.itemManager.read(event.getItemDrop().getItemStack());
         if(item != null) event.setCancelled(true);
     }
 
     @Override
-    public void onClickInventory(InventoryClickEvent event, LocalGame game, Player player){
+    public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player){
         if(event.getClickedInventory() instanceof PlayerInventory){
             BattleItem item = plugin.itemManager.read(event.getCurrentItem());
             if(item != null) event.setCancelled(true);

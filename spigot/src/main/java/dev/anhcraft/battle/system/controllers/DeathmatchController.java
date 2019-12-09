@@ -41,6 +41,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -58,7 +59,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onQuit(Player player, LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
         broadcast(game, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
         for (Player p : game.getPlayers().keySet()){
             PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
@@ -69,7 +70,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onJoin(Player player, LocalGame game) {
+    public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
         int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
         switch (game.getPhase()){
@@ -167,7 +168,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onChooseItem(ItemChooseEvent event, LocalGame game){
+    public void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
         if(game.getPhase() != GamePhase.PLAYING) return;
         performCooldownMap(game, "item_selection", cooldownMap -> {
             int t = game.getArena().getAttributes().getInt("item_selection_time");
@@ -190,7 +191,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onRespawn(PlayerRespawnEvent event, LocalGame game) {
+    public void onRespawn(@NotNull PlayerRespawnEvent event, @NotNull LocalGame game) {
         Player player = event.getPlayer();
         GamePlayer gp = game.getPlayer(player);
         if (gp != null) {
@@ -229,7 +230,7 @@ public class DeathmatchController extends ModeController {
     }
 
     @Override
-    public void onEnd(LocalGame game) {
+    public void onEnd(@NotNull LocalGame game) {
         cancelAllTasks(game);
         clearCooldown();
 
