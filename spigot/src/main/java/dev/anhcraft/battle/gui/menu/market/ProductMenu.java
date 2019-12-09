@@ -22,6 +22,7 @@ package dev.anhcraft.battle.gui.menu.market;
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
 import dev.anhcraft.battle.api.economy.Currency;
+import dev.anhcraft.battle.api.events.PlayerPrePurchaseEvent;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
 import dev.anhcraft.battle.api.game.GamePlayer;
 import dev.anhcraft.battle.api.gui.page.Pagination;
@@ -76,24 +77,27 @@ public class ProductMenu implements Pagination {
             Slot slot = chain.next();
             slot.setPaginationItem(ic);
             slot.setAdditionalFunction(report -> {
-                Currency c = p.getCurrency().get();
-                final double balance = c.getBalance(player);
-
-                if(balance < p.getPrice()){
-                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, String.format(pf, balance)));
-                    return;
-                }
                 PlayerData pd = api.getPlayerData(player);
                 if(pd == null) return;
 
-                PlayerPurchaseEvent ev = new PlayerPurchaseEvent(player, mk, ctg, p);
+                Currency c = p.getCurrency().get();
+                final double balance = c.getBalance(player);
+
+                PlayerPrePurchaseEvent ev = new PlayerPrePurchaseEvent(player, mk, ctg, p, balance >= p.getPrice());
+                ev.setCancelled(balance < p.getPrice());
                 Bukkit.getPluginManager().callEvent(ev);
-                if(ev.isCancelled()) return;
+
+                if(!ev.hasEnoughBalance()){
+                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, String.format(pf, balance)));
+                    return;
+                } else if(ev.isCancelled()) return;
 
                 if(!c.withdraw(player, p.getPrice())){
                     api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_failed");
                     return;
                 }
+
+                Bukkit.getPluginManager().callEvent(new PlayerPurchaseEvent(player, mk, ctg, p));
 
                 p.givePlayer(player, pd);
                 api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_success");

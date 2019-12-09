@@ -21,6 +21,7 @@ package dev.anhcraft.battle.gui.menu;
 
 import dev.anhcraft.battle.api.ApiProvider;
 import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.api.events.KitReceiveEvent;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
@@ -28,6 +29,7 @@ import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.misc.Kit;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import net.md_5.bungee.api.ChatMessageType;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,8 +67,13 @@ public class KitMenu implements Pagination {
                         return;
                     }
                 }
+
                 slot.setPaginationItem(kit.getIcon().duplicate());
                 slot.setAdditionalFunction(object -> {
+                    KitReceiveEvent event = new KitReceiveEvent(player, kit);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if(event.isCancelled()) return;
+
                     kit.givePlayer(object.getPlayer(), pd);
                     pd.getKits().put(kit.getId(), System.currentTimeMillis());
                     api.getGuiManager().openTopGui(object.getPlayer(), "kit_menu");
