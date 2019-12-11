@@ -21,6 +21,7 @@
 package dev.anhcraft.battle.api.game;
 
 import com.google.common.base.Preconditions;
+import com.google.common.math.Stats;
 import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.craftkit.utils.BlockUtil;
@@ -30,6 +31,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,7 +42,9 @@ public class BWTeam implements Team {
     private List<Location> spawnPoints;
     private Block bedPart1;
     private Block bedPart2;
+    private Location centerSpawnPoint;
 
+    @SuppressWarnings("UnstableApiUsage")
     public BWTeam(@NotNull ConfigurationSection c) {
         Preconditions.checkNotNull(c);
 
@@ -63,6 +67,20 @@ public class BWTeam implements Team {
             }
         }
         Preconditions.checkNotNull(this.bedPart1);
+        List<Double> xp = new ArrayList<>();
+        List<Double> yp = new ArrayList<>();
+        List<Double> zp = new ArrayList<>();
+        for(Location sp : spawnPoints){
+            xp.add(sp.getX());
+            yp.add(sp.getY());
+            zp.add(sp.getZ());
+        }
+        centerSpawnPoint = new Location(
+                bl.getWorld(),
+                Stats.meanOf(xp),
+                Stats.meanOf(yp),
+                Stats.meanOf(zp)
+        );
     }
 
     @NotNull
@@ -89,6 +107,11 @@ public class BWTeam implements Team {
         boolean a = bedPart1.getType().name().equals("BED_BLOCK") || bedPart1.getType().name().endsWith("_BED");
         boolean b = bedPart2.getType().name().equals("BED_BLOCK") || bedPart2.getType().name().endsWith("_BED");
         return a && b;
+    }
+
+    @NotNull
+    public Location getCenterSpawnPoint() {
+        return centerSpawnPoint;
     }
 
     @Override
