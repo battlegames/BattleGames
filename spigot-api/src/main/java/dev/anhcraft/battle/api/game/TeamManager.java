@@ -39,7 +39,7 @@ public class TeamManager<T extends Team> implements Resettable {
     private final Map<T, Integer> PLAYER_COUNTER = new HashMap<>();
     private final Object LOCK = new Object();
 
-    @Nullable
+    @NotNull
     public Collection<T> getTeams() {
         return PLAYER_COUNTER.keySet();
     }
