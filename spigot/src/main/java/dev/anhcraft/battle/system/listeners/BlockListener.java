@@ -19,11 +19,10 @@
  */
 package dev.anhcraft.battle.system.listeners;
 
-import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.BattleComponent;
+import dev.anhcraft.battle.BattlePlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockListener extends BattleComponent implements Listener {
@@ -32,22 +31,7 @@ public class BlockListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void breakBlock(BlockBreakEvent event){
-        if(!event.getPlayer().hasPermission("battle.block.break")){
-            plugin.chatManager.sendPlayer(event.getPlayer(), "server.illegal_block_break");
-            event.setCancelled(true);
-            event.setDropItems(false);
-            event.setExpToDrop(0);
-        }
-    }
-
-    @EventHandler
     public void placeBlock(BlockPlaceEvent event){
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
-        if(!event.isCancelled() && !event.getPlayer().hasPermission("battle.block.place")){
-            plugin.chatManager.sendPlayer(event.getPlayer(), "server.illegal_block_place");
-            event.setCancelled(true);
-            event.setBuild(false);
-        }
     }
 }
