@@ -264,6 +264,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
 
     @Override
     public boolean shouldAcceptRespawn(PlayerRespawnEvent event, LocalGame game, GamePlayer gp){
+        if(game.getPhase() != GamePhase.PLAYING) return true;
         TeamManager<BWTeam> tm = TEAM.get(game);
         BWTeam bt = Objects.requireNonNull(tm.getTeam(event.getPlayer()));
         boolean b = bt.isBedPresent();
