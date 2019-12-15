@@ -151,6 +151,14 @@ public class Arena extends ConfigurableObject implements Informative {
     @Explanation("The delay time before the game actually ends")
     private long endDelay = 60;
 
+    @Key("result_broadcast.won")
+    @Explanation("The message to be sent to the winners")
+    private List<String> wonReport = new ArrayList<>();
+
+    @Key("result_broadcast.lost")
+    @Explanation("The message to be sent to the winners")
+    private List<String> lostReport = new ArrayList<>();
+
     @Key("rollback")
     @Explanation("Rollback settings")
     private Rollback rollback;
@@ -250,6 +258,16 @@ public class Arena extends ConfigurableObject implements Informative {
     @Nullable
     public Rollback getRollback() {
         return rollback;
+    }
+
+    @NotNull
+    public List<String> getWonReport() {
+        return wonReport;
+    }
+
+    @NotNull
+    public List<String> getLostReport() {
+        return lostReport;
     }
 
     @Override

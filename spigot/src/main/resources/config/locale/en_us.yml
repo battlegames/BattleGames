@@ -44,7 +44,6 @@ arena:
   error_full_players: "&cSorry, this arena is full! Please join later."
   error_mode_controller_unavailable: "&cInternal error: Mode controller was unavailable."
   error_attendance_refused: "&cThe mode which you're going to join refused your request."
-  reward_message: "&aYou received &f{__exp__}&a exp and &f${__money__}"
   join_failed: "&cFailed to make %s join the arena"
   join_success: "&a%s joined the arena successfully!"
   quit_failed: "&cFailed to make %s quit the game"

@@ -2,7 +2,7 @@
 # https://anhcraft.dev/cd/battle/Arena.html
 
 dm_demo:
-  name: "&aExample Arena 1"
+  name: "&aDEATHMATCH"
   mode: dm
   final_exp_formula: "a+b*30-c*10+d*5"
   final_money_formula: "a*4+b*12+d*5"
@@ -17,9 +17,19 @@ dm_demo:
   attr:
     min_players: 2
     waiting_spawn_points:
-      - dm_assault 0 0 0
+      - assault -309.37 48.00 -240.57 -270.16 5.40
+      - assault -309.23 48.00 -252.58 -272.11 3.45
+      - assault -307.24 48.00 -278.05 -1.06 5.10
+      - assault -307.50 48.00 -289.55 -1.06 4.05
     playing_spawn_points:
-      - dm_assault 0 0 0 0 0
+      - assault -369.74 37.00 -292.70 357.30 1.35
+      - assault -362.64 48.00 -216.06 256.94 8.25
+      - assault -340.42 48.00 -226.12 79.79 -1.65
+      - assault -340.60 43.00 -247.49 357.89 4.80
+      - assault -333.14 48.00 -221.80 168.89 3.00
+      - assault -367.03 40.00 -265.06 270.14 6.00
+      - assault -375.22 40.50 -236.96 179.54 1.35
+      - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
     item_selection_time: 200
     spawn_protection_time: 40
@@ -53,9 +63,28 @@ dm_demo:
           - aqua
           - orange
   end_delay: 60
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
 tdm_demo:
-  name: "&aExample Arena 2"
+  name: "&aTEAM DEATHMATCH"
   mode: tdm
   max_time: 8400
   max_players: 10
@@ -75,19 +104,61 @@ tdm_demo:
   attr:
     min_players: 2
     waiting_spawn_points:
-      - dm_assault 0 0 0
+      - assault -309.37 48.00 -240.57 -270.16 5.40
+      - assault -309.23 48.00 -252.58 -272.11 3.45
+      - assault -307.24 48.00 -278.05 -1.06 5.10
+      - assault -307.50 48.00 -289.55 -1.06 4.05
     playing_spawn_points_a:
-      - dm_assault 0 0 0
+      - assault -369.74 37.00 -292.70 357.30 1.35
+      - assault -362.64 48.00 -216.06 256.94 8.25
+      - assault -340.42 48.00 -226.12 79.79 -1.65
+      - assault -340.60 43.00 -247.49 357.89 4.80
+      - assault -333.14 48.00 -221.80 168.89 3.00
+      - assault -367.03 40.00 -265.06 270.14 6.00
+      - assault -375.22 40.50 -236.96 179.54 1.35
+      - assault -319.64 47.50 -285.61 357.29 3.45
     playing_spawn_points_b:
-      - dm_assault 0 0 0
+      - assault -369.74 37.00 -292.70 357.30 1.35
+      - assault -362.64 48.00 -216.06 256.94 8.25
+      - assault -340.42 48.00 -226.12 79.79 -1.65
+      - assault -340.60 43.00 -247.49 357.89 4.80
+      - assault -333.14 48.00 -221.80 168.89 3.00
+      - assault -367.03 40.00 -265.06 270.14 6.00
+      - assault -375.22 40.50 -236.96 179.54 1.35
+      - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
     item_selection_time: 200
     spawn_protection_time: 40
     respawn_waiting_time: 200
+  end_delay: 60
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
 ctf_demo:
-  name: "&aExample Arena 3"
+  name: "&aCTF [REMOTE]"
   mode: ctf
+  bungeecord:
+    enabled: true
+    remote_servers:
+      - "server1"
+      - "server2"
   max_time: 12000
   max_players: 8
   icon:
@@ -101,18 +172,35 @@ ctf_demo:
   attr:
     min_players: 2
     waiting_spawn_points:
-      - ctf_italy 0 0 0
+      - assault -309.37 48.00 -240.57 -270.16 5.40
+      - assault -309.23 48.00 -252.58 -272.11 3.45
+      - assault -307.24 48.00 -278.05 -1.06 5.10
+      - assault -307.50 48.00 -289.55 -1.06 4.05
     playing_spawn_points_a:
-      - ctf_italy 0 0 0
+      - assault -369.74 37.00 -292.70 357.30 1.35
+      - assault -362.64 48.00 -216.06 256.94 8.25
+      - assault -340.42 48.00 -226.12 79.79 -1.65
+      - assault -340.60 43.00 -247.49 357.89 4.80
+      - assault -333.14 48.00 -221.80 168.89 3.00
+      - assault -367.03 40.00 -265.06 270.14 6.00
+      - assault -375.22 40.50 -236.96 179.54 1.35
+      - assault -319.64 47.50 -285.61 357.29 3.45
     playing_spawn_points_b:
-      - ctf_italy 0 0 0
+      - assault -369.74 37.00 -292.70 357.30 1.35
+      - assault -362.64 48.00 -216.06 256.94 8.25
+      - assault -340.42 48.00 -226.12 79.79 -1.65
+      - assault -340.60 43.00 -247.49 357.89 4.80
+      - assault -333.14 48.00 -221.80 168.89 3.00
+      - assault -367.03 40.00 -265.06 270.14 6.00
+      - assault -375.22 40.50 -236.96 179.54 1.35
+      - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
     item_selection_time: 180
     spawn_protection_time: 60
     respawn_waiting_time: 200
     flags:
       '1':
-        location: ctf_italy 0 0 0
+        location: assault -345.41 43.00 -224.30 52.35 11.55
         display_name:
           valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
@@ -121,64 +209,49 @@ ctf_demo:
         start_capture_sound: "$entity_player_levelup"
         stop_capture_sound: "$ui_toast_challenge_complete"
       '2':
-        location: ctf_italy 0 0 0
+        location: assault -355.86 40.50 -285.70 176.70 90.00
         display_name:
           valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
           neutral: "&7Neutral"
         max_health: 15
       '3':
-        location: ctf_italy 0 0 0
+        location: assault -385.20 40.50 -262.56 201.00 88.80
         display_name:
           valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
           neutral: "&7Neutral"
         max_health: 12
       '4':
-        location: ctf_italy 0 0 0
+        location: assault -368.37 41.00 -247.33 281.70 10.95
         display_name:
           valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
           invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
           neutral: "&7Neutral"
         max_health: 15
-
-rmt_arena:
-  name: "&4Example Remote Arena"
-  mode: tdm
-  max_time: 8400
-  max_players: 16
-  bungeecord:
-    enabled: true
-    remote_servers:
-      - "server1"
-      - "server2"
-  icon:
-    material: diamond_sword
-    name: "{__arena_name__}"
-    lore:
-      - "&dMode &7>> &e{__mode_name__}"
-      - "&dPlayers &7>> &e{__game_current_time:0__}/{__arena_max_players__}"
-    enchant:
-      sharpness: 1
-    flag:
-      - hide_enchants
-  final_exp_formula: "a*2+b*28-c*8+d*3"
-  final_money_formula: "a*5+b*15+d*3"
-  attr:
-    min_players: 2
-    waiting_spawn_points:
-      - dm_assault 0 0 0
-    playing_spawn_points_a:
-      - dm_assault 0 0 0
-    playing_spawn_points_b:
-      - dm_assault 0 0 0
-    countdown_time: 300
-    item_selection_time: 200
-    spawn_protection_time: 40
-    respawn_waiting_time: 200
+  end_delay: 80
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
 bw_demo:
-  name: "&aExample Arena 4"
+  name: "&aBEDWAR"
   mode: bw
   max_time: 72000
   max_players: 16
@@ -285,4 +358,22 @@ bw_demo:
           - lighthouse 92.67 65 -27.31 -277.20 -0.30
           - lighthouse 92.03 65 -25.16 -269.55 -0.75
         bed_location: lighthouse 79.12 66.56 -25.70 0 0
-
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+${__money__}"
+      - "&b         • Exp: &e+{__exp__}"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"

@@ -35,7 +35,6 @@ arena:
   error_full_players: "&cĐấu trường đã đầy."
   error_mode_controller_unavailable: "&cLỗi hệ thống: Không tìm thấy bộ điều khiển trò chơi."
   error_attendance_refused: "&cBạn đã bị từ chối yêu cầu tham gia."
-  reward_message: "&aBạn nhận được &f{__exp__}&a exp và &f${__money__}"
   join_failed: "&cKhông thể bắt %s tham gia đấu trường"
   join_success: "&a%s đã tham gia đấu trường!"
   quit_failed: "&cKhông thể bắt %s thoát đấu trường"

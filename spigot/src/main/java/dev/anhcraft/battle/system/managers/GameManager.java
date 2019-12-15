@@ -28,7 +28,6 @@ import dev.anhcraft.battle.api.BattleModeController;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
 import dev.anhcraft.battle.api.game.*;
-import dev.anhcraft.battle.api.misc.BattleFirework;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
@@ -37,6 +36,7 @@ import dev.anhcraft.battle.system.cleaners.GameCleaner;
 import dev.anhcraft.battle.system.controllers.*;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
@@ -246,59 +246,69 @@ public class GameManager extends BattleComponent implements BattleGameManager {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
     }
 
-    public void handleEnd(LocalGame localGame) {
-        BattleFirework ebf = localGame.getArena().getEndFirework();
-        localGame.getPlayers().values().forEach(gp -> {
-            plugin.gunManager.handleZoomOut(gp.toBukkit());
-            PlayerData playerData = plugin.getPlayerData(gp.toBukkit());
-            if(playerData != null) {
-                double m = Math.max(0, localGame.getArena().calculateFinalMoney(gp));
-                long e = Math.max(0, localGame.getArena().calculateFinalExp(gp));
-                String ab = playerData.getActiveBooster();
-                if(ab != null){
-                    Booster booster = plugin.getBooster(ab);
-                    Long abd = playerData.getBoosters().get(ab);
+    public void handleEnd(LocalGame game) {
+        Arena arena = game.getArena();
+        for (GamePlayer gp : game.getPlayers().values()){
+            Player p = gp.toBukkit();
+            plugin.gunManager.handleZoomOut(p);
+            PlayerData pd = plugin.getPlayerData(p);
+            if(pd != null) {
+                double money = Math.max(0, arena.calculateFinalMoney(gp));
+                long exp = Math.max(0, arena.calculateFinalExp(gp));
+                String activeBooster = pd.getActiveBooster();
+                if(activeBooster != null){
+                    Booster booster = plugin.getBooster(activeBooster);
+                    Long abd = pd.getBoosters().get(activeBooster);
                     if(abd != null && booster != null) {
                         if(System.currentTimeMillis() - abd <= booster.getExpiryTime()*50){
-                            m *= booster.getMoneyMultiplier();
-                            e *= booster.getExpMultiplier();
+                            money *= booster.getMoneyMultiplier();
+                            exp *= booster.getExpMultiplier();
                             if(booster.getMoneyLimit() > 0){
-                                m = Math.min(m, booster.getMoneyLimit());
+                                money = Math.min(money, booster.getMoneyLimit());
                             }
                             if(booster.getExpLimit() > 0){
-                                e = Math.min(e, booster.getExpLimit());
+                                exp = Math.min(exp, booster.getExpLimit());
                             }
                         } else {
-                            playerData.getBoosters().remove(ab);
+                            pd.getBoosters().remove(activeBooster);
                         }
                     }
                 }
-                VaultApi.getEconomyApi().depositPlayer(gp.toBukkit(), m);
-                playerData.getExp().addAndGet(e);
+                VaultApi.getEconomyApi().depositPlayer(p, money);
+                pd.getExp().addAndGet(exp);
 
-                String mf = MathUtil.formatRound(m);
-                String ef = Long.toString(e);
-                plugin.chatManager.sendPlayer(gp.toBukkit(), "arena.reward_message", s -> s.replace("{__money__}", mf).replace("{__exp__}", ef));
+                String fmMoney = MathUtil.formatRound(money);
+                String fmExp = Long.toString(exp);
 
-                playerData.getKillCounter().addAndGet(gp.getKillCounter().get());
-                playerData.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
-                playerData.getAssistCounter().addAndGet(gp.getAssistCounter().get());
-                playerData.getDeathCounter().addAndGet(gp.getDeathCounter().get());
-                if(gp.isHasFirstKill()) playerData.getFirstKillCounter().incrementAndGet();
+                pd.getKillCounter().addAndGet(gp.getKillCounter().get());
+                pd.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
+                pd.getAssistCounter().addAndGet(gp.getAssistCounter().get());
+                pd.getDeathCounter().addAndGet(gp.getDeathCounter().get());
+                if(gp.isHasFirstKill()) pd.getFirstKillCounter().incrementAndGet();
                 if(gp.isWinner()) {
-                    playerData.getWinCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandWinners().forEach(s -> runCmd(s, gp.toBukkit()));
-                    if(ebf != null) ebf.spawn(gp.toBukkit().getLocation());
+                    for (String s : arena.getWonReport()) {
+                        p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
+                    }
+                    pd.getWinCounter().incrementAndGet();
+                    for (String s : arena.getEndCommandWinners()){
+                        runCmd(s, p);
+                    }
+                    if(arena.getEndFirework() != null) arena.getEndFirework().spawn(p.getLocation());
                 } else {
-                    playerData.getLoseCounter().incrementAndGet();
-                    localGame.getArena().getEndCommandLosers().forEach(s -> runCmd(s, gp.toBukkit()));
+                    for (String s : arena.getLostReport()) {
+                        p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
+                    }
+                    pd.getLoseCounter().incrementAndGet();
+                    for (String s : arena.getEndCommandLosers()){
+                        runCmd(s, p);
+                    }
                 }
             }
-        });
+        }
 
-        long ed = localGame.getArena().getEndDelay();
-        if(ed <= 0) plugin.gameManager.destroy(localGame);
-        else plugin.taskHelper.newDelayedTask(() -> plugin.gameManager.destroy(localGame), ed);
+        long ed = arena.getEndDelay();
+        if(ed <= 0) plugin.gameManager.destroy(game);
+        else plugin.taskHelper.newDelayedTask(() -> plugin.gameManager.destroy(game), ed);
     }
 
     @NotNull
