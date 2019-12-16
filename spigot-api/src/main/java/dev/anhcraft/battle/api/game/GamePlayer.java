@@ -21,6 +21,7 @@ package dev.anhcraft.battle.api.game;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.anhcraft.battle.api.misc.Resettable;
+import dev.anhcraft.battle.api.misc.TempDataContainer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GamePlayer implements Resettable {
+public class GamePlayer extends TempDataContainer implements Resettable {
     private final AtomicInteger headshotCounter = new AtomicInteger();
     private final AtomicInteger killCounter = new AtomicInteger();
     private final AtomicInteger deathCounter = new AtomicInteger();

@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.game;
 
 import com.google.common.base.Preconditions;
 import com.google.common.math.Stats;
+import dev.anhcraft.battle.api.misc.TempDataContainer;
 import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.craftkit.utils.BlockUtil;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class BWTeam implements Team {
+public class BWTeam extends TempDataContainer implements Team {
     private String name;
     private DyeColor color;
     private List<Location> spawnPoints;
