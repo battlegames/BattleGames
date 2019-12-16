@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Schema
 public class AmmoModel extends SingleSkinItem implements Attachable {
@@ -43,6 +44,11 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     @Explanation("Define bullets in this ammunition")
     @IgnoreValue(ifNull = true)
     private List<Ammo.Bullet> bullets = new ArrayList<>();
+
+    private double sumBulletDamage;
+    private double avgBulletDamage;
+    private double sumBulletKnockback;
+    private double avgBulletKnockback;
 
     public AmmoModel(@NotNull String id) {
         super(id);
@@ -62,10 +68,10 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     public void inform(@NotNull InfoHolder holder){
         super.inform(holder);
         holder.inform("bullet_count", bullets.size())
-        .inform("total_bullet_damage", bullets.stream().mapToDouble(Ammo.Bullet::getDamage).sum())
-        .inform("total_bullet_knockback", bullets.stream().mapToDouble(Ammo.Bullet::getKnockback).sum())
-        .inform("avg_bullet_damage", bullets.stream().mapToDouble(Ammo.Bullet::getDamage).average().orElse(0))
-        .inform("avg_bullet_knockback", bullets.stream().mapToDouble(Ammo.Bullet::getKnockback).average().orElse(0));
+        .inform("total_bullet_damage", sumBulletDamage)
+        .inform("total_bullet_knockback", sumBulletKnockback)
+        .inform("avg_bullet_damage", avgBulletDamage)
+        .inform("avg_bullet_knockback", avgBulletKnockback);
     }
 
     @Override
@@ -80,9 +86,15 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
         if(value != null && entry.getKey().equals("bullets")){
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Ammo.Bullet> bullets = new ArrayList<>();
-            for(String s : cs.getKeys(false)){
+            Set<String> keys = cs.getKeys(false);
+            for(String s : keys){
                 try {
-                    bullets.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), Ammo.Bullet.SCHEMA));
+                    Ammo.Bullet b = ConfigHelper.readConfig(cs.getConfigurationSection(s), Ammo.Bullet.SCHEMA);
+                    bullets.add(b);
+                    sumBulletDamage += b.getDamage();
+                    sumBulletKnockback += b.getKnockback();
+                    avgBulletDamage += b.getDamage() / keys.size();
+                    avgBulletKnockback += b.getKnockback() / keys.size();
                 } catch (InvalidValueException e) {
                     e.printStackTrace();
                 }
