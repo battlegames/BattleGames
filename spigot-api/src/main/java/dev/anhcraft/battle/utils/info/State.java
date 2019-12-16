@@ -23,14 +23,12 @@ package dev.anhcraft.battle.utils.info;
 import org.jetbrains.annotations.NotNull;
 
 public enum State {
-    YES(1),
-    NO(0),
-    ENABLED(3),
-    DISABLED(2),
-    ENABLE(5),
-    DISABLE(4),
-    TRUE(7),
-    FALSE(6);
+    ENABLED(2),
+    DISABLED(1),
+    ENABLE(4),
+    DISABLE(3),
+    TRUE(6),
+    FALSE(5);
 
     private int opposite;
     private String localePath;

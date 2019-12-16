@@ -7,8 +7,6 @@ state:
   disabled: Disabled
   enable: Enable
   disable: Disable
-  yes: Yes
-  no: No
   true: True
   false: False
 item_type:
