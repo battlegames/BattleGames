@@ -28,13 +28,11 @@ import dev.anhcraft.battle.api.*;
 import dev.anhcraft.battle.api.game.ABTeam;
 import dev.anhcraft.battle.api.game.Arena;
 import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.system.managers.item.ItemManager;
-import dev.anhcraft.battle.utils.info.*;
+import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
@@ -45,12 +43,10 @@ import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.inventory.*;
-import dev.anhcraft.battle.gui.menu.market.CategoryMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
-import dev.anhcraft.battle.gui.menu.market.ProductMenuEditor;
+import dev.anhcraft.battle.gui.menu.market.CategoryMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.ProductMenu;
-import dev.anhcraft.battle.system.managers.item.GrenadeManager;
-import dev.anhcraft.battle.system.managers.item.GunManager;
+import dev.anhcraft.battle.gui.menu.market.ProductMenuEditor;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
 import dev.anhcraft.battle.system.integrations.VaultApi;
@@ -58,12 +54,16 @@ import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
 import dev.anhcraft.battle.system.managers.*;
+import dev.anhcraft.battle.system.managers.item.GrenadeManager;
+import dev.anhcraft.battle.system.managers.item.GunManager;
+import dev.anhcraft.battle.system.managers.item.ItemManager;
 import dev.anhcraft.battle.system.messengers.BungeeMessenger;
 import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigUpdater;
+import dev.anhcraft.battle.utils.info.*;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -757,6 +757,41 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @Override
     public @NotNull GeneralConfig getGeneralConfig() {
         return GENERAL_CONF;
+    }
+
+    @Override
+    public @Nullable String getLocalizedMessage(@NotNull String path) {
+        Object o = getLocaleConf().get(path);
+        if(o == null) return null;
+        return o instanceof Collection ? ((Collection<?>) o).stream().map(s -> s.toString()).collect(Collectors.joining(", ")) : o.toString();
+    }
+
+    @Override
+    public @NotNull String getLocalizedMessage(@NotNull String path, @NotNull String def) {
+        Object o = getLocaleConf().get(path);
+        if(o == null) return def;
+        return o instanceof Collection ? ((Collection<?>) o).stream().map(s -> s.toString()).collect(Collectors.joining(", ")) : o.toString();
+    }
+
+    @Override
+    public @Nullable List<String> getLocalizedMessages(@NotNull String path) {
+        Object o = getLocaleConf().get(path);
+        if(o == null) return null;
+        return o instanceof Collection ? ((Collection<?>) o).stream().map(s -> s.toString()).collect(Collectors.toList()) : Collections.singletonList(o.toString());
+    }
+
+    @Override
+    public @NotNull List<String> getLocalizedMessages(@NotNull String path, @NotNull String def) {
+        Object o = getLocaleConf().get(path);
+        if(o == null) return Collections.singletonList(def);
+        return o instanceof Collection ? ((Collection<?>) o).stream().map(s -> s.toString()).collect(Collectors.toList()) : Collections.singletonList(o.toString());
+    }
+
+    @Override
+    public @NotNull List<String> getLocalizedMessages(@NotNull String path, @NotNull List<String> def) {
+        Object o = getLocaleConf().get(path);
+        if(o == null) return def;
+        return o instanceof Collection ? ((Collection<?>) o).stream().map(s -> s.toString()).collect(Collectors.toList()) : Collections.singletonList(o.toString());
     }
 
     @Override

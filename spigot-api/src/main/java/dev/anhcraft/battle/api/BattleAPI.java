@@ -24,9 +24,9 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.inventory.items.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +44,55 @@ public interface BattleAPI {
      */
     @NotNull
     GeneralConfig getGeneralConfig();
+
+    /**
+     * Gets the localized message.
+     * <br>
+     * If the given message is multi-lines, then they will be joined to
+     * a single line separated by commas.
+     * @param path the path to the message
+     * @return the message (or {@code null} if not found)
+     */
+    @Nullable
+    String getLocalizedMessage(@NotNull String path);
+
+    /**
+     * Gets the localized message.
+     * <br>
+     * If the given message is multi-lines, then they will be joined to
+     * a single line separated by commas.
+     * @param path the path to the message
+     * @param def the default message
+     * @return the message.
+     */
+    @NotNull
+    String getLocalizedMessage(@NotNull String path, @NotNull String def);
+
+    /**
+     * Gets the localized messages.
+     * @param path the path to the messages
+     * @return the messages (or {@code null} if not found)
+     */
+    @Nullable
+    List<String> getLocalizedMessages(@NotNull String path);
+
+    /**
+     * Gets the localized messages.
+     * @param path the path to the messages
+     * @param def the default message
+     * @return the messages.
+     */
+    @NotNull
+    List<String> getLocalizedMessages(@NotNull String path, @NotNull String def);
+
+    /**
+     * Gets the localized messages.
+     * @param path the path to the messages
+     * @param def the default messages
+     * @return the messages.
+     */
+    @NotNull
+    List<String> getLocalizedMessages(@NotNull String path, @NotNull List<String> def);
 
     /**
      * Creates a map represents the view of {@link InfoHolder}.
