@@ -17,16 +17,41 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.battle.utils.info;
 
-public abstract class InfoData<T> {
-    private T value;
+import org.jetbrains.annotations.NotNull;
 
-    protected InfoData(T value) {
-        this.value = value;
+public enum State {
+    YES(1),
+    NO(0),
+    ENABLED(3),
+    DISABLED(2),
+    ENABLE(5),
+    DISABLE(4),
+    TRUE(7),
+    FALSE(6);
+
+    private int opposite;
+    private String localePath;
+
+    State(int opposite) {
+        this.opposite = opposite;
+        localePath = "state." + name().toLowerCase();
     }
 
-    public T getValue() {
-        return value;
+    @NotNull
+    public State getOppositeState() {
+        return values()[opposite];
+    }
+
+    @NotNull
+    public State inCaseOf(boolean expression) {
+        return expression ? this : getOppositeState();
+    }
+
+    @NotNull
+    public String getLocalePath() {
+        return localePath;
     }
 }

@@ -5,6 +5,12 @@ name: "English (en-US)"
 state:
   enabled: Enabled
   disabled: Disabled
+  enable: Enable
+  disable: Disable
+  yes: Yes
+  no: No
+  true: True
+  false: False
 item_type:
   magazine: Magazine
   ammo: Ammunition

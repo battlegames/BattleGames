@@ -798,24 +798,23 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     @NotNull
     public Map<String, String> mapInfo(@NotNull InfoHolder holder){
         Condition.argNotNull("holder", holder);
-        return holder.read().entrySet().stream().collect(Collectors.toMap(
+        return holder.getMap().entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> {
-                    InfoData data = entry.getValue();
-                    if(data instanceof InfoBooleanData){
-                        if(((InfoBooleanData) data).getValue())
-                            return getLocaleConf().getString("state.enabled");
-                        else
-                            return getLocaleConf().getString("state.disabled");
+                    Object data = entry.getValue();
+                    if(data instanceof State){
+                        return getLocaleConf().getString(((State) data).getLocalePath());
                     }
-                    else if(data instanceof InfoDoubleData)
-                        return MathUtil.formatRound(((InfoDoubleData) data).getValue());
-                    else if(data instanceof InfoIntData)
-                        return Integer.toString(((InfoIntData) data).getValue());
-                    else if(data instanceof InfoLongData)
-                        return Long.toString(((InfoLongData) data).getValue());
-                    else if(data instanceof InfoStringData)
-                        return ((InfoStringData) data).getValue();
+                    else if(data instanceof Double)
+                        return MathUtil.formatRound((Double) data);
+                    else if(data instanceof Float)
+                        return MathUtil.formatRound((Float) data);
+                    else if(data instanceof Integer)
+                        return Integer.toString((Integer) data);
+                    else if(data instanceof Long)
+                        return Long.toString((Long) data);
+                    else if(data instanceof String)
+                        return data.toString();
                     return "Error! (data class="+data.getClass().getSimpleName()+")";
                 }
         ));

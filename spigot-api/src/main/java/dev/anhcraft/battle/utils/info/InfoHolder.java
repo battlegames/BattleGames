@@ -19,65 +19,74 @@
  */
 package dev.anhcraft.battle.utils.info;
 
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InfoHolder {
-    private final Map<String, InfoData> map = new HashMap<>();
+    private final Map<String, Object> map = new HashMap<>();
     private String identifier;
 
     public InfoHolder(@NotNull String identifier) {
-        Validate.notNull(identifier);
+        Condition.argNotNull("identifier", identifier);
         this.identifier = identifier;
     }
 
-    public InfoHolder inform(String key, boolean val){
-        map.put(identifier + key, new InfoBooleanData(val));
+    public InfoHolder inform(String key, @NotNull State val){
+        Condition.argNotNull("val", val);
+        map.put(identifier + key, val);
         return this;
     }
 
     public InfoHolder inform(String key, int val){
-        map.put(identifier + key, new InfoIntData(val));
+        map.put(identifier + key, val);
         return this;
     }
 
     public InfoHolder inform(String key, long val){
-        map.put(identifier + key, new InfoLongData(val));
+        map.put(identifier + key, val);
         return this;
     }
 
     public InfoHolder inform(String key, double val){
-        map.put(identifier + key, new InfoDoubleData(val));
+        map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, String val){
-        map.put(identifier + key, new InfoStringData(val));
+    public InfoHolder inform(String key, float val){
+        map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, String... val){
-        map.put(identifier + key, new InfoStringData(String.join(", ", val)));
+    public InfoHolder inform(String key, @NotNull String val){
+        Condition.argNotNull("val", val);
+        map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, Iterable<String> val){
-        map.put(identifier + key, new InfoStringData(String.join(", ", val)));
+    public InfoHolder inform(String key, @NotNull String... val){
+        Condition.argNotNull("val", val);
+        map.put(identifier + key, String.join(", ", val));
+        return this;
+    }
+
+    public InfoHolder inform(String key, @NotNull Iterable<String> val){
+        Condition.argNotNull("val", val);
+        map.put(identifier + key, String.join(", ", val));
         return this;
     }
 
     public InfoHolder link(@Nullable InfoHolder another){
+        Condition.argNotNull("another", another);
         if(another != null) map.putAll(another.map);
         return this;
     }
 
     @NotNull
-    public Map<String, InfoData> read() {
-        return Collections.unmodifiableMap(map);
+    public Map<String, Object> getMap() {
+        return map;
     }
 }
