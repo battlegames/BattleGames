@@ -160,6 +160,7 @@ public class GunModel extends WeaponModel {
     public void inform(@NotNull InfoHolder holder){
         super.inform(holder);
         holder.inform("weight", weight)
+                .inform("muzzle_velocity", muzzleVelocity)
                 .inform("max_magazine_capacity", getMagazineMaxCapacity())
                 .link(defaultMagazine.collectInfo("default_"));
     }
