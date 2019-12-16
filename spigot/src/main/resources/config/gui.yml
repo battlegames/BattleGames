@@ -1024,9 +1024,9 @@ market_category_editor:
       positions: 2/3; 2
       item:
         material: chest
-        name: '[ gui.market_category_editor.edit_item_name ]'
+        name: '[ gui.market_category_editor.edit_product_name ]'
         lore:
-          - '[ gui.market_category_editor.edit_item_lore ]'
+          - '[ gui.market_category_editor.edit_product_lore ]'
       functions:
         - common::cancel_event
         - common::switch_gui { market_product_menu_editor }

@@ -1,10 +1,14 @@
-﻿# This configuration is a part of BattleGames
+﻿#
 # Vietnamese (VI-VN)
 
-name: "Tiếng Việt (Vi)"
+name: Tiếng Việt (Vi)
 state:
   enabled: Đã bật
   disabled: Đã tắt
+  enable: Bật
+  disable: Tắt
+  true: Đúng
+  false: Sai
 item_type:
   magazine: Băng đạn
   ammo: Đạn dược
@@ -14,109 +18,175 @@ ab_team:
   team_a: Đội A
   team_b: Đội B
 medal:
-  headshot_title: "&l%battle_icon_headshot%"
-  headshot_subtitle: "&bHeadshot"
-  assist_title: "&l%battle_icon_assist%"
-  assist_subtitle: "&cAssist"
+  headshot_title: '&l%battle_icon_headshot%'
+  headshot_subtitle: '&bHeadshot'
+  assist_title: '&l%battle_icon_assist%'
+  assist_subtitle: '&cAssist'
+  first_kill_title: '&l%battle_icon_gold_cup%'
+  first_kill_subtitle: '&eFirst kill'
 server:
-  illegal_block_break: "&cHành động bị cấm: Bạn không được phép phá block!"
-  illegal_block_blace: "&cHành động bị cấm: Bạn không được phép đặt block!"
-  set_spawn_success: "&aSpawn máy chủ đã được đặt thành %s"
-  connect_failed: "&eKhông thể kết nối tới bất kì máy chủ nào hiện tại. Vui lòng liên hệ staff."
-  try_reconnect: "&eĐang thử kết nối lại... &f%s/%s"
+  set_spawn_success: '&aSpawn máy chủ đã được đặt thành %s'
+  connect_failed: '&eKhông thể kết nối tới bất kì máy chủ nào hiện tại. Vui lòng liên hệ staff.'
+  try_reconnect: '&eĐang thử kết nối lại... &f%s/%s'
   switched_server:
-    - "&eCó vẻ như máy chủ đích đang gặp sự cố!"
-    - "&aĐã chuyển sang máy chủ khác. Đang kết nối... &f%s/%s"
-  server_connecting: "&aBạn sẽ được kết nối tới máy chủ khác! Vui lòng chờ..."
+    - '&eCó vẻ như máy chủ đích đang gặp sự cố!'
+    - '&aĐã chuyển sang máy chủ khác. Đang kết nối... &f%s/%s'
+  server_connecting: '&aBạn sẽ được kết nối tới máy chủ khác! Vui lòng chờ...'
 arena:
-  not_found: "&cKhông thể tìm thấy đấu trường đó."
-  error_already_joined: "&cBạn đã tham gia trò chơi!"
-  error_attendance_disabled: "&cXin lỗi, bạn không thể tham gia trong thời gian này."
-  error_full_players: "&cĐấu trường đã đầy."
-  error_mode_controller_unavailable: "&cLỗi hệ thống: Không tìm thấy bộ điều khiển trò chơi."
-  error_attendance_refused: "&cBạn đã bị từ chối yêu cầu tham gia."
-  join_failed: "&cKhông thể bắt %s tham gia đấu trường"
-  join_success: "&a%s đã tham gia đấu trường!"
-  quit_failed: "&cKhông thể bắt %s thoát đấu trường"
-  quit_success: "&a%s đã thoát trò chơi!"
+  not_found: '&cKhông thể tìm thấy đấu trường đó.'
+  error_already_joined: '&cBạn đã tham gia trò chơi!'
+  error_attendance_disabled: '&cXin lỗi, bạn không thể tham gia trong thời gian này.'
+  error_full_players: '&cĐấu trường đã đầy.'
+  error_mode_controller_unavailable: '&cLỗi hệ thống: Không tìm thấy bộ điều khiển trò chơi.'
+  error_attendance_refused: '&cBạn đã bị từ chối yêu cầu tham gia.'
+  join_failed: '&cKhông thể bắt %s tham gia đấu trường'
+  join_success: '&a%s đã tham gia đấu trường!'
+  quit_failed: '&cKhông thể bắt %s thoát đấu trường'
+  quit_success: '&a%s đã thoát trò chơi!'
 game:
-  list_header: "&4&l--- Các trò chơi đang diễn ra: (%s) ---"
+  list_header: '&4&l--- Các trò chơi đang diễn ra: (%s) ---'
   list_section:
-    - "&eĐấu trường: &f{__arena_name__}"
-    - "&eChế độ: &f{__mode_name__}"
-    - "&eThời gian: &f{__game_current_time__}/{__arena_max_time__} ticks"
-    - "&eNgười chơi: &f{__game_player_count__}/{__arena_max_players__}"
-  destroy_success: "&aTrò chơi đang bị phá hủy!"
-  inactive_arena: "&cKhông có trò chơi nào đang diễn ra trên đấu trường đó!"
+    - '&eĐấu trường: &f{__arena_name__}'
+    - '&eChế độ: &f{__mode_name__}'
+    - '&eThời gian: &f{__game_current_time__}/{__arena_max_time__} ticks'
+    - '&eNgười chơi: &f{__game_player_count__}/{__arena_max_players__}'
+  destroy_success: '&aTrò chơi đang bị phá hủy!'
+  inactive_arena: '&cKhông có trò chơi nào đang diễn ra trên đấu trường đó!'
 mode_dm:
-  player_join_broadcast: "&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)"
-  player_quit_broadcast: "&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)"
-  countdown_title: "&a&lBắt đầu sau"
-  countdown_subtitle: "&f&l{__current__}"
-  game_start_broadcast: "&bĐã bắt đầu trò chơi!"
-  error_item_selection_overtime: "&cĐã quá thời gian cho phép chọn vật phẩm!"
-  error_disabled_item_type: "&cLoại vật phẩm này hiện bị cấm trong trò chơi!"
-  respawn_title: "&e&lHồi sinh sau"
-  respawn_subtitle: "&f&l{__current__}"
+  player_join_broadcast: '&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
+  player_quit_broadcast: '&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
+  countdown_title: '&a&lBắt đầu sau'
+  countdown_subtitle: '&f&l{__current__}'
+  game_start_broadcast: '&bĐã bắt đầu trò chơi!'
+  error_item_selection_overtime: '&cĐã quá thời gian cho phép chọn vật phẩm!'
+  error_disabled_item_type: '&cLoại vật phẩm này hiện bị cấm trong trò chơi!'
+  respawn_title: '&e&lHồi sinh sau'
+  respawn_subtitle: '&f&l{__current__}'
 mode_tdm:
-  player_join_broadcast: "&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)"
-  player_quit_broadcast: "&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)"
-  countdown_title: "&a&lBắt đầu sau"
-  countdown_subtitle: "&f&l{__current__}"
-  game_start_broadcast: "&bĐã bắt đầu trò chơi!"
-  error_item_selection_overtime: "&cĐã hết thời gian chọn vật phẩm!"
-  error_disabled_item_type: "&cLoại vật phẩm này hiện đang bị cấm!"
-  respawn_title: "&e&lHồi sinh sau"
-  respawn_subtitle: "&f&l{__current__}"
+  player_join_broadcast: '&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
+  player_quit_broadcast: '&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
+  countdown_title: '&a&lBắt đầu sau'
+  countdown_subtitle: '&f&l{__current__}'
+  game_start_broadcast: '&bĐã bắt đầu trò chơi!'
+  error_item_selection_overtime: '&cĐã hết thời gian chọn vật phẩm!'
+  error_disabled_item_type: '&cLoại vật phẩm này hiện đang bị cấm!'
+  respawn_title: '&e&lHồi sinh sau'
+  respawn_subtitle: '&f&l{__current__}'
 mode_ctf:
-  player_join_broadcast: "&c{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)"
-  player_quit_broadcast: "&c{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)"
-  countdown_title: "&6&lBắt đầu sau"
-  countdown_subtitle: "&e&l{__current__}"
-  game_start_broadcast: "&bĐã bắt đầu trò chơi!"
-  error_item_selection_overtime: "&cĐã hết thời gian chọn vật phẩm!"
-  error_disabled_item_type: "&cLoại vật phẩm này hiện đang bị cấm!"
-  respawn_title: "&6&lHồi sinh sau"
-  respawn_subtitle: "&e&l{__current__}"
+  player_join_broadcast: '&c{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
+  player_quit_broadcast: '&c{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
+  countdown_title: '&6&lBắt đầu sau'
+  countdown_subtitle: '&e&l{__current__}'
+  game_start_broadcast: '&bĐã bắt đầu trò chơi!'
+  error_item_selection_overtime: '&cĐã hết thời gian chọn vật phẩm!'
+  error_disabled_item_type: '&cLoại vật phẩm này hiện đang bị cấm!'
+  respawn_title: '&6&lHồi sinh sau'
+  respawn_subtitle: '&e&l{__current__}'
 gun:
-  none_magazine_message: "&cKhẩu súng này chưa có băng đạn!"
-  out_of_ammo: "&cSúng đã hết đạn."
-  reloading_warn: "&cĐang nạp đạn!"
-  none_scope_message: "&cKhẩu súng này chưa được trang bị kính ngắm!"
+  none_magazine_message: '&cKhẩu súng này chưa có băng đạn!'
+  out_of_ammo: '&cSúng đã hết đạn.'
+  reloading_warn: '&cĐang nạp đạn!'
+  none_scope_message: '&cKhẩu súng này chưa được trang bị kính ngắm!'
+  ammo_reloaded: '&aSúng của bạn đã được nạp đầy đạn!'
 items:
-  not_found: "&cKhông tìm thấy vật phẩm"
-  given: "&aĐã trao vật phẩm &e(%s)&a cho %s"
+  not_found: '&cKhông tìm thấy vật phẩm'
+  given: '&aĐã trao vật phẩm &e(%s)&a cho %s'
+  is_null: '&cBạn phải cầm một vật phẩm trong tay!'
+  not_gun: '&cĐây không phải là một khẩu súng'
 inv:
-  cleared: "&aTúi đồ đã được dọn dẹp!"
+  cleared: '&aTúi đồ đã được dọn dẹp!'
 player_data:
-  not_found: "&cKhông thể tìm thấy dữ liệu người chơi"
+  not_found: '&cKhông thể tìm thấy dữ liệu người chơi'
 tool:
   position:
-    message: "&fVị trí hiện tại của bạn là: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Click to copy)"
-    location: "/%s %.2f %.2f %.2f %.2f %.2f"
-  exp2lv: "&a%d exp = cấp %d"
-  lv2exp: "&aCấp %d = %d exp"
+    message: '&fVị trí hiện tại của bạn là: &e%s &b%.2f %.2f %.2f &a%.2f %.2f &7(Nhấn để sao chép)'
+    location: '/%s %.2f %.2f %.2f %.2f %.2f'
+  exp2lv: '&a%d điểm kinh nghiệm = cấp %d'
+  lv2exp: '&aCấp %d = %d điểm kinh nghiệm'
 kit:
-  no_permission: "&cBạn không có quyền để sử dụng kit này!"
-  unavailable: "&cKit này hiện không có sẵn! Bạn phải chờ đến %s"
-  one_time_use: "&cKit này chỉ được nhận một lần!"
+  no_permission: '&cBạn không có quyền để sử dụng kit này!'
+  unavailable: '&cKit này hiện không có sẵn! Bạn phải chờ đến %s'
+  one_time_use: '&cKit này chỉ được nhận một lần!'
 gui:
-  empty: "&f"
+  empty: '&f'
   btn:
-    close_name: "&cĐóng"
+    close_name: '&cĐóng'
     close_lore:
-      - "&aNhấn vào đây để đóng"
-    prev_name: "&aTrang trước"
+      - '&aNhấn vào đây để đóng'
+    prev_name: '&aTrang trước'
     prev_lore:
-      - "&fXem trang trước"
-    back_inv_name: "&cQuay về"
+      - '&fXem trang trước'
+    back_inv_name: '&cQuay về'
     back_inv_lore:
-      - "&fQuay về GUI trước"
-    next_name: "&aTrang sau"
+      - '&fQuay về GUI trước'
+    next_name: '&aTrang sau'
     next_lore:
-      - "&fXem trang sau"
+      - '&fXem trang sau'
   inventory_menu:
-    title: "&e&lTúi đồ"
+    title: '&e&lTúi đồ'
+    gun_name: '&fSúng'
+    gun_lore:
+      - '&aXem toàn bộ khẩu súng đã sở hữu'
+    magazine_name: '&fBăng đạn'
+    magazine_lore:
+      - '&aXem toàn bộ băng đạn đã sở hữu'
+    ammo_name: '&fĐạn dược'
+    ammo_lore:
+      - '&aXem toàn bộ đạn dược đã sở hữu'
+    scope_name: '&fKính ngắm'
+    scope_lore:
+      - '&aXem toàn bộ kính ngắm đã sở hữu'
+    grenade_name: '&fLựu đạn'
+    grenade_lore:
+      - '&aXem toàn bộ lựu đạn đã sở hữu'
+  inventory_gun:
+    title: '&c&lTúi đồ > Súng'
+  inventory_magazine:
+    title: '&c&lTúi đồ > Băng đạn'
+  inventory_ammo:
+    title: '&c&lTúi đồ > Đạn dược'
+  inventory_scope:
+    title: '&c&lTúi đồ > Kính ngắm'
+  inventory_grenade:
+    title: '&c&lTúi đồ > Lựu đạn'
+  kit_menu:
+    title: '&b&lKit'
+  arena_chooser:
+    title: '&e&lChọn đấu trường'
+  main_player_inv:
+    title: '&c&lHotbar chính'
+    arena_chooser_name: '&e&lChọn đấu trường'
+    arena_chooser_lore:
+      - '&aTìm đấu trường phù hợp để tham gia trò chơi'
+    your_inventory_name: '&b&lTúi đồ của bạn'
+    your_inventory_lore:
+      - '&aXem túi đồ của bạn'
+  game_player_inv:
+    title: '&c&lHotbar trò chơi'
+    your_inventory_name: '&b&lTúi đồ'
+    your_inventory_lore:
+      - '&aXem túi đồ của bạn'
+    quit_name: '&c&lThoát'
+    quit_lore:
+      - '&eRời khỏi trận đấu'
+  common:
+    close_name: '&cĐóng'
+    close_lore:
+      - '&aNhấn vào đây để đóng túi đồ'
+    prev_name: '&aTrang trước'
+    prev_lore:
+      - '&fXem trang trước'
+    back_inv_name: '&cQuay lại'
+    back_inv_lore:
+      - '&fQuay lại menu trước đó'
+    next_name: '&aTrang sau'
+    next_lore:
+      - '&fXem trang kế tiếp'
+    your_inv_name: '&b&lTúi đồ của bạn'
+    your_inv_lore:
+      - '&aXem túi đồ của bạn'
+  player_inv:
+    title: '&e&lTúi đồ'
     gun_name: "&fSúng"
     gun_lore:
       - "&aXem toàn bộ khẩu súng đã sở hữu"
@@ -132,33 +202,121 @@ gui:
     grenade_name: "&fLựu đạn"
     grenade_lore:
       - "&aXem toàn bộ lựu đạn đã sở hữu"
-  inventory_gun:
+  player_gun_inv:
     title: "&c&lTúi đồ > Súng"
-  inventory_magazine:
+  player_magazine_inv:
     title: "&c&lTúi đồ > Băng đạn"
-  inventory_ammo:
+  player_ammo_inv:
     title: "&c&lTúi đồ > Đạn dược"
-  inventory_scope:
+  player_scope_inv:
     title: "&c&lTúi đồ > Kính ngắm"
-  inventory_grenade:
+  player_grenade_inv:
     title: "&c&lTúi đồ > Lựu đạn"
-  kit_menu:
-    title: "&b&lKit"
-  arena_chooser:
-    title: "&e&lChọn đấu trường"
-  main_player_inv:
-    title: "&c&lHotbar chính"
-    arena_chooser_name: "&e&lChọn đấu trường"
-    arena_chooser_lore:
-      - "&aTìm đấu trường phù hợp để tham gia trò chơi"
-    your_inventory_name: "&b&lTúi đồ của bạn"
-    your_inventory_lore:
-      - "&aXem túi đồ của bạn"
-  game_player_inv:
-    title: "&c&lHotbar trò chơi"
-    your_inventory_name: "&b&lTúi đồ"
-    your_inventory_lore:
-      - "&aXem túi đồ của bạn"
-    quit_name: "&c&lThoát"
-    quit_lore:
-      - "&eRời khỏi trận đấu"
+  market_product_menu:
+    title: '&4&lCỬA HÀNG'
+    back_name: '&eQuay lại'
+    back_lore:
+      - '&fNhấn vào để quay trở lại menu chính của cừa hàng'
+      - '&fHoặc bạn có thể dùng lệnh &d/b market'
+  market_category_menu:
+    title: '&4&lCỬA HÀNG'
+  booster_menu:
+    title: '&e&lBooster'
+  market_category_menu_editor:
+    title: '&5&lTrình chỉnh sửa danh mục'
+    create_name: '&eTạo danh mục mới'
+    create_lore:
+      - '&aNhấn vào đây để tạo thêm một danh mục'
+      - '&amới cho cửa hàng'
+  market_category_editor:
+    title: '&5&lTrình chỉnh sửa danh mục'
+    set_igo_name: '&eCài đặt tùy chọn ''in-game only'''
+    set_igo_lore:
+      - '&aNhấn vào để cài đặt tùy chọn ''in-game only'''
+      - '&f'
+      - '&bTùy chọn này chỉ cho phép những ai đang chơi'
+      - '&bmới được xem danh mục này.'
+      - '&f'
+      - '&7Điều này sẽ có tác dụng với toàn bộ sản phẩm'
+      - '&7trong danh mục, nhưng sẽ không thay đổi thiết'
+      - '&7lập nào của các sản phẩm đó.'
+    edit_product_name: '&dChỉnh sửa sản phẩm'
+    edit_product_lore:
+      - '&fNhấn vào đây để chỉnh sửa các mặt hàng'
+      - '&ftrong danh mục này'
+    remove_name: '&cXóa'
+    remove_lore:
+      - '&fNhấn vào đây để xóa danh mục này'
+      - '&eLưu ý: Toàn bộ sản phẩm bên trong cũng sẽ bị xóa'
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fNhấn vào để quay về menu dạnh mục'
+  market_product_menu_editor:
+    title: '&4&lTrình chình sửa sản phẩm'
+    create_name: '&eTạo sản phẩm mới'
+    create_lore:
+      - '&aNhấn vào đây để tạo sản phẩm mới'
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fNhấn vào đây để quay về trình chỉnh sửa danh mục'
+  market_product_editor:
+    title: '&4&lTrình chỉnh sửa sản phẩm'
+    set_igo_name: '&eCài đặt tùy chọn ''in-game only'''
+    set_igo_lore:
+      - '&aNhấn vào để cài đặt tùy chọn ''in-game only'''
+      - '&f'
+      - '&bTùy chọn này chỉ cho phép những ai đang chơi'
+      - '&bđược xem sản phẩm này.'
+    set_price_name: '&dThay đổi giá bán'
+    set_price_lore:
+      - '&fNhấn vào đây để thay đổi giá bán của sản phẩm này'
+    remove_name: '&cXóa'
+    remove_lore:
+      - '&fNhấn vào đây để xóa sản phẩm này'
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fNhấn vào đây để quay về menu sản phẩm'
+  value_editor:
+    done_btn: '&a✔ Xong'
+    flip_number_btn: '&cĐảo số: &eÂm <=> Dương'
+    boolean_title: '&d&lTrình chỉnh sửa giá trị &e&l[Đúng/Sai]'
+    int_title: '&d&lTrình chỉnh sửa giá trị &e&l[Số nguyên]'
+    real_title: '&d&lTrình chỉnh sửa giá trị &e&l[Số thực]'
+price_format:
+  vault: "$%s"
+  ing: '%s xu'
+  iron: '%s sắt'
+  gold: '%s vàng'
+  diamond: '%s kim cương'
+  emerald: '%s ngọc lục bảo'
+mode_bw:
+  player_join_broadcast: '&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
+  player_quit_broadcast: '&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
+  countdown_title: '&a&lBắt đầu sau'
+  countdown_subtitle: '&f&l{__current__}'
+  game_start_broadcast: '&bĐã bắt đầu trò chơi!'
+  respawn_title: '&e&lHồi sinh sau'
+  respawn_subtitle: '&f&l{__current__}'
+  bed_status:
+    present: '&a✔'
+    destroyed: '&c✘'
+  bed_destroy_broadcast: '&e%s&c đã phá hủy giường của đội &e%s'
+  respawn_unable: '&bBạn không còn khả năng hồi sinh sau khi chết. Hãy cẩn thận!'
+perks:
+  not_found: '&cKhông tìm thấy perk này'
+  given: '&aĐã gửi perk &f%s'
+market:
+  not_enough_money: '&cXin lỗi, bạn không có đủ tiền! Bạn hiện có &f%s&c trong tài khoản.'
+  purchase_failed: '&cCó lỗi xảy ra! Vui lòng liên hệ admin.'
+  purchase_success: '&aMua thành công!'
+booster:
+  not_found: '&cKhông thể tìm thấy booster này'
+  given: '&aNgười chơi đã nhận được booster &f%s'
+  already_used: '&eBạn đang dùng booster này!'
+  another_used: '&cCó một booster khác đã được kích hoạt!'
+  active_success: '&aBooster đã kích hoạt thành công!'
+editor:
+  market:
+    category_created: '&aDanh mục &f#%s&a đã được tạo.'
+    product_created: '&aVật phẩm &f#%s&a đã được tạo.'
+    saved: '&aTệp cấu hình cửa hàng đã được lưu vào %s'

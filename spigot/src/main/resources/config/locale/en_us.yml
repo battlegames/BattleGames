@@ -7,8 +7,8 @@ state:
   disabled: Disabled
   enable: Enable
   disable: Disable
-  true: True
-  false: False
+  true: "True"
+  false: "False"
 item_type:
   magazine: Magazine
   ammo: Ammunition
@@ -32,8 +32,6 @@ medal:
   first_kill_title: "&l%battle_icon_gold_cup%"
   first_kill_subtitle: "&eFirst kill"
 server:
-  illegal_block_break: "&cIllegal action: You aren't allowed to break blocks!"
-  illegal_block_blace: "&cIllegal action: You aren't allowed to place blocks!"
   set_spawn_success: "&aThe spawn point has been set to %s"
   connect_failed: "&eCouldn't connect to any servers at the moment. Please contact the staffs."
   try_reconnect: "&eTrying to reconnect... &f%s/%s"
@@ -133,7 +131,7 @@ kit:
   unavailable: "&cThis kit is currently unavailable! You need to wait until %s"
   one_time_use: "&cThis kit can only be used one-time!"
 market:
-  not_enough_money: "&cSorry, you can't afford this product! You only have &f%s&c in wallet."
+  not_enough_money: "&cSorry, you can't afford this product! You have &f%s&c in wallet."
   purchase_failed: "&cSomething wrong has occurred! Please contact the server owners."
   purchase_success: "&aPurchased successfully!"
 booster:
@@ -151,13 +149,13 @@ gui:
   common:
     close_name: "&cClose"
     close_lore:
-      - "&aClick here to close this inventory"
+      - "&aClick here to close this menu"
     prev_name: "&aPrevious page"
     prev_lore:
       - "&fGo back to previous page"
     back_inv_name: "&cBack"
     back_inv_lore:
-      - "&fBack to your inventory"
+      - "&fBack to the last menu"
     next_name: "&aNext page"
     next_lore:
       - "&fTurn to the next page"
@@ -229,12 +227,11 @@ gui:
       - "&bThis option only allows who are attending a game"
       - "&bable to view this category."
       - "&f"
-      - "&7It affects all the products inside but it does"
+      - "&7It affects all the products inside, but it does"
       - "&7not change their options in any way."
-    edit_item_name: "&dEdit items"
-    edit_item_lore:
-      - "&fClick here if you want to modify items"
-      - "&fin this category"
+    edit_product_name: "&dEdit products"
+    edit_product_lore:
+      - "&fClick here if you want to edit the products"
     remove_name: "&cRemove"
     remove_lore:
       - "&fClick here to remove this category"
