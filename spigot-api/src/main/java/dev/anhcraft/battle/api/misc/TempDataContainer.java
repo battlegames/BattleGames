@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.misc;
 
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.Informative;
+import dev.anhcraft.battle.utils.info.State;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -48,11 +49,17 @@ public class TempDataContainer implements Informative {
             else if(v instanceof Boolean){
                 holder.inform("data_"+ent.getKey(), v.toString()); // fixed bug
             }
+            else if(v instanceof State){
+                holder.inform("data_"+ent.getKey(), (State) v);
+            }
             else if(v instanceof Integer){
                 holder.inform("data_"+ent.getKey(), (Integer) v);
             }
             else if(v instanceof Double){
                 holder.inform("data_"+ent.getKey(), (Double) v);
+            }
+            else if(v instanceof Float){
+                holder.inform("data_"+ent.getKey(), (Float) v);
             }
             else if(v instanceof Long){
                 holder.inform("data_"+ent.getKey(), (Long) v);
