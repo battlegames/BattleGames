@@ -26,6 +26,7 @@ import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.api.mode.Mode;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.Informative;
+import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -291,6 +292,8 @@ public class Arena extends ConfigurableObject implements Informative {
                 .inform("name", name)
                 .inform("max_time", maxTime)
                 .inform("max_players", maxPlayers)
+                .inform("endDelay", endDelay)
+                .inform("bungeecord", State.ENABLED.inCaseOf(bungeeSupport))
                 .link(modeInfo);
     }
 
