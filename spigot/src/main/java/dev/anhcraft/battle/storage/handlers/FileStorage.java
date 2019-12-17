@@ -134,9 +134,9 @@ public class FileStorage extends StorageProvider {
     public boolean save() {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeInt(getData().size());
-        getData().forEach(new BiConsumer<String, DataTag>() {
+        getData().forEach(new BiConsumer<String, DataTag<?>>() {
             @Override
-            public void accept(String s, DataTag dataTag) {
+            public void accept(String s, DataTag<?> dataTag) {
                 out.writeUTF(s);
                 int type = dataTag.getId();
                 out.writeInt(type);

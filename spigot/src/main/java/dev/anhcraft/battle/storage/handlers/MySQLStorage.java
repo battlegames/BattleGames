@@ -122,7 +122,7 @@ public class MySQLStorage extends StorageProvider {
         }
     }
 
-    private DataTag parse(String value, int type){
+    private DataTag<?> parse(String value, int type){
         switch (type){
             case DataTag.INT: return new IntTag(Integer.parseInt(value));
             case DataTag.BOOL: return new BoolTag(Boolean.parseBoolean(value));
@@ -131,7 +131,7 @@ public class MySQLStorage extends StorageProvider {
             case DataTag.LONG: return new LongTag(Long.parseLong(value));
             case DataTag.FLOAT: return new FloatTag(Float.parseFloat(value));
             case DataTag.LIST: {
-                List<DataTag> list = new ArrayList<>();
+                List<DataTag<?>> list = new ArrayList<>();
                 JsonObject jo = GSON.fromJson(value, JsonObject.class);
                 if(jo.has("data")) {
                     JsonArray array = jo.getAsJsonArray("data");
@@ -146,9 +146,9 @@ public class MySQLStorage extends StorageProvider {
         return null;
     }
 
-    private String toStr(DataTag tag){
+    private String toStr(DataTag<?> tag){
         if(tag.getId() == DataTag.LIST){
-            ListTag<DataTag> listTag = (ListTag<DataTag>) tag;
+            ListTag<DataTag<?>> listTag = (ListTag<DataTag<?>>) tag;
             JsonObject obj = new JsonObject();
             if(!listTag.getValue().isEmpty()) {
                 obj.addProperty("type", listTag.getValue().get(0).getId());
@@ -193,10 +193,10 @@ public class MySQLStorage extends StorageProvider {
                 Connection conn = dataSource.getConnection();
                 if (needSync(conn)) return true; // it doesn't mean the saving is fail
                 boolean f = false;
-                Set<Map.Entry<String, DataTag>> entries = getData().entrySet();
-                for (Map.Entry<String, DataTag> entry : entries){
+                Set<Map.Entry<String, DataTag<?>>> entries = getData().entrySet();
+                for (Map.Entry<String, DataTag<?>> entry : entries){
                     String name = entry.getKey();
-                    DataTag tag = entry.getValue();
+                    DataTag<?> tag = entry.getValue();
                     try {
                         String val = toStr(tag);
                         PreparedStatement s = conn.prepareStatement("INSERT INTO `" + tablePre + "data` (`name`, `value`, `type`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `value` = ?;");

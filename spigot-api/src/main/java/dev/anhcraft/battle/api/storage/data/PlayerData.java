@@ -23,9 +23,13 @@ import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.PlayerInventory;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.market.Transaction;
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.LongCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
+import dev.anhcraft.battle.api.stats.Statistic;
+import dev.anhcraft.battle.api.storage.tags.StringTag;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.impl.Serializable;
-import dev.anhcraft.battle.api.storage.tags.StringTag;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,63 +39,60 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class PlayerData implements Resettable, Serializable {
-    private AtomicInteger headshotCounter = new AtomicInteger();
-    private AtomicInteger killCounter = new AtomicInteger();
-    private AtomicInteger deathCounter = new AtomicInteger();
-    private AtomicInteger assistCounter = new AtomicInteger();
-    private AtomicInteger firstKillCounter = new AtomicInteger();
-    private AtomicInteger winCounter = new AtomicInteger();
-    private AtomicInteger loseCounter = new AtomicInteger();
-    private AtomicLong exp = new AtomicLong();
     private PlayerInventory inventory = new PlayerInventory();
+    private Map<String, Statistic> stats = new ConcurrentHashMap<>();
     private Map<String, Long> kits = new ConcurrentHashMap<>();
     private List<String> receivedFirstJoinKits = new ArrayList<>();
     private List<Transaction> transactions = new ArrayList<>();
     private Map<String, Long> boosters = new ConcurrentHashMap<>();
     private String activeBooster;
 
-    @NotNull
-    public AtomicInteger getHeadshotCounter() {
-        return headshotCounter;
+    public PlayerData(){
+        for(NativeStats ns : NativeStats.values()) {
+            stats.put(ns.getId(), ns.newInstance());
+        }
     }
 
     @NotNull
-    public AtomicInteger getAssistCounter() {
-        return assistCounter;
+    public IntCounter getHeadshotCounter() {
+        return (IntCounter) stats.get(NativeStats.HEADSHOT.getId());
     }
 
     @NotNull
-    public AtomicInteger getFirstKillCounter() {
-        return firstKillCounter;
+    public IntCounter getAssistCounter() {
+        return (IntCounter) stats.get(NativeStats.ASSIST.getId());
     }
 
     @NotNull
-    public AtomicInteger getKillCounter() {
-        return killCounter;
+    public IntCounter getFirstKillCounter() {
+        return (IntCounter) stats.get(NativeStats.FIRST_KILL.getId());
     }
 
     @NotNull
-    public AtomicInteger getDeathCounter() {
-        return deathCounter;
+    public IntCounter getKillCounter() {
+        return (IntCounter) stats.get(NativeStats.KILL.getId());
     }
 
     @NotNull
-    public AtomicInteger getWinCounter() {
-        return winCounter;
+    public IntCounter getDeathCounter() {
+        return (IntCounter) stats.get(NativeStats.DEATH.getId());
     }
 
     @NotNull
-    public AtomicInteger getLoseCounter() {
-        return loseCounter;
+    public IntCounter getWinCounter() {
+        return (IntCounter) stats.get(NativeStats.WIN.getId());
     }
 
     @NotNull
-    public AtomicLong getExp() {
-        return exp;
+    public IntCounter getLoseCounter() {
+        return (IntCounter) stats.get(NativeStats.LOSE.getId());
+    }
+
+    @NotNull
+    public LongCounter getExp() {
+        return (LongCounter) stats.get(NativeStats.EXP.getId());
     }
 
     @NotNull
@@ -132,14 +133,12 @@ public class PlayerData implements Resettable, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
-        headshotCounter.set(map.readTag("hs", Integer.class, 0));
-        assistCounter.set(map.readTag("ast", Integer.class, 0));
-        firstKillCounter.set(map.readTag("fsk", Integer.class, 0));
-        killCounter.set(map.readTag("kill", Integer.class, 0));
-        deathCounter.set(map.readTag("death", Integer.class, 0));
-        winCounter.set(map.readTag("win", Integer.class, 0));
-        loseCounter.set(map.readTag("lose", Integer.class, 0));
-        exp.set(map.readTag("exp", Long.class, 0L));
+        for(Map.Entry<String, Statistic> x : stats.entrySet()){
+            Object t = map.readTag(x.getKey());
+            if(t != null) {
+                x.getValue().setData(t);
+            }
+        }
         List inv = map.readTag("inv", List.class);
         if(inv != null) {
             inv.forEach(o -> {
@@ -197,14 +196,9 @@ public class PlayerData implements Resettable, Serializable {
 
     @Override
     public void write(DataMap<String> map) {
-        map.writeTag("hs", headshotCounter.get());
-        map.writeTag("ast", assistCounter.get());
-        map.writeTag("fsk", firstKillCounter.get());
-        map.writeTag("kill", killCounter.get());
-        map.writeTag("death", deathCounter.get());
-        map.writeTag("win", winCounter.get());
-        map.writeTag("lose", loseCounter.get());
-        map.writeTag("exp", exp.get());
+        for(Map.Entry<String, Statistic> x : stats.entrySet()) {
+            map.writeTag(x.getKey(), x.getValue().getData());
+        }
         List<StringTag> inv = new ArrayList<>();
         inventory.listStorage((itemType, itemStorage) -> {
             String s = itemType.name();
@@ -250,14 +244,9 @@ public class PlayerData implements Resettable, Serializable {
 
     @Override
     public void reset() {
-        headshotCounter.set(0);
-        killCounter.set(0);
-        deathCounter.set(0);
-        assistCounter.set(0);
-        firstKillCounter.set(0);
-        winCounter.set(0);
-        loseCounter.set(0);
-        exp.set(0);
+        for(Statistic x : stats.values()) {
+            x.reset();
+        }
         inventory.clearInventory();
         kits.clear();
         receivedFirstJoinKits.clear();

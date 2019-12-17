@@ -29,8 +29,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 public class DataMap<T> {
-    private Map<T, DataTag> map = new HashMap<>();
+    private Map<T, DataTag<?>> map = new HashMap<>();
     private AtomicBoolean changed = new AtomicBoolean();
+
+    @Nullable
+    public Object readTag(T key){
+        DataTag<?> q = map.get(key);
+        return q == null ? null : q.getValue();
+    }
 
     @Nullable
     public <C> C readTag(T key, Class<? extends C> clazz){
@@ -40,7 +46,7 @@ public class DataMap<T> {
     @NotNull
     public <C> C readTag(T key, Class<? extends C> clazz, C def){
         Class<?> c = DataTypeUtil.getObjectClass(clazz);
-        DataTag q = map.get(key);
+        DataTag<?> q = map.get(key);
         if(q == null) return def;
         Object a = q.getValue();
         return c.isAssignableFrom(a.getClass()) ? (C) a : def;
@@ -52,11 +58,11 @@ public class DataMap<T> {
         return Objects.requireNonNull(v);
     }
 
-    public void forEach(BiConsumer<T, DataTag> consumer){
+    public void forEach(BiConsumer<T, DataTag<?>> consumer){
         map.forEach(consumer);
     }
 
-    public void put(T key, DataTag tag){
+    public void put(T key, DataTag<?> tag){
         if(!Objects.equals(tag, map.put(key, tag))) changed.set(true);
     }
 
@@ -64,8 +70,12 @@ public class DataMap<T> {
      * @deprecated INTERNAL ONLY!
      */
     @Deprecated
-    public void fastPut(T key, DataTag tag){
+    public void fastPut(T key, DataTag<?> tag){
         map.put(key, tag);
+    }
+
+    public void writeTag(T key, DataTag<?> value){
+        put(key, value);
     }
 
     public void writeTag(T key, boolean value){
@@ -92,7 +102,7 @@ public class DataMap<T> {
         put(key, new StringTag(value));
     }
 
-    public <C extends DataTag> void writeTag(T key, List<C> value){
+    public <C extends DataTag<?>> void writeTag(T key, List<C> value){
         put(key, new ListTag<>(value));
     }
 
@@ -104,7 +114,7 @@ public class DataMap<T> {
         return map.size();
     }
 
-    public Set<Map.Entry<T, DataTag>> entrySet() {
+    public Set<Map.Entry<T, DataTag<?>>> entrySet() {
         return map.entrySet();
     }
 }
