@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.gui.menu.market;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
@@ -35,9 +35,9 @@ import org.jetbrains.annotations.NotNull;
 public class CategoryMenuEditor implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         Market mk = api.getMarket();
-        boolean inGame = api.getGameManager().getGame(player) != null;
+        boolean inGame = api.getArenaManager().getGame(player) != null;
         for(Category c : mk.getCategories()){
             if(!chain.hasNext()) break;
             if((c.isInGameOnly() && !inGame) || chain.shouldSkip()){

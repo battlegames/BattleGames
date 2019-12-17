@@ -21,10 +21,10 @@ package dev.anhcraft.battle.tasks;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.BattleModeController;
-import dev.anhcraft.battle.api.game.GamePhase;
-import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.game.RemoteGame;
+import dev.anhcraft.battle.api.arena.mode.IMode;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.game.RemoteGame;
 
 public class GameTask extends BattleComponent implements Runnable {
     public GameTask(BattlePlugin plugin) {
@@ -33,10 +33,10 @@ public class GameTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
-        plugin.gameManager.listGames(g -> {
+        plugin.arenaManager.listGames(g -> {
             if(g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;
-                BattleModeController mc = game.getMode().getController();
+                IMode mc = game.getMode().getController();
                 if (mc != null) mc.onTick(game);
 
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
@@ -48,7 +48,7 @@ public class GameTask extends BattleComponent implements Runnable {
             } else if(g instanceof RemoteGame) {
                 RemoteGame game = (RemoteGame) g;
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
-                    plugin.gameManager.destroy(game);
+                    plugin.arenaManager.destroy(game);
                 }
             }
         });

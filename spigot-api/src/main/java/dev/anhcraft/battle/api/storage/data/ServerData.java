@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.api.storage.data;
 
-import dev.anhcraft.battle.api.misc.Resettable;
-import dev.anhcraft.battle.api.storage.Serializable;
+import dev.anhcraft.battle.impl.Resettable;
+import dev.anhcraft.battle.impl.Serializable;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

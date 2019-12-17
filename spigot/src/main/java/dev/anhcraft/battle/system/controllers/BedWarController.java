@@ -21,12 +21,16 @@ package dev.anhcraft.battle.system.controllers;
 
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.mode.BattleBedWar;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.BWTeam;
+import dev.anhcraft.battle.api.arena.team.TeamManager;
+import dev.anhcraft.battle.api.arena.mode.IBedWar;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
-import dev.anhcraft.battle.api.game.*;
-import dev.anhcraft.battle.api.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -44,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class BedWarController extends DeathmatchController implements BattleBedWar {
+public class BedWarController extends DeathmatchController implements IBedWar {
     protected final Map<LocalGame, TeamManager<BWTeam>> TEAM = new HashMap<>();
     protected final Map<BlockPosition, BWTeam> BEDS = new HashMap<>();
 
@@ -58,7 +62,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
         String p = mode.getId()+"_";
 
         plugin.getPapiExpansion().handlers.put(p+"team", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -68,7 +72,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
         });
 
         plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -78,13 +82,13 @@ public class BedWarController extends DeathmatchController implements BattleBedW
         });
 
         plugin.getPapiExpansion().handlers.put(p+"max_team_players", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             return game.getArena().getAttributes().getString("team_size");
         });
 
         plugin.getPapiExpansion().handlers.put(p+"bed_status", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -124,7 +128,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
                 TeamManager<BWTeam> tm = TEAM.get(game);
                 Optional<BWTeam> to = tm.nextAvailableTeam(game.getArena().getAttributes().getInt("team_size"));
                 if(!to.isPresent()){
-                    plugin.gameManager.quit(player);
+                    plugin.arenaManager.quit(player);
                     break;
                 }
                 List<Player> lc = Collections.singletonList(player);
@@ -191,7 +195,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
         int teamIndex = 0;
         for(Player p : players){
             if(teamIndex == bwt.length){
-                plugin.gameManager.quit(p);
+                plugin.arenaManager.quit(p);
                 continue;
             }
             tm.addPlayer(p, bwt[teamIndex]);
@@ -237,7 +241,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
     public void onBreakBed(BlockBreakEvent event){
         Block b = event.getBlock();
         if(b.getType().name().equals("BED_BLOCK") || b.getType().name().endsWith("_BED")){
-            LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+            LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
             if(game != null && game.getMode() == getMode()){
                 TeamManager<BWTeam> tm = TEAM.get(game);
                 if(tm == null) return;
@@ -339,7 +343,7 @@ public class BedWarController extends DeathmatchController implements BattleBedW
         f.get(winTeam).forEach(player -> player.setWinner(true));
         tm.reset();
 
-        plugin.gameManager.handleEnd(game);
+        plugin.arenaManager.handleEnd(game);
     }
 
     @Override

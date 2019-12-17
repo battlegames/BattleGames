@@ -19,10 +19,10 @@
  */
 package dev.anhcraft.battle.gui.menu;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
-import dev.anhcraft.battle.api.game.Arena;
-import dev.anhcraft.battle.api.game.Game;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
@@ -38,13 +38,13 @@ import java.util.Map;
 public class ArenaChooser implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         for (Arena arena : api.listArenas()){
             if(!chain.hasNext()) break;
             if(chain.shouldSkip()) continue;
             Slot slot = chain.next();
             InfoHolder infoHolder;
-            Game game = ApiProvider.consume().getGameManager().getGame(arena);
+            Game game = ApiProvider.consume().getArenaManager().getGame(arena);
             if(game != null){
                 infoHolder = new InfoHolder("game_");
                 game.inform(infoHolder);
@@ -57,7 +57,7 @@ public class ArenaChooser implements Pagination {
             icon.name(PlaceholderUtil.formatInfo(icon.name(), infoMap));
             icon.lore().replaceAll(s -> PlaceholderUtil.formatInfo(s, infoMap));
             slot.setPaginationItem(icon);
-            slot.setAdditionalFunction(object -> api.getGameManager().join(object.getPlayer(), arena));
+            slot.setAdditionalFunction(object -> api.getArenaManager().join(object.getPlayer(), arena));
         }
     }
 }

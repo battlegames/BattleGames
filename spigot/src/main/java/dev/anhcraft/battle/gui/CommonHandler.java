@@ -19,11 +19,11 @@
  */
 package dev.anhcraft.battle.gui;
 
-import dev.anhcraft.battle.api.ApiProvider;
+import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.struct.Component;
-import dev.anhcraft.battle.api.misc.TempDataContainer;
+import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.Function;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.PlayerInventory;
@@ -165,6 +165,6 @@ public class CommonHandler extends GuiHandler {
 
     @Function("quit_game")
     public void quitGame(SlotReport report){
-        ApiProvider.consume().getGameManager().quit(report.getPlayer());
+        ApiProvider.consume().getArenaManager().quit(report.getPlayer());
     }
 }

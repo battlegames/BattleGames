@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.economy;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.game.GamePlayer;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class InGameCurrency implements Currency {
     @Nullable
     private GamePlayer getGamePlayer(Player player){
-        return ApiProvider.consume().getGameManager().getGamePlayer(player);
+        return ApiProvider.consume().getArenaManager().getGamePlayer(player);
     }
 
     @Override

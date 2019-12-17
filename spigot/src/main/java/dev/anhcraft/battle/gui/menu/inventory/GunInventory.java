@@ -19,15 +19,15 @@
  */
 package dev.anhcraft.battle.gui.menu.inventory;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
-import dev.anhcraft.battle.api.inventory.items.GunModel;
-import dev.anhcraft.battle.api.inventory.items.ItemType;
+import dev.anhcraft.battle.api.inventory.item.GunModel;
+import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ import java.util.Map;
 public class GunInventory implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
         if(pd == null) return;
         for(Map.Entry<String, Long> entry : pd.getInventory().getStorage(ItemType.GUN).list()){

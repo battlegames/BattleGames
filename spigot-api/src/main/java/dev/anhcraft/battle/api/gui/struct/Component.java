@@ -20,12 +20,12 @@
 
 package dev.anhcraft.battle.api.gui.struct;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
-import dev.anhcraft.battle.api.BattleGuiManager;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
-import dev.anhcraft.battle.api.misc.ConfigurableObject;
+import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.functions.Instruction;
@@ -108,7 +108,7 @@ public class Component extends ConfigurableObject {
     public synchronized List<FunctionLinker<SlotReport>> getFunctions() {
         if(functions == null) functions = new ArrayList<>();
         if(!rawFunctions.isEmpty()){
-            BattleGuiManager bgm = ApiProvider.consume().getGuiManager();
+            GuiManager bgm = ApiProvider.consume().getGuiManager();
             for (Iterator<String> it = rawFunctions.iterator(); it.hasNext(); ) {
                 String str = it.next();
                 Instruction fn = Instruction.parse(str);
@@ -120,7 +120,7 @@ public class Component extends ConfigurableObject {
                     functions.add(new FunctionLinker<>(
                         fn,
                         event -> {
-                            BattleAPI a = ApiProvider.consume();
+                            BattleApi a = ApiProvider.consume();
                             Map<String, String> f = a.mapInfo(
                                     a.getGuiManager().collectInfo(event.getView())
                             );

@@ -19,12 +19,12 @@
  */
 package dev.anhcraft.battle.gui.menu.market;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.economy.Currency;
 import dev.anhcraft.battle.api.events.PlayerPrePurchaseEvent;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
-import dev.anhcraft.battle.api.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
@@ -48,11 +48,11 @@ import java.util.Map;
 public class ProductMenu implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         Category ctg = (Category) view.getWindow().getDataContainer().remove(GDataRegistry.MARKET_CATEGORY);
         if(ctg == null) return;
         Market mk = api.getMarket();
-        GamePlayer gp = api.getGameManager().getGamePlayer(player);
+        GamePlayer gp = api.getArenaManager().getGamePlayer(player);
         for(Product p : ctg.getProducts()){
             if(!chain.hasNext()) break;
             if((p.isInGameOnly() && gp == null) || chain.shouldSkip()){

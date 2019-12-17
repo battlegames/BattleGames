@@ -20,9 +20,9 @@
 
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.game.ABTeam;
-import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.game.TeamFlag;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;

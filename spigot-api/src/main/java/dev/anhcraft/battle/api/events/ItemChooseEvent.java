@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.battle.api.events;
 
-import dev.anhcraft.battle.api.inventory.items.BattleItemModel;
+import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;

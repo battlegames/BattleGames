@@ -19,10 +19,10 @@
  */
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.game.GamePlayer;
-import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.inventory.items.Weapon;
-import dev.anhcraft.battle.api.misc.DamageReport;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.inventory.item.Weapon;
+import dev.anhcraft.battle.api.DamageReport;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

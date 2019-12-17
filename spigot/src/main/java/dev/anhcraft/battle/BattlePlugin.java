@@ -25,14 +25,19 @@ import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.*;
-import dev.anhcraft.battle.api.game.ABTeam;
-import dev.anhcraft.battle.api.game.Arena;
-import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.chat.ChatManager;
+import dev.anhcraft.battle.api.effect.BattleEffect;
+import dev.anhcraft.battle.api.effect.EffectOption;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.api.arena.ArenaManager;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.Gui;
-import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.gui.GuiManager;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.api.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
@@ -54,9 +59,9 @@ import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
 import dev.anhcraft.battle.system.managers.*;
-import dev.anhcraft.battle.system.managers.item.GrenadeManager;
-import dev.anhcraft.battle.system.managers.item.GunManager;
-import dev.anhcraft.battle.system.managers.item.ItemManager;
+import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
+import dev.anhcraft.battle.system.managers.item.BattleGunManager;
+import dev.anhcraft.battle.system.managers.item.BattleItemManager;
 import dev.anhcraft.battle.system.messengers.BungeeMessenger;
 import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -98,7 +103,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
-public class BattlePlugin extends JavaPlugin implements BattleAPI {
+public class BattlePlugin extends JavaPlugin implements BattleApi {
     public static final long BOSSBAR_UPDATE_INTERVAL = 10;
     public static final long SCOREBOARD_UPDATE_INTERVAL = 10;
     private static final String[] CONFIG_FILES = new String[]{
@@ -137,15 +142,14 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     public final GeneralConfig GENERAL_CONF = new GeneralConfig();
     private File localeDir;
     public CraftExtension extension;
-    public ChatManager chatManager;
-    public TitleManager titleProvider;
-    public GameManager gameManager;
-    public DataManager dataManager;
+    public BattleChatManager chatManager;
+    public BattleArenaManager arenaManager;
+    public BattleDataManager dataManager;
     public TaskHelper taskHelper;
-    public ItemManager itemManager;
-    public GunManager gunManager;
-    public GrenadeManager grenadeManager;
-    public GuiManager guiManager;
+    public BattleItemManager itemManager;
+    public BattleGunManager gunManager;
+    public BattleGrenadeManager grenadeManager;
+    public BattleGuiManager guiManager;
     public ScoreboardRenderer scoreboardRenderer;
     public BossbarRenderer bossbarRenderer;
     public BungeeMessenger bungeeMessenger;
@@ -194,13 +198,12 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
         taskHelper = new TaskHelper(this);
-        chatManager = new ChatManager(this);
-        titleProvider = new TitleManager(this);
-        itemManager = new ItemManager(this);
-        gunManager = new GunManager(this);
-        grenadeManager = new GrenadeManager(this);
-        guiManager = new GuiManager(this);
-        gameManager = new GameManager(this);
+        chatManager = new BattleChatManager(this);
+        itemManager = new BattleItemManager(this);
+        gunManager = new BattleGunManager(this);
+        grenadeManager = new BattleGrenadeManager(this);
+        guiManager = new BattleGuiManager(this);
+        arenaManager = new BattleArenaManager(this);
 
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
@@ -317,7 +320,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
 
     @Override
     public void onDisable(){
-        gameManager.listGames(game -> {
+        arenaManager.listGames(game -> {
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {
                     if (player.getBackupInventory() != null)
@@ -494,7 +497,7 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
             e.printStackTrace();
         }
 
-        dataManager = new DataManager(this, GENERAL_CONF.getStorageType());
+        dataManager = new BattleDataManager(this, GENERAL_CONF.getStorageType());
         switch (GENERAL_CONF.getStorageType()){
             case FILE: {
                 File f = new File(GENERAL_CONF.getStorageFilePath());
@@ -1061,22 +1064,22 @@ public class BattlePlugin extends JavaPlugin implements BattleAPI {
     }
 
     @Override
-    public @NotNull BattleGameManager getGameManager() {
-        return gameManager;
+    public @NotNull ArenaManager getArenaManager() {
+        return arenaManager;
     }
 
     @Override
-    public @NotNull BattleItemManager getItemManager() {
+    public @NotNull ItemManager getItemManager() {
         return itemManager;
     }
 
     @Override
-    public @NotNull BattleGuiManager getGuiManager() {
+    public @NotNull GuiManager getGuiManager() {
         return guiManager;
     }
 
     @Override
-    public @NotNull BattleChatManager getChatManager() {
+    public @NotNull ChatManager getChatManager() {
         return chatManager;
     }
 

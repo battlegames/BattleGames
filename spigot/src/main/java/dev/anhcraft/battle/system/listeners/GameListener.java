@@ -21,12 +21,12 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.BattleModeController;
+import dev.anhcraft.battle.api.arena.mode.IMode;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
-import dev.anhcraft.battle.api.game.GamePhase;
-import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import org.bukkit.entity.Player;
@@ -82,7 +82,7 @@ public class GameListener extends BattleComponent implements Listener {
     @EventHandler
     public void phaseChange(GamePhaseChangeEvent event){
         if(event.getGame() instanceof LocalGame) {
-            BattleModeController bmc = event.getGame().getMode().getController();
+            IMode bmc = event.getGame().getMode().getController();
             if (bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
                 ModeController mc = (ModeController) bmc;
                 ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);

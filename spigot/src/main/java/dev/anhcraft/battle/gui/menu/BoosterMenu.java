@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.gui.menu;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
@@ -36,7 +36,7 @@ import java.util.Objects;
 public class BoosterMenu implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
         if(pd != null) {
             for (Map.Entry<String, Long> ent : pd.getBoosters().entrySet()){

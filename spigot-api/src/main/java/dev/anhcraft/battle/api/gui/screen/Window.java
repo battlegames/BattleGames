@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.battle.api.gui.screen;
 
-import dev.anhcraft.battle.api.misc.TempDataContainer;
+import dev.anhcraft.battle.utils.TempDataContainer;
 import org.jetbrains.annotations.Nullable;
 
 public class Window extends TempDataContainer {

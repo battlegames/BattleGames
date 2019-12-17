@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.gui.menu;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.events.KitReceiveEvent;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
@@ -38,7 +38,7 @@ import java.util.Date;
 public class KitMenu implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
         if(pd != null) {
             for(Kit kit : api.listKits()){

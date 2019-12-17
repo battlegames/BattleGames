@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.api.misc;
 
+import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;

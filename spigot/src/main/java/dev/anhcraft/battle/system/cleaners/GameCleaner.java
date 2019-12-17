@@ -21,7 +21,7 @@ package dev.anhcraft.battle.system.cleaners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.game.Arena;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.system.cleaners.works.RollbackWork;
 import dev.anhcraft.battle.system.cleaners.works.Work;
 

@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.battle.api.inventory;
 
-import dev.anhcraft.battle.api.inventory.items.ItemType;
+import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 

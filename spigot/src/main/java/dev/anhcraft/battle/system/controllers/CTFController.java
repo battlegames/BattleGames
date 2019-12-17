@@ -22,11 +22,15 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.mode.BattleCTF;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.arena.team.TeamFlag;
+import dev.anhcraft.battle.api.arena.team.TeamManager;
+import dev.anhcraft.battle.api.arena.mode.ICaptureTheFlag;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
-import dev.anhcraft.battle.api.game.*;
-import dev.anhcraft.battle.api.misc.BattleSound;
-import dev.anhcraft.battle.api.mode.Mode;
+import dev.anhcraft.battle.api.BattleSound;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -45,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CTFController extends TeamDeathmatchController implements BattleCTF {
+public class CTFController extends TeamDeathmatchController implements ICaptureTheFlag {
     private final Multimap<LocalGame, TeamFlag<ABTeam>> FLAG = LinkedHashMultimap.create();
 
     public CTFController(BattlePlugin plugin) {
@@ -54,19 +58,19 @@ public class CTFController extends TeamDeathmatchController implements BattleCTF
         String p = getMode().getId()+"_";
 
         plugin.getPapiExpansion().handlers.put(p+"flags", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Integer.toString(f.size());
         });
 
         plugin.getPapiExpansion().handlers.put(p+"valid_flags", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(TeamFlag::isValid).count());
         });
 
         plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
@@ -75,7 +79,7 @@ public class CTFController extends TeamDeathmatchController implements BattleCTF
         });
 
         plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
@@ -194,7 +198,7 @@ public class CTFController extends TeamDeathmatchController implements BattleCTF
     @EventHandler
     public void sneak(PlayerToggleSneakEvent event){
         if(event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
-        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
         if(game != null){
             if(game.getMode() != getMode()) return;
             if(!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_"+event.getPlayer().getName())){

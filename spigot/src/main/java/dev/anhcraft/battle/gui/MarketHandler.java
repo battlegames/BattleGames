@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.gui;
 
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleAPI;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.screen.Window;
@@ -108,7 +108,7 @@ public class MarketHandler extends GuiHandler {
         String id = new String(RandomUtil.randomLetters(7));
         Category category = new Category(id);
         category.getIcon().name(id);
-        BattleAPI api = ApiProvider.consume();
+        BattleApi api = ApiProvider.consume();
         api.getMarket().getCategories().add(category);
         api.getChatManager().sendPlayer(report.getPlayer(), "editor.market.category_created", s -> String.format(s, id));
     }

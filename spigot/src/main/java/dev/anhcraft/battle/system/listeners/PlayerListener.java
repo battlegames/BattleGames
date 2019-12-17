@@ -24,16 +24,16 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.events.game.GameWeaponEvent;
-import dev.anhcraft.battle.api.game.GamePhase;
-import dev.anhcraft.battle.api.game.GamePlayer;
-import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
-import dev.anhcraft.battle.api.inventory.items.BattleItem;
-import dev.anhcraft.battle.api.inventory.items.Grenade;
-import dev.anhcraft.battle.api.inventory.items.Gun;
-import dev.anhcraft.battle.api.inventory.items.GunModel;
-import dev.anhcraft.battle.api.misc.DamageReport;
-import dev.anhcraft.battle.api.misc.MouseClick;
+import dev.anhcraft.battle.api.inventory.item.BattleItem;
+import dev.anhcraft.battle.api.inventory.item.Grenade;
+import dev.anhcraft.battle.api.inventory.item.Gun;
+import dev.anhcraft.battle.api.inventory.item.GunModel;
+import dev.anhcraft.battle.api.DamageReport;
+import dev.anhcraft.battle.api.MouseClick;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
@@ -94,7 +94,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void quit(PlayerQuitEvent event){
         plugin.guiManager.destroyWindow(event.getPlayer());
-        plugin.gameManager.quit(event.getPlayer());
+        plugin.arenaManager.quit(event.getPlayer());
         plugin.gunManager.handleZoomOut(event.getPlayer());
         plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
@@ -102,7 +102,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
-        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
         if(game != null){
             game.getMode().getController(c -> c.onSwapItem(event, game));
         }
@@ -111,7 +111,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void drop(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
-        LocalGame game = plugin.gameManager.getGame(p);
+        LocalGame game = plugin.arenaManager.getGame(p);
         if(game != null){
             game.getMode().getController(c -> c.onDropItem(event, game));
         }
@@ -123,7 +123,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void chooseItem(ItemChooseEvent event) {
-        LocalGame game = plugin.gameManager.getGame(event.getPlayer());
+        LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
         if(game != null){
             game.getMode().getController(c -> c.onChooseItem(event, game));
         }
@@ -136,7 +136,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(event.getAction() != Action.PHYSICAL) {
             BattleItem item = plugin.itemManager.read(event.getItem());
             if(item != null) {
-                LocalGame game = plugin.gameManager.getGame(p);
+                LocalGame game = plugin.arenaManager.getGame(p);
                 if(game != null && game.getPhase() == GamePhase.PLAYING){
                     boolean left = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
                     boolean right = event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK;
@@ -183,8 +183,8 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void useWeapon(GameWeaponEvent e) {
         if(e.getEntity() instanceof Player) {
             Player ent = (Player) e.getEntity();
-            LocalGame g1 = plugin.gameManager.getGame(e.getDamager());
-            LocalGame g2 = plugin.gameManager.getGame(ent);
+            LocalGame g1 = plugin.arenaManager.getGame(e.getDamager());
+            LocalGame g2 = plugin.arenaManager.getGame(ent);
             if(g1 != null && g2 != null){
                 if(g1.equals(g2) && g1.getPhase() == GamePhase.PLAYING) {
                     GamePlayer gp1 = g1.getPlayer(e.getDamager());
@@ -278,7 +278,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             e.setKeepInventory(true);
             e.setKeepLevel(true);
         }
-        LocalGame game = plugin.gameManager.getGame(e.getEntity());
+        LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
             e.setDeathMessage(null);
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getDeathCounter().incrementAndGet();
@@ -362,7 +362,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
             plugin.guiManager.callEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
-            LocalGame game = plugin.gameManager.getGame(p);
+            LocalGame game = plugin.arenaManager.getGame(p);
             if(game != null) game.getMode().getController(c -> c.onClickInventory(event, game, p));
         }
     }
@@ -375,7 +375,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void respawn(PlayerRespawnEvent event){
         Player player = event.getPlayer();
-        LocalGame game = plugin.gameManager.getGame(player);
+        LocalGame game = plugin.arenaManager.getGame(player);
         if(game != null) game.getMode().getController(c -> c.onRespawn(event, game));
         else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
     }

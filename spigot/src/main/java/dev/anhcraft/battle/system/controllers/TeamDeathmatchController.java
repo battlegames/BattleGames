@@ -20,10 +20,14 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.mode.BattleTeamDeathmatch;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.arena.team.TeamManager;
+import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
-import dev.anhcraft.battle.api.game.*;
-import dev.anhcraft.battle.api.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -37,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class TeamDeathmatchController extends DeathmatchController implements BattleTeamDeathmatch {
+public class TeamDeathmatchController extends DeathmatchController implements ITeamDeathmatch {
     protected final Map<LocalGame, TeamManager<ABTeam>> TEAM = new HashMap<>();
 
     public TeamDeathmatchController(BattlePlugin plugin) {
@@ -50,7 +54,7 @@ public class TeamDeathmatchController extends DeathmatchController implements Ba
         String p = mode.getId()+"_";
 
         plugin.getPapiExpansion().handlers.put(p+"team", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)
@@ -62,7 +66,7 @@ public class TeamDeathmatchController extends DeathmatchController implements Ba
         });
 
         plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
-            LocalGame game = plugin.gameManager.getGame(player);
+            LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)
@@ -264,7 +268,7 @@ public class TeamDeathmatchController extends DeathmatchController implements Ba
             teamManager.reset();
         }
 
-        plugin.gameManager.handleEnd(game);
+        plugin.arenaManager.handleEnd(game);
     }
 
     protected ABTeam handleResult(LocalGame game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {

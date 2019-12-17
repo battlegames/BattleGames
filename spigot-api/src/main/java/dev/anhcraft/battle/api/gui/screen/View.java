@@ -23,7 +23,7 @@ import com.google.common.base.Preconditions;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.misc.TempDataContainer;
+import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;

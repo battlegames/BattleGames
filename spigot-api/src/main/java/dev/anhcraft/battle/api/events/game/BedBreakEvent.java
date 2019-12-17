@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.game.BWTeam;
-import dev.anhcraft.battle.api.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.BWTeam;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

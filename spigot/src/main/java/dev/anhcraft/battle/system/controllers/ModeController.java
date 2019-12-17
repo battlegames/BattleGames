@@ -19,18 +19,18 @@
  */
 package dev.anhcraft.battle.system.controllers;
 
+import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.ApiProvider;
-import dev.anhcraft.battle.api.BattleModeController;
-import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.mode.Mode;
-import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.BattleBar;
-import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.api.arena.mode.IMode;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
@@ -44,7 +44,9 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,7 +54,7 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public abstract class ModeController extends BattleComponent implements Listener, BattleModeController {
+public abstract class ModeController extends BattleComponent implements Listener, IMode {
     private final Map<String, Integer> RUNNING_TASKS = new ConcurrentHashMap<>();
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
     public final Map<UUID, Runnable> RELOADING_GUN = new ConcurrentHashMap<>();
@@ -124,18 +126,24 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath){
         game.getPlayers().keySet().forEach(player -> {
-            plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath));
+            sendTitle(player, titleLocalePath, subtitleLocalePath, UnaryOperator.identity());
         });
     }
 
     void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
         game.getPlayers().keySet().forEach(player -> {
-            plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
+            sendTitle(player, titleLocalePath, subtitleLocalePath, x);
         });
     }
 
+    void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath){
+        sendTitle(player, titleLocalePath, subtitleLocalePath, UnaryOperator.identity());
+    }
+
     void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
-        plugin.titleProvider.send(player, blp(titleLocalePath), blp(subtitleLocalePath), x);
+        String s1 = x.apply(PlaceholderUtil.formatPAPI(player, plugin.getLocaleConf().getString(blp(titleLocalePath))));
+        String s2 = x.apply(PlaceholderUtil.formatPAPI(player, plugin.getLocaleConf().getString(blp(subtitleLocalePath))));
+        player.sendTitle(s1, s2, 10, 70, 20);
     }
 
     void trackTask(LocalGame game, String id, int task){

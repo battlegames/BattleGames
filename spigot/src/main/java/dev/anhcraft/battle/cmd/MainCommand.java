@@ -23,15 +23,14 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.game.Arena;
-import dev.anhcraft.battle.api.game.Game;
+import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.gui.NativeGui;
-import dev.anhcraft.battle.api.inventory.items.*;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.battle.system.managers.item.GunManager;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.utils.ItemUtil;
@@ -84,7 +83,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("game list")
     @CommandPermission("battle.game.list")
     public void listGames(CommandSender sender){
-        Collection<Game> q = plugin.gameManager.listGames();
+        Collection<Game> q = plugin.arenaManager.listGames();
         plugin.chatManager.send(sender, "game.list_header", str -> String.format(str, Integer.toString(q.size())));
         q.forEach(game -> {
             InfoHolder holder = new InfoHolder("game_");
@@ -100,9 +99,9 @@ public class MainCommand extends BaseCommand{
     public void destroyGame(CommandSender sender, String arena){
         Arena a = plugin.getArena(arena);
         if(a != null) {
-            Game g = plugin.gameManager.getGame(a);
+            Game g = plugin.arenaManager.getGame(a);
             if(g != null){
-                plugin.gameManager.destroy(g);
+                plugin.arenaManager.destroy(g);
                 plugin.chatManager.send(sender, "game.destroy_success");
             } else
                 plugin.chatManager.send(sender, "game.inactive_arena");
@@ -123,7 +122,7 @@ public class MainCommand extends BaseCommand{
         Player t = (target == null) ? player : target;
         Arena a = plugin.getArena(arena);
         if(a != null) {
-            if(plugin.gameManager.join(t, a) != null)
+            if(plugin.arenaManager.join(t, a) != null)
                 plugin.chatManager.sendPlayer(player, "arena.join_success", str ->
                         String.format(str, t.getName()));
             else
@@ -138,7 +137,7 @@ public class MainCommand extends BaseCommand{
     @CommandCompletion("@players")
     public void quit(Player player, @Optional Player target){
         Player t = (target == null) ? player : target;
-        if(plugin.gameManager.quit(t))
+        if(plugin.arenaManager.quit(t))
             plugin.chatManager.sendPlayer(player, "arena.quit_success", str ->
                     String.format(str, t.getName()));
         else

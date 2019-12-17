@@ -23,7 +23,11 @@ package dev.anhcraft.battle.system.messengers;
 import com.google.common.collect.Multiset;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.game.*;
+import dev.anhcraft.battle.api.arena.*;
+import dev.anhcraft.battle.api.arena.game.Game;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.game.RemoteGame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -88,7 +92,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
                     long time = in.readLong();
                     Arena arena = plugin.getArena(arenaId);
                     if(arena != null && arena.hasBungeecordSupport()) {
-                        RemoteGame rg = (RemoteGame) plugin.gameManager.getGame(arena);
+                        RemoteGame rg = (RemoteGame) plugin.arenaManager.getGame(arena);
                         if (rg != null) {
                             rg.setPhase(GamePhase.valueOf(phase));
                             rg.setPlayerCount(players);
@@ -103,7 +107,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
                     String server = in.readUTF();
                     Arena arena = plugin.getArena(arenaId);
                     if (arena != null) {
-                        Game game = plugin.gameManager.join(player, arena, true);
+                        Game game = plugin.arenaManager.join(player, arena, true);
                         if(game != null) ((LocalGame) game).getDownstreamServers().put(server, player);
                     }
                 }

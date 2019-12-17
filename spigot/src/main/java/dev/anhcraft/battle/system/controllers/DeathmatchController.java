@@ -22,13 +22,13 @@ package dev.anhcraft.battle.system.controllers;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.game.GamePhase;
-import dev.anhcraft.battle.api.game.GamePlayer;
-import dev.anhcraft.battle.api.game.LocalGame;
-import dev.anhcraft.battle.api.mode.Mode;
-import dev.anhcraft.battle.api.inventory.items.GrenadeModel;
-import dev.anhcraft.battle.api.inventory.items.GunModel;
-import dev.anhcraft.battle.api.inventory.items.ItemType;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
+import dev.anhcraft.battle.api.inventory.item.GunModel;
+import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -255,6 +255,6 @@ public class DeathmatchController extends ModeController {
         } while(players.hasNext()); // we use do-while since there is always at least one player
         winner.setWinner(true);
 
-        plugin.gameManager.handleEnd(game);
+        plugin.arenaManager.handleEnd(game);
     }
 }

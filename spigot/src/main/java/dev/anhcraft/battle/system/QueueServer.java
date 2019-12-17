@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.system;
 
-import dev.anhcraft.battle.api.ApiProvider;
+import dev.anhcraft.battle.ApiProvider;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 

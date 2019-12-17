@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.game.Game;
-import dev.anhcraft.battle.api.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.Game;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
