@@ -18,14 +18,33 @@
  *
  */
 
-package dev.anhcraft.battle.api.economy;
+package dev.anhcraft.battle.api.economy.natives;
 
-import org.bukkit.Material;
+import dev.anhcraft.battle.api.economy.Currency;
+import dev.anhcraft.craftkit.utils.VaultApiUtil;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class GoldCurrency extends ItemCurrency {
+public class VaultCurrency implements Currency {
+    private Economy eco;
+
+    public VaultCurrency(){
+        eco = VaultApiUtil.getEconomyApi();
+    }
+
     @Override
-    public @NotNull Material getItemType() {
-        return Material.GOLD_INGOT;
+    public double getBalance(@NotNull Player player) {
+        return eco.getBalance(player);
+    }
+
+    @Override
+    public boolean withdraw(@NotNull Player player, double delta) {
+        return eco.withdrawPlayer(player, delta).transactionSuccess();
+    }
+
+    @Override
+    public boolean deposit(@NotNull Player player, double delta) {
+        return eco.depositPlayer(player, delta).transactionSuccess();
     }
 }

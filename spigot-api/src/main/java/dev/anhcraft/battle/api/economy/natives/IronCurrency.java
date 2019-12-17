@@ -18,14 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.economy;
+package dev.anhcraft.battle.api.economy.natives;
 
+import dev.anhcraft.battle.api.economy.ItemCurrency;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-public class EmeraldCurrency extends ItemCurrency {
+public class IronCurrency extends ItemCurrency {
     @Override
     public @NotNull Material getItemType() {
-        return Material.EMERALD;
+        return Material.IRON_INGOT;
     }
 }

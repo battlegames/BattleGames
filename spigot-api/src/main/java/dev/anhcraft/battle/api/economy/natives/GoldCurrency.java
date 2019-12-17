@@ -18,13 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.economy;
+package dev.anhcraft.battle.api.economy.natives;
 
-public class NativeCurrency {
-    public static VaultCurrency VAULT = new VaultCurrency();
-    public static InGameCurrency ING = new InGameCurrency();
-    public static IronCurrency IRON = new IronCurrency();
-    public static GoldCurrency GOLD = new GoldCurrency();
-    public static DiamondCurrency DIAMOND = new DiamondCurrency();
-    public static EmeraldCurrency EMERALD = new EmeraldCurrency();
+import dev.anhcraft.battle.api.economy.ItemCurrency;
+import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+
+public class GoldCurrency extends ItemCurrency {
+    @Override
+    public @NotNull Material getItemType() {
+        return Material.GOLD_INGOT;
+    }
 }

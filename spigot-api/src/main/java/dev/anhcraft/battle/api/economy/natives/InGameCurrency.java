@@ -18,32 +18,48 @@
  *
  */
 
-package dev.anhcraft.battle.api.economy;
+package dev.anhcraft.battle.api.economy.natives;
 
-import dev.anhcraft.craftkit.utils.VaultApiUtil;
-import net.milkbowl.vault.economy.Economy;
+import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.economy.Currency;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class VaultCurrency implements Currency {
-    private Economy eco;
-
-    VaultCurrency(){
-        eco = VaultApiUtil.getEconomyApi();
+public class InGameCurrency implements Currency {
+    @Nullable
+    private GamePlayer getGamePlayer(Player player){
+        return ApiProvider.consume().getArenaManager().getGamePlayer(player);
     }
 
     @Override
     public double getBalance(@NotNull Player player) {
-        return eco.getBalance(player);
+        GamePlayer gp = getGamePlayer(player);
+        return gp == null ? 0 : getBalance(gp);
+    }
+
+    public double getBalance(@NotNull GamePlayer player) {
+        return player.getIgBalance().get();
     }
 
     @Override
     public boolean withdraw(@NotNull Player player, double delta) {
-        return eco.withdrawPlayer(player, delta).transactionSuccess();
+        GamePlayer gp = getGamePlayer(player);
+        if(gp == null) return false;
+        if(delta != 0) {
+            gp.getIgBalance().addAndGet(delta < 0 ? delta : -delta);
+        }
+        return true;
     }
 
     @Override
     public boolean deposit(@NotNull Player player, double delta) {
-        return eco.depositPlayer(player, delta).transactionSuccess();
+        GamePlayer gp = getGamePlayer(player);
+        if(gp == null) return false;
+        if(delta != 0) {
+            gp.getIgBalance().addAndGet(delta < 0 ? -delta : delta);
+        }
+        return true;
     }
 }

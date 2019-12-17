@@ -18,28 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.economy;
+package dev.anhcraft.battle.api.economy.natives;
 
+import dev.anhcraft.battle.api.economy.ItemCurrency;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public enum CurrencyType {
-    VAULT(() -> NativeCurrencies.VAULT),
-    ING(() -> NativeCurrencies.ING),
-    IRON(() -> NativeCurrencies.IRON),
-    GOLD(() -> NativeCurrencies.GOLD),
-    DIAMOND(() -> NativeCurrencies.DIAMOND),
-    EMERALD(() -> NativeCurrencies.EMERALD);
-
-    private Supplier<Currency> currency;
-
-    CurrencyType(Supplier<Currency> currency) {
-        this.currency = currency;
-    }
-
-    @NotNull
-    public Currency get() {
-        return currency.get();
+public class EmeraldCurrency extends ItemCurrency {
+    @Override
+    public @NotNull Material getItemType() {
+        return Material.EMERALD;
     }
 }
