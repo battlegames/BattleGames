@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.chat;
 
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,17 +34,28 @@ public interface ChatManager {
 
     List<String> getFormattedMessages(String localePath, UnaryOperator<String> x);
 
+    List<String> getFormattedMessages(String localePath, InfoReplacer x);
+
     default List<String> getFormattedMessages(Player target, String localePath){
         return getFormattedMessages(target, localePath, UnaryOperator.identity());
     }
 
     List<String> getFormattedMessages(Player target, String localePath, UnaryOperator<String> x);
 
+    List<String> getFormattedMessages(Player target, String localePath, InfoReplacer x);
+
     default void send(CommandSender commandSender, String localePath){
         if(commandSender instanceof Player)
             sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, UnaryOperator.identity());
         else
             sendConsole(localePath);
+    }
+
+    default void send(CommandSender commandSender, String localePath, InfoReplacer infoReplacer){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, infoReplacer);
+        else
+            sendConsole(localePath, infoReplacer);
     }
 
     default void send(CommandSender commandSender, String localePath, UnaryOperator<String> x){
@@ -58,6 +70,13 @@ public interface ChatManager {
             sendPlayer((Player) commandSender, localePath, type, UnaryOperator.identity());
         else
             sendConsole(localePath);
+    }
+
+    default void send(CommandSender commandSender, String localePath, ChatMessageType type, InfoReplacer infoReplacer){
+        if(commandSender instanceof Player)
+            sendPlayer((Player) commandSender, localePath, type, infoReplacer);
+        else
+            sendConsole(localePath, infoReplacer);
     }
 
     default void send(CommandSender commandSender, String localePath, ChatMessageType type, UnaryOperator<String> x){
@@ -81,9 +100,17 @@ public interface ChatManager {
 
     void sendPlayer(Player target, String localePath, ChatMessageType type, UnaryOperator<String> x);
 
+    default void sendPlayer(Player target, String localePath, InfoReplacer infoReplacer){
+        sendPlayer(target, localePath, ChatMessageType.CHAT, infoReplacer);
+    }
+
+    void sendPlayer(Player target, String localePath, ChatMessageType type, InfoReplacer infoReplacer);
+
     default void sendConsole(String localePath){
         sendConsole(localePath, UnaryOperator.identity());
     }
 
     void sendConsole(String localePath, UnaryOperator<String> x);
+
+    void sendConsole(String localePath, InfoReplacer infoReplacer);
 }

@@ -21,10 +21,10 @@ package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.economy.Currency;
 import dev.anhcraft.battle.api.events.PlayerPrePurchaseEvent;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
@@ -35,15 +35,14 @@ import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.market.Transaction;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.gui.GDataRegistry;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
 
 public class ProductMenu implements Pagination {
     @Override
@@ -67,9 +66,9 @@ public class ProductMenu implements Pagination {
                     String x = String.format(pf, p.getPrice());
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);
-                    Map<String, String> map = api.mapInfo(holder);
+                    InfoReplacer replacer = holder.compile();
                     for (String s : lore) {
-                        ic.lore().add(PlaceholderUtil.formatInfo(String.format(s, x), map));
+                        ic.lore().add(replacer.replace(String.format(s, x)));
                     }
                 }
             }

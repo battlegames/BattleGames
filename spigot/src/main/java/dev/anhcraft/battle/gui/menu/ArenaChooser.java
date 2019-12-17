@@ -23,17 +23,14 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class ArenaChooser implements Pagination {
     @Override
@@ -52,10 +49,7 @@ public class ArenaChooser implements Pagination {
                 infoHolder = new InfoHolder("arena_");
                 arena.inform(infoHolder);
             }
-            Map<String, String> infoMap = ApiProvider.consume().mapInfo(infoHolder);
-            PreparedItem icon = arena.getIcon().duplicate();
-            icon.name(PlaceholderUtil.formatInfo(icon.name(), infoMap));
-            icon.lore().replaceAll(s -> PlaceholderUtil.formatInfo(s, infoMap));
+            PreparedItem icon = infoHolder.compile().replace(arena.getIcon().duplicate());
             slot.setPaginationItem(icon);
             slot.setAdditionalFunction(object -> api.getArenaManager().join(object.getPlayer(), arena));
         }

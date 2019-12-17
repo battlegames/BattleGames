@@ -21,18 +21,13 @@ package dev.anhcraft.battle.system.managers.item;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.inventory.item.ItemManager;
-import dev.anhcraft.battle.api.inventory.item.BattleItem;
-import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
-import dev.anhcraft.battle.api.inventory.item.ItemTag;
-import dev.anhcraft.battle.api.inventory.item.ItemType;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.ABIF;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -72,12 +67,9 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
         if(model != null){
             InfoHolder map = battleItem.collectInfo(null);
             if(map == null) return null;
-            Map<String, String> info = plugin.mapInfo(map);
-            if(addition != null) info.putAll(addition);
-            PreparedItem pi = ITEMS.get(model.getItemType()).duplicate();
-            pi.name(ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(pi.name(), info)));
-            pi.lore().replaceAll(s -> ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(s, info)));
-            return pi;
+            InfoReplacer ipr = map.compile();
+            if(addition != null) ipr.getMap().putAll(addition);
+            return ipr.replace(ITEMS.get(model.getItemType()).duplicate());
         }
         return null;
     }
@@ -92,12 +84,9 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     @Nullable
     public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition){
         if(bim == null) return null;
-        Map<String, String> info = plugin.mapInfo(bim.collectInfo(null));
-        if(addition != null) info.putAll(addition);
-        PreparedItem pi = ITEM_MODELS.get(bim.getItemType()).duplicate();
-        pi.name(ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(pi.name(), info)));
-        pi.lore().replaceAll(s -> ChatUtil.formatColorCodes(PlaceholderUtil.formatInfo(s, info)));
-        return pi;
+        InfoReplacer info = bim.collectInfo(null).compile();
+        if(addition != null) info.getMap().putAll(addition);
+        return info.replace(ITEM_MODELS.get(bim.getItemType()).duplicate());
     }
 
     @Override

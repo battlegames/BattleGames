@@ -252,7 +252,7 @@ public abstract class ModeController extends BattleComponent implements Listener
 
                 InfoHolder info = new InfoHolder("gun_");
                 gun.inform(info);
-                playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, PlaceholderUtil.formatInfo(cb.getTitle(), plugin.mapInfo(info))));
+                playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, info.compile().replace(cb.getTitle())));
 
                 playerBossBar.show();
             }

@@ -32,14 +32,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlaceholderUtil {
-    private static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
-    private static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\[([ A-Za-z0-9._-])+]");
-    private static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
+    public static final Pattern EXPRESSION_PLACEHOLDER_PATTERN = Pattern.compile("<\\?.+\\?>");
+    public static final Pattern LOCALE_PLACEHOLDER_PATTERN = Pattern.compile("\\[([ A-Za-z0-9._-])+]");
+    public static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("\\{__[a-zA-Z0-9:_]+__}");
 
     @NotNull
     public static PreparedItem formatPAPI(@NotNull PreparedItem pi, @NotNull Player player){
@@ -47,15 +46,6 @@ public class PlaceholderUtil {
         Condition.notNull(player);
         pi.name(formatPAPI(player, pi.name()));
         pi.lore().replaceAll(s -> formatPAPI(player, s));
-        return pi;
-    }
-
-    @NotNull
-    public static PreparedItem formatInfo(@NotNull PreparedItem pi, @NotNull Map<String, String> x){
-        Condition.notNull(pi);
-        Condition.notNull(x);
-        pi.name(formatInfo(pi.name(), x));
-        pi.lore().replaceAll(s -> formatInfo(s, x));
         return pi;
     }
 
@@ -87,25 +77,6 @@ public class PlaceholderUtil {
         if(str == null) return null;
         str.replaceAll(s -> formatPAPI(player, s)); // use #replaceAll is better than the provided PAPI method
         return str;
-    }
-
-    @Contract("null, _ -> null; _, null -> null")
-    public static String formatInfo(@Nullable String str, @Nullable Map<String, String> x){
-        if(str == null || x == null) return null;
-        Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
-        StringBuffer sb = new StringBuffer(str.length());
-        while(m.find()){
-            String p = m.group();
-            String s = p.substring(3, p.length()-3).trim();
-            String[] f = s.split(":");
-            if(f.length == 2) {
-                s = f[0];
-                p = f[1];
-            }
-            m.appendReplacement(sb, x.getOrDefault(s, p));
-        }
-        m.appendTail(sb);
-        return sb.toString();
     }
 
     @Contract("null -> null")

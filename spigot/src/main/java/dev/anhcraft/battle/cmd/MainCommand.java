@@ -29,10 +29,9 @@ import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.utils.ItemUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -43,7 +42,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.Map;
 
 @CommandAlias("b|bg|battle|battlegames")
 public class MainCommand extends BaseCommand{
@@ -84,13 +82,12 @@ public class MainCommand extends BaseCommand{
     @CommandPermission("battle.game.list")
     public void listGames(CommandSender sender){
         Collection<Game> q = plugin.arenaManager.listGames();
-        plugin.chatManager.send(sender, "game.list_header", str -> String.format(str, Integer.toString(q.size())));
-        q.forEach(game -> {
+        plugin.chatManager.send(sender, "game.list_header", str -> String.format(str, q.size()));
+        for (Game game : q){
             InfoHolder holder = new InfoHolder("game_");
             game.inform(holder);
-            Map<String, String> map = plugin.mapInfo(holder);
-            plugin.chatManager.send(sender, "game.list_section", x -> PlaceholderUtil.formatInfo(x, map));
-        });
+            plugin.chatManager.send(sender, "game.list_section", holder.compile());
+        }
     }
 
     @Subcommand("game destroy")

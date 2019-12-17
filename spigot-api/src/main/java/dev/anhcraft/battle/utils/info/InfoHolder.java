@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.utils.info;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,5 +89,15 @@ public class InfoHolder {
     @NotNull
     public Map<String, Object> getMap() {
         return map;
+    }
+
+    @NotNull
+    public Map<String, String> mapInfo() {
+        return BattleApi.getInstance().mapInfo(this);
+    }
+
+    @NotNull
+    public InfoReplacer compile() {
+        return new InfoReplacer(this);
     }
 }

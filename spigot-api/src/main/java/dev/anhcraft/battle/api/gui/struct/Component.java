@@ -22,13 +22,13 @@ package dev.anhcraft.battle.api.gui.struct;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.gui.GuiHandler;
+import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.functions.Instruction;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
@@ -36,6 +36,7 @@ import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.annotation.Validation;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -121,14 +122,9 @@ public class Component extends ConfigurableObject {
                         fn,
                         event -> {
                             BattleApi a = ApiProvider.consume();
-                            Map<String, String> f = a.mapInfo(
-                                    a.getGuiManager().collectInfo(event.getView())
-                            );
-                            String[] args = new String[fn.getArgs().length];
-                            for(int i = 0; i < args.length; i++){
-                                args[i] = PlaceholderUtil.formatInfo(fn.getArgs()[i], f);
-                            }
-                            if(!gh.fireEvent(fn.getTarget(), event, args)){
+                            InfoReplacer f = a.getGuiManager().collectInfo(event.getView()).compile();
+                            String[] x = (String[]) ArrayUtils.clone(fn.getArgs());
+                            if(!gh.fireEvent(fn.getTarget(), event, f.replace(x))){
                                 throw new IllegalStateException("Event fired failed");
                             }
                         })

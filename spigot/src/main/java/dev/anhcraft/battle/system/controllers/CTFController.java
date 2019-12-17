@@ -22,17 +22,16 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.mode.ICaptureTheFlag;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
-import dev.anhcraft.battle.api.arena.mode.ICaptureTheFlag;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
-import dev.anhcraft.battle.api.BattleSound;
-import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
@@ -136,7 +135,7 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
                     flag.updateDisplayName(s -> {
                         InfoHolder h = new InfoHolder("flag_");
                         flag.inform(h);
-                        return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
+                        return h.compile().replace(s);
                     });
                     String startCaptureSound = sec.getString(k+".start_capture_sound");
                     if(startCaptureSound != null) flag.setCaptureStartSound(new BattleSound(startCaptureSound));
@@ -175,7 +174,7 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             flag.updateDisplayName(s -> {
                 InfoHolder h = new InfoHolder("flag_");
                 flag.inform(h);
-                return PlaceholderUtil.formatInfo(s, plugin.mapInfo(h));
+                return h.compile().replace(s);
             });
             FlagUpdateEvent e = new FlagUpdateEvent(game, occupier, team, flag);
             Bukkit.getPluginManager().callEvent(e);

@@ -36,6 +36,7 @@ import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
@@ -99,7 +100,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         }
     }
 
-    private void drawComponent(Player player, View view, Component c, Map<String, String> info){
+    private void drawComponent(Player player, View view, Component c, InfoReplacer info){
         for (int slot : c.getSlots()) {
             PreparedItem item = c.getItem();
             if(c.getPagination() != null){
@@ -110,9 +111,8 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             }
             view.getInventory().setItem(slot,
                     formatPAPI(
-                            formatInfo(
-                                formatTranslations(item.duplicate(), plugin.getLocaleConf()),
-                                info
+                            info.replace(
+                                formatTranslations(item.duplicate(), plugin.getLocaleConf())
                             ),
                             player
                     ).build());
@@ -132,7 +132,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         return holder;
     }
 
-    private void refreshComponent(Player player, View view, Component c, Map<String, String> infoMap){
+    private void refreshComponent(Player player, View view, Component c, InfoReplacer infoMap){
         ComponentRenderEvent event = new ComponentRenderEvent(player, view.getGui(), view.getWindow(), view, c);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) return;
@@ -149,16 +149,16 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         ViewRenderEvent event = new ViewRenderEvent(player, view.getGui(), view.getWindow(), view);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) return;
-        refreshView(player, view, plugin.mapInfo(collectInfo(view)));
+        refreshView(player, view, collectInfo(view).compile());
     }
 
-    private void refreshView(Player player, View view, Map<String, String> infoMap){
+    private void refreshView(Player player, View view, InfoReplacer replacer){
         for(Component c : view.getGui().getComponents()) {
-            refreshComponent(player, view, c, infoMap);
+            refreshComponent(player, view, c, replacer);
         }
     }
 
-    private View createView(Player player, Window window, Gui gui, Map<String, String> infoMap){
+    private View createView(Player player, Window window, Gui gui, InfoReplacer replacer){
         return createView(
                 window, gui,
                 Bukkit.createInventory(
@@ -166,9 +166,8 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                         gui.getSize(),
                         formatPAPI(
                                 player,
-                                formatInfo(
-                                        localizeString(gui.getTitle(), plugin.getLocaleConf()),
-                                        infoMap
+                                replacer.replace(
+                                        localizeString(gui.getTitle(), plugin.getLocaleConf())
                                 )
                         )
                 )
@@ -245,7 +244,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     public void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component component) {
         Condition.argNotNull("player", player);
         if (view == null || component == null) return;
-        refreshComponent(player, view, component, plugin.mapInfo(collectInfo(view)));
+        refreshComponent(player, view, component, collectInfo(view).compile());
     }
 
     @Override
@@ -274,7 +273,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         GuiOpenEvent event = new GuiOpenEvent(player, g, w);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) return null;
-        Map<String, String> info = plugin.mapInfo(collectInfo(w));
+        InfoReplacer info = collectInfo(w).compile();
         View v = createView(player, w, g, info);
         if(w.getTopView() != null){
             player.closeInventory();
