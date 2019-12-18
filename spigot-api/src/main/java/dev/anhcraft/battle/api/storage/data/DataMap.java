@@ -27,10 +27,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class DataMap<T> {
     private Map<T, DataTag<?>> map = new HashMap<>();
-    private AtomicBoolean changed = new AtomicBoolean();
+    private AtomicBoolean modifyTracker = new AtomicBoolean();
 
     @Nullable
     public Object readTag(T key){
@@ -63,7 +65,7 @@ public class DataMap<T> {
     }
 
     public void put(T key, DataTag<?> tag){
-        if(!Objects.equals(tag, map.put(key, tag))) changed.set(true);
+        if(!Objects.equals(tag, map.put(key, tag))) modifyTracker.set(true);
     }
 
     /**
@@ -106,15 +108,34 @@ public class DataMap<T> {
         put(key, new ListTag<>(value));
     }
 
-    public AtomicBoolean hasChanged() {
-        return changed;
+    @NotNull
+    public AtomicBoolean getModifyTracker() {
+        return modifyTracker;
     }
 
     public int size() {
         return map.size();
     }
 
+    @NotNull
     public Set<Map.Entry<T, DataTag<?>>> entrySet() {
         return map.entrySet();
+    }
+
+    @NotNull
+    public Set<T> filterKeys(@NotNull Predicate<T> predicate){
+        return map.keySet().stream().filter(predicate).collect(Collectors.toSet());
+    }
+
+    public void copyTag(@NotNull T oldKey, @NotNull T newKey){
+        DataTag<?> x = map.get(newKey);
+        if(x == null) return;
+        put(oldKey, x);
+    }
+
+    public void cutTag(@NotNull T oldKey, @NotNull T newKey){
+        DataTag<?> x = map.remove(newKey);
+        if(x == null) return;
+        put(oldKey, x);
     }
 }
