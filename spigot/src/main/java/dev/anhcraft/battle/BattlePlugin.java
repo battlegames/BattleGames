@@ -806,7 +806,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 entry -> {
                     Object data = entry.getValue();
                     if(data instanceof State){
-                        return getLocaleConf().getString(((State) data).getLocalePath());
+                        String s = getLocaleConf().getString(((State) data).getLocalePath());
+                        return s == null ? "" : s;
                     }
                     else if(data instanceof Double)
                         return MathUtil.formatRound((Double) data);
