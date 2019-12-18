@@ -18,19 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.stats;
+package dev.anhcraft.battle.api.stats.natives;
 
-public class NativeStats {
-    public static String ASSIST = "ast";
-    public static String HEADSHOT = "hs";
-    public static String FIRST_KILL = "fsk";
-    public static String KILL = "kl";
-    public static String DEATH = "dt";
-    public static String WIN = "wn";
-    public static String LOSE = "ls";
-    public static String EXP = "exp";
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
+import org.jetbrains.annotations.NotNull;
 
-    static {
-
+public class LoseStat extends IntCounter {
+    @Override
+    public @NotNull String getId() {
+        return NativeStats.LOSE;
     }
 }

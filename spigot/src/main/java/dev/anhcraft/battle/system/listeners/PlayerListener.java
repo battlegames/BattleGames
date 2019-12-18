@@ -34,6 +34,10 @@ import dev.anhcraft.battle.api.inventory.item.Gun;
 import dev.anhcraft.battle.api.inventory.item.GunModel;
 import dev.anhcraft.battle.api.DamageReport;
 import dev.anhcraft.battle.api.MouseClick;
+import dev.anhcraft.battle.api.stats.natives.AssistStat;
+import dev.anhcraft.battle.api.stats.natives.DeathStat;
+import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
@@ -281,7 +285,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
             e.setDeathMessage(null);
-            Objects.requireNonNull(game.getPlayer(e.getEntity())).getDeathCounter().incrementAndGet();
+            Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats().of(DeathStat.class).incrementAndGet();
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
             DoubleSummaryStatistics stats = reports
@@ -316,21 +320,21 @@ public class PlayerListener extends BattleComponent implements Listener {
             for(Player player : headshooters){
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return; // ignore attackers who quit the game
-                gp.getHeadshotCounter().incrementAndGet();
+                gp.getStats().of(HeadshotStat.class).incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
             }
 
             for(Player player : assistants){
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
-                gp.getAssistCounter().incrementAndGet();
+                gp.getStats().of(AssistStat.class).incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
             }
 
             for(Player player : killers){
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) return;
-                gp.getKillCounter().incrementAndGet();
+                gp.getStats().of(KillStat.class).incrementAndGet();
                 if(player.equals(mostDamager)){
                     gp.setHasFirstKill(true);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, fkt), PlaceholderUtil.formatPAPI(player, fkst)));

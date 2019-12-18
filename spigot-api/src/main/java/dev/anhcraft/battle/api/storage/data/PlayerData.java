@@ -23,10 +23,8 @@ import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.PlayerInventory;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.market.Transaction;
-import dev.anhcraft.battle.api.stats.IntCounter;
-import dev.anhcraft.battle.api.stats.LongCounter;
-import dev.anhcraft.battle.api.stats.NativeStats;
 import dev.anhcraft.battle.api.stats.Statistic;
+import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.api.storage.tags.StringTag;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.impl.Serializable;
@@ -34,65 +32,27 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData implements Resettable, Serializable {
     private PlayerInventory inventory = new PlayerInventory();
-    private Map<String, Statistic> stats = new ConcurrentHashMap<>();
+    private Map<String, Object> storedStats = new HashMap<>();
+    private StatisticMap stats = new StatisticMap(statistic -> {
+        Object v = storedStats.get(statistic.getId());
+        if(v != null) {
+            statistic.setData(v);
+        }
+    });
     private Map<String, Long> kits = new ConcurrentHashMap<>();
     private List<String> receivedFirstJoinKits = new ArrayList<>();
     private List<Transaction> transactions = new ArrayList<>();
     private Map<String, Long> boosters = new ConcurrentHashMap<>();
     private String activeBooster;
 
-    public PlayerData(){
-        for(NativeStats ns : NativeStats.values()) {
-            stats.put(ns.getId(), ns.newInstance());
-        }
-    }
-
     @NotNull
-    public IntCounter getHeadshotCounter() {
-        return (IntCounter) stats.get(NativeStats.HEADSHOT.getId());
-    }
-
-    @NotNull
-    public IntCounter getAssistCounter() {
-        return (IntCounter) stats.get(NativeStats.ASSIST.getId());
-    }
-
-    @NotNull
-    public IntCounter getFirstKillCounter() {
-        return (IntCounter) stats.get(NativeStats.FIRST_KILL.getId());
-    }
-
-    @NotNull
-    public IntCounter getKillCounter() {
-        return (IntCounter) stats.get(NativeStats.KILL.getId());
-    }
-
-    @NotNull
-    public IntCounter getDeathCounter() {
-        return (IntCounter) stats.get(NativeStats.DEATH.getId());
-    }
-
-    @NotNull
-    public IntCounter getWinCounter() {
-        return (IntCounter) stats.get(NativeStats.WIN.getId());
-    }
-
-    @NotNull
-    public IntCounter getLoseCounter() {
-        return (IntCounter) stats.get(NativeStats.LOSE.getId());
-    }
-
-    @NotNull
-    public LongCounter getExp() {
-        return (LongCounter) stats.get(NativeStats.EXP.getId());
+    public StatisticMap getStats(){
+        return stats;
     }
 
     @NotNull
@@ -133,10 +93,11 @@ public class PlayerData implements Resettable, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
-        for(Map.Entry<String, Statistic> x : stats.entrySet()){
-            Object t = map.readTag(x.getKey());
-            if(t != null) {
-                x.getValue().setData(t);
+        for(String x : map.filterKeys(s -> s.startsWith("stats."))){
+            String t = x.substring("stats.".length());
+            Object f = map.readTag(x);
+            if (f != null) {
+                storedStats.put(t, f);
             }
         }
         List inv = map.readTag("inv", List.class);
@@ -196,8 +157,8 @@ public class PlayerData implements Resettable, Serializable {
 
     @Override
     public void write(DataMap<String> map) {
-        for(Map.Entry<String, Statistic> x : stats.entrySet()) {
-            map.writeTag(x.getKey(), x.getValue().getData());
+        for(Statistic x : stats.all()) {
+            map.writeTag("stats."+x.getId(), x.getData());
         }
         List<StringTag> inv = new ArrayList<>();
         inventory.listStorage((itemType, itemStorage) -> {
@@ -244,9 +205,7 @@ public class PlayerData implements Resettable, Serializable {
 
     @Override
     public void reset() {
-        for(Statistic x : stats.values()) {
-            x.reset();
-        }
+        stats.clear();
         inventory.clearInventory();
         kits.clear();
         receivedFirstJoinKits.clear();

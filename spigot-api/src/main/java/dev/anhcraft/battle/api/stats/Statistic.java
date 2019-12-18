@@ -26,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Statistic<T> extends Resettable {
     @NotNull
+    String getId();
+
+    @NotNull
     DataTag<T> getData();
 
     void setData(@NotNull T value);

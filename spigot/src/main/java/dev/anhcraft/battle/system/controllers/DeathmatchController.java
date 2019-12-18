@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.item.GunModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -241,10 +242,10 @@ public class DeathmatchController extends ModeController {
             GamePlayer x = players.next();
             if(winner == null) {
                 winner = x;
-                maxKill = winner.getKillCounter().get();
+                maxKill = winner.getStats().of(KillStat.class).get();
             }
             else {
-                int nextKill = x.getKillCounter().get();
+                int nextKill = x.getStats().of(KillStat.class).get();
                 if(maxKill < nextKill) {
                     winner = x;
                     maxKill = nextKill;

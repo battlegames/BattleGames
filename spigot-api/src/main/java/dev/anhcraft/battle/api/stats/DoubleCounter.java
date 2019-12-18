@@ -25,7 +25,7 @@ import dev.anhcraft.battle.api.storage.tags.DataTag;
 import dev.anhcraft.battle.api.storage.tags.DoubleTag;
 import org.jetbrains.annotations.NotNull;
 
-public class DoubleCounter extends AtomicDouble implements Statistic<Double> {
+public abstract class DoubleCounter extends AtomicDouble implements Statistic<Double> {
     public DoubleCounter(){
         super();
     }

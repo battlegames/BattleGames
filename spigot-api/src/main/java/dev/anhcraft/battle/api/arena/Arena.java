@@ -22,6 +22,9 @@ package dev.anhcraft.battle.api.arena;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.effect.firework.BattleFirework;
+import dev.anhcraft.battle.api.stats.natives.DeathStat;
+import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.api.arena.mode.Mode;
@@ -203,9 +206,9 @@ public class Arena extends ConfigurableObject implements Informative {
     public double calculateFinalMoney(@NotNull GamePlayer player){
         Validate.notNull(player, "Player must be non-null");
         return finalMoneyCalculator
-                .setVariable("a", player.getHeadshotCounter().get())
-                .setVariable("b", player.getKillCounter().get())
-                .setVariable("c", player.getDeathCounter().get())
+                .setVariable("a", player.getStats().of(HeadshotStat.class).get())
+                .setVariable("b", player.getStats().of(KillStat.class).get())
+                .setVariable("c", player.getStats().of(DeathStat.class).get())
                 .setVariable("d", player.isWinner() ? 1 : 0)
                 .evaluate();
     }
@@ -213,9 +216,9 @@ public class Arena extends ConfigurableObject implements Informative {
     public long calculateFinalExp(@NotNull GamePlayer player){
         Validate.notNull(player, "Player must be non-null");
         return (long) finalExpCalculator
-                .setVariable("a", player.getHeadshotCounter().get())
-                .setVariable("b", player.getKillCounter().get())
-                .setVariable("c", player.getDeathCounter().get())
+                .setVariable("a", player.getStats().of(HeadshotStat.class).get())
+                .setVariable("b", player.getStats().of(KillStat.class).get())
+                .setVariable("c", player.getStats().of(DeathStat.class).get())
                 .setVariable("d", player.isWinner() ? 1 : 0)
                 .evaluate();
     }

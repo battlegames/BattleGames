@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
+import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -172,7 +173,7 @@ public class MainCommand extends BaseCommand{
     public void giveExp(CommandSender sender, long exp, Player player){
         PlayerData playerData = plugin.getPlayerData(player);
         if(playerData != null) {
-            playerData.getExp().addAndGet(exp);
+            playerData.getStats().of(ExpStat.class).addAndGet(exp);
         } else {
             plugin.chatManager.sendPlayer(player, "player_data.not_found");
         }

@@ -23,7 +23,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.stats.NativeStats;
 import dev.anhcraft.battle.api.storage.StorageType;
+import dev.anhcraft.battle.api.storage.data.DataMap;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.storage.Storage;
 import dev.anhcraft.battle.storage.handlers.FileStorage;
@@ -77,8 +79,8 @@ public class BattleDataManager extends BattleComponent {
     public synchronized void saveServerData(){
         if(serverStorage != null) {
             plugin.getServerData().write(serverStorage.getData());
-            if(serverStorage.getData().hasChanged().get() && serverStorage.save())
-                serverStorage.getData().hasChanged().set(false);
+            if(serverStorage.getData().getModifyTracker().get() && serverStorage.save())
+                serverStorage.getData().getModifyTracker().set(false);
         }
     }
 
@@ -101,7 +103,23 @@ public class BattleDataManager extends BattleComponent {
             }
         }
         PlayerData pd = new PlayerData();
-        if(provider.load()) pd.read(provider.getData());
+        if(provider.load()) {
+            DataMap<String> data = provider.getData();
+            Integer ver = data.readTag("version", Integer.class);
+            if(ver == null || ver < 2){
+                plugin.getLogger().info("Upgrading player data: " + player.getUniqueId().toString());
+                data.cutTag("exp", "stats." + NativeStats.EXP);
+                data.cutTag("kill", "stats." + NativeStats.KILL);
+                data.cutTag("death", "stats." + NativeStats.DEATH);
+                data.cutTag("ast", "stats." + NativeStats.ASSIST);
+                data.cutTag("fsk", "stats." + NativeStats.FIRST_KILL);
+                data.cutTag("hs", "stats." + NativeStats.HEADSHOT);
+                data.cutTag("win", "stats." + NativeStats.WIN);
+                data.cutTag("lose", "stats." + NativeStats.LOSE);
+                data.writeTag("version", 2);
+            }
+            pd.read(data);
+        }
         plugin.PLAYER_MAP.put(player, pd);
         return pd;
     }
@@ -116,8 +134,8 @@ public class BattleDataManager extends BattleComponent {
         if(playerData != null) {
             Storage provider = PLAYER_STORAGE.get(player);
             playerData.write(provider.getData());
-            if(provider.getData().hasChanged().get() && provider.save())
-                provider.getData().hasChanged().set(false);
+            if(provider.getData().getModifyTracker().get() && provider.save())
+                provider.getData().getModifyTracker().set(false);
         }
     }
 

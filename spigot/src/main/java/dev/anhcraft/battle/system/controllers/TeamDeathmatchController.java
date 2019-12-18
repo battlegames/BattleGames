@@ -28,6 +28,7 @@ import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -256,12 +257,12 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
             IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
                 respw(game, value.toBukkit(), ABTeam.TEAM_A);
                 value.setSpectator(false);
-                return value.getKillCounter().get();
+                return value.getStats().of(KillStat.class).get();
             }).summaryStatistics();
             IntSummaryStatistics sb = bPlayers.stream().mapToInt(value -> {
                 respw(game, value.toBukkit(), ABTeam.TEAM_B);
                 value.setSpectator(false);
-                return value.getKillCounter().get();
+                return value.getStats().of(KillStat.class).get();
             }).summaryStatistics();
             ABTeam winner = handleResult(game, sa, sb, aPlayers, bPlayers);
             map.get(winner).forEach(player -> player.setWinner(true));

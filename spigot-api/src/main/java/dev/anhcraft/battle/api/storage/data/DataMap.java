@@ -128,14 +128,14 @@ public class DataMap<T> {
     }
 
     public void copyTag(@NotNull T oldKey, @NotNull T newKey){
-        DataTag<?> x = map.get(newKey);
+        DataTag<?> x = map.get(oldKey);
         if(x == null) return;
-        put(oldKey, x);
+        put(newKey, x);
     }
 
     public void cutTag(@NotNull T oldKey, @NotNull T newKey){
-        DataTag<?> x = map.remove(newKey);
+        DataTag<?> x = map.remove(oldKey);
         if(x == null) return;
-        put(oldKey, x);
+        put(newKey, x);
     }
 }

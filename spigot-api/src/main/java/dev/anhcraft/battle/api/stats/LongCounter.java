@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class LongCounter extends AtomicLong implements Statistic<Long> {
+public abstract class LongCounter extends AtomicLong implements Statistic<Long> {
     public LongCounter(){
         super();
     }

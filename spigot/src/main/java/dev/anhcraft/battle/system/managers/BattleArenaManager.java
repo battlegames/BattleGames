@@ -23,14 +23,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.mode.IMode;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
-import dev.anhcraft.battle.api.arena.*;
 import dev.anhcraft.battle.api.misc.Booster;
-import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.stats.StatisticMap;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
@@ -276,21 +278,22 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                     }
                 }
                 VaultApi.getEconomyApi().depositPlayer(p, money);
-                pd.getExp().addAndGet(exp);
+                pd.getStats().of(ExpStat.class).addAndGet(exp);
 
                 String fmMoney = MathUtil.formatRound(money);
                 String fmExp = Long.toString(exp);
 
-                pd.getKillCounter().addAndGet(gp.getKillCounter().get());
-                pd.getHeadshotCounter().addAndGet(gp.getHeadshotCounter().get());
-                pd.getAssistCounter().addAndGet(gp.getAssistCounter().get());
-                pd.getDeathCounter().addAndGet(gp.getDeathCounter().get());
-                if(gp.isHasFirstKill()) pd.getFirstKillCounter().incrementAndGet();
+                StatisticMap sm = pd.getStats();
+                sm.of(KillStat.class).addAndGet(gp.getStats().of(KillStat.class).get());
+                sm.of(HeadshotStat.class).addAndGet(gp.getStats().of(HeadshotStat.class).get());
+                sm.of(AssistStat.class).addAndGet(gp.getStats().of(AssistStat.class).get());
+                sm.of(DeathStat.class).addAndGet(gp.getStats().of(DeathStat.class).get());
+                if(gp.isHasFirstKill()) sm.of(FirstKillStat.class).incrementAndGet();
                 if(gp.isWinner()) {
                     for (String s : arena.getWonReport()) {
                         p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
                     }
-                    pd.getWinCounter().incrementAndGet();
+                    sm.of(WinStat.class).incrementAndGet();
                     for (String s : arena.getEndCommandWinners()){
                         runCmd(s, p);
                     }
@@ -299,7 +302,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                     for (String s : arena.getLostReport()) {
                         p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
                     }
-                    pd.getLoseCounter().incrementAndGet();
+                    sm.of(LoseStat.class).incrementAndGet();
                     for (String s : arena.getEndCommandLosers()){
                         runCmd(s, p);
                     }

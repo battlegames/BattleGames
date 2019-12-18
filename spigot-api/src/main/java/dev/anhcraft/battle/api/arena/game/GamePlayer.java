@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.api.arena.game;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.TempDataContainer;
 import org.apache.commons.lang.Validate;
@@ -29,13 +30,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GamePlayer extends TempDataContainer implements Resettable {
-    private final AtomicInteger headshotCounter = new AtomicInteger();
-    private final AtomicInteger killCounter = new AtomicInteger();
-    private final AtomicInteger deathCounter = new AtomicInteger();
-    private final AtomicInteger assistCounter = new AtomicInteger();
+    private final StatisticMap stats = new StatisticMap(x -> {});
     private final AtomicDouble igBalance = new AtomicDouble();
     private boolean hasFirstKill;
     private WeakReference<Player> player;
@@ -74,23 +71,8 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     }
 
     @NotNull
-    public AtomicInteger getHeadshotCounter() {
-        return headshotCounter;
-    }
-
-    @NotNull
-    public AtomicInteger getAssistCounter() {
-        return assistCounter;
-    }
-
-    @NotNull
-    public AtomicInteger getDeathCounter() {
-        return deathCounter;
-    }
-
-    @NotNull
-    public AtomicInteger getKillCounter() {
-        return killCounter;
+    public StatisticMap getStats() {
+        return stats;
     }
 
     @Nullable
@@ -119,8 +101,7 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     public void reset() {
         spectator = false;
         winner = false;
-        killCounter.set(0);
-        deathCounter.set(0);
+        stats.clear();
         backupInventory = null;
         hasFirstKill = false;
         igBalance.set(0);

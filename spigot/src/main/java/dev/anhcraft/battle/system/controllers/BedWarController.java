@@ -31,6 +31,7 @@ import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -329,7 +330,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             IntSummaryStatistics ss = f.get(bt).stream().mapToInt(p -> {
                 respw(game, p.toBukkit(), bt);
                 p.setSpectator(false);
-                return p.getKillCounter().get();
+                return p.getStats().of(KillStat.class).get();
             }).summaryStatistics();
             if(ss.getSum() > sumKill || (ss.getSum() == sumKill && ss.getAverage() > avgKill)){
                 avgKill = ss.getAverage();

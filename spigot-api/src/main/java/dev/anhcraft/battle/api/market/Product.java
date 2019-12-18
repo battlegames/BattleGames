@@ -26,6 +26,7 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
+import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -226,7 +227,7 @@ public class Product extends ConfigurableObject implements Informative {
             player.giveExp(vanillaExp);
         }
         if(battleExp > 0){
-            playerData.getExp().addAndGet(battleExp);
+            playerData.getStats().of(ExpStat.class).addAndGet(battleExp);
         }
         for(String booster : boosters){
             playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());

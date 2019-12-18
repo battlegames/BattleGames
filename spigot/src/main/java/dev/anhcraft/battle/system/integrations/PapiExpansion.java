@@ -20,9 +20,10 @@
 package dev.anhcraft.battle.system.integrations;
 
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.Icon;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.Icon;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -43,16 +44,16 @@ public class PapiExpansion extends PlaceholderExpansion {
 
         handlers.put("exp", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Long.toString(pd.getExp().get());
+            return pd == null ? null : Long.toString(pd.getStats().of(ExpStat.class).get());
         });
         handlers.put("level", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(plugin.calculateLevel(pd.getExp().get()));
+            return pd == null ? null : Integer.toString(plugin.calculateLevel(pd.getStats().of(ExpStat.class).get()));
         });
         handlers.put("level_progress", player -> {
             PlayerData pd = plugin.getPlayerData(player);
             if(pd != null) {
-                long midExp = pd.getExp().get();
+                long midExp = pd.getStats().of(ExpStat.class).get();
                 int lv = plugin.calculateLevel(midExp);
                 long startExp = plugin.calculateExp(lv);
                 long endExp = plugin.calculateExp(lv + 1);
@@ -63,51 +64,54 @@ public class PapiExpansion extends PlaceholderExpansion {
         });
         handlers.put("stats_win_matches", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getWinCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(WinStat.class).get());
         });
         handlers.put("stats_lose_matches", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getLoseCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(LoseStat.class).get());
         });
         handlers.put("stats_total_matches", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getWinCounter().get() + pd.getLoseCounter().get());
+            return pd == null ? null : Integer.toString(
+                    pd.getStats().of(WinStat.class).get() +
+                    pd.getStats().of(LoseStat.class).get()
+            );
         });
         handlers.put("stats_headshots", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getHeadshotCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(HeadshotStat.class).get());
         });
         handlers.put("stats_assists", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getAssistCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(AssistStat.class).get());
         });
         handlers.put("stats_first_kills", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getFirstKillCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(FirstKillStat.class).get());
         });
         handlers.put("stats_kills", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getKillCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(KillStat.class).get());
         });
         handlers.put("stats_deaths", player -> {
             PlayerData pd = plugin.getPlayerData(player);
-            return pd == null ? null : Integer.toString(pd.getDeathCounter().get());
+            return pd == null ? null : Integer.toString(pd.getStats().of(DeathStat.class).get());
         });
         handlers.put("game_stats_headshots", player -> {
             GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
-            return gp == null ? null : Integer.toString(gp.getHeadshotCounter().get());
+            return gp == null ? null : Integer.toString(gp.getStats().of(HeadshotStat.class).get());
         });
         handlers.put("game_stats_assists", player -> {
             GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
-            return gp == null ? null : Integer.toString(gp.getAssistCounter().get());
+            return gp == null ? null : Integer.toString(gp.getStats().of(AssistStat.class).get());
         });
         handlers.put("game_stats_kills", player -> {
             GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
-            return gp == null ? null : Integer.toString(gp.getKillCounter().get());
+            return gp == null ? null : Integer.toString(gp.getStats().of(KillStat.class).get());
         });
         handlers.put("game_stats_deaths", player -> {
             GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
-            return gp == null ? null : Integer.toString(gp.getDeathCounter().get());
+            return gp == null ? null : Integer.toString(gp.getStats().of(DeathStat.class).get());
         });
         handlers.put("game_total_players", player -> {
             LocalGame game = plugin.arenaManager.getGame(player);

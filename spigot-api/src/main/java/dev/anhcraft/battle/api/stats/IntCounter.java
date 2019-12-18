@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class IntCounter extends AtomicInteger implements Statistic<Integer> {
+public abstract class IntCounter extends AtomicInteger implements Statistic<Integer> {
     public IntCounter(){
         super();
     }
