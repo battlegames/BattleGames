@@ -21,20 +21,21 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
-import dev.anhcraft.battle.api.events.game.GameWeaponEvent;
+import dev.anhcraft.battle.api.MouseClick;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.reports.DamageReport;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
+import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
+import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerWeaponUseEvent;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.gui.screen.Window;
-import dev.anhcraft.battle.api.inventory.item.BattleItem;
-import dev.anhcraft.battle.api.inventory.item.Grenade;
-import dev.anhcraft.battle.api.inventory.item.Gun;
-import dev.anhcraft.battle.api.inventory.item.GunModel;
-import dev.anhcraft.battle.api.DamageReport;
-import dev.anhcraft.battle.api.MouseClick;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.stats.natives.AssistStat;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
@@ -46,11 +47,14 @@ import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -185,28 +189,130 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void useWeapon(GameWeaponEvent e) {
-        if(e.getEntity() instanceof Player) {
-            Player ent = (Player) e.getEntity();
-            LocalGame g1 = plugin.arenaManager.getGame(e.getDamager());
-            LocalGame g2 = plugin.arenaManager.getGame(ent);
-            if(g1 != null && g2 != null){
-                if(g1.equals(g2) && g1.getPhase() == GamePhase.PLAYING) {
-                    GamePlayer gp1 = g1.getPlayer(e.getDamager());
-                    GamePlayer gp2 = g1.getPlayer(ent);
-                    if(gp1 == null || gp2 == null) return;
-                    // spectators can't attack or receive damage
-                    if(gp1.isSpectator() || gp2.isSpectator()){
+    public void useWeapon(WeaponUseEvent e) {
+        LocalGame g1 = plugin.arenaManager.getGame(e.getReport().getDamager());
+        if(g1 != null && g1.getPhase() == GamePhase.PLAYING){
+            GamePlayer gp1 = g1.getPlayer(e.getReport().getDamager());
+            if(gp1 == null || gp1.isSpectator()){
+                e.setCancelled(true);
+                return;
+            }
+            if(e.getReport().getEntity() instanceof Player){
+                Player p2 = (Player) e.getReport().getEntity();
+                LocalGame g2 = plugin.arenaManager.getGame(p2);
+                if(g2 == null || !g2.equals(g1)){
+                    e.setCancelled(true);
+                    return;
+                }
+                GamePlayer gp2 = g1.getPlayer(p2);
+                if(gp2 == null || gp2.isSpectator()){
+                    e.setCancelled(true);
+                    return;
+                }
+                GamePlayerWeaponUseEvent event = new GamePlayerWeaponUseEvent(g1, e.getReport(), gp1, gp2);
+                Bukkit.getPluginManager().callEvent(event);
+                e.setCancelled(event.isCancelled());
+            } else {
+                GamePlayerWeaponUseEvent event = new GamePlayerWeaponUseEvent(g1, e.getReport(), gp1, null);
+                Bukkit.getPluginManager().callEvent(event);
+                e.setCancelled(event.isCancelled());
+            }
+            if(!e.isCancelled()){
+                gp1.getDataContainer().put("lastWeaponUsed", e.getWeapon());
+                gp1.getDataContainer().put("lastDamageReport", e.getReport());
+                Objects.requireNonNull(g1.getMode().getController()).onUseWeapon(e, g1);
+            }
+        } else {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void entityDamageEvent(EntityDamageEvent e) {
+        LocalGame g = null;
+        Player p2 = null;
+        GamePlayer gp1 = null;
+        GamePlayer gp2 = null;
+        DamageReport report = null;
+        GamePlayerDamageEvent.BattleType battleType = null;
+
+        if(e instanceof EntityDamageByEntityEvent){
+            EntityDamageByEntityEvent ed = (EntityDamageByEntityEvent) e;
+            if(ed.getDamager() instanceof Player && ed.getEntity() instanceof LivingEntity){
+                Player attacker = (Player) ed.getDamager();
+                g = plugin.arenaManager.getGame(attacker);
+                if(g == null) return;
+                if(g.getPhase() != GamePhase.PLAYING) {
+                    e.setCancelled(true);
+                    return;
+                }
+                gp1 = g.getPlayer(attacker);
+                if(gp1 == null || gp1.isSpectator()){
+                    e.setCancelled(true);
+                    return;
+                }
+                Weapon weaponUsed = (Weapon) gp1.getDataContainer().remove("lastWeaponUsed");
+                if(weaponUsed != null){
+                    report = (PlayerAttackReport) gp1.getDataContainer().remove("lastDamageReport");
+                }
+
+                if(ed.getEntity() instanceof Player){
+                    battleType = GamePlayerDamageEvent.BattleType.PLAYER_ATTACK_PLAYER;
+                    p2 = (Player) ed.getEntity();
+                    LocalGame g2 = plugin.arenaManager.getGame(p2);
+                    if(g2 == null || !g2.equals(g)) {
                         e.setCancelled(true);
                         return;
                     }
-                    GamePlayerWeaponEvent event = new GamePlayerWeaponEvent(g1, e.getReport(), ent, e.getWeapon(), gp1, gp2);
-                    Bukkit.getPluginManager().callEvent(event);
-                    e.setCancelled(event.isCancelled());
+                    gp2 = g2.getPlayer(p2);
+                    if(gp2 == null || gp2.isSpectator()) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                } else battleType = GamePlayerDamageEvent.BattleType.PLAYER_ATTACK_ENTITY;
 
-                    if(!event.isCancelled()) g1.getDamageReports().get(ent).add(event.getReport());
-                } else e.setCancelled(true);
+                if(report == null) {
+                    report = new PlayerAttackReport((LivingEntity) e.getEntity(), e.getFinalDamage(), attacker, weaponUsed);
+                }
+            } else if(ed.getDamager() instanceof LivingEntity && ed.getEntity() instanceof Player){
+                LivingEntity le = (LivingEntity) ed.getDamager();
+                p2 = (Player) e.getEntity();
+                g = plugin.arenaManager.getGame(p2);
+                if(g == null) return;
+                if(g.getPhase() != GamePhase.PLAYING) {
+                    e.setCancelled(true);
+                    return;
+                }
+                gp2 = g.getPlayer(p2);
+                if(gp2 == null || gp2.isSpectator()){
+                    e.setCancelled(true);
+                    return;
+                }
+                report = new PlayerAttackedReport(p2, e.getFinalDamage(), le, null);
+                battleType = GamePlayerDamageEvent.BattleType.ENTITY_ATTACK_PLAYER;
             }
+        } else if(e.getEntity() instanceof Player) {
+            p2 = (Player) e.getEntity();
+            g = plugin.arenaManager.getGame(p2);
+            if(g == null) return;
+            if(g.getPhase() != GamePhase.PLAYING) {
+                e.setCancelled(true);
+                return;
+            }
+            gp2 = g.getPlayer(p2);
+            if(gp2 == null || gp2.isSpectator()){
+                e.setCancelled(true);
+                return;
+            }
+            report = new PlayerDamagedReport(p2, e.getFinalDamage());
+            battleType = GamePlayerDamageEvent.BattleType.PLAYER_DAMAGED;
+        }
+        if(report == null) return;
+        GamePlayerDamageEvent event = new GamePlayerDamageEvent(g, report, gp1, gp2, battleType);
+        Bukkit.getPluginManager().callEvent(event);
+        e.setCancelled(event.isCancelled());
+        if(!event.isCancelled() && p2 != null){
+            g.getDamageReports().put(p2, report);
         }
     }
 
@@ -308,14 +414,17 @@ public class PlayerListener extends BattleComponent implements Listener {
             Player mostDamager = null;
 
             for(DamageReport report : reports){
-                if(report.getDamage() >= avgDamage) {
-                    killers.add(report.getDamager());
-                    if(report.getDamage() > mostDamage){
-                        mostDamage = report.getDamage();
-                        mostDamager = report.getDamager();
-                    }
-                    if(report.isHeadshotDamage()) headshooters.add(report.getDamager());
-                } else assistants.add(report.getDamager());
+                if(report instanceof PlayerAttackReport) {
+                    PlayerAttackReport par = (PlayerAttackReport) report;
+                    if (report.getDamage() >= avgDamage) {
+                        killers.add(par.getDamager());
+                        if (report.getDamage() > mostDamage) {
+                            mostDamage = report.getDamage();
+                            mostDamager = par.getDamager();
+                        }
+                        if (report.isHeadshotDamage()) headshooters.add(par.getDamager());
+                    } else assistants.add(par.getDamager());
+                }
             }
 
             for(Player player : headshooters){

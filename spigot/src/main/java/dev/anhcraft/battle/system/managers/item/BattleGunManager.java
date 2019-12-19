@@ -21,10 +21,10 @@ package dev.anhcraft.battle.system.managers.item;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.game.GameWeaponEvent;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.item.*;
-import dev.anhcraft.battle.api.DamageReport;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.utils.VectUtil;
@@ -263,13 +263,13 @@ public class BattleGunManager extends BattleComponent {
                 for(Map.Entry<LivingEntity, BoundingBox> ent : entities.entrySet()){
                     LivingEntity ve = ent.getKey();
                     if(ve.equals(player) || !ent.getValue().contains(loc)) continue;
-                    DamageReport dr = new DamageReport(player, b.getDamage());
-                    dr.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
-                    GameWeaponEvent event = new GameWeaponEvent(localGame, dr, ve, gunItem);
+                    PlayerAttackReport attackReport = new PlayerAttackReport(ve, b.getDamage(), player, gunItem);
+                    attackReport.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
+                    WeaponUseEvent event = new WeaponUseEvent(localGame, attackReport);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) continue;
 
-                    ve.damage(event.getDamage(), player);
+                    ve.damage(event.getReport().getDamage(), player);
                     if(b.getFireTicks() > 0) ve.setFireTicks(b.getFireTicks());
                     Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
                             .normalize().multiply(b.getKnockback()));

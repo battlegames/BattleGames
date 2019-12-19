@@ -20,12 +20,12 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
-import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.item.GunModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
@@ -39,7 +39,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -220,14 +219,17 @@ public class DeathmatchController extends ModeController {
         }
     }
 
-    @EventHandler
-    public void damage(GamePlayerWeaponEvent e) {
-        if(e.getGame().getMode() != getMode()) return;
-        performCooldownMap(e.getGame(), "spawn_protection",
-            cooldownMap -> {
-                int t = e.getGame().getArena().getAttributes().getInt("spawn_protection_time");
-                if(!cooldownMap.isPassed(e.getPlayer(), t)) e.setCancelled(true);
-            });
+    @Override
+    public void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game) {
+        if(event.getReport().getEntity() instanceof Player){
+            performCooldownMap(game, "spawn_protection",
+                cooldownMap -> {
+                    int t = game.getArena().getAttributes().getInt("spawn_protection_time");
+                    if(!cooldownMap.isPassed((Player) event.getReport().getEntity(), t)) {
+                        event.setCancelled(true);
+                    }
+                });
+        }
     }
 
     @Override

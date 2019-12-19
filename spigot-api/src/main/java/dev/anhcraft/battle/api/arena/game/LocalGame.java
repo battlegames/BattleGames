@@ -24,7 +24,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.events.game.GameEndEvent;
-import dev.anhcraft.battle.api.DamageReport;
+import dev.anhcraft.battle.api.reports.DamageReport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

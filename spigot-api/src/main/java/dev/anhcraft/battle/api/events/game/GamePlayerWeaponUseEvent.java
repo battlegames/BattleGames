@@ -21,36 +21,34 @@ package dev.anhcraft.battle.api.events.game;
 
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.inventory.item.Weapon;
-import dev.anhcraft.battle.api.DamageReport;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GamePlayerWeaponEvent extends GameWeaponEvent {
+/**
+ * This event has the same function with {@link WeaponUseEvent} except that this one is only fired during the game.
+ */
+public class GamePlayerWeaponUseEvent extends WeaponUseEvent {
     public static final HandlerList handlers = new HandlerList();
+
     private GamePlayer gp1;
     private GamePlayer gp2;
 
-    public GamePlayerWeaponEvent(@NotNull LocalGame localGame, @NotNull DamageReport report, @NotNull LivingEntity entity, @NotNull Weapon weapon, @NotNull GamePlayer gp1, @NotNull GamePlayer gp2) {
-        super(localGame, report, entity, weapon);
+    public GamePlayerWeaponUseEvent(@NotNull LocalGame game, @NotNull PlayerAttackReport report, @NotNull GamePlayer gp1, @Nullable GamePlayer gp2) {
+        super(game, report);
         this.gp1 = gp1;
         this.gp2 = gp2;
     }
 
     @NotNull
-    public Player getPlayer(){
-        return (Player) getEntity();
-    }
-
-    @NotNull
-    public GamePlayer getGameDamager() {
+    public GamePlayer getDamager() {
         return gp1;
     }
 
-    @NotNull
-    public GamePlayer getGamePlayer() {
+    @Nullable
+    public GamePlayer getTarget() {
         return gp2;
     }
 

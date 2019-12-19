@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.arena.mode;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -73,6 +74,10 @@ public interface IMode {
     }
 
     default void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
+
+    }
+
+    default void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game){
 
     }
 

@@ -17,47 +17,21 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.api;
+package dev.anhcraft.battle.api.reports;
 
-import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.battle.api.inventory.item.Weapon;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class DamageReport {
-    private long date;
-    private Player damager;
-    private double damage;
-    private boolean headshotDamage;
-
-    public DamageReport(@NotNull Player damager, double damage) {
-        Condition.argNotNull("damager", damager);
-        this.damager = damager;
-        this.date = System.currentTimeMillis();
-        this.damage = damage;
+public class PlayerAttackReport extends AttackReport {
+    public PlayerAttackReport(@NotNull LivingEntity entity, double damage, @NotNull Player damager, @Nullable Weapon weapon) {
+        super(entity, damage, damager, weapon);
     }
 
     @NotNull
     public Player getDamager() {
-        return damager;
-    }
-
-    public long getDate() {
-        return date;
-    }
-
-    public void setDamage(double damage) {
-        this.damage = damage;
-    }
-
-    public double getDamage() {
-        return damage;
-    }
-
-    public boolean isHeadshotDamage() {
-        return headshotDamage;
-    }
-
-    public void setHeadshotDamage(boolean headshotDamage) {
-        this.headshotDamage = headshotDamage;
+        return (Player) damager;
     }
 }

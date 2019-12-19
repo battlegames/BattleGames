@@ -23,11 +23,11 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
+import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
-import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
-import dev.anhcraft.battle.api.events.game.GamePlayerWeaponEvent;
-import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
@@ -36,7 +36,6 @@ import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -233,16 +232,23 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
         }
     }
 
-    @EventHandler
-    public void damage(GamePlayerWeaponEvent e) {
-        if(e.getGame().getMode() != getMode()) return;
-        TeamManager<ABTeam> teamManager = TEAM.get(e.getGame());
-        if(teamManager.getTeam(e.getDamager()) == teamManager.getTeam(e.getPlayer())) e.setCancelled(true);
-        else performCooldownMap(e.getGame(), "spawn_protection",
-                cooldownMap -> {
-                    int t = e.getGame().getArena().getAttributes().getInt("spawn_protection_time");
-                    if(!cooldownMap.isPassed(e.getPlayer(), t)) e.setCancelled(true);
-                });
+    @Override
+    public void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game) {
+        if(event.getReport().getEntity() instanceof Player){
+            Player target = (Player) event.getReport().getEntity();
+            TeamManager<ABTeam> teamManager = TEAM.get(game);
+            if(teamManager.getTeam(event.getReport().getDamager()) == teamManager.getTeam(target)) {
+                event.setCancelled(true);
+            } else {
+                performCooldownMap(game, "spawn_protection",
+                        cooldownMap -> {
+                            int t = game.getArena().getAttributes().getInt("spawn_protection_time");
+                            if (!cooldownMap.isPassed(target, t)) {
+                                event.setCancelled(true);
+                            }
+                        });
+            }
+        }
     }
 
     @Override
