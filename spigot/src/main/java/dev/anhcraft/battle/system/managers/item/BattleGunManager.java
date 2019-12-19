@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BattleGunManager extends BattleComponent {
@@ -196,6 +197,10 @@ public class BattleGunManager extends BattleComponent {
             return false;
         }
         if(mag.getAmmo().getModel() == null || mag.getAmmoCount() == 0) {
+            if(plugin.getGeneralConfig().shouldAutoReloadGun()){
+                Objects.requireNonNull((ModeController) localGame.getMode().getController()).doReloadGun(player, gunItem);
+                return false;
+            }
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return false;
         }

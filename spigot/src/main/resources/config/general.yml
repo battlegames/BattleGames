@@ -71,6 +71,7 @@ control:
   gun_shoot: left_click
   gun_zoom: right_click
   grenade_throw: left_click
+  auto_reload_gun: false
 
 in_game_economy:
   currency:

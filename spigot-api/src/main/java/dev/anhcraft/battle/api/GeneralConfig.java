@@ -198,6 +198,10 @@ public class GeneralConfig extends ConfigurableObject {
     @PrettyEnum
     private MouseClick grenadeThrowClick = MouseClick.LEFT_CLICK;
 
+    @Key("control.auto_reload_gun")
+    @Explanation("Automatically reload guns ammunition when needed")
+    private boolean autoReloadGun = false;
+
     @Key("in_game_economy.currency.name")
     @Explanation("The name of the currency that used in-game")
     @IgnoreValue(ifNull = true)
@@ -338,6 +342,10 @@ public class GeneralConfig extends ConfigurableObject {
     @NotNull
     public MouseClick getGunZoomClick() {
         return gunZoomClick;
+    }
+
+    public boolean shouldAutoReloadGun() {
+        return autoReloadGun;
     }
 
     @NotNull
