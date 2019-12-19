@@ -84,7 +84,7 @@ public class GamePlayer extends TempDataContainer implements Resettable {
         this.backupInventory = backupInventory;
     }
 
-    public boolean isHasFirstKill() {
+    public boolean hasFirstKill() {
         return hasFirstKill;
     }
 

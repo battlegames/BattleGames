@@ -429,23 +429,23 @@ public class PlayerListener extends BattleComponent implements Listener {
 
             for(Player player : headshooters){
                 GamePlayer gp = game.getPlayer(player);
-                if(gp == null) return; // ignore attackers who quit the game
+                if(gp == null) continue;
                 gp.getStats().of(HeadshotStat.class).incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
             }
 
             for(Player player : assistants){
                 GamePlayer gp = game.getPlayer(player);
-                if(gp == null) return;
+                if(gp == null) continue;
                 gp.getStats().of(AssistStat.class).incrementAndGet();
                 plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
             }
 
             for(Player player : killers){
                 GamePlayer gp = game.getPlayer(player);
-                if(gp == null) return;
+                if(gp == null) continue;
                 gp.getStats().of(KillStat.class).incrementAndGet();
-                if(player.equals(mostDamager)){
+                if(player.equals(mostDamager) && !gp.hasFirstKill()) {
                     gp.setHasFirstKill(true);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, fkt), PlaceholderUtil.formatPAPI(player, fkst)));
                 }

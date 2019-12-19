@@ -288,7 +288,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 sm.of(HeadshotStat.class).addAndGet(gp.getStats().of(HeadshotStat.class).get());
                 sm.of(AssistStat.class).addAndGet(gp.getStats().of(AssistStat.class).get());
                 sm.of(DeathStat.class).addAndGet(gp.getStats().of(DeathStat.class).get());
-                if(gp.isHasFirstKill()) sm.of(FirstKillStat.class).incrementAndGet();
+                if(gp.hasFirstKill()) sm.of(FirstKillStat.class).incrementAndGet();
                 if(gp.isWinner()) {
                     for (String s : arena.getWonReport()) {
                         p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
