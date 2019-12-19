@@ -221,7 +221,7 @@ public class BattleGunManager extends BattleComponent {
                 sprayVec.normalize();
             }
             VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
-            sprayVec.multiply(player.isSneaking() ? 0.25 : 0.5);
+            sprayVec.multiply(player.isSneaking() ? 0.25 : 0.4);
         } else
             sprayVec = new Vector();
 
@@ -231,7 +231,7 @@ public class BattleGunManager extends BattleComponent {
         }
 
         final double maxHeight = player.getWorld().getMaxHeight();
-        final double angle = Math.toRadians(-start.getPitch());
+        final double angle = Math.toRadians(-start.getPitch()/5);
         final double cosA = Math.cos(angle);
         final double sinA = Math.sin(angle);
         final long timeOffset = 25;

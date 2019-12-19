@@ -61,7 +61,7 @@ public class GunModel extends WeaponModel {
 
     @Key("muzzle_velocity")
     @Explanation("The initial velocity of a bullet when it is shot out of the gun")
-    private double muzzleVelocity = 50;
+    private double muzzleVelocity = 70;
 
     @Key("magazine.default")
     @Explanation("The default magazine")

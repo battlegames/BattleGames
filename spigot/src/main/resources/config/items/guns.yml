@@ -18,7 +18,7 @@ ak_47:
     on_shoot: "$entity_dragon_fireball_explode"
     on_start_reloading: "$entity_player_levelup"
     on_end_reloading: "$entity_player_levelup"
-  reload_time_formula: "(b-a)*10"
+  reload_time_formula: "(b-a)*8"
   bossbar:
     on_reload:
       primary: false
@@ -68,7 +68,7 @@ desert_eagle:
     default: default_de
     max_capacity: 35
   inventory_slot: 0
-  reload_time_formula: "(b-a)*10"
+  reload_time_formula: "(b-a)*7"
   bossbar:
     on_reload:
       title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
@@ -102,4 +102,4 @@ awm:
     on_reload:
       title: "&b&lReloading... &6&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
       color: green
-  muzzle_velocity: 90
+  muzzle_velocity: 120
