@@ -28,6 +28,7 @@ import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
+import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.Grenade;
 import dev.anhcraft.battle.api.inventory.item.Gun;
@@ -373,7 +374,10 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void closeInv(InventoryCloseEvent event) {
-        plugin.guiManager.getWindow(event.getPlayer()).setTopView(null);
+        Window w = plugin.guiManager.getWindow(event.getPlayer());
+        Object v = w.getDataContainer().remove("switchView");
+        if(v instanceof Boolean && (Boolean) v) return;
+        w.setTopView(null);
     }
 
     @EventHandler

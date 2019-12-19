@@ -276,7 +276,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         InfoReplacer info = collectInfo(w).compile();
         View v = createView(player, w, g, info);
         if(w.getTopView() != null){
-            player.closeInventory();
+            w.getDataContainer().put("switchView", true);
         }
         w.setTopView(v);
         refreshView(player, v, info);
