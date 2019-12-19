@@ -19,16 +19,13 @@
  */
 package dev.anhcraft.battle.system.listeners;
 
+import com.google.common.collect.ImmutableMap;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.MouseClick;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.reports.DamageReport;
-import dev.anhcraft.battle.api.reports.PlayerAttackReport;
-import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
-import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerDamageEvent;
@@ -36,6 +33,10 @@ import dev.anhcraft.battle.api.events.game.GamePlayerWeaponUseEvent;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.api.reports.DamageReport;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
+import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
+import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
 import dev.anhcraft.battle.api.stats.natives.AssistStat;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
@@ -44,7 +45,10 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
@@ -65,6 +69,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlayerListener extends BattleComponent implements Listener {
     public PlayerListener(BattlePlugin plugin) {
@@ -391,10 +396,10 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
         LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
-            e.setDeathMessage(null);
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats().of(DeathStat.class).incrementAndGet();
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
+            if(reports.isEmpty()) return;
             DoubleSummaryStatistics stats = reports
                     .stream()
                     .mapToDouble(DamageReport::getDamage)
@@ -407,15 +412,21 @@ public class PlayerListener extends BattleComponent implements Listener {
             String asst = plugin.getLocaleConf().getString("medal.assist_subtitle");
             String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
             String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
+
+            Map<String, Double> damagerMap = new HashMap<>();
             Set<Player> headshooters = new HashSet<>();
             Set<Player> killers = new HashSet<>();
             Set<Player> assistants = new HashSet<>();
             double mostDamage = 0;
             Player mostDamager = null;
+            double totalPlayerDamage = 0;
+            double totalNatureDamage = 0;
 
             for(DamageReport report : reports){
                 if(report instanceof PlayerAttackReport) {
+                    totalPlayerDamage += report.getDamage();
                     PlayerAttackReport par = (PlayerAttackReport) report;
+                    damagerMap.compute(par.getDamager().getName(), (s, f) -> f == null ? report.getDamage() : f + report.getDamage());
                     if (report.getDamage() >= avgDamage) {
                         killers.add(par.getDamager());
                         if (report.getDamage() > mostDamage) {
@@ -424,7 +435,41 @@ public class PlayerListener extends BattleComponent implements Listener {
                         }
                         if (report.isHeadshotDamage()) headshooters.add(par.getDamager());
                     } else assistants.add(par.getDamager());
+                } else {
+                    totalNatureDamage += report.getDamage();
                 }
+            }
+
+            ImmutableMap.Builder<String, Double> damagerMapBuilder = ImmutableMap.builder();
+            damagerMapBuilder.orderEntriesByValue(Comparator.reverseOrder());
+            damagerMapBuilder.putAll(damagerMap);
+            ImmutableMap<String, Double> damagers = damagerMapBuilder.build();
+
+            if(totalPlayerDamage == 0){
+                InfoReplacer ir = new InfoHolder("")
+                        .inform("player", e.getEntity().getName())
+                        .compile();
+                e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocaleConf().getString("game.death_message.by_nature"))));
+            } else {
+                boolean over = damagers.keySet().size() > 3;
+                String attackerNames = damagers.keySet().stream().limit(3).collect(Collectors.joining(", "));
+                double playerPtg = totalPlayerDamage * 100 / (totalPlayerDamage + totalNatureDamage);
+                double naturePtg = 100 - playerPtg;
+                InfoReplacer ir = new InfoHolder("")
+                        .inform("attackers", attackerNames)
+                        .inform("nature_ptg", naturePtg)
+                        .inform("player_ptg", playerPtg)
+                        .inform("player", e.getEntity().getName())
+                        .compile();
+                String x;
+                if(totalNatureDamage == 0){
+                    if(over) x = "game.death_message.by_players.over";
+                    else x = "game.death_message.by_players.enough";
+                } else {
+                    if(over) x = "game.death_message.with_players.over";
+                    else x = "game.death_message.with_players.enough";
+                }
+                e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(plugin.getLocaleConf().getString(x))));
             }
 
             for(Player player : headshooters){
