@@ -82,6 +82,10 @@
                             <pattern>org.jetbrains.annotations</pattern>
                             <shadedPattern>dev.anhcraft.battle.ext.annotations</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>dev.anhcraft.battle.bstats</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

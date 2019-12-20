@@ -24,20 +24,24 @@ import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
-import dev.anhcraft.battle.api.*;
-import dev.anhcraft.battle.api.chat.ChatManager;
-import dev.anhcraft.battle.api.effect.BattleEffect;
-import dev.anhcraft.battle.api.effect.EffectOption;
-import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.chat.ChatManager;
+import dev.anhcraft.battle.api.effect.BattleEffect;
+import dev.anhcraft.battle.api.effect.EffectOption;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.misc.BattleScoreboard;
+import dev.anhcraft.battle.api.misc.Booster;
+import dev.anhcraft.battle.api.misc.Kit;
+import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
@@ -58,7 +62,10 @@ import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
-import dev.anhcraft.battle.system.managers.*;
+import dev.anhcraft.battle.system.managers.BattleArenaManager;
+import dev.anhcraft.battle.system.managers.BattleChatManager;
+import dev.anhcraft.battle.system.managers.BattleDataManager;
+import dev.anhcraft.battle.system.managers.BattleGuiManager;
 import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
 import dev.anhcraft.battle.system.managers.item.BattleGunManager;
 import dev.anhcraft.battle.system.managers.item.BattleItemManager;
@@ -68,7 +75,8 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.battle.utils.info.*;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -80,6 +88,7 @@ import dev.anhcraft.jvmkit.utils.*;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -96,9 +105,11 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -299,6 +310,23 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 return guiManager.GUI.keySet();
             }
         });
+
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.AdvancedPie("arenas_per_mode", new Callable<Map<String, Integer>>() {
+            @Override
+            public Map<String, Integer> call() throws Exception {
+                Map<String, Integer> map = new HashMap<>();
+                for (Arena a : ARENA_MAP.values()){
+                    map.compute(a.getMode().getId(), new BiFunction<String, Integer, Integer>() {
+                        @Override
+                        public Integer apply(String s, Integer x) {
+                            return x == null ? 1 : x + 1;
+                        }
+                    });
+                }
+                return map;
+            }
+        }));
     }
 
     private void injectApiProvider() {
