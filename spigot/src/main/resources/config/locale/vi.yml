@@ -52,6 +52,14 @@ game:
     - '&eNgười chơi: &f{__game_player_count__}/{__arena_max_players__}'
   destroy_success: '&aTrò chơi đang bị phá hủy!'
   inactive_arena: '&cKhông có trò chơi nào đang diễn ra trên đấu trường đó!'
+  death_message:
+    by_nature: "&c{__player__} đã chết"
+    by_players:
+      enough: "&c{__player__} đã chết vì bị giết bởi &e{__attackers__}"
+      over: "&c{__player__} đã chết vì bị giết bởi &e{__attackers__},..."
+    with_players:
+      enough: "&c{__player__} đã chết vì &a{__nature_ptg__}% &cdo tự nhiên và &a{__player_ptg__}% &cdo &e{__attackers__}"
+      over: "&c{__player__} đã chết vì &a{__nature_ptg__}% &cdo tự nhiên và &a{__player_ptg__}% &cdo &e{__attackers__},..."
 mode_dm:
   player_join_broadcast: '&f{__target__} đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
   player_quit_broadcast: '&f{__target__} đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
