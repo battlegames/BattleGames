@@ -227,6 +227,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         Condition.argNotNull("game", game);
         synchronized (LOCK) {
             if(game instanceof LocalGame) {
+                plugin.bungeeMessenger.sendGameDestroy((LocalGame) game);
                 ((LocalGame) game).getPlayers().forEach((player, gp) -> {
                     Bukkit.getPluginManager().callEvent(new GameQuitEvent(game, gp));
                     PLAYER_GAME_MAP.remove(player.getUniqueId());

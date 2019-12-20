@@ -85,6 +85,29 @@ public class MessageListener extends BattleComponent implements Listener {
                             plugin.getProxy().getServerInfo(sv).sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
                         }
                     }
+                    break;
+                }
+                case 3: {
+                    String arena = in.readUTF();
+                    ByteArrayOutputStream s = new ByteArrayOutputStream();
+                    DataOutputStream out = new DataOutputStream(s);
+                    out.writeByte(3);
+                    out.writeUTF(arena);
+                    byte[] bytes = s.toByteArray();
+                    if(ev.getSender() instanceof Server && plugin.config.getBoolean("game_update.send_all")){
+                        ServerInfo sender = ((Server) ev.getSender()).getInfo();
+                        plugin.getProxy().getServers().forEach((s1, serverInfo) -> {
+                            if(!serverInfo.equals(sender)){
+                                serverInfo.sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
+                            }
+                        });
+                    } else {
+                        int svs = in.readInt();
+                        for(int i = 0; i < svs; i++){
+                            String sv = in.readUTF();
+                            plugin.getProxy().getServerInfo(sv).sendData(BattlePlugin.BATTLE_CHANNEL, bytes, false);
+                        }
+                    }
                 }
             }
             in.close();

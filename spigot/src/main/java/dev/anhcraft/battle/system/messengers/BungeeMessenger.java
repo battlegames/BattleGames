@@ -78,6 +78,23 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
         }
     }
 
+    public void sendGameDestroy(LocalGame game){
+        try {
+            ByteArrayOutputStream s = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(s);
+            out.writeByte(3);
+            out.writeUTF(game.getArena().getId());
+            Multiset<String> servers = game.getDownstreamServers().keys();
+            out.writeInt(servers.size());
+            for(String sv : servers) out.writeUTF(sv);
+            out.close();
+            byte[] array = s.toByteArray();
+            game.getPlayers().keySet().iterator().next().sendPluginMessage(plugin, BATTLE_CHANNEL, array);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onPluginMessageReceived(String channel, Player mid, byte[] message) {
         if(!channel.equals(BATTLE_CHANNEL)) return;
@@ -110,6 +127,17 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
                         Game game = plugin.arenaManager.join(player, arena, true);
                         if(game != null) ((LocalGame) game).getDownstreamServers().put(server, player);
                     }
+                }
+                case 3: {
+                    String arenaId = in.readUTF();
+                    Arena arena = plugin.getArena(arenaId);
+                    if(arena != null && arena.hasBungeecordSupport()) {
+                        Game g = plugin.arenaManager.getGame(arena);
+                        if(g instanceof RemoteGame) {
+                            plugin.arenaManager.destroy(g);
+                        }
+                    }
+                    break;
                 }
             }
             in.close();
