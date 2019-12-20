@@ -24,8 +24,10 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 
 public class RollbackWork implements Work {
@@ -60,6 +62,31 @@ public class RollbackWork implements Work {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
+            } else if (rollback.getProvider() == Rollback.Provider.BATTLE) {
+                CountDownLatch countDownLatch = new CountDownLatch(1);
+                for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
+                    String w = it.next();
+                    World wd = plugin.getServer().getWorld(w);
+                    if(wd == null){
+                        plugin.getLogger().warning("World not found: "+w);
+                        it.remove();
+                    } else {
+                        plugin.getLogger().info("[Rollback/Battle] Reloading world: " + w);
+                        plugin.taskHelper.newTask(() -> {
+                            if (plugin.battleRollback.rollbackWorld(wd)) {
+                                plugin.getLogger().info("[Rollback/Battle] World reloaded successfully!");
+                            } else {
+                                plugin.getLogger().warning("[Rollback/Battle] Failed to reload! (Please check the world)");
+                            }
+                            countDownLatch.countDown();
+                        });
+                    }
+                }
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

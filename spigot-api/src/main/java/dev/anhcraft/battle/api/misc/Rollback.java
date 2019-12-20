@@ -33,7 +33,8 @@ public class Rollback extends ConfigurableObject {
     public static final ConfigSchema<Rollback> SCHEMA = ConfigSchema.of(Rollback.class);
 
     public enum Provider {
-        SLIME_WORLD
+        SLIME_WORLD,
+        BATTLE
     }
 
     @Key("enabled")

@@ -38,10 +38,7 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.BattleScoreboard;
-import dev.anhcraft.battle.api.misc.Booster;
-import dev.anhcraft.battle.api.misc.Kit;
-import dev.anhcraft.battle.api.misc.Perk;
+import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.EditorCommand;
@@ -56,6 +53,7 @@ import dev.anhcraft.battle.gui.menu.market.CategoryMenu;
 import dev.anhcraft.battle.gui.menu.market.CategoryMenuEditor;
 import dev.anhcraft.battle.gui.menu.market.ProductMenu;
 import dev.anhcraft.battle.gui.menu.market.ProductMenuEditor;
+import dev.anhcraft.battle.system.BattleRollback;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
 import dev.anhcraft.battle.system.integrations.VaultApi;
@@ -91,6 +89,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -180,6 +179,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private String remoteConfigUrl;
     private boolean spigotBungeeSupport;
     private boolean supportBungee;
+    public BattleRollback battleRollback;
     public SWMIntegration SWMIntegration;
     private boolean slimeWorldManagerSupport;
 
@@ -215,6 +215,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         grenadeManager = new BattleGrenadeManager(this);
         guiManager = new BattleGuiManager(this);
         arenaManager = new BattleArenaManager(this);
+        battleRollback = new BattleRollback(this);
 
         initGeneral(CONFIG[1]);
         initLocale(CONFIG[2]);
@@ -624,6 +625,21 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 e.printStackTrace();
             }
             ARENA_MAP.put(s, arena);
+            if(arena.getRollback() != null && arena.getRollback().getProvider() == Rollback.Provider.BATTLE){
+                for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
+                    String w = it.next();
+                    World wd = getServer().getWorld(w);
+                    if(wd == null){
+                        getLogger().warning("World not found: "+w);
+                        it.remove();
+                    } else if(slimeWorldManagerSupport && SWMIntegration.isReadOnly(w) != -1){
+                        getLogger().warning("World is managed by SWM: "+w);
+                        it.remove();
+                    } else {
+                        battleRollback.backupWorld(wd);
+                    }
+                }
+            }
         });
     }
 
