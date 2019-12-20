@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerDamageEvent;
+import dev.anhcraft.battle.api.events.game.GamePlayerDeathEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponUseEvent;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.gui.screen.Window;
@@ -413,11 +414,11 @@ public class PlayerListener extends BattleComponent implements Listener {
             String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
             String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
 
-            Map<String, Double> damagerMap = new HashMap<>();
+            Map<Player, Double> damagerMap = new HashMap<>();
             Set<Player> headshooters = new HashSet<>();
             Set<Player> killers = new HashSet<>();
             Set<Player> assistants = new HashSet<>();
-            double mostDamage = 0;
+            double mostPlayerDamage = 0;
             Player mostDamager = null;
             double totalPlayerDamage = 0;
             double totalNatureDamage = 0;
@@ -426,24 +427,36 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(report instanceof PlayerAttackReport) {
                     totalPlayerDamage += report.getDamage();
                     PlayerAttackReport par = (PlayerAttackReport) report;
-                    damagerMap.compute(par.getDamager().getName(), (s, f) -> f == null ? report.getDamage() : f + report.getDamage());
+                    damagerMap.compute(par.getDamager(), (s, f) -> f == null ? report.getDamage() : f + report.getDamage());
                     if (report.getDamage() >= avgDamage) {
                         killers.add(par.getDamager());
-                        if (report.getDamage() > mostDamage) {
-                            mostDamage = report.getDamage();
+                        if (report.getDamage() > mostPlayerDamage) {
+                            mostPlayerDamage = report.getDamage();
                             mostDamager = par.getDamager();
                         }
-                        if (report.isHeadshotDamage()) headshooters.add(par.getDamager());
-                    } else assistants.add(par.getDamager());
+                        if (report.isHeadshotDamage()) {
+                            headshooters.add(par.getDamager());
+                        }
+                    } else {
+                        assistants.add(par.getDamager());
+                    }
                 } else {
                     totalNatureDamage += report.getDamage();
                 }
             }
 
-            ImmutableMap.Builder<String, Double> damagerMapBuilder = ImmutableMap.builder();
+            headshooters.removeAll(assistants);
+            killers.removeAll(assistants);
+
+            ImmutableMap.Builder<Player, Double> damagerMapBuilder = ImmutableMap.builder();
             damagerMapBuilder.orderEntriesByValue(Comparator.reverseOrder());
             damagerMapBuilder.putAll(damagerMap);
-            ImmutableMap<String, Double> damagers = damagerMapBuilder.build();
+            ImmutableMap<Player, Double> damagers = damagerMapBuilder.build();
+
+            GamePlayerDeathEvent event = new GamePlayerDeathEvent(game, e.getEntity(), damagers, headshooters, killers, assistants, mostDamager, mostPlayerDamage, totalPlayerDamage, totalNatureDamage);
+            Bukkit.getPluginManager().callEvent(event);
+            totalNatureDamage = event.getTotalNatureDamage();
+            totalPlayerDamage = event.getTotalPlayerDamage();
 
             if(totalPlayerDamage == 0){
                 InfoReplacer ir = new InfoHolder("")
@@ -452,7 +465,11 @@ public class PlayerListener extends BattleComponent implements Listener {
                 e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocaleConf().getString("game.death_message.by_nature"))));
             } else {
                 boolean over = damagers.keySet().size() > 3;
-                String attackerNames = damagers.keySet().stream().limit(3).collect(Collectors.joining(", "));
+                String attackerNames = damagers.keySet()
+                        .stream()
+                        .limit(3)
+                        .map(Player::getName)
+                        .collect(Collectors.joining(", "));
                 double playerPtg = totalPlayerDamage * 100 / (totalPlayerDamage + totalNatureDamage);
                 double naturePtg = 100 - playerPtg;
                 InfoReplacer ir = new InfoHolder("")
@@ -490,8 +507,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                 GamePlayer gp = game.getPlayer(player);
                 if(gp == null) continue;
                 gp.getStats().of(KillStat.class).incrementAndGet();
-                if(player.equals(mostDamager) && !gp.hasFirstKill()) {
+                if(player.equals(mostDamager) && !game.hasFirstKill() && !gp.hasFirstKill()) {
                     gp.setHasFirstKill(true);
+                    game.setHasFirstKill(true);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, fkt), PlaceholderUtil.formatPAPI(player, fkst)));
                 }
             }

@@ -39,6 +39,7 @@ public class LocalGame extends Game {
     private final Map<Player, GamePlayer> players = new ConcurrentHashMap<>();
     private final Multimap<String, Player> downstreamServers = Multimaps.synchronizedMultimap(HashMultimap.create());
     private final AtomicInteger bungeeSyncTick = new AtomicInteger();
+    private boolean hasFirstKill;
 
     public LocalGame(@NotNull Arena arena) {
         super(arena);
@@ -89,25 +90,19 @@ public class LocalGame extends Game {
         getArena().getMode().getController(c -> c.onEnd(this));
     }
 
+    public boolean hasFirstKill() {
+        return hasFirstKill;
+    }
+
+    public void setHasFirstKill(boolean hasFirstKill) {
+        this.hasFirstKill = hasFirstKill;
+    }
+
     @Override
     public void reset() {
         players.clear();
         downstreamServers.clear();
         bungeeSyncTick.set(0);
         super.reset();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LocalGame localGame = (LocalGame) o;
-        return damageReports.equals(localGame.damageReports) &&
-                players.equals(localGame.players) &&
-                getCurrentTime().equals(localGame.getCurrentTime()) &&
-                getPhase() == localGame.getPhase() &&
-                getArena().equals(localGame.getArena()) &&
-                downstreamServers.equals(localGame.downstreamServers) &&
-                bungeeSyncTick.equals(localGame.bungeeSyncTick);
     }
 }
