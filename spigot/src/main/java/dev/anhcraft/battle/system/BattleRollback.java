@@ -29,8 +29,11 @@ import org.bukkit.WorldCreator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BattleRollback extends BattleComponent {
+    private final Set<String> cachedWorlds = new HashSet<>();
     private final File cachedWorldFolder;
 
     public BattleRollback(BattlePlugin plugin) {
@@ -46,6 +49,8 @@ public class BattleRollback extends BattleComponent {
     }
 
     public boolean backupWorld(World world){
+        if(cachedWorlds.contains(world.getName())) return true;
+        cachedWorlds.add(world.getName());
         plugin.getLogger().info("Making a world backup of "+world.getName()+"...");
         File dest = getCachedWorldFolder(world);
         if(dest.exists()){
