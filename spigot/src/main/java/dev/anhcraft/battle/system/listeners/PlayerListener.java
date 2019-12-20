@@ -84,17 +84,17 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     public void handleJoin(Player player) {
+        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
+        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
         plugin.taskHelper.newDelayedTask(() -> {
             if(!player.isOnline()) return;
             player.teleport(plugin.getServerData().getSpawnPoint());
-            player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
-            player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
             plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
-            plugin.resetScoreboard(player);
             plugin.taskHelper.newAsyncTask(() -> {
                 PlayerData playerData = plugin.dataManager.loadPlayerData(player);
                 // back to main thread
                 plugin.taskHelper.newTask(() -> {
+                    plugin.resetScoreboard(player);
                     plugin.listKits(kit -> {
                         if(kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())){
                             kit.givePlayer(player, playerData);
