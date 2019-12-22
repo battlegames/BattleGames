@@ -266,6 +266,9 @@ gui:
     set_price_name: "&dSet price"
     set_price_lore:
       - "&fClick here to set the price of this item"
+    set_exp_name: "&dSet exp"
+    set_exp_lore:
+      - "&fClick here to set the experience points received after purchasing"
     remove_name: "&cRemove"
     remove_lore:
       - "&fClick here to remove this product"
