@@ -259,6 +259,8 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                     event.setDropItems(false);
                     event.setExpToDrop(0);
                 } else {
+                    event.setDropItems(false);
+                    event.setExpToDrop(0);
                     targetTeam.getBedPart1().setType(Material.AIR);
                     targetTeam.getBedPart2().setType(Material.AIR);
                     broadcast(game, "bed_destroy_broadcast", s -> String.format(s, event.getPlayer().getName(), targetTeam.getLocalizedName()));
