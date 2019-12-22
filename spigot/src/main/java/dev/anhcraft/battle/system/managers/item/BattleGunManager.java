@@ -234,13 +234,12 @@ public class BattleGunManager extends BattleComponent {
         final double angle = Math.toRadians(-start.getPitch()/5);
         final double cosA = Math.cos(angle);
         final double sinA = Math.sin(angle);
-        final long timeOffset = 25;
 
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Ammo.Bullet b : bullets){
             long currentTime = 0;
             while (true){
-                double deltaTime = (currentTime += timeOffset) / 1000d;
+                double deltaTime = (currentTime += b.getTimeOffset()) / 1000d;
                 double x = gm.getMuzzleVelocity() * cosA * deltaTime;
                 double y = gm.getMuzzleVelocity() * sinA * deltaTime - 0.5 * 9.8 * deltaTime * deltaTime;
                 Location loc = start.clone().add(dir.clone().multiply(x).add(sprayVec)).add(0, y, 0);

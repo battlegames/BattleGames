@@ -73,6 +73,14 @@ public class Ammo extends BattleItem<AmmoModel> {
         @Explanation("The particle to be shown when flying")
         private BattleParticle particleEffect;
 
+        @Key("time_offset")
+        @Explanation({
+                "The bullet's time offset (in milliseconds)",
+                "Higher value can help to make the entity bounding check",
+                "more accurate, but may result in laggy"
+        })
+        private double timeOffset = 5;
+
         public double getDamage() {
             return damage;
         }
@@ -90,5 +98,8 @@ public class Ammo extends BattleItem<AmmoModel> {
             return particleEffect;
         }
 
+        public double getTimeOffset() {
+            return timeOffset;
+        }
     }
 }
