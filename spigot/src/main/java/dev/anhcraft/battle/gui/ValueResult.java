@@ -21,34 +21,39 @@
 package dev.anhcraft.battle.gui;
 
 import org.apache.commons.lang.BooleanUtils;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
 public class ValueResult {
-    private String val;
+    private Object val;
 
-    public ValueResult(String val) {
+    public ValueResult(Object val) {
         this.val = val;
     }
 
     public boolean asBoolean(){
-        return BooleanUtils.toBooleanObject(val);
+        return BooleanUtils.toBooleanObject(String.valueOf(val));
     }
 
     public int asInt(){
-        return (int) Double.parseDouble(val);
+        return (int) Double.parseDouble(String.valueOf(val));
     }
 
     public double asDouble(){
-        return Double.parseDouble(val);
+        return Double.parseDouble(String.valueOf(val));
     }
 
     public float asFloat(){
-        return Float.parseFloat(val);
+        return Float.parseFloat(String.valueOf(val));
     }
 
     public long asLong(){
-        return (long) Double.parseDouble(val);
+        return (long) Double.parseDouble(String.valueOf(val));
+    }
+
+    public ItemStack asItem(){
+        return (ItemStack) val;
     }
 
     @Override
