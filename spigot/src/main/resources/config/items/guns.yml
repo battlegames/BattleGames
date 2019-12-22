@@ -13,7 +13,7 @@ ak_47:
     max_capacity: 90
   scope:
     default: basic_scope
-  inventory_slot: 1
+  inventory_slot: 2
   sounds:
     on_shoot: "$entity_dragon_fireball_explode"
     on_start_reloading: "$entity_player_levelup"
@@ -67,7 +67,7 @@ desert_eagle:
   magazine:
     default: default_de
     max_capacity: 35
-  inventory_slot: 0
+  inventory_slot: 1
   reload_time_formula: "(b-a)*7"
   bossbar:
     on_reload:
@@ -94,7 +94,7 @@ awm:
   magazine:
     default: default_awm
     max_capacity: 10
-  inventory_slot: 1
+  inventory_slot: 2
   reload_time_formula: "(b-a)*7"
   sounds:
     on_shoot: "$entity_dragon_fireball_explode"
