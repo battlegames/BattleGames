@@ -57,6 +57,7 @@ game:
     - "&eMode: &f{__mode_name__}"
     - "&eTime: &f{__game_current_time__}/{__arena_max_time__} ticks"
     - "&ePlayers: &f{__game_player_count__}/{__arena_max_players__}"
+  end_success: "&aThe game is going to end soon..."
   destroy_success: "&aThe game is being destroyed!"
   inactive_arena: "&cNo game occurs in that arena!"
   death_message:

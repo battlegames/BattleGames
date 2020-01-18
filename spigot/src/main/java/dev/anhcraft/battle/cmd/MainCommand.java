@@ -25,6 +25,7 @@ import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.Game;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
@@ -101,6 +102,26 @@ public class MainCommand extends BaseCommand{
             if(g != null){
                 plugin.arenaManager.destroy(g);
                 plugin.chatManager.send(sender, "game.destroy_success");
+            } else
+                plugin.chatManager.send(sender, "game.inactive_arena");
+        } else
+            plugin.chatManager.send(sender, "arena.not_found");
+    }
+
+    @Subcommand("game end")
+    @CommandPermission("battle.game.end")
+    @CommandCompletion("@arena")
+    public void endGame(CommandSender sender, String arena){
+        Arena a = plugin.getArena(arena);
+        if(a != null) {
+            Game g = plugin.arenaManager.getGame(a);
+            if(g != null){
+                if(g instanceof LocalGame){
+                    ((LocalGame) g).end();
+                } else {
+                    plugin.arenaManager.destroy(g);
+                }
+                plugin.chatManager.send(sender, "game.end_success");
             } else
                 plugin.chatManager.send(sender, "game.inactive_arena");
         } else
