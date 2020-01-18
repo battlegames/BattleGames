@@ -21,10 +21,7 @@ package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +37,10 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
     @Key("ammo")
     @Explanation("All ammo types can be stored in this magazine")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "ammo:",
+            "  7_62mm: 30 # Can hold up to x30 7.62 mm ammo"
+    })
     private Map<AmmoModel, Integer> ammunition = new HashMap<>();
 
     public MagazineModel(@NotNull String id) {

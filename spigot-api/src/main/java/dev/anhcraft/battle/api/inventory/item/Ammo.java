@@ -55,11 +55,11 @@ public class Ammo extends BattleItem<AmmoModel> {
         public static final ConfigSchema<Bullet> SCHEMA = ConfigSchema.of(Bullet.class);
 
         @Key("damage")
-        @Explanation("The damage that this bullet will cause")
+        @Explanation("The damage")
         private double damage;
 
         @Key("knockback")
-        @Explanation("The knockback power that applied for the target")
+        @Explanation("The knockback power")
         private double knockback;
 
         @Key("fire_ticks")

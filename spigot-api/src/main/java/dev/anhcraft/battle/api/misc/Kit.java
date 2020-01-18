@@ -76,6 +76,13 @@ public class Kit extends ConfigurableObject {
     @Key("items.vanilla")
     @Explanation("All vanilla items in this kit")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "items:",
+            "  vanilla:",
+            "    '1':",
+            "      material: bread",
+            "      amount: 16"
+    })
     private PreparedItem[] vanillaItems = new PreparedItem[0];
 
     @Key("items.battle")
@@ -91,6 +98,13 @@ public class Kit extends ConfigurableObject {
             "- _50_ae</code>"
     })
     @IgnoreValue(ifNull = true)
+    @Example({
+            "items:",
+            "  battle:",
+            "    gun: # gun, ammo, magazine, scope, grenade",
+            "    - ak_47",
+            "    - desert_eagle"
+    })
     private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
     @Key("boosters")

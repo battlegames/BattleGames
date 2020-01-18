@@ -50,7 +50,7 @@ public class GunModel extends WeaponModel {
     @Key("skin.secondary")
     @Explanation("Set the primary skin")
     @IgnoreValue(ifNull = true)
-    private ItemSkin secondarySkin = new ItemSkin();
+    private ItemSkin secondarySkin = ItemSkin.EMPTY;
 
     @Key("weight")
     @Explanation({
@@ -118,6 +118,30 @@ public class GunModel extends WeaponModel {
             "<a href=https://anhcraft.dev/tools/battle/spray.html>Spray pattern generator tool</a>"
     })
     @IgnoreValue(ifNull = true)
+    @Example({
+            "spray_pattern:",
+            "- 1.55 0.9600006103515625",
+            "- 2.05 1.7600006103515624",
+            "- 1.05 2.8600006103515625",
+            "- -0.65 3.3600006103515625",
+            "- -2.35 4.160000610351562",
+            "- -3.95 4.960000610351562",
+            "- -5.15 6.3600006103515625",
+            "- -5.25 7.560000610351563",
+            "- -4.15 9.360000610351562",
+            "- -2.45 10.660000610351563",
+            "- 0.25 12.160000610351563",
+            "- 2.05 12.860000610351562",
+            "- 3.95 14.160000610351563",
+            "- 4.45 15.460000610351562",
+            "- 4.55 17.660000610351563",
+            "- 4.25 18.560000610351562",
+            "- 2.85 19.660000610351563",
+            "- 0.65 21.26000061035156",
+            "- -0.95 21.660000610351563",
+            "- -4.25 22.560000610351562",
+            "- -5.65 22.860000610351562"
+    })
     private List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
 
     public GunModel(@NotNull String id) {

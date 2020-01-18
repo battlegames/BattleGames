@@ -52,13 +52,13 @@ public class BattleEffect extends ConfigurableObject {
     private EffectType type;
 
     @Key("options")
-    @Explanation({
-            "Options for customizing this effect",
-            "Example:",
-            "<code>repeat_delay: 20",
-            "repeat_times: 5</code>"
-    })
+    @Explanation("Effect options")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "options:",
+            "  repeat_delay: 20",
+            "  repeat_times: 5"
+    })
     private Map<EffectOption, Object> options = new HashMap<>();
 
     @NotNull

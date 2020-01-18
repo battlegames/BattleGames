@@ -23,10 +23,7 @@ package dev.anhcraft.battle.api.market;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -61,6 +58,13 @@ public class Category extends ConfigurableObject {
 
     @Key("products")
     @Explanation("Products in this category")
+    @Example({
+            "products:",
+            "  '1':",
+            "    icon:",
+            "    name: \"&c&lApple\"",
+            "    material: apple"
+    })
     private List<Product> products = new ArrayList<>();
 
     public Category(@NotNull String id) {

@@ -24,10 +24,7 @@ import dev.anhcraft.battle.api.effect.potion.BattlePotionEffect;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.attribute.Attribute;
@@ -54,6 +51,15 @@ public class Perk extends ConfigurableObject {
     @Key("executions.give_effects")
     @Explanation("Potion effects to be applied on the player")
     @IgnoreValue(ifNull = true, ifEmptyList = true)
+    @Example({
+            "executions:",
+            "  give_effects:",
+            "    '1':",
+            "      type: speed",
+            "      amplifier: 1",
+            "      duration: 99999",
+            "      particles: false"
+    })
     private List<BattlePotionEffect> potionEffects = new ArrayList<>();
 
     @Key("executions.set_health")

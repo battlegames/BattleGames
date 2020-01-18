@@ -104,11 +104,26 @@ public class Product extends ConfigurableObject implements Informative {
     @Key("executions.give_items.vanilla")
     @Explanation("The vanilla items to be given later")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "executions:",
+            "  give_items:",
+            "    vanilla:",
+            "      '1':",
+            "        material: cookie",
+            "        amount: 16"
+    })
     private PreparedItem[] vanillaItems = new PreparedItem[0];
 
     @Key("executions.give_items.battle")
     @Explanation("The Battle items to be given later")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "executions:",
+            "  give_items:",
+            "    battle:",
+            "      gun: # gun, ammo, magazine, scope, grenade",
+            "      - ak_47",
+    })
     private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
     @Key("executions.give_exp.vanilla")

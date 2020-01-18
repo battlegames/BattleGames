@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 @Schema
 public class ItemSkin extends ConfigurableObject {
     public static final ConfigSchema<ItemSkin> SCHEMA = ConfigSchema.of(ItemSkin.class);
+    public static final ItemSkin EMPTY = new ItemSkin();
 
     @Key("material")
     @Explanation("Set the material")
