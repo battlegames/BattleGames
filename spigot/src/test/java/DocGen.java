@@ -18,6 +18,8 @@
  *
  */
 
+import dev.anhcraft.battle.api.GeneralConfig;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.effect.BattleParticle;
@@ -25,7 +27,6 @@ import dev.anhcraft.battle.api.effect.FakeBlockEffect;
 import dev.anhcraft.battle.api.effect.firework.BattleFirework;
 import dev.anhcraft.battle.api.effect.firework.BattleFireworkEffect;
 import dev.anhcraft.battle.api.effect.potion.BattlePotionEffect;
-import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
@@ -34,14 +35,13 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.misc.*;
-import dev.anhcraft.battle.api.GeneralConfig;
-import dev.anhcraft.confighelper.ConfigDoc;
+import dev.anhcraft.configdoc.ConfigDocGenerator;
 
 import java.io.File;
 
 public class DocGen {
     public static void main(String[] args){
-        new ConfigDoc()
+        new ConfigDocGenerator()
                 .withSchema(Ammo.Bullet.SCHEMA)
                 .withSchema(AmmoModel.SCHEMA)
                 .withSchema(MagazineModel.SCHEMA)
