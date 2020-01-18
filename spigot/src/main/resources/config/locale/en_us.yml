@@ -42,6 +42,7 @@ server:
 arena:
   not_found: "&cCouldn't find that arena."
   error_already_joined: "&cYou've already joined!"
+  error_already_playing: "&cThe game has started. You can't join during this time."
   error_attendance_disabled: "&cSorry, you can't attend during this time."
   error_full_players: "&cSorry, this arena is full! Please join later."
   error_mode_controller_unavailable: "&cInternal error: Mode controller was unavailable."

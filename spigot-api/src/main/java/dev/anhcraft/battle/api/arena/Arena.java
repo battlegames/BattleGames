@@ -77,6 +77,10 @@ public class Arena extends ConfigurableObject implements Informative {
     @Explanation("The maximum players in this arena")
     private int maxPlayers;
 
+    @Key("allow_late_joins")
+    @Explanation("Able to join a game even it has started")
+    private boolean allowLateJoins;
+
     @Key("final_exp_formula")
     @Explanation({
             "The formula for calculating the final exp",
@@ -201,6 +205,10 @@ public class Arena extends ConfigurableObject implements Informative {
 
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    public boolean isAllowLateJoins() {
+        return allowLateJoins;
     }
 
     public double calculateFinalMoney(@NotNull GamePlayer player){

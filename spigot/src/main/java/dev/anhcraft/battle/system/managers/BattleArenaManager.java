@@ -135,6 +135,10 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                     plugin.chatManager.sendPlayer(player, "arena.error_attendance_disabled");
                     return null;
                 }
+                if(!arena.isAllowLateJoins() && game.getPhase() == GamePhase.PLAYING){
+                    plugin.chatManager.sendPlayer(player, "arena.error_already_playing");
+                    return null;
+                }
                 if(game.getPlayerCount() == arena.getMaxPlayers()){
                     plugin.chatManager.sendPlayer(player, "arena.error_full_players");
                     return null;
