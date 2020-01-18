@@ -24,16 +24,21 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import dev.anhcraft.battle.api.storage.tags.*;
+import dev.anhcraft.battle.utils.CompressUtil;
+import dev.anhcraft.jvmkit.utils.ArrayUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.zip.DataFormatException;
 
 @SuppressWarnings("ALL")
 public class FileStorage extends StorageProvider {
+    private static final byte[] MAGIC_VALUE = "bgf".getBytes();
     private File file;
 
     public FileStorage(File file) {
@@ -113,6 +118,13 @@ public class FileStorage extends StorageProvider {
                 FileInputStream fis = new FileInputStream(file);
                 byte[] bytes = ByteStreams.toByteArray(fis);
                 fis.close();
+                if(Arrays.equals(Arrays.copyOfRange(bytes, 0, MAGIC_VALUE.length), MAGIC_VALUE)){
+                    try {
+                        bytes = CompressUtil.decompress(Arrays.copyOfRange(bytes, MAGIC_VALUE.length, bytes.length));
+                    } catch (DataFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if(bytes.length > 0) {
                     ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
                     int size = in.readInt();
@@ -145,7 +157,7 @@ public class FileStorage extends StorageProvider {
         });
         try {
             file.createNewFile();
-            Files.write(out.toByteArray(), file);
+            Files.write(ArrayUtil.concat(MAGIC_VALUE, CompressUtil.compress(out.toByteArray())), file);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
