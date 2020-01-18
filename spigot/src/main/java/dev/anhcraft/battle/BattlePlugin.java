@@ -625,6 +625,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 e.printStackTrace();
             }
             ARENA_MAP.put(s, arena);
+            if(arena.getRollback() == null){
+                getLogger().warning("For safety reasons, you should specify rollback for arena #"+arena.getId());
+            }
             if(arena.getRollback() != null && arena.getRollback().getProvider() == Rollback.Provider.BATTLE){
                 for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
                     String w = it.next();
