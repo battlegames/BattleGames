@@ -11,8 +11,6 @@ ak_47:
   magazine:
     default: default_ak_47
     max_capacity: 90
-  scope:
-    default: basic_scope
   inventory_slot: 2
   sounds:
     on_shoot: "$entity_dragon_fireball_explode"
