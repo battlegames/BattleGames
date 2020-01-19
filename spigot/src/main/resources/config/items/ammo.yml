@@ -10,6 +10,7 @@
     '1':
       damage: 12
       knockback: 0.1
+      penetration_power: 20
       particle:
         type: end_rod
 
@@ -21,6 +22,7 @@ _50_ae:
     '1':
       damage: 10.8
       knockback: 0.102
+      penetration_power: 20
       particle:
         type: end_rod
 
@@ -32,5 +34,6 @@ _50_ae:
     '1':
       damage: 25
       knockback: 0.2
+      penetration_power: 50
       particle:
         type: end_rod

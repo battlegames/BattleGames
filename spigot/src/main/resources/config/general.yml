@@ -57,6 +57,168 @@ misc:
     walk: 0.2
     fly: 0.2
   entity_track_min_distance: 1.5
+  block_hardness:
+    _default_: 10
+    '0':
+      material:
+        - air
+        - cave_air
+        - void_air
+      value: 0
+    '1':
+      material:
+        - bubble_column
+        - string
+        - water
+      value: 1
+    '2':
+      material:
+        - (.+)_carpet
+        - (.+)_coral_fan
+        - (.+)_coral_wall_fan
+        - (.+)_leaves
+        - (.+)_sapling
+        - allium
+        - azure_bluet
+        - blue_orchid
+        - brown_mushroom_block
+        - chorus_plant
+        - cornflower
+        - dandelion
+        - dead_bush
+        - fern
+        - grass
+        - kelp
+        - large_fern
+        - lilac
+        - lily_of_the_valley
+        - lily_pad
+        - nether_wart_block
+        - orange_tulip
+        - oxeye_daisy
+        - peony
+        - pink_tulip
+        - poppy
+        - red_mushroom_block
+        - red_tulip
+        - rose_bush
+        - seagrass
+        - snow
+        - sugar_cane
+        - sunflower
+        - sweet_berry_bush
+        - tall_grass
+        - tall_seagrass
+        - wheat
+        - white_tulip
+        - wither_rose
+      value: 2
+    '3':
+      material:
+        - (.+)_banner
+        - (.+)_wall_banner
+        - cactus
+        - cake
+        - clay
+        - coarse_dirt
+        - dirt
+        - farmland
+        - painting
+        - sea_pickle
+        - torch
+        - tripwire
+        - tripwire_hook
+        - wall_torch
+      value: 3
+    '4':
+      material:
+        - (.+)_stained_glass
+        - (.+)_stained_glass_pane
+        - fire
+        - flower_pot
+        - glass
+        - hay_block
+        - item_frame
+        - lava
+        - potatoes
+        - potted_(.+)
+        - scaffolding
+        - snow_block
+      value: 4
+    '5':
+      material:
+        - (.+)_fence
+        - (.+)_fence_gate
+        - (.+)_slab
+        - (.+)_wall
+        - bamboo
+        - campfire
+        - carved_pumpkin
+        - dried_kelp_block
+        - melon
+        - pumpkin
+      value: 5
+    '6':
+      material:
+        - jack_o_lantern
+        - turtle_egg
+      value: 6
+    '7':
+      material:
+        - frosted_ice
+        - ice
+        - packed_ice
+      value: 7
+    '8':
+      material:
+        - (.+)_door
+        - (.+)_trapdoor
+        - cobweb
+        - sponge
+      value: 8
+    '9':
+      material:
+        - gravel
+        - red_sand
+        - sand
+        - soul_sand
+        - wet_sponge
+      value: 9
+    '10':
+      material:
+        - blue_ice
+      value: 12
+    '11':
+      material:
+        - honey_block
+        - slime_block
+      value: 20
+    '12':
+      material:
+        - bell
+      value: 50
+    '13':
+      material:
+        - (coal|iron|gold|diamond|emerald|lapis|redstone)_(.+)
+        - anvil
+        - barrier
+        - beacon
+        - bedrock
+        - cauldron
+        - chain_command_block
+        - command_block
+        - damaged_anvil
+        - end_gateway
+        - end_portal
+        - end_portal_frame
+        - ender_chest
+        - jigsaw
+        - moving_piston
+        - nether_portal
+        - obsidian
+        - repeating_command_block
+        - structure_block
+      value: 9999999
 
 bungeecord:
   enabled: false

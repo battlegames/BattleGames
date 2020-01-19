@@ -20,22 +20,28 @@
 
 package dev.anhcraft.battle.api;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Schema
 public class GeneralConfig extends ConfigurableObject {
     public static final ConfigSchema<GeneralConfig> SCHEMA = ConfigSchema.of(GeneralConfig.class);
+    private static final EnumSet<Material> BLOCK_MATERIALS = Arrays.stream(Material.values()).filter(Material::isBlock).collect(Collectors.toCollection(() -> EnumSet.noneOf(Material.class)));
 
     @Key("locale")
     @Explanation({
@@ -155,6 +161,10 @@ public class GeneralConfig extends ConfigurableObject {
     @Key("misc.entity_track_min_distance")
     @Explanation("The minimum distance to ensure a tracked entity has moved")
     private double entityTrackMinDistance = 1.5;
+
+    @Key("misc.block_hardness")
+    @Explanation("The hardness of blocks")
+    private Map<Material, Integer> blockHardness;
 
     @Key("bungeecord.enabled")
     @Explanation("Should we enable the Bungeecord support?")
@@ -364,5 +374,59 @@ public class GeneralConfig extends ConfigurableObject {
 
     public double getEntityTrackMinDistance() {
         return entityTrackMinDistance;
+    }
+
+    public int getBlockHardness(@NotNull Material material) {
+        return blockHardness.getOrDefault(material, 0);
+    }
+
+    @Nullable
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
+        if(value != null && entry.getKey().equals("misc.block_hardness")){
+            ConfigurationSection cs = (ConfigurationSection) value;
+            Map<Material, Integer> map = new EnumMap<>(Material.class);
+            for(String s : cs.getKeys(false)){
+                if(s.equals("_default_")){
+                    int v = cs.getInt(s);
+                    for(Material mt : BLOCK_MATERIALS){
+                        map.put(mt, v);
+                    }
+                } else {
+                    List<String> k = cs.getStringList(s+".material");
+                    int v = cs.getInt(s+".value");
+                    for(String pattern : k){
+                        Pattern p = Pattern.compile(pattern.toUpperCase());
+                        for(Material mt : BLOCK_MATERIALS){
+                            if(p.matcher(mt.toString()).matches()){
+                                map.put(mt, v);
+                            }
+                        }
+                    }
+                }
+            }
+            return map;
+        }
+        return value;
+    }
+
+    @Nullable
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
+        if(value != null && entry.getKey().equals("misc.block_hardness")){
+            Map<Material, Integer> blockHardness = (Map<Material, Integer>) value;
+            Multimap<Integer, Material> map = MultimapBuilder.treeKeys().treeSetValues().build();
+            for(Map.Entry<Material, Integer> e : blockHardness.entrySet()){
+                map.put(e.getValue(), e.getKey());
+            }
+            YamlConfiguration c = new YamlConfiguration();
+            int i = 0;
+            for(Integer s : map.keySet()){
+                String k = Integer.toString(i);
+                c.set(k+".material", new ArrayList<>(map.get(s)));
+                c.set(k+".value", s);
+                i++;
+            }
+            return c;
+        }
+        return value;
     }
 }

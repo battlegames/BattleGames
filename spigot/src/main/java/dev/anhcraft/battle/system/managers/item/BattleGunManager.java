@@ -237,6 +237,8 @@ public class BattleGunManager extends BattleComponent {
 
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for(Ammo.Bullet b : bullets){
+            Block lastBlock = null;
+            int power = b.getPenetrationPower();
             long currentTime = 0;
             while (true){
                 double deltaTime = (currentTime += b.getTimeOffset()) / 1000d;
@@ -249,14 +251,17 @@ public class BattleGunManager extends BattleComponent {
                     b.getParticleEffect().spawn(loc);
 
                 Block block = loc.getBlock();
-                if(block.getType().isSolid()) {
-                    int id = loc.hashCode();
-                    int st = RandomUtil.randomInt(0, 9);
-                    BlockUtil.createBreakAnimation(id, block, st, entities.keySet().stream()
-                            .filter(ent -> ent instanceof Player)
-                            .map(livingEntity -> (Player) livingEntity)
-                            .collect(Collectors.toList()));
-                    break;
+                if(lastBlock == null || !lastBlock.equals(block)) {
+                    power -= plugin.GENERAL_CONF.getBlockHardness(block.getType());
+                    if (power <= 0) {
+                        int id = loc.hashCode();
+                        int st = RandomUtil.randomInt(0, 9);
+                        BlockUtil.createBreakAnimation(id, block, st, entities.keySet().stream()
+                                .filter(ent -> ent instanceof Player)
+                                .map(livingEntity -> (Player) livingEntity)
+                                .collect(Collectors.toList()));
+                        break;
+                    } else lastBlock = block;
                 }
 
                 for(Map.Entry<LivingEntity, BoundingBox> ent : entities.entrySet()){

@@ -62,6 +62,13 @@ public class Ammo extends BattleItem<AmmoModel> {
         @Explanation("The knockback power")
         private double knockback;
 
+        @Key("penetration_power")
+        @Explanation({
+                "The penetration power",
+                "Every time a bullet digs through a block, its power will be reduced until reaches zero and stop flying."
+        })
+        private int penetrationPower;
+
         @Key("fire_ticks")
         @Explanation({
                 "How long does the fire remain on the target",
@@ -100,6 +107,10 @@ public class Ammo extends BattleItem<AmmoModel> {
 
         public double getTimeOffset() {
             return timeOffset;
+        }
+
+        public int getPenetrationPower() {
+            return penetrationPower;
         }
     }
 }
