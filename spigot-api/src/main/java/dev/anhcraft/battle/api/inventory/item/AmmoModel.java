@@ -49,6 +49,8 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     private double avgBulletDamage;
     private double sumBulletKnockback;
     private double avgBulletKnockback;
+    private double sumBulletPenetration;
+    private double avgBulletPenetration;
 
     public AmmoModel(@NotNull String id) {
         super(id);
@@ -70,8 +72,10 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
         holder.inform("bullet_count", bullets.size())
         .inform("total_bullet_damage", sumBulletDamage)
         .inform("total_bullet_knockback", sumBulletKnockback)
+        .inform("total_bullet_penetration", sumBulletPenetration)
         .inform("avg_bullet_damage", avgBulletDamage)
-        .inform("avg_bullet_knockback", avgBulletKnockback);
+        .inform("avg_bullet_knockback", avgBulletKnockback)
+        .inform("avg_bullet_penetration", avgBulletPenetration);
     }
 
     @Override
@@ -93,8 +97,10 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
                     bullets.add(b);
                     sumBulletDamage += b.getDamage();
                     sumBulletKnockback += b.getKnockback();
+                    sumBulletPenetration += b.getPenetrationPower();
                     avgBulletDamage += b.getDamage() / keys.size();
                     avgBulletKnockback += b.getKnockback() / keys.size();
+                    avgBulletPenetration += b.getPenetrationPower() / (double) keys.size();
                 } catch (InvalidValueException e) {
                     e.printStackTrace();
                 }
