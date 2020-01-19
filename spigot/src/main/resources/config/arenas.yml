@@ -15,6 +15,11 @@ dm_demo:
   max_time: 8400
   max_players: 15
   allow_late_joins: true
+  rollback:
+    enabled: true
+    provider: battle
+    worlds:
+      - assault
   attr:
     min_players: 2
     waiting_spawn_points:
@@ -89,6 +94,11 @@ tdm_demo:
   mode: tdm
   max_time: 8400
   max_players: 10
+  rollback:
+    enabled: true
+    provider: battle
+    worlds:
+      - assault
   icon:
     material: diamond_sword
     name: "{__arena_name__}"
@@ -160,6 +170,11 @@ ctf_demo:
     remote_servers:
       - "server1"
       - "server2"
+  rollback:
+    enabled: true
+    provider: battle
+    worlds:
+      - assault
   max_time: 12000
   max_players: 8
   icon:
@@ -266,7 +281,7 @@ bw_demo:
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
   rollback:
     enabled: true
-    provider: SLIME_WORLD
+    provider: battle
     worlds:
       - lighthouse
   end_firework:
