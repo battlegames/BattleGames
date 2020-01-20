@@ -20,12 +20,12 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.ApiProvider;
-import dev.anhcraft.battle.api.chat.ChatManager;
-import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
-import dev.anhcraft.battle.api.gui.GuiManager;
+import dev.anhcraft.battle.api.chat.ChatManager;
+import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.Booster;
@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 public interface BattleApi {
     /**
@@ -53,6 +54,13 @@ public interface BattleApi {
     static BattleApi getInstance(){
         return ApiProvider.consume();
     }
+
+    /**
+     * Gets Battle's logger.
+     * @return {@link Logger}
+     */
+    @NotNull
+    Logger getLogger();
 
     /**
      * Gets the general configuration.
