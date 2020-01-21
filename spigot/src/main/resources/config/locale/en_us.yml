@@ -24,6 +24,10 @@ price_format:
   gold: "%s golds"
   diamond: "%s diamonds"
   emerald: "%s emeralds"
+debug:
+  done: "&bDebug task has stopped. The report was saved to &e%s"
+  created_success: "&aDebug task has started. Please wait for the report to be made."
+  created_failure: "&cFailed! Another debug task is running."
 medal:
   headshot_title: "&l%battle_icon_headshot%"
   headshot_subtitle: "&bHeadshot"

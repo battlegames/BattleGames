@@ -43,6 +43,7 @@ import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
@@ -88,6 +89,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
         plugin.taskHelper.newDelayedTask(() -> {
             if(!player.isOnline()) return;
+            BattleDebugger.startTiming("player-join");
             player.teleport(plugin.getServerData().getSpawnPoint());
             plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
             plugin.taskHelper.newAsyncTask(() -> {
@@ -101,6 +103,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                             playerData.getReceivedFirstJoinKits().add(kit.getId());
                         }
                     });
+                    BattleDebugger.endTiming("player-join");
                 });
             });
         }, 60);

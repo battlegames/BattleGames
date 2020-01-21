@@ -22,6 +22,7 @@ package dev.anhcraft.battle.system;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -62,6 +63,7 @@ public class BattleRollback extends BattleComponent {
     }
 
     public boolean rollbackWorld(World world){
+        BattleDebugger.startTiming("rollback-battle");
         File workingDir = world.getWorldFolder();
         File cacheDir = getCachedWorldFolder(world);
         if(!cacheDir.exists()) return false;
@@ -70,6 +72,7 @@ public class BattleRollback extends BattleComponent {
         FileUtil.clean(workingDir);
         if(!FileUtil.copy(cacheDir, workingDir)) return false;
         new WorldCreator(world.getName()).createWorld();
+        BattleDebugger.endTiming("rollback-battle");
         return true;
     }
 }

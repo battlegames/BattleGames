@@ -30,6 +30,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.storage.Storage;
 import dev.anhcraft.battle.storage.handlers.FileStorage;
 import dev.anhcraft.battle.storage.handlers.MySQLStorage;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -71,16 +72,20 @@ public class BattleDataManager extends BattleComponent {
 
     public synchronized void loadServerData(){
         if(serverStorage != null) {
+            BattleDebugger.startTiming("server-data-load");
             plugin.getServerData().reset();
             if(serverStorage.load()) plugin.getServerData().read(serverStorage.getData());
+            BattleDebugger.endTiming("server-data-load");
         }
     }
 
     public synchronized void saveServerData(){
         if(serverStorage != null) {
+            BattleDebugger.startTiming("server-data-save");
             plugin.getServerData().write(serverStorage.getData());
             if(serverStorage.getData().getModifyTracker().get() && serverStorage.save())
                 serverStorage.getData().getModifyTracker().set(false);
+            BattleDebugger.endTiming("server-data-save");
         }
     }
 
@@ -102,6 +107,7 @@ public class BattleDataManager extends BattleComponent {
                     throw new UnsupportedOperationException();
             }
         }
+        BattleDebugger.startTiming("player-data-load");
         PlayerData pd = new PlayerData();
         if(provider.load()) {
             DataMap<String> data = provider.getData();
@@ -121,6 +127,7 @@ public class BattleDataManager extends BattleComponent {
             pd.read(data);
         }
         plugin.PLAYER_MAP.put(player, pd);
+        BattleDebugger.endTiming("player-data-load");
         return pd;
     }
 
@@ -132,10 +139,12 @@ public class BattleDataManager extends BattleComponent {
     public synchronized void savePlayerData(OfflinePlayer player){
         PlayerData playerData = plugin.getPlayerData(player);
         if(playerData != null) {
+            BattleDebugger.startTiming("player-data-save");
             Storage provider = PLAYER_STORAGE.get(player);
             playerData.write(provider.getData());
             if(provider.getData().getModifyTracker().get() && provider.save())
                 provider.getData().getModifyTracker().set(false);
+            BattleDebugger.endTiming("player-data-save");
         }
     }
 

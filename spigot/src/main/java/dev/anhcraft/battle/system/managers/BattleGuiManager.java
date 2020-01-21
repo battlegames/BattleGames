@@ -34,6 +34,7 @@ import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
@@ -75,6 +76,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn){
+        BattleDebugger.startTiming("gui-pagination-update");
         int page = Math.abs(view.getPage(pgn));
         Iterator<Integer> it = cpn.getSlots().iterator();
         PagedSlotChain chain = new PagedSlotChain(it, view, page * cpn.getSlots().size());
@@ -98,9 +100,11 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                 view.setPage(pgn, page);
             }
         }
+        BattleDebugger.endTiming("gui-pagination-update");
     }
 
     private void drawComponent(Player player, View view, Component c, InfoReplacer info){
+        BattleDebugger.startTiming("gui-component-render");
         for (int slot : c.getSlots()) {
             PreparedItem item = c.getItem();
             if(c.getPagination() != null){
@@ -117,6 +121,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                             player
                     ).build());
         }
+        BattleDebugger.endTiming("gui-component-render");
     }
 
     private InfoHolder collectInfo(Window window){

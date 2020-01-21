@@ -116,7 +116,7 @@ import java.util.stream.Collectors;
 public class BattlePlugin extends JavaPlugin implements BattleApi {
     public static final long BOSSBAR_UPDATE_INTERVAL = 10;
     public static final long SCOREBOARD_UPDATE_INTERVAL = 10;
-    private static final String[] CONFIG_FILES = new String[]{
+    public static final String[] CONFIG_FILES = new String[]{
             "system.yml",
             "general.yml",
             "_ locale/en_us.yml", // PUT DEFAULT LOCALE HERE
@@ -136,7 +136,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             "market.yml",
             "boosters.yml"
     };
-    private static final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
+    public final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
     private final Map<String, Arena> ARENA_MAP = new HashMap<>();
     private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
@@ -175,7 +175,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private SimpleDateFormat shortFormDate2;
     private SimpleDateFormat shortFormDate3;
     private boolean syncDataTaskNeed;
-    private File configFolder = getDataFolder();
+    public File configFolder = getDataFolder();
     private String remoteConfigUrl;
     private boolean spigotBungeeSupport;
     private boolean supportBungee;

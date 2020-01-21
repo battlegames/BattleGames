@@ -26,6 +26,7 @@ import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.utils.VectUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -207,6 +208,7 @@ public class BattleGunManager extends BattleComponent {
         mag.setAmmoCount(mag.getAmmoCount()-1);
         gm.getShootSound().play(player.getWorld(), player.getLocation());
 
+        BattleDebugger.startTiming("gun-shoot");
         Location start = player.getEyeLocation();
         Vector originVec = player.getEyeLocation().toVector();
         Vector dir = start.getDirection().normalize();
@@ -281,6 +283,7 @@ public class BattleGunManager extends BattleComponent {
                 }
             }
         }
+        BattleDebugger.endTiming("gun-shoot");
         return true;
     }
 }

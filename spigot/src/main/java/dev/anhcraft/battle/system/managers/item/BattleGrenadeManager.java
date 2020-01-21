@@ -24,6 +24,7 @@ import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.inventory.item.Grenade;
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.tasks.EntityTrackingTask;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.BlockUtil;
@@ -75,6 +76,7 @@ public class BattleGrenadeManager extends BattleComponent {
                     callback.untrack(entity);
                     Location eloc = entity.getLocation();
                     plugin.taskHelper.newTask(() -> {
+                        BattleDebugger.startTiming("grenade-track");
                         entity.remove();
                         if(gm.getExplosionPower() > 0) {
                             entity.getWorld().createExplosion(eloc.getX(), eloc.getY(), eloc.getZ(), (float) gm.getExplosionPower(), false, false);
@@ -98,6 +100,7 @@ public class BattleGrenadeManager extends BattleComponent {
                                 }
                             });
                         }
+                        BattleDebugger.endTiming("grenade-track");
                     });
                     if(gm.getExplosionEffect() != null){
                         plugin.playEffect(eloc, gm.getExplosionEffect());

@@ -25,6 +25,7 @@ import dev.anhcraft.battle.api.arena.mode.IMode;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.RemoteGame;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 
 public class GameTask extends BattleComponent implements Runnable {
     public GameTask(BattlePlugin plugin) {
@@ -33,6 +34,7 @@ public class GameTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
+        BattleDebugger.reportTps();
         plugin.arenaManager.listGames(g -> {
             if(g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;

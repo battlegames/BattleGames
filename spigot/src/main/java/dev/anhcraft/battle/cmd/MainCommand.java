@@ -32,6 +32,7 @@ import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.utils.ItemUtil;
@@ -371,5 +372,35 @@ public class MainCommand extends BaseCommand{
     @Subcommand("kit")
     public void kit(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
+    }
+
+    @Subcommand("debug 3min")
+    @CommandPermission("battle.debug")
+    public void debug3(CommandSender sender){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 3)){
+            plugin.chatManager.send(sender, "debug.created_success");
+        } else {
+            plugin.chatManager.send(sender, "debug.created_failure");
+        }
+    }
+
+    @Subcommand("debug 5min")
+    @CommandPermission("battle.debug")
+    public void debug5(CommandSender sender){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 5)){
+            plugin.chatManager.send(sender, "debug.created_success");
+        } else {
+            plugin.chatManager.send(sender, "debug.created_failure");
+        }
+    }
+
+    @Subcommand("debug 15min")
+    @CommandPermission("battle.debug")
+    public void debug15(CommandSender sender){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 15)){
+            plugin.chatManager.send(sender, "debug.created_success");
+        } else {
+            plugin.chatManager.send(sender, "debug.created_failure");
+        }
     }
 }

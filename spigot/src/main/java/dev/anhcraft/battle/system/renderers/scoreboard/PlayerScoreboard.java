@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.system.renderers.scoreboard;
 
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.utils.StringUtil;
@@ -82,6 +83,7 @@ public class PlayerScoreboard {
     }
 
     public void renderLine(int index){
+        BattleDebugger.startTiming("scoreboard-line-render");
         ScoreboardLine line = lines[index];
         String content = PlaceholderUtil.formatPAPI(player, line.getContent());
 
@@ -89,7 +91,10 @@ public class PlayerScoreboard {
         // if the prefix ends with colors, remove it!
         if (prefix.charAt(prefix.length() - 2) == ChatColor.COLOR_CHAR)
             prefix.delete(prefix.length() - 2, prefix.length());
-        if(prefix.length() == 0) return;
+        if(prefix.length() == 0) {
+            BattleDebugger.endTiming("scoreboard-line-render");
+            return;
+        }
 
         boolean rendered = false;
 
@@ -99,13 +104,19 @@ public class PlayerScoreboard {
             // we can remove it here
             if (prefix.charAt(prefix.length() - 1) == ChatColor.COLOR_CHAR)
                 prefix.deleteCharAt(prefix.length() - 1);
-            if(prefix.length() == 0) return;
+            if(prefix.length() == 0) {
+                BattleDebugger.endTiming("scoreboard-line-render");
+                return;
+            }
             String preStr = prefix.toString();
 
             StringBuilder suffix = new StringBuilder();
             int maxSufLen = Math.min(prefix.length() + maxEntryLength - suffix.length(), content.length());
             String s = content.substring(prefix.length(), maxSufLen);
-            if(s.length() == 0) return;
+            if(s.length() == 0) {
+                BattleDebugger.endTiming("scoreboard-line-render");
+                return;
+            }
             suffix.append(s);
 
             // if the beginning of the suffix did not have colors, we will try to add
@@ -118,13 +129,19 @@ public class PlayerScoreboard {
             // if the suffix ends with colors, remove it!
             if(suffix.charAt(suffix.length() - 2) == ChatColor.COLOR_CHAR)
                 suffix.delete(suffix.length() - 2, suffix.length());
-            if(suffix.length() == 0) return;
+            if(suffix.length() == 0) {
+                BattleDebugger.endTiming("scoreboard-line-render");
+                return;
+            }
 
             // sometimes, dividing suffix and the rest causes the suffix to be ended with a color sign
             // we can remove it here
             if (suffix.charAt(suffix.length() - 1) == ChatColor.COLOR_CHAR)
                 suffix.deleteCharAt(suffix.length() - 1);
-            if(suffix.length() == 0) return;
+            if(suffix.length() == 0) {
+                BattleDebugger.endTiming("scoreboard-line-render");
+                return;
+            }
 
             // add spaces to the end if needed
             while (fixedLength && suffix.length() < maxEntryLength) suffix.append(" ");
@@ -140,6 +157,7 @@ public class PlayerScoreboard {
         }
         line.getTeam().addEntry(line.getTeam().getName());
         ENTRIES.forEach(line.getTeam()::addEntry);
+        BattleDebugger.endTiming("scoreboard-line-render");
     }
 
     public List<String> getEntries() {
