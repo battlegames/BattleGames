@@ -46,10 +46,12 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -218,14 +220,7 @@ public class Product extends ConfigurableObject implements Informative {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
         Location loc = player.getLocation();
-        for(PreparedItem pi : vanillaItems){
-            int in = player.getInventory().firstEmpty();
-            if(in == -1){
-                player.getWorld().dropItemNaturally(loc, pi.build());
-            } else {
-                player.getInventory().setItem(in, pi.build());
-            }
-        }
+        player.getInventory().addItem((ItemStack[]) Arrays.stream(vanillaItems).map(PreparedItem::build).toArray()).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         battleItems.forEach((type, x) -> {
             ItemStorage is = playerData.getInventory().getStorage(type);
             is.put(x);
