@@ -144,6 +144,10 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("This option prevents player items and exp from dropping")
     private boolean antiDeathDrops = true;
 
+    @Key("misc.heal_on_game_end")
+    @Explanation("Enable this option to heal all players after end game")
+    private boolean healOnGameEnd = true;
+
     @Key("misc.default_speed.walk")
     @Explanation({
             "The walking speed",
@@ -378,6 +382,10 @@ public class GeneralConfig extends ConfigurableObject {
 
     public int getBlockHardness(@NotNull Material material) {
         return blockHardness.getOrDefault(material, 0);
+    }
+
+    public boolean shouldHealOnGameEnd() {
+        return healOnGameEnd;
     }
 
     @Nullable

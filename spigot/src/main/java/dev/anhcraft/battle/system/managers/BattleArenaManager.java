@@ -43,6 +43,7 @@ import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -260,6 +261,9 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         Arena arena = game.getArena();
         for (GamePlayer gp : game.getPlayers().values()){
             Player p = gp.toBukkit();
+            if(plugin.GENERAL_CONF.shouldHealOnGameEnd()){
+                p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            }
             plugin.gunManager.handleZoomOut(p);
             PlayerData pd = plugin.getPlayerData(p);
             if(pd != null) {

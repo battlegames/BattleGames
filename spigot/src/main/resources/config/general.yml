@@ -52,6 +52,7 @@ storage:
       useServerPrepStmts: true
 
 misc:
+  heal_on_game_end: true
   anti_death_drops: true
   default_speed:
     walk: 0.2
