@@ -23,35 +23,22 @@ package dev.anhcraft.battle.api.events.gui;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.screen.Window;
-import dev.anhcraft.battle.api.gui.struct.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class ComponentRenderEvent extends ViewEvent implements Cancellable {
+public class ViewEvent extends GuiEvent {
     public static final HandlerList handlers = new HandlerList();
-    private Component component;
-    private boolean cancelled;
+    private View view;
 
-    public ComponentRenderEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window, @NotNull View view, @NotNull Component component) {
-        super(who, gui, window, view);
-        this.component = component;
+    public ViewEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window, @NotNull View view) {
+        super(who, gui, window);
+        this.view = view;
     }
 
     @NotNull
-    public Component getComponent() {
-        return component;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public View getView() {
+        return view;
     }
 
     @Override
@@ -62,5 +49,4 @@ public class ComponentRenderEvent extends ViewEvent implements Cancellable {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

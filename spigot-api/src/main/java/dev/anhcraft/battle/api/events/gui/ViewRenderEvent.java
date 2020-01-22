@@ -28,19 +28,12 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewRenderEvent extends GuiEvent implements Cancellable {
+public class ViewRenderEvent extends ViewEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
-    private View view;
     private boolean cancelled;
 
     public ViewRenderEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window, @NotNull View view) {
-        super(who, gui, window);
-        this.view = view;
-    }
-
-    @NotNull
-    public View getView() {
-        return view;
+        super(who, gui, window, view);
     }
 
     @Override
