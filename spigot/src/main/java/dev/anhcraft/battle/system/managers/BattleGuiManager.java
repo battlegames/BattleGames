@@ -21,6 +21,7 @@ package dev.anhcraft.battle.system.managers;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.events.gui.PaginationUpdateEvent;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.events.gui.ComponentRenderEvent;
 import dev.anhcraft.battle.api.events.gui.GuiOpenEvent;
@@ -48,10 +49,8 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 
 import static dev.anhcraft.battle.utils.PlaceholderUtil.*;
 
@@ -77,22 +76,21 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
 
     private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn){
         BattleDebugger.startTiming("gui-pagination-update");
-        int page = Math.abs(view.getPage(pgn));
-        Iterator<Integer> it = cpn.getSlots().iterator();
-        PagedSlotChain chain = new PagedSlotChain(it, view, page * cpn.getSlots().size());
-        pg.supply(player, view, chain);
-        if(page > 0) {
+        PaginationUpdateEvent event = new PaginationUpdateEvent(player, view.getGui(), view.getWindow(), view, cpn, pg);
+        Bukkit.getPluginManager().callEvent(event);
+        if(!event.isCancelled()) {
+            int page = Math.abs(view.getPage(pgn));
+            PagedSlotChain chain = new PagedSlotChain(cpn.getSlots(), view, page, event.getSlotFilter());
+            pg.supply(player, view, chain);
             if (chain.getAllocatedSlot() == 0) {
                 // empty page is something special
                 view.setPage(pgn, page - 1);
             } else if (chain.getAllocatedSlot() < cpn.getSlots().size()) {
                 view.setPage(pgn, -page);
-                while (it.hasNext()) {
-                    Slot x = view.getSlot(it.next());
-                    if(x != null){
-                        x.setAdditionalFunction(null);
-                        x.setPaginationItem(null);
-                    }
+                while (chain.hasNext()) {
+                    Slot x = chain.next();
+                    x.setAdditionalFunction(null);
+                    x.setPaginationItem(null);
                 }
             } else if (chain.getAllocatedSlot() == cpn.getSlots().size()) {
                 // if run out of the chain, it MAY have a new page
@@ -293,44 +291,80 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     private static class PagedSlotChain implements SlotChain {
-        private Iterator<Integer> it;
         private View view;
-        private int sc;
-        private int as;
+        private List<Integer> slots;
+        private int prevSlots;
+        private int allocatedSlot;
+        private int cursor = -1;
+        private Predicate<Slot> slotFilter;
 
-        private PagedSlotChain(Iterator<Integer> it, View view, int sc) {
-            this.it = it;
+        private PagedSlotChain(@NotNull List<Integer> slots, @NotNull View view, int page, @Nullable Predicate<Slot> slotFilter) {
+            this.slots = slots;
             this.view = view;
-            this.sc = sc;
+            this.prevSlots = slots.size() * page;
+            this.slotFilter = slotFilter;
+        }
+
+        @NotNull
+        private Slot get(int cursor){
+            Slot s = view.getSlot(slots.get(cursor));
+            if(s == null){
+                throw new IllegalStateException("Pagination slot is null");
+            }
+            if (slotFilter == null || slotFilter.test(s)) {
+                return s;
+            } else {
+                // make a dummy one
+                // this will never get queried
+                return new Slot(s.getPosition(), s.getComponent());
+            }
+        }
+
+        @NotNull
+        public Slot get(){
+            return get(cursor);
         }
 
         @Override
         @NotNull
         public Slot next() {
-            Slot s = view.getSlot(it.next());
-            if(s == null){
-                throw new IllegalStateException("Pagination slot is null");
+            if(cursor == slots.size()){
+                throw new IndexOutOfBoundsException(cursor+" = "+slots.size());
             }
-            as++;
-            return s;
+            cursor++;
+            allocatedSlot++;
+            return get();
+        }
+
+        @NotNull
+        public Slot prev() {
+            if(cursor == 0){
+                throw new IndexOutOfBoundsException(cursor+" = 0");
+            }
+            cursor--;
+            return get();
         }
 
         @Override
         public boolean hasNext() {
-            return it.hasNext();
+            return !slots.isEmpty() && cursor < slots.size() - 1;
+        }
+
+        public boolean hasPrev() {
+            return cursor > 0;
         }
 
         @Override
         public boolean shouldSkip() {
-            if(sc > 0){
-                sc--;
+            if(prevSlots > 0){
+                prevSlots--;
                 return true;
             }
             return false;
         }
 
         int getAllocatedSlot() {
-            return as;
+            return allocatedSlot;
         }
     }
 }
