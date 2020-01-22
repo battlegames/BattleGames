@@ -18,7 +18,6 @@ categories:
       name: "&b&lPerk shop"
       lore:
         - "&fHere you can buy perks with&a cheap price"
-        - "&fCurrently, sale off &e30%&f for all perks!"
       enchant:
         unbreaking: 1
       flag:
@@ -28,8 +27,6 @@ categories:
         icon:
           name: "&c&lHealth boost"
           material: redstone
-          lore:
-            - "&fBoost your health!"
         currency: vault
         price: 75
         executions:
@@ -52,8 +49,7 @@ categories:
       material: apple
       name: "&6&lFood shop"
       lore:
-        - "&bHere you can buy tasty food to provide energy"
-        - "&bfor the battle"
+        - "&bHere you can buy tasty food"
     products:
       '1':
         icon:
@@ -66,16 +62,16 @@ categories:
             vanilla:
               '1':
                 material: cookie
-                amount: 16
+                amount: 8
               '2':
-                material: apple
-                amount: 16
+                material: bread
+                amount: 8
       '2':
         icon:
           name: "&4Meat"
           material: cookie
         currency: vault
-        price: 36
+        price: 40
         executions:
           give_items:
             vanilla:
