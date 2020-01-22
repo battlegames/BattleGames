@@ -55,7 +55,7 @@ public class EditorCommand extends BaseCommand{
     @Subcommand("market save")
     @CommandPermission("battle.editor.market.save")
     public void marketSave(CommandSender sender){
-        ConfigHelper.writeConfig(plugin.getMarketConf(), Market.SCHEMA, plugin.getMarket());
+        ConfigHelper.writeConfig(plugin.getMarketConf(), Market.SCHEMA, plugin.getMarket(), ConfigHelper.newOptions().ignoreEmptyArray().ignoreEmptyList().ignoreFalse().ignoreZero());
         File f = new File(plugin.getEditorFolder(), "market."+System.currentTimeMillis()+".yml");
         try {
             plugin.getMarketConf().save(f);
