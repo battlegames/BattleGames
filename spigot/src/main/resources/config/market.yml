@@ -122,3 +122,255 @@ categories:
         executions:
           perform_commands:
             - "fly %player_name%"
+
+  bedwar_items:
+    icon:
+      material: diamond
+      name: "&c&l[BW] &f&lItems Shop"
+    in_game_only: true
+    reserved_game_modes:
+      - bw
+    products:
+      stone_sword:
+        icon:
+          name: "&ax1 Stone Sword"
+          material: stone_sword
+        currency: iron
+        price: 10
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_sword
+      iron_sword:
+        icon:
+          name: "&ax1 Iron Sword"
+          material: iron_sword
+        currency: gold
+        price: 7
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: iron_sword
+      diamond_sword:
+        icon:
+          name: "&ax1 Diamond Sword"
+          material: diamond_sword
+        currency: emerald
+        price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: diamond_sword
+      arrow:
+        icon:
+          name: "&bx8 Arrows"
+          material: arrow
+        currency: gold
+        price: 2
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: arrow
+                amount: 8
+      bow:
+        icon:
+          name: "&bx1 Bow"
+          material: bow
+        currency: gold
+        price: 12
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+      bow1:
+        icon:
+          name: "&bx1 Bow [+1]"
+          material: bow
+          enchant:
+            power: 1
+        currency: gold
+        price: 24
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+                enchant:
+                  power: 1
+      bow2:
+        icon:
+          name: "&bx1 Bow [+2]"
+          material: bow
+          enchant:
+            power: 1
+            punch: 1
+        currency: emerald
+        price: 6
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+                enchant:
+                  power: 1
+                  punch: 1
+      stone_pickaxe:
+        icon:
+          name: "&dx1 Stone Pickaxe"
+          material: stone_pickaxe
+        currency: iron
+        price: 10
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_pickaxe
+      iron_pickaxe:
+        icon:
+          name: "&dx1 Iron Pickaxe"
+          material: iron_pickaxe
+          enchant:
+            efficiency: 1
+        currency: gold
+        price: 8
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_pickaxe
+                enchant:
+                  efficiency: 1
+      iron_pickaxe1:
+        icon:
+          name: "&dx1 Iron Pickaxe [+1]"
+          material: iron_pickaxe
+          enchant:
+            efficiency: 2
+        currency: gold
+        price: 16
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: iron_pickaxe
+                enchant:
+                  efficiency: 2
+      wool:
+        icon:
+          name: "&ax16 Wools"
+          material: white_wool
+        currency: iron
+        price: 4
+      sandstone:
+        icon:
+          name: "&ax16 Sandstones"
+          material: sandstone
+        currency: iron
+        price: 16
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: sandstone
+                amount: 16
+      obsidian:
+        icon:
+          name: "&ax4 Obsidians"
+          material: obsidian
+        currency: emerald
+        price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: obsidian
+                amount: 4
+      ender_pearl:
+        icon:
+          name: "&5x1 Ender Pearl"
+          material: ender_pearl
+        currency: emerald
+        price: 3
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: ender_pearl
+      water_bucket:
+        icon:
+          name: "&5x1 Water Bucket"
+          material: water_bucket
+        currency: emerald
+        price: 2
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: water_bucket
+      tnt:
+        icon:
+          name: "&5x1 TNT"
+          material: tnt
+        currency: gold
+        price: 7
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: tnt
+      cookie:
+        icon:
+          name: "&5x3 Cookie"
+          material: cookie
+        currency: gold
+        price: 5
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cookie
+                amount: 5
+
+  bedwar_upgrades:
+    icon:
+      material: diamond
+      name: "&c&l[BW] &f&lUpgrades Shop"
+    in_game_only: true
+    reserved_game_modes:
+      - bw
+    products:
+      upLocalGen:
+        icon:
+          name: "&e&lUpgrade iron/gold generator"
+          material: chest
+        currency: diamond
+        price: 15
+      upDiamondGen:
+        icon:
+          name: "&e&lUpgrade all diamond generators"
+          material: chest
+        currency: ing
+        price: 50000
+      healthPool:
+        icon:
+          name: "&4&lHeal pool"
+          lore:
+            - "&aGet &bRegeneration &a if you and your teammates"
+            - "&aare present near the base"
+          material: cake
+        currency: diamond
+        price: 6
+      slownessPool:
+        icon:
+          name: "&6&lSlowness pool"
+          lore:
+            - "&aYour enemies get &bSlowness &aif they are near to"
+            - "&ayour bed."
+          material: cake
+        currency: diamond
+        price: 8
