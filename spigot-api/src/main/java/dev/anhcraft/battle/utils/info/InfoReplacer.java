@@ -35,8 +35,7 @@ public class InfoReplacer {
 
     InfoReplacer(InfoHolder holder) {
         this.map = holder.mapInfo();
-        // by unknown reason, the text can't have dollar ($) characters
-        map.replaceAll((s, s2) -> ChatUtil.formatColorCodes(s2.replace('$', ' ')));
+        map.replaceAll((s, s2) -> ChatUtil.formatColorCodes(s2));
     }
 
     @NotNull
@@ -51,7 +50,8 @@ public class InfoReplacer {
                 s = f[0];
                 p = f[1];
             }
-            m.appendReplacement(sb, map.getOrDefault(s, p));
+            m.appendReplacement(sb, "");
+            sb.append(map.getOrDefault(s, p));
         }
         m.appendTail(sb);
         return sb.toString();
