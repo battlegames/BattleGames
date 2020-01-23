@@ -21,7 +21,7 @@ package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.economy.Currency;
 import dev.anhcraft.battle.api.events.PlayerPrePurchaseEvent;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
@@ -51,11 +51,13 @@ public class ProductMenu implements Pagination {
         Category ctg = (Category) view.getWindow().getDataContainer().remove(GDataRegistry.MARKET_CATEGORY);
         if(ctg == null) return;
         Market mk = api.getMarket();
-        GamePlayer gp = api.getArenaManager().getGamePlayer(player);
+        Game g = api.getArenaManager().getGame(player);
         for(Product p : ctg.getProducts()){
             if(!chain.hasNext()) break;
-            if((p.isInGameOnly() && gp == null) || chain.shouldSkip()){
-                continue;
+            if(chain.shouldSkip()) continue;
+            if(p.isInGameOnly()) {
+                if(g == null) continue;
+                if(p.getGameModeReserved() != null && p.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId()))) continue;
             }
 
             String pf = ApiProvider.consume().getChatManager().getFormattedMessages("price_format."+p.getCurrency().name().toLowerCase()).get(0);

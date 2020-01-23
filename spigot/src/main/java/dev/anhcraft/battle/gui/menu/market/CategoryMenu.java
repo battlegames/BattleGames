@@ -21,11 +21,12 @@ package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.gui.NativeGui;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.gui.GDataRegistry;
@@ -37,11 +38,13 @@ public class CategoryMenu implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         Market mk = api.getMarket();
-        boolean inGame = api.getArenaManager().getGame(player) != null;
+        Game g = api.getArenaManager().getGame(player);
         for(Category c : mk.getCategories()){
             if(!chain.hasNext()) break;
-            if((c.isInGameOnly() && !inGame) || chain.shouldSkip()){
-                continue;
+            if(chain.shouldSkip()) continue;
+            if(c.isInGameOnly()) {
+                if(g == null) continue;
+                if(c.getGameModeReserved() != null && c.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId()))) continue;
             }
             Slot slot = chain.next();
             slot.setPaginationItem(c.getIcon().duplicate());

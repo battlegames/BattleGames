@@ -56,6 +56,14 @@ public class Category extends ConfigurableObject {
     @Explanation("Make this category only available during the game")
     private boolean inGameOnly;
 
+    @Key("reserved_game_modes")
+    @Explanation({
+            "Make this category only available during certain game modes",
+            "This option only takes effect if <b>in_game_only</b> set to <i>true</i>",
+            "All game modes are non-case-sensitive"
+    })
+    private List<String> gameModeReserved;
+
     @Key("products")
     @Explanation("Products in this category")
     @Example({
@@ -98,6 +106,11 @@ public class Category extends ConfigurableObject {
 
     public void setInGameOnly(boolean inGameOnly) {
         this.inGameOnly = inGameOnly;
+    }
+
+    @Nullable
+    public List<String> getGameModeReserved() {
+        return gameModeReserved;
     }
 
     @Override

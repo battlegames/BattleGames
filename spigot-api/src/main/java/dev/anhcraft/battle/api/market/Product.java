@@ -84,6 +84,14 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("Make this product only available during the game")
     private boolean inGameOnly;
 
+    @Key("reserved_game_modes")
+    @Explanation({
+            "Make this product only available during certain game modes",
+            "This option only takes effect if <b>in_game_only</b> set to <i>true</i>",
+            "All game modes are non-case-sensitive"
+    })
+    private List<String> gameModeReserved;
+
     @Key("executions.perform_commands")
     @Explanation({
             "The commands to be performed by the console later",
@@ -216,6 +224,11 @@ public class Product extends ConfigurableObject implements Informative {
 
     public void setBattleExp(long battleExp) {
         this.battleExp = battleExp;
+    }
+
+    @Nullable
+    public List<String> getGameModeReserved() {
+        return gameModeReserved;
     }
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
