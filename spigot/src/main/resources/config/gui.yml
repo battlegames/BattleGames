@@ -443,20 +443,28 @@ player_gun_inv:
     '2':
       positions: 6; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { player_gun }
     '3':
       positions: 7; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { player_gun }
@@ -494,20 +502,28 @@ player_magazine_inv:
     '2':
       positions: 6; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { player_magazine }
     '3':
       positions: 7; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { player_magazine }
@@ -545,20 +561,28 @@ player_ammo_inv:
     '2':
       positions: 6; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { player_ammo }
     '3':
       positions: 7; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { player_ammo }
@@ -596,20 +620,28 @@ player_scope_inv:
     '2':
       positions: 6; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { player_scope }
     '3':
       positions: 7; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { player_scope }
@@ -647,20 +679,28 @@ player_grenade_inv:
     '2':
       positions: 6; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { player_grenade }
     '3':
       positions: 7; 5
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { player_grenade }
@@ -698,20 +738,28 @@ kit_menu:
     '2':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { kits }
     '3':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { kits }
@@ -750,20 +798,28 @@ booster_menu:
     '2':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { boosters }
     '3':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { boosters }
@@ -802,20 +858,28 @@ arena_chooser:
     '2':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { arena_chooser }
     '3':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { arena_chooser }
@@ -862,20 +926,28 @@ market_category_menu:
     '3':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { market_category }
     '4':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { market_category }
@@ -914,20 +986,28 @@ market_product_menu:
     '2':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { market_product }
     '3':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { market_product }
@@ -977,20 +1057,28 @@ market_category_menu_editor:
     '3':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { editor_market_category }
     '4':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { editor_market_category }
@@ -1095,20 +1183,28 @@ market_product_menu_editor:
     '3':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { editor_market_product }
     '4':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { editor_market_product }
@@ -1226,20 +1322,28 @@ market_transaction:
     '3':
       positions: 6; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.prev_name ]'
         lore:
           - '[ gui.common.prev_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowLeft"
       functions:
         - common::cancel_event
         - common::prev_page { market_transaction }
     '4':
       positions: 7; 4
       item:
-        material: arrow
+        material: player_head
         name: '[ gui.common.next_name ]'
         lore:
           - '[ gui.common.next_lore ]'
+        meta:
+          type: skull
+          skull:
+            owner: "MHF_ArrowRight"
       functions:
         - common::cancel_event
         - common::next_page { market_transaction }
