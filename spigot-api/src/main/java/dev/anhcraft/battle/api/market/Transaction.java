@@ -20,11 +20,13 @@
 
 package dev.anhcraft.battle.api.market;
 
-import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class Transaction implements Informative {
@@ -33,6 +35,8 @@ public class Transaction implements Informative {
     private String currency;
     private double price;
     private long date;
+    private String formattedDate;
+    private String formattedPrice;
 
     public Transaction(@NotNull UUID buyer, @NotNull String product, double price, @NotNull String currency, long date) {
         Condition.argNotNull("buyer", buyer);
@@ -43,6 +47,15 @@ public class Transaction implements Informative {
         this.price = price;
         this.currency = currency;
         this.date = date;
+        formattedDate = BattleApi.getInstance().formatLongFormDate(new Date(date));
+        System.out.println(currency.toLowerCase());
+        String s = BattleApi.getInstance().getLocalizedMessage("price_format." + currency.toLowerCase());
+        System.out.println(s);
+        if(s != null){
+            formattedPrice = String.format(s, price);
+        } else {
+            formattedPrice = price + " " + currency;
+        }
     }
 
     @NotNull
@@ -74,6 +87,8 @@ public class Transaction implements Informative {
                 .inform("product", product)
                 .inform("currency", currency)
                 .inform("price", price)
-                .inform("date", date);
+                .inform("date", date)
+                .inform("formatted_price", formattedPrice)
+                .inform("formatted_date", formattedDate);
     }
 }

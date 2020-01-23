@@ -10,6 +10,11 @@ options:
       - "&fPrice: &d%s"
       - "&f"
       - "&e>> Click to purchase <<"
+  transaction_item:
+    material: paper
+    name: "&f{__product__} &7({__formatted_price__})"
+    lore:
+      - "&7{__formatted_date__}"
 
 categories:
   perks:

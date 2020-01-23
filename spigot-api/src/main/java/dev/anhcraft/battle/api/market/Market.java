@@ -28,6 +28,7 @@ import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,10 @@ public class Market extends ConfigurableObject {
     @Key("options.summary_product_info.lore")
     @Explanation("Additional lore that contains common stuff about the product (e.g: price)")
     private List<String> summaryProductLore;
+
+    @Key("options.transaction_item")
+    @Explanation("The item to be displayed for each transaction in the transaction menu")
+    private PreparedItem transactionItem;
 
     @Key("categories")
     @Explanation("All categories")
@@ -80,6 +85,11 @@ public class Market extends ConfigurableObject {
     @NotNull
     public List<Category> getCategories() {
         return categories;
+    }
+
+    @Nullable
+    public PreparedItem getTransactionItem() {
+        return transactionItem;
     }
 
     @Override

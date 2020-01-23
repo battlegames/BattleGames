@@ -843,15 +843,23 @@ market_category_menu:
       functions:
         - common::cancel_event
     '1':
+      positions: 1; 4
+      item:
+        material: paper
+        name: '&bView all transactions'
+      functions:
+        - common::cancel_event
+        - common::switch_gui { market_transaction }
+    '2':
       positions:
-        - 1 -> 5; 4
+        - 2 -> 5; 4
         - 8; 4
       item:
         material: GRAY_STAINED_GLASS_PANE
         name: '&f'
       functions:
         - common::cancel_event
-    '2':
+    '3':
       positions: 6; 4
       item:
         material: arrow
@@ -861,7 +869,7 @@ market_category_menu:
       functions:
         - common::cancel_event
         - common::prev_page { market_category }
-    '3':
+    '4':
       positions: 7; 4
       item:
         material: arrow
@@ -871,7 +879,7 @@ market_category_menu:
       functions:
         - common::cancel_event
         - common::next_page { market_category }
-    '4':
+    '5':
       positions: 9; 4
       item:
         material: barrier
@@ -1183,6 +1191,58 @@ market_product_editor:
       functions:
         - common::cancel_event
         - common::switch_gui { market_product_menu_editor }
+
+market_transaction:
+  title: '[ gui.market_transaction.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: market_transaction
+      item:
+        material: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+      functions:
+        - common::cancel_event
+    '1':
+      positions: 1; 4
+      item:
+        material: diamond
+        name: '[ gui.market_transaction.back_name ]'
+        lore:
+          - '[ gui.market_transaction.back_lore ]'
+      functions:
+        - common::cancel_event
+        - common::switch_gui { market_category_menu }
+    '2':
+      positions:
+        - 2 -> 5; 4
+        - 8 -> 9; 4
+      item:
+        material: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+      functions:
+        - common::cancel_event
+    '3':
+      positions: 6; 4
+      item:
+        material: arrow
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+      functions:
+        - common::cancel_event
+        - common::prev_page { market_transaction }
+    '4':
+      positions: 7; 4
+      item:
+        material: arrow
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+      functions:
+        - common::cancel_event
+        - common::next_page { market_transaction }
 
 main_player_inv:
   title: '[ gui.main_player_inv.title ]'

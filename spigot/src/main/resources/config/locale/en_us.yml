@@ -281,6 +281,12 @@ gui:
     back_name: "&cBack"
     back_lore:
       - "&fClick here to open the product menu"
+  market_transaction:
+    title: "&3Your transactions"
+    back_name: "&cBack"
+    back_lore:
+      - "&fClick to go back to the market menu"
+      - "&fOr you can use &e/b market"
   value_editor:
     done_btn: "&a✔ Done"
     flip_number_btn: "&cFlip number: &eNegative <=> Positive"
