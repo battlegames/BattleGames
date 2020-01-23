@@ -26,19 +26,20 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.battle.api.stats.natives.ExpStat;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.api.misc.Perk;
-import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.jvmkit.utils.CollectionUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -54,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Schema
 public class Product extends ConfigurableObject implements Informative {
@@ -233,7 +235,7 @@ public class Product extends ConfigurableObject implements Informative {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
         Location loc = player.getLocation();
-        player.getInventory().addItem((ItemStack[]) Arrays.stream(vanillaItems).map(PreparedItem::build).toArray()).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
+        player.getInventory().addItem(CollectionUtil.toArray(Arrays.stream(vanillaItems).map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         battleItems.forEach((type, x) -> {
             ItemStorage is = playerData.getInventory().getStorage(type);
             is.put(x);
