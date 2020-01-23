@@ -33,16 +33,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-public class Mode implements Informative {
+public final class Mode implements Informative {
     private static final Map<String, Mode> MODE_REGISTRY = new ConcurrentHashMap<>();
 
     @Contract("!null -> param1")
     @NotNull
     public static Mode registerMode(@NotNull Mode mode){
         Condition.argNotNull("mode", mode);
-        String k = mode.id.toLowerCase();
-        if(MODE_REGISTRY.containsKey(k)) throw new IllegalStateException("Mode is already registered");
-        MODE_REGISTRY.put(k, mode);
+        if(MODE_REGISTRY.containsKey(mode.id)) throw new IllegalStateException("Mode is already registered");
+        MODE_REGISTRY.put(mode.id, mode);
         return mode;
     }
 
@@ -108,7 +107,7 @@ public class Mode implements Informative {
 
     public Mode(@NotNull String id){
         Condition.argNotNull("id", id);
-        this.id = id;
+        this.id = id.toLowerCase();
     }
 
     public void init(@NotNull ConfigurationSection conf){
