@@ -48,9 +48,7 @@ public class Transaction implements Informative {
         this.currency = currency;
         this.date = date;
         formattedDate = BattleApi.getInstance().formatLongFormDate(new Date(date));
-        System.out.println(currency.toLowerCase());
         String s = BattleApi.getInstance().getLocalizedMessage("price_format." + currency.toLowerCase());
-        System.out.println(s);
         if(s != null){
             formattedPrice = String.format(s, price);
         } else {
