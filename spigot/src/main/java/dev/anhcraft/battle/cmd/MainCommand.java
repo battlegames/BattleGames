@@ -35,6 +35,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.craftkit.chat.Chat;
 import dev.anhcraft.craftkit.utils.ItemUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -58,6 +59,16 @@ public class MainCommand extends BaseCommand{
     @HelpCommand
     public void help(CommandSender sender, CommandHelp help){
         help.showHelp();
+    }
+
+    @Subcommand("info")
+    @CommandPermission("battle.info")
+    public void info(CommandSender sender){
+        Chat.noPrefix()
+                .message(sender, "&e&lBattleGames Minigame &7&lv"+plugin.getDescription().getVersion())
+                .message(sender, "&f◈ Author: anhcraft")
+                .message(sender, "&f◈ Discord: https://discord.gg/QSpc5xH")
+                .message(sender, "&f◈ Spigot: https://spigotmc.org/resources/69463/");
     }
 
     @Subcommand("setspawn")
