@@ -20,14 +20,19 @@
 
 package dev.anhcraft.battle.api.events.game;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.reports.DamageReport;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Called when an in-game player dies.
@@ -35,27 +40,111 @@ import java.util.Set;
 public class GamePlayerDeathEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
 
+    public static class Contribution {
+        private List<PlayerAttackReport> damageReports = new ArrayList<>();
+        private boolean readOnly;
+        private double totalDamage;
+        private double avgDamage;
+        private boolean isHeadshooter;
+        private boolean isKiller;
+        private boolean isAssistant;
+
+        private void checkAccess(){
+            if(readOnly){
+                try {
+                    throw new IllegalAccessException("Read-only");
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * Returns an immutable list of damage reports.
+         * @return damage reports
+         */
+        @NotNull
+        public List<PlayerAttackReport> getDamageReports() {
+            return damageReports;
+        }
+
+        public double getTotalDamage() {
+            return totalDamage;
+        }
+
+        @Deprecated
+        public void setTotalDamage(double totalDamage) {
+            checkAccess();
+            this.totalDamage = totalDamage;
+        }
+
+        public double getAvgDamage() {
+            return avgDamage;
+        }
+
+        @Deprecated
+        public void setAvgDamage(double avgDamage) {
+            checkAccess();
+            this.avgDamage = avgDamage;
+        }
+
+        public boolean isHeadshooter() {
+            return isHeadshooter;
+        }
+
+        @Deprecated
+        public void setHeadshooter(boolean headshooter) {
+            checkAccess();
+            isHeadshooter = headshooter;
+        }
+
+        public boolean isKiller() {
+            return isKiller;
+        }
+
+        @Deprecated
+        public void setKiller(boolean killer) {
+            checkAccess();
+            isKiller = killer;
+        }
+
+        public boolean isAssistant() {
+            return isAssistant;
+        }
+
+        @Deprecated
+        public void setAssistant(boolean assistant) {
+            checkAccess();
+            isAssistant = assistant;
+        }
+
+        @Deprecated
+        public void readOnly() {
+            checkAccess();
+            readOnly = true;
+            damageReports = ImmutableList.copyOf(damageReports);
+        }
+    }
+
     private Player player;
-    private ImmutableMap<Player, Double> damagers;
-    private Set<Player> headshooters;
-    private Set<Player> killers;
-    private Set<Player> assistants;
+    private Collection<DamageReport> damageReports;
+    private Map<Player, Contribution> damagerMap;
     private Player mostDamager;
     private double mostPlayerDamage;
     private double totalPlayerDamage;
     private double totalNatureDamage;
+    private double avgDamage;
 
-    public GamePlayerDeathEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull ImmutableMap<Player, Double> damagers, @NotNull Set<Player> headshooters, @NotNull Set<Player> killers, @NotNull Set<Player> assistants, @Nullable Player mostDamager, double mostPlayerDamage, double totalPlayerDamage, double totalNatureDamage) {
+    public GamePlayerDeathEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull Collection<DamageReport> damageReports, @NotNull Map<Player, Contribution> damagerMap, @Nullable Player mostDamager, double mostPlayerDamage, double totalPlayerDamage, double totalNatureDamage, double avgDamage) {
         super(game);
         this.player = player;
-        this.damagers = damagers;
-        this.headshooters = headshooters;
-        this.killers = killers;
-        this.assistants = assistants;
+        this.damageReports = damageReports;
+        this.damagerMap = damagerMap;
         this.mostDamager = mostDamager;
         this.mostPlayerDamage = mostPlayerDamage;
         this.totalPlayerDamage = totalPlayerDamage;
         this.totalNatureDamage = totalNatureDamage;
+        this.avgDamage = avgDamage;
     }
 
     /**
@@ -68,27 +157,29 @@ public class GamePlayerDeathEvent extends GameEvent {
     }
 
     /**
-     * Gets the map contains all damagers and their damages to the player.
-     * @return damage map
+     * Returns all damage reports.
+     * @return immutable collection of damage reports
      */
     @NotNull
-    public ImmutableMap<Player, Double> getDamagers() {
-        return damagers;
+    public Collection<DamageReport> getDamageReports() {
+        return damageReports;
     }
 
+    /**
+     * Returns the damager map.
+     * @return immutable damage map caused by players
+     */
     @NotNull
-    public Set<Player> getHeadshooters() {
-        return headshooters;
+    public Map<Player, Contribution> getDamagerMap() {
+        return damagerMap;
     }
 
-    @NotNull
-    public Set<Player> getKillers() {
-        return killers;
-    }
-
-    @NotNull
-    public Set<Player> getAssistants() {
-        return assistants;
+    /**
+     * Returns the average damage.
+     * @return average damage
+     */
+    public double getAvgDamage() {
+        return avgDamage;
     }
 
     /**
@@ -100,24 +191,28 @@ public class GamePlayerDeathEvent extends GameEvent {
         return mostDamager;
     }
 
+    /**
+     * Returns the damage that {@link #getMostDamager()} caused
+     * @return the most damage caused by player
+     */
     public double getMostPlayerDamage() {
         return mostPlayerDamage;
     }
 
+    /**
+     * Gets the total player damage.
+     * @return total player damage
+     */
     public double getTotalPlayerDamage() {
         return totalPlayerDamage;
     }
 
-    public void setTotalPlayerDamage(double totalPlayerDamage) {
-        this.totalPlayerDamage = totalPlayerDamage;
-    }
-
+    /**
+     * Gets the total nature damage.
+     * @return total nature damage.
+     */
     public double getTotalNatureDamage() {
         return totalNatureDamage;
-    }
-
-    public void setTotalNatureDamage(double totalNatureDamage) {
-        this.totalNatureDamage = totalNatureDamage;
     }
 
     @Override

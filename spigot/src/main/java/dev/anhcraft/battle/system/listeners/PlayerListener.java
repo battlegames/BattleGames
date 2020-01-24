@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.system.listeners;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
@@ -38,14 +39,15 @@ import dev.anhcraft.battle.api.reports.DamageReport;
 import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
 import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
+import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.api.stats.natives.AssistStat;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
@@ -70,7 +72,10 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PlayerListener extends BattleComponent implements Listener {
@@ -403,61 +408,56 @@ public class PlayerListener extends BattleComponent implements Listener {
             Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats().of(DeathStat.class).incrementAndGet();
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
-            if(reports.isEmpty()) return;
-            DoubleSummaryStatistics stats = reports
-                    .stream()
-                    .mapToDouble(DamageReport::getDamage)
-                    .summaryStatistics();
-            double avgDamage = stats.getAverage();
 
-            String hst = plugin.getLocaleConf().getString("medal.headshot_title");
-            String hsst = plugin.getLocaleConf().getString("medal.headshot_subtitle");
-            String ast = plugin.getLocaleConf().getString("medal.assist_title");
-            String asst = plugin.getLocaleConf().getString("medal.assist_subtitle");
-            String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
-            String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
+            Map<Player, GamePlayerDeathEvent.Contribution> damagerMap = new HashMap<>();
 
-            Map<Player, Double> damagerMap = new HashMap<>();
-            Set<Player> headshooters = new HashSet<>();
-            Set<Player> killers = new HashSet<>();
-            Set<Player> assistants = new HashSet<>();
-            double mostPlayerDamage = 0;
-            Player mostDamager = null;
             double totalPlayerDamage = 0;
             double totalNatureDamage = 0;
 
             for(DamageReport report : reports){
                 if(report instanceof PlayerAttackReport) {
-                    totalPlayerDamage += report.getDamage();
                     PlayerAttackReport par = (PlayerAttackReport) report;
-                    damagerMap.compute(par.getDamager(), (s, f) -> f == null ? report.getDamage() : f + report.getDamage());
-                    if (report.getDamage() >= avgDamage) {
-                        killers.add(par.getDamager());
-                        if (report.getDamage() > mostPlayerDamage) {
-                            mostPlayerDamage = report.getDamage();
-                            mostDamager = par.getDamager();
-                        }
-                        if (report.isHeadshotDamage()) {
-                            headshooters.add(par.getDamager());
-                        }
-                    } else {
-                        assistants.add(par.getDamager());
+                    GamePlayerDeathEvent.Contribution c = damagerMap.get(par.getDamager());
+                    if(c == null) {
+                        damagerMap.put(par.getDamager(), c = new GamePlayerDeathEvent.Contribution());
                     }
+                    if(report.isHeadshotDamage()){
+                        c.setHeadshooter(true);
+                    }
+                    c.setTotalDamage(c.getTotalDamage() + par.getDamage());
+                    c.getDamageReports().add(par);
+                    totalPlayerDamage += par.getDamage();
                 } else {
-                    totalNatureDamage += report.getDamage();
+                    totalNatureDamage = report.getDamage();
                 }
             }
 
-            headshooters.removeAll(assistants);
-            killers.removeAll(assistants);
+            double avgDamage = (totalPlayerDamage + totalNatureDamage) / reports.size();
+            double mostPlayerDamage = 0;
+            Player mostDamager = null;
 
-            ImmutableMap.Builder<Player, Double> damagerMapBuilder = ImmutableMap.builder();
-            damagerMapBuilder.orderEntriesByValue(Comparator.reverseOrder());
-            damagerMapBuilder.putAll(damagerMap);
-            ImmutableMap<Player, Double> damagers = damagerMapBuilder.build();
+            for(Map.Entry<Player, GamePlayerDeathEvent.Contribution> ent : damagerMap.entrySet()){
+                GamePlayerDeathEvent.Contribution c = ent.getValue();
+                c.setAvgDamage(c.getTotalDamage() / c.getDamageReports().size());
+                if(c.getAvgDamage() >= avgDamage){
+                    c.setKiller(true); // (*)
+                } else {
+                    c.setAssistant(true);
+                }
+                // dont move this to (*) since it may cause bugs if nature damage is high
+                if(c.getAvgDamage() > mostPlayerDamage){
+                    mostDamager = ent.getKey();
+                    mostPlayerDamage = c.getAvgDamage();
+                }
+                c.readOnly();
+            }
 
-            GamePlayerDeathEvent event = new GamePlayerDeathEvent(game, e.getEntity(), damagers, headshooters, killers, assistants, mostDamager, mostPlayerDamage, totalPlayerDamage, totalNatureDamage);
+            damagerMap = ImmutableMap.copyOf(damagerMap);
+            reports = ImmutableList.copyOf(reports);
+
+            GamePlayerDeathEvent event = new GamePlayerDeathEvent(game, e.getEntity(), reports, damagerMap, mostDamager, mostPlayerDamage, totalPlayerDamage, totalNatureDamage, avgDamage);
             Bukkit.getPluginManager().callEvent(event);
+
             totalNatureDamage = event.getTotalNatureDamage();
             totalPlayerDamage = event.getTotalPlayerDamage();
 
@@ -467,8 +467,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                         .compile();
                 e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocaleConf().getString("game.death_message.by_nature"))));
             } else {
-                boolean over = damagers.keySet().size() > 3;
-                String attackerNames = damagers.keySet()
+                boolean over = damagerMap.keySet().size() > 3;
+                String attackerNames = damagerMap.keySet()
                         .stream()
                         .limit(3)
                         .map(Player::getName)
@@ -492,25 +492,31 @@ public class PlayerListener extends BattleComponent implements Listener {
                 e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(plugin.getLocaleConf().getString(x))));
             }
 
-            for(Player player : headshooters){
-                GamePlayer gp = game.getPlayer(player);
-                if(gp == null) continue;
-                gp.getStats().of(HeadshotStat.class).incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
-            }
+            String hst = plugin.getLocaleConf().getString("medal.headshot_title");
+            String hsst = plugin.getLocaleConf().getString("medal.headshot_subtitle");
+            String ast = plugin.getLocaleConf().getString("medal.assist_title");
+            String asst = plugin.getLocaleConf().getString("medal.assist_subtitle");
+            String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
+            String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
 
-            for(Player player : assistants){
-                GamePlayer gp = game.getPlayer(player);
+            for(Map.Entry<Player, GamePlayerDeathEvent.Contribution> ent : damagerMap.entrySet()){
+                Player player = ent.getKey();
+                GamePlayer gp = game.getPlayer(ent.getKey());
                 if(gp == null) continue;
-                gp.getStats().of(AssistStat.class).incrementAndGet();
-                plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
-            }
-
-            for(Player player : killers){
-                GamePlayer gp = game.getPlayer(player);
-                if(gp == null) continue;
-                gp.getStats().of(KillStat.class).incrementAndGet();
+                StatisticMap stats = gp.getStats();
+                if(ent.getValue().isHeadshooter()) {
+                    stats.of(HeadshotStat.class).incrementAndGet();
+                    plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
+                }
+                if(ent.getValue().isAssistant()) {
+                    stats.of(AssistStat.class).incrementAndGet();
+                    plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
+                } else if(ent.getValue().isKiller()){
+                    stats.of(KillStat.class).incrementAndGet(); // (*)
+                }
+                // most damager not means he is a killer (what if nature damage is high?) moved from (*)
                 if(player.equals(mostDamager) && !game.hasFirstKill() && !gp.hasFirstKill()) {
+                    // dont increase first kill stats here! we do it at the end
                     gp.setHasFirstKill(true);
                     game.setHasFirstKill(true);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, fkt), PlaceholderUtil.formatPAPI(player, fkst)));
