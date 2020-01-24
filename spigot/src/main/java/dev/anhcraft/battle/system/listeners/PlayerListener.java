@@ -54,6 +54,7 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -108,6 +109,13 @@ public class PlayerListener extends BattleComponent implements Listener {
                             playerData.getReceivedFirstJoinKits().add(kit.getId());
                         }
                     });
+                    if(player.hasPermission("battle.pleasesetrollback")) {
+                        plugin.listArenas(arena -> {
+                            if (arena.getRollback() == null) {
+                                player.sendMessage(ChatColor.GOLD + "For safety reasons, you should specify rollback for arena #" + arena.getId());
+                            }
+                        });
+                    }
                     BattleDebugger.endTiming("player-join");
                 });
             });
