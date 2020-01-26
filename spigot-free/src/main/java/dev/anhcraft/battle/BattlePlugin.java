@@ -581,19 +581,29 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             ARENA_MAP.put(s, arena);
             if(arena.getRollback() == null){
                 getLogger().warning("For safety reasons, you should specify rollback for arena #"+arena.getId());
-            }
-            if(arena.getRollback() != null && arena.getRollback().getProvider() == Rollback.Provider.BATTLE){
-                for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
-                    String w = it.next();
-                    World wd = getServer().getWorld(w);
-                    if(wd == null){
-                        getLogger().warning("World not found: "+w);
-                        it.remove();
-                    } else if(slimeWorldManagerSupport && SWMIntegration.isReadOnly(w) != -1){
-                        getLogger().warning("World is managed by SWM: "+w);
-                        it.remove();
-                    } else {
-                        battleRollback.backupWorld(wd);
+            } else {
+                if(arena.getRollback().getProvider() == Rollback.Provider.SLIME_WORLD) {
+                    if(!premiumConnector.isSuccess()){
+                        getLogger().warning("SWM support is not provided in free version. Uses Battle rollback instead.");
+                        arena.getRollback().setProvider(Rollback.Provider.BATTLE);
+                    } else if(!slimeWorldManagerSupport){
+                        getLogger().warning("SWM not found! Uses Battle rollback instead.");
+                        arena.getRollback().setProvider(Rollback.Provider.BATTLE);
+                    }
+                }
+                if(arena.getRollback().getProvider() == Rollback.Provider.BATTLE) {
+                    for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
+                        String w = it.next();
+                        World wd = getServer().getWorld(w);
+                        if (wd == null) {
+                            getLogger().warning("World not found: " + w);
+                            it.remove();
+                        } else if (SWMIntegration != null && SWMIntegration.isReadOnly(w) != -1) {
+                            getLogger().warning("World is managed by SWM: " + w);
+                            it.remove();
+                        } else {
+                            battleRollback.backupWorld(wd);
+                        }
                     }
                 }
             }

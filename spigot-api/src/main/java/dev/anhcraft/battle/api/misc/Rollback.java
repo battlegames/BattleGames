@@ -61,6 +61,10 @@ public class Rollback extends ConfigurableObject {
         return provider;
     }
 
+    public void setProvider(@NotNull Provider provider) {
+        this.provider = provider;
+    }
+
     @NotNull
     public List<String> getWorlds() {
         return worlds;
