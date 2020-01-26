@@ -15,7 +15,8 @@
 
     <modules>
         <module>spigot-api</module>
-        <module>spigot</module>
+        <module>spigot-free</module>
+        <module>spigot-premium</module>
         <module>bungee</module>
     </modules>
 

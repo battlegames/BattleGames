@@ -16,6 +16,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/spigot/pom.xml" />
         <option value="$PROJECT_DIR$/bungee/pom.xml" />
+        <option value="$PROJECT_DIR$/spigot-free/pom.xml" />
       </list>
     </option>
   </component>
