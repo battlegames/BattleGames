@@ -19,10 +19,6 @@
  */
 package dev.anhcraft.battle;
 
-import co.aikar.commands.BukkitCommandCompletionContext;
-import co.aikar.commands.CommandCompletions;
-import co.aikar.commands.InvalidCommandArgument;
-import co.aikar.commands.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.GeneralConfig;
@@ -41,8 +37,7 @@ import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
-import dev.anhcraft.battle.cmd.EditorCommand;
-import dev.anhcraft.battle.cmd.MainCommand;
+import dev.anhcraft.battle.cmd.CommandInitializer;
 import dev.anhcraft.battle.gui.CommonHandler;
 import dev.anhcraft.battle.gui.MarketHandler;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
@@ -135,15 +130,15 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     };
     public final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
-    private final Map<String, Arena> ARENA_MAP = new HashMap<>();
-    private final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
-    private final Map<String, GunModel> GUN_MAP = new HashMap<>();
-    private final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
-    private final Map<String, Kit> KIT_MAP = new HashMap<>();
-    private final Map<String, Perk> PERK_MAP = new HashMap<>();
-    private final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
-    private final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
-    private final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
+    public final Map<String, Arena> ARENA_MAP = new HashMap<>();
+    public final Map<String, AmmoModel>  AMMO_MAP = new HashMap<>();
+    public final Map<String, GunModel> GUN_MAP = new HashMap<>();
+    public final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
+    public final Map<String, Kit> KIT_MAP = new HashMap<>();
+    public final Map<String, Perk> PERK_MAP = new HashMap<>();
+    public final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
+    public final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
+    public final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
     private final ServerData SERVER_DATA = new ServerData();
     private final Market MARKET = new Market();
     public final GeneralConfig GENERAL_CONF = new GeneralConfig();
@@ -250,64 +245,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
         }
 
-        PaperCommandManager manager = new PaperCommandManager(this);
-        manager.enableUnstableAPI("help");
-        manager.registerCommand(new MainCommand(this));
-        manager.registerCommand(new EditorCommand(this));
-        manager.getCommandCompletions().registerAsyncCompletion("ammo", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return AMMO_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("gun", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return GUN_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("magazine", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return MAGAZINE_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("scope", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return SCOPE_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("arena", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return ARENA_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("grenade", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return GRENADE_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("perk", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return PERK_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("booster", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return BOOSTER_MAP.keySet();
-            }
-        });
-        manager.getCommandCompletions().registerAsyncCompletion("gui", new CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext>() {
-            @Override
-            public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
-                return guiManager.GUI.keySet();
-            }
-        });
+        new CommandInitializer(this);
 
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.AdvancedPie("arenas_per_mode", new Callable<Map<String, Integer>>() {

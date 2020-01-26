@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.MouseClick;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -110,11 +111,11 @@ public class PlayerListener extends BattleComponent implements Listener {
                         }
                     });
                     if(player.hasPermission("battle.pleasesetrollback")) {
-                        plugin.listArenas(arena -> {
+                        for (Arena arena : plugin.ARENA_MAP.values()){
                             if (arena.getRollback() == null) {
                                 player.sendMessage(ChatColor.GOLD + "For safety reasons, you should specify rollback for arena #" + arena.getId());
                             }
-                        });
+                        }
                     }
                     BattleDebugger.endTiming("player-join");
                 });
