@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="spigot-premium" />
         <module name="Shared" />
         <module name="spigot-free" />
-        <module name="bungee" />
         <module name="spigot-api" />
-        <module name="spigot.premium" />
+        <module name="bungee" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -18,7 +18,7 @@
       <module name="parent" target="1.8" />
       <module name="spigot-api" target="1.8" />
       <module name="spigot-free" target="1.8" />
-      <module name="spigot.premium" target="1.8" />
+      <module name="spigot-premium" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -26,7 +26,7 @@
       <module name="bungee" options="-parameters" />
       <module name="spigot-api" options="-parameters" />
       <module name="spigot-free" options="-parameters" />
-      <module name="spigot.premium" options="-parameters" />
+      <module name="spigot-premium" options="-parameters" />
     </option>
   </component>
 </project>

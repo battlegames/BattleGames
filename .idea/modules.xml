@@ -6,7 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/parent.iml" filepath="$PROJECT_DIR$/parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/spigot-api/spigot-api.iml" filepath="$PROJECT_DIR$/spigot-api/spigot-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/spigot/spigot-free.iml" filepath="$PROJECT_DIR$/spigot/spigot-free.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spigot-premium/spigot.premium.iml" filepath="$PROJECT_DIR$/spigot-premium/spigot.premium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spigot-premium/spigot-premium.iml" filepath="$PROJECT_DIR$/spigot-premium/spigot-premium.iml" />
     </modules>
   </component>
 </project>
