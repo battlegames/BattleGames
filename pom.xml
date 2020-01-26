@@ -84,7 +84,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>dev.anhcraft.battle.bstats</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
