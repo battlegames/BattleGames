@@ -251,7 +251,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         new CommandInitializer(this);
 
-        Metrics metrics = new Metrics(this);
+        Metrics metrics = new Metrics(this, 6080);
         metrics.addCustomChart(new Metrics.AdvancedPie("arenas_per_mode", new Callable<Map<String, Integer>>() {
             @Override
             public Map<String, Integer> call() throws Exception {

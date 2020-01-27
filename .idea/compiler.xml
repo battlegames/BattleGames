@@ -7,9 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Shared" />
-        <module name="bungee" />
-        <module name="spigot-api" />
+        <module name="spigot-free" />
         <module name="spigot-premium" />
+        <module name="spigot-api" />
+        <module name="bungee" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
