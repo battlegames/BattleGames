@@ -66,10 +66,10 @@ public class MainCommand extends BaseCommand{
     public void info(CommandSender sender){
         Chat.noPrefix()
                 .message(sender, "&e&lBattleGames Minigame &7&lv"+plugin.getDescription().getVersion())
-                .message(sender, "&f◈ Type: "+(plugin.premiumConnector.isSuccess() ? "&cPremium" : "&bFree"))
-                .message(sender, "&f◈ Author: anhcraft")
-                .message(sender, "&f◈ Discord: https://discord.gg/QSpc5xH")
-                .message(sender, "&f◈ Spigot: https://spigotmc.org/resources/69463");
+                .message(sender, "&d◈ Type: "+(plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
+                .message(sender, "&d◈ Author: &fanhcraft")
+                .message(sender, "&d◈ Discord: &fhttps://discord.gg/QSpc5xH")
+                .message(sender, "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463");
     }
 
     @Subcommand("setspawn")
