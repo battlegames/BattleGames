@@ -231,10 +231,10 @@ bungeecord:
   connection_delay: 100
 
 control:
-  gun_shoot: left_click
-  gun_zoom: right_click
-  grenade_throw: left_click
-  auto_reload_gun: false
+  gun_shoot: right_click
+  gun_zoom: left_click
+  grenade_throw: right_click
+  auto_reload_gun: true
 
 in_game_economy:
   currency:
