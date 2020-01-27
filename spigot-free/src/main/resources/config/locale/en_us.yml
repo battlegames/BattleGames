@@ -180,19 +180,27 @@ gui:
     title: "&e&lInventory"
     gun_name: "&fGun"
     gun_lore:
-      - "&aClick here to view owned guns"
+      - "&aView all owned guns"
     magazine_name: "&fMagazine"
     magazine_lore:
-      - "&aClick here to view owned magazines"
+      - "&aView all owned magazines"
     ammo_name: "&fAmmunition"
     ammo_lore:
-      - "&aClick here to view owned ammunition"
+      - "&aView all owned ammunition"
     scope_name: "&fScopes"
     scope_lore:
-      - "&aClick here to view owned scopes"
+      - "&aView all owned scopes"
     grenade_name: "&fGrenades"
     grenade_lore:
-      - "&aClick here to view owned grenades"
+      - "&aView all owned grenades"
+    kit_name: "&bKits"
+    kit_lore:
+      - "&fClick here to open the kit menu"
+      - "&eOr use command &7/b kit"
+    market_name: "&bMarket"
+    market_lore:
+      - "&fClick here to open the market"
+      - "&eOr use command &7/b market"
   player_gun_inv:
     title: "&c&lInventory > Gun"
   player_magazine_inv:

@@ -409,6 +409,16 @@ player_inv:
         - common::cancel_event
         - common::switch_gui { player_grenade_inv }
     '6':
+      positions: 1; 4
+      item:
+        material: ender_chest
+        name: '[ gui.player_inv.kit_name ]'
+        lore:
+          - '[ gui.player_inv.kit_lore ]'
+      functions:
+        - common::cancel_event
+        - common::switch_gui { kit_menu }
+    '7':
       positions: 1/1; 4
       item:
         material: barrier
@@ -418,6 +428,16 @@ player_inv:
       functions:
         - common::cancel_event
         - common::close_gui
+    '8':
+      positions: 9; 4
+      item:
+        material: emerald
+        name: '[ gui.player_inv.market_name ]'
+        lore:
+          - '[ gui.player_inv.market_lore ]'
+      functions:
+        - common::cancel_event
+        - common::switch_gui { market_category_menu }
 
 player_gun_inv:
   title: '[ gui.player_gun_inv.title ]'
