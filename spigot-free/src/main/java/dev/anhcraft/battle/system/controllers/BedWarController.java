@@ -125,6 +125,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
     @Override
     public void onTick(@NotNull LocalGame game){
+        super.onTick(game);
         TeamManager<BWTeam> x = TEAM.get(game);
         if(x != null && game.getCurrentTime().get() > 100 && x.countPresentTeams() <= 1) {
             game.end();

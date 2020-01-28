@@ -100,6 +100,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
 
     @Override
     public void onTick(@NotNull LocalGame game){
+        super.onTick(game);
         TeamManager<ABTeam> x = TEAM.get(game);
         if(x != null && x.nextEmptyTeam().isPresent()) {
             game.end();

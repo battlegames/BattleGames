@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.arena.mode;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -26,13 +27,18 @@ import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public interface IMode {
     default void onInitGame(@NotNull Game game){
@@ -67,7 +73,15 @@ public interface IMode {
     }
 
     default void onTick(@NotNull LocalGame game){
-
+        if(game.getCurrentTime().get() % 100 == 0) {
+            List<World> worlds = game.getInvolvedWorlds();
+            for (Player p : game.getPlayers().keySet()) {
+                if (!worlds.contains(p.getWorld())) {
+                    p.sendMessage(BattleApi.getInstance().getLocalizedMessage("game.outside_playable_area"));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0), true);
+                }
+            }
+        }
     }
 
     default void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){

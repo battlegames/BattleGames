@@ -73,6 +73,7 @@ game:
     with_players:
       enough: "&c{__player__} has been died because of &a{__nature_ptg__}% &cby natural causes and &a{__player_ptg__}% &cby &e{__attackers__}"
       over: "&c{__player__} has been died because of &a{__nature_ptg__}% &cby natural causes and &a{__player_ptg__}% &cby &e{__attackers__} and others"
+  outside_playable_area: "&cYou're out of the playable area!"
 mode_dm:
   player_join_broadcast: "&f{__target__} joined! (%battle_game_total_players%/%battle_arena_max_players%)"
   player_quit_broadcast: "&f{__target__} left! (%battle_game_total_players%/%battle_arena_max_players%)"
