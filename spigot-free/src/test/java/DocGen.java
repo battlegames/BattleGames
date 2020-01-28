@@ -20,6 +20,7 @@
 
 import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.api.arena.mode.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.effect.BattleParticle;
@@ -69,6 +70,12 @@ public class DocGen {
                 .withSchema(GeneralConfig.SCHEMA)
                 .withSchema(Gui.SCHEMA)
                 .withSchema(Component.SCHEMA)
+                .withSchema(DeathmatchOptions.SCHEMA)
+                .withSchema(TeamDeathmatchOptions.SCHEMA)
+                .withSchema(CaptureTheFlagOptions.SCHEMA)
+                .withSchema(FlagOptions.SCHEMA)
+                .withSchema(BedWarOptions.SCHEMA)
+                .withSchema(BWTeamOptions.SCHEMA)
                 .addJavadoc("dev.anhcraft.battle.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));

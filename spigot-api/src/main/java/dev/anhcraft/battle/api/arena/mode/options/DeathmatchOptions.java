@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.arena.mode.options;
 
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
@@ -37,6 +38,7 @@ public class DeathmatchOptions extends ModeOptions {
     public static final ConfigSchema<DeathmatchOptions> SCHEMA = ConfigSchema.of(DeathmatchOptions.class);
 
     @Key("playing_spawn_points")
+    @Explanation("The spawn points (in playing phase)")
     @IgnoreValue(ifNull = true)
     private List<String> playSpawnPoints = new ArrayList<>();
 

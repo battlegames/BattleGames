@@ -23,10 +23,7 @@ package dev.anhcraft.battle.api.arena.mode.options;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.PrettyEnum;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -39,19 +36,23 @@ public class BWTeamOptions extends ConfigurableObject {
     public static final ConfigSchema<BWTeamOptions> SCHEMA = ConfigSchema.of(BWTeamOptions.class);
 
     @Key("name")
+    @Explanation("The name of this team")
     @Validation(notNull = true)
     private String name;
 
     @Key("color")
+    @Explanation("The team's color")
     @Validation(notNull = true)
     @PrettyEnum
     private DyeColor color;
 
     @Key("spawn_points")
+    @Explanation("The spawn points of this team (in playing phase)")
     @Validation(notNull = true)
     private List<String> spawnPoints;
 
     @Key("bed_location")
+    @Explanation("Where the bed of this team located")
     @Validation(notNull = true)
     private String bedLocation;
 

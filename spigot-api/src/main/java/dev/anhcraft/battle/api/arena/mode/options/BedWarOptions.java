@@ -22,9 +22,7 @@ package dev.anhcraft.battle.api.arena.mode.options;
 
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,9 +37,29 @@ public class BedWarOptions extends ModeOptions {
     public static final ConfigSchema<BedWarOptions> SCHEMA = ConfigSchema.of(BedWarOptions.class);
 
     @Key("team_size")
+    @Explanation("The size of a team")
     private int teamSize = 2;
 
     @Key("teams")
+    @Example({
+            "teams:",
+            "  '1':",
+            "    name: \"&fWhite\"",
+            "    color: white",
+            "    spawn_points:",
+            "    - lighthouse 30.39 65 -88.76 -0.45 -1.05",
+            "    - lighthouse 27.80 65 -88.75 -0.45 -1.05",
+            "    - lighthouse 29.36 65 -88.07 -0.45 -1.05",
+            "    bed_location: lighthouse 29.53 66.56 -74.76 0 0",
+            "  '2':",
+            "    name: \"&bCyan\"",
+            "    color: cyan",
+            "    spawn_points:",
+            "    - lighthouse -20.62 65 -88.37 -359.85 -0.30",
+            "    - lighthouse -22.97 65 -88.38 -359.85 -0.30",
+            "    - lighthouse -21.98 65 -87.81 -357.75 -0.60",
+            "    bed_location: lighthouse -22.44 66.56 -76.01 0 0"
+    })
     @IgnoreValue(ifNull = true)
     private List<BWTeamOptions> teams = new ArrayList<>();
 

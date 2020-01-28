@@ -23,6 +23,7 @@ package dev.anhcraft.battle.api.arena.mode.options;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
@@ -38,10 +39,12 @@ public class TeamDeathmatchOptions extends ModeOptions {
     public static final ConfigSchema<TeamDeathmatchOptions> SCHEMA = ConfigSchema.of(TeamDeathmatchOptions.class);
 
     @Key("playing_spawn_points_a")
+    @Explanation("The spawn points of team A (in playing phase)")
     @IgnoreValue(ifNull = true)
     private List<String> playSpawnPointsA = new ArrayList<>();
 
     @Key("playing_spawn_points_b")
+    @Explanation("The spawn points of team B (in playing phase)")
     @IgnoreValue(ifNull = true)
     private List<String> playSpawnPointsB = new ArrayList<>();
 

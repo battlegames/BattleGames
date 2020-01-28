@@ -22,9 +22,7 @@ package dev.anhcraft.battle.api.arena.mode.options;
 
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,7 +37,25 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
     public static final ConfigSchema<CaptureTheFlagOptions> SCHEMA = ConfigSchema.of(CaptureTheFlagOptions.class);
 
     @Key("flags")
+    @Explanation("All flags in the arena")
     @IgnoreValue(ifNull = true)
+    @Example({
+            "flags:",
+            "  '1':",
+            "    location: assault -345.41 43.00 -224.30 52.35 11.55",
+            "    display_name:",
+            "      valid: \"&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤\"",
+            "      invalid: \"&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤\"",
+            "      neutral: \"&7Neutral\"",
+            "    max_health: 10",
+            "  '2':",
+            "    location: assault -355.86 40.50 -285.70 176.70 90.00",
+            "    display_name:",
+            "      valid: \"&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤\"",
+            "      invalid: \"&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤\"",
+            "      neutral: \"&7Neutral\"",
+            "    max_health: 15"
+    })
     private List<FlagOptions> flags = new ArrayList<>();
 
     @NotNull
