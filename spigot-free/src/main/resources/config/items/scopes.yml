@@ -9,12 +9,3 @@ basic_scope:
   zoom_levels:
     - 1
     - 7
-
-enhanced_scope:
-  name: "&5Enhanced scope"
-  skin:
-    material: GLASS
-    damage: 0
-  zoom_levels:
-    - 3
-    - 10

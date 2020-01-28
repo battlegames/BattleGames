@@ -88,14 +88,14 @@ awm:
       damage: 3
   weight: 0.06
   scope:
-    default: enhanced_scope
+    default: basic_scope
   magazine:
     default: default_awm
     max_capacity: 10
   inventory_slot: 2
   reload_time_formula: "(b-a)*7"
   sounds:
-    on_shoot: "$entity_dragon_fireball_explode"
+    on_shoot: "$entity_dragon_fireball_explode:4.5:3"
   bossbar:
     on_reload:
       title: "&b&lReloading... &6&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
