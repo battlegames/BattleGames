@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.arena.mode;
 
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -32,6 +33,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface IMode {
+    default void onInitGame(@NotNull Game game){
+
+    }
+
     @NotNull
     default GamePlayer makeGamePlayer(@NotNull Player player){
         return new GamePlayer(player);

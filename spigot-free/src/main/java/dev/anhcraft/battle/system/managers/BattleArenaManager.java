@@ -144,6 +144,8 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 }
             } else {
                 game = arena.hasBungeecordSupport() && !forceLocal ? new RemoteGame(arena) : new LocalGame(arena);
+                IMode controller = arena.getMode().getController();
+                if(controller != null) controller.onInitGame(game);
                 ARENA_GAME_MAP.put(arena, game);
             }
             if(game instanceof LocalGame) {
