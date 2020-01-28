@@ -27,7 +27,7 @@ import java.io.IOException;
 
 public class GuiLegacyConfigGen {
     public static void main(String[] args){
-        FileConfiguration fc = YamlConfiguration.loadConfiguration(new File("spigot/src/main/resources/config/gui.yml"));
+        FileConfiguration fc = YamlConfiguration.loadConfiguration(new File("spigot-free/src/main/resources/config/gui.yml"));
         for (String s : fc.getKeys(false)){
             System.out.println("Visiting gui "+s);
             ConfigurationSection cs = fc.getConfigurationSection(s+".components");
@@ -49,7 +49,7 @@ public class GuiLegacyConfigGen {
             }
         }
         try {
-            fc.save(new File("spigot/src/main/resources/config/gui.legacy.yml"));
+            fc.save(new File("spigot-free/src/main/resources/config/gui.legacy.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
