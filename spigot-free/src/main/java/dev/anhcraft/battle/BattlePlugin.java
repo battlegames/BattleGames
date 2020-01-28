@@ -570,9 +570,12 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initArena(FileConfiguration c) {
+        ConfigUpdater configUpdater = new ConfigUpdater(getLogger());
+        configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().oldPath("attr").newPath("mode_options").type(ConfigurationSection.class));
         limit("Arena", c.getKeys(false), 8).forEach(s -> {
             Arena arena = new Arena(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
+            configUpdater.update(cs);
             try {
                 ConfigHelper.readConfig(cs, Arena.SCHEMA, arena);
             } catch (InvalidValueException e) {

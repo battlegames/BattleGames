@@ -24,6 +24,7 @@ import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.options.DeathmatchOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
@@ -33,7 +34,6 @@ import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
-import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -47,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DeathmatchController extends ModeController {
@@ -72,7 +73,7 @@ public class DeathmatchController extends ModeController {
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
+        int m = Math.min(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player);
@@ -104,8 +105,8 @@ public class DeathmatchController extends ModeController {
 
     protected void countdown(LocalGame game) {
         if(hasTask(game, "countdown")) return;
-        AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("countdown_time")/20L);
-        int m = Math.min(game.getArena().getAttributes().getInt("min_players"), 1);
+        AtomicLong current = new AtomicLong(game.getArena().getModeOptions().getCountdownTime()/20L);
+        int m = Math.min(game.getArena().getModeOptions().getMinPlayers(), 1);
         trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.getPlayerCount()) {
                 broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
@@ -150,13 +151,13 @@ public class DeathmatchController extends ModeController {
         switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
-                EntityUtil.teleport(player, LocationUtil.fromString(loc));
+                Location loc = RandomUtil.pickRandom(game.getArena().getModeOptions().getWaitSpawnPoints());
+                EntityUtil.teleport(player, loc);
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points"));
-                EntityUtil.teleport(player, LocationUtil.fromString(loc));
+                Location loc = RandomUtil.pickRandom(((DeathmatchOptions) game.getArena().getModeOptions()).getPlaySpawnPoints());
+                EntityUtil.teleport(player, loc);
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
@@ -171,7 +172,7 @@ public class DeathmatchController extends ModeController {
     public void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
         if(game.getPhase() != GamePhase.PLAYING) return;
         performCooldownMap(game, "item_selection", cooldownMap -> {
-            int t = game.getArena().getAttributes().getInt("item_selection_time");
+            long t = game.getArena().getModeOptions().getItemSelectTime();
             if(cooldownMap.isPassed(event.getPlayer(), t))
                 plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_item_selection_overtime"));
             else {
@@ -195,15 +196,13 @@ public class DeathmatchController extends ModeController {
         Player player = event.getPlayer();
         GamePlayer gp = game.getPlayer(player);
         if (gp != null) {
-            String sl = RandomUtil.pickRandom(game.getArena().getAttributes()
-                    .getStringList("waiting_spawn_points"));
-            Location loc = LocationUtil.fromString(sl);
+            Location loc = Objects.requireNonNull(RandomUtil.pickRandom(game.getArena().getModeOptions().getWaitSpawnPoints()));
             if(loc.getWorld() == null) loc.setWorld(player.getWorld());
             event.setRespawnLocation(loc);
             gp.setSpectator(true);
             if(!shouldAcceptRespawn(event, game, gp)) return;
             player.setGameMode(GameMode.SPECTATOR);
-            AtomicLong current = new AtomicLong(game.getArena().getAttributes().getLong("respawn_waiting_time")/20L);
+            AtomicLong current = new AtomicLong(game.getArena().getModeOptions().getRespawnWaitTime()/20L);
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
@@ -224,7 +223,7 @@ public class DeathmatchController extends ModeController {
         if(event.getReport().getEntity() instanceof Player){
             performCooldownMap(game, "spawn_protection",
                 cooldownMap -> {
-                    int t = game.getArena().getAttributes().getInt("spawn_protection_time");
+                    long t = game.getArena().getModeOptions().getSpawnProtectionTime();
                     if(!cooldownMap.isPassed((Player) event.getReport().getEntity(), t)) {
                         event.setCancelled(true);
                     }

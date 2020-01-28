@@ -27,18 +27,18 @@ import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.ICaptureTheFlag;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.options.CaptureTheFlagOptions;
+import dev.anhcraft.battle.api.arena.mode.options.FlagOptions;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
-import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -46,7 +46,10 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IntSummaryStatistics;
+import java.util.List;
 
 public class CTFController extends TeamDeathmatchController implements ICaptureTheFlag {
     private final Multimap<LocalGame, TeamFlag<ABTeam>> FLAG = LinkedHashMultimap.create();
@@ -116,33 +119,30 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
         super.play(game);
 
         plugin.taskHelper.newTask(() -> {
-            ConfigurationSection sec = game.getArena().getAttributes().getConfigurationSection("flags");
-            if(sec != null){
-                Set<String> keys = sec.getKeys(false);
-                for(String k : keys){
-                    Location loc = LocationUtil.fromString(sec.getString(k+".location"));
-                    int mh = sec.getInt(k+".max_health");
-                    ArmorStand armorStand = ArmorStand.spawn(loc);
-                    armorStand.setVisible(false);
-                    armorStand.setNameVisible(true);
-                    TrackedEntity<ArmorStand> te = plugin.extension.trackEntity(armorStand);
-                    te.setViewDistance(50);
-                    te.setViewers(new ArrayList<>(game.getPlayers().keySet()));
-                    TeamFlag<ABTeam> flag = new TeamFlag<>(te, mh);
-                    flag.getDisplayNames()[0] = sec.getString(k+".display_name.valid");
-                    flag.getDisplayNames()[1] = sec.getString(k+".display_name.invalid");
-                    flag.getDisplayNames()[2] = sec.getString(k+".display_name.neutral");
-                    flag.updateDisplayName(s -> {
-                        InfoHolder h = new InfoHolder("flag_");
-                        flag.inform(h);
-                        return h.compile().replace(s);
-                    });
-                    String startCaptureSound = sec.getString(k+".start_capture_sound");
-                    if(startCaptureSound != null) flag.setCaptureStartSound(new BattleSound(startCaptureSound));
-                    String stopCaptureSound = sec.getString(k+".stop_capture_sound");
-                    if(stopCaptureSound != null) flag.setCaptureStopSound(new BattleSound(stopCaptureSound));
-                    FLAG.put(game, flag);
+            List<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getModeOptions()).getFlags();
+            for(FlagOptions k : fs){
+                ArmorStand armorStand = ArmorStand.spawn(k.getLocation());
+                armorStand.setVisible(false);
+                armorStand.setNameVisible(true);
+                TrackedEntity<ArmorStand> te = plugin.extension.trackEntity(armorStand);
+                te.setViewDistance(50);
+                te.setViewers(new ArrayList<>(game.getPlayers().keySet()));
+                TeamFlag<ABTeam> flag = new TeamFlag<>(te, k.getMaxHealth());
+                flag.getDisplayNames()[0] = k.getValidDisplayName();
+                flag.getDisplayNames()[1] = k.getInvalidDisplayName();
+                flag.getDisplayNames()[2] = k.getNeutralDisplayName();
+                flag.updateDisplayName(s -> {
+                    InfoHolder h = new InfoHolder("flag_");
+                    flag.inform(h);
+                    return h.compile().replace(s);
+                });
+                if(k.getStartCaptureSound() != null) {
+                    flag.setCaptureStartSound(new BattleSound(k.getStartCaptureSound()));
                 }
+                if(k.getStopCaptureSound() != null) {
+                    flag.setCaptureStopSound(new BattleSound(k.getStopCaptureSound()));
+                }
+                FLAG.put(game, flag);
             }
         });
     }

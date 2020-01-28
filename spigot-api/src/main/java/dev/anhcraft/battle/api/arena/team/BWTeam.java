@@ -22,20 +22,17 @@ package dev.anhcraft.battle.api.arena.team;
 
 import com.google.common.base.Preconditions;
 import com.google.common.math.Stats;
+import dev.anhcraft.battle.api.arena.mode.options.BWTeamOptions;
 import dev.anhcraft.battle.utils.TempDataContainer;
-import dev.anhcraft.battle.utils.EnumUtil;
-import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class BWTeam extends TempDataContainer implements Team {
     private String name;
@@ -46,17 +43,13 @@ public class BWTeam extends TempDataContainer implements Team {
     private Location centerSpawnPoint;
 
     @SuppressWarnings("UnstableApiUsage")
-    public BWTeam(@NotNull ConfigurationSection c) {
+    public BWTeam(BWTeamOptions c) {
         Preconditions.checkNotNull(c);
 
-        this.name = c.getString("name");
-        this.color = EnumUtil.getEnum(DyeColor.values(), c.getString("color"));
-        this.spawnPoints = c.getStringList("spawn_points").stream()
-                .map(LocationUtil::fromString)
-                .collect(Collectors.toList());
-        Location bl = LocationUtil.fromString(c.getString("bed_location"));
-        Preconditions.checkNotNull(bl);
-        for (Block b : BlockUtil.getNearbyBlocks(bl, 2, 2, 2)){
+        this.name = c.getName();
+        this.color = c.getColor();
+        this.spawnPoints = c.getSpawnPoints();
+        for (Block b : BlockUtil.getNearbyBlocks(c.getBedLocation(), 2, 2, 2)){
             if(b.getType().name().equals("BED_BLOCK") || b.getType().name().endsWith("_BED")){
                 if(this.bedPart1 == null) {
                     this.bedPart1 = b;
@@ -77,7 +70,7 @@ public class BWTeam extends TempDataContainer implements Team {
             zp.add(sp.getZ());
         }
         centerSpawnPoint = new Location(
-                bl.getWorld(),
+                c.getBedLocation().getWorld(),
                 Stats.meanOf(xp),
                 Stats.meanOf(yp),
                 Stats.meanOf(zp)

@@ -26,6 +26,8 @@ import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.IBedWar;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.options.BWTeamOptions;
+import dev.anhcraft.battle.api.arena.mode.options.BedWarOptions;
 import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
@@ -36,13 +38,12 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.BlockPosition;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
-import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -88,7 +89,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         plugin.getPapiExpansion().handlers.put(p+"max_team_players", player -> {
             LocalGame game = plugin.arenaManager.getGame(player);
             if(game == null) return null;
-            return game.getArena().getAttributes().getString("team_size");
+            return String.valueOf(((BedWarOptions) game.getArena().getModeOptions()).getTeamSize());
         });
 
         plugin.getPapiExpansion().handlers.put(p+"bed_status", player -> {
@@ -115,7 +116,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.max(game.getArena().getAttributes().getInt("min_players"), 1);
+        int m = Math.max(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player, null);
@@ -130,7 +131,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             }
             case PLAYING: {
                 TeamManager<BWTeam> tm = TEAM.get(game);
-                Optional<BWTeam> to = tm.nextAvailableTeam(game.getArena().getAttributes().getInt("team_size"));
+                Optional<BWTeam> to = tm.nextAvailableTeam(((BedWarOptions) game.getArena().getModeOptions()).getTeamSize());
                 if(!to.isPresent()){
                     plugin.arenaManager.quit(player);
                     break;
@@ -181,12 +182,11 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
         TeamManager<BWTeam> tm = new TeamManager<>();
         TEAM.put(game, tm);
-        ConfigurationSection teamConf = game.getArena().getAttributes().getConfigurationSection("teams");
-        Set<String> tk = teamConf.getKeys(false);
-        BWTeam[] bwt = new BWTeam[tk.size()];
+        List<BWTeamOptions> teams = ((BedWarOptions) game.getArena().getModeOptions()).getTeams();
+        BWTeam[] bwt = new BWTeam[teams.size()];
         int i = 0;
-        for(String team : tk){
-            BWTeam bt = new BWTeam(teamConf.getConfigurationSection(team));
+        for(BWTeamOptions team : teams){
+            BWTeam bt = new BWTeam(team);
             bwt[i++] = bt;
             tm.initTeam(bt);
             BEDS.put(BlockPosition.of(bt.getBedPart1()), bt);
@@ -195,7 +195,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
         List<Player> players = new ArrayList<>(game.getPlayers().keySet());
         int teammates = 1;
-        int maxTeammates = game.getArena().getAttributes().getInt("team_size");
+        int maxTeammates = ((BedWarOptions) game.getArena().getModeOptions()).getTeamSize();
         int teamIndex = 0;
         for(Player p : players){
             if(teamIndex == bwt.length){
@@ -297,8 +297,8 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
-                EntityUtil.teleport(player, LocationUtil.fromString(loc));
+                Location loc = RandomUtil.pickRandom(game.getArena().getModeOptions().getWaitSpawnPoints());
+                EntityUtil.teleport(player, loc);
                 break;
             }
             case PLAYING: {
@@ -320,7 +320,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             } else {
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> {
-                            int t = game.getArena().getAttributes().getInt("spawn_protection_time");
+                            long t = game.getArena().getModeOptions().getSpawnProtectionTime();
                             if (!cooldownMap.isPassed(target, t)) {
                                 event.setCancelled(true);
                             }

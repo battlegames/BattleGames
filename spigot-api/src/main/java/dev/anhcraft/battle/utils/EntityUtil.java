@@ -25,11 +25,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityUtil {
-    public static void teleport(@NotNull Entity entity, @NotNull Location location){
+    public static void teleport(@NotNull Entity entity, @Nullable Location location){
         Condition.notNull(entity);
-        Condition.notNull(location);
+        if(location == null) return;
         if(location.getWorld() == null){
             Bukkit.getLogger().warning(String.format("`%s` is missing param `world`. This error may be caused because you have not configured correctly!", LocationUtil.toString(location)));
             location.setWorld(entity.getWorld());

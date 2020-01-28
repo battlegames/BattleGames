@@ -25,6 +25,7 @@ import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.options.TeamDeathmatchOptions;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
@@ -33,9 +34,9 @@ import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
-import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +91,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
-        int m = Math.max(game.getArena().getAttributes().getInt("min_players"), 1);
+        int m = Math.max(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player, null);
@@ -216,13 +217,13 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
         switch (game.getPhase()) {
             case END:
             case WAITING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("waiting_spawn_points"));
-                EntityUtil.teleport(player, LocationUtil.fromString(loc));
+                Location loc = RandomUtil.pickRandom(game.getArena().getModeOptions().getWaitSpawnPoints());
+                EntityUtil.teleport(player, loc);
                 break;
             }
             case PLAYING: {
-                String loc = RandomUtil.pickRandom(game.getArena().getAttributes().getStringList("playing_spawn_points_"+ (team == ABTeam.TEAM_A ? "a" : "b")));
-                EntityUtil.teleport(player, LocationUtil.fromString(loc));
+                Location loc = RandomUtil.pickRandom(((TeamDeathmatchOptions) game.getArena().getModeOptions()).getPlaySpawnPoints(team));
+                EntityUtil.teleport(player, loc);
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> cooldownMap.resetTime(player),
                         () -> new CooldownMap(player));
@@ -243,7 +244,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
             } else {
                 performCooldownMap(game, "spawn_protection",
                         cooldownMap -> {
-                            int t = game.getArena().getAttributes().getInt("spawn_protection_time");
+                            long t = game.getArena().getModeOptions().getSpawnProtectionTime();
                             if (!cooldownMap.isPassed(target, t)) {
                                 event.setCancelled(true);
                             }

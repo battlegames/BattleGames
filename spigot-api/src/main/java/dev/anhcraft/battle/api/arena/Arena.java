@@ -21,25 +21,27 @@ package dev.anhcraft.battle.api.arena;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
+import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
 import dev.anhcraft.battle.api.effect.firework.BattleFirework;
+import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.api.misc.Rollback;
-import dev.anhcraft.battle.api.arena.mode.Mode;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.State;
+import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,13 +105,10 @@ public class Arena extends ConfigurableObject implements Informative {
     @Validation(notNull = true)
     private Expression finalMoneyCalculator;
 
-    @Key("attr")
-    @Explanation({
-            "The attributes of this arena",
-            "Attributes are settings for the mode"
-    })
-    @IgnoreValue(ifNull = true)
-    private ConfigurationSection attrSection = new YamlConfiguration();
+    @Key("mode_options")
+    @Explanation("Game mode settings")
+    @Validation(notNull = true)
+    private ModeOptions modeOptions;
 
     @Key("end_commands.winners")
     @Explanation({
@@ -232,8 +231,8 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @NotNull
-    public ConfigurationSection getAttributes() {
-        return attrSection;
+    public ModeOptions getModeOptions() {
+        return modeOptions;
     }
 
     @NotNull
@@ -329,6 +328,16 @@ public class Arena extends ConfigurableObject implements Informative {
                     if(b && !ApiProvider.consume().hasBungeecordSupport()){
                         Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
                         return false;
+                    }
+                }
+                case "mode_options": {
+                    if (value instanceof ConfigurationSection) {
+                        ConfigurationSection c = (ConfigurationSection) value;
+                        try {
+                            return ConfigHelper.readConfig(c, mode.getOptionSchema());
+                        } catch (InvalidValueException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

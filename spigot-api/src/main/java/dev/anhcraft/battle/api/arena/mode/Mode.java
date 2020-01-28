@@ -20,8 +20,13 @@
 package dev.anhcraft.battle.api.arena.mode;
 
 import com.google.common.collect.ImmutableList;
+import dev.anhcraft.battle.api.arena.mode.options.BedWarOptions;
+import dev.anhcraft.battle.api.arena.mode.options.CaptureTheFlagOptions;
+import dev.anhcraft.battle.api.arena.mode.options.DeathmatchOptions;
+import dev.anhcraft.battle.api.arena.mode.options.TeamDeathmatchOptions;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
@@ -70,23 +75,24 @@ public final class Mode implements Informative {
     /**
      * ID: <b>dm</b>
      */
-    public static final Mode DEATHMATCH = registerMode(new Mode("dm"));
+    public static final Mode DEATHMATCH = registerMode(new Mode("dm", DeathmatchOptions.SCHEMA));
 
     /**
      * ID: <b>tdm</b>
      */
-    public static final Mode TEAM_DEATHMATCH = registerMode(new Mode("tdm"));
+    public static final Mode TEAM_DEATHMATCH = registerMode(new Mode("tdm", TeamDeathmatchOptions.SCHEMA));
 
     /**
      * ID: <b>ctf</b>
      */
-    public static final Mode CTF = registerMode(new Mode("ctf"));
+    public static final Mode CTF = registerMode(new Mode("ctf", CaptureTheFlagOptions.SCHEMA));
 
     /**
      * ID: <b>bw</b>
      */
-    public static final Mode BEDWAR = registerMode(new Mode("bw"));
+    public static final Mode BEDWAR = registerMode(new Mode("bw", BedWarOptions.SCHEMA));
 
+    private ConfigSchema<?> optionSchema;
     private String id;
     private String name;
     private String description;
@@ -105,9 +111,10 @@ public final class Mode implements Informative {
     private ConfigurationSection config;
     private IMode controller;
 
-    public Mode(@NotNull String id){
+    public Mode(@NotNull String id, @NotNull ConfigSchema optionSchema){
         Condition.argNotNull("id", id);
         this.id = id.toLowerCase();
+        this.optionSchema = optionSchema;
     }
 
     public void init(@NotNull ConfigurationSection conf){
@@ -204,6 +211,11 @@ public final class Mode implements Informative {
     @NotNull
     public ConfigurationSection getConfig() {
         return config;
+    }
+
+    @NotNull
+    public ConfigSchema<?> getOptionSchema() {
+        return optionSchema;
     }
 
     @Nullable
