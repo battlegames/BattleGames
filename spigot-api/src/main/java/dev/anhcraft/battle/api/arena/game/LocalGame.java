@@ -20,17 +20,23 @@
 package dev.anhcraft.battle.api.arena.game;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.events.game.GameEndEvent;
 import dev.anhcraft.battle.api.reports.DamageReport;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,6 +46,7 @@ public class LocalGame extends Game {
     private final Multimap<String, Player> downstreamServers = Multimaps.synchronizedMultimap(HashMultimap.create());
     private final AtomicInteger bungeeSyncTick = new AtomicInteger();
     private boolean hasFirstKill;
+    private final List<WeakReference<World>> involvedWorlds = new ArrayList<>();
 
     public LocalGame(@NotNull Arena arena) {
         super(arena);
@@ -96,6 +103,27 @@ public class LocalGame extends Game {
 
     public void setHasFirstKill(boolean hasFirstKill) {
         this.hasFirstKill = hasFirstKill;
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @NotNull
+    public List<World> getInvolvedWorlds() {
+        return involvedWorlds.stream().map(WeakReference::get).filter(Objects::nonNull).collect(ImmutableList.toImmutableList());
+    }
+
+    /**
+     * @deprecated internal uses
+     */
+    @Deprecated
+    public synchronized void addInvolvedWorld(@Nullable World world) {
+        if(world == null) return;
+        for(WeakReference<World> w : involvedWorlds){
+            World x = w.get();
+            if(x != null && x.getName().equals(world.getName())){
+                return;
+            }
+        }
+        involvedWorlds.add(new WeakReference<>(world));
     }
 
     @Override

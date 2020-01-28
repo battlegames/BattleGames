@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -57,6 +58,20 @@ public class DeathmatchController extends ModeController {
 
     public DeathmatchController(BattlePlugin plugin, Mode mode) {
         super(plugin, mode);
+    }
+
+    @Override
+    public void onInitGame(@NotNull Game game){
+        super.onInitGame(game);
+        if(game instanceof LocalGame) {
+            LocalGame lc = (LocalGame) game;
+            if(game.getArena().getModeOptions() instanceof DeathmatchOptions) {
+                DeathmatchOptions options = (DeathmatchOptions) game.getArena().getModeOptions();
+                for (Location loc : options.getPlaySpawnPoints()) {
+                    lc.addInvolvedWorld(loc.getWorld());
+                }
+            }
+        }
     }
 
     @Override

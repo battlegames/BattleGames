@@ -20,10 +20,12 @@
 package dev.anhcraft.battle.api.arena.mode;
 
 import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -34,7 +36,13 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IMode {
     default void onInitGame(@NotNull Game game){
-
+        if(game instanceof LocalGame) {
+            LocalGame lc = (LocalGame) game;
+            ModeOptions options = game.getArena().getModeOptions();
+            for(Location loc : options.getWaitSpawnPoints()){
+                lc.addInvolvedWorld(loc.getWorld());
+            }
+        }
     }
 
     @NotNull

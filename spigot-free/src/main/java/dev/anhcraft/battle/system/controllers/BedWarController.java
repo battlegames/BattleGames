@@ -21,6 +21,7 @@ package dev.anhcraft.battle.system.controllers;
 
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -103,6 +104,23 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                     blp(bwTeam.isBedPresent() ? "bed_status.present" : "bed_status.destroyed")
             ).get(0);
         });
+    }
+
+    @Override
+    public void onInitGame(@NotNull Game game){
+        super.onInitGame(game);
+        if(game instanceof LocalGame) {
+            LocalGame lc = (LocalGame) game;
+            if(game.getArena().getModeOptions() instanceof BedWarOptions) {
+                BedWarOptions options = (BedWarOptions) game.getArena().getModeOptions();
+                for (BWTeamOptions bwt : options.getTeams()) {
+                    lc.addInvolvedWorld(bwt.getBedLocation().getWorld());
+                    for (Location x : bwt.getSpawnPoints()){
+                        lc.addInvolvedWorld(x.getWorld());
+                    }
+                }
+            }
+        }
     }
 
     @Override

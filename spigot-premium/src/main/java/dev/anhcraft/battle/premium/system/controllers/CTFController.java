@@ -23,6 +23,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleSound;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.ICaptureTheFlag;
@@ -88,6 +89,20 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == team).count());
         });
+    }
+
+    @Override
+    public void onInitGame(@NotNull Game game){
+        super.onInitGame(game);
+        if(game instanceof LocalGame) {
+            LocalGame lc = (LocalGame) game;
+            if(game.getArena().getModeOptions() instanceof CaptureTheFlagOptions) {
+                CaptureTheFlagOptions options = (CaptureTheFlagOptions) game.getArena().getModeOptions();
+                for (FlagOptions f : options.getFlags()) {
+                    lc.addInvolvedWorld(f.getLocation().getWorld());
+                }
+            }
+        }
     }
 
     @Override

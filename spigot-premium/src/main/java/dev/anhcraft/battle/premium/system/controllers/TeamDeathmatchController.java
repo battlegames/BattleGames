@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.premium.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -78,6 +79,23 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
                 return null;
             return Integer.toString(t.countPlayers(dt));
         });
+    }
+
+    @Override
+    public void onInitGame(@NotNull Game game){
+        super.onInitGame(game);
+        if(game instanceof LocalGame) {
+            LocalGame lc = (LocalGame) game;
+            if(game.getArena().getModeOptions() instanceof TeamDeathmatchOptions) {
+                TeamDeathmatchOptions options = (TeamDeathmatchOptions) game.getArena().getModeOptions();
+                for (Location loc : options.getPlaySpawnPoints(ABTeam.TEAM_A)) {
+                    lc.addInvolvedWorld(loc.getWorld());
+                }
+                for (Location loc : options.getPlaySpawnPoints(ABTeam.TEAM_B)) {
+                    lc.addInvolvedWorld(loc.getWorld());
+                }
+            }
+        }
     }
 
     @Override
