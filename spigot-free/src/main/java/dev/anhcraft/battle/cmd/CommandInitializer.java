@@ -25,6 +25,10 @@ import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import org.bukkit.entity.EntityType;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CommandInitializer extends BattleComponent {
     public CommandInitializer(BattlePlugin plugin) {
@@ -44,5 +48,6 @@ public class CommandInitializer extends BattleComponent {
         cc.registerAsyncCompletion("perk", context -> plugin.PERK_MAP.keySet());
         cc.registerAsyncCompletion("booster", context -> plugin.BOOSTER_MAP.keySet());
         cc.registerAsyncCompletion("gui", context -> plugin.guiManager.GUI.keySet());
+        cc.registerStaticCompletion("entityTypes", Arrays.stream(EntityType.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList()));
     }
 }

@@ -41,7 +41,11 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -200,6 +204,21 @@ public class MainCommand extends BaseCommand{
     public void lv2exp(CommandSender sender, int lv){
         long exp = plugin.calculateExp(lv);
         plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, lv, exp));
+    }
+
+    @Subcommand("tool spawn")
+    @CommandPermission("battle.tool.spawn")
+    @CommandCompletion("@entityTypes")
+    public void spawn(Player player, EntityType entityType, int amount, @Optional Double health){
+        Location loc = player.getLocation();
+        for (int i = 0; i < amount; i++) {
+            Entity entity = player.getWorld().spawnEntity(loc, entityType);
+            if (health != null && entity instanceof LivingEntity) {
+                LivingEntity le = (LivingEntity) entity;
+                le.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+                le.setHealth(Math.max(health, 1));
+            }
+        }
     }
 
     @Subcommand("give exp")
