@@ -49,6 +49,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
@@ -97,27 +98,28 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.taskHelper.newDelayedTask(() -> {
             if(!player.isOnline()) return;
             BattleDebugger.startTiming("player-join");
-            player.teleport(plugin.getServerData().getSpawnPoint());
-            plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
-            plugin.taskHelper.newAsyncTask(() -> {
-                PlayerData playerData = plugin.dataManager.loadPlayerData(player);
-                // back to main thread
-                plugin.taskHelper.newTask(() -> {
-                    plugin.resetScoreboard(player);
-                    plugin.listKits(kit -> {
-                        if(kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())){
-                            kit.givePlayer(player, playerData);
-                            playerData.getReceivedFirstJoinKits().add(kit.getId());
-                        }
-                    });
-                    if(player.hasPermission("battle.pleasesetrollback")) {
-                        for (Arena arena : plugin.ARENA_MAP.values()){
-                            if (arena.getRollback() == null) {
-                                player.sendMessage(ChatColor.GOLD + "For safety reasons, you should specify rollback for arena #" + arena.getId());
+            EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint(), ok -> {
+                plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
+                plugin.taskHelper.newAsyncTask(() -> {
+                    PlayerData playerData = plugin.dataManager.loadPlayerData(player);
+                    // back to main thread
+                    plugin.taskHelper.newTask(() -> {
+                        plugin.resetScoreboard(player);
+                        plugin.listKits(kit -> {
+                            if(kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())){
+                                kit.givePlayer(player, playerData);
+                                playerData.getReceivedFirstJoinKits().add(kit.getId());
+                            }
+                        });
+                        if(player.hasPermission("battle.pleasesetrollback")) {
+                            for (Arena arena : plugin.ARENA_MAP.values()){
+                                if (arena.getRollback() == null) {
+                                    player.sendMessage(ChatColor.GOLD + "For safety reasons, you should specify rollback for arena #" + arena.getId());
+                                }
                             }
                         }
-                    }
-                    BattleDebugger.endTiming("player-join");
+                        BattleDebugger.endTiming("player-join");
+                    });
                 });
             });
         }, 60);

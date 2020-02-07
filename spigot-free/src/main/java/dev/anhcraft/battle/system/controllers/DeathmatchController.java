@@ -172,13 +172,16 @@ public class DeathmatchController extends ModeController {
             }
             case PLAYING: {
                 Location loc = RandomUtil.pickRandom(((DeathmatchOptions) game.getArena().getModeOptions()).getPlaySpawnPoints());
-                EntityUtil.teleport(player, loc);
-                performCooldownMap(game, "spawn_protection",
-                        cooldownMap -> cooldownMap.resetTime(player),
-                        () -> new CooldownMap(player));
-                performCooldownMap(game, "item_selection",
-                        cooldownMap -> cooldownMap.resetTime(player),
-                        () -> new CooldownMap(player));
+                EntityUtil.teleport(player, loc, ok -> {
+                    if(ok){
+                        performCooldownMap(game, "spawn_protection",
+                                cooldownMap -> cooldownMap.resetTime(player),
+                                () -> new CooldownMap(player));
+                        performCooldownMap(game, "item_selection",
+                                cooldownMap -> cooldownMap.resetTime(player),
+                                () -> new CooldownMap(player));
+                    }
+                });
             }
         }
     }

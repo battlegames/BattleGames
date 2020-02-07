@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.utils.EntityUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -72,9 +73,9 @@ public class GameListener extends BattleComponent implements Listener {
         plugin.taskHelper.newTask(() -> {
             if(p.isOnline()) {
                 plugin.resetScoreboard(p);
-                p.teleport(plugin.getServerData().getSpawnPoint());
-
-                event.getGame().getMode().getController(c -> ((ModeController) c).cancelReloadGun(p));
+                EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {
+                    event.getGame().getMode().getController(c -> ((ModeController) c).cancelReloadGun(p));
+                });
             }
         });
     }

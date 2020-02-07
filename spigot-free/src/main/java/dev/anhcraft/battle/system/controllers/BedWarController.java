@@ -321,10 +321,13 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                 break;
             }
             case PLAYING: {
-                EntityUtil.teleport(player, Objects.requireNonNull(RandomUtil.pickRandom(team.getSpawnPoints())));
-                performCooldownMap(game, "spawn_protection",
-                        cooldownMap -> cooldownMap.resetTime(player),
-                        () -> new CooldownMap(player));
+                EntityUtil.teleport(player, RandomUtil.pickRandom(team.getSpawnPoints()), ok -> {
+                    if(ok) {
+                        performCooldownMap(game, "spawn_protection",
+                                cooldownMap -> cooldownMap.resetTime(player),
+                                () -> new CooldownMap(player));
+                    }
+                });
             }
         }
     }

@@ -33,6 +33,7 @@ import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.chat.Chat;
@@ -87,7 +88,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("spawn")
     @CommandPermission("battle.spawn")
     public void spawn(Player player){
-        player.teleport(plugin.getServerData().getSpawnPoint());
+        EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint());
     }
 
     @Subcommand("open")

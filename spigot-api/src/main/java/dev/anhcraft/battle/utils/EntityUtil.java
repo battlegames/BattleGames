@@ -20,21 +20,26 @@
 
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.jvmkit.utils.Condition;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public class EntityUtil {
     public static void teleport(@NotNull Entity entity, @Nullable Location location){
-        Condition.notNull(entity);
+        teleport(entity, location, ok -> {});
+    }
+
+    public static void teleport(@NotNull Entity entity, @Nullable Location location, @NotNull Consumer<Boolean> callback){
         if(location == null) return;
         if(location.getWorld() == null){
-            Bukkit.getLogger().warning(String.format("`%s` is missing param `world`. This error may be caused because you have not configured correctly!", LocationUtil.toString(location)));
+            Bukkit.getLogger().warning(String.format("`%s` is missing param `world`. Recheck your config!", LocationUtil.toString(location)));
             location.setWorld(entity.getWorld());
         }
-        entity.teleport(location);
+        PaperLib.teleportAsync(entity, location).thenAccept(callback);
     }
 }
