@@ -303,7 +303,7 @@ public class Arena extends ConfigurableObject implements Informative {
                 .inform("name", name)
                 .inform("max_time", maxTime)
                 .inform("max_players", maxPlayers)
-                .inform("endDelay", endDelay)
+                .inform("end_delay", endDelay)
                 .inform("bungeecord", State.ENABLED.inCaseOf(bungeeSupport))
                 .link(modeInfo);
     }
