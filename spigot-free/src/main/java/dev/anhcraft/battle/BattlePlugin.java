@@ -267,6 +267,12 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 return map;
             }
         }));
+        metrics.addCustomChart(new Metrics.SimplePie("license_type", new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return premiumConnector.isSuccess() ? "premium" : "free";
+            }
+        }));
     }
 
     private void injectApiProvider() {
