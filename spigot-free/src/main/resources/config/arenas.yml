@@ -17,7 +17,7 @@ dm_demo:
   allow_late_joins: true
   rollback:
     enabled: true
-    provider: battle
+    provider: slime_world
     worlds:
       - assault
   mode_options:
@@ -96,7 +96,7 @@ tdm_demo:
   max_players: 10
   rollback:
     enabled: true
-    provider: battle
+    provider: slime_world
     worlds:
       - assault
   icon:
@@ -172,7 +172,7 @@ ctf_demo:
       - "server2"
   rollback:
     enabled: true
-    provider: battle
+    provider: slime_world
     worlds:
       - assault
   max_time: 12000
@@ -281,7 +281,7 @@ bw_demo:
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
   rollback:
     enabled: true
-    provider: battle
+    provider: slime_world
     worlds:
       - lighthouse
   end_firework:
