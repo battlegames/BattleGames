@@ -607,7 +607,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                             getLogger().warning("World not found: " + w);
                             it.remove();
                         } else if (SWMIntegration != null && SWMIntegration.isReadOnly(w) != -1) {
-                            getLogger().warning("World is managed by SWM: " + w);
                             it.remove();
                         } else {
                             battleRollback.backupWorld(wd);

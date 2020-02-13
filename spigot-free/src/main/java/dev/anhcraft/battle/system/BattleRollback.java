@@ -52,7 +52,7 @@ public class BattleRollback extends BattleComponent {
     public boolean backupWorld(World world){
         if(cachedWorlds.contains(world.getName())) return true;
         cachedWorlds.add(world.getName());
-        plugin.getLogger().info("Making a world backup of "+world.getName()+"...");
+        plugin.getLogger().info("Making a backup for world "+world.getName()+"...");
         File dest = getCachedWorldFolder(world);
         if(dest.exists()){
             FileUtil.clean(dest);
