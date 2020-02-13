@@ -33,7 +33,7 @@ default_scoreboard:
 
 default_chat:
   enabled: true
-  format: "&7[%battle_icon_medal%&r%battle_level%&7] &8%player_displayname%&f: {__message__}"
+  format: "&7[%battle_icon_medal%&r%battle_level%&7] &8%player_displayname%&f: <message>"
 
 storage:
   type: file

@@ -39,6 +39,7 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.BlockPosition;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -100,9 +101,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             if(t == null) return null;
             BWTeam bwTeam = t.getTeam(player);
             if(bwTeam == null) return null;
-            return plugin.chatManager.getFormattedMessages(
-                    blp(bwTeam.isBedPresent() ? "bed_status.present" : "bed_status.destroyed")
-            ).get(0);
+            return plugin.getLocalizedMessage(blp(bwTeam.isBedPresent() ? "bed_status.present" : "bed_status.destroyed"));
         });
     }
 
@@ -134,7 +133,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
-        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_join_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         int m = Math.max(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{
@@ -282,7 +281,9 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                     event.setExpToDrop(0);
                     targetTeam.getBedPart1().setType(Material.AIR);
                     targetTeam.getBedPart2().setType(Material.AIR);
-                    broadcast(game, "bed_destroy_broadcast", s -> String.format(s, event.getPlayer().getName(), targetTeam.getLocalizedName()));
+                    broadcast(game, "bed_destroy_broadcast", new InfoHolder("")
+                            .inform("player", event.getPlayer().getName())
+                            .inform("team", targetTeam.getLocalizedName()).compile());
                     for (Player p : tm.getPlayers(targetTeam)){
                         plugin.chatManager.sendPlayer(p, blp("respawn_unable"));
                     }

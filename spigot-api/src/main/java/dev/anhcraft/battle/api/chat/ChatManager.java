@@ -21,96 +21,46 @@ package dev.anhcraft.battle.api.chat;
 
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import net.md_5.bungee.api.ChatMessageType;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.Collection;
 
 public interface ChatManager {
-    default List<String> getFormattedMessages(String localePath){
-        return getFormattedMessages(localePath, UnaryOperator.identity());
+    boolean chat(@NotNull Player player, @NotNull String message);
+
+    default void sendPlayer(@NotNull Player player, @NotNull String localePath){
+        sendPlayer(player, localePath, ChatMessageType.CHAT, null);
     }
 
-    List<String> getFormattedMessages(String localePath, UnaryOperator<String> x);
-
-    List<String> getFormattedMessages(String localePath, InfoReplacer x);
-
-    default List<String> getFormattedMessages(Player target, String localePath){
-        return getFormattedMessages(target, localePath, UnaryOperator.identity());
+    default void sendPlayer(@NotNull Player player, @NotNull String localePath, @Nullable InfoReplacer infoReplacer){
+        sendPlayer(player, localePath, ChatMessageType.CHAT, infoReplacer);
     }
 
-    List<String> getFormattedMessages(Player target, String localePath, UnaryOperator<String> x);
+    void sendPlayer(@NotNull Player player, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
 
-    List<String> getFormattedMessages(Player target, String localePath, InfoReplacer x);
-
-    default void send(CommandSender commandSender, String localePath){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, UnaryOperator.identity());
-        else
-            sendConsole(localePath);
+    default void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath){
+        sendPlayer(players, localePath, ChatMessageType.CHAT, null);
     }
 
-    default void send(CommandSender commandSender, String localePath, InfoReplacer infoReplacer){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, infoReplacer);
-        else
-            sendConsole(localePath, infoReplacer);
+    void sendPlayer(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
+
+    default void sendConsole(@NotNull String localePath){
+        send(Bukkit.getConsoleSender(), localePath, null);
     }
 
-    default void send(CommandSender commandSender, String localePath, UnaryOperator<String> x){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, ChatMessageType.CHAT, x);
-        else
-            sendConsole(localePath, x);
+    default void sendConsole(@NotNull String localePath, @Nullable InfoReplacer infoReplacer) {
+        send(Bukkit.getConsoleSender(), localePath, infoReplacer);
     }
 
-    default void send(CommandSender commandSender, String localePath, ChatMessageType type){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, type, UnaryOperator.identity());
-        else
-            sendConsole(localePath);
+    default void send(CommandSender commandSender, @NotNull String localePath) {
+        send(commandSender, localePath, null);
     }
 
-    default void send(CommandSender commandSender, String localePath, ChatMessageType type, InfoReplacer infoReplacer){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, type, infoReplacer);
-        else
-            sendConsole(localePath, infoReplacer);
-    }
+    void send(CommandSender commandSender, @NotNull String localePath, @Nullable InfoReplacer infoReplacer);
 
-    default void send(CommandSender commandSender, String localePath, ChatMessageType type, UnaryOperator<String> x){
-        if(commandSender instanceof Player)
-            sendPlayer((Player) commandSender, localePath, type, x);
-        else
-            sendConsole(localePath, x);
-    }
-
-    default void sendPlayer(Player target, String localePath){
-        sendPlayer(target, localePath, ChatMessageType.CHAT, UnaryOperator.identity());
-    }
-
-    default void sendPlayer(Player target, String localePath, ChatMessageType type){
-        sendPlayer(target, localePath, type, UnaryOperator.identity());
-    }
-
-    default void sendPlayer(Player target, String localePath, UnaryOperator<String> x){
-        sendPlayer(target, localePath, ChatMessageType.CHAT, x);
-    }
-
-    void sendPlayer(Player target, String localePath, ChatMessageType type, UnaryOperator<String> x);
-
-    default void sendPlayer(Player target, String localePath, InfoReplacer infoReplacer){
-        sendPlayer(target, localePath, ChatMessageType.CHAT, infoReplacer);
-    }
-
-    void sendPlayer(Player target, String localePath, ChatMessageType type, InfoReplacer infoReplacer);
-
-    default void sendConsole(String localePath){
-        sendConsole(localePath, UnaryOperator.identity());
-    }
-
-    void sendConsole(String localePath, UnaryOperator<String> x);
-
-    void sendConsole(String localePath, InfoReplacer infoReplacer);
+    void send(CommandSender commandSender, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
 }

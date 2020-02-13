@@ -22,13 +22,13 @@ package dev.anhcraft.battle.gui.menu;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.events.KitReceiveEvent;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.misc.Kit;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import net.md_5.bungee.api.ChatMessageType;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +62,7 @@ public class KitMenu implements Pagination {
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
                         slot.setAdditionalFunction(object -> {
                             String f = api.formatLongFormDate(new Date(next));
-                            api.getChatManager().sendPlayer(object.getPlayer(), "kit.unavailable", ChatMessageType.CHAT, x -> String.format(x, f));
+                            api.getChatManager().sendPlayer(object.getPlayer(), "kit.unavailable", new InfoHolder("").inform("next_available_date", f).compile());
                         });
                         return;
                     }

@@ -35,6 +35,7 @@ import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -109,7 +110,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
 
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
-        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_join_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         int m = Math.max(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{

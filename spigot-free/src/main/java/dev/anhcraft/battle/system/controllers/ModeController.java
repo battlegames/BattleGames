@@ -23,14 +23,15 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.inventory.item.*;
-import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.api.arena.mode.IMode;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
@@ -46,12 +47,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public abstract class ModeController extends BattleComponent implements Listener, IMode {
@@ -78,7 +79,7 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     @Override
     public void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game){
-        BattleItem item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
+        BattleItem<?> item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
         if(item instanceof Gun){
             Gun gun = (Gun) item;
             event.setCancelled(true);
@@ -88,62 +89,60 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     @Override
     public void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game){
-        BattleItem item = plugin.itemManager.read(event.getItemDrop().getItemStack());
+        BattleItem<?> item = plugin.itemManager.read(event.getItemDrop().getItemStack());
         if(item != null) event.setCancelled(true);
     }
 
     @Override
     public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player){
         if(event.getClickedInventory() instanceof PlayerInventory){
-            BattleItem item = plugin.itemManager.read(event.getCurrentItem());
+            BattleItem<?> item = plugin.itemManager.read(event.getCurrentItem());
             if(item != null) event.setCancelled(true);
         }
     }
 
     public void broadcast(LocalGame game, String localePath){
-        game.getPlayers().keySet().forEach(player -> {
+        for(Player player : game.getPlayers().keySet())
             plugin.chatManager.sendPlayer(player, blp(localePath));
-        });
     }
 
-    public void broadcast(LocalGame game, String localePath, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
-            plugin.chatManager.sendPlayer(player, blp(localePath), x);
-        });
+    public void broadcast(LocalGame game, String localePath, InfoReplacer infoReplacer){
+        for(Player player : game.getPlayers().keySet())
+            plugin.chatManager.sendPlayer(player, blp(localePath), infoReplacer);
     }
 
     public void broadcast(LocalGame game, String localePath, ChatMessageType type){
-        game.getPlayers().keySet().forEach(player -> {
-            plugin.chatManager.sendPlayer(player, blp(localePath), type);
-        });
+        for(Player player : game.getPlayers().keySet())
+            plugin.chatManager.sendPlayer(player, blp(localePath), type, null);
     }
 
-    public void broadcast(LocalGame game, String localePath, ChatMessageType type, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
-            plugin.chatManager.sendPlayer(player, blp(localePath), type, x);
-        });
+    public void broadcast(LocalGame game, String localePath, ChatMessageType type, InfoReplacer infoReplacer){
+        for(Player player : game.getPlayers().keySet())
+            plugin.chatManager.sendPlayer(player, blp(localePath), type, infoReplacer);
     }
 
     public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath){
-        game.getPlayers().keySet().forEach(player -> {
-            sendTitle(player, titleLocalePath, subtitleLocalePath, UnaryOperator.identity());
-        });
+        for(Player player : game.getPlayers().keySet())
+            sendTitle(player, titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
-        game.getPlayers().keySet().forEach(player -> {
-            sendTitle(player, titleLocalePath, subtitleLocalePath, x);
-        });
+    public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+        for(Player player : game.getPlayers().keySet())
+            sendTitle(player, titleLocalePath, subtitleLocalePath, infoReplacer);
     }
 
     public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath){
-        sendTitle(player, titleLocalePath, subtitleLocalePath, UnaryOperator.identity());
+        sendTitle(player, titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, UnaryOperator<String> x){
-        String s1 = x.apply(PlaceholderUtil.formatPAPI(player, plugin.getLocaleConf().getString(blp(titleLocalePath))));
-        String s2 = x.apply(PlaceholderUtil.formatPAPI(player, plugin.getLocaleConf().getString(blp(subtitleLocalePath))));
-        player.sendTitle(s1, s2, 10, 70, 20);
+    public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+        String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
+        String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
+        if(infoReplacer == null) {
+            player.sendTitle(s1, s2, 10, 70, 20);
+        } else {
+            player.sendTitle(infoReplacer.replace(s1), infoReplacer.replace(s2), 10, 70, 20);
+        }
     }
 
     public void trackTask(LocalGame game, String id, int task){
@@ -167,11 +166,13 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     public void playSound(LocalGame game, Sound sound){
-        game.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
+        for(Player p : game.getPlayers().keySet())
+            p.playSound(p.getLocation(), sound, 3f, 1f);
     }
 
     public void playSound(LocalGame game, String sound){
-        game.getPlayers().keySet().forEach(p -> p.playSound(p.getLocation(), sound, 3f, 1f));
+        for(Player p : game.getPlayers().keySet())
+            p.playSound(p.getLocation(), sound, 3f, 1f);
     }
 
     @Nullable

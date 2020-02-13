@@ -2,71 +2,71 @@
 # https://wiki.anhcraft.dev/en/battle/items
 
 ammo:
-  name: "{__ammo_name__}"
+  name: "<ammo_name>"
   lore:
-    - "&aBullets: &f{__ammo_bullet_count__}"
-    - "&e> Total damage: &f{__ammo_total_bullet_damage__}"
-    - "&e> Total knockback: &f{__ammo_total_bullet_knockback__}"
+    - "&aBullets: &f<ammo_bullet_count>"
+    - "&e> Total damage: &f<ammo_total_bullet_damage>"
+    - "&e> Total knockback: &f<ammo_total_bullet_knockback>"
 
 model_ammo:
-  name: "{__ammo_name__}"
+  name: "<ammo_name>"
   lore:
-    - "&aBullets: &f{__ammo_bullet_count__}"
-    - "&e> Total damage: &f{__ammo_total_bullet_damage__}"
-    - "&e> Total knockback: &f{__ammo_total_bullet_knockback__}"
+    - "&aBullets: &f<ammo_bullet_count>"
+    - "&e> Total damage: &f<ammo_total_bullet_damage>"
+    - "&e> Total knockback: &f<ammo_total_bullet_knockback>"
 
 magazine:
-  name: "{__magazine_name__}"
+  name: "<magazine_name>"
   lore:
-    - "&aAmmo: &f{__magazine_ammo_count__}/{__magazine_ammo_capacity__} {__ammo_name__}"
+    - "&aAmmo: &f<magazine_ammo_count>/<magazine_ammo_capacity> <ammo_name>"
 
 model_magazine:
-  name: "{__magazine_name__}"
+  name: "<magazine_name>"
 
 gun:
-  name: "{__gun_name__}"
+  name: "<gun_name>"
   lore:
-    - "&aAmmo: &f{__ammo_name__} &e({__magazine_ammo_count__}/{__magazine_ammo_capacity__})"
-    - "&aWeight: &f{__gun_weight__}"
-    - "&aMagazine: &f{__magazine_name__}"
+    - "&aAmmo: &f<ammo_name> &e(<magazine_ammo_count>/<magazine_ammo_capacity>)"
+    - "&aWeight: &f<gun_weight>"
+    - "&aMagazine: &f<magazine_name>"
   flag:
     - hide_attributes
     - hide_unbreakable
   unbreakable: true
 
 model_gun:
-  name: "{__gun_name__}"
+  name: "<gun_name>"
   lore:
-    - "&aWeight: &f{__gun_weight__}"
+    - "&aWeight: &f<gun_weight>"
     - "&aMagazine:"
-    - "&e> Default: &f{__default_magazine_name__}"
-    - "&e> Maximum capacity: &f{__gun_max_magazine_capacity__}"
+    - "&e> Default: &f<default_magazine_name>"
+    - "&e> Maximum capacity: &f<gun_max_magazine_capacity>"
   flag:
     - hide_attributes
     - hide_unbreakable
   unbreakable: true
 
 scope:
-  name: "{__scope_name__}"
+  name: "<scope_name>"
 
 model_scope:
-  name: "{__scope_name__}"
+  name: "<scope_name>"
 
 model_grenade:
-  name: "{__grenade_name__}"
+  name: "<grenade_name>"
   lore:
-    - "&aExplosion power: &f{__grenade_explosion_power__}"
-    - "&aDelay time: &f{__grenade_delay_time__}"
+    - "&aExplosion power: &f<grenade_explosion_power>"
+    - "&aDelay time: &f<grenade_delay_time>"
   flag:
     - hide_attributes
     - hide_unbreakable
   unbreakable: true
 
 grenade:
-  name: "{__grenade_name__}"
+  name: "<grenade_name>"
   lore:
-    - "&aExplosion power: &f{__grenade_explosion_power__}"
-    - "&aDelay time: &f{__grenade_delay_time__}"
+    - "&aExplosion power: &f<grenade_explosion_power>"
+    - "&aDelay time: &f<grenade_delay_time>"
   flag:
     - hide_attributes
     - hide_unbreakable

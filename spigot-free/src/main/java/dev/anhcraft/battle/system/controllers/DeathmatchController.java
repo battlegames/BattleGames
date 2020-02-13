@@ -35,6 +35,7 @@ import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -76,7 +77,7 @@ public class DeathmatchController extends ModeController {
 
     @Override
     public void onQuit(@NotNull Player player, @NotNull LocalGame game){
-        broadcast(game, "player_quit_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_quit_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         for (Player p : game.getPlayers().keySet()){
             PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
             if (ps != null) {
@@ -87,7 +88,7 @@ public class DeathmatchController extends ModeController {
 
     @Override
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
-        broadcast(game, "player_join_broadcast", s -> s.replace("{__target__}", player.getDisplayName()));
+        broadcast(game, "player_join_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         int m = Math.min(game.getArena().getModeOptions().getMinPlayers(), 1);
         switch (game.getPhase()){
             case WAITING:{
@@ -124,7 +125,7 @@ public class DeathmatchController extends ModeController {
         int m = Math.min(game.getArena().getModeOptions().getMinPlayers(), 1);
         trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
             if(m <= game.getPlayerCount()) {
-                broadcastTitle(game, "countdown_title", "countdown_subtitle", s -> s.replace("{__current__}", current.toString()));
+                broadcastTitle(game, "countdown_title", "countdown_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                 if(current.getAndDecrement() == 0) {
                     cancelTask(game, "countdown");
@@ -224,7 +225,7 @@ public class DeathmatchController extends ModeController {
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
-                    sendTitle(player, "respawn_title", "respawn_subtitle", s -> s.replace("{__current__}", current.toString()));
+                    sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);

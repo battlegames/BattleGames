@@ -44,7 +44,7 @@ public class InfoReplacer {
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
             String p = m.group();
-            String s = p.substring(3, p.length()-3).trim();
+            String s = p.substring(1, p.length()-1).trim();
             String[] f = s.split(":");
             if(f.length == 2) {
                 s = f[0];

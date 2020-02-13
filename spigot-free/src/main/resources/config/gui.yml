@@ -12,7 +12,7 @@ boolean_value_editor:
     '1':
       positions: 1/2; 2
       item:
-        name: '&f{__window_data_value:false__}'
+        name: '&f<window_data_value:false>'
         material: paper
         unbreakable: true
         enchant:
@@ -30,8 +30,8 @@ boolean_value_editor:
         material: diamond
       functions:
         - common::cancel_event
-        - common::apply_value { {__window_data_value:false__} }
-        - common::switch_gui { {__window_data_lastgui__} }
+        - common::apply_value { <window_data_value:false> }
+        - common::switch_gui { <window_data_lastgui> }
 
 int_value_editor:
   title: '[ gui.value_editor.int_title ]'
@@ -47,7 +47,7 @@ int_value_editor:
     '1':
       positions: 1/2; 2
       item:
-        name: '&f{__window_data_value:0__}'
+        name: '&f<window_data_value:0>'
         material: paper
         unbreakable: true
         enchant:
@@ -63,8 +63,8 @@ int_value_editor:
         material: diamond
       functions:
         - common::cancel_event
-        - common::apply_value { {__window_data_value:0__} }
-        - common::switch_gui { {__window_data_lastgui__} }
+        - common::apply_value { <window_data_value:0> }
+        - common::switch_gui { <window_data_lastgui> }
     '3':
       positions: 1; 4
       item:
@@ -161,7 +161,7 @@ real_value_editor:
     '1':
       positions: 1/2; 2
       item:
-        name: '&f{__window_data_value:0__}'
+        name: '&f<window_data_value:0>'
         material: paper
         unbreakable: true
         enchant:
@@ -177,8 +177,8 @@ real_value_editor:
         material: diamond
       functions:
         - common::cancel_event
-        - common::apply_value { {__window_data_value:0__} }
-        - common::switch_gui { {__window_data_lastgui__} }
+        - common::apply_value { <window_data_value:0> }
+        - common::switch_gui { <window_data_lastgui> }
     '3':
       positions: 1; 4
       item:

@@ -28,6 +28,7 @@ import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.utils.functions.Function;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 
 import java.util.function.Consumer;
@@ -100,7 +101,7 @@ public class MarketHandler extends GuiHandler {
         Product p = new Product(id);
         p.getIcon().name(id);
         ctg.getProducts().add(p);
-        ApiProvider.consume().getChatManager().sendPlayer(report.getPlayer(), "editor.market.product_created", s -> String.format(s, id));
+        ApiProvider.consume().getChatManager().sendPlayer(report.getPlayer(), "editor.market.product_created", new InfoHolder("").inform("id", id).compile());
     }
 
     @Function("create_category")
@@ -110,6 +111,6 @@ public class MarketHandler extends GuiHandler {
         category.getIcon().name(id);
         BattleApi api = ApiProvider.consume();
         api.getMarket().getCategories().add(category);
-        api.getChatManager().sendPlayer(report.getPlayer(), "editor.market.category_created", s -> String.format(s, id));
+        api.getChatManager().sendPlayer(report.getPlayer(), "editor.market.category_created", new InfoHolder("").inform("id", id).compile());
     }
 }

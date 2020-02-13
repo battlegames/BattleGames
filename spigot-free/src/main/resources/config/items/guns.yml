@@ -20,7 +20,7 @@ ak_47:
   bossbar:
     on_reload:
       primary: false
-      title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
+      title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
       color: green
       style: segmented_20
   spray_pattern:
@@ -69,7 +69,7 @@ desert_eagle:
   reload_time_formula: "(b-a)*7"
   bossbar:
     on_reload:
-      title: "&e&lReloading... &f&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
+      title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
       color: red
   spray_pattern:
     - "0 0"
@@ -98,6 +98,6 @@ awm:
     on_shoot: "$entity_dragon_fireball_explode:4.5:3"
   bossbar:
     on_reload:
-      title: "&b&lReloading... &6&l{__magazine_ammo_count__}/{__magazine_ammo_capacity__}"
+      title: "&b&lReloading... &6&l<magazine_ammo_count>/<magazine_ammo_capacity>"
       color: green
   muzzle_velocity: 120

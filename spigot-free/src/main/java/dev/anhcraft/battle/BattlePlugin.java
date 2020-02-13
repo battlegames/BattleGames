@@ -436,7 +436,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(String.class).oldPath("storage_version").newPath("last_storage_version"));
         configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(String.class).oldPath("plugin_version").newPath("last_plugin_version"));
         configUpdater.update(c);
-        if(c.getString("plugin_version").chars().sum() < "1.1.9".chars().sum()){
+        if(c.getString("last_plugin_version").chars().sum() < "1.1.9".chars().sum()){
             getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
             getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
             getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
@@ -467,7 +467,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         new File(configFolder, "locale").mkdir();
         new File(configFolder, "items").mkdir();
         new File(configFolder, "editor").mkdir();
-        // TODO check and upgrade db here
     }
 
     private void initGeneral(FileConfiguration conf) {

@@ -43,6 +43,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ProductMenu implements Pagination {
     @Override
@@ -60,17 +61,21 @@ public class ProductMenu implements Pagination {
                 if(p.getGameModeReserved() != null && p.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId()))) continue;
             }
 
-            String pf = ApiProvider.consume().getChatManager().getFormattedMessages("price_format."+p.getCurrency().name().toLowerCase()).get(0);
+            String currencyFormat = Objects.requireNonNull(ApiProvider.consume().getLocalizedMessage("currency_format." + p.getCurrency().name().toLowerCase()));
+            String price = new InfoHolder("")
+                    .inform("amount", p.getPrice())
+                    .compile()
+                    .replace(currencyFormat);
             PreparedItem ic = p.getIcon().duplicate();
             if(mk.isSummaryProductInfoEnabled()){
                 List<String> lore = mk.getSummaryProductLore();
                 if(lore != null) {
-                    String x = String.format(pf, p.getPrice());
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);
+                    holder.inform("price_formatted", price);
                     InfoReplacer replacer = holder.compile();
                     for (String s : lore) {
-                        ic.lore().add(replacer.replace(String.format(s, x)));
+                        ic.lore().add(replacer.replace(s));
                     }
                 }
             }
@@ -82,14 +87,18 @@ public class ProductMenu implements Pagination {
                 if(pd == null) return;
 
                 Currency c = p.getCurrency().get();
-                final double balance = c.getBalance(player);
+                double balance = c.getBalance(player);
+                String balanceFormat = new InfoHolder("")
+                        .inform("amount", balance)
+                        .compile()
+                        .replace(currencyFormat);
 
                 PlayerPrePurchaseEvent ev = new PlayerPrePurchaseEvent(player, mk, ctg, p, balance >= p.getPrice());
                 ev.setCancelled(balance < p.getPrice());
                 Bukkit.getPluginManager().callEvent(ev);
 
                 if(!ev.hasEnoughBalance()){
-                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", s -> String.format(s, String.format(pf, balance)));
+                    api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", new InfoHolder("").inform("balance", balanceFormat).compile());
                     return;
                 } else if(ev.isCancelled()) return;
 

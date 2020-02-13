@@ -7,14 +7,14 @@ options:
     enabled: true
     lore:
       - "&f"
-      - "&fPrice: &d%s"
+      - "&fPrice: &d<product_price_formatted>"
       - "&f"
       - "&e>> Click to purchase <<"
   transaction_item:
     material: paper
-    name: "&f{__product__} &7({__formatted_price__})"
+    name: "&f<product> &7(<formatted_price>)"
     lore:
-      - "&7{__formatted_date__}"
+      - "&7<formatted_date>"
 
 categories:
   perks:

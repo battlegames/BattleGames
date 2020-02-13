@@ -22,50 +22,53 @@ package dev.anhcraft.battle.system.managers;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.chat.ChatManager;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.chat.BattleChat;
+import dev.anhcraft.battle.api.chat.ChatManager;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 public class BattleChatManager extends BattleComponent implements ChatManager {
     public BattleChatManager(BattlePlugin plugin) {
         super(plugin);
     }
 
-    public boolean chat(Player player, String msg){
+    @Override
+    public boolean chat(@NotNull Player player, @NotNull String message) {
         LocalGame g = plugin.arenaManager.getGame(player);
         if(g != null){
             if (g.getPhase() == GamePhase.WAITING) {
                 if (!g.getMode().isWaitingChatEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                         .getMode().getWaitingChatFormat())
-                        .replace("{__message__}", msg);
-                g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
+                        .replace("<message>", message);
+                for (Player p : g.getPlayers().keySet()){
+                    p.sendMessage(q);
+                }
             } else {
                 if (!g.getMode().isPlayingChatEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                         .getMode().getPlayingChatFormat())
-                        .replace("{__message__}", msg);
-                g.getPlayers().keySet().forEach(p -> p.sendMessage(q));
+                        .replace("<message>", message);
+                for (Player p : g.getPlayers().keySet()){
+                    p.sendMessage(q);
+                }
             }
         } else {
             BattleChat bc = plugin.GENERAL_CONF.getDefaultChat();
             if(bc == null || !bc.isEnabled()) return false;
             String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, bc.getFormat()))
-                    .replace("{__message__}", msg);
+                    .replace("<message>", message);
             for(Player p : Bukkit.getOnlinePlayers()){
                 if(p.equals(player) || plugin.arenaManager.getGame(player) == null) {
                     p.sendMessage(q);
@@ -75,91 +78,50 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
         return true;
     }
 
-    @Override
-    public List<String> getFormattedMessages(String localePath, UnaryOperator<String> x) {
-        Object s = plugin.getLocaleConf().get(localePath);
-        if(s == null) {
-            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            return Collections.singletonList("null");
+    @NotNull
+    private String getLocaleMsg(String localePath){
+        String msg = plugin.getLocalizedMessage(localePath);
+        if(msg == null) {
+            msg = "[ Missing localized message: "+localePath+" ]";
         }
-        if(s instanceof Collection)
-            return ((Collection<?>) s).stream()
-                    .map((Function<Object, String>) o -> x.apply(String.valueOf(o)))
-                    .collect(Collectors.toList());
-        else
-            return Collections.singletonList(x.apply(String.valueOf(s)));
+        return msg;
     }
 
     @Override
-    public List<String> getFormattedMessages(String localePath, InfoReplacer x) {
-        Object s = plugin.getLocaleConf().get(localePath);
-        if(s == null) {
-            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            return Collections.singletonList("null");
-        }
-        if(s instanceof Collection)
-            return ((Collection<?>) s).stream()
-                    .map((Function<Object, String>) o -> x.replace(String.valueOf(o)))
-                    .collect(Collectors.toList());
-        else
-            return Collections.singletonList(x.replace(String.valueOf(s)));
+    public void sendPlayer(@NotNull Player player, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
+        String msg = getLocaleMsg(localePath);
+        player.spigot().sendMessage(type, new TextComponent(TextComponent.fromLegacyText(
+                PlaceholderUtil.formatPAPI(player, infoReplacer == null ? msg : infoReplacer.replace(msg))
+        )));
     }
 
     @Override
-    public List<String> getFormattedMessages(Player target, String localePath, UnaryOperator<String> x){
-        Object s = plugin.getLocaleConf().get(localePath);
-        if(s == null) {
-            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            return Collections.singletonList("null");
-        }
-        if(s instanceof Collection)
-            return PlaceholderUtil.formatPAPI(target, ((Collection<?>) s).stream()
-                    .map((Function<Object, String>) o -> x.apply(String.valueOf(o)))
-                    .collect(Collectors.toList()));
-        else
-            return Collections.singletonList(PlaceholderUtil.formatPAPI(target, x.apply(String.valueOf(s))));
-    }
-
-    @Override
-    public List<String> getFormattedMessages(Player target, String localePath, InfoReplacer x) {
-        Object s = plugin.getLocaleConf().get(localePath);
-        if(s == null) {
-            plugin.getLogger().warning(String.format("Locale path `%s` not found", localePath));
-            return Collections.singletonList("null");
-        }
-        if(s instanceof Collection) {
-            return PlaceholderUtil.formatPAPI(target, ((Collection<?>) s).stream()
-                    .map((Function<Object, String>) o -> x.replace(String.valueOf(o)))
-                    .collect(Collectors.toList()));
-        }
-        else {
-            return Collections.singletonList(PlaceholderUtil.formatPAPI(target, x.replace(String.valueOf(s))));
+    public void sendPlayer(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
+        String msg = getLocaleMsg(localePath);
+        msg = infoReplacer == null ? msg : infoReplacer.replace(msg);
+        for(Player player : players){
+            player.spigot().sendMessage(type, new TextComponent(TextComponent.fromLegacyText(
+                    PlaceholderUtil.formatPAPI(player, msg)
+            )));
         }
     }
 
     @Override
-    public void sendPlayer(Player target, String localePath, ChatMessageType type, UnaryOperator<String> x){
-        getFormattedMessages(target, localePath, x).forEach(s -> {
-            TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
-            target.spigot().sendMessage(type, c);
-        });
+    public void send(CommandSender commandSender, @NotNull String localePath, @Nullable InfoReplacer infoReplacer) {
+        String msg = getLocaleMsg(localePath);
+        if(commandSender instanceof Player) {
+            commandSender.sendMessage(PlaceholderUtil.formatPAPI((Player) commandSender, infoReplacer == null ? msg : infoReplacer.replace(msg)));
+        } else {
+            commandSender.sendMessage(infoReplacer == null ? msg : infoReplacer.replace(msg));
+        }
     }
 
     @Override
-    public void sendPlayer(Player target, String localePath, ChatMessageType type, InfoReplacer infoReplacer) {
-        getFormattedMessages(target, localePath, infoReplacer).forEach(s -> {
-            TextComponent c = new TextComponent(TextComponent.fromLegacyText(s));
-            target.spigot().sendMessage(type, c);
-        });
-    }
-
-    @Override
-    public void sendConsole(String localePath, UnaryOperator<String> x){
-        getFormattedMessages(localePath, x).forEach(s -> Bukkit.getConsoleSender().sendMessage(s));
-    }
-
-    @Override
-    public void sendConsole(String localePath, InfoReplacer infoReplacer) {
-        getFormattedMessages(localePath, infoReplacer).forEach(s -> Bukkit.getConsoleSender().sendMessage(s));
+    public void send(CommandSender commandSender, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
+        if(commandSender instanceof Player){
+            sendPlayer((Player) commandSender, localePath, type, infoReplacer);
+        } else {
+            send(commandSender, localePath, infoReplacer);
+        }
     }
 }

@@ -8,10 +8,10 @@ dm_demo:
   final_money_formula: "a*4+b*12+d*5"
   icon:
     material: GRASS
-    name: "{__arena_name__}"
+    name: "<arena_name>"
     lore:
-      - "&4Mode: &f{__mode_name__}"
-      - "&4Players: &f{__game_current_time:0__}/{__arena_max_players__}"
+      - "&4Mode: &f<mode_name>"
+      - "&4Players: &f<game_current_time:0>/<arena_max_players>"
   max_time: 8400
   max_players: 15
   allow_late_joins: true
@@ -20,7 +20,7 @@ dm_demo:
     provider: battle
     worlds:
       - assault
-  attr:
+  mode_options:
     min_players: 2
     waiting_spawn_points:
       - assault -309.37 48.00 -240.57 -270.16 5.40
@@ -75,8 +75,8 @@ dm_demo:
       - "&f"
       - "&a         Congratulations! You WON the game!         "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
     lost:
@@ -84,8 +84,8 @@ dm_demo:
       - "&f"
       - "&7       You lost. Be better in the next match!       "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
@@ -101,10 +101,10 @@ tdm_demo:
       - assault
   icon:
     material: diamond_sword
-    name: "{__arena_name__}"
+    name: "<arena_name>"
     lore:
-      - "&eMode: &f{__mode_name__}"
-      - "&ePlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
+      - "&eMode: &f<mode_name>"
+      - "&ePlayers: &f<game_current_time:0>/<arena_max_players>"
     enchant:
       sharpness: 1
     flag:
@@ -112,7 +112,7 @@ tdm_demo:
     unbreakable: true
   final_exp_formula: "a*2+b*28-c*8+d*3"
   final_money_formula: "a*5+b*15+d*3"
-  attr:
+  mode_options:
     min_players: 2
     waiting_spawn_points:
       - assault -309.37 48.00 -240.57 -270.16 5.40
@@ -148,8 +148,8 @@ tdm_demo:
       - "&f"
       - "&a         Congratulations! You WON the game!         "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
     lost:
@@ -157,8 +157,8 @@ tdm_demo:
       - "&f"
       - "&7       You lost. Be better in the next match!       "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
@@ -179,13 +179,13 @@ ctf_demo:
   max_players: 8
   icon:
     material: grass
-    name: "{__arena_name__}"
+    name: "<arena_name>"
     lore:
-      - "&eMode: &f{__mode_name__}"
-      - "&ePlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
+      - "&eMode: &f<mode_name>"
+      - "&ePlayers: &f<game_current_time:0>/<arena_max_players>"
   final_exp_formula: "a*3+b*25-c*8+d*5.7"
   final_money_formula: "a*4.5+b*18+d*3"
-  attr:
+  mode_options:
     min_players: 2
     waiting_spawn_points:
       - assault -309.37 48.00 -240.57 -270.16 5.40
@@ -218,8 +218,8 @@ ctf_demo:
       '1':
         location: assault -345.41 43.00 -224.30 52.35 11.55
         display_name:
-          valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
-          invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
           neutral: "&7Neutral"
         max_health: 10
         start_capture_sound: "$entity_player_levelup"
@@ -227,22 +227,22 @@ ctf_demo:
       '2':
         location: assault -355.86 40.50 -285.70 176.70 90.00
         display_name:
-          valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
-          invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
           neutral: "&7Neutral"
         max_health: 15
       '3':
         location: assault -385.20 40.50 -262.56 201.00 88.80
         display_name:
-          valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
-          invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
           neutral: "&7Neutral"
         max_health: 12
       '4':
         location: assault -368.37 41.00 -247.33 281.70 10.95
         display_name:
-          valid: "&a&l{__flag_team__} | &f&l{__flag_health__} &c&l❤"
-          invalid: "&7&l{__flag_team__} | &f&l{__flag_health__}/{__flag_max_health__} &c&l❤"
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
           neutral: "&7Neutral"
         max_health: 15
   end_delay: 80
@@ -252,8 +252,8 @@ ctf_demo:
       - "&f"
       - "&a         Congratulations! You WON the game!         "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
     lost:
@@ -261,8 +261,8 @@ ctf_demo:
       - "&f"
       - "&7       You lost. Be better in the next match!       "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
@@ -273,10 +273,10 @@ bw_demo:
   max_players: 16
   icon:
     material: grass
-    name: "{__arena_name__}"
+    name: "<arena_name>"
     lore:
-      - "&bMode: &f{__mode_name__}"
-      - "&bPlayers: &f{__game_current_time:0__}/{__arena_max_players__}"
+      - "&bMode: &f<mode_name>"
+      - "&bPlayers: &f<game_current_time:0>/<arena_max_players>"
   final_exp_formula: "a*3+b*20-c*7.7+d*15.75"
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
   rollback:
@@ -298,7 +298,7 @@ bw_demo:
           - purple
           - aqua
   end_delay: 100
-  attr:
+  mode_options:
     min_players: 3
     countdown_time: 300
     waiting_spawn_points:
@@ -380,8 +380,8 @@ bw_demo:
       - "&f"
       - "&a         Congratulations! You WON the game!         "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
     lost:
@@ -389,7 +389,7 @@ bw_demo:
       - "&f"
       - "&7       You lost. Be better in the next match!       "
       - "&f"
-      - "&b         • Money: &e+${__money__}"
-      - "&b         • Exp: &e+{__exp__}"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"

@@ -17,7 +17,7 @@ dm: # <-- This mode's id (do not change)
 
     # The format
     # [optional] [default: <empty>] [placeholder supported]
-    format: "&8%player_displayname%&f: {__message__}"
+    format: "&8%player_displayname%&f: <message>"
 
   # Chat for playing phase
   playing_chat:
@@ -26,7 +26,7 @@ dm: # <-- This mode's id (do not change)
 
     # The format
     # [optional] [default: <empty>] [placeholder supported]
-    format: "&8%player_displayname%&f: {__message__}"
+    format: "&8%player_displayname%&f: <message>"
 
   # A built-in scoreboard which is used during the waiting phase
   waiting_scoreboard:
@@ -94,10 +94,10 @@ tdm:
   description: "&fA game where two teams attack each other to know who is the winner"
   waiting_chat:
     enabled: true
-    format: "&8%player_displayname%&f: {__message__}"
+    format: "&8%player_displayname%&f: <message>"
   playing_chat:
     enabled: true
-    format: "&7[%battle_tdm_team%] &8%player_displayname%&f: {__message__}"
+    format: "&7[%battle_tdm_team%] &8%player_displayname%&f: <message>"
   waiting_scoreboard:
     enabled: true
     title: "&a &c&lBATTLE"
@@ -132,10 +132,10 @@ ctf:
   description: "&fA game where two teams capture as many flags as possible to become the winner"
   waiting_chat:
     enabled: true
-    format: "&8%player_displayname%&f: {__message__}"
+    format: "&8%player_displayname%&f: <message>"
   playing_chat:
     enabled: true
-    format: "&7[%battle_ctf_team%] &8%player_displayname%&f: {__message__}"
+    format: "&7[%battle_ctf_team%] &8%player_displayname%&f: <message>"
   waiting_scoreboard:
     enabled: true
     title: "&a &c&lBATTLE"
@@ -173,10 +173,10 @@ bw:
   description: "&fA game where you (and your teammates) have to protect your bed against enemies and kill them to obtain the victory"
   waiting_chat:
     enabled: true
-    format: "&8%player_displayname%&f: {__message__}"
+    format: "&8%player_displayname%&f: <message>"
   playing_chat:
     enabled: true
-    format: "&7[%battle_bw_team%] &8%player_displayname%&f: {__message__}"
+    format: "&7[%battle_bw_team%] &8%player_displayname%&f: <message>"
   waiting_scoreboard:
     enabled: true
     title: "&a &e&lBATTLE"

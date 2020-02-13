@@ -36,6 +36,7 @@ import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.chat.Chat;
 import dev.anhcraft.craftkit.utils.ItemUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -51,6 +52,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @CommandAlias("b|bg|battle|battlegames")
 public class MainCommand extends BaseCommand{
@@ -82,7 +84,7 @@ public class MainCommand extends BaseCommand{
     public void setSpawn(Player player){
         Location loc = player.getLocation();
         plugin.getServerData().setSpawnPoint(loc);
-        plugin.chatManager.sendPlayer(player, "server.set_spawn_success", s -> String.format(s, LocationUtil.toString(loc)));
+        plugin.chatManager.sendPlayer(player, "server.set_spawn_success", new InfoHolder("").inform("location", LocationUtil.toString(loc)).compile());
     }
 
     @Subcommand("spawn")
@@ -102,7 +104,11 @@ public class MainCommand extends BaseCommand{
     @CommandPermission("battle.game.list")
     public void listGames(CommandSender sender){
         Collection<Game> q = plugin.arenaManager.listGames();
-        plugin.chatManager.send(sender, "game.list_header", str -> String.format(str, q.size()));
+        if(q.isEmpty()){
+            plugin.chatManager.send(sender, "game.list_header_none");
+            return;
+        }
+        plugin.chatManager.send(sender, "game.list_header", new InfoHolder("").inform("size", q.size()).compile());
         for (Game game : q){
             InfoHolder holder = new InfoHolder("game_");
             game.inform(holder);
@@ -159,12 +165,11 @@ public class MainCommand extends BaseCommand{
         Player t = (target == null) ? player : target;
         Arena a = plugin.getArena(arena);
         if(a != null) {
-            if(plugin.arenaManager.join(t, a) != null)
-                plugin.chatManager.sendPlayer(player, "arena.join_success", str ->
-                        String.format(str, t.getName()));
-            else
-                plugin.chatManager.sendPlayer(player, "arena.join_failed", str ->
-                        String.format(str, t.getName()));
+            if(plugin.arenaManager.join(t, a) != null) {
+                plugin.chatManager.sendPlayer(player, "arena.join_success", new InfoHolder("").inform("target", t.getName()).compile());
+            } else {
+                plugin.chatManager.sendPlayer(player, "arena.join_failed", new InfoHolder("").inform("target", t.getName()).compile());
+            }
         }
         else plugin.chatManager.sendPlayer(player, "arena.not_found");
     }
@@ -174,22 +179,24 @@ public class MainCommand extends BaseCommand{
     @CommandCompletion("@players")
     public void quit(Player player, @Optional Player target){
         Player t = (target == null) ? player : target;
-        if(plugin.arenaManager.quit(t))
-            plugin.chatManager.sendPlayer(player, "arena.quit_success", str ->
-                    String.format(str, t.getName()));
-        else
-            plugin.chatManager.sendPlayer(player, "arena.quit_failed", str ->
-                    String.format(str, t.getName()));
+        if(plugin.arenaManager.quit(t)) {
+            plugin.chatManager.sendPlayer(player, "arena.quit_success", new InfoHolder("").inform("target", t.getName()).compile());
+        } else {
+            plugin.chatManager.sendPlayer(player, "arena.quit_failed", new InfoHolder("").inform("target", t.getName()).compile());
+        }
     }
 
     @Subcommand("tool position")
     @CommandPermission("battle.tool.position")
     public void pos(Player player){
         Location loc = player.getLocation();
-        String s1 = String.format(plugin.chatManager.getFormattedMessages(player, "tool.position.message").get(0), player.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        String s2 = String.format(plugin.chatManager.getFormattedMessages(player, "tool.position.location").get(0), player.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        TextComponent c = new TextComponent(TextComponent.fromLegacyText(s1));
-        c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, s2));
+        InfoReplacer replacer = new InfoHolder("")
+                .inform("location", LocationUtil.toString(loc))
+                .compile();
+        String s1 = Objects.requireNonNull(plugin.getLocalizedMessage("tool.position.message"));
+        String s2 = Objects.requireNonNull(plugin.getLocalizedMessage("tool.position.location"));
+        TextComponent c = new TextComponent(TextComponent.fromLegacyText(replacer.replace(s1)));
+        c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, replacer.replace(s2)));
         player.spigot().sendMessage(c);
     }
 
@@ -197,14 +204,14 @@ public class MainCommand extends BaseCommand{
     @CommandPermission("battle.tool.exp.to.level")
     public void exp2lv(CommandSender sender, long exp){
         int lv = plugin.calculateLevel(exp);
-        plugin.chatManager.send(sender, "tool.exp2lv", s -> String.format(s, exp, lv));
+        plugin.chatManager.send(sender, "tool.exp2lv", new InfoHolder("").inform("exp", exp).inform("level", lv).compile());
     }
 
     @Subcommand("tool lv2exp")
     @CommandPermission("battle.tool.level.to.exp")
     public void lv2exp(CommandSender sender, int lv){
         long exp = plugin.calculateExp(lv);
-        plugin.chatManager.send(sender, "tool.lv2exp", s -> String.format(s, lv, exp));
+        plugin.chatManager.send(sender, "tool.lv2exp", new InfoHolder("").inform("exp", exp).inform("level", lv).compile());
     }
 
     @Subcommand("tool spawn")
@@ -244,7 +251,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null){
                 playerData.getInventory().getStorage(ItemType.GUN).put(id);
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+                plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -262,7 +269,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null){
                 playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id);
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+                plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -280,7 +287,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null) {
                 playerData.getInventory().getStorage(ItemType.AMMO).put(id);
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+                plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -298,7 +305,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null) {
                 playerData.getInventory().getStorage(ItemType.SCOPE).put(id);
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+                plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -316,7 +323,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null) {
                 playerData.getInventory().getStorage(ItemType.GRENADE).put(id);
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "items.given", str -> String.format(str, id, receiver));
+                plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -332,7 +339,7 @@ public class MainCommand extends BaseCommand{
         if(perk != null) {
             perk.give(target);
             String receiver = target.getName();
-            plugin.chatManager.sendPlayer(player, "perks.given", str -> String.format(str, receiver));
+            plugin.chatManager.sendPlayer(player, "perks.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
         } else plugin.chatManager.sendPlayer(player, "perks.not_found");
     }
 
@@ -347,7 +354,7 @@ public class MainCommand extends BaseCommand{
             if(playerData != null) {
                 playerData.getBoosters().putIfAbsent(id, System.currentTimeMillis());
                 String receiver = target.getName();
-                plugin.chatManager.sendPlayer(player, "booster.given", str -> String.format(str, receiver));
+                plugin.chatManager.sendPlayer(player, "booster.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "player_data.not_found");
             }
@@ -390,7 +397,7 @@ public class MainCommand extends BaseCommand{
             plugin.chatManager.sendPlayer(player, "items.is_null");
             return;
         }
-        BattleItem bi = plugin.itemManager.read(item);
+        BattleItem<?> bi = plugin.itemManager.read(item);
         if(bi instanceof Gun){
             Gun g = (Gun) bi;
             g.getMagazine().resetAmmo();
@@ -409,7 +416,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("debug 3min")
     @CommandPermission("battle.debug")
     public void debug3(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 3)){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 3)){
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
@@ -419,7 +426,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("debug 5min")
     @CommandPermission("battle.debug")
     public void debug5(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 5)){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 5)){
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
@@ -429,7 +436,7 @@ public class MainCommand extends BaseCommand{
     @Subcommand("debug 15min")
     @CommandPermission("battle.debug")
     public void debug15(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", str -> String.format(str, s)), 20 * 60 * 15)){
+        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 15)){
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");

@@ -25,6 +25,7 @@ import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -59,7 +60,7 @@ public class EditorCommand extends BaseCommand{
         File f = new File(plugin.getEditorFolder(), "market."+System.currentTimeMillis()+".yml");
         try {
             plugin.getMarketConf().save(f);
-            plugin.chatManager.send(sender, "editor.market.saved", s -> String.format(s, f.getAbsolutePath()));
+            plugin.chatManager.send(sender, "editor.market.saved", new InfoHolder("").inform("path", f.getAbsolutePath()).compile());
         } catch (IOException e) {
             e.printStackTrace();
         }
