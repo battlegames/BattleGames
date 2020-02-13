@@ -21,6 +21,7 @@ package dev.anhcraft.battle.api.arena.mode;
 
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.Game;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
@@ -73,7 +74,7 @@ public interface IMode {
     }
 
     default void onTick(@NotNull LocalGame game){
-        if(game.getCurrentTime().get() % 100 == 0) {
+        if(game.getPhase() == GamePhase.PLAYING && game.getCurrentTime().get() % 100 == 0) {
             List<World> worlds = game.getInvolvedWorlds();
             for (Player p : game.getPlayers().keySet()) {
                 if (!worlds.contains(p.getWorld())) {
