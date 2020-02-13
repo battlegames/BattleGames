@@ -23,6 +23,6 @@ remote_config:
   url: "http://localhost/battle/config/%s"
 
 # DON'T TOUCH ANYTHING BELOW!
-config_version: ${config.version}
-storage_version: ${storage.version}
-plugin_version: ${project.version}
+last_config_version: ${config.version}
+last_storage_version: ${storage.version}
+last_plugin_version: ${project.version}
