@@ -415,7 +415,6 @@ public class PlayerListener extends BattleComponent implements Listener {
         if(game != null){
             StatisticMap st = Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats();
             st.of(DeathStat.class).increase(e.getEntity());
-            st.of(RespawnStat.class).increase(e.getEntity());
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
 
@@ -575,7 +574,12 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void respawn(PlayerRespawnEvent event){
         Player player = event.getPlayer();
         LocalGame game = plugin.arenaManager.getGame(player);
-        if(game != null) game.getMode().getController(c -> c.onRespawn(event, game));
-        else event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
+        if(game != null) {
+            game.getMode().getController(c -> {
+                c.onRespawn(event, game);
+            });
+        } else {
+            event.setRespawnLocation(plugin.getServerData().getSpawnPoint());
+        }
     }
 }

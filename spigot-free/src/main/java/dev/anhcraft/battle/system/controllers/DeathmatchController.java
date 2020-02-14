@@ -32,6 +32,7 @@ import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
 import dev.anhcraft.battle.api.inventory.item.GunModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
+import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -221,6 +222,7 @@ public class DeathmatchController extends ModeController {
             gp.setSpectator(true);
             if(!shouldAcceptRespawn(event, game, gp)) return;
             player.setGameMode(GameMode.SPECTATOR);
+            gp.getStats().of(RespawnStat.class).increase(player);
             AtomicLong current = new AtomicLong(game.getArena().getModeOptions().getRespawnWaitTime()/20L);
             String task = "respawn::"+player.getName();
             trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
