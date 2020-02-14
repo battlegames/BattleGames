@@ -67,27 +67,35 @@ public class QueueAdvancementTask implements Runnable {
                     String type = p.getFirst();
                     double amount = p.getSecond();
                     PlayerProgression pp = pd.getProgressionOrCreate(type);
-                    // if the player is first come to this advancement...
+                    Advancement current = null;
+                    Advancement next = null;
+                    Progression currentLevel = null;
                     if(pp.getActiveAdvancement() == null){
-                        // but if the player already done the advancement (amount > 0) we don't re-init it.
-                        if (pp.getCurrentAmount() != 0) continue;
+                        // if the player already done the advancement (amount > 0) we don't re-init it.
+                        if (pp.getCurrentAmount() > 0) continue;
+                        // if the player is first come to this advancement...
                         SortedSet<Advancement> set = api.getAdvancementManager().getAdvancementsFromType(type);
                         // this stat type must have its own advancement
-                        if(!set.isEmpty()) {
-                            Advancement adv = api.getAdvancementManager().getAdvancementsFromType(type).first();
+                        if(set.isEmpty()) {
+                            continue;
+                        } else {
+                            Advancement adv = set.first();
                             pp.setActiveAdvancement(adv.getId());
                             pp.setCurrentLevel(0);
-                            pp.setTargetAmount(adv.getProgression().first().getAmount());
+                            pp.setTargetAmount((currentLevel = adv.getProgression().first()).getAmount());
                             pp.setCurrentAmount(amount);
+                            if(pp.getCurrentAmount() < pp.getTargetAmount()) continue;
+                            else {
+                                current = adv;
+                                next = set.stream().skip(1).findFirst().orElse(null);
+                            }
                         }
-                        continue;
-                    }
-                    // check if we should award the player and level up the advancement
-                    if(amount >= pp.getTargetAmount()){
+                    } else {
+                        if(amount < pp.getTargetAmount()){
+                            pp.setCurrentAmount(amount);
+                            continue;
+                        }
                         SortedSet<Advancement> set = api.getAdvancementManager().getAdvancementsFromType(type);
-                        // for performance reason, we will get both current & the next advancements
-                        Advancement current = null;
-                        Advancement next = null;
                         for (Advancement adv : set){
                             if(adv.getId().equals(pp.getActiveAdvancement())){
                                 current = adv;
@@ -96,68 +104,64 @@ public class QueueAdvancementTask implements Runnable {
                                 break;
                             }
                         }
-                        // by unknown reason could not get the current advancement, we will
-                        // reset the advancement (but keep the current amount)
-                        if(current == null){
-                            pp.setActiveAdvancement(set.first().getId());
-                            pp.setCurrentLevel(0);
-                            pp.setTargetAmount(set.first().getProgression().first().getAmount());
-                            pp.setCurrentAmount(amount);
-                            continue;
-                        }
-                        int currentLv = pp.getCurrentLevel();
-                        Optional<Progression> currentLevel = current.getProgression().stream().skip(currentLv).findFirst();
-                        if(!currentLevel.isPresent()) continue;
-                        if(amount >= currentLevel.get().getAmount()){
-                            InfoReplacer currInfo = new InfoHolder("")
-                                    .inform("advancement", current.getName())
-                                    .inform("exp", currentLevel.get().getRewardExp())
-                                    .inform("money", currentLevel.get().getRewardMoney())
-                                    .compile();
-                            if(currentLv + 1 >= current.getProgression().size()) {
-                                if(next != null) {
-                                    api.getChatManager().sendPlayer(player, "advancement.finished", currInfo);
-                                    api.getChatManager().sendPlayer(player, "advancement.new", new InfoHolder("").inform("advancement", next.getName()).compile());
-                                    if (next.getInheritProgress()) {
-                                        pp.setCurrentAmount(amount);
-                                    } else {
-                                        pp.setCurrentAmount(0);
-                                    }
-                                    pp.getFinishedAdvancements().add(current.getId());
-                                    pp.setActiveAdvancement(next.getId());
-                                    pp.setCurrentLevel(0);
-                                    pp.setTargetAmount(next.getProgression().stream().findFirst().orElseThrow(IllegalStateException::new).getAmount());
-                                } else {
-                                    // congratulate! you have finished all advancements of this type!
-                                    api.getChatManager().sendPlayer(player, "advancement.finished", currInfo);
-                                    pp.setCurrentAmount(amount);
-                                    pp.setCurrentLevel(-1);
-                                    pp.getFinishedAdvancements().add(current.getId());
-                                    pp.setActiveAdvancement(null);
-                                    pp.setTargetAmount(0);
-                                }
-                            } else {
-                                api.getChatManager().sendPlayer(player, "advancement.level_up", currInfo);
-                                api.getChatManager().sendPlayer(player, "advancement.level_up_overview",
-                                        new InfoHolder("")
-                                        .inform("last_lv", currentLv)
-                                        .inform("current_lv", currentLv + 1)
-                                        .inform("progress", 100d/current.getProgression().size()*(currentLv+1)).compile());
+                    }
+                    if(current == null){
+                        pp.setActiveAdvancement(null);
+                        continue;
+                    }
+                    int currentLv = pp.getCurrentLevel();
+                    if(currentLevel == null){
+                        Optional<Progression> currLv = current.getProgression().stream().skip(currentLv).findFirst();
+                        if(!currLv.isPresent()) continue;
+                        currentLevel = currLv.get();
+                    }
+                    if(amount < currentLevel.getAmount()){
+                        pp.setTargetAmount(currentLevel.getAmount());
+                        pp.setCurrentAmount(amount);
+                        continue;
+                    }
+                    InfoReplacer currInfo = new InfoHolder("")
+                            .inform("advancement", current.getName())
+                            .inform("exp", currentLevel.getRewardExp())
+                            .inform("money", currentLevel.getRewardMoney())
+                            .compile();
+                    if(currentLv + 1 >= current.getProgression().size()) {
+                        api.getChatManager().sendPlayer(player, "advancement.finished", currInfo);
+                        if(next != null) {
+                            api.getChatManager().sendPlayer(player, "advancement.new", new InfoHolder("").inform("advancement", next.getName()).compile());
+                            if (next.getInheritProgress()) {
                                 pp.setCurrentAmount(amount);
-                                pp.setCurrentLevel(currentLv + 1);
-                                pp.setTargetAmount(current.getProgression().stream().skip(currentLv).findFirst().orElseThrow(IllegalStateException::new).getAmount());
+                            } else {
+                                pp.setCurrentAmount(0);
                             }
-                            // award...
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 4f, 1f);
-                            pd.getStats().of(ExpStat.class).increase(player, currentLevel.get().getRewardExp());
-                            Bukkit.getScheduler().runTask((BattlePlugin) api, () -> VaultApi.getEconomyApi().depositPlayer(player, currentLevel.get().getRewardMoney()));
+                            pp.getFinishedAdvancements().add(current.getId());
+                            pp.setActiveAdvancement(next.getId());
+                            pp.setCurrentLevel(0);
+                            pp.setTargetAmount(next.getProgression().stream().findFirst().orElseThrow(IllegalStateException::new).getAmount());
                         } else {
-                            pp.setTargetAmount(currentLevel.get().getAmount());
+                            // congratulate! you have finished all advancements of this type!
                             pp.setCurrentAmount(amount);
+                            pp.setCurrentLevel(-1);
+                            pp.getFinishedAdvancements().add(current.getId());
+                            pp.setActiveAdvancement(null);
+                            pp.setTargetAmount(0);
                         }
                     } else {
+                        api.getChatManager().sendPlayer(player, "advancement.level_up", currInfo);
+                        api.getChatManager().sendPlayer(player, "advancement.level_up_overview",
+                                new InfoHolder("")
+                                .inform("last_lv", currentLv)
+                                .inform("current_lv", currentLv + 1)
+                                .inform("progress", 100d/current.getProgression().size()*(currentLv+1)).compile());
                         pp.setCurrentAmount(amount);
+                        pp.setCurrentLevel(currentLv + 1);
+                        pp.setTargetAmount(current.getProgression().stream().skip(currentLv).findFirst().orElseThrow(IllegalStateException::new).getAmount());
                     }
+                    // award...
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 4f, 1f);
+                    pd.getStats().of(ExpStat.class).increase(player, currentLevel.getRewardExp());
+                    double money = currentLevel.getRewardMoney();
+                    Bukkit.getScheduler().runTask((BattlePlugin) api, () -> VaultApi.getEconomyApi().depositPlayer(player, money));
                 }
                 keys.remove();
                 break;
