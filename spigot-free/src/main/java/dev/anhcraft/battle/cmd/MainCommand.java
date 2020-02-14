@@ -31,6 +31,9 @@ import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
+import dev.anhcraft.battle.api.stats.natives.RespawnStat;
+import dev.anhcraft.battle.api.stats.natives.WinStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -416,6 +419,24 @@ public class MainCommand extends BaseCommand{
     @Subcommand("stats")
     public void stats(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.STATISTICS);
+    }
+
+    @Subcommand("adjust stats win")
+    @CommandPermission("battle.adjust.stats")
+    public void adjustWins(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(WinStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats respawn")
+    @CommandPermission("battle.adjust.stats")
+    public void adjustRespawns(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(RespawnStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats kill")
+    @CommandPermission("battle.adjust.stats")
+    public void adjustKills(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(KillStat.class).increase(player, delta);
     }
 
     @Subcommand("debug 3min")
