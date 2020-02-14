@@ -127,6 +127,11 @@ public class DataMap<T> {
         return map.keySet().stream().filter(predicate).collect(Collectors.toSet());
     }
 
+    @NotNull
+    public Set<Map.Entry<T, DataTag<?>>> filterEntries(@NotNull Predicate<T> predicate){
+        return map.entrySet().stream().filter(e -> predicate.test(e.getKey())).collect(Collectors.toSet());
+    }
+
     public void copyTag(@NotNull T oldKey, @NotNull T newKey){
         DataTag<?> x = map.get(oldKey);
         if(x == null) return;
