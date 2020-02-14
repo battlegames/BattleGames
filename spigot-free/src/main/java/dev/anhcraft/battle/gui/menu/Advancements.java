@@ -59,7 +59,7 @@ public class Advancements implements Pagination {
                 icon.lore().addAll(adv.getDescription());
             }
             if(pp != null){
-                if(adv.getId().equals(pp.getActiveAdvancement())){
+                if(pp.getCurrentLevel() >= 0 && adv.getId().equals(pp.getActiveAdvancement())){
                     Progression p = adv.getProgression().stream().skip(pp.getCurrentLevel()).findFirst().orElseThrow(IllegalStateException::new);
                     InfoReplacer infoReplacer = new InfoHolder("")
                             .inform("amount", pp.getCurrentAmount())

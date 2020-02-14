@@ -70,6 +70,7 @@ public class QueueAdvancementTask implements Runnable {
                     Advancement current = null;
                     Advancement next = null;
                     Progression currentLevel = null;
+                    if(pp.getCurrentLevel() < 0) continue;
                     if(pp.getActiveAdvancement() == null){
                         // if the player already done the advancement (amount > 0) we don't re-init it.
                         if (pp.getCurrentAmount() > 0) continue;
