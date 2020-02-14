@@ -252,6 +252,8 @@ public class PlayerData implements Resettable, Serializable {
             }
             if(value.getActiveAdvancement() != null) {
                 map.writeTag("adv.act." + key, value.getActiveAdvancement());
+            } else {
+                map.removeTag("adv.act." + key);
             }
             map.writeTag("adv.amt." + key, value.getCurrentAmount());
             map.writeTag("adv.cpg." + key, value.getCurrentLevel());

@@ -143,4 +143,10 @@ public class DataMap<T> {
         if(x == null) return;
         put(newKey, x);
     }
+
+    public void removeTag(@NotNull T key){
+        if(map.remove(key) != null){
+            modifyTracker.set(true);
+        }
+    }
 }
