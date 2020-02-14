@@ -159,8 +159,8 @@ booster:
 advancement:
   level_up: "(%battle_icon_medal%) <advancement>&r&f level up! &7(+<exp> exp; +$<money>)"
   level_up_overview: "&f        &7Level: <last_lv> -> <current_lv> &a(<progress>%)"
-  finished: "(%battle_icon_medal%) &aFinished advancement: <advancement>&r &7(+<exp> exp; +$<money>)"
-  new: "(%battle_icon_medal%) &aNew advancement: <advancement>"
+  finished: "(%battle_icon_medal%)&a Finished: <advancement>&r &7(+<exp> exp; +$<money>)"
+  unlocked: "(%battle_icon_medal%)&a Unlocked: <advancement>"
 editor:
   market:
     category_created: "&aNew category named &f#<id>&a created."

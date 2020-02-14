@@ -129,7 +129,7 @@ public class QueueAdvancementTask implements Runnable {
                     if(currentLv + 1 >= current.getProgression().size()) {
                         api.getChatManager().sendPlayer(player, "advancement.finished", currInfo);
                         if(next != null) {
-                            api.getChatManager().sendPlayer(player, "advancement.new", new InfoHolder("").inform("advancement", next.getName()).compile());
+                            api.getChatManager().sendPlayer(player, "advancement.unlocked", new InfoHolder("").inform("advancement", next.getName()).compile());
                             if (next.getInheritProgress()) {
                                 pp.setCurrentAmount(amount);
                             } else {
