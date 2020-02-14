@@ -41,10 +41,7 @@ import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
 import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
 import dev.anhcraft.battle.api.stats.StatisticMap;
-import dev.anhcraft.battle.api.stats.natives.AssistStat;
-import dev.anhcraft.battle.api.stats.natives.DeathStat;
-import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
-import dev.anhcraft.battle.api.stats.natives.KillStat;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.controllers.ModeController;
@@ -416,7 +413,9 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
         LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
-            Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats().of(DeathStat.class).incrementAndGet();
+            StatisticMap st = Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats();
+            st.of(DeathStat.class).increase(e.getEntity());
+            st.of(RespawnStat.class).increase(e.getEntity());
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
 
@@ -512,18 +511,18 @@ public class PlayerListener extends BattleComponent implements Listener {
 
             for(Map.Entry<Player, GamePlayerDeathEvent.Contribution> ent : damagerMap.entrySet()){
                 Player player = ent.getKey();
-                GamePlayer gp = game.getPlayer(ent.getKey());
+                GamePlayer gp = game.getPlayer(player);
                 if(gp == null) continue;
                 StatisticMap stats = gp.getStats();
                 if(ent.getValue().isHeadshooter()) {
-                    stats.of(HeadshotStat.class).incrementAndGet();
+                    stats.of(HeadshotStat.class).increase(player);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, hst), PlaceholderUtil.formatPAPI(player, hsst)));
                 }
                 if(ent.getValue().isAssistant()) {
-                    stats.of(AssistStat.class).incrementAndGet();
+                    stats.of(AssistStat.class).increase(player);
                     plugin.queueTitleTask.put(player, new QueueTitle(PlaceholderUtil.formatPAPI(player, ast), PlaceholderUtil.formatPAPI(player, asst)));
                 } else if(ent.getValue().isKiller()){
-                    stats.of(KillStat.class).incrementAndGet(); // (*)
+                    stats.of(KillStat.class).increase(player); // (*)
                 }
                 // most damager not means he is a killer (what if nature damage is high?) moved from (*)
                 if(player.equals(mostDamager) && !game.hasFirstKill() && !gp.hasFirstKill()) {

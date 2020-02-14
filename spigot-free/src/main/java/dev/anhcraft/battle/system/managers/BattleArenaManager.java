@@ -36,10 +36,13 @@ import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
-import dev.anhcraft.battle.system.controllers.*;
+import dev.anhcraft.battle.system.controllers.BedWarController;
+import dev.anhcraft.battle.system.controllers.DeathmatchController;
+import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
@@ -289,31 +292,33 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                     }
                 }
                 VaultApi.getEconomyApi().depositPlayer(p, money);
-                pd.getStats().of(ExpStat.class).addAndGet(exp);
+                pd.getStats().of(ExpStat.class).increase(p, exp);
 
                 String fmMoney = MathUtil.formatRound(money);
                 String fmExp = Long.toString(exp);
 
                 StatisticMap sm = pd.getStats();
-                sm.of(KillStat.class).addAndGet(gp.getStats().of(KillStat.class).get());
-                sm.of(HeadshotStat.class).addAndGet(gp.getStats().of(HeadshotStat.class).get());
-                sm.of(AssistStat.class).addAndGet(gp.getStats().of(AssistStat.class).get());
-                sm.of(DeathStat.class).addAndGet(gp.getStats().of(DeathStat.class).get());
-                if(gp.hasFirstKill()) sm.of(FirstKillStat.class).incrementAndGet();
+                sm.of(KillStat.class).increase(p, gp.getStats().of(KillStat.class).get());
+                sm.of(HeadshotStat.class).increase(p, gp.getStats().of(HeadshotStat.class).get());
+                sm.of(AssistStat.class).increase(p, gp.getStats().of(AssistStat.class).get());
+                sm.of(DeathStat.class).increase(p, gp.getStats().of(DeathStat.class).get());
+                sm.of(RespawnStat.class).increase(p, gp.getStats().of(RespawnStat.class).get());
+                if(gp.hasFirstKill()) sm.of(FirstKillStat.class).increase(p);
+                InfoReplacer infoReplacer = new InfoHolder("").inform("money", money).inform("exp", exp).compile();
                 if(gp.isWinner()) {
                     for (String s : arena.getWonReport()) {
-                        p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
+                        p.sendMessage(infoReplacer.replace(s));
                     }
-                    sm.of(WinStat.class).incrementAndGet();
+                    sm.of(WinStat.class).increase(p);
                     for (String s : arena.getEndCommandWinners()){
                         runCmd(s, p);
                     }
                     if(arena.getEndFirework() != null) arena.getEndFirework().spawn(p.getLocation());
                 } else {
                     for (String s : arena.getLostReport()) {
-                        p.sendMessage(ChatUtil.formatColorCodes(s.replace("{__money__}", fmMoney).replace("{__exp__}", fmExp)));
+                        p.sendMessage(infoReplacer.replace(s));
                     }
-                    sm.of(LoseStat.class).incrementAndGet();
+                    sm.of(LoseStat.class).increase(p);
                     for (String s : arena.getEndCommandLosers()){
                         runCmd(s, p);
                     }

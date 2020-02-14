@@ -20,33 +20,55 @@
 
 package dev.anhcraft.battle.api.stats;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.storage.tags.DataTag;
 import dev.anhcraft.battle.api.storage.tags.LongTag;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class LongCounter extends AtomicLong implements Statistic<Long> {
+public abstract class LongCounter extends Statistic<Long> {
+    private AtomicLong backend;
+
     public LongCounter(){
-        super();
+        backend = new AtomicLong();
     }
 
-    public LongCounter(int value){
-        super(value);
+    public LongCounter(long value){
+        backend = new AtomicLong(value);
     }
 
     @Override
     public @NotNull DataTag<Long> getData() {
-        return new LongTag(get());
+        return new LongTag(backend.get());
     }
 
     @Override
     public void setData(@NotNull Long value) {
-        set(value);
+        backend.set(value);
     }
 
     @Override
     public void reset() {
-        set(0);
+        backend.set(0);
+    }
+
+    public long get() {
+        return backend.get();
+    }
+
+    public long increase(@Nullable Player who) {
+        return increase(who, 1);
+    }
+
+    public long increase(@Nullable Player who, long delta) {
+        if(delta == 0) return backend.get();
+        long x = backend.addAndGet(delta);
+        if(hasAdvancementSupport() && who != null) {
+            BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
+        }
+        return x;
     }
 }

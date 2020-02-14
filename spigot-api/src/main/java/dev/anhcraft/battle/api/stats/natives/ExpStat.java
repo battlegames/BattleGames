@@ -29,4 +29,13 @@ public class ExpStat extends LongCounter {
     public @NotNull String getId() {
         return NativeStats.EXP;
     }
+
+    /*
+        ExpStat never support advancement as exp are a kind of reward.
+        Means they may cause overflow.
+     */
+    @Override
+    public boolean hasAdvancementSupport() {
+        return false;
+    }
 }

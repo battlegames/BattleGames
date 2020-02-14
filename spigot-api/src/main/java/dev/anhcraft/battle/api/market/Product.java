@@ -252,7 +252,7 @@ public class Product extends ConfigurableObject implements Informative {
             player.giveExp(vanillaExp);
         }
         if(battleExp > 0){
-            playerData.getStats().of(ExpStat.class).addAndGet(battleExp);
+            playerData.getStats().of(ExpStat.class).increase(player, battleExp);
         }
         for(String booster : boosters){
             playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());

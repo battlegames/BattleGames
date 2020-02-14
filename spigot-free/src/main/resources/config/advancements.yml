@@ -1,0 +1,235 @@
+kill_beginner:
+  type: kills
+  name: "&cBe a killer"
+  description:
+    - "&7Find your enemies and kill them"
+  icon: iron_sword
+  progression:
+    '0':
+      amount: 1
+      reward:
+        exp: 5
+        money: 8
+    '1':
+      amount: 10
+      reward:
+        exp: 60
+        money: 100
+    '2':
+      amount: 20
+      reward:
+        exp: 150
+        money: 200
+    '3':
+      amount: 50
+      reward:
+        exp: 375
+        money: 600
+    '4':
+      amount: 100
+      reward:
+        exp: 780
+        money: 1300
+    '5':
+      amount: 200
+      reward:
+        exp: 1800
+        money: 2800
+    '6':
+      amount: 300
+      reward:
+        exp: 2500
+        money: 4200
+
+kill_master:
+  type: kills
+  name: "&c&lGrim reaper"
+  description:
+    - "&bYou are master at killing now."
+  icon: diamond_sword
+  inherit_progress: true
+  progression:
+    '0':
+      amount: 500
+      reward:
+        exp: 4000
+        money: 6500
+    '1':
+      amount: 1000
+      reward:
+        exp: 12000
+        money: 15000
+    '2':
+      amount: 2000
+      reward:
+        exp: 30000
+        money: 42000
+
+return_from_hell:
+  type: respawns
+  name: "&6&lReturn from hell"
+  description:
+    - "&bYou get this advancement after certain respawns"
+    - "&7Tip: Try to die as much as possible :ok_hand:"
+  icon: pumpkin
+  progression:
+    '0':
+      amount: 1
+      reward:
+        exp: 3
+        money: 6
+    '1':
+      amount: 5
+      reward:
+        exp: 20
+        money: 40
+    '2':
+      amount: 10
+      reward:
+        exp: 45
+        money: 90
+    '3':
+      amount: 25
+      reward:
+        exp: 130
+        money: 220
+    '4':
+      amount: 50
+      reward:
+        exp: 280
+        money: 460
+    '5':
+      amount: 100
+      reward:
+        exp: 600
+        money: 950
+
+nice_vacation_at_hell:
+  type: respawns
+  name: "&b&lNice vacation at hell"
+  description:
+    - "&fYou've died several times so far. So unlucky! Be careful from now on."
+    - "&7Tip: Don't attempt to escape, instead, accepting it. Just treat death like a nice vacation."
+  icon: soul_sand
+  inherit_progress: true
+  progression:
+    '0':
+      amount: 200
+      reward:
+        exp: 1600
+        money: 2000
+    '1':
+      amount: 300
+      reward:
+        exp: 2500
+        money: 3300
+    '2':
+      amount: 500
+      reward:
+        exp: 3200
+        money: 4800
+
+new_world_order:
+  type: wins
+  name: "&a&lNew world order"
+  description:
+    - "&fTake control over the battle and become the winner."
+  icon: glowstone
+  progression:
+    '0':
+      amount: 1
+      reward:
+        exp: 15
+        money: 20
+    '1':
+      amount: 3
+      reward:
+        exp: 50
+        money: 80
+    '2':
+      amount: 10
+      reward:
+        exp: 180
+        money: 200
+    '3':
+      amount: 20
+      reward:
+        exp: 400
+        money: 480
+    '4':
+      amount: 50
+      reward:
+        exp: 900
+        money: 1200
+    '5':
+      amount: 100
+      reward:
+        exp: 2000
+        money: 2800
+
+veteran:
+  type: wins
+  name: "&6&lVeteran"
+  description:
+    - "&fPassed several wars. How skillful you are!"
+  icon: gold_block
+  inherit_progress: true
+  progression:
+    '0':
+      amount: 200
+      reward:
+        exp: 4200
+        money: 5300
+    '1':
+      amount: 300
+      reward:
+        exp: 6500
+        money: 8000
+    '2':
+      amount: 500
+      reward:
+        exp: 11500
+        money: 13450
+    '3':
+      amount: 1000
+      reward:
+        exp: 24000
+        money: 28000
+
+eye2eye:
+  type: kills_eye2eye
+  name: "&2&lEye to eye"
+  description:
+    - "&fKill a zoomed-in sniper with your own sniper rifle"
+  icon: player_head
+  progression:
+    '0':
+      amount: 1
+      reward:
+        exp: 8
+        money: 6
+    '1':
+      amount: 3
+      reward:
+        exp: 25
+        money: 36
+    '2':
+      amount: 5
+      reward:
+        exp: 50
+        money: 32
+    '3':
+      amount: 10
+      reward:
+        exp: 120
+        money: 75
+    '4':
+      amount: 20
+      reward:
+        exp: 250
+        money: 160
+    '5':
+      amount: 50
+      reward:
+        exp: 600
+        money: 380

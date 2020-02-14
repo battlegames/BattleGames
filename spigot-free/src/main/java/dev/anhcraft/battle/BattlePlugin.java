@@ -22,6 +22,8 @@ package dev.anhcraft.battle;
 import com.google.common.collect.ImmutableList;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.GeneralConfig;
+import dev.anhcraft.battle.api.advancement.Advancement;
+import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -54,10 +56,7 @@ import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
-import dev.anhcraft.battle.system.managers.BattleArenaManager;
-import dev.anhcraft.battle.system.managers.BattleChatManager;
-import dev.anhcraft.battle.system.managers.BattleDataManager;
-import dev.anhcraft.battle.system.managers.BattleGuiManager;
+import dev.anhcraft.battle.system.managers.*;
 import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
 import dev.anhcraft.battle.system.managers.item.BattleGunManager;
 import dev.anhcraft.battle.system.managers.item.BattleItemManager;
@@ -128,7 +127,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             "kits.yml",
             "perks.yml",
             "market.yml",
-            "boosters.yml"
+            "boosters.yml",
+            "advancements.yml"
     };
     public final FileConfiguration[] CONFIG = new FileConfiguration[CONFIG_FILES.length];
     public final Map<OfflinePlayer, PlayerData> PLAYER_MAP = new ConcurrentHashMap<>();
@@ -154,6 +154,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public BattleGunManager gunManager;
     public BattleGrenadeManager grenadeManager;
     public BattleGuiManager guiManager;
+    public BattleAdvancementManager advancementManager;
     public ScoreboardRenderer scoreboardRenderer;
     public BossbarRenderer bossbarRenderer;
     public BungeeMessenger bungeeMessenger;
@@ -207,6 +208,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         grenadeManager = new BattleGrenadeManager(this);
         guiManager = new BattleGuiManager(this);
         arenaManager = new BattleArenaManager(this);
+        advancementManager = new BattleAdvancementManager(this);
         battleRollback = new BattleRollback(this);
         premiumConnector.onInitSystem();
 
@@ -225,6 +227,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         initPerks(CONFIG[13]);
         initMarket(CONFIG[14]);
         initBooster(CONFIG[15]);
+        initAdvancement(CONFIG[16]);
         premiumConnector.onInitConfig();
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
@@ -375,6 +378,10 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
     public FileConfiguration getBoosterConf(){
         return CONFIG[15];
+    }
+
+    public FileConfiguration getAdvancementConf(){
+        return CONFIG[16];
     }
 
     private YamlConfiguration loadConfigFile(String fp, String cp){
@@ -766,6 +773,19 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         });
     }
 
+    private void initAdvancement(FileConfiguration c) {
+        limit("Advancement", c.getKeys(false), 10).forEach(s -> {
+            Advancement ach = new Advancement(s);
+            ConfigurationSection cs = c.getConfigurationSection(s);
+            try {
+                ConfigHelper.readConfig(cs, Advancement.SCHEMA, ach);
+            } catch (InvalidValueException e) {
+                e.printStackTrace();
+            }
+            advancementManager.registerAdvancement(ach);
+        });
+    }
+
     public void resetScoreboard(Player player) {
         BattleScoreboard sb = GENERAL_CONF.getDefaultScoreboard();
         if(sb == null || !sb.isEnabled()) {
@@ -1101,6 +1121,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public @NotNull ChatManager getChatManager() {
         return chatManager;
+    }
+
+    @Override
+    public @NotNull AdvancementManager getAdvancementManager() {
+        return advancementManager;
     }
 
     @Override

@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.storage.data;
 
+import dev.anhcraft.battle.api.advancement.PlayerProgression;
 import dev.anhcraft.battle.api.inventory.ItemStorage;
 import dev.anhcraft.battle.api.inventory.PlayerInventory;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
@@ -48,7 +49,12 @@ public class PlayerData implements Resettable, Serializable {
     private List<String> receivedFirstJoinKits = new ArrayList<>();
     private List<Transaction> transactions = new ArrayList<>();
     private Map<String, Long> boosters = new ConcurrentHashMap<>();
+    private Map<String, PlayerProgression> advancements = new HashMap<>();
     private String activeBooster;
+
+    public PlayerData(){
+        stats.setAdvancementSupport(true);
+    }
 
     @NotNull
     public StatisticMap getStats(){
@@ -90,6 +96,16 @@ public class PlayerData implements Resettable, Serializable {
         activeBooster = id;
     }
 
+    @Nullable
+    public PlayerProgression getProgression(String type) {
+        return advancements.get(type);
+    }
+
+    @NotNull
+    public PlayerProgression getProgressionOrCreate(String type) {
+        return advancements.compute(type, (s, p) -> p == null ? new PlayerProgression() : p);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
@@ -99,6 +115,29 @@ public class PlayerData implements Resettable, Serializable {
             if (f != null) {
                 storedStats.put(t, f);
             }
+        }
+        List adv = map.readTag("adv", List.class);
+        if(adv != null) {
+            adv.forEach(o -> {
+                String type = ((StringTag) o).getValue();
+                List finished = map.readTag("adv.fns."+type, List.class);
+                String active = map.readTag("adv.act."+type, String.class);
+                double amount = map.readTag("adv.amt."+type, Double.class, 0d);
+                double tgtAmount = map.readTag("adv.tamt."+type, Double.class, 0d);
+                int cpg = map.readTag("adv.cpg."+type, Integer.class, 0);
+                PlayerProgression pp = new PlayerProgression();
+                pp.setCurrentLevel(cpg);
+                pp.setCurrentAmount(amount);
+                pp.setActiveAdvancement(active);
+                pp.setTargetAmount(tgtAmount);
+                if(finished != null) {
+                    for (Object obj : finished) {
+                        String v = ((StringTag) obj).getValue();
+                        pp.getFinishedAdvancements().add(v);
+                    }
+                }
+                advancements.put(type, pp);
+            });
         }
         List inv = map.readTag("inv", List.class);
         if(inv != null) {
@@ -201,6 +240,24 @@ public class PlayerData implements Resettable, Serializable {
         if(activeBooster != null){
             map.writeTag("abst", activeBooster);
         }
+        List<StringTag> adv = new ArrayList<>();
+        advancements.forEach((key, value) -> {
+            adv.add(new StringTag(key));
+            if(!value.getFinishedAdvancements().isEmpty()) {
+                List<StringTag> finished = new ArrayList<>();
+                for (String s : value.getFinishedAdvancements()) {
+                    finished.add(new StringTag(s));
+                }
+                map.writeTag("adv.fns" + key, finished);
+            }
+            if(value.getActiveAdvancement() != null) {
+                map.writeTag("adv.act" + key, value.getActiveAdvancement());
+            }
+            map.writeTag("adv.amt" + key, value.getCurrentAmount());
+            map.writeTag("adv.cpg" + key, value.getCurrentLevel());
+            map.writeTag("adv.tamt" + key, value.getTargetAmount());
+        });
+        map.writeTag("adv", adv);
     }
 
     @Override

@@ -20,33 +20,55 @@
 
 package dev.anhcraft.battle.api.stats;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.storage.tags.DataTag;
 import dev.anhcraft.battle.api.storage.tags.IntTag;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class IntCounter extends AtomicInteger implements Statistic<Integer> {
+public abstract class IntCounter extends Statistic<Integer> {
+    private AtomicInteger backend;
+
     public IntCounter(){
-        super();
+        backend = new AtomicInteger();
     }
 
     public IntCounter(int value){
-        super(value);
+        backend = new AtomicInteger(value);
     }
 
     @Override
     public @NotNull DataTag<Integer> getData() {
-        return new IntTag(get());
+        return new IntTag(backend.get());
     }
 
     @Override
     public void setData(@NotNull Integer value) {
-        set(value);
+        backend.set(value);
     }
 
     @Override
     public void reset() {
-        set(0);
+        backend.set(0);
+    }
+
+    public int get() {
+        return backend.get();
+    }
+
+    public int increase(@Nullable Player who) {
+        return increase(who, 1);
+    }
+
+    public int increase(@Nullable Player who, int delta) {
+        if(delta == 0) return backend.get();
+        int x = backend.addAndGet(delta);
+        if(hasAdvancementSupport() && who != null) {
+            BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
+        }
+        return x;
     }
 }

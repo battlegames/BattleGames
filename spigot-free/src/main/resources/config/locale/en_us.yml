@@ -156,6 +156,11 @@ booster:
   already_used: "&eYou are using this booster!"
   another_used: "&cAnother booster is activated at the moment!"
   active_success: "&aThe booster is activated successfully!"
+advancement:
+  level_up: "(%battle_icon_medal%) <advancement>&r&f level up! &7(+<exp> exp; +$<money>)"
+  level_up_overview: "(%battle_icon_medal%) &7Overview: <last_lv> -> &f<current_lv> &a(<progress>%)"
+  finished: "(%battle_icon_medal%) &aFinished advancement: <advancement>&r &7(+<exp> exp; +$<money>)"
+  new: "(%battle_icon_medal%) &aNew advancement: <advancement>"
 editor:
   market:
     category_created: "&aNew category named &f#<id>&a created."

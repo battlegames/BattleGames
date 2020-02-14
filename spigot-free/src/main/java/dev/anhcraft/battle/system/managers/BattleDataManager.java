@@ -113,7 +113,7 @@ public class BattleDataManager extends BattleComponent {
             DataMap<String> data = provider.getData();
             Integer ver = data.readTag("version", Integer.class);
             if(ver == null || ver < 2){
-                plugin.getLogger().info("Upgrading player data: " + player.getUniqueId().toString());
+                plugin.getLogger().info("Upgrading player data: " + player.getUniqueId().toString()+" v1 -> v2");
                 data.cutTag("exp", "stats." + NativeStats.EXP);
                 data.cutTag("kill", "stats." + NativeStats.KILL);
                 data.cutTag("death", "stats." + NativeStats.DEATH);
@@ -123,6 +123,14 @@ public class BattleDataManager extends BattleComponent {
                 data.cutTag("win", "stats." + NativeStats.WIN);
                 data.cutTag("lose", "stats." + NativeStats.LOSE);
                 data.writeTag("version", 2);
+            }
+            if(ver == null || ver < 3){
+                plugin.getLogger().info("Upgrading player data: " + player.getUniqueId().toString()+" v2 -> v3");
+                data.cutTag("kl", "stats." + NativeStats.KILL);
+                data.cutTag("dt", "stats." + NativeStats.DEATH);
+                data.cutTag("wn", "stats." + NativeStats.WIN);
+                data.cutTag("ls", "stats." + NativeStats.LOSE);
+                data.writeTag("version", 3);
             }
             pd.read(data);
         }

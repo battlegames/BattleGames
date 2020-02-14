@@ -18,28 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.stats;
+package dev.anhcraft.battle.api.stats.natives;
 
-import dev.anhcraft.battle.api.storage.tags.DataTag;
-import dev.anhcraft.battle.impl.Resettable;
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Statistic<T> implements Resettable {
-    private boolean advancementSupport;
-
-    @NotNull
-    public abstract String getId();
-
-    @NotNull
-    public abstract DataTag<T> getData();
-
-    public abstract void setData(@NotNull T value);
-
-    public boolean hasAdvancementSupport() {
-        return advancementSupport;
-    }
-
-    public void setAdvancementSupport(boolean advancementSupport) {
-        this.advancementSupport = advancementSupport;
+public class RespawnStat extends IntCounter {
+    @Override
+    public @NotNull String getId() {
+        return NativeStats.RESPAWN;
     }
 }

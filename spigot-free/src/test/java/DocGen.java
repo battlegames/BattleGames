@@ -19,6 +19,8 @@
  */
 
 import dev.anhcraft.battle.api.GeneralConfig;
+import dev.anhcraft.battle.api.advancement.Advancement;
+import dev.anhcraft.battle.api.advancement.Progression;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.mode.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
@@ -76,6 +78,8 @@ public class DocGen {
                 .withSchema(FlagOptions.SCHEMA)
                 .withSchema(BedWarOptions.SCHEMA)
                 .withSchema(BWTeamOptions.SCHEMA)
+                .withSchema(Advancement.SCHEMA)
+                .withSchema(Progression.SCHEMA)
                 .addJavadoc("dev.anhcraft.battle.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
                 .generate(new File("docs"));

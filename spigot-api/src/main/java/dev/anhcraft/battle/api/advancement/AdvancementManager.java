@@ -18,28 +18,17 @@
  *
  */
 
-package dev.anhcraft.battle.api.stats;
+package dev.anhcraft.battle.api.advancement;
 
-import dev.anhcraft.battle.api.storage.tags.DataTag;
-import dev.anhcraft.battle.impl.Resettable;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Statistic<T> implements Resettable {
-    private boolean advancementSupport;
+import java.util.Collection;
+import java.util.SortedSet;
 
-    @NotNull
-    public abstract String getId();
-
-    @NotNull
-    public abstract DataTag<T> getData();
-
-    public abstract void setData(@NotNull T value);
-
-    public boolean hasAdvancementSupport() {
-        return advancementSupport;
-    }
-
-    public void setAdvancementSupport(boolean advancementSupport) {
-        this.advancementSupport = advancementSupport;
-    }
+public interface AdvancementManager {
+    void registerAdvancement(@NotNull Advancement advancement);
+    Collection<Advancement> getAdvancements();
+    @NotNull SortedSet<Advancement> getAdvancementsFromType(@NotNull String type);
+    void report(@NotNull Player player, @NotNull String type, double current);
 }

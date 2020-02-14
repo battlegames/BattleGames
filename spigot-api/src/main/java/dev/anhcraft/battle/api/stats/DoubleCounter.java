@@ -21,31 +21,53 @@
 package dev.anhcraft.battle.api.stats;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.storage.tags.DataTag;
 import dev.anhcraft.battle.api.storage.tags.DoubleTag;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class DoubleCounter extends AtomicDouble implements Statistic<Double> {
+public abstract class DoubleCounter extends Statistic<Double> {
+    private AtomicDouble backend;
+
     public DoubleCounter(){
-        super();
+        backend = new AtomicDouble();
     }
 
     public DoubleCounter(double value){
-        super(value);
+        backend = new AtomicDouble(value);
     }
 
     @Override
     public @NotNull DataTag<Double> getData() {
-        return new DoubleTag(get());
+        return new DoubleTag(backend.get());
     }
 
     @Override
     public void setData(@NotNull Double value) {
-        set(value);
+        backend.set(value);
     }
 
     @Override
     public void reset() {
-        set(0);
+        backend.set(0);
+    }
+
+    public double get() {
+        return backend.get();
+    }
+
+    public double increase(@Nullable Player who) {
+        return increase(who, 1);
+    }
+
+    public double increase(@Nullable Player who, double delta) {
+        if(delta == 0) return backend.get();
+        double x = backend.addAndGet(delta);
+        if(hasAdvancementSupport() && who != null) {
+            BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
+        }
+        return x;
     }
 }

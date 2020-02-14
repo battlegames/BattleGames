@@ -234,7 +234,7 @@ public class MainCommand extends BaseCommand{
     public void giveExp(CommandSender sender, long exp, Player player){
         PlayerData playerData = plugin.getPlayerData(player);
         if(playerData != null) {
-            playerData.getStats().of(ExpStat.class).addAndGet(exp);
+            playerData.getStats().of(ExpStat.class).increase(player, exp);
         } else {
             plugin.chatManager.sendPlayer(player, "player_data.not_found");
         }
@@ -411,6 +411,11 @@ public class MainCommand extends BaseCommand{
     @Subcommand("kit")
     public void kit(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
+    }
+
+    @Subcommand("advancement")
+    public void adv(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.ADVANCEMENT_RECORDS);
     }
 
     @Subcommand("debug 3min")

@@ -21,16 +21,13 @@
 package dev.anhcraft.battle.api.stats;
 
 public class NativeStats {
-    public static String ASSIST = "ast";
-    public static String HEADSHOT = "hs";
-    public static String FIRST_KILL = "fsk";
-    public static String KILL = "kl";
-    public static String DEATH = "dt";
-    public static String WIN = "wn";
-    public static String LOSE = "ls";
+    public static String ASSIST = "assists";
+    public static String HEADSHOT = "headshot";
+    public static String FIRST_KILL = "first_kills";
+    public static String KILL = "kills";
+    public static String DEATH = "deaths";
+    public static String WIN = "wins";
+    public static String LOSE = "loses";
     public static String EXP = "exp";
-
-    static {
-
-    }
+    public static String RESPAWN = "respawns";
 }

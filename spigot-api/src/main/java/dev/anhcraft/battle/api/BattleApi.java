@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.chat.ChatManager;
@@ -452,6 +453,13 @@ public interface BattleApi {
      */
     @NotNull
     ChatManager getChatManager();
+
+    /**
+     * Gets the advancement manager.
+     * @return {@link AdvancementManager}
+     */
+    @NotNull
+    AdvancementManager getAdvancementManager();
 
     /**
      * Checks if Bungeecord is supported.
