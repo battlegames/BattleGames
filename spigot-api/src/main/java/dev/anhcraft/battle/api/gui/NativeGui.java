@@ -34,7 +34,7 @@ public class NativeGui {
     public static final String MARKET_CATEGORY_EDITOR = "market_category_editor";
     public static final String MARKET_PRODUCT_EDITOR = "market_product_editor";
     public static final String KIT_MENU = "kit_menu";
-    public static final String ADVANCEMENT_RECORDS = "advancement_records";
+    public static final String STATISTICS = "statistics";
     public static final String BOOSTER_MENU = "booster_menu";
     public static final String ARENA_CHOOSER = "arena_chooser";
     public static final String MAIN_PLAYER_INV = "main_player_inv";

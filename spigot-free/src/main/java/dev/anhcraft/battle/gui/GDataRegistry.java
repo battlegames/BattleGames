@@ -28,4 +28,5 @@ public class GDataRegistry {
     public static final String LAST_GUI = "lastgui";
     public static final String VALUE = "value";
     public static final String VALUE_CALLBACK = "vcll";
+    public static final String STAT = "stat";
 }

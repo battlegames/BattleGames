@@ -413,9 +413,9 @@ public class MainCommand extends BaseCommand{
         plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
     }
 
-    @Subcommand("advancement")
-    public void adv(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.ADVANCEMENT_RECORDS);
+    @Subcommand("stats")
+    public void stats(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.STATISTICS);
     }
 
     @Subcommand("debug 3min")

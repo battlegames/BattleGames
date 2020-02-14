@@ -43,6 +43,7 @@ import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.CommandInitializer;
 import dev.anhcraft.battle.gui.CommonHandler;
 import dev.anhcraft.battle.gui.MarketHandler;
+import dev.anhcraft.battle.gui.menu.Advancements;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
@@ -705,6 +706,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         guiManager.registerPagination("boosters", new BoosterMenu());
         guiManager.registerPagination("editor_market_category", new CategoryMenuEditor());
         guiManager.registerPagination("editor_market_product", new ProductMenuEditor());
+        guiManager.registerPagination("advancements", new Advancements());
 
         c.getKeys(false).forEach(s -> {
             ConfigurationSection cs = c.getConfigurationSection(s);

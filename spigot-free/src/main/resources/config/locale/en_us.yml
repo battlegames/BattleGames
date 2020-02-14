@@ -158,7 +158,7 @@ booster:
   active_success: "&aThe booster is activated successfully!"
 advancement:
   level_up: "(%battle_icon_medal%) <advancement>&r&f level up! &7(+<exp> exp; +$<money>)"
-  level_up_overview: "(%battle_icon_medal%) &7Overview: <last_lv> -> &f<current_lv> &a(<progress>%)"
+  level_up_overview: "&f        &7Level: <last_lv> -> <current_lv> &a(<progress>%)"
   finished: "(%battle_icon_medal%) &aFinished advancement: <advancement>&r &7(+<exp> exp; +$<money>)"
   new: "(%battle_icon_medal%) &aNew advancement: <advancement>"
 editor:
@@ -222,6 +222,29 @@ gui:
     title: "&b&lKits"
   arena_chooser:
     title: "&e&lChoose arena"
+  statistics:
+    title: "&4&lStatistics"
+  advancements:
+    title: "&5&lAdvancements"
+    back_name: "&cBack"
+    back_lore:
+      - "&fGo back to the statistics menu"
+      - "&eOr use command &7/b stats"
+    status:
+      locked:
+        - "&f"
+        - "&c&l[LOCKED]"
+        - "&7Find a way to unlock this advancement!"
+      finished:
+        - "&f"
+        - "&a&l[FINISHED]"
+      in_progress:
+        - "&f"
+        - "&cAmount: <amount>/<max_amount> &7(<amount_progress>%)"
+        - "&cLevel: <lv>/<max_lv> &7(<lv_progress>%)"
+        - "&aCurrent level's rewards:"
+        - "&f- <reward_exp> exp"
+        - "&f- $<reward_money>"
   main_player_inv:
     title: "&c&lMain hotbar"
     arena_chooser_name: "&e&lChoose arena"

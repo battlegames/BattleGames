@@ -1,6 +1,6 @@
 kill_beginner:
   type: kills
-  name: "&cBe a killer"
+  name: "&c&lBe a killer"
   description:
     - "&7Find your enemies and kill them"
   icon: iron_sword
@@ -108,8 +108,8 @@ nice_vacation_at_hell:
   type: respawns
   name: "&b&lNice vacation at hell"
   description:
-    - "&fYou've died several times so far. So unlucky! Be careful from now on."
-    - "&7Tip: Don't attempt to escape, instead, accepting it. Just treat death like a nice vacation."
+    - "&fYou've died several times so far. So unlucky!"
+    - "&fBe careful from now on."
   icon: soul_sand
   inherit_progress: true
   progression:
