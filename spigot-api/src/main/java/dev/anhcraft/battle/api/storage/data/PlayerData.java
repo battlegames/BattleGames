@@ -248,14 +248,14 @@ public class PlayerData implements Resettable, Serializable {
                 for (String s : value.getFinishedAdvancements()) {
                     finished.add(new StringTag(s));
                 }
-                map.writeTag("adv.fns" + key, finished);
+                map.writeTag("adv.fns." + key, finished);
             }
             if(value.getActiveAdvancement() != null) {
-                map.writeTag("adv.act" + key, value.getActiveAdvancement());
+                map.writeTag("adv.act." + key, value.getActiveAdvancement());
             }
-            map.writeTag("adv.amt" + key, value.getCurrentAmount());
-            map.writeTag("adv.cpg" + key, value.getCurrentLevel());
-            map.writeTag("adv.tamt" + key, value.getTargetAmount());
+            map.writeTag("adv.amt." + key, value.getCurrentAmount());
+            map.writeTag("adv.cpg." + key, value.getCurrentLevel());
+            map.writeTag("adv.tamt." + key, value.getTargetAmount());
         });
         map.writeTag("adv", adv);
     }
