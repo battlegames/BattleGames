@@ -26,10 +26,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.PrettyEnum;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -46,25 +43,52 @@ public class Advancement extends ConfigurableObject implements Informative {
     private String id;
 
     @Key("type")
+    @Explanation({
+            "The type of this advancement",
+            "This is also the name of statistic type",
+            "All statistic types:",
+            "- kills",
+            "- first_kills",
+            "- assists",
+            "- headshot",
+            "- deaths",
+            "- wins",
+            "- loses",
+            "- respawns",
+            "Except for \"exp\", it is not supported."
+    })
     @Validation(notNull = true)
     private String type;
 
     @Key("name")
+    @Explanation("The name of this advancement")
     @Validation(notNull = true)
     private String name;
 
     @Key("description")
+    @Explanation("What this advancement about")
     private List<String> description;
 
     @Key("icon")
     @Validation(notNull = true)
     @PrettyEnum
+    @Explanation("The icon")
     private Material icon;
 
     @Key("inherit_progress")
+    @Explanation({
+            "Should a player's progressions be inherited from",
+            "previous advancements with the same statistics type?",
+            "This should be enabled as players can continue what",
+            "they have achieved without doing from the beginning."
+    })
     private boolean inheritProgress;
 
     @Key("progression")
+    @Explanation({
+            "Different period of this advancements",
+            "They can be known as 'level'"
+    })
     @Validation(notNull = true)
     private SortedSet<Progression> progression;
 
