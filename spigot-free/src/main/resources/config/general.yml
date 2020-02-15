@@ -52,6 +52,9 @@ storage:
       useServerPrepStmts: true
 
 misc:
+  resource_pack:
+    enabled: true
+    custom_url: ""
   heal_on_game_end: true
   anti_death_drops: true
   default_speed:

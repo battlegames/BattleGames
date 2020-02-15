@@ -166,6 +166,11 @@ editor:
     category_created: "&aNew category named &f#<id>&a created."
     product_created: "&aNew product named &f#<id>&a created."
     saved: "&aThe market's config file was saved to <path>"
+resource_pack:
+  notice: "&a&lPlease install the resource pack to play on this server!"
+  declined: "&c&lThe resource pack has been rejected (✖)"
+  failed: "&c&lFailed to install resource pack (✖)"
+  loaded: "&a&lResource pack has been loaded (✔)"
 gui:
   common:
     close_name: "&cClose"

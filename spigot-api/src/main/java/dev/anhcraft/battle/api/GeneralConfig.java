@@ -144,6 +144,14 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("This option prevents player items and exp from dropping")
     private boolean antiDeathDrops = true;
 
+    @Key("misc.resource_pack.enabled")
+    @Explanation("Enabled force resource pack on join")
+    private boolean resourcePackEnabled;
+
+    @Key("misc.resource_pack.custom_url")
+    @Explanation("Custom resource pack URL")
+    private String resourcePackCustomUrl;
+
     @Key("misc.heal_on_game_end")
     @Explanation("Enable this option to heal all players after end game")
     private boolean healOnGameEnd = true;
@@ -386,6 +394,14 @@ public class GeneralConfig extends ConfigurableObject {
 
     public boolean shouldHealOnGameEnd() {
         return healOnGameEnd;
+    }
+
+    public boolean isResourcePackEnabled() {
+        return resourcePackEnabled;
+    }
+
+    public String getResourcePackCustomUrl() {
+        return resourcePackCustomUrl;
     }
 
     @Nullable

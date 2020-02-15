@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.MouseClick;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
@@ -44,6 +45,7 @@ import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
+import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -71,6 +73,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -98,6 +101,9 @@ public class PlayerListener extends BattleComponent implements Listener {
             EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint(), ok -> {
                 plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
                 plugin.taskHelper.newAsyncTask(() -> {
+                    if(plugin.GENERAL_CONF.isResourcePackEnabled()) {
+                        ResourcePack.send(player);
+                    }
                     PlayerData playerData = plugin.dataManager.loadPlayerData(player);
                     // back to main thread
                     plugin.taskHelper.newTask(() -> {
@@ -119,7 +125,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                     });
                 });
             });
-        }, 60);
+        }, 15);
     }
 
     @EventHandler
@@ -128,6 +134,38 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.arenaManager.quit(event.getPlayer());
         plugin.gunManager.handleZoomOut(event.getPlayer());
         plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
+    }
+
+    @EventHandler
+    public void resourcePackStatus(PlayerResourcePackStatusEvent event){
+        if(plugin.GENERAL_CONF.isResourcePackEnabled()) {
+            Player player = event.getPlayer();
+            switch (event.getStatus()){
+                case DECLINED: {
+                    BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.declined");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.kickPlayer("Resource pack not available");
+                        }
+                    }.runTaskLater(plugin, 60);
+                    break;
+                }
+                case FAILED_DOWNLOAD: {
+                    BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.failed");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.kickPlayer("Resource pack not available");
+                        }
+                    }.runTaskLater(plugin, 60);
+                    break;
+                }
+                case SUCCESSFULLY_LOADED: {
+                    BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.loaded");
+                }
+            }
+        }
     }
 
     @EventHandler
