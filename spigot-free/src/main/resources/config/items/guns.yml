@@ -13,7 +13,7 @@ ak_47:
     max_capacity: 90
   inventory_slot: 2
   sounds:
-    on_shoot: "$entity_dragon_fireball_explode"
+    on_shoot: "bg.guns.ak47:1"
     on_start_reloading: "$entity_player_levelup"
     on_end_reloading: "$entity_player_levelup"
   reload_time_formula: "(b-a)*8"
@@ -67,6 +67,8 @@ desert_eagle:
     max_capacity: 35
   inventory_slot: 1
   reload_time_formula: "(b-a)*7"
+  sounds:
+    on_shoot: "bg.guns.de:1"
   bossbar:
     on_reload:
       title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
@@ -87,6 +89,7 @@ awm:
       material: diamond_axe
       damage: 3
   weight: 0.06
+
   scope:
     default: basic_scope
   magazine:
@@ -95,7 +98,7 @@ awm:
   inventory_slot: 2
   reload_time_formula: "(b-a)*7"
   sounds:
-    on_shoot: "$entity_dragon_fireball_explode:4.5:3"
+    on_shoot: "bg.guns.awm:1"
   bossbar:
     on_reload:
       title: "&b&lReloading... &6&l<magazine_ammo_count>/<magazine_ammo_capacity>"
