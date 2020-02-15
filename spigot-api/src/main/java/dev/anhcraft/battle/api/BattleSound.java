@@ -70,6 +70,6 @@ public class BattleSound {
         if(bukkitSound != null)
             return "$"+bukkitSound.name()+":"+volume+":"+pitch;
         else
-            return "$"+soundName+":"+volume+":"+pitch;
+            return soundName+":"+volume+":"+pitch;
     }
 }
