@@ -20,8 +20,10 @@
 
 package dev.anhcraft.battle.premium;
 
+import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
 import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
 import dev.anhcraft.battle.premium.system.listeners.WorldListener;
 import dev.anhcraft.battle.premium.system.WorldSettings;
@@ -111,6 +113,11 @@ public class PremiumModule implements IPremiumModule {
     @Override
     public void onRegisterTasks(BattlePlugin plugin) {
         plugin.getServer().getScheduler().runTaskTimer(plugin, new Task(), 0, 100);
+    }
+
+    @Override
+    public void onRegisterCommands(BattlePlugin plugin, PaperCommandManager commandManager) {
+        commandManager.registerCommand(new ExtendedCommand());
     }
 
     @Override

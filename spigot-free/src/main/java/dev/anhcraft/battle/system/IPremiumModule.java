@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.system;
 
+import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
 
 public interface IPremiumModule {
@@ -32,6 +33,8 @@ public interface IPremiumModule {
     void onRegisterEvents(BattlePlugin plugin);
 
     void onRegisterTasks(BattlePlugin plugin);
+
+    void onRegisterCommands(BattlePlugin plugin, PaperCommandManager commandManager);
 
     void onDisable(BattlePlugin plugin);
 }

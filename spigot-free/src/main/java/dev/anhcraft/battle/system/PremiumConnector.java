@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.system;
 
+import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 
@@ -75,6 +76,12 @@ public class PremiumConnector extends BattleComponent {
     public void onRegisterTasks() {
         if(premiumModule != null) {
             premiumModule.onRegisterTasks(plugin);
+        }
+    }
+
+    public void onRegisterCommands(PaperCommandManager commandManager) {
+        if(premiumModule != null) {
+            premiumModule.onRegisterCommands(plugin, commandManager);
         }
     }
 

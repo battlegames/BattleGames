@@ -49,5 +49,6 @@ public class CommandInitializer extends BattleComponent {
         cc.registerAsyncCompletion("booster", context -> plugin.BOOSTER_MAP.keySet());
         cc.registerAsyncCompletion("gui", context -> plugin.guiManager.GUI.keySet());
         cc.registerStaticCompletion("entityTypes", Arrays.stream(EntityType.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList()));
+        plugin.premiumConnector.onRegisterCommands(manager);
     }
 }

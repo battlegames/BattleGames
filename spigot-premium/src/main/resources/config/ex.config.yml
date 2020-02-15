@@ -1,3 +1,13 @@
+# Medical kit settings
+# Get it with: /minecraft:give @p minecraft:stone_sword{Damage:1, Unbreakable:1} 1
+# You can put this item in the market with following settings:
+# - Material type: Stone sword
+# - Durability: 1
+# - Unbreakable: true
+medical_kit:
+  # Additional health given to the player
+  health_bonus: 15
+
 # World settings
 world_settings:
   # General configuration
