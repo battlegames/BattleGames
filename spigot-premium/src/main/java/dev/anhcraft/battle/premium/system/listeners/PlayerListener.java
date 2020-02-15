@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = event.getItem();
             Player p = event.getPlayer();
-            if(item.getType() == Material.STONE_SWORD && item.getDurability() == 1 && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()){
+            if(item != null && item.getType() == Material.STONE_SWORD && item.getDurability() == 1 && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()){
                 double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                 double now = p.getHealth();
                 if(max != now) {
