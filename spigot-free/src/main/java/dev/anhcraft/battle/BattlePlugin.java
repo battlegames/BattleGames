@@ -385,7 +385,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         return CONFIG[16];
     }
 
-    private YamlConfiguration loadConfigFile(String fp, String cp){
+    public YamlConfiguration loadConfigFile(String fp, String cp){
         if(remoteConfigUrl != null){
             String url = String.format(remoteConfigUrl, fp);
             getLogger().info("Downloading config from "+url);
