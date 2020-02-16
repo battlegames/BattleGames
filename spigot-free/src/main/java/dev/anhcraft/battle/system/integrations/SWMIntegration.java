@@ -18,7 +18,7 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system.integrations;
+package dev.anhcraft.battle.system.integrations;
 
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
@@ -32,7 +32,6 @@ import com.grinderwolf.swm.plugin.config.ConfigManager;
 import com.grinderwolf.swm.plugin.config.WorldData;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 

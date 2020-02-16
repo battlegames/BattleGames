@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.utils;
 
+import dev.anhcraft.battle.api.BattleApi;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,6 +41,11 @@ public class EntityUtil {
             Bukkit.getLogger().warning(String.format("`%s` is missing param `world`. Recheck your config!", LocationUtil.toString(location)));
             location.setWorld(entity.getWorld());
         }
-        PaperLib.teleportAsync(entity, location).thenAccept(callback);
+        if(BattleApi.getInstance().isPremium()) {
+            PaperLib.teleportAsync(entity, location).thenAccept(callback);
+        } else {
+            entity.teleport(location);
+            callback.accept(true);
+        }
     }
 }

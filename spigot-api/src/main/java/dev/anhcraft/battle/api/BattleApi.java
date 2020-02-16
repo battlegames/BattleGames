@@ -48,6 +48,12 @@ import java.util.logging.Logger;
 
 public interface BattleApi {
     /**
+     * Whether this version is premium.
+     * @return {@code true} if true, otherwise, {@code false}
+     */
+    boolean isPremium();
+
+    /**
      * Returns the instance of this API.
      * @return {@link BattleApi}
      */

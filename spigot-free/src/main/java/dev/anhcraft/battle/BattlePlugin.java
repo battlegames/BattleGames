@@ -53,6 +53,7 @@ import dev.anhcraft.battle.system.BattleRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
+import dev.anhcraft.battle.system.integrations.SWMIntegration;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
@@ -198,6 +199,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         premiumConnector = new PremiumConnector(this);
         premiumConnector.onIntegrate();
+        if(getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")){
+            slimeWorldManagerSupport = true;
+            SWMIntegration = new SWMIntegration(this);
+            getLogger().info("Hooked to SlimeWorldManager");
+        }
 
         extension = CraftExtension.of(BattlePlugin.class);
         papiExpansion = new PapiExpansion(this);
@@ -796,6 +802,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         }
         PlayerScoreboard ps = new PlayerScoreboard(player, sb.getTitle(), sb.getContent(), sb.getFixedLength());
         scoreboardRenderer.setScoreboard(ps);
+    }
+
+    @Override
+    public boolean isPremium() {
+        return premiumConnector.isSuccess();
     }
 
     @Override

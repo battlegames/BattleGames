@@ -24,12 +24,11 @@ import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
-import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
-import dev.anhcraft.battle.premium.system.listeners.WorldListener;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
 import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
-import dev.anhcraft.battle.premium.system.integrations.SWMIntegration;
+import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
+import dev.anhcraft.battle.premium.system.listeners.WorldListener;
 import dev.anhcraft.battle.premium.tasks.Task;
 import dev.anhcraft.battle.system.IPremiumModule;
 import dev.anhcraft.confighelper.ConfigHelper;
@@ -75,11 +74,6 @@ public class PremiumModule implements IPremiumModule {
 
     @Override
     public void onIntegrate(BattlePlugin plugin) {
-        if(plugin.getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")){
-            plugin.slimeWorldManagerSupport = true;
-            plugin.SWMIntegration = new SWMIntegration(plugin);
-            plugin.getLogger().info("Hooked to SlimeWorldManager");
-        }
     }
 
     @Override
