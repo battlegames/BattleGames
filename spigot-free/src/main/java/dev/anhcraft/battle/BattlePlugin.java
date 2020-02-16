@@ -68,6 +68,7 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigUpdater;
+import dev.anhcraft.battle.utils.CraftStats;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.confighelper.ConfigHelper;
@@ -244,6 +245,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         getServer().getOnlinePlayers().forEach(pl::handleJoin);
         premiumConnector.onRegisterEvents();
 
+        taskHelper.newAsyncTimerTask(() -> CraftStats.sendData(this), 100, 576000);
         taskHelper.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
