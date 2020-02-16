@@ -28,7 +28,7 @@ world_settings:
     always_weather: clear
 
     # Control the world time
-    always_time: 18000
+    always_time: 3000
 
     # Any worlds that will not get effect
     except_worlds:
