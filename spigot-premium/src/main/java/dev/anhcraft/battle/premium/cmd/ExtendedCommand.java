@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 @CommandAlias("bx|battlex")
 public class ExtendedCommand extends BaseCommand {
@@ -43,13 +44,15 @@ public class ExtendedCommand extends BaseCommand {
     public void giveMedicalKit(Player player, int amount, @Optional Player target) {
         Player t = (target == null) ? player : target;
         PreparedItem pi = new PreparedItem();
-        pi.amount(amount);
         pi.material(Material.STONE_SWORD);
         pi.name(ChatUtil.formatColorCodes("&f&lMedical Kit &c&l(❤)"));
         pi.damage((short) 1);
         pi.flags().add(ItemFlag.HIDE_UNBREAKABLE);
         pi.flags().add(ItemFlag.HIDE_ATTRIBUTES);
         pi.unbreakable(true);
-        t.getInventory().addItem(pi.build());
+        ItemStack itemStack = pi.build();
+        for(int i = 0; i < amount; i++){
+            t.getInventory().addItem(itemStack.clone());
+        }
     }
 }
