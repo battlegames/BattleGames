@@ -992,6 +992,8 @@ statistics:
         name: "&fKills: &a%battle_stats_kills%"
         lore:
           - "&7> Click to view advancements <"
+        flag:
+          - hide_attributes
       functions:
         - common::cancel_event
         - common::set_window_data { stat; kills }
