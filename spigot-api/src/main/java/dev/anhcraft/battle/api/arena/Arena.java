@@ -331,7 +331,7 @@ public class Arena extends ConfigurableObject implements Informative {
                     }
                 }
                 case "mode_options": {
-                    if (value instanceof ConfigurationSection) {
+                    if (value instanceof ConfigurationSection && mode != null) {
                         ConfigurationSection c = (ConfigurationSection) value;
                         try {
                             return ConfigHelper.readConfig(c, mode.getOptionSchema());
