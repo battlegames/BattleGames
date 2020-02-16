@@ -46,6 +46,10 @@ public class GuiLegacyConfigGen {
                     cs.set(k + ".item.material", "STAINED_GLASS_PANE");
                     cs.set(k + ".item.damage", 5);
                 }
+                else if(q != null && q.equalsIgnoreCase("BLACK_STAINED_GLASS_PANE")){
+                    cs.set(k + ".item.material", "STAINED_GLASS_PANE");
+                    cs.set(k + ".item.damage", 15);
+                }
             }
         }
         try {
