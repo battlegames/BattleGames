@@ -164,6 +164,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                 case SUCCESSFULLY_LOADED: {
                     BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.loaded");
                 }
+                case ACCEPTED: {
+                    BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.accepted");
+                }
             }
         }
     }

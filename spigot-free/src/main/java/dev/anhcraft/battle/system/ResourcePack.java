@@ -20,12 +20,14 @@
 
 package dev.anhcraft.battle.system;
 
+import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ResourcePack {
     private static final byte[] HASH;
     private static String FILE;
@@ -42,13 +44,15 @@ public class ResourcePack {
             case v1_14_R1: FILE = "abm-1.13-1.14.zip";
             default: FILE = "abm-1.15.zip";
         }
+        BattleApi.getInstance().getLogger().info("Downloading resource pack....");
         HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
                 .setProperty("User-Agent", HTTPConnectionHelper.USER_AGENT_CHROME)
                 .connect();
         byte[] bytes = conn.read();
         conn.disconnect();
-        //noinspection UnstableApiUsage
-        HASH = Hashing.sha1().hashBytes(bytes).asBytes();
+        HashCode x = Hashing.sha1().hashBytes(bytes);
+        HASH = x.asBytes();
+        BattleApi.getInstance().getLogger().info("Finished! Hash: "+x.toString());
     }
 
     public static void send(Player player){

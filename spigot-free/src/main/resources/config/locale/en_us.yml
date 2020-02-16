@@ -173,6 +173,7 @@ resource_pack:
   declined: "&c&lThe resource pack has been rejected (✖)"
   failed: "&c&lFailed to install resource pack (✖)"
   loaded: "&a&lResource pack has been loaded (✔)"
+  accepted: "&b&lYou've accepted the resource pack. Please wait for it to be loaded."
 gui:
   common:
     close_name: "&cClose"
