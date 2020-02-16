@@ -42,7 +42,7 @@ public class CraftStats {
             object.addProperty("lcs", plugin.isPremium() ? "premium" : "free");
             object.addProperty("gv", Bukkit.getVersion());
             object.addProperty("onp", Bukkit.getOnlinePlayers().size());
-            object.addProperty("onm", Bukkit.getOnlineMode());
+            object.addProperty("onm", Boolean.toString(Bukkit.getOnlineMode()));
             object.addProperty("mrm", Runtime.getRuntime().maxMemory() / 1000000L);
             object.addProperty("frm", Runtime.getRuntime().freeMemory() / 1000000L);
             object.addProperty("trm", Runtime.getRuntime().totalMemory() / 1000000L);
