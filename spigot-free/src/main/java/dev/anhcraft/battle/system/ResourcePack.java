@@ -29,14 +29,14 @@ import org.bukkit.entity.Player;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ResourcePack {
-    private static final byte[] HASH;
+    private static byte[] HASH;
     private static String FILE;
 
     private static String getUrl(){
-        return "https://github.com/anhcraft/Battle-Issues/raw/master/"+FILE;
+        return "https://tichcucquaytayvanmayseden.000webhostapp.com/"+FILE;
     }
 
-    static {
+    public static void init() {
         switch (NMSVersion.current()){
             case v1_12_R1: FILE = "abm-1.12.zip";
             case v1_13_R1:
@@ -48,15 +48,14 @@ public class ResourcePack {
         HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
                 .setProperty("User-Agent", HTTPConnectionHelper.USER_AGENT_CHROME)
                 .connect();
-        byte[] bytes = conn.read();
+        HashCode hashCode = Hashing.sha1().hashBytes(conn.read());
+        HASH = hashCode.asBytes();
+        BattleApi.getInstance().getLogger().info("Finished! Hash: "+hashCode.toString());
         conn.disconnect();
-        HashCode x = Hashing.sha1().hashBytes(bytes);
-        HASH = x.asBytes();
-        BattleApi.getInstance().getLogger().info("Finished! Hash: "+x.toString());
     }
 
     public static void send(Player player){
-        String url = "https://github.com/anhcraft/Battle-Issues/raw/master/"+FILE;
+        String url = getUrl();
         String s = BattleApi.getInstance().getGeneralConfig().getResourcePackCustomUrl();
         if(s != null && !(s = s.trim()).isEmpty()) url = s;
         player.setResourcePack(url, HASH);

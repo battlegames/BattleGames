@@ -51,6 +51,7 @@ import dev.anhcraft.battle.gui.menu.inventory.*;
 import dev.anhcraft.battle.gui.menu.market.*;
 import dev.anhcraft.battle.system.BattleRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
+import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
@@ -285,6 +286,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 return premiumConnector.isSuccess() ? "premium" : "free";
             }
         }));
+
+        ResourcePack.init();
     }
 
     private void injectApiProvider() {
