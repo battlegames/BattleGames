@@ -134,6 +134,8 @@ items:
   given: "&aGiven item &e#<id>&a to <receiver>"
 inv:
   cleared: "&aInventory has been cleared!"
+progression:
+  cleared: "&aAll statistics and advancements have been reset."
 player_data:
   not_found: "&cCouldn't find the player data"
 tool:

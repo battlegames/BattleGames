@@ -76,7 +76,7 @@ public class MainCommand extends BaseCommand{
     public void info(CommandSender sender){
         Chat.noPrefix()
                 .message(sender, "&e&lBattleGames Minigame &7&lv"+plugin.getDescription().getVersion())
-                .message(sender, "&d◈ Type: "+(plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
+                .message(sender, "&d◈ License: "+(plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
                 .message(sender, "&d◈ Author: &fanhcraft")
                 .message(sender, "&d◈ Discord: &fhttps://discord.gg/QSpc5xH")
                 .message(sender, "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463");
@@ -379,16 +379,27 @@ public class MainCommand extends BaseCommand{
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU);
     }
 
-    @Subcommand("clearinv")
-    @CommandPermission("battle.clearinv")
-    public void clearInv(Player player, @Optional OfflinePlayer target){
+    @Subcommand("clear inventory")
+    @CommandPermission("battle.clear.inventory")
+    public void clearInventory(Player player, @Optional OfflinePlayer target){
         target = (target == null ? player : target);
         PlayerData pd = plugin.getPlayerData(target);
-        if(pd == null)
-            plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
         else {
             pd.getInventory().clearInventory();
             plugin.chatManager.sendPlayer(player, "inv.cleared");
+        }
+    }
+
+    @Subcommand("clear progression")
+    @CommandPermission("battle.clear.progression")
+    public void clearProgression(Player player, @Optional OfflinePlayer target){
+        target = (target == null ? player : target);
+        PlayerData pd = plugin.getPlayerData(target);
+        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        else {
+            pd.clearProgression();
+            plugin.chatManager.sendPlayer(player, "progression.cleared");
         }
     }
 

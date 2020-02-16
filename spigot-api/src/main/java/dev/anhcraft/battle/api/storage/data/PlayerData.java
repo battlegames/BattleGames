@@ -106,6 +106,11 @@ public class PlayerData implements Resettable, Serializable {
         return advancements.compute(type, (s, p) -> p == null ? new PlayerProgression() : p);
     }
 
+    public void clearProgression() {
+        advancements.clear();
+        stats.clear();
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
