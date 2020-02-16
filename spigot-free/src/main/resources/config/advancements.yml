@@ -2,7 +2,7 @@ kill_beginner:
   type: kills
   name: "&c&lBe a killer"
   description:
-    - "&7Find your enemies and kill them"
+    - "&7Find and kill your enemies"
   icon: iron_sword
   progression:
     '0':
@@ -45,7 +45,7 @@ kill_master:
   type: kills
   name: "&c&lGrim reaper"
   description:
-    - "&bYou are master at killing now."
+    - "&bMaster at killing."
   icon: diamond_sword
   inherit_progress: true
   progression:
@@ -109,7 +109,6 @@ nice_vacation_at_hell:
   name: "&b&lNice vacation at hell"
   description:
     - "&fYou've died several times so far. So unlucky!"
-    - "&fBe careful from now on."
   icon: soul_sand
   inherit_progress: true
   progression:
