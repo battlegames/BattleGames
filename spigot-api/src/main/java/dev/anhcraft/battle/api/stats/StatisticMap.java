@@ -55,7 +55,7 @@ public class StatisticMap {
     }
 
     public void clear(){
-        stats.clear();
+        stats.values().forEach(Statistic::reset);
     }
 
     @NotNull
