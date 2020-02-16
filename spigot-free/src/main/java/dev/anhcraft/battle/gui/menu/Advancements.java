@@ -35,6 +35,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,6 +54,7 @@ public class Advancements implements Pagination {
             if(chain.shouldSkip()) continue;
             Slot slot = chain.next();
             PreparedItem icon = new PreparedItem();
+            icon.flags().add(ItemFlag.HIDE_ATTRIBUTES);
             icon.material(adv.getIcon());
             icon.name(adv.getName());
             if(adv.getDescription() != null) {
