@@ -21,7 +21,6 @@ package dev.anhcraft.battle.api.gui;
 
 import dev.anhcraft.battle.utils.functions.Function;
 import dev.anhcraft.jvmkit.utils.Condition;
-import dev.anhcraft.jvmkit.utils.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,11 +30,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class GuiHandler {
-    private interface HandleCaller {
+    private interface BackendCaller {
         void call(SlotReport event, String... args);
     }
 
-    private final Map<String, Pair<Class<?>, HandleCaller>> slotListeners = new HashMap<>();
+    private final Map<String, BackendCaller> slotListeners = new HashMap<>();
     private final GuiHandler instance = this;
 
     protected GuiHandler(){
@@ -45,7 +44,7 @@ public abstract class GuiHandler {
             if(method.isAnnotationPresent(Function.class) && method.getParameterCount() >= 1 && SlotReport.class.isAssignableFrom(method.getParameterTypes()[0])){
                 Function fn = method.getDeclaredAnnotation(Function.class);
                 int paramLen = method.getParameterCount() - 1;
-                slotListeners.put(fn.value(), new Pair<>(fn.event(), (report, args) -> {
+                slotListeners.put(fn.value(), (report, args) -> {
                     if(paramLen == 0) {
                         try {
                             method.invoke(instance, report);
@@ -63,17 +62,16 @@ public abstract class GuiHandler {
                             e.printStackTrace();
                         }
                     }
-                }));
+                });
             }
         }
     }
 
     public boolean fireEvent(@Nullable String target, @NotNull SlotReport report, String... params) {
         Condition.argNotNull("report", report);
-        Pair<Class<?>, HandleCaller> f = slotListeners.get(target);
-        if (f != null && f.getFirst() != null && f.getSecond() != null &&
-                f.getFirst().isAssignableFrom(report.getEvent().getClass())) {
-            f.getSecond().call(report, params == null ? new String[0] : params);
+        BackendCaller backendCaller = slotListeners.get(target);
+        if (backendCaller != null) {
+            backendCaller.call(report, params == null ? new String[0] : params);
             return true;
         }
         return false;

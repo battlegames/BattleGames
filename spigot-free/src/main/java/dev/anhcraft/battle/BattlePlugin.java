@@ -702,6 +702,15 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initGui(FileConfiguration c) {
+        ConfigUpdater configUpdater = new ConfigUpdater(getLogger());
+        configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(List.class).oldPath("*.components.*.functions").newPath("#0.components.#1.functions.on_click"));
+        configUpdater.update(c);
+        try {
+            c.save(new File("cc.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         guiManager.registerGuiHandler("common", new CommonHandler());
         guiManager.registerGuiHandler("market", new MarketHandler());
         guiManager.registerPagination("player_gun", new GunInventory());

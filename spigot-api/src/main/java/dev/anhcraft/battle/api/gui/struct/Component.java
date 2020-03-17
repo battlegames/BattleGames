@@ -68,7 +68,8 @@ public class Component extends ConfigurableObject {
     }
 
     private String id;
-    private List<FunctionLinker<SlotReport>> functions;
+    private List<FunctionLinker<SlotReport>> initFunctions;
+    private List<FunctionLinker<SlotReport>> clickFunctions;
 
     @Key("positions")
     @Validation(notNull = true)
@@ -78,9 +79,13 @@ public class Component extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private PreparedItem item = DEFAULT_ITEM;
 
-    @Key("functions")
+    @Key("functions.on_init")
     @IgnoreValue(ifNull = true)
-    private List<String> rawFunctions = new ArrayList<>();
+    private List<String> rawInitFunctions = new ArrayList<>();
+
+    @Key("functions.on_click")
+    @IgnoreValue(ifNull = true)
+    private List<String> rawClickFunctions = new ArrayList<>();
 
     @Key("pagination")
     private String pagination;
@@ -105,9 +110,7 @@ public class Component extends ConfigurableObject {
         return item;
     }
 
-    @NotNull
-    public synchronized List<FunctionLinker<SlotReport>> getFunctions() {
-        if(functions == null) functions = new ArrayList<>();
+    private void compileFunction(List<String> rawFunctions, List<FunctionLinker<SlotReport>> functions){
         if(!rawFunctions.isEmpty()){
             GuiManager bgm = ApiProvider.consume().getGuiManager();
             for (Iterator<String> it = rawFunctions.iterator(); it.hasNext(); ) {
@@ -119,21 +122,34 @@ public class Component extends ConfigurableObject {
                     // it may be available in the future
                     if (gh == null) continue;
                     functions.add(new FunctionLinker<>(
-                        fn,
-                        event -> {
-                            BattleApi a = ApiProvider.consume();
-                            InfoReplacer f = a.getGuiManager().collectInfo(event.getView()).compile();
-                            String[] x = (String[]) ArrayUtils.clone(fn.getArgs());
-                            if(!gh.fireEvent(fn.getTarget(), event, f.replace(x))){
-                                throw new IllegalStateException("Event fired failed");
-                            }
-                        })
+                            fn,
+                            event -> {
+                                BattleApi a = ApiProvider.consume();
+                                InfoReplacer f = a.getGuiManager().collectInfo(event.getView()).compile();
+                                String[] x = (String[]) ArrayUtils.clone(fn.getArgs());
+                                if(!gh.fireEvent(fn.getTarget(), event, f.replace(x))){
+                                    throw new IllegalStateException("Event fired failed");
+                                }
+                            })
                     );
                 }
                 it.remove();
             }
         }
-        return functions;
+    }
+
+    @NotNull
+    public synchronized List<FunctionLinker<SlotReport>> getClickFunctions() {
+        if(clickFunctions == null) clickFunctions = new ArrayList<>();
+        compileFunction(rawClickFunctions, clickFunctions);
+        return clickFunctions;
+    }
+
+    @NotNull
+    public synchronized List<FunctionLinker<SlotReport>> getInitFunctions() {
+        if(initFunctions == null) initFunctions = new ArrayList<>();
+        compileFunction(rawInitFunctions, initFunctions);
+        return initFunctions;
     }
 
     @Nullable
@@ -209,12 +225,19 @@ public class Component extends ConfigurableObject {
 
     @Nullable
     protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("functions")){
-            List<String> strs = new ArrayList<>();
-            // don't use "functions", call the getter to do some init works first
-            for (FunctionLinker fc : getFunctions())
-                strs.add(fc.getInstruction().toString());
-            return strs;
+        if(value != null){
+            if(entry.getKey().equals("functions.on_init")) {
+                List<String> strs = new ArrayList<>();
+                // don't use "functions", call the getter to do some init works first
+                for (FunctionLinker fc : getClickFunctions())
+                    strs.add(fc.getInstruction().toString());
+                return strs;
+            } else if(entry.getKey().equals("functions.on_click")) {
+                List<String> strs = new ArrayList<>();
+                for (FunctionLinker fc : getInitFunctions())
+                    strs.add(fc.getInstruction().toString());
+                return strs;
+            }
         }
         return value;
     }

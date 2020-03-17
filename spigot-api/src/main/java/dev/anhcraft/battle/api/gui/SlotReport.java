@@ -26,6 +26,7 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SlotReport {
     private Player player;
@@ -33,7 +34,7 @@ public class SlotReport {
     private Event event;
     private View view;
 
-    public SlotReport(@NotNull Player player, @NotNull Event event, @NotNull View view, int position) {
+    public SlotReport(@NotNull Player player, @Nullable Event event, @NotNull View view, int position) {
         Condition.argNotNull("player", player);
         Condition.argNotNull("event", event);
         Condition.argNotNull("view", view);
@@ -43,7 +44,7 @@ public class SlotReport {
         this.position = position;
     }
 
-    @NotNull
+    @Nullable
     public Event getEvent() {
         return event;
     }

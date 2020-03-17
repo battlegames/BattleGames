@@ -66,7 +66,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         if(v == null) return;
         Slot s = v.getSlot(slot);
         if(s == null) return;
-        for (FunctionLinker<SlotReport> fc : s.getComponent().getFunctions()){
+        for (FunctionLinker<SlotReport> fc : s.getComponent().getClickFunctions()){
             fc.call(new SlotReport(p, event, v, slot));
         }
         if (s.getAdditionalFunction() != null) {
@@ -232,7 +232,9 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     public Window getWindow(@NotNull HumanEntity player){
         Condition.argNotNull("player", player);
         Window x = WINDOWS.get(player.getUniqueId());
-        if(x == null) WINDOWS.put(player.getUniqueId(), x = new Window());
+        if(player instanceof Player) {
+            WINDOWS.put(player.getUniqueId(), x = new Window((Player) player));
+        }
         return x;
     }
 

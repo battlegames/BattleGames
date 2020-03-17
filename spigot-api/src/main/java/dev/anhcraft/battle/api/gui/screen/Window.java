@@ -20,11 +20,19 @@
 package dev.anhcraft.battle.api.gui.screen;
 
 import dev.anhcraft.battle.utils.TempDataContainer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+
 public class Window extends TempDataContainer {
+    private WeakReference<Player> player;
     private View topView;
     private View bottomView;
+
+    public Window(Player player) {
+        this.player = new WeakReference<>(player);
+    }
 
     @Nullable
     public View getTopView() {
@@ -42,5 +50,10 @@ public class Window extends TempDataContainer {
 
     public void setBottomView(@Nullable View bottomView) {
         this.bottomView = bottomView;
+    }
+
+    @Nullable
+    public Player getPlayer() {
+        return player.get();
     }
 }

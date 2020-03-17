@@ -20,8 +20,6 @@
 
 package dev.anhcraft.battle.utils.functions;
 
-import org.bukkit.event.Event;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,5 +29,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Function {
     String value();
-    Class<?> event() default Event.class;
 }
