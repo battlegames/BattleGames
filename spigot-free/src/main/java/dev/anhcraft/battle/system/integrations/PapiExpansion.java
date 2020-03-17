@@ -117,6 +117,10 @@ public class PapiExpansion extends PlaceholderExpansion {
             GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
             return gp == null ? null : Integer.toString(gp.getStats().of(DeathStat.class).get());
         });
+        handlers.put("game_stats_respawns", player -> {
+            GamePlayer gp = plugin.arenaManager.getGamePlayer(player);
+            return gp == null ? null : Integer.toString(gp.getStats().of(RespawnStat.class).get());
+        });
         handlers.put("game_total_players", player -> {
             LocalGame game = plugin.arenaManager.getGame(player);
             return game == null ? null : Integer.toString(game.getPlayerCount());
