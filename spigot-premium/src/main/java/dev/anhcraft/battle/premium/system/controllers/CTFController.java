@@ -60,20 +60,20 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
 
         String p = getMode().getId()+"_";
 
-        plugin.getPapiExpansion().handlers.put(p+"flags", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Integer.toString(f.size());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"valid_flags", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"valid_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(TeamFlag::isValid).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_all_flags", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team_all_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);
@@ -81,8 +81,8 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == team).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null) return null;
             ABTeam team = t.getTeam(player);

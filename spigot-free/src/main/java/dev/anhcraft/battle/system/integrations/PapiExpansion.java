@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PapiExpansion extends PlaceholderExpansion {
-    private interface Callback {
+    public interface Callback {
         String handle(Player player, PlayerData pd, LocalGame game, GamePlayer gp);
     }
     

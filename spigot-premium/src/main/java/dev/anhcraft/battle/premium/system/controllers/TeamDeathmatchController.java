@@ -57,8 +57,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
 
         String p = mode.getId()+"_";
 
-        plugin.getPapiExpansion().handlers.put(p+"team", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)
@@ -69,8 +68,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
             return dt.getLocalizedName();
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team_players", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             if(t == null)

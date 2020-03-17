@@ -68,8 +68,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
         String p = mode.getId()+"_";
 
-        plugin.getPapiExpansion().handlers.put(p+"team", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -78,8 +77,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             return bwTeam.getLocalizedName();
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_players", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"team_players", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
@@ -88,14 +86,12 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             return Integer.toString(t.countPlayers(bwTeam));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"max_team_players", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"max_team_players", (player, pd, game, gp) -> {
             if(game == null) return null;
             return String.valueOf(((BedWarOptions) game.getArena().getModeOptions()).getTeamSize());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"bed_status", player -> {
-            LocalGame game = plugin.arenaManager.getGame(player);
+        plugin.getPapiExpansion().handlers.put(p+"bed_status", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
             if(t == null) return null;
