@@ -88,8 +88,8 @@ public class ConfigUpdater {
                     }
                     return s;
                 }).collect(Collectors.joining("."));
+                conf.set(k, null); // must remove the old before setting the new
                 conf.set(path, val);
-                conf.set(k, null);
                 logger.info("[ConfigUpdater] Relocated entry at `"+k+"` to `"+path+"`");
                 break;
             }
