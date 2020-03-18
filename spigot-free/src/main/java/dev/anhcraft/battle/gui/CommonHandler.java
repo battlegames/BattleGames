@@ -25,9 +25,13 @@ import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.Function;
+import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.utils.ItemUtil;
 import org.bukkit.event.Cancellable;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class CommonHandler extends GuiHandler {
@@ -166,5 +170,45 @@ public class CommonHandler extends GuiHandler {
     @Function("quit_game")
     public void quitGame(SlotReport report){
         ApiProvider.consume().getArenaManager().quit(report.getPlayer());
+    }
+
+    @Function("copy_current_slot")
+    public void copyCurrentSlot(SlotReport report, String container, String data){
+        if(container.equalsIgnoreCase("window")) {
+            report.getView().getWindow().getDataContainer().put(data, report.getPosition());
+        } else if(container.equalsIgnoreCase("view")) {
+            report.getView().getDataContainer().put(data, report.getPosition());
+        }
+    }
+
+    @Function("pull_item_from_data")
+    public void pullItemFromData(SlotReport report, String data, String notNull){
+        Object f = report.getView().getWindow().getDataContainer().remove(data);
+        if(f instanceof ItemStack) {
+            if(!notNull.equalsIgnoreCase("not-null") || !ItemUtil.isNull((ItemStack) f)) {
+                report.getSlot().getComponent().setItem(PreparedItem.of((ItemStack) f));
+            }
+        } else if(f instanceof PreparedItem) {
+            if(!notNull.equalsIgnoreCase("not-null") || !ItemUtil.isNull(((PreparedItem) f).material())) {
+                report.getSlot().getComponent().setItem((PreparedItem) f);
+            }
+        }
+    }
+
+    @Function("pull_item_from_cursor")
+    public void pullItemFromCursor(SlotReport report, String notNull){
+        ItemStack i = report.getPlayer().getItemOnCursor();
+        if(!notNull.equalsIgnoreCase("not-null") || !ItemUtil.isNull(i)) {
+            report.getSlot().getComponent().setItem(PreparedItem.of(i));
+            report.getPlayer().setItemOnCursor(null);
+        }
+    }
+
+    @Function("push_item_to_value")
+    public void pushItemToValue(SlotReport report, String slot){
+        Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
+        if(f instanceof Consumer){
+            ((Consumer<ValueResult>) f).accept(new ValueResult(Objects.requireNonNull(report.getView().getSlot(Integer.parseInt(slot))).getComponent().getItem()));
+        }
     }
 }
