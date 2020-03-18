@@ -232,8 +232,12 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     public Window getWindow(@NotNull HumanEntity player){
         Condition.argNotNull("player", player);
         Window x = WINDOWS.get(player.getUniqueId());
-        if(player instanceof Player) {
-            WINDOWS.put(player.getUniqueId(), x = new Window((Player) player));
+        if(x == null) {
+            if (player instanceof Player) {
+                WINDOWS.put(player.getUniqueId(), x = new Window((Player) player));
+            } else {
+                throw new UnsupportedOperationException("cannot create window for non-player");
+            }
         }
         return x;
     }
