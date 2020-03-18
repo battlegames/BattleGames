@@ -1593,3 +1593,18 @@ game_player_inv:
         on_click:
           - common::cancel_event
           - common::quit_game
+game_player_inv_bw:
+  title: '[ gui.game_player_inv.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 9; 1
+      item:
+        material: barrier
+        name: '[ gui.game_player_inv.quit_name ]'
+        lore:
+          - '[ gui.game_player_inv.quit_lore ]'
+      functions:
+        on_click:
+          - common::cancel_event
+          - common::quit_game
