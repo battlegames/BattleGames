@@ -93,6 +93,17 @@ public class MarketHandler extends GuiHandler {
         });
     }
 
+    @Function("icon_editor")
+    public void ie(SlotReport report){
+        Window w = report.getView().getWindow();
+        Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
+        if(p == null) return;
+        w.getDataContainer().put(GDataRegistry.VALUE, p.getIcon().build());
+        w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
+            p.setIcon(r.asPreparedItem());
+        });
+    }
+
     @Function("create_product")
     public void createProduct(SlotReport report){
         Category ctg = (Category) report.getView().getWindow().getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);

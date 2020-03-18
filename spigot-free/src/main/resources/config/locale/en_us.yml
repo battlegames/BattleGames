@@ -320,7 +320,11 @@ gui:
       - "&fClick here to set the price of this item"
     set_exp_name: "&dSet exp"
     set_exp_lore:
-      - "&fClick here to set the experience points received after purchasing"
+      - "&fClick here to set the experience points received"
+      - "&fafter purchasing"
+    set_icon_name: "&dSet icon"
+    set_icon_lore:
+      - "&fClick here to set the icon"
     remove_name: "&cRemove"
     remove_lore:
       - "&fClick here to remove this product"
@@ -339,3 +343,4 @@ gui:
     boolean_title: "&d&lValue editor &e&l[Boolean]"
     int_title: "&d&lValue editor &e&l[Integer]"
     real_title: "&d&lValue editor &e&l[Real]"
+    item_title: "&d&lValue editor &e&l[Item]"

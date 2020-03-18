@@ -161,6 +161,10 @@ public class Product extends ConfigurableObject implements Informative {
         return icon;
     }
 
+    public void setIcon(@NotNull PreparedItem icon) {
+        this.icon = icon;
+    }
+
     public double getPrice() {
         return price;
     }
