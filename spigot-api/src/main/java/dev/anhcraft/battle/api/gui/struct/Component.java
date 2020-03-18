@@ -110,6 +110,10 @@ public class Component extends ConfigurableObject {
         return item;
     }
 
+    public void setItem(@NotNull PreparedItem item) {
+        this.item = item;
+    }
+
     private void compileFunction(List<String> rawFunctions, List<FunctionLinker<SlotReport>> functions){
         if(!rawFunctions.isEmpty()){
             GuiManager bgm = ApiProvider.consume().getGuiManager();
