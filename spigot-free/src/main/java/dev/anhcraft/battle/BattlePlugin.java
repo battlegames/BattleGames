@@ -287,7 +287,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             }
         }));
 
-        ResourcePack.init();
+        if(GENERAL_CONF.isResourcePackEnabled()) {
+            ResourcePack.init();
+        }
     }
 
     private void injectApiProvider() {
