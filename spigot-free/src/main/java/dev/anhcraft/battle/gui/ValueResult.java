@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.gui;
 
+import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.inventory.ItemStack;
 
@@ -53,7 +54,11 @@ public class ValueResult {
     }
 
     public ItemStack asItem(){
-        return (ItemStack) val;
+        return val instanceof PreparedItem ? ((PreparedItem) val).build() : (ItemStack) val;
+    }
+
+    public PreparedItem asPreparedItem(){
+        return val instanceof ItemStack ? PreparedItem.of((ItemStack) val) : (PreparedItem) val;
     }
 
     @Override
