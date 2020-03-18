@@ -19,9 +19,17 @@ magazine:
   name: "<magazine_name>"
   lore:
     - "&aAmmo: &f<magazine_ammo_count>/<magazine_ammo_capacity> <ammo_name>"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true
 
 model_magazine:
   name: "<magazine_name>"
+  flag:
+    - hide_attributes
+    - hide_unbreakable
+  unbreakable: true
 
 gun:
   name: "<gun_name>"

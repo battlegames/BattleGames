@@ -4,28 +4,31 @@
 default_ak_47:
   name: "&2AK-47 Magazine"
   skin:
-    material: chest
-    damage: 0
+    material: stone_sword
+    damage: 2
   ammo:
     7_62mm: 30
 
 improved_ak_47:
   name: "&2AK-47 Magazine &5&l[Improved]"
   skin:
-    material: chest
+    material: stone_sword
+    damage: 3
   ammo:
     7_62mm: 45
 
 default_de:
   name: "&eDE Magazine"
   skin:
-    material: chest
+    material: stone_sword
+    damage: 2
   ammo:
     _50_ae: 7
 
 default_awm:
   name: "&4AWM Magazine"
   skin:
-    material: chest
+    material: stone_sword
+    damage: 3
   ammo:
     308_Winchester: 10
