@@ -50,6 +50,15 @@ public class View extends TempDataContainer {
         this.window = window;
         this.inventory = inventory;
         slots = new Slot[gui.getSize()];
+        for (int i = 0; i < slots.length; i++){
+            Component c = gui.getComponentAt(i);
+            if(c != null) {
+                slots[i] = new Slot(i, c);
+                for (FunctionLinker<SlotReport> fc : c.getInitFunctions()) {
+                    fc.call(new SlotReport(Objects.requireNonNull(window.getPlayer()), null, this, i));
+                }
+            }
+        }
         for (String s : gui.getAllPagination()){
             PAGE.put(s, 0);
         }
@@ -73,16 +82,7 @@ public class View extends TempDataContainer {
     @Nullable
     public Slot getSlot(int position){
         if(position < 0 || position >= gui.getSize()) return null;
-        Slot slot = slots[position];
-        if(slot == null){
-            Component c = gui.getComponentAt(position);
-            if(c == null) return null;
-            slots[position] = (slot = new Slot(position, c));
-            for (FunctionLinker<SlotReport> fc : c.getInitFunctions()){
-                fc.call(new SlotReport(Objects.requireNonNull(window.getPlayer()), null, this, position));
-            }
-        }
-        return slot;
+        return slots[position];
     }
 
     @NotNull
