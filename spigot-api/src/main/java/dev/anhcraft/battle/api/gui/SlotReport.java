@@ -36,7 +36,6 @@ public class SlotReport {
 
     public SlotReport(@NotNull Player player, @Nullable Event event, @NotNull View view, int position) {
         Condition.argNotNull("player", player);
-        Condition.argNotNull("event", event);
         Condition.argNotNull("view", view);
         this.player = player;
         this.event = event;
