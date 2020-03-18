@@ -180,7 +180,7 @@ public class PapiExpansion extends PlaceholderExpansion {
             if(game != null) {
                 gp = game.getPlayers().get(player);
             }
-            x.handle(player, pd, game, gp);
+            return x.handle(player, pd, game, gp);
         }
         return null;
     }
