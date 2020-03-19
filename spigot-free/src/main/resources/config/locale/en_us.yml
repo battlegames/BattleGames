@@ -194,7 +194,7 @@ gui:
     your_bp_lore:
       - "&aView your backpack"
   player_bp:
-    title: "&e&lBackpack"
+    title: "&c&lBackpack"
     gun_name: "&fGun"
     gun_lore:
       - "&aView all owned guns"
