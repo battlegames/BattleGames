@@ -60,18 +60,19 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     private final Map<String, Pagination> PAGES = new HashMap<>();
     private final Map<UUID, Window> WINDOWS = new HashMap<>();
 
-    public void callEvent(Player p, int slot, boolean isTop, Event event) {
+    public Window callEvent(Player p, int slot, boolean isTop, Event event) {
         Window w = getWindow(p);
         View v = isTop ? w.getTopView() : w.getBottomView();
-        if(v == null) return;
+        if(v == null) return w;
         Slot s = v.getSlot(slot);
-        if(s == null) return;
+        if(s == null) return w;
         for (FunctionLinker<SlotReport> fc : s.getComponent().getClickFunctions()){
             fc.call(new SlotReport(p, event, v, slot));
         }
         if (s.getAdditionalFunction() != null) {
             s.getAdditionalFunction().call(new SlotReport(p, event, v, slot));
         }
+        return w;
     }
 
     private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn){

@@ -134,6 +134,8 @@ items:
   given: "&aGiven item &e#<id>&a to <receiver>"
 bp:
   cleared: "&a<target>'s backpack has been cleared!"
+inv:
+  hotbar_full: "&aYour hotbar is full!"
 progression:
   cleared: "&aAll statistics and advancements have been reset."
 player_data:

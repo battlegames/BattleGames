@@ -11,7 +11,6 @@ ak_47:
   magazine:
     default: default_ak_47
     max_capacity: 90
-  inventory_slot: 2
   sounds:
     on_shoot: "bg.guns.ak47:1"
     on_start_reloading: "$entity_player_levelup"
@@ -65,7 +64,6 @@ desert_eagle:
   magazine:
     default: default_de
     max_capacity: 35
-  inventory_slot: 1
   reload_time_formula: "(b-a)*7"
   sounds:
     on_shoot: "bg.guns.de:1"
@@ -95,7 +93,6 @@ awm:
   magazine:
     default: default_awm
     max_capacity: 10
-  inventory_slot: 2
   reload_time_formula: "(b-a)*7"
   sounds:
     on_shoot: "bg.guns.awm:1"

@@ -25,6 +25,7 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.IMode;
 import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
@@ -94,10 +95,12 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     @Override
-    public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player){
+    public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window){
         if(event.getClickedInventory() instanceof PlayerInventory){
             BattleItem<?> item = plugin.itemManager.read(event.getCurrentItem());
-            if(item != null) event.setCancelled(true);
+            if(item instanceof Gun && RELOADING_GUN.containsKey(player.getUniqueId())) {
+                event.setCancelled(true);
+            }
         }
     }
 

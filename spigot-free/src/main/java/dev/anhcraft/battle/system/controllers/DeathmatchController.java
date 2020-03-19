@@ -28,9 +28,9 @@ import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.mode.options.DeathmatchOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
-import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
-import dev.anhcraft.battle.api.inventory.item.GunModel;
+import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
+import dev.anhcraft.battle.api.inventory.item.NullBattleItem;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -47,10 +47,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DeathmatchController extends ModeController {
@@ -191,20 +188,37 @@ public class DeathmatchController extends ModeController {
     @Override
     public void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
         if(game.getPhase() != GamePhase.PLAYING) return;
-        performCooldownMap(game, "item_selection", cooldownMap -> {
-            long t = game.getArena().getModeOptions().getItemSelectTime();
-            if(cooldownMap.isPassed(event.getPlayer(), t))
-                plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_item_selection_overtime"));
-            else {
-                ItemType type = event.getItemModel().getItemType();
-                if (type == ItemType.GUN)
-                    plugin.gunManager.selectGun(event.getPlayer(), (GunModel) event.getItemModel());
-                else if (type == ItemType.GRENADE)
-                    plugin.grenadeManager.selectGrenade(event.getPlayer(), (GrenadeModel) event.getItemModel());
-                else
-                    plugin.chatManager.sendPlayer(event.getPlayer(), blp("error_disabled_item_type"));
+        Player player = event.getPlayer();
+        Map<String, BattleItem<?>> igbp = Objects.requireNonNull(game.getPlayer(player)).getIgBackpack();
+        ItemType type = event.getItemModel().getItemType();
+        if (type == ItemType.GUN || type == ItemType.SCOPE || type == ItemType.MAGAZINE || type == ItemType.GRENADE) {
+            String id = event.getItemModel().getId();
+            BattleItem<?> item = igbp.get(id);
+            if(item == null) {
+                performCooldownMap(game, "item_selection", cooldownMap -> {
+                    long t = game.getArena().getModeOptions().getItemSelectTime();
+                    if(cooldownMap.isPassed(player, t)) {
+                        plugin.chatManager.sendPlayer(player, blp("error_item_selection_overtime"));
+                    } else {
+                        if (plugin.itemManager.selectItem(player, event.getItemModel())) {
+                            igbp.put(id, NullBattleItem.INSTANCE);
+                            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                        } else {
+                            plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
+                        }
+                    }
+                });
+            } else if(item.getModel() != null && item.getModel().getItemType() == type) {
+                if(plugin.itemManager.selectItem(player, item)) {
+                    igbp.put(id, NullBattleItem.INSTANCE);
+                    player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                } else {
+                    plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
+                }
             }
-        });
+        } else {
+            plugin.chatManager.sendPlayer(player, blp("error_disabled_item_type"));
+        }
     }
 
     public boolean shouldAcceptRespawn(PlayerRespawnEvent event, LocalGame game, GamePlayer gp){

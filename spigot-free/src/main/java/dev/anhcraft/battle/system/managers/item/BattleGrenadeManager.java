@@ -42,21 +42,6 @@ public class BattleGrenadeManager extends BattleComponent {
         super(plugin);
     }
 
-    private ItemStack createGrenade(Grenade grenade, GrenadeModel gm){
-        PreparedItem pi = plugin.itemManager.make(grenade);
-        if(pi == null) return null;
-        else {
-            pi = gm.getSkin().transform(pi);
-            return plugin.itemManager.write(pi.build(), grenade);
-        }
-    }
-
-    public void selectGrenade(Player player, GrenadeModel g) {
-        Grenade grenade = new Grenade();
-        grenade.setModel(g);
-        player.getInventory().setItem(g.getInventorySlot(), createGrenade(grenade, g));
-    }
-
     public boolean throwGrenade(Player player, Grenade grenade){
         GrenadeModel gm = grenade.getModel();
         if(gm == null) return false;

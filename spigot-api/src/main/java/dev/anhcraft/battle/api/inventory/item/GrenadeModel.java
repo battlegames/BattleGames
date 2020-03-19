@@ -55,13 +55,6 @@ public class GrenadeModel extends SingleSkinWeapon {
     })
     private double explosionPower;
 
-    @Key("inventory_slot")
-    @Explanation({
-            "The slot where the grenade is put into",
-            "Only supported by a few game modes"
-    })
-    private int inventorySlot;
-
     @Key("fire.block_radius")
     @Explanation({
             "The radius that inner blocks get ignited",
@@ -108,10 +101,6 @@ public class GrenadeModel extends SingleSkinWeapon {
 
     public long getDelayTime() {
         return delayTime;
-    }
-
-    public int getInventorySlot() {
-        return inventorySlot;
     }
 
     @Override

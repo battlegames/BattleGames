@@ -27,6 +27,7 @@ import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
+import dev.anhcraft.battle.api.gui.screen.Window;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -97,7 +98,7 @@ public interface IMode {
 
     }
 
-    default void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player){
+    default void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window){
 
     }
 

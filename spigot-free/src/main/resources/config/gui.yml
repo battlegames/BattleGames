@@ -535,6 +535,7 @@ player_gun_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { gun }
     '1':
       positions:
         - 1 -> 5; 4
@@ -545,6 +546,7 @@ player_gun_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { gun }
     '2':
       positions: 6; 4
       item:
@@ -590,6 +592,7 @@ player_magazine_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { magazine }
     '1':
       positions:
         - 1 -> 5; 4
@@ -600,6 +603,7 @@ player_magazine_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { magazine }
     '2':
       positions: 6; 4
       item:
@@ -700,6 +704,7 @@ player_scope_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { scope }
     '1':
       positions:
         - 1 -> 5; 4
@@ -710,6 +715,7 @@ player_scope_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { scope }
     '2':
       positions: 6; 4
       item:
@@ -755,6 +761,7 @@ player_grenade_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { grenade }
     '1':
       positions:
         - 1 -> 5; 4
@@ -765,6 +772,7 @@ player_grenade_bp:
       functions:
         on_click:
           - common::cancel_event
+          - item::handle_item_drop { grenade }
     '2':
       positions: 6; 4
       item:

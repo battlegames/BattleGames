@@ -8,7 +8,6 @@ fire_grenade:
     damage: 1
   delay_time: 70
   velocity_multiplier: 2.5
-  inventory_slot: 2
   fire:
     mob_ticks: 100
     mob_radius: 3.5

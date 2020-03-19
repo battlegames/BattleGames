@@ -455,7 +455,8 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
         LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
-            StatisticMap st = Objects.requireNonNull(game.getPlayer(e.getEntity())).getStats();
+            GamePlayer gamePlayer = Objects.requireNonNull(game.getPlayer(e.getEntity()));
+            StatisticMap st = gamePlayer.getStats();
             st.of(DeathStat.class).increase(e.getEntity());
 
             Collection<DamageReport> reports = game.getDamageReports().removeAll(e.getEntity());
@@ -575,6 +576,7 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
 
             if(game.getArena().isRenderGuiOnDeath()){
+                gamePlayer.getIgBackpack().clear();
                 e.getEntity().getInventory().clear();
                 plugin.guiManager.updateView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()).getBottomView());
             }
@@ -598,9 +600,11 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void clickInv(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
-            plugin.guiManager.callEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
+            Window w = plugin.guiManager.callEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
             LocalGame game = plugin.arenaManager.getGame(p);
-            if(game != null) game.getMode().getController(c -> c.onClickInventory(event, game, p));
+            if(game != null) {
+                game.getMode().getController(c -> c.onClickInventory(event, game, p, w));
+            }
         }
     }
 

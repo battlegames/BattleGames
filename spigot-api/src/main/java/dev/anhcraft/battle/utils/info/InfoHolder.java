@@ -81,7 +81,6 @@ public class InfoHolder {
     }
 
     public InfoHolder link(@Nullable InfoHolder another){
-        Condition.argNotNull("another", another);
         if(another != null) map.putAll(another.map);
         return this;
     }

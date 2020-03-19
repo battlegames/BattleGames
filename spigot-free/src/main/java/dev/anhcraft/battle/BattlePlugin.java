@@ -42,6 +42,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.CommandInitializer;
 import dev.anhcraft.battle.gui.CommonHandler;
+import dev.anhcraft.battle.gui.ItemHandler;
 import dev.anhcraft.battle.gui.MarketHandler;
 import dev.anhcraft.battle.gui.menu.Advancements;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
@@ -715,6 +716,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         guiManager.registerGuiHandler("common", new CommonHandler());
         guiManager.registerGuiHandler("market", new MarketHandler());
+        guiManager.registerGuiHandler("item", new ItemHandler());
         guiManager.registerPagination("player_gun", new GunCompartment());
         guiManager.registerPagination("player_magazine", new MagazineCompartment());
         guiManager.registerPagination("player_ammo", new AmmoCompartment());

@@ -21,15 +21,18 @@ package dev.anhcraft.battle.gui.menu.backpack;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.inventory.item.MagazineModel;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -49,6 +52,12 @@ public class MagazineCompartment implements Pagination {
             if(pi == null) continue;
             Slot slot = chain.next();
             slot.setPaginationItem(mm.getSkin().transform(pi));
+            slot.setAdditionalFunction(report -> {
+                if(report.getEvent() instanceof InventoryClickEvent){
+                    ItemChooseEvent e = new ItemChooseEvent(report.getPlayer(), ((InventoryClickEvent) report.getEvent()).getCurrentItem(), mm);
+                    Bukkit.getPluginManager().callEvent(e);
+                }
+            });
         }
     }
 }

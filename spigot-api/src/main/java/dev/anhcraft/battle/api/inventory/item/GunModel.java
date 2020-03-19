@@ -79,13 +79,6 @@ public class GunModel extends WeaponModel {
     @Explanation("The default scope")
     private ScopeModel defaultScope;
 
-    @Key("inventory_slot")
-    @Explanation({
-            "The slot where the grenade is put into",
-            "Only supported by a few game modes"
-    })
-    private int inventorySlot;
-
     @Key("sounds.on_shoot")
     @Explanation("Set the sound that is played when shooting")
     @IgnoreValue(ifNull = true)
@@ -187,10 +180,6 @@ public class GunModel extends WeaponModel {
                 .inform("muzzle_velocity", muzzleVelocity)
                 .inform("max_magazine_capacity", getMagazineMaxCapacity())
                 .link(defaultMagazine.collectInfo("default_"));
-    }
-
-    public int getInventorySlot() {
-        return inventorySlot;
     }
 
     @NotNull

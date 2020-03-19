@@ -30,11 +30,13 @@ import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BattleItemManager extends BattleComponent implements ItemManager {
     private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
@@ -50,6 +52,40 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
             if(sec != null) ITEM_MODELS.put(type, ABIF.read(sec));
             sec = plugin.getItemConf().getConfigurationSection(k);
             if(sec != null) ITEMS.put(type, ABIF.read(sec));
+        }
+    }
+
+    public boolean selectItem(Player player, BattleItemModel m) {
+        if(m instanceof GunModel) {
+            return plugin.gunManager.selectGun(player, (GunModel) m);
+        }
+        //noinspection rawtypes
+        BattleItem bi = m.getItemType().make();
+        //noinspection unchecked
+        bi.setModel(m);
+        return selectItem(player, bi);
+    }
+
+    public boolean selectItem(Player player, BattleItem<?> bi) {
+        if(bi instanceof Gun) {
+            return plugin.gunManager.selectGun(player, (Gun) bi);
+        }
+        BattleItemModel m = Objects.requireNonNull(bi.getModel());
+        int slot = player.getInventory().firstEmpty();
+        if(slot == -1) return false;
+        player.getInventory().setItem(slot, createItem(bi, m));
+        return true;
+    }
+
+    public ItemStack createItem(BattleItem<?> bi, BattleItemModel m) {
+        if(bi instanceof Gun) {
+            throw new UnsupportedOperationException("call GunManager#createItem instead");
+        }
+        PreparedItem pi = plugin.itemManager.make(bi);
+        if(pi == null) return null;
+        else {
+            if(m instanceof SingleSkinItem) pi = ((SingleSkinItem) m).getSkin().transform(pi);
+            return plugin.itemManager.write(pi.build(), bi);
         }
     }
 

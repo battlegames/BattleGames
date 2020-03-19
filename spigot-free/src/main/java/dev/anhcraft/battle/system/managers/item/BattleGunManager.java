@@ -75,22 +75,29 @@ public class BattleGunManager extends BattleComponent {
         }
     }
 
-    public void selectGun(Player player, GunModel g) {
-        Map.Entry<AmmoModel, Integer> ammo = g.getDefaultMagazine().getAmmunition().entrySet().iterator().next();
+    public boolean selectGun(Player player, GunModel g) {
         Gun gun = new Gun();
         gun.setModel(g);
+        Map.Entry<AmmoModel, Integer> ammo = g.getDefaultMagazine().getAmmunition().entrySet().iterator().next();
         Magazine magazine = gun.getMagazine();
         magazine.setModel(g.getDefaultMagazine());
         magazine.setAmmoCount(ammo.getValue());
         Ammo ammoItem = magazine.getAmmo();
         ammoItem.setModel(ammo.getKey());
+        return selectGun(player, gun);
+    }
 
-        player.getInventory().setItem(g.getInventorySlot(), createGun(gun, false));
+    public boolean selectGun(Player player, Gun gun) {
+        GunModel g = Objects.requireNonNull(gun.getModel());
+        int slot = player.getInventory().firstEmpty();
+        if(slot == -1) return false;
+        player.getInventory().setItem(slot, createGun(gun, false));
         int held = player.getInventory().getHeldItemSlot();
-        if(held == g.getInventorySlot()) {
+        if(held == slot) {
             player.getInventory().setItemInOffHand(createGun(gun, true));
             reduceSpeed(player, g);
         }
+        return true;
     }
 
     public void reduceSpeed(Player player, GunModel g){
