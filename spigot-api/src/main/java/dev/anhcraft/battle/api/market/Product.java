@@ -24,7 +24,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.economy.CurrencyType;
-import dev.anhcraft.battle.api.inventory.ItemStorage;
+import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
@@ -241,7 +241,7 @@ public class Product extends ConfigurableObject implements Informative {
         Location loc = player.getLocation();
         player.getInventory().addItem(CollectionUtil.toArray(Arrays.stream(vanillaItems).map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         battleItems.forEach((type, x) -> {
-            ItemStorage is = playerData.getInventory().getStorage(type);
+            Backpack.Compartment is = playerData.getBackpack().getStorage(type);
             is.put(x);
         });
         for(String perk : perks){

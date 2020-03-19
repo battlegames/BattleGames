@@ -20,8 +20,7 @@
 package dev.anhcraft.battle.api.storage.data;
 
 import dev.anhcraft.battle.api.advancement.PlayerProgression;
-import dev.anhcraft.battle.api.inventory.ItemStorage;
-import dev.anhcraft.battle.api.inventory.PlayerInventory;
+import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.market.Transaction;
 import dev.anhcraft.battle.api.stats.Statistic;
@@ -37,7 +36,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData implements Resettable, Serializable {
-    private PlayerInventory inventory = new PlayerInventory();
+    private Backpack backpack = new Backpack();
     private Map<String, Object> storedStats = new HashMap<>();
     private StatisticMap stats = new StatisticMap(statistic -> {
         Object v = storedStats.get(statistic.getId());
@@ -62,8 +61,8 @@ public class PlayerData implements Resettable, Serializable {
     }
 
     @NotNull
-    public PlayerInventory getInventory() {
-        return inventory;
+    public Backpack getBackpack() {
+        return backpack;
     }
 
     @NotNull
@@ -148,7 +147,7 @@ public class PlayerData implements Resettable, Serializable {
         if(inv != null) {
             inv.forEach(o -> {
                 String q = ((StringTag) o).getValue();
-                ItemStorage storage = inventory.getStorage(ItemType.valueOf(q));
+                Backpack.Compartment storage = backpack.getStorage(ItemType.valueOf(q));
                 List is = map.readTag("inv." + q, List.class);
                 if(is != null) {
                     is.forEach(o1 -> {
@@ -205,11 +204,11 @@ public class PlayerData implements Resettable, Serializable {
             map.writeTag("stats."+x.getId(), x.getData());
         }
         List<StringTag> inv = new ArrayList<>();
-        inventory.listStorage((itemType, itemStorage) -> {
+        backpack.listStorage((itemType, compartment) -> {
             String s = itemType.name();
             inv.add(new StringTag(s));
             List<StringTag> items = new ArrayList<>();
-            itemStorage.list((i, v) -> {
+            compartment.list((i, v) -> {
                 items.add(new StringTag(i));
                 map.writeTag("inv."+s+"."+i, v);
             });
@@ -270,7 +269,7 @@ public class PlayerData implements Resettable, Serializable {
     @Override
     public void reset() {
         stats.clear();
-        inventory.clearInventory();
+        backpack.clear();
         kits.clear();
         receivedFirstJoinKits.clear();
         transactions.clear();

@@ -47,7 +47,7 @@ import dev.anhcraft.battle.gui.menu.Advancements;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
-import dev.anhcraft.battle.gui.menu.inventory.*;
+import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
 import dev.anhcraft.battle.system.BattleRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
@@ -715,11 +715,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         guiManager.registerGuiHandler("common", new CommonHandler());
         guiManager.registerGuiHandler("market", new MarketHandler());
-        guiManager.registerPagination("player_gun", new GunInventory());
-        guiManager.registerPagination("player_magazine", new MagazineInventory());
-        guiManager.registerPagination("player_ammo", new AmmoInventory());
-        guiManager.registerPagination("player_scope", new ScopeInventory());
-        guiManager.registerPagination("player_grenade", new GrenadeInventory());
+        guiManager.registerPagination("player_gun", new GunCompartment());
+        guiManager.registerPagination("player_magazine", new MagazineCompartment());
+        guiManager.registerPagination("player_ammo", new AmmoCompartment());
+        guiManager.registerPagination("player_scope", new ScopeCompartment());
+        guiManager.registerPagination("player_grenade", new GrenadeCompartment());
         guiManager.registerPagination("kits", new KitMenu());
         guiManager.registerPagination("arena_chooser", new ArenaChooser());
         guiManager.registerPagination("market_category", new CategoryMenu());

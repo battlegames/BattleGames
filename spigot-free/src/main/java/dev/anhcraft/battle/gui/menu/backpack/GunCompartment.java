@@ -17,38 +17,47 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.gui.menu.inventory;
+package dev.anhcraft.battle.gui.menu.backpack;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
-import dev.anhcraft.battle.api.inventory.item.AmmoModel;
+import dev.anhcraft.battle.api.inventory.item.GunModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class AmmoInventory implements Pagination {
+public class GunCompartment implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
         if(pd == null) return;
-        for(Map.Entry<String, Long> entry : pd.getInventory().getStorage(ItemType.AMMO).list()){
+        for(Map.Entry<String, Long> entry : pd.getBackpack().getStorage(ItemType.GUN).list()){
             if(!chain.hasNext()) break;
             if(chain.shouldSkip()) continue;
-            AmmoModel am = api.getAmmoModel(entry.getKey());
-            if (am == null) continue;
-            PreparedItem pi = api.getItemManager().make(am);
+            GunModel gm = api.getGunModel(entry.getKey());
+            if (gm == null) continue;
+            PreparedItem pi = api.getItemManager().make(gm);
             if(pi == null) continue;
             Slot slot = chain.next();
-            slot.setPaginationItem(am.getSkin().transform(pi));
+            slot.setPaginationItem(gm.getPrimarySkin().transform(pi));
+            slot.setAdditionalFunction(report -> {
+                if(report.getEvent() instanceof InventoryClickEvent){
+                    ItemChooseEvent e = new ItemChooseEvent(report.getPlayer(), ((InventoryClickEvent) report.getEvent()).getCurrentItem(), gm);
+                    Bukkit.getPluginManager().callEvent(e);
+                }
+            });
         }
     }
 }

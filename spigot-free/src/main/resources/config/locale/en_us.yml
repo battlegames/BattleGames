@@ -132,8 +132,8 @@ items:
   not_found: "&cCouldn't find that item"
   not_gun: "&cThe item is not a gun"
   given: "&aGiven item &e#<id>&a to <receiver>"
-inv:
-  cleared: "&aInventory has been cleared!"
+bp:
+  cleared: "&a<target>'s backpack has been cleared!"
 progression:
   cleared: "&aAll statistics and advancements have been reset."
 player_data:
@@ -182,17 +182,17 @@ gui:
     prev_name: "&aPrevious page"
     prev_lore:
       - "&fGo back to previous page"
-    back_inv_name: "&cBack"
-    back_inv_lore:
+    back_name: "&cBack"
+    back_lore:
       - "&fBack to the last menu"
     next_name: "&aNext page"
     next_lore:
       - "&fTurn to the next page"
-    your_inv_name: "&b&lYour inventory"
-    your_inv_lore:
-      - "&aOpen your inventory"
-  player_inv:
-    title: "&e&lInventory"
+    your_bp_name: "&b&lYour backpack"
+    your_bp_lore:
+      - "&aView your backpack"
+  player_bp:
+    title: "&e&lBackpack"
     gun_name: "&fGun"
     gun_lore:
       - "&aView all owned guns"
@@ -216,16 +216,16 @@ gui:
     market_lore:
       - "&fClick here to open the market"
       - "&eOr use command &7/b market"
-  player_gun_inv:
-    title: "&c&lInventory > Gun"
-  player_magazine_inv:
-    title: "&c&lInventory > Magazine"
-  player_ammo_inv:
-    title: "&c&lInventory > Ammunition"
-  player_scope_inv:
-    title: "&c&lInventory > Scope"
-  player_grenade_inv:
-    title: "&c&lInventory > Grenade"
+  player_gun_bp:
+    title: "&c&lBackpack > Gun"
+  player_magazine_bp:
+    title: "&c&lBackpack > Magazine"
+  player_ammo_bp:
+    title: "&c&lBackpack > Ammunition"
+  player_scope_bp:
+    title: "&c&lBackpack > Scope"
+  player_grenade_bp:
+    title: "&c&lBackpack > Grenade"
   kit_menu:
     title: "&b&lKits"
   arena_chooser:

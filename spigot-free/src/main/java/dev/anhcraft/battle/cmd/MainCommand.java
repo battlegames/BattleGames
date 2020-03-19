@@ -252,7 +252,7 @@ public class MainCommand extends BaseCommand{
         if(gun != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null){
-                playerData.getInventory().getStorage(ItemType.GUN).put(id);
+                playerData.getBackpack().getStorage(ItemType.GUN).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
@@ -270,7 +270,7 @@ public class MainCommand extends BaseCommand{
         if(mag != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null){
-                playerData.getInventory().getStorage(ItemType.MAGAZINE).put(id);
+                playerData.getBackpack().getStorage(ItemType.MAGAZINE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
@@ -288,7 +288,7 @@ public class MainCommand extends BaseCommand{
         if(ammo != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null) {
-                playerData.getInventory().getStorage(ItemType.AMMO).put(id);
+                playerData.getBackpack().getStorage(ItemType.AMMO).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
@@ -306,7 +306,7 @@ public class MainCommand extends BaseCommand{
         if(sc != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null) {
-                playerData.getInventory().getStorage(ItemType.SCOPE).put(id);
+                playerData.getBackpack().getStorage(ItemType.SCOPE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
@@ -324,7 +324,7 @@ public class MainCommand extends BaseCommand{
         if(gm != null) {
             PlayerData playerData = plugin.getPlayerData(target);
             if(playerData != null) {
-                playerData.getInventory().getStorage(ItemType.GRENADE).put(id);
+                playerData.getBackpack().getStorage(ItemType.GRENADE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
             } else {
@@ -364,9 +364,21 @@ public class MainCommand extends BaseCommand{
         } else plugin.chatManager.sendPlayer(player, "booster.not_found");
     }
 
-    @Subcommand("inv")
-    public void inv(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.PLAYER_INV);
+    @Subcommand("bp open")
+    public void openBackpack(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.PLAYER_BP);
+    }
+
+    @Subcommand("bp clear")
+    @CommandPermission("battle.bp.clear")
+    public void clearBackpack(Player player, @Optional OfflinePlayer target){
+        target = (target == null ? player : target);
+        PlayerData pd = plugin.getPlayerData(target);
+        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        else {
+            pd.getBackpack().clear();
+            plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", target.getName()).compile());
+        }
     }
 
     @Subcommand("booster")
@@ -377,18 +389,6 @@ public class MainCommand extends BaseCommand{
     @Subcommand("market")
     public void market(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU);
-    }
-
-    @Subcommand("clear inventory")
-    @CommandPermission("battle.clear.inventory")
-    public void clearInventory(Player player, @Optional OfflinePlayer target){
-        target = (target == null ? player : target);
-        PlayerData pd = plugin.getPlayerData(target);
-        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
-        else {
-            pd.getInventory().clearInventory();
-            plugin.chatManager.sendPlayer(player, "inv.cleared");
-        }
     }
 
     @Subcommand("clear progression")

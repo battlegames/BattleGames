@@ -21,7 +21,7 @@ package dev.anhcraft.battle.api.misc;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import dev.anhcraft.battle.api.inventory.ItemStorage;
+import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.utils.ConfigurableObject;
@@ -175,7 +175,7 @@ public class Kit extends ConfigurableObject {
             }
         }
         battleItems.forEach((type, x) -> {
-            ItemStorage is = playerData.getInventory().getStorage(type);
+            Backpack.Compartment is = playerData.getBackpack().getStorage(type);
             is.put(x);
         });
         boosters.forEach(s -> playerData.getBoosters().putIfAbsent(s, System.currentTimeMillis()));

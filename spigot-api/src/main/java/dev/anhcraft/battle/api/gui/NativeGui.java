@@ -21,12 +21,12 @@
 package dev.anhcraft.battle.api.gui;
 
 public class NativeGui {
-    public static final String PLAYER_INV = "player_inv";
-    public static final String PLAYER_INV_GUN = "player_gun_inv";
-    public static final String PLAYER_INV_MAGAZINE = "player_magazine_inv";
-    public static final String PLAYER_INV_AMMO = "player_ammo_inv";
-    public static final String PLAYER_INV_SCOPE = "player_scope_inv";
-    public static final String PLAYER_INV_GRENADE = "player_grenade_inv";
+    public static final String PLAYER_BP = "player_bp";
+    public static final String PLAYER_BP_GUN = "player_gun_bp";
+    public static final String PLAYER_BP_MAGAZINE = "player_magazine_bp";
+    public static final String PLAYER_BP_AMMO = "player_ammo_bp";
+    public static final String PLAYER_BP_SCOPE = "player_scope_bp";
+    public static final String PLAYER_BP_GRENADE = "player_grenade_bp";
     public static final String MARKET_CATEGORY_MENU = "market_category_menu";
     public static final String MARKET_PRODUCT_MENU = "market_product_menu";
     public static final String MARKET_CATEGORY_MENU_EDITOR = "market_category_menu_editor";
@@ -42,4 +42,5 @@ public class NativeGui {
     public static final String BOOL_VAL_EDITOR = "boolean_value_editor";
     public static final String INT_VAL_EDITOR = "int_value_editor";
     public static final String REAL_VAL_EDITOR = "real_value_editor";
+    public static final String GUN_MENU = "gun_menu";
 }
