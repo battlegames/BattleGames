@@ -37,7 +37,7 @@ dm_demo:
       - assault -375.22 40.50 -236.96 179.54 1.35
       - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
-    item_selection_time: 200
+    item_selection_time: 400
     spawn_protection_time: 40
     respawn_waiting_time: 200
   end_commands:
@@ -138,7 +138,7 @@ tdm_demo:
       - assault -375.22 40.50 -236.96 179.54 1.35
       - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
-    item_selection_time: 200
+    item_selection_time: 400
     spawn_protection_time: 40
     respawn_waiting_time: 200
   end_delay: 60
@@ -211,7 +211,7 @@ ctf_demo:
       - assault -375.22 40.50 -236.96 179.54 1.35
       - assault -319.64 47.50 -285.61 357.29 3.45
     countdown_time: 300
-    item_selection_time: 180
+    item_selection_time: 360
     spawn_protection_time: 60
     respawn_waiting_time: 200
     flags:
