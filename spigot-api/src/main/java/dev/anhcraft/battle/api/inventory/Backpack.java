@@ -79,5 +79,10 @@ public class Backpack {
         public Collection<Map.Entry<String, Long>> list(){
             return MAP.entrySet();
         }
+
+        @NotNull
+        public Collection<String> listIds(){
+            return MAP.keySet();
+        }
     }
 }

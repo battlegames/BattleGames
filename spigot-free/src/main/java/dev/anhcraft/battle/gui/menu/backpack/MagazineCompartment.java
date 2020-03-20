@@ -19,45 +19,23 @@
  */
 package dev.anhcraft.battle.gui.menu.backpack;
 
-import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.gui.page.Pagination;
-import dev.anhcraft.battle.api.gui.page.SlotChain;
-import dev.anhcraft.battle.api.gui.screen.View;
-import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.battle.api.inventory.item.MagazineModel;
-import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
-public class MagazineCompartment implements Pagination {
+public class MagazineCompartment extends ItemCompartment {
     @Override
-    public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleApi api = ApiProvider.consume();
-        PlayerData pd = api.getPlayerData(player);
-        if(pd == null) return;
-        for(Map.Entry<String, Long> entry : pd.getBackpack().getStorage(ItemType.MAGAZINE).list()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
-            MagazineModel mm = api.getMagazineModel(entry.getKey());
-            if (mm == null) continue;
-            PreparedItem pi = api.getItemManager().make(mm);
-            if(pi == null) continue;
-            Slot slot = chain.next();
-            slot.setPaginationItem(mm.getSkin().transform(pi));
-            slot.setAdditionalFunction(report -> {
-                if(report.getEvent() instanceof InventoryClickEvent){
-                    ItemChooseEvent e = new ItemChooseEvent(report.getPlayer(), ((InventoryClickEvent) report.getEvent()).getCurrentItem(), mm);
-                    Bukkit.getPluginManager().callEvent(e);
-                }
-            });
-        }
+    public ItemType getItemType() {
+        return ItemType.MAGAZINE;
+    }
+
+    @Override
+    public BattleItemModel getItem(String id, BattleApi api) {
+        return api.getMagazineModel(id);
+    }
+
+    @Override
+    public boolean isObtainable() {
+        return true;
     }
 }

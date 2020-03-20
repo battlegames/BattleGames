@@ -19,36 +19,23 @@
  */
 package dev.anhcraft.battle.gui.menu.backpack;
 
-import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
-import dev.anhcraft.battle.api.gui.page.Pagination;
-import dev.anhcraft.battle.api.gui.page.SlotChain;
-import dev.anhcraft.battle.api.inventory.item.AmmoModel;
+import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
-public class AmmoCompartment implements Pagination {
+public class AmmoCompartment extends ItemCompartment {
     @Override
-    public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        BattleApi api = ApiProvider.consume();
-        PlayerData pd = api.getPlayerData(player);
-        if(pd == null) return;
-        for(Map.Entry<String, Long> entry : pd.getBackpack().getStorage(ItemType.AMMO).list()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
-            AmmoModel am = api.getAmmoModel(entry.getKey());
-            if (am == null) continue;
-            PreparedItem pi = api.getItemManager().make(am);
-            if(pi == null) continue;
-            Slot slot = chain.next();
-            slot.setPaginationItem(am.getSkin().transform(pi));
-        }
+    public ItemType getItemType() {
+        return ItemType.AMMO;
+    }
+
+    @Override
+    public BattleItemModel getItem(String id, BattleApi api) {
+        return api.getAmmoModel(id);
+    }
+
+    @Override
+    public boolean isObtainable() {
+        return false;
     }
 }
