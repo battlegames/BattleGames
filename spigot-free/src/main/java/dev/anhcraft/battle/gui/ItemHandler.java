@@ -44,7 +44,7 @@ public class ItemHandler extends GuiHandler {
                 if (bi != null && bi.getModel() != null) {
                     BattleItemModel m = bi.getModel();
                     if (m.getItemType().name().equalsIgnoreCase(type)) {
-                        gp.getIgBackpack().put(m.getId(), bi);
+                        gp.getIgBackpack().put(m.getItemType(), m.getId(), bi);
                         player.setItemOnCursor(null);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
                     } else {

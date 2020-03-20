@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.system.controllers;
 
+import com.google.common.collect.Table;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
@@ -189,11 +190,11 @@ public class DeathmatchController extends ModeController {
     public void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
         if(game.getPhase() != GamePhase.PLAYING) return;
         Player player = event.getPlayer();
-        Map<String, BattleItem<?>> igbp = Objects.requireNonNull(game.getPlayer(player)).getIgBackpack();
+        Table<ItemType, String, BattleItem<?>> igbp = Objects.requireNonNull(game.getPlayer(player)).getIgBackpack();
         ItemType type = event.getItemModel().getItemType();
         if (type == ItemType.GUN || type == ItemType.SCOPE || type == ItemType.MAGAZINE || type == ItemType.GRENADE) {
             String id = event.getItemModel().getId();
-            BattleItem<?> item = igbp.get(id);
+            BattleItem<?> item = igbp.get(type, id);
             if(item == null) {
                 performCooldownMap(game, "item_selection", cooldownMap -> {
                     long t = game.getArena().getModeOptions().getItemSelectTime();
@@ -201,7 +202,7 @@ public class DeathmatchController extends ModeController {
                         plugin.chatManager.sendPlayer(player, blp("error_item_selection_overtime"));
                     } else {
                         if (plugin.itemManager.selectItem(player, event.getItemModel())) {
-                            igbp.put(id, NullBattleItem.INSTANCE);
+                            igbp.put(type, id, NullBattleItem.INSTANCE);
                             player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
                         } else {
                             plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
@@ -210,7 +211,7 @@ public class DeathmatchController extends ModeController {
                 });
             } else if(item.getModel() != null && item.getModel().getItemType() == type) {
                 if(plugin.itemManager.selectItem(player, item)) {
-                    igbp.put(id, NullBattleItem.INSTANCE);
+                    igbp.put(type, id, NullBattleItem.INSTANCE);
                     player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
                 } else {
                     plugin.chatManager.sendPlayer(player, "inv.hotbar_full");

@@ -19,8 +19,11 @@
  */
 package dev.anhcraft.battle.api.arena.game;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.google.common.util.concurrent.AtomicDouble;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
+import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.TempDataContainer;
@@ -31,8 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GamePlayer extends TempDataContainer implements Resettable {
     private final StatisticMap stats = new StatisticMap(x -> {});
@@ -42,7 +43,7 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     private boolean spectator;
     private boolean winner;
     private ItemStack[] backupInventory;
-    private Map<String, BattleItem<?>> igBackpack = new HashMap<>();
+    private Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
 
     public GamePlayer(@NotNull Player player) {
         Validate.notNull(player, "Player must be non-null");
@@ -102,7 +103,7 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     }
 
     @NotNull
-    public Map<String, BattleItem<?>> getIgBackpack() {
+    public Table<ItemType, String, BattleItem<?>> getIgBackpack() {
         return igBackpack;
     }
 
