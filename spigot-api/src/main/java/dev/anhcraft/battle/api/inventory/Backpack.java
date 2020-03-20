@@ -76,13 +76,13 @@ public class Backpack {
         }
 
         @NotNull
-        public Collection<Map.Entry<String, Long>> list(){
-            return MAP.entrySet();
+        public Set<Map.Entry<String, Long>> list(){
+            return new HashSet<>(MAP.entrySet());
         }
 
         @NotNull
-        public Collection<String> listIds(){
-            return MAP.keySet();
+        public Set<String> listIds(){
+            return new HashSet<>(MAP.keySet());
         }
     }
 }
