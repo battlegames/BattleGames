@@ -52,8 +52,9 @@ public abstract class ItemCompartment implements Pagination {
         GamePlayer gp = api.getArenaManager().getGamePlayer(player);
         if(gp != null) {
             for (Map.Entry<String, BattleItem<?>> e : gp.getIgBackpack().row(getItemType()).entrySet()) {
-                if(e.getValue() instanceof NullBattleItem) continue;
-                ids.remove(e.getKey());
+                if(e.getValue() instanceof NullBattleItem) {
+                    ids.remove(e.getKey());
+                }
             }
         }
         for(String id : ids) {
