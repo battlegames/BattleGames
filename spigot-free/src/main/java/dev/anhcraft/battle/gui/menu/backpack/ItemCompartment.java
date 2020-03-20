@@ -73,7 +73,7 @@ public abstract class ItemCompartment implements Pagination {
             if (isObtainable()) {
                 slot.setAdditionalFunction(report -> {
                     if (report.getEvent() instanceof InventoryClickEvent) {
-                        ItemChooseEvent e = new ItemChooseEvent(report.getPlayer(), ((InventoryClickEvent) report.getEvent()).getCurrentItem(), bi);
+                        ItemChooseEvent e = new ItemChooseEvent(report.getPlayer(), report, ((InventoryClickEvent) report.getEvent()).getCurrentItem(), bi);
                         Bukkit.getPluginManager().callEvent(e);
                     }
                 });

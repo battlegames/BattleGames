@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.events;
 
+import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -28,14 +29,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemChooseEvent extends PlayerEvent {
     public static final HandlerList handlers = new HandlerList();
+    private SlotReport slotReport;
     private ItemStack itemStack;
     private BattleItemModel itemModel;
 
-    public ItemChooseEvent(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull BattleItemModel itemModel) {
+    public ItemChooseEvent(@NotNull Player player, @NotNull SlotReport slotReport, @NotNull ItemStack itemStack, @NotNull BattleItemModel itemModel) {
         super(player);
+        this.slotReport = slotReport;
         this.player = player;
         this.itemStack = itemStack;
         this.itemModel = itemModel;
+    }
+
+    @NotNull
+    public SlotReport getSlotReport() {
+        return slotReport;
     }
 
     @NotNull

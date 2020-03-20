@@ -21,6 +21,7 @@ package dev.anhcraft.battle.system.controllers;
 
 import com.google.common.collect.Table;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -48,7 +49,10 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DeathmatchController extends ModeController {
@@ -204,6 +208,7 @@ public class DeathmatchController extends ModeController {
                         if (plugin.itemManager.selectItem(player, event.getItemModel())) {
                             igbp.put(type, id, NullBattleItem.INSTANCE);
                             player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                            BattleApi.getInstance().getGuiManager().updateView(player, event.getSlotReport().getView());
                         } else {
                             plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
                         }
@@ -213,6 +218,7 @@ public class DeathmatchController extends ModeController {
                 if(plugin.itemManager.selectItem(player, item)) {
                     igbp.put(type, id, NullBattleItem.INSTANCE);
                     player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                    BattleApi.getInstance().getGuiManager().updateView(player, event.getSlotReport().getView());
                 } else {
                     plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
                 }

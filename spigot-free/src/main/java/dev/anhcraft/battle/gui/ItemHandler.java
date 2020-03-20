@@ -47,6 +47,7 @@ public class ItemHandler extends GuiHandler {
                         gp.getIgBackpack().put(m.getItemType(), m.getId(), bi);
                         player.setItemOnCursor(null);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                        BattleApi.getInstance().getGuiManager().updateView(report.getPlayer(), report.getView());
                     } else {
                         player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 3f, 1f);
                     }
