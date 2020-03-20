@@ -27,10 +27,7 @@ import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
-import dev.anhcraft.battle.api.inventory.item.GunModel;
-import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.battle.api.inventory.item.SingleSkinItem;
+import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
@@ -39,6 +36,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Map;
 
 public abstract class ItemCompartment implements Pagination {
     public abstract ItemType getItemType();
@@ -53,7 +51,10 @@ public abstract class ItemCompartment implements Pagination {
         Collection<String> ids = pd.getBackpack().getStorage(getItemType()).listIds();
         GamePlayer gp = api.getArenaManager().getGamePlayer(player);
         if(gp != null) {
-            ids.removeAll(gp.getIgBackpack().row(getItemType()).keySet());
+            for (Map.Entry<String, BattleItem<?>> e : gp.getIgBackpack().row(getItemType()).entrySet()) {
+                if(e.getValue() instanceof NullBattleItem) continue;
+                ids.remove(e.getKey());
+            }
         }
         for(String id : ids) {
             if (!chain.hasNext()) break;
