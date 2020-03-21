@@ -20,16 +20,14 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.ApiProvider;
-import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
+import dev.anhcraft.battle.api.misc.BattleBar;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.jvmkit.lang.enumeration.RegEx;
 import dev.anhcraft.jvmkit.utils.Pair;
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -91,13 +89,6 @@ public class GunModel extends WeaponModel {
     @Key("sounds.on_end_reloading")
     @Explanation("Set the sound that is played when finished reloading ammo")
     private BattleSound reloadEndSound;
-
-    private String reloadTimeFormula;
-
-    @Key("reload_time_formula")
-    @Explanation("Set the formula used for calculating the reloading time")
-    @Validation(notNull = true)
-    private Expression reloadTimeCalculator;
 
     @Key("bossbar.on_reload")
     @Explanation("Set the boss bar used during the reloading time")
@@ -192,11 +183,6 @@ public class GunModel extends WeaponModel {
         return reloadBar;
     }
 
-    @NotNull
-    public Expression getReloadTimeCalculator() {
-        return reloadTimeCalculator;
-    }
-
     @Nullable
     public BattleSound getReloadStartSound() {
         return reloadStartSound;
@@ -229,10 +215,6 @@ public class GunModel extends WeaponModel {
                 }
                 case "scope.default": {
                     return ApiProvider.consume().getScopeModel((String) o);
-                }
-                case "reload_time_formula": {
-                    reloadTimeFormula = (String) o;
-                    return new ExpressionBuilder(reloadTimeFormula).variables("a", "b").build();
                 }
                 case "spray_pattern": {
                     List<Pair<Double, Double>> sp = new ArrayList<>();
@@ -271,9 +253,6 @@ public class GunModel extends WeaponModel {
                 case "scope.default":
                 case "magazine.default": {
                     return ((BattleItemModel) o).getId();
-                }
-                case "reload_time_formula": {
-                    return reloadTimeFormula;
                 }
                 case "spray_pattern": {
                     List<Pair<Double, Double>> sp = (List<Pair<Double, Double>>) o;

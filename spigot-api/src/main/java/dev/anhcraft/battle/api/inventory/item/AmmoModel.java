@@ -45,6 +45,15 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     @IgnoreValue(ifNull = true)
     private List<Ammo.Bullet> bullets = new ArrayList<>();
 
+    @Key("reload_delay")
+    @Explanation({
+            "The time needed to put a single ammo into magazines.",
+            "The reloading time of a magazine (or a gun with magazine attached) is",
+            "<b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; (ticks)</b>",
+            "or <b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; / 20 (seconds)</b>"
+    })
+    private long reloadDelay = 1;
+
     private double sumBulletDamage;
     private double avgBulletDamage;
     private double sumBulletKnockback;
@@ -66,6 +75,10 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
         return bullets;
     }
 
+    public long getReloadDelay() {
+        return reloadDelay;
+    }
+
     @Override
     public void inform(@NotNull InfoHolder holder){
         super.inform(holder);
@@ -75,7 +88,8 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
         .inform("total_bullet_penetration", sumBulletPenetration)
         .inform("avg_bullet_damage", avgBulletDamage)
         .inform("avg_bullet_knockback", avgBulletKnockback)
-        .inform("avg_bullet_penetration", avgBulletPenetration);
+        .inform("avg_bullet_penetration", avgBulletPenetration)
+        .inform("reload_delay", reloadDelay);
     }
 
     @Override

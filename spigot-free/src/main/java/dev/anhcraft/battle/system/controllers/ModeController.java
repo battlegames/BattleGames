@@ -218,48 +218,58 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     public void doReloadGun(Player player, Gun gun){
+        GunModel gm = gun.getModel();
+        if(gm == null) return;
+        Magazine m = gun.getMagazine();
+        MagazineModel mm = m.getModel();
+        if(mm == null) {
+            plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
+            return;
+        }
+        
         if(RELOADING_GUN.containsKey(player.getUniqueId())) return;
 
-        GunModel gm = gun.getModel();
-        MagazineModel mm = gun.getMagazine().getModel();
-        AmmoModel am = gun.getMagazine().getAmmo().getModel();
-        if(gm == null || mm == null || am == null) return;
+        AmmoModel am = m.getAmmo().getModel();
+        int maxCap;
+        if(am == null) {
+            Map.Entry<AmmoModel, Integer> x = mm.getAmmunition().entrySet().iterator().next();
+            am = x.getKey();
+            maxCap = x.getValue();
+        } else {
+            maxCap = mm.getAmmunition().getOrDefault(am, 0);
+        }
+        if(maxCap == 0) return;
 
-        int maxBullet = mm.getAmmunition().getOrDefault(am, 0);
-        int currentBullet = gun.getMagazine().getAmmoCount();
-        if(currentBullet == maxBullet) return;
-        double reloadTime = gm.getReloadTimeCalculator()
-                .setVariable("a", currentBullet)
-                .setVariable("b", maxBullet).evaluate();
-        if(reloadTime <= 0) return;
+        int curCap = m.getAmmoCount();
+        if(curCap >= maxCap) return;
 
         plugin.gunManager.handleZoomOut(player, gm);
 
-        double maxTime = reloadTime / BattlePlugin.BOSSBAR_UPDATE_INTERVAL;
-        int bullerPerTime = (int) Math.floor((maxBullet - currentBullet) / maxTime);
-        AtomicLong currentTime = new AtomicLong();
+        int slot = player.getInventory().getHeldItemSlot();
+        long delay = am.getReloadDelay();
+        AtomicLong curDeltaTime = new AtomicLong();
         BattleBar cb = gm.getReloadBar();
 
-        int slot = player.getInventory().getHeldItemSlot();
-
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
-            long now = currentTime.getAndIncrement();
-            if(now > maxTime){
-                gun.getMagazine().setAmmoCount(Math.min(gun.getMagazine().getAmmoCount(), maxBullet));
+            long now = curDeltaTime.getAndIncrement();
+            int amc = m.getAmmoCount();
+            if(now < delay && amc < maxCap) return;
+            curDeltaTime.set(0);
+
+            double d = maxCap - amc;
+            playerBossBar.getBar().setProgress(1 - MathUtil.clampDouble(d / (maxCap - curCap), 0, 1));
+            InfoHolder info = new InfoHolder("gun_");
+            gun.inform(info);
+            playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, info.compile().replace(cb.getTitle())));
+            playerBossBar.show();
+
+            if(amc > maxCap) {
+                m.setAmmoCount(maxCap);
                 gun.setNextSpray(-1);
                 player.getInventory().setItem(slot, plugin.gunManager.createGun(gun, false));
                 RELOADING_GUN.remove(player.getUniqueId()).run();
             } else {
-                playerBossBar.getBar().setProgress(MathUtil.clampDouble(now / maxTime, 0, 1));
-
-                int n = gun.getMagazine().getAmmoCount() + bullerPerTime;
-                gun.getMagazine().setAmmoCount(Math.min(n, maxBullet));
-
-                InfoHolder info = new InfoHolder("gun_");
-                gun.inform(info);
-                playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, info.compile().replace(cb.getTitle())));
-
-                playerBossBar.show();
+                m.setAmmoCount(amc + 1);
             }
         });
 

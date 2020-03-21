@@ -112,8 +112,8 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class BattlePlugin extends JavaPlugin implements BattleApi {
-    public static final long BOSSBAR_UPDATE_INTERVAL = 10;
-    public static final long SCOREBOARD_UPDATE_INTERVAL = 10;
+    public static final int BOSSBAR_UPDATE_INTERVAL = 1;
+    public static final int SCOREBOARD_UPDATE_INTERVAL = 10;
     public static final String[] CONFIG_FILES = new String[]{
             "system.yml",
             "general.yml",

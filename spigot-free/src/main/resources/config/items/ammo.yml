@@ -13,6 +13,7 @@
       penetration_power: 10
       particle:
         type: end_rod
+  reload_delay: 2
 
 _50_ae:
   name: "&f.50 Action Express"
@@ -25,6 +26,7 @@ _50_ae:
       penetration_power: 10
       particle:
         type: end_rod
+  reload_delay: 6
 
 308_Winchester:
   name: "&f.308 Winchester"
@@ -37,3 +39,4 @@ _50_ae:
       penetration_power: 20
       particle:
         type: end_rod
+  reload_delay: 7

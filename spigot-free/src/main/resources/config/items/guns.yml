@@ -15,7 +15,6 @@ ak_47:
     on_shoot: "bg.guns.ak47:1"
     on_start_reloading: "$entity_player_levelup"
     on_end_reloading: "$entity_player_levelup"
-  reload_time_formula: "(b-a)*8"
   bossbar:
     on_reload:
       primary: false
@@ -64,7 +63,6 @@ desert_eagle:
   magazine:
     default: default_de
     max_capacity: 35
-  reload_time_formula: "(b-a)*7"
   sounds:
     on_shoot: "bg.guns.de:1"
   bossbar:
@@ -87,13 +85,11 @@ awm:
       material: diamond_axe
       damage: 3
   weight: 0.06
-
   scope:
     default: basic_scope
   magazine:
     default: default_awm
     max_capacity: 10
-  reload_time_formula: "(b-a)*7"
   sounds:
     on_shoot: "bg.guns.awm:1"
   bossbar:
