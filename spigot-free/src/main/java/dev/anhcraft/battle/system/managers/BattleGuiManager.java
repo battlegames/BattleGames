@@ -36,6 +36,7 @@ import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.SignedInt;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
@@ -80,21 +81,27 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         PaginationUpdateEvent event = new PaginationUpdateEvent(player, view.getGui(), view.getWindow(), view, cpn, pg);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()) {
-            int page = Math.abs(view.getPage(pgn));
-            PagedSlotChain chain = new PagedSlotChain(cpn.getSlots(), view, page, event.getSlotFilter());
+            SignedInt page = view.getPage(pgn);
+            PagedSlotChain chain = new PagedSlotChain(cpn.getSlots(), view, page.toPositive().asInt(), event.getSlotFilter());
             pg.supply(player, view, chain);
             if (chain.getAllocatedSlot() == 0) {
                 // empty page is something special
-                view.setPage(pgn, page - 1);
+                SignedInt si = page.toPositive().subtract(SignedInt.ONE);
+                view.setPage(pgn, si.isNegative() ? SignedInt.ZERO : si);
+                while (chain.hasNext()) {
+                    Slot x = chain.next();
+                    x.setAdditionalFunction(null);
+                    x.setPaginationItem(null);
+                }
             } else if (chain.getAllocatedSlot() < cpn.getSlots().size()) {
-                view.setPage(pgn, -page);
+                view.setPage(pgn, page.toNegative());
                 while (chain.hasNext()) {
                     Slot x = chain.next();
                     x.setAdditionalFunction(null);
                     x.setPaginationItem(null);
                 }
             } else if (chain.getAllocatedSlot() == cpn.getSlots().size()) {
-                // if run out of the chain, it MAY have a new page
+                // in this case, running out of the chain MAY still have pages
                 // we will set it again to ensure the page number is POSITIVE
                 view.setPage(pgn, page);
             }

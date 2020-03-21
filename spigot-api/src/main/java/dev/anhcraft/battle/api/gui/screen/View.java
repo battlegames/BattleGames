@@ -24,6 +24,7 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
+import dev.anhcraft.battle.utils.SignedInt;
 import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -36,7 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class View extends TempDataContainer {
-    private final Map<String, Integer> PAGE = new HashMap<>();
+    private final Map<String, SignedInt> PAGE = new HashMap<>();
     private Slot[] slots;
     private Gui gui;
     private Window window;
@@ -60,7 +61,7 @@ public class View extends TempDataContainer {
             }
         }
         for (String s : gui.getAllPagination()){
-            PAGE.put(s, 0);
+            PAGE.put(s, SignedInt.ZERO);
         }
     }
 
@@ -86,15 +87,15 @@ public class View extends TempDataContainer {
     }
 
     @NotNull
-    public Integer getPage(@Nullable String pagination){
-        Integer f = PAGE.get(pagination);
+    public SignedInt getPage(@Nullable String pagination){
+        SignedInt f = PAGE.get(pagination);
         if(f == null) {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
         }
         return f;
     }
 
-    public void setPage(@Nullable String pagination, int page){
+    public void setPage(@Nullable String pagination, @NotNull SignedInt page){
         if(gui.getAllPagination().contains(pagination)){
             PAGE.put(pagination, page);
         } else {
@@ -104,9 +105,9 @@ public class View extends TempDataContainer {
 
     public boolean nextPage(@Nullable String pagination){
         if(gui.getAllPagination().contains(pagination)){
-            int f = PAGE.getOrDefault(pagination, 0);
-            if(f < 0) return false;
-            PAGE.put(pagination, f + 1);
+            SignedInt f = PAGE.getOrDefault(pagination, SignedInt.ZERO);
+            if(f.isNegative()) return false;
+            PAGE.put(pagination, f.add(SignedInt.ONE));
             return true;
         } else {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
@@ -115,9 +116,9 @@ public class View extends TempDataContainer {
 
     public boolean prevPage(@Nullable String pagination){
         if(gui.getAllPagination().contains(pagination)){
-            int f = PAGE.getOrDefault(pagination, 0);
-            if(f == 0) return false;
-            PAGE.put(pagination, Math.abs(f) - 1);
+            SignedInt f = PAGE.getOrDefault(pagination, SignedInt.ZERO);
+            if(f.asInt() == 0) return false;
+            PAGE.put(pagination, f.toPositive().subtract(SignedInt.ONE));
             return true;
         } else {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
