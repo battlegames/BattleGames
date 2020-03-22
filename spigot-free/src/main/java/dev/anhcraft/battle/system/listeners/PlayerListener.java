@@ -146,7 +146,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            player.kickPlayer("Resource pack not available");
+                            player.kickPlayer("Resource pack declined");
                         }
                     }.runTaskLater(plugin, 60);
                     break;
@@ -156,7 +156,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            player.kickPlayer("Resource pack not available");
+                            player.kickPlayer("Resource pack installation failed");
                         }
                     }.runTaskLater(plugin, 60);
                     break;
