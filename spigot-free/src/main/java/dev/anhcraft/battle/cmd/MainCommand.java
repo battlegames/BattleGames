@@ -35,6 +35,7 @@ import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.api.stats.natives.WinStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
@@ -478,5 +479,11 @@ public class MainCommand extends BaseCommand{
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
         }
+    }
+
+    @Subcommand("rsp refresh")
+    @CommandPermission("battle.rsp.refresh")
+    public void refreshRsp(CommandSender sender){
+        ResourcePack.init(sender::sendMessage);
     }
 }

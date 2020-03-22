@@ -25,7 +25,10 @@ import com.google.common.hash.Hashing;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
+import dev.anhcraft.jvmkit.utils.UserAgent;
 import org.bukkit.entity.Player;
+
+import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ResourcePack {
@@ -36,7 +39,7 @@ public class ResourcePack {
         return "https://tichcucquaytayvanmayseden.000webhostapp.com/"+FILE;
     }
 
-    public static void init() {
+    public static void init(Consumer<String> stringConsumer) {
         switch (NMSVersion.current()){
             case v1_12_R1: FILE = "abm-1.12.zip";
             case v1_13_R1:
@@ -44,13 +47,13 @@ public class ResourcePack {
             case v1_14_R1: FILE = "abm-1.13-1.14.zip";
             default: FILE = "abm-1.15.zip";
         }
-        BattleApi.getInstance().getLogger().info("Downloading resource pack....");
+        stringConsumer.accept("Downloading resource pack....");
         HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
-                .setProperty("User-Agent", HTTPConnectionHelper.USER_AGENT_CHROME)
+                .setProperty("User-Agent", UserAgent.CHROME_WINDOWS)
                 .connect();
         HashCode hashCode = Hashing.sha1().hashBytes(conn.read());
         HASH = hashCode.asBytes();
-        BattleApi.getInstance().getLogger().info("Finished! Hash: "+hashCode.toString());
+        stringConsumer.accept("Finished! Hash: "+hashCode.toString());
         conn.disconnect();
     }
 

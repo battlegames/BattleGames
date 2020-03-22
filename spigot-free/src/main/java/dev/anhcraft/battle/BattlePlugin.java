@@ -289,7 +289,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         }));
 
         if(GENERAL_CONF.isResourcePackEnabled()) {
-            ResourcePack.init();
+            ResourcePack.init(s -> getLogger().info(s));
         }
     }
 
