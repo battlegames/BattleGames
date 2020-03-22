@@ -30,6 +30,7 @@ import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.utils.EntityUtil;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -87,9 +88,15 @@ public class GameListener extends BattleComponent implements Listener {
     public void phaseChange(GamePhaseChangeEvent event){
         if(event.getGame() instanceof LocalGame) {
             IMode bmc = event.getGame().getMode().getController();
-            if (bmc != null && event.getOldPhase() == GamePhase.PLAYING) {
-                ModeController mc = (ModeController) bmc;
-                ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
+            if (bmc != null) {
+                if(event.getOldPhase() == GamePhase.PLAYING) {
+                    ModeController mc = (ModeController) bmc;
+                    ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
+                } else if(event.getNewPhase() == GamePhase.PLAYING) {
+                    if (plugin.GENERAL_CONF.shouldHealOnGameStart()) {
+                        ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+                    }
+                }
             }
         }
     }

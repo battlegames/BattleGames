@@ -152,6 +152,10 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("Custom resource pack URL")
     private String resourcePackCustomUrl;
 
+    @Key("misc.heal_on_game_start")
+    @Explanation("Enable this option to heal all players when game started")
+    private boolean healOnGameStart = true;
+
     @Key("misc.heal_on_game_end")
     @Explanation("Enable this option to heal all players after end game")
     private boolean healOnGameEnd = true;
@@ -390,6 +394,10 @@ public class GeneralConfig extends ConfigurableObject {
 
     public int getBlockHardness(@NotNull Material material) {
         return blockHardness.getOrDefault(material, 0);
+    }
+
+    public boolean shouldHealOnGameStart() {
+        return healOnGameStart;
     }
 
     public boolean shouldHealOnGameEnd() {
