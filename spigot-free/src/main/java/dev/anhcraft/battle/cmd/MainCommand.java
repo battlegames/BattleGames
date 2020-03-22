@@ -387,25 +387,6 @@ public class MainCommand extends BaseCommand{
         } else plugin.chatManager.sendPlayer(player, "booster.not_found");
     }
 
-    @Subcommand("bp open")
-    @Description("Open your backpack")
-    public void openBackpack(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.PLAYER_BP);
-    }
-
-    @Subcommand("bp clear")
-    @CommandPermission("battle.bp.clear")
-    @Description("Clear your or someone's backpack")
-    public void clearBackpack(Player player, @Optional OfflinePlayer target){
-        target = (target == null ? player : target);
-        PlayerData pd = plugin.getPlayerData(target);
-        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
-        else {
-            pd.getBackpack().clear();
-            plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", target.getName()).compile());
-        }
-    }
-
     @Subcommand("booster")
     @Description("Open the booster GUI")
     public void booster(Player player){
@@ -416,6 +397,37 @@ public class MainCommand extends BaseCommand{
     @Description("Open the market")
     public void market(Player player){
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU);
+    }
+
+    @Subcommand("kit")
+    @Description("Open the kit menu")
+    public void kit(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
+    }
+
+    @Subcommand("stats")
+    @Description("Open the statistics menu")
+    public void stats(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.STATISTICS);
+    }
+
+    @Subcommand("bp")
+    @Description("Open your backpack")
+    public void openBackpack(Player player){
+        plugin.guiManager.openTopGui(player, NativeGui.PLAYER_BP);
+    }
+
+    @Subcommand("clear bp")
+    @CommandPermission("battle.clear.bp")
+    @Description("Clear your or someone's backpack")
+    public void clearBackpack(Player player, @Optional OfflinePlayer target){
+        target = (target == null ? player : target);
+        PlayerData pd = plugin.getPlayerData(target);
+        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        else {
+            pd.getBackpack().clear();
+            plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", target.getName()).compile());
+        }
     }
 
     @Subcommand("clear progression")
@@ -449,18 +461,6 @@ public class MainCommand extends BaseCommand{
         } else {
             plugin.chatManager.sendPlayer(player, "items.not_gun");
         }
-    }
-
-    @Subcommand("kit")
-    @Description("Open the kit menu")
-    public void kit(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
-    }
-
-    @Subcommand("stats")
-    @Description("Open the statistics menu")
-    public void stats(Player player){
-        plugin.guiManager.openTopGui(player, NativeGui.STATISTICS);
     }
 
     @Subcommand("adjust stats win")
