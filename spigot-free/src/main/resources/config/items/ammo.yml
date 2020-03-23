@@ -53,3 +53,16 @@ _50_ae:
       particle:
         type: end_rod
   reload_delay: 1
+
+5_56_nato:
+  name: "&f5.56 NATO"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 19
+      knockback: 0.1
+      penetration_power: 10
+      particle:
+        type: end_rod
+  reload_delay: 2

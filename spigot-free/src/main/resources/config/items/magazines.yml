@@ -40,3 +40,11 @@ default_xm1014:
     damage: 2
   ammo:
     12_gauge: 7
+
+default_m4a4:
+  name: "&eM4A4"
+  skin:
+    material: stone_sword
+    damage: 1
+  ammo:
+    5_56_nato: 30
