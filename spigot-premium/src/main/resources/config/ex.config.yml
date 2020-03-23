@@ -43,6 +43,3 @@ world_settings:
       protect_blocks: false
 
       prevent_hungry: false
-
-    assault:
-      always_time: 18000
