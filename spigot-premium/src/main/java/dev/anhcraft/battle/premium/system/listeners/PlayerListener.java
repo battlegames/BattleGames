@@ -33,6 +33,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener {
     @EventHandler
@@ -49,16 +51,24 @@ public class PlayerListener implements Listener {
         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = event.getItem();
             Player p = event.getPlayer();
-            if(item != null && item.getType() == Material.STONE_SWORD && item.getDurability() == 1 && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()){
-                double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                double now = p.getHealth();
-                if(max != now) {
-                    double add = PremiumModule.getInstance().conf.getDouble("medical_kit.health_bonus");
-                    p.setHealth(Math.min(max, add + now));
-                    p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 4f, 1f);
+            if(item != null && item.getType() == Material.STONE_SWORD && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()){
+                if(item.getDurability() == 1) {
+                    double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    double now = p.getHealth();
+                    if (max != now) {
+                        double add = PremiumModule.getInstance().conf.getDouble("medical_kit.health_bonus");
+                        p.setHealth(Math.min(max, add + now));
+                        p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 4f, 1f);
+                        p.getInventory().setItemInMainHand(null);
+                    }
+                    event.setCancelled(true);
+                } else if (item.getDurability() == 4) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 0));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 0));
+                    p.playSound(p.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 4f, 1f);
                     p.getInventory().setItemInMainHand(null);
+                    event.setCancelled(true);
                 }
-                event.setCancelled(true);
             }
         }
     }

@@ -55,4 +55,21 @@ public class ExtendedCommand extends BaseCommand {
             t.getInventory().addItem(itemStack.clone());
         }
     }
+
+    @Subcommand("give adrenaline_shot")
+    @CommandPermission("battle.extended.give.adrenaline_shot")
+    public void giveAdrenalineShot(Player player, int amount, @Optional Player target) {
+        Player t = (target == null) ? player : target;
+        PreparedItem pi = new PreparedItem();
+        pi.material(Material.STONE_SWORD);
+        pi.name(ChatUtil.formatColorCodes("&4&lAdrenaline Shot"));
+        pi.damage((short) 4);
+        pi.flags().add(ItemFlag.HIDE_UNBREAKABLE);
+        pi.flags().add(ItemFlag.HIDE_ATTRIBUTES);
+        pi.unbreakable(true);
+        ItemStack itemStack = pi.build();
+        for(int i = 0; i < amount; i++){
+            t.getInventory().addItem(itemStack.clone());
+        }
+    }
 }
