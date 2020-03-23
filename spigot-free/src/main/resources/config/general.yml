@@ -134,6 +134,7 @@ misc:
         - tripwire
         - tripwire_hook
         - wall_torch
+        - turtle_egg
       value: 3
     '4':
       material:
@@ -152,57 +153,40 @@ misc:
       value: 4
     '5':
       material:
+        - ladder
+        - iron_bars
         - (.+)_fence
         - (.+)_fence_gate
         - (.+)_slab
         - (.+)_wall
         - bamboo
         - campfire
+        - pumpkin
         - carved_pumpkin
+        - jack_o_lantern
         - dried_kelp_block
         - melon
-        - pumpkin
       value: 5
     '6':
-      material:
-        - jack_o_lantern
-        - turtle_egg
-      value: 6
-    '7':
       material:
         - frosted_ice
         - ice
         - packed_ice
-      value: 7
-    '8':
-      material:
         - (.+)_door
         - (.+)_trapdoor
         - cobweb
         - sponge
-      value: 8
-    '9':
+      value: 6
+    '7':
       material:
         - gravel
         - red_sand
         - sand
         - soul_sand
         - wet_sponge
-      value: 9
-    '10':
-      material:
         - blue_ice
-      value: 12
-    '11':
-      material:
-        - honey_block
-        - slime_block
-      value: 20
-    '12':
-      material:
-        - bell
-      value: 50
-    '13':
+      value: 7
+    '8':
       material:
         - (coal|iron|gold|diamond|emerald|lapis|redstone)_(.+)
         - anvil
