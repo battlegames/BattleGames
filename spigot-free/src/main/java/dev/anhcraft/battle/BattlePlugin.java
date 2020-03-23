@@ -880,9 +880,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                         return s == null ? "" : s;
                     }
                     else if(data instanceof Double)
-                        return MathUtil.formatRound((Double) data);
+                        return MathUtil.formatRound((Double) data, 3);
                     else if(data instanceof Float)
-                        return MathUtil.formatRound((Float) data);
+                        return MathUtil.formatRound((Float) data, 3);
                     else if(data instanceof Integer)
                         return Integer.toString((Integer) data);
                     else if(data instanceof Long)
