@@ -65,6 +65,8 @@ desert_eagle:
     max_capacity: 35
   sounds:
     on_shoot: "bg.guns.de:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
   bossbar:
     on_reload:
       title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
@@ -92,6 +94,8 @@ awm:
     max_capacity: 10
   sounds:
     on_shoot: "bg.guns.awm:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
   bossbar:
     on_reload:
       title: "&b&lReloading... &6&l<magazine_ammo_count>/<magazine_ammo_capacity>"
@@ -110,6 +114,8 @@ xm1014:
     max_capacity: 35
   sounds:
     on_shoot: "bg.guns.shotgun:3"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
   bossbar:
     on_reload:
       title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
