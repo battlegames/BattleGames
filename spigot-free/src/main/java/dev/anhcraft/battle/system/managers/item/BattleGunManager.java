@@ -236,7 +236,7 @@ public class BattleGunManager extends BattleComponent {
 
         Map<LivingEntity, BoundingBox> entities = new HashMap<>();
         for (LivingEntity livingEntity : start.getWorld().getEntitiesByClass(LivingEntity.class)){
-            entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity));
+            entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity).expand(.25, .25, .25));
         }
 
         final double maxHeight = player.getWorld().getMaxHeight();
