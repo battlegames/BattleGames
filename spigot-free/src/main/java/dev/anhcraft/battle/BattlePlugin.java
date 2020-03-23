@@ -640,7 +640,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initAmmo(FileConfiguration c) {
-        limit("Ammo", c.getKeys(false), 7).forEach(s -> {
+        limit("Ammo", c.getKeys(false), 15).forEach(s -> {
             AmmoModel a = new AmmoModel(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
@@ -653,7 +653,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initMagazine(FileConfiguration c) {
-        limit("Magazine", c.getKeys(false), 7).forEach(s -> {
+        limit("Magazine", c.getKeys(false), 15).forEach(s -> {
             MagazineModel m = new MagazineModel(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
@@ -666,7 +666,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initGun(FileConfiguration c) {
-        limit("Gun", c.getKeys(false), 7).forEach(s -> {
+        limit("Gun", c.getKeys(false), 15).forEach(s -> {
             GunModel g = new GunModel(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
@@ -692,7 +692,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initScope(FileConfiguration c) {
-        limit("Scope", c.getKeys(false), 1).forEach(s -> {
+        limit("Scope", c.getKeys(false), 3).forEach(s -> {
             ScopeModel sm = new ScopeModel(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
@@ -745,7 +745,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initKits(FileConfiguration c) {
-        limit("Kit", c.getKeys(false), 3).forEach(s -> {
+        limit("Kit", c.getKeys(false), 5).forEach(s -> {
             Kit kit = new Kit(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
@@ -800,7 +800,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     private void initAdvancement(FileConfiguration c) {
-        limit("Advancement", c.getKeys(false), 10).forEach(s -> {
+        limit("Advancement", c.getKeys(false), 15).forEach(s -> {
             Advancement ach = new Advancement(s);
             ConfigurationSection cs = c.getConfigurationSection(s);
             try {
