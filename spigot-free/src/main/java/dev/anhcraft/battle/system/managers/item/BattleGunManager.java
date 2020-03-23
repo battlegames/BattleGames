@@ -182,8 +182,8 @@ public class BattleGunManager extends BattleComponent {
             int nextLv = sm.getZoomLevels().get(next);
             player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
-            player.setWalkSpeed(-1f);
-            player.setFlySpeed(-1f);
+            player.setWalkSpeed(0f);
+            player.setFlySpeed(0f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
         }
         return true;
