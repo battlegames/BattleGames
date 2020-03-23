@@ -32,3 +32,11 @@ default_awm:
     damage: 3
   ammo:
     308_Winchester: 10
+
+default_xm1014:
+  name: "&eXM1014"
+  skin:
+    material: stone_sword
+    damage: 2
+  ammo:
+    12_gauge: 7

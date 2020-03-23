@@ -40,3 +40,16 @@ _50_ae:
       particle:
         type: end_rod
   reload_delay: 7
+
+12_gauge:
+  name: "&f12 gauge"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 17.2
+      knockback: 0.25
+      penetration_power: 20
+      particle:
+        type: end_rod
+  reload_delay: 1
