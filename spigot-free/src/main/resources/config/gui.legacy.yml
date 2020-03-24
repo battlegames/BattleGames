@@ -1,3 +1,44 @@
+item_value_editor:
+  title: '[ gui.value_editor.item_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: STAINED_GLASS_PANE
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+        - common::cancel_event
+    '1':
+      positions: 1/2; 2
+      item:
+        material: STAINED_GLASS_PANE
+        name: '&f'
+        lore:
+        - '&fDrag and drop the item to here'
+        damage: 14
+      functions:
+        on_init:
+        - common::pull_item_from_data { value; not-null }
+        - common::copy_current_slot { window; itemSlot }
+        on_click:
+        - common::cancel_event
+        - common::pull_item_from_cursor { not-null }
+        - common::refresh
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        on_click:
+        - common::cancel_event
+        - common::push_item_to_value { <window_data_itemSlot> }
+        - common::del_window_data { itemSlot }
+        - common::del_window_data { value }
+        - common::switch_gui { <window_data_lastgui> }
 boolean_value_editor:
   title: '[ gui.value_editor.boolean_title ]'
   sound: $block_chest_open
@@ -35,6 +76,7 @@ boolean_value_editor:
         on_click:
         - common::cancel_event
         - common::apply_value { <window_data_value:false> }
+        - common::del_window_data { value }
         - common::switch_gui { <window_data_lastgui> }
 int_value_editor:
   title: '[ gui.value_editor.int_title ]'
@@ -71,6 +113,7 @@ int_value_editor:
         on_click:
         - common::cancel_event
         - common::apply_value { <window_data_value:0> }
+        - common::del_window_data { value }
         - common::switch_gui { <window_data_lastgui> }
     '3':
       positions: 1; 4
@@ -205,6 +248,7 @@ real_value_editor:
         on_click:
         - common::cancel_event
         - common::apply_value { <window_data_value:0> }
+        - common::del_window_data { value }
         - common::switch_gui { <window_data_lastgui> }
     '3':
       positions: 1; 4
@@ -402,8 +446,8 @@ real_value_editor:
         - common::cancel_event
         - common::add_window_data { value; 0.01 }
         - common::refresh
-player_inv:
-  title: '[ gui.player_inv.title ]'
+player_bp:
+  title: '[ gui.player_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
@@ -418,9 +462,9 @@ player_inv:
     '1':
       positions: 1/5; 2
       item:
-        name: '[ gui.player_inv.gun_name ]'
+        name: '[ gui.player_bp.gun_name ]'
         lore:
-        - '[ gui.player_inv.gun_lore ]'
+        - '[ gui.player_bp.gun_lore ]'
         material: diamond_axe
         damage: 1
         unbreakable: true
@@ -430,58 +474,58 @@ player_inv:
       functions:
         on_click:
         - common::cancel_event
-        - common::switch_gui { player_gun_inv }
+        - common::switch_gui { player_gun_bp }
     '2':
       positions: 2/5; 2
       item:
-        name: '[ gui.player_inv.magazine_name ]'
+        name: '[ gui.player_bp.magazine_name ]'
         lore:
-        - '[ gui.player_inv.magazine_lore ]'
+        - '[ gui.player_bp.magazine_lore ]'
         material: chest
       functions:
         on_click:
         - common::cancel_event
-        - common::switch_gui { player_magazine_inv }
+        - common::switch_gui { player_magazine_bp }
     '3':
       positions: 3/5; 2
       item:
         material: arrow
-        name: '[ gui.player_inv.ammo_name ]'
+        name: '[ gui.player_bp.ammo_name ]'
         lore:
-        - '[ gui.player_inv.ammo_lore ]'
+        - '[ gui.player_bp.ammo_lore ]'
       functions:
         on_click:
         - common::cancel_event
-        - common::switch_gui { player_ammo_inv }
+        - common::switch_gui { player_ammo_bp }
     '4':
       positions: 4/5; 2
       item:
         material: glass
-        name: '[ gui.player_inv.scope_name ]'
+        name: '[ gui.player_bp.scope_name ]'
         lore:
-        - '[ gui.player_inv.scope_lore ]'
+        - '[ gui.player_bp.scope_lore ]'
       functions:
         on_click:
         - common::cancel_event
-        - common::switch_gui { player_scope_inv }
+        - common::switch_gui { player_scope_bp }
     '5':
       positions: 5/5; 2
       item:
         material: tnt
-        name: '[ gui.player_inv.grenade_name ]'
+        name: '[ gui.player_bp.grenade_name ]'
         lore:
-        - '[ gui.player_inv.grenade_lore ]'
+        - '[ gui.player_bp.grenade_lore ]'
       functions:
         on_click:
         - common::cancel_event
-        - common::switch_gui { player_grenade_inv }
+        - common::switch_gui { player_grenade_bp }
     '6':
       positions: 1; 4
       item:
         material: ender_chest
-        name: '[ gui.player_inv.kit_name ]'
+        name: '[ gui.player_bp.kit_name ]'
         lore:
-        - '[ gui.player_inv.kit_lore ]'
+        - '[ gui.player_bp.kit_lore ]'
       functions:
         on_click:
         - common::cancel_event
@@ -501,19 +545,19 @@ player_inv:
       positions: 9; 4
       item:
         material: emerald
-        name: '[ gui.player_inv.market_name ]'
+        name: '[ gui.player_bp.market_name ]'
         lore:
-        - '[ gui.player_inv.market_lore ]'
+        - '[ gui.player_bp.market_lore ]'
       functions:
         on_click:
         - common::cancel_event
         - common::switch_gui { market_category_menu }
-player_gun_inv:
-  title: '[ gui.player_gun_inv.title ]'
+player_gun_bp:
+  title: '[ gui.player_gun_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 4
+      positions: 1 -> 9; 1 -> 3
       pagination: player_gun
       item:
         material: STAINED_GLASS_PANE
@@ -522,10 +566,11 @@ player_gun_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { gun }
     '1':
       positions:
-      - 1 -> 5; 5
-      - 8; 5
+      - 1 -> 5; 4
+      - 8; 4
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -533,8 +578,9 @@ player_gun_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { gun }
     '2':
-      positions: 6; 5
+      positions: 6; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.prev_name ]'
@@ -546,7 +592,7 @@ player_gun_inv:
         - common::cancel_event
         - common::prev_page { player_gun }
     '3':
-      positions: 7; 5
+      positions: 7; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.next_name ]'
@@ -558,21 +604,21 @@ player_gun_inv:
         - common::cancel_event
         - common::next_page { player_gun }
     '4':
-      positions: 9; 5
+      positions: 9; 4
       item:
         material: barrier
-        name: '[ gui.common.back_inv_name ]'
+        name: '[ gui.common.back_name ]'
         lore:
-        - '[ gui.common.back_inv_lore ]'
+        - '[ gui.common.back_lore ]'
       functions:
         on_click:
-        - common::switch_gui { player_inv }
-player_magazine_inv:
-  title: '[ gui.player_magazine_inv.title ]'
+        - common::switch_gui { player_bp }
+player_magazine_bp:
+  title: '[ gui.player_magazine_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 4
+      positions: 1 -> 9; 1 -> 3
       pagination: player_magazine
       item:
         material: STAINED_GLASS_PANE
@@ -581,10 +627,11 @@ player_magazine_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { magazine }
     '1':
       positions:
-      - 1 -> 5; 5
-      - 8; 5
+      - 1 -> 5; 4
+      - 8; 4
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -592,8 +639,9 @@ player_magazine_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { magazine }
     '2':
-      positions: 6; 5
+      positions: 6; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.prev_name ]'
@@ -605,7 +653,7 @@ player_magazine_inv:
         - common::cancel_event
         - common::prev_page { player_magazine }
     '3':
-      positions: 7; 5
+      positions: 7; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.next_name ]'
@@ -617,21 +665,21 @@ player_magazine_inv:
         - common::cancel_event
         - common::next_page { player_magazine }
     '4':
-      positions: 9; 5
+      positions: 9; 4
       item:
         material: barrier
-        name: '[ gui.common.back_inv_name ]'
+        name: '[ gui.common.back_name ]'
         lore:
-        - '[ gui.common.back_inv_lore ]'
+        - '[ gui.common.back_lore ]'
       functions:
         on_click:
-        - common::switch_gui { player_inv }
-player_ammo_inv:
-  title: '[ gui.player_ammo_inv.title ]'
+        - common::switch_gui { player_bp }
+player_ammo_bp:
+  title: '[ gui.player_ammo_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 4
+      positions: 1 -> 9; 1 -> 3
       pagination: player_ammo
       item:
         material: STAINED_GLASS_PANE
@@ -642,8 +690,8 @@ player_ammo_inv:
         - common::cancel_event
     '1':
       positions:
-      - 1 -> 5; 5
-      - 8; 5
+      - 1 -> 5; 4
+      - 8; 4
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -652,7 +700,7 @@ player_ammo_inv:
         on_click:
         - common::cancel_event
     '2':
-      positions: 6; 5
+      positions: 6; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.prev_name ]'
@@ -664,7 +712,7 @@ player_ammo_inv:
         - common::cancel_event
         - common::prev_page { player_ammo }
     '3':
-      positions: 7; 5
+      positions: 7; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.next_name ]'
@@ -676,21 +724,21 @@ player_ammo_inv:
         - common::cancel_event
         - common::next_page { player_ammo }
     '4':
-      positions: 9; 5
+      positions: 9; 4
       item:
         material: barrier
-        name: '[ gui.common.back_inv_name ]'
+        name: '[ gui.common.back_name ]'
         lore:
-        - '[ gui.common.back_inv_lore ]'
+        - '[ gui.common.back_lore ]'
       functions:
         on_click:
-        - common::switch_gui { player_inv }
-player_scope_inv:
-  title: '[ gui.player_scope_inv.title ]'
+        - common::switch_gui { player_bp }
+player_scope_bp:
+  title: '[ gui.player_scope_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 4
+      positions: 1 -> 9; 1 -> 3
       pagination: player_scope
       item:
         material: STAINED_GLASS_PANE
@@ -699,10 +747,11 @@ player_scope_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { scope }
     '1':
       positions:
-      - 1 -> 5; 5
-      - 8; 5
+      - 1 -> 5; 4
+      - 8; 4
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -710,8 +759,9 @@ player_scope_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { scope }
     '2':
-      positions: 6; 5
+      positions: 6; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.prev_name ]'
@@ -723,7 +773,7 @@ player_scope_inv:
         - common::cancel_event
         - common::prev_page { player_scope }
     '3':
-      positions: 7; 5
+      positions: 7; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.next_name ]'
@@ -735,21 +785,21 @@ player_scope_inv:
         - common::cancel_event
         - common::next_page { player_scope }
     '4':
-      positions: 9; 5
+      positions: 9; 4
       item:
         material: barrier
-        name: '[ gui.common.back_inv_name ]'
+        name: '[ gui.common.back_name ]'
         lore:
-        - '[ gui.common.back_inv_lore ]'
+        - '[ gui.common.back_lore ]'
       functions:
         on_click:
-        - common::switch_gui { player_inv }
-player_grenade_inv:
-  title: '[ gui.player_grenade_inv.title ]'
+        - common::switch_gui { player_bp }
+player_grenade_bp:
+  title: '[ gui.player_grenade_bp.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 4
+      positions: 1 -> 9; 1 -> 3
       pagination: player_grenade
       item:
         material: STAINED_GLASS_PANE
@@ -758,10 +808,11 @@ player_grenade_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { grenade }
     '1':
       positions:
-      - 1 -> 5; 5
-      - 8; 5
+      - 1 -> 5; 4
+      - 8; 4
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -769,8 +820,9 @@ player_grenade_inv:
       functions:
         on_click:
         - common::cancel_event
+        - item::handle_item_drop { grenade }
     '2':
-      positions: 6; 5
+      positions: 6; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.prev_name ]'
@@ -782,7 +834,7 @@ player_grenade_inv:
         - common::cancel_event
         - common::prev_page { player_grenade }
     '3':
-      positions: 7; 5
+      positions: 7; 4
       item:
         material: STAINED_GLASS_PANE
         name: '[ gui.common.next_name ]'
@@ -794,15 +846,15 @@ player_grenade_inv:
         - common::cancel_event
         - common::next_page { player_grenade }
     '4':
-      positions: 9; 5
+      positions: 9; 4
       item:
         material: barrier
-        name: '[ gui.common.back_inv_name ]'
+        name: '[ gui.common.back_name ]'
         lore:
-        - '[ gui.common.back_inv_lore ]'
+        - '[ gui.common.back_lore ]'
       functions:
         on_click:
-        - common::switch_gui { player_inv }
+        - common::switch_gui { player_bp }
 kit_menu:
   title: '[ gui.kit_menu.title ]'
   sound: $block_chest_open
@@ -1443,7 +1495,7 @@ market_product_editor:
   sound: $block_chest_open
   components:
     '0':
-      positions: 1 -> 9; 1 -> 5
+      positions: 1 -> 9; 1 -> 3
       item:
         material: STAINED_GLASS_PANE
         name: '&f'
@@ -1452,7 +1504,7 @@ market_product_editor:
         on_click:
         - common::cancel_event
     '1':
-      positions: 1/4; 2
+      positions: 1; 1
       item:
         material: paper
         name: '[ gui.market_product_editor.set_igo_name ]'
@@ -1465,9 +1517,9 @@ market_product_editor:
         - common::set_window_data { lastgui; market_product_editor }
         - common::switch_gui { boolean_value_editor }
     '2':
-      positions: 2/4; 2
+      positions: 2; 1
       item:
-        material: diamond
+        material: emerald
         name: '[ gui.market_product_editor.set_price_name ]'
         lore:
         - '[ gui.market_product_editor.set_price_lore ]'
@@ -1478,7 +1530,7 @@ market_product_editor:
         - common::set_window_data { lastgui; market_product_editor }
         - common::switch_gui { real_value_editor }
     '3':
-      positions: 3/4; 2
+      positions: 3; 1
       item:
         material: diamond
         name: '[ gui.market_product_editor.set_exp_name ]'
@@ -1491,7 +1543,20 @@ market_product_editor:
         - common::set_window_data { lastgui; market_product_editor }
         - common::switch_gui { real_value_editor }
     '4':
-      positions: 4/4; 2
+      positions: 4; 1
+      item:
+        material: diamond_pickaxe
+        name: '[ gui.market_product_editor.set_icon_name ]'
+        lore:
+        - '[ gui.market_product_editor.set_icon_lore ]'
+      functions:
+        on_click:
+        - common::cancel_event
+        - market::icon_editor
+        - common::set_window_data { lastgui; market_product_editor }
+        - common::switch_gui { item_value_editor }
+    '5':
+      positions: 9; 1
       item:
         material: barrier
         name: '[ gui.market_product_editor.remove_name ]'
@@ -1502,8 +1567,8 @@ market_product_editor:
         - common::cancel_event
         - market::remove_product
         - common::switch_gui { market_product_menu_editor }
-    '5':
-      positions: 1/1; 4
+    '6':
+      positions: 1/1; 3
       item:
         material: emerald
         name: '[ gui.market_product_editor.back_name ]'
@@ -1592,29 +1657,53 @@ main_player_inv:
       positions: 2; 1
       item:
         material: chest
-        name: '[ gui.common.your_inv_name ]'
+        name: '[ gui.common.your_bp_name ]'
         lore:
-        - '[ gui.common.your_inv_lore ]'
+        - '[ gui.common.your_bp_lore ]'
       functions:
         on_click:
         - common::cancel_event
-        - common::open_top_gui { player_inv }
+        - common::open_top_gui { player_bp }
 game_player_inv:
   title: '[ gui.game_player_inv.title ]'
   sound: $block_chest_open
   components:
     '0':
-      positions: 1; 1
+      positions: 9; 1
       item:
-        material: chest
-        name: '[ gui.common.your_inv_name ]'
+        material: barrier
+        name: '[ gui.game_player_inv.quit_name ]'
         lore:
-        - '[ gui.common.your_inv_lore ]'
+        - '[ gui.game_player_inv.quit_lore ]'
       functions:
         on_click:
         - common::cancel_event
-        - common::open_top_gui { player_inv }
+        - common::quit_game
     '1':
+      positions: 1 -> 9; 2 -> 4
+      item:
+        material: STAINED_GLASS_PANE
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+        - common::cancel_event
+    '2':
+      positions: 1/1; 3
+      item:
+        material: chest
+        name: '[ gui.common.your_bp_name ]'
+        lore:
+        - '[ gui.common.your_bp_lore ]'
+      functions:
+        on_click:
+        - common::cancel_event
+        - common::open_top_gui { player_bp }
+game_player_inv_bw:
+  title: '[ gui.game_player_inv.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
       positions: 9; 1
       item:
         material: barrier
