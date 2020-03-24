@@ -62,7 +62,26 @@ misc:
     walk: 0.2
     fly: 0.2
   entity_track_min_distance: 1.5
-  block_hardness:
+  entity_hardness:
+    _default_: 3
+    '0':
+      types:
+        - player
+        - skeleton
+        - stray
+        - spider
+        - cave_spider
+        - zombie
+        - zombie_villager
+        - pig_zombie
+        - drowned
+        - husk
+      value: 5
+    '1':
+      types:
+        - ender_dragon
+      value: 69
+  material_hardness:
     _default_: 10
     '0':
       material:
@@ -75,6 +94,10 @@ misc:
         - bubble_column
         - string
         - water
+        - leather_helmet
+        - leather_chestplate
+        - leather_leggings
+        - leather_boots
       value: 1
     '2':
       material:
@@ -117,6 +140,10 @@ misc:
         - wheat
         - white_tulip
         - wither_rose
+        - chainmail_helmet
+        - chainmail_chestplate
+        - chainmail_leggings
+        - chainmail_boots
       value: 2
     '3':
       material:
@@ -135,6 +162,10 @@ misc:
         - tripwire_hook
         - wall_torch
         - turtle_egg
+        - iron_helmet
+        - iron_chestplate
+        - iron_leggings
+        - iron_boots
       value: 3
     '4':
       material:
@@ -150,6 +181,14 @@ misc:
         - potted_(.+)
         - scaffolding
         - snow_block
+        - gold_helmet
+        - gold_chestplate
+        - gold_leggings
+        - gold_boots
+        - golden_helmet
+        - golden_chestplate
+        - golden_leggings
+        - golden_boots
       value: 4
     '5':
       material:
@@ -185,6 +224,10 @@ misc:
         - soul_sand
         - wet_sponge
         - blue_ice
+        - diamond_helmet
+        - diamond_chestplate
+        - diamond_leggings
+        - diamond_boots
       value: 7
     '8':
       material:

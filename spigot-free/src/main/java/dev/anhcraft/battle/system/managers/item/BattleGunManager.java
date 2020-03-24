@@ -43,6 +43,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -261,7 +262,7 @@ public class BattleGunManager extends BattleComponent {
 
                 Block block = loc.getBlock();
                 if(lastBlock == null || !lastBlock.equals(block)) {
-                    power -= plugin.GENERAL_CONF.getBlockHardness(block.getType());
+                    power -= plugin.GENERAL_CONF.getMaterialHardness(block.getType());
                     if (power <= 0) {
                         int id = loc.hashCode();
                         int st = RandomUtil.randomInt(0, 9);
@@ -287,6 +288,14 @@ public class BattleGunManager extends BattleComponent {
                     Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
                             .normalize().multiply(b.getKnockback()));
                     ve.setVelocity(vec);
+                    power -= plugin.GENERAL_CONF.getEntityHardness(ve.getType());
+                    EntityEquipment ee = ve.getEquipment();
+                    if(ee != null) {
+                        for(ItemStack item : ee.getArmorContents()){
+                            if(ItemUtil.isNull(item)) continue;
+                            power -= plugin.GENERAL_CONF.getMaterialHardness(item.getType());
+                        }
+                    }
                 }
             }
         }
