@@ -30,6 +30,9 @@ world_settings:
     # Control the world time
     always_time: 3000
 
+    # Prevent fire spread
+    anti_fire_spread: true
+
     # Any worlds that will not get effect
     except_worlds:
       - world

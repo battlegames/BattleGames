@@ -26,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -71,6 +72,16 @@ public class WorldListener implements Listener {
         WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getBlock().getWorld().getName());
         if(ws != null && ws.isProtectBlocks()){
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void fireSpread(BlockIgniteEvent event) {
+        if(event.getCause() == BlockIgniteEvent.IgniteCause.SPREAD) {
+            WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getBlock().getWorld().getName());
+            if(ws != null && ws.isAntiFireSpread()){
+                event.setCancelled(true);
+            }
         }
     }
 }

@@ -52,6 +52,9 @@ public class WorldSettings {
     @Key("prevent_hungry")
     private boolean preventHungry;
 
+    @Key("anti_fire_spread")
+    private boolean antiFireSpread;
+
     @Key("except_worlds")
     @IgnoreValue(ifNull = true)
     private List<String> blacklistWorlds = new ArrayList<>();
@@ -108,5 +111,13 @@ public class WorldSettings {
 
     public void setPreventHungry(boolean preventHungry) {
         this.preventHungry = preventHungry;
+    }
+
+    public boolean isAntiFireSpread() {
+        return antiFireSpread;
+    }
+
+    public void setAntiFireSpread(boolean antiFireSpread) {
+        this.antiFireSpread = antiFireSpread;
     }
 }
