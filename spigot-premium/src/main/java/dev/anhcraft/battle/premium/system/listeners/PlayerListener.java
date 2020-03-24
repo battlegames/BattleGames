@@ -20,7 +20,11 @@
 
 package dev.anhcraft.battle.premium.system.listeners;
 
+import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.premium.PremiumModule;
+import dev.anhcraft.battle.premium.stats.AdrenalineShotUseStat;
+import dev.anhcraft.battle.premium.stats.MedicalKitUseStat;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -60,6 +64,8 @@ public class PlayerListener implements Listener {
                         p.setHealth(Math.min(max, add + now));
                         p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 4f, 1f);
                         p.getInventory().setItemInMainHand(null);
+                        PlayerData pd = BattleApi.getInstance().getPlayerData(p);
+                        if(pd != null) pd.getStats().of(MedicalKitUseStat.class).increase(p);
                     }
                     event.setCancelled(true);
                 } else if (item.getDurability() == 4) {
@@ -67,6 +73,8 @@ public class PlayerListener implements Listener {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 0));
                     p.playSound(p.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 4f, 1f);
                     p.getInventory().setItemInMainHand(null);
+                    PlayerData pd = BattleApi.getInstance().getPlayerData(p);
+                    if(pd != null) pd.getStats().of(AdrenalineShotUseStat.class).increase(p);
                     event.setCancelled(true);
                 }
             }
