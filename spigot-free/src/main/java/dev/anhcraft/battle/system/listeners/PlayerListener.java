@@ -42,7 +42,10 @@ import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
 import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
 import dev.anhcraft.battle.api.stats.StatisticMap;
-import dev.anhcraft.battle.api.stats.natives.*;
+import dev.anhcraft.battle.api.stats.natives.AssistStat;
+import dev.anhcraft.battle.api.stats.natives.DeathStat;
+import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
+import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.ResourcePack;
@@ -73,6 +76,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
@@ -98,6 +102,9 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.taskHelper.newDelayedTask(() -> {
             if(!player.isOnline()) return;
             BattleDebugger.startTiming("player-join");
+            for(PotionEffect pe : player.getActivePotionEffects()){
+                player.removePotionEffect(pe.getType());
+            }
             EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint(), ok -> {
                 plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
                 plugin.taskHelper.newAsyncTask(() -> {
