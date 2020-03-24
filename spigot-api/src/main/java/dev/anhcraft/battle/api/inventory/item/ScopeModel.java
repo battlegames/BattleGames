@@ -35,7 +35,9 @@ public class ScopeModel extends SingleSkinItem implements Attachable {
     @Explanation({
             "Set the zoom levels",
             "The zoom level must be between 1 and 255",
-            "It is recommended to keep them between 1 and 11"
+            "Players can turn to the next level by",
+            "click the zoom button, when none level",
+            "remains, the view returns to normal"
     })
     @IgnoreValue(ifNull = true)
     private List<Integer> zoomLevels = new ArrayList<>();

@@ -35,6 +35,7 @@ import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import dev.anhcraft.craftkit.utils.EntityUtil;
 import dev.anhcraft.craftkit.utils.ItemUtil;
+import dev.anhcraft.craftkit.utils.PlayerUtil;
 import dev.anhcraft.jvmkit.utils.Pair;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
@@ -117,6 +118,7 @@ public class BattleGunManager extends BattleComponent {
     }
 
     private void rmvZoom(Player player, @Nullable GunModel gunModel){
+        PlayerUtil.unfreeze(player);
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
         player.removeMetadata("zoom", plugin);
@@ -183,9 +185,10 @@ public class BattleGunManager extends BattleComponent {
             int nextLv = sm.getZoomLevels().get(next);
             player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
-            player.setWalkSpeed(0f);
-            player.setFlySpeed(0f);
+            player.setWalkSpeed(-0.5f);
+            player.setFlySpeed(-0.5f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
+            PlayerUtil.freeze(player);
         }
         return true;
     }

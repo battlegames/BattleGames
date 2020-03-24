@@ -7,4 +7,4 @@ basic_scope:
     material: GLASS
     damage: 0
   zoom_levels:
-    - 7
+    - 20
