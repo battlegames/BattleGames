@@ -44,7 +44,6 @@ import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.Condition;
-import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -293,9 +292,6 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 }
                 VaultApi.getEconomyApi().depositPlayer(p, money);
                 pd.getStats().of(ExpStat.class).increase(p, exp);
-
-                String fmMoney = MathUtil.formatRound(money);
-                String fmExp = Long.toString(exp);
 
                 StatisticMap sm = pd.getStats();
                 sm.of(KillStat.class).increase(p, gp.getStats().of(KillStat.class).get());
