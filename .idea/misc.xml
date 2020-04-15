@@ -9,6 +9,7 @@
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="/media/duyanh/Work/BATTLE JAVADOC" />
     <option name="OPTION_SCOPE" value="public" />
+    <option name="OPEN_IN_BROWSER" value="false" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
