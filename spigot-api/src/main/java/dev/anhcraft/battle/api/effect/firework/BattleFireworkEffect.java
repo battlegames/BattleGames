@@ -38,7 +38,7 @@ public class BattleFireworkEffect extends ConfigurableObject {
     @Explanation("The firework type")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private FireworkEffect.Type type = FireworkEffect.Type.BALL;
+    private final FireworkEffect.Type type = FireworkEffect.Type.BALL;
 
     @Key("flicker")
     @Explanation("Make this firework flicker")
@@ -52,13 +52,13 @@ public class BattleFireworkEffect extends ConfigurableObject {
     @Explanation("All primary colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<ColorPalette> primaryColors = new ArrayList<>();
+    private final List<ColorPalette> primaryColors = new ArrayList<>();
 
     @Key("fade_colors")
     @Explanation("All fade colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<ColorPalette> fadeColors = new ArrayList<>();
+    private final List<ColorPalette> fadeColors = new ArrayList<>();
 
     private FireworkEffect cached;
 

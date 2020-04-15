@@ -45,7 +45,7 @@ import java.util.SortedSet;
 public class QueueAdvancementTask implements Runnable {
     private static final Object LOCK = new Object();
     @SuppressWarnings("UnstableApiUsage")
-    private Multimap<Player, PresentPair<String, Double>> queue = MultimapBuilder.linkedHashKeys().linkedListValues().build();
+    private final Multimap<Player, PresentPair<String, Double>> queue = MultimapBuilder.linkedHashKeys().linkedListValues().build();
 
     public void put(Player player, String type, double amount){
         synchronized (LOCK) {

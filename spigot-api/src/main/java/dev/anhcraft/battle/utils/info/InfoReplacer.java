@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
 import static dev.anhcraft.battle.utils.PlaceholderUtil.INFO_PLACEHOLDER_PATTERN;
 
 public class InfoReplacer {
-    private Map<String, String> map;
+    private final Map<String, String> map;
 
     InfoReplacer(InfoHolder holder) {
         this.map = holder.mapInfo();

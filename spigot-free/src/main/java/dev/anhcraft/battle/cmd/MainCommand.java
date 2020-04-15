@@ -60,7 +60,7 @@ import java.util.Objects;
 
 @CommandAlias("b|bg|battle|battlegames")
 public class MainCommand extends BaseCommand{
-    private BattlePlugin plugin;
+    private final BattlePlugin plugin;
 
     public MainCommand(BattlePlugin plugin){
         this.plugin = plugin;

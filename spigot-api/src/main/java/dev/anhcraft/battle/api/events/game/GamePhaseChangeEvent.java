@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class GamePhaseChangeEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
-    private GamePhase oldPhase;
-    private GamePhase newPhase;
+    private final GamePhase oldPhase;
+    private final GamePhase newPhase;
 
     public GamePhaseChangeEvent(@NotNull Game game, @NotNull GamePhase oldPhase, @NotNull GamePhase newPhase) {
         super(game);

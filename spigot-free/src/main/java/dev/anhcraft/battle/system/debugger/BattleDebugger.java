@@ -109,8 +109,8 @@ public class BattleDebugger {
         }
     }
 
-    private ListMultimap<String, TimingStack> timings = MultimapBuilder.hashKeys().linkedListValues().build();
-    private List<PresentPair<Long, Double>> tps = new ArrayList<>();
+    private final ListMultimap<String, TimingStack> timings = MultimapBuilder.hashKeys().linkedListValues().build();
+    private final List<PresentPair<Long, Double>> tps = new ArrayList<>();
     private int tpsTickDelay;
 
     private BattleDebugger(Consumer<String> callback, long time){

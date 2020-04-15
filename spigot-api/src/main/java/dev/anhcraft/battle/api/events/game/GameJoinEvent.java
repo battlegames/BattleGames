@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GameJoinEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
-    private GamePlayer gamePlayer;
+    private final GamePlayer gamePlayer;
 
     public GameJoinEvent(@NotNull Game game, @NotNull GamePlayer gamePlayer) {
         super(game);

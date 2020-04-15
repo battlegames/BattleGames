@@ -35,7 +35,7 @@ import java.io.IOException;
 
 @CommandAlias("be|bge")
 public class EditorCommand extends BaseCommand{
-    private BattlePlugin plugin;
+    private final BattlePlugin plugin;
 
     public EditorCommand(BattlePlugin plugin){
         this.plugin = plugin;

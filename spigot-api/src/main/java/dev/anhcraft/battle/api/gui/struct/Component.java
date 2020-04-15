@@ -46,7 +46,7 @@ import java.util.*;
 @Schema
 public class Component extends ConfigurableObject {
     public static final ConfigSchema<Component> SCHEMA = ConfigSchema.of(Component.class);
-    private static Map<Integer, Integer> CENTER_SLOTS = new HashMap<>();
+    private static final Map<Integer, Integer> CENTER_SLOTS = new HashMap<>();
     private static final PreparedItem DEFAULT_ITEM = new PreparedItem();
 
     static {
@@ -67,7 +67,7 @@ public class Component extends ConfigurableObject {
         CENTER_SLOTS.put(Objects.hash(5, 5), 9);
     }
 
-    private String id;
+    private final String id;
     private List<FunctionLinker<SlotReport>> initFunctions;
     private List<FunctionLinker<SlotReport>> clickFunctions;
 
@@ -81,11 +81,11 @@ public class Component extends ConfigurableObject {
 
     @Key("functions.on_init")
     @IgnoreValue(ifNull = true)
-    private List<String> rawInitFunctions = new ArrayList<>();
+    private final List<String> rawInitFunctions = new ArrayList<>();
 
     @Key("functions.on_click")
     @IgnoreValue(ifNull = true)
-    private List<String> rawClickFunctions = new ArrayList<>();
+    private final List<String> rawClickFunctions = new ArrayList<>();
 
     @Key("pagination")
     private String pagination;

@@ -88,7 +88,7 @@ public class Ammo extends BattleItem<AmmoModel> {
                 "Higher value can help to make the entity bounding check",
                 "more accurate, but may result in laggy"
         })
-        private double timeOffset = 5;
+        private final double timeOffset = 5;
 
         public double getDamage() {
             return damage;

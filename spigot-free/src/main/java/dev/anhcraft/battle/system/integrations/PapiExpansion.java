@@ -38,7 +38,7 @@ public class PapiExpansion extends PlaceholderExpansion {
     }
     
     public final Map<String, Callback> handlers = new HashMap<>();
-    private BattlePlugin plugin;
+    private final BattlePlugin plugin;
 
     public PapiExpansion(BattlePlugin plugin){
         this.plugin = plugin;

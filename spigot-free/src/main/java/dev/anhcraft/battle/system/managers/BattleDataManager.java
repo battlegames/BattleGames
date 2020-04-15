@@ -43,7 +43,7 @@ import java.util.Set;
 public class BattleDataManager extends BattleComponent {
     private final Map<OfflinePlayer, Storage> PLAYER_STORAGE = new HashMap<>();
     private Storage serverStorage;
-    private StorageType storageType;
+    private final StorageType storageType;
     private File dataDir;
     private HikariDataSource dataSource;
 

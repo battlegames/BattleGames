@@ -41,7 +41,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
             "ammo:",
             "  7_62mm: 30 # Can hold up to x30 7.62 mm ammo"
     })
-    private Map<AmmoModel, Integer> ammunition = new HashMap<>();
+    private final Map<AmmoModel, Integer> ammunition = new HashMap<>();
 
     public MagazineModel(@NotNull String id) {
         super(id);

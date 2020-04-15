@@ -40,7 +40,7 @@ public class DeathmatchOptions extends ModeOptions {
     @Key("playing_spawn_points")
     @Explanation("The spawn points (in playing phase)")
     @IgnoreValue(ifNull = true)
-    private List<String> playSpawnPoints = new ArrayList<>();
+    private final List<String> playSpawnPoints = new ArrayList<>();
 
     @NotNull
     public List<Location> getPlaySpawnPoints() {

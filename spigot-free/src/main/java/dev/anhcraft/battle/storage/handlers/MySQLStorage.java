@@ -36,10 +36,10 @@ import java.util.Set;
 public class MySQLStorage extends StorageProvider {
     private static final Gson GSON = new Gson();
     private final Object SAFE_LOCK = new Object();
-    private HikariDataSource dataSource;
+    private final HikariDataSource dataSource;
     private long localSyncTime;
     private long remoteSyncTime;
-    private String tablePre;
+    private final String tablePre;
 
     static {
         try {

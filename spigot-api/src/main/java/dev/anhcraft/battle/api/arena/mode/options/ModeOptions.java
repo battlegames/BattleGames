@@ -40,28 +40,28 @@ public class ModeOptions extends ConfigurableObject {
 
     @Key("min_players")
     @Explanation("The minimum players needed to start a game")
-    private int minPlayers = 1;
+    private final int minPlayers = 1;
 
     @Key("countdown_time")
     @Explanation("The countdown time")
-    private long countdownTime = 300;
+    private final long countdownTime = 300;
 
     @Key("spawn_protection_time")
     @Explanation("Protection time when a player spawns (or respawn)")
-    private long spawnProtectionTime = 40;
+    private final long spawnProtectionTime = 40;
 
     @Key("item_selection_time")
     @Explanation("The time for selecting Battle items")
-    private long itemSelectTime = 200;
+    private final long itemSelectTime = 200;
 
     @Key("respawn_waiting_time")
     @Explanation("How long players need to wait before respawn")
-    private long respawnWaitTime = 200;
+    private final long respawnWaitTime = 200;
 
     @Key("waiting_spawn_points")
     @Explanation("Spawn points in waiting phase")
     @IgnoreValue(ifNull = true)
-    private List<String> waitSpawnPoints = new ArrayList<>();
+    private final List<String> waitSpawnPoints = new ArrayList<>();
 
     public int getMinPlayers() {
         return minPlayers;

@@ -27,7 +27,7 @@ public enum EffectOption {
     REPEAT_TIMES(Integer.class),
     SPHERE_RADIUS(Double.class);
 
-    private Class<?> clazz;
+    private final Class<?> clazz;
 
     EffectOption(Class<?> clazz) {
         this.clazz = clazz;

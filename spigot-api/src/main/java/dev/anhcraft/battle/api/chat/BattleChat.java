@@ -33,7 +33,7 @@ public class BattleChat {
 
     @Key("enabled")
     @Explanation("Should we enable the chat system?")
-    private boolean enabled = true;
+    private final boolean enabled = true;
 
     @Key("format")
     @Explanation({

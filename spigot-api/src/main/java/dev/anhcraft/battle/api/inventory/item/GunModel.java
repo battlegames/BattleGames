@@ -48,7 +48,7 @@ public class GunModel extends WeaponModel {
     @Key("skin.secondary")
     @Explanation("Set the primary skin")
     @IgnoreValue(ifNull = true)
-    private ItemSkin secondarySkin = ItemSkin.EMPTY;
+    private final ItemSkin secondarySkin = ItemSkin.EMPTY;
 
     @Key("weight")
     @Explanation({
@@ -59,7 +59,7 @@ public class GunModel extends WeaponModel {
 
     @Key("muzzle_velocity")
     @Explanation("The initial velocity of a bullet when it is shot out of the gun")
-    private double muzzleVelocity = 70;
+    private final double muzzleVelocity = 70;
 
     @Key("magazine.default")
     @Explanation("The default magazine")
@@ -80,7 +80,7 @@ public class GunModel extends WeaponModel {
     @Key("sounds.on_shoot")
     @Explanation("Set the sound that is played when shooting")
     @IgnoreValue(ifNull = true)
-    private BattleSound shootSound = DEF_SHOOT_SOUND;
+    private final BattleSound shootSound = DEF_SHOOT_SOUND;
 
     @Key("sounds.on_start_reloading")
     @Explanation("Set the sound that is played when starting to reload ammo")
@@ -126,7 +126,7 @@ public class GunModel extends WeaponModel {
             "- -4.25 22.560000610351562",
             "- -5.65 22.860000610351562"
     })
-    private List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
+    private final List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
 
     public GunModel(@NotNull String id) {
         super(id);

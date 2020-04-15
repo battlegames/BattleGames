@@ -52,7 +52,7 @@ import java.util.Objects;
 @Schema
 public class Arena extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Arena> SCHEMA = ConfigSchema.of(Arena.class);
-    private String id;
+    private final String id;
     private String finalExpExpression;
     private String finalMoneyExpression;
 
@@ -117,7 +117,7 @@ public class Arena extends ConfigurableObject implements Informative {
             "values parsed from each <b>winner</b>"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> endCommandWinners = new ArrayList<>();
+    private final List<String> endCommandWinners = new ArrayList<>();
 
     @Key("end_commands.losers")
     @Explanation({
@@ -126,14 +126,14 @@ public class Arena extends ConfigurableObject implements Informative {
             "values parsed from each <b>loser</b>"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> endCommandLosers = new ArrayList<>();
+    private final List<String> endCommandLosers = new ArrayList<>();
 
     @Key("render_gui_on_death")
     @Explanation({
             "Re-renders the GUI on death",
             "This option can prevent players from reusing old items"
     })
-    private boolean renderGuiOnDeath = true;
+    private final boolean renderGuiOnDeath = true;
 
     @Key("bungeecord.enabled")
     @Explanation({
@@ -149,7 +149,7 @@ public class Arena extends ConfigurableObject implements Informative {
             "Remote servers are places where the game happens"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> remoteServers = new ArrayList<>();
+    private final List<String> remoteServers = new ArrayList<>();
 
     @Key("end_firework")
     @Explanation("The firework to be spawned when the game ends")
@@ -157,15 +157,15 @@ public class Arena extends ConfigurableObject implements Informative {
 
     @Key("end_delay")
     @Explanation("The delay time before the game actually ends")
-    private long endDelay = 60;
+    private final long endDelay = 60;
 
     @Key("result_broadcast.won")
     @Explanation("The message to be sent to the winners")
-    private List<String> wonReport = new ArrayList<>();
+    private final List<String> wonReport = new ArrayList<>();
 
     @Key("result_broadcast.lost")
     @Explanation("The message to be sent to the winners")
-    private List<String> lostReport = new ArrayList<>();
+    private final List<String> lostReport = new ArrayList<>();
 
     @Key("rollback")
     @Explanation("Rollback settings")

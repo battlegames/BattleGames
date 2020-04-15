@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LongCounter extends Statistic<Long> {
-    private AtomicLong backend;
+    private final AtomicLong backend;
 
     public LongCounter(){
         backend = new AtomicLong();

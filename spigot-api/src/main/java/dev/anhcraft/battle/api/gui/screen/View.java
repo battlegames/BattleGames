@@ -38,10 +38,10 @@ import java.util.Objects;
 
 public class View extends TempDataContainer {
     private final Map<String, SignedInt> PAGE = new HashMap<>();
-    private Slot[] slots;
-    private Gui gui;
-    private Window window;
-    private Inventory inventory;
+    private final Slot[] slots;
+    private final Gui gui;
+    private final Window window;
+    private final Inventory inventory;
 
     public View(@NotNull Gui gui, @NotNull Window window, @NotNull Inventory inventory) {
         Preconditions.checkNotNull(gui);

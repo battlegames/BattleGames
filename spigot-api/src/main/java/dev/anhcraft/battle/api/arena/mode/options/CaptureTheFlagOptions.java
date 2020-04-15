@@ -56,7 +56,7 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
             "      neutral: \"&7Neutral\"",
             "    max_health: 15"
     })
-    private List<FlagOptions> flags = new ArrayList<>();
+    private final List<FlagOptions> flags = new ArrayList<>();
 
     @NotNull
     public List<FlagOptions> getFlags() {

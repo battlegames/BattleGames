@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AttackReport extends DamageReport {
     protected LivingEntity damager;
-    private Weapon weapon;
+    private final Weapon weapon;
 
     public AttackReport(@NotNull LivingEntity entity, double damage, @NotNull LivingEntity damager, @Nullable Weapon weapon) {
         super(entity, damage);

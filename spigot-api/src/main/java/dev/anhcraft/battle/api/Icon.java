@@ -35,7 +35,7 @@ public enum Icon {
     WARN("\u340c"),
     INFO("\u340d");
 
-    private String character;
+    private final String character;
 
     Icon(String character) {
         this.character = character;

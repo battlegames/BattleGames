@@ -40,7 +40,7 @@ import java.util.*;
 public class Advancement extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Advancement> SCHEMA = ConfigSchema.of(Advancement.class);
 
-    private String id;
+    private final String id;
 
     @Key("type")
     @Explanation({

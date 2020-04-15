@@ -27,7 +27,7 @@ public class DamageReport {
     protected LivingEntity entity;
     private double damage;
     private boolean headshotDamage;
-    private long date;
+    private final long date;
 
     public DamageReport(@NotNull LivingEntity entity, double damage) {
         Condition.argNotNull("entity", entity);

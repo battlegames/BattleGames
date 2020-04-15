@@ -30,8 +30,8 @@ public enum State {
     TRUE(6),
     FALSE(5);
 
-    private int opposite;
-    private String localePath;
+    private final int opposite;
+    private final String localePath;
 
     State(int opposite) {
         this.opposite = opposite;

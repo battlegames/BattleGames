@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class VaultCurrency implements Currency {
-    private Economy eco;
+    private final Economy eco;
 
     public VaultCurrency(){
         eco = VaultApiUtil.getEconomyApi();

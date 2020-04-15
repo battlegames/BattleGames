@@ -23,7 +23,7 @@ import dev.anhcraft.battle.api.storage.data.DataMap;
 import dev.anhcraft.battle.storage.handlers.StorageProvider;
 
 public class Storage extends StorageProvider {
-    private StorageProvider handler;
+    private final StorageProvider handler;
 
     public Storage(StorageProvider handler) {
         this.handler = handler;

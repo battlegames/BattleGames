@@ -59,7 +59,7 @@ public class Market extends ConfigurableObject {
     @Key("categories")
     @Explanation("All categories")
     @IgnoreValue(ifNull = true)
-    private List<Category> categories = new ArrayList<>();
+    private final List<Category> categories = new ArrayList<>();
 
     public boolean shouldLogTransactions() {
         return logTransactions;

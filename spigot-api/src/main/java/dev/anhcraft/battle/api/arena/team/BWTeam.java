@@ -36,11 +36,11 @@ import java.util.Objects;
 
 public class BWTeam extends TempDataContainer implements Team {
     private String name;
-    private DyeColor color;
-    private List<Location> spawnPoints;
+    private final DyeColor color;
+    private final List<Location> spawnPoints;
     private Block bedPart1;
     private Block bedPart2;
-    private Location centerSpawnPoint;
+    private final Location centerSpawnPoint;
 
     @SuppressWarnings("UnstableApiUsage")
     public BWTeam(BWTeamOptions c) {

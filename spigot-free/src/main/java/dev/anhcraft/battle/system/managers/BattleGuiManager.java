@@ -305,12 +305,12 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     private static class PagedSlotChain implements SlotChain {
-        private View view;
-        private List<Integer> slots;
+        private final View view;
+        private final List<Integer> slots;
         private int prevSlots;
         private int allocatedSlot;
         private int cursor = -1;
-        private Predicate<Slot> slotFilter;
+        private final Predicate<Slot> slotFilter;
 
         private PagedSlotChain(@NotNull List<Integer> slots, @NotNull View view, int page, @Nullable Predicate<Slot> slotFilter) {
             this.slots = slots;

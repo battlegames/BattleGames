@@ -92,8 +92,8 @@ public final class Mode implements Informative {
      */
     public static final Mode BEDWAR = registerMode(new Mode("bw", BedWarOptions.SCHEMA));
 
-    private ConfigSchema<?> optionSchema;
-    private String id;
+    private final ConfigSchema<?> optionSchema;
+    private final String id;
     private String name;
     private String description;
     private boolean waitingChatEnabled;

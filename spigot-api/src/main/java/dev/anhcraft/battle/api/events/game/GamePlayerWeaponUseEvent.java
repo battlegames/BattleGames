@@ -33,8 +33,8 @@ import org.jetbrains.annotations.Nullable;
 public class GamePlayerWeaponUseEvent extends WeaponUseEvent {
     public static final HandlerList handlers = new HandlerList();
 
-    private GamePlayer gp1;
-    private GamePlayer gp2;
+    private final GamePlayer gp1;
+    private final GamePlayer gp2;
 
     public GamePlayerWeaponUseEvent(@NotNull LocalGame game, @NotNull PlayerAttackReport report, @NotNull GamePlayer gp1, @Nullable GamePlayer gp2) {
         super(game, report);

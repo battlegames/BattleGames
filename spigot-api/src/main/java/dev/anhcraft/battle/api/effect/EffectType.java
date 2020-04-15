@@ -63,7 +63,7 @@ public enum EffectType {
         }
     });
 
-    private BiConsumer<Location, BattleEffect> effectConsumer;
+    private final BiConsumer<Location, BattleEffect> effectConsumer;
 
     EffectType(BiConsumer<Location, BattleEffect> effectConsumer){
         this.effectConsumer = effectConsumer;

@@ -57,7 +57,7 @@ public class WorldSettings {
 
     @Key("except_worlds")
     @IgnoreValue(ifNull = true)
-    private List<String> blacklistWorlds = new ArrayList<>();
+    private final List<String> blacklistWorlds = new ArrayList<>();
 
     public boolean isPreventMobDrops() {
         return preventMobDrops;

@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 
 public class Window extends TempDataContainer {
-    private WeakReference<Player> player;
+    private final WeakReference<Player> player;
     private View topView;
     private View bottomView;
 

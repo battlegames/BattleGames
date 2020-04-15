@@ -29,9 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemChooseEvent extends PlayerEvent {
     public static final HandlerList handlers = new HandlerList();
-    private SlotReport slotReport;
-    private ItemStack itemStack;
-    private BattleItemModel itemModel;
+    private final SlotReport slotReport;
+    private final ItemStack itemStack;
+    private final BattleItemModel itemModel;
 
     public ItemChooseEvent(@NotNull Player player, @NotNull SlotReport slotReport, @NotNull ItemStack itemStack, @NotNull BattleItemModel itemModel) {
         super(player);

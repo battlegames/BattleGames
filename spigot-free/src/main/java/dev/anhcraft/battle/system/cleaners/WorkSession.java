@@ -26,9 +26,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
 public class WorkSession {
-    private CountDownLatch countDownLatch;
-    private long start;
-    private Logger logger;
+    private final CountDownLatch countDownLatch;
+    private final long start;
+    private final Logger logger;
 
     public WorkSession(int sz, Logger logger) {
         this.countDownLatch = new CountDownLatch(sz);

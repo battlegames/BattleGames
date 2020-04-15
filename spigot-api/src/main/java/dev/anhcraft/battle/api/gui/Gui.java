@@ -49,7 +49,7 @@ public class Gui extends ConfigurableObject implements Informative {
 
     private final Map<Integer, Component> S2C = new HashMap<>();
     private final Multimap<String, Component> P2C = HashMultimap.create();
-    private String id;
+    private final String id;
     private int size;
 
     @Key("title")
@@ -58,7 +58,7 @@ public class Gui extends ConfigurableObject implements Informative {
 
     @Key("components")
     @IgnoreValue(ifNull = true)
-    private List<Component> components = new ArrayList<>();
+    private final List<Component> components = new ArrayList<>();
 
     @Key("sound")
     private BattleSound sound;
@@ -137,7 +137,7 @@ public class Gui extends ConfigurableObject implements Informative {
                             e.printStackTrace();
                         }
                     }
-                    size = (int) MathUtil.nextMultiple(highestSlot, 9);
+                    size = MathUtil.nextMultiple(highestSlot, 9);
                     if(size > 54){
                         Bukkit.getLogger().warning("The inventory size is out of bound: "+size);
                         size = 54;

@@ -28,8 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Slot {
-    private int position;
-    private Component component;
+    private final int position;
+    private final Component component;
     private FunctionCaller<SlotReport> additionalFunction;
     private PreparedItem paginationItem;
 

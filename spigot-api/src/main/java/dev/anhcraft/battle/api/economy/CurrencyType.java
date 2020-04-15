@@ -32,7 +32,7 @@ public enum CurrencyType {
     DIAMOND(() -> NativeCurrencies.DIAMOND),
     EMERALD(() -> NativeCurrencies.EMERALD);
 
-    private Supplier<Currency> currency;
+    private final Supplier<Currency> currency;
 
     CurrencyType(Supplier<Currency> currency) {
         this.currency = currency;

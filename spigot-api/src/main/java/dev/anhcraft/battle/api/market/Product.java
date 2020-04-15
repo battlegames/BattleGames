@@ -66,7 +66,7 @@ public class Product extends ConfigurableObject implements Informative {
         DEFAULT_ICON.material(Material.STONE);
     }
 
-    private String id;
+    private final String id;
 
     @Key("icon")
     @Explanation("Product's icon")
@@ -101,17 +101,17 @@ public class Product extends ConfigurableObject implements Informative {
             "from the buyer's info"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> commands = new ArrayList<>();
+    private final List<String> commands = new ArrayList<>();
 
     @Key("executions.give_perks")
     @Explanation("The perks to be given later")
     @IgnoreValue(ifNull = true)
-    private List<String> perks = new ArrayList<>();
+    private final List<String> perks = new ArrayList<>();
 
     @Key("executions.give_boosters")
     @Explanation("The boosters to be given later")
     @IgnoreValue(ifNull = true)
-    private List<String> boosters = new ArrayList<>();
+    private final List<String> boosters = new ArrayList<>();
 
     @Key("executions.give_items.vanilla")
     @Explanation("The vanilla items to be given later")
@@ -136,7 +136,7 @@ public class Product extends ConfigurableObject implements Informative {
             "      gun: # gun, ammo, magazine, scope, grenade",
             "      - ak_47",
     })
-    private Multimap<ItemType, String> battleItems = HashMultimap.create();
+    private final Multimap<ItemType, String> battleItems = HashMultimap.create();
 
     @Key("executions.give_exp.vanilla")
     @Explanation("The vanilla exp to be given later")

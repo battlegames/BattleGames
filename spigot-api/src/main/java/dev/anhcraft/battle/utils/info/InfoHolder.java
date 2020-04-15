@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class InfoHolder {
     private final Map<String, Object> map = new HashMap<>();
-    private String identifier;
+    private final String identifier;
 
     public InfoHolder(@NotNull String identifier) {
         Condition.argNotNull("identifier", identifier);

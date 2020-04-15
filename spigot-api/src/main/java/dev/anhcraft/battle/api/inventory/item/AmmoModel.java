@@ -43,7 +43,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     @Key("bullets")
     @Explanation("Define bullets in this ammunition")
     @IgnoreValue(ifNull = true)
-    private List<Ammo.Bullet> bullets = new ArrayList<>();
+    private final List<Ammo.Bullet> bullets = new ArrayList<>();
 
     @Key("reload_delay")
     @Explanation({
@@ -52,7 +52,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
             "<b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; (ticks)</b>",
             "or <b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; / 20 (seconds)</b>"
     })
-    private long reloadDelay = 1;
+    private final long reloadDelay = 1;
 
     private double sumBulletDamage;
     private double avgBulletDamage;

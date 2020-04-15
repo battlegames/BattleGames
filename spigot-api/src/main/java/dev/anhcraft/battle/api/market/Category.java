@@ -45,7 +45,7 @@ public class Category extends ConfigurableObject {
         DEFAULT_ICON.material(Material.STONE);
     }
 
-    private String id;
+    private final String id;
 
     @Key("icon")
     @Explanation("Category's icon")
@@ -73,7 +73,7 @@ public class Category extends ConfigurableObject {
             "    name: \"&c&lApple\"",
             "    material: apple"
     })
-    private List<Product> products = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
     public Category(@NotNull String id) {
         Condition.argNotNull("id", id);

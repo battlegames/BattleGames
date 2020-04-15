@@ -54,10 +54,10 @@ public class EntityTrackingTask extends BattleComponent implements Runnable {
     }
 
     public static class EntityTracker{
-        private Entity entity;
+        private final Entity entity;
         private Location lastLoc;
         private final List<EntityTrackCallback> callbacks = new LinkedList<>();
-        private long originTime = System.currentTimeMillis();
+        private final long originTime = System.currentTimeMillis();
         private long lastMoveTime = System.currentTimeMillis();
 
         public EntityTracker(Entity entity) {

@@ -50,7 +50,7 @@ public class Rollback extends ConfigurableObject {
     @Key("worlds")
     @Explanation("List of worlds need to be reset")
     @IgnoreValue(ifNull = true)
-    private List<String> worlds = new ArrayList<>();
+    private final List<String> worlds = new ArrayList<>();
 
     public boolean isEnabled() {
         return enabled;

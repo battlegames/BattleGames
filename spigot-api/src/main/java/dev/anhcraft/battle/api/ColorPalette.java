@@ -43,7 +43,7 @@ public enum ColorPalette {
     PURPLE,
     ORANGE;
 
-    private Color color;
+    private final Color color;
 
     ColorPalette(){
         color = (Color) ReflectionUtil.getStaticField(Color.class, name());

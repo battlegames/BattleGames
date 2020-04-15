@@ -58,7 +58,7 @@ public class FlagOptions extends ConfigurableObject {
     @Key("max_health")
     @Explanation("The maximum health points of the flag")
     @Validation(notNull = true)
-    private int maxHealth = 10;
+    private final int maxHealth = 10;
 
     @Key("start_capture_sound")
     @Explanation("The sound on starting the capture")

@@ -59,7 +59,7 @@ public class BattleEffect extends ConfigurableObject {
             "  repeat_delay: 20",
             "  repeat_times: 5"
     })
-    private Map<EffectOption, Object> options = new HashMap<>();
+    private final Map<EffectOption, Object> options = new HashMap<>();
 
     @NotNull
     public Map<EffectOption, Object> getOptions() {

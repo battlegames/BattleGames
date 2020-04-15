@@ -53,7 +53,7 @@ public class Kit extends ConfigurableObject {
         DEF_NO_ACCESS.material(Material.BARRIER);
     }
 
-    private String id;
+    private final String id;
 
     @Key("icon")
     @Explanation("The kit's icon (when players can get it)")
@@ -63,7 +63,7 @@ public class Kit extends ConfigurableObject {
     @Key("no_access_icon")
     @Explanation("The icon to be showed when players can't access the kit")
     @IgnoreValue(ifNull = true)
-    private PreparedItem noAccessIcon = DEF_NO_ACCESS.duplicate();
+    private final PreparedItem noAccessIcon = DEF_NO_ACCESS.duplicate();
 
     @Key("permission")
     @Explanation("The permission that players must have to get the kit")
@@ -83,7 +83,7 @@ public class Kit extends ConfigurableObject {
             "      material: bread",
             "      amount: 16"
     })
-    private PreparedItem[] vanillaItems = new PreparedItem[0];
+    private final PreparedItem[] vanillaItems = new PreparedItem[0];
 
     @Key("items.battle")
     @Explanation({
@@ -105,12 +105,12 @@ public class Kit extends ConfigurableObject {
             "    - ak_47",
             "    - desert_eagle"
     })
-    private Multimap<ItemType, String> battleItems = HashMultimap.create();
+    private final Multimap<ItemType, String> battleItems = HashMultimap.create();
 
     @Key("boosters")
     @Explanation("The boosters to be given")
     @IgnoreValue(ifNull = true)
-    private List<String> boosters = new ArrayList<>();
+    private final List<String> boosters = new ArrayList<>();
 
     @Key("first_join")
     @Explanation("Players receive the kit automatically on their first joins")

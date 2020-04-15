@@ -34,9 +34,9 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerPrePurchaseEvent extends PlayerEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
-    private Market market;
-    private Category category;
-    private Product product;
+    private final Market market;
+    private final Category category;
+    private final Product product;
     private boolean cancelled;
     private boolean hasEnoughBalance;
 

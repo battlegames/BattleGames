@@ -33,9 +33,9 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerPurchaseEvent extends PlayerEvent {
     public static final HandlerList handlers = new HandlerList();
 
-    private Market market;
-    private Category category;
-    private Product product;
+    private final Market market;
+    private final Category category;
+    private final Product product;
 
     public PlayerPurchaseEvent(@NotNull Player player, @NotNull Market market, @NotNull Category category, @NotNull Product product) {
         super(player);

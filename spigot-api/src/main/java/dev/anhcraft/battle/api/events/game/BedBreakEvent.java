@@ -31,10 +31,10 @@ import org.jetbrains.annotations.NotNull;
 public class BedBreakEvent extends GameEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
-    private Player player;
-    private Block bed;
-    private BWTeam playerTeam;
-    private BWTeam targetTeam;
+    private final Player player;
+    private final Block bed;
+    private final BWTeam playerTeam;
+    private final BWTeam targetTeam;
     private boolean cancelled;
 
     public BedBreakEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull Block bed, @NotNull BWTeam playerTeam, @NotNull BWTeam targetTeam) {

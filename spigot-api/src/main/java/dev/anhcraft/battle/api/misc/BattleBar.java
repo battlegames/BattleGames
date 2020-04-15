@@ -31,7 +31,7 @@ public class BattleBar extends ConfigurableObject {
 
     @Key("primary")
     @Explanation("Make the bar appeared on the primary slot")
-    private boolean primarySlot = true;
+    private final boolean primarySlot = true;
 
     @Key("title")
     @Explanation("Set the title")
@@ -42,13 +42,13 @@ public class BattleBar extends ConfigurableObject {
     @Explanation("Set the color")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private BarColor color = BarColor.RED;
+    private final BarColor color = BarColor.RED;
 
     @Key("style")
     @Explanation("Set the style")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private BarStyle style = BarStyle.SOLID;
+    private final BarStyle style = BarStyle.SOLID;
 
     public boolean isPrimarySlot() {
         return primarySlot;

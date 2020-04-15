@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class FunctionLinker<T> implements FunctionCaller<T> {
-    private Instruction instruction;
-    private Consumer<T> handler;
+    private final Instruction instruction;
+    private final Consumer<T> handler;
 
     public FunctionLinker(@NotNull Instruction instruction, @NotNull Consumer<T> handler) {
         Condition.argNotNull("function", instruction);

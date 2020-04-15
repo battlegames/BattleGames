@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ViewEvent extends GuiEvent {
     public static final HandlerList handlers = new HandlerList();
-    private View view;
+    private final View view;
 
     public ViewEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window, @NotNull View view) {
         super(who, gui, window);

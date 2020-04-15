@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 
 public class PaginationUpdateEvent extends ComponentEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
-    private Pagination pagination;
+    private final Pagination pagination;
     private Predicate<Slot> slotFilter;
     private boolean cancelled;
 

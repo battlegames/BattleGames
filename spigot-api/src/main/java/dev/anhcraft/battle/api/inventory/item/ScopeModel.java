@@ -40,7 +40,7 @@ public class ScopeModel extends SingleSkinItem implements Attachable {
             "remains, the view returns to normal"
     })
     @IgnoreValue(ifNull = true)
-    private List<Integer> zoomLevels = new ArrayList<>();
+    private final List<Integer> zoomLevels = new ArrayList<>();
 
     public ScopeModel(@NotNull String id) {
         super(id);

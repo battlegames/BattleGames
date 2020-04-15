@@ -37,7 +37,7 @@ import java.util.Objects;
 public class WeaponUseEvent extends GameEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
-    private PlayerAttackReport report;
+    private final PlayerAttackReport report;
     private boolean cancelled;
 
     public WeaponUseEvent(@NotNull LocalGame game, @NotNull PlayerAttackReport report) {

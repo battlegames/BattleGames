@@ -39,11 +39,11 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     private final StatisticMap stats = new StatisticMap(x -> {});
     private final AtomicDouble igBalance = new AtomicDouble();
     private boolean hasFirstKill;
-    private WeakReference<Player> player;
+    private final WeakReference<Player> player;
     private boolean spectator;
     private boolean winner;
     private ItemStack[] backupInventory;
-    private Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
+    private final Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
 
     public GamePlayer(@NotNull Player player) {
         Validate.notNull(player, "Player must be non-null");

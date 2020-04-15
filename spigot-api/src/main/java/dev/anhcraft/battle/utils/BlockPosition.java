@@ -42,10 +42,10 @@ public class BlockPosition {
         return new BlockPosition(block.getX(), block.getY(), block.getZ(), block.getWorld());
     }
 
-    private int x;
-    private int y;
-    private int z;
-    private World world;
+    private final int x;
+    private final int y;
+    private final int z;
+    private final World world;
 
     public BlockPosition(int x, int y, int z, @Nullable World world) {
         this.x = x;

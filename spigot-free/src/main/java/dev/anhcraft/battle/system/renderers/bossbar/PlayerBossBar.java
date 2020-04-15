@@ -28,9 +28,9 @@ import org.bukkit.entity.Player;
 import java.util.function.Consumer;
 
 public class PlayerBossBar {
-    private Player player;
-    private BossBar bar;
-    private Consumer<PlayerBossBar> callback;
+    private final Player player;
+    private final BossBar bar;
+    private final Consumer<PlayerBossBar> callback;
     private boolean isShow;
 
     public PlayerBossBar(Player player, String title, BarColor color, BarStyle style, Consumer<PlayerBossBar> callback) {

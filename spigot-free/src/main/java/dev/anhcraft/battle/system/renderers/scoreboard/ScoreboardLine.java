@@ -23,8 +23,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
 public class ScoreboardLine {
-    private Team team;
-    private ChatColor color;
+    private final Team team;
+    private final ChatColor color;
     private String content;
 
     public ScoreboardLine(Team team, ChatColor color, String content) {

@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiEvent extends PlayerEvent {
     public static final HandlerList handlers = new HandlerList();
-    private Gui gui;
-    private Window window;
+    private final Gui gui;
+    private final Window window;
 
     public GuiEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window) {
         super(who);

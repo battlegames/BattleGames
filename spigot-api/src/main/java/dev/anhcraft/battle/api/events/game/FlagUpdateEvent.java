@@ -30,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
 public class FlagUpdateEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
 
-    private Player player;
-    private ABTeam team;
-    private TeamFlag<ABTeam> flag;
+    private final Player player;
+    private final ABTeam team;
+    private final TeamFlag<ABTeam> flag;
 
     public FlagUpdateEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull ABTeam team, @NotNull TeamFlag<ABTeam> flag) {
         super(game);

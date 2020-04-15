@@ -41,12 +41,12 @@ import java.util.List;
 public class Perk extends ConfigurableObject {
     public static final ConfigSchema<Perk> SCHEMA = ConfigSchema.of(Perk.class);
 
-    private String id;
+    private final String id;
 
     @Key("name")
     @Explanation("This perk's name")
     @IgnoreValue(ifNull = true)
-    private String name;
+    private final String name;
 
     @Key("executions.give_effects")
     @Explanation("Potion effects to be applied on the player")
@@ -60,7 +60,7 @@ public class Perk extends ConfigurableObject {
             "      duration: 99999",
             "      particles: false"
     })
-    private List<BattlePotionEffect> potionEffects = new ArrayList<>();
+    private final List<BattlePotionEffect> potionEffects = new ArrayList<>();
 
     @Key("executions.set_health")
     @Explanation("Set the player's health")

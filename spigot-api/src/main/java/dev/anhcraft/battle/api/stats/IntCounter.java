@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class IntCounter extends Statistic<Integer> {
-    private AtomicInteger backend;
+    private final AtomicInteger backend;
 
     public IntCounter(){
         backend = new AtomicInteger();

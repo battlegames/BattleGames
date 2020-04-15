@@ -27,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class ValueResult {
-    private Object val;
+    private final Object val;
 
     public ValueResult(Object val) {
         this.val = val;

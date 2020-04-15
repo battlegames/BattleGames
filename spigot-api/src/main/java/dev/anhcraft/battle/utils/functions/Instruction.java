@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 
 public class Instruction {
     private static final Pattern KEY_PATTERN = Pattern.compile("[a-zA-Z0-9_]+");
-    private String namespace;
-    private String target;
-    private String[] args;
+    private final String namespace;
+    private final String target;
+    private final String[] args;
 
     /**
      * Parses the given instruction in {@link String}.

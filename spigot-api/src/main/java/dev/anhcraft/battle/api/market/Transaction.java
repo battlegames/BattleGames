@@ -30,13 +30,13 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Transaction implements Informative {
-    private UUID buyer;
-    private String product;
-    private String currency;
-    private double price;
-    private long date;
-    private String formattedDate;
-    private String formattedPrice;
+    private final UUID buyer;
+    private final String product;
+    private final String currency;
+    private final double price;
+    private final long date;
+    private final String formattedDate;
+    private final String formattedPrice;
 
     public Transaction(@NotNull UUID buyer, @NotNull String product, double price, @NotNull String currency, long date) {
         Condition.argNotNull("buyer", buyer);

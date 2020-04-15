@@ -38,7 +38,7 @@ public class Game extends TempDataContainer implements Resettable, Informative {
     private final AtomicLong currentTime = new AtomicLong();
     protected int playerCount;
     private GamePhase phase = GamePhase.WAITING;
-    private Arena arena;
+    private final Arena arena;
 
     public Game(@NotNull Arena arena) {
         Validate.notNull(arena, "Arena must be non-null");

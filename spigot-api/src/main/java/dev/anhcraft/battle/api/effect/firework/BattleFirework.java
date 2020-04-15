@@ -46,7 +46,7 @@ public class BattleFirework extends ConfigurableObject {
     @Key("effects")
     @Explanation("The firework's effects")
     @IgnoreValue(ifNull = true)
-    private List<BattleFireworkEffect> effects = new ArrayList<>();
+    private final List<BattleFireworkEffect> effects = new ArrayList<>();
 
     @Key("power")
     @Explanation("The firework's power")

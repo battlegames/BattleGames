@@ -53,7 +53,7 @@ public enum BattlePotionEffectType {
     LUCK,
     UNLUCK;
 
-    private PotionEffectType potionEffectType;
+    private final PotionEffectType potionEffectType;
 
     BattlePotionEffectType(){
         potionEffectType = (PotionEffectType) ReflectionUtil.getStaticField(PotionEffectType.class, name());

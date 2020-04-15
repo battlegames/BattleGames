@@ -51,7 +51,7 @@ public class Backpack {
     }
 
     public static class Compartment {
-        private Map<String, Long> MAP = new LinkedHashMap<>();
+        private final Map<String, Long> MAP = new LinkedHashMap<>();
 
         public void put(@Nullable String id){
             MAP.put(id, System.currentTimeMillis());

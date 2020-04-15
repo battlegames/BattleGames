@@ -29,10 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SlotReport {
-    private Player player;
-    private int position;
-    private Event event;
-    private View view;
+    private final Player player;
+    private final int position;
+    private final Event event;
+    private final View view;
 
     public SlotReport(@NotNull Player player, @Nullable Event event, @NotNull View view, int position) {
         Condition.argNotNull("player", player);

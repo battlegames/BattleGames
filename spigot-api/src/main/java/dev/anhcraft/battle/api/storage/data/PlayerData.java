@@ -36,19 +36,19 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData implements Resettable, Serializable {
-    private Backpack backpack = new Backpack();
-    private Map<String, Object> storedStats = new HashMap<>();
-    private StatisticMap stats = new StatisticMap(statistic -> {
+    private final Backpack backpack = new Backpack();
+    private final Map<String, Object> storedStats = new HashMap<>();
+    private final StatisticMap stats = new StatisticMap(statistic -> {
         Object v = storedStats.get(statistic.getId());
         if(v != null) {
             statistic.setData(v);
         }
     });
-    private Map<String, Long> kits = new ConcurrentHashMap<>();
-    private List<String> receivedFirstJoinKits = new ArrayList<>();
-    private List<Transaction> transactions = new ArrayList<>();
-    private Map<String, Long> boosters = new ConcurrentHashMap<>();
-    private Map<String, PlayerProgression> advancements = new HashMap<>();
+    private final Map<String, Long> kits = new ConcurrentHashMap<>();
+    private final List<String> receivedFirstJoinKits = new ArrayList<>();
+    private final List<Transaction> transactions = new ArrayList<>();
+    private final Map<String, Long> boosters = new ConcurrentHashMap<>();
+    private final Map<String, PlayerProgression> advancements = new HashMap<>();
     private String activeBooster;
 
     public PlayerData(){

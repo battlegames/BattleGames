@@ -59,10 +59,10 @@ public class GamePlayerDamageEvent extends GameEvent implements Cancellable {
 
     public static final HandlerList handlers = new HandlerList();
 
-    private DamageReport report;
-    private GamePlayer gp1;
-    private GamePlayer gp2;
-    private BattleType battleType;
+    private final DamageReport report;
+    private final GamePlayer gp1;
+    private final GamePlayer gp2;
+    private final BattleType battleType;
     private boolean cancelled;
 
     public GamePlayerDamageEvent(@NotNull LocalGame game, @NotNull DamageReport report, @Nullable GamePlayer gp1, @Nullable GamePlayer gp2, @NotNull BattleType battleType) {

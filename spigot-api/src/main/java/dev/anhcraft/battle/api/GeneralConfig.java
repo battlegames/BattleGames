@@ -112,28 +112,28 @@ public class GeneralConfig extends ConfigurableObject {
     @Key("storage.file.data_path")
     @Explanation("The path to the directory where we should store data")
     @IgnoreValue(ifNull = true)
-    private String storageFilePath = ".battle";
+    private final String storageFilePath = ".battle";
 
     @Key("storage.mysql.hostname")
     @Explanation("The IP (or host name) of MySQL server")
     @IgnoreValue(ifNull = true)
-    private String storageMySQLHost = "localhost";
+    private final String storageMySQLHost = "localhost";
 
     @Key("storage.mysql.port")
     @Explanation("The port MySQL server listens to")
-    private int storageMySQLPort = 3306;
+    private final int storageMySQLPort = 3306;
 
     @Key("storage.mysql.database")
     @Explanation("The MySQL database")
-    private String storageMySQLDatabase = "minecraft";
+    private final String storageMySQLDatabase = "minecraft";
 
     @Key("storage.mysql.username")
     @Explanation("The MySQL user's name")
-    private String storageMySQLUser = "root";
+    private final String storageMySQLUser = "root";
 
     @Key("storage.mysql.password")
     @Explanation("The MySQL user's password")
-    private String storageMySQLPass = "";
+    private final String storageMySQLPass = "";
 
     @Key("storage.mysql.datasource_properties")
     @Explanation("The external configuration (for HikariCP's data source)")
@@ -141,7 +141,7 @@ public class GeneralConfig extends ConfigurableObject {
 
     @Key("misc.anti_death_drops")
     @Explanation("This option prevents player items and exp from dropping")
-    private boolean antiDeathDrops = true;
+    private final boolean antiDeathDrops = true;
 
     @Key("misc.resource_pack.enabled")
     @Explanation("Enabled force resource pack on join")
@@ -153,29 +153,29 @@ public class GeneralConfig extends ConfigurableObject {
 
     @Key("misc.heal_on_game_start")
     @Explanation("Enable this option to heal all players when game started")
-    private boolean healOnGameStart = true;
+    private final boolean healOnGameStart = true;
 
     @Key("misc.heal_on_game_end")
     @Explanation("Enable this option to heal all players after end game")
-    private boolean healOnGameEnd = true;
+    private final boolean healOnGameEnd = true;
 
     @Key("misc.default_speed.walk")
     @Explanation({
             "The walking speed",
             "-1 <= speed <= 1"
     })
-    private double walkSpeed = 0.2;
+    private final double walkSpeed = 0.2;
 
     @Key("misc.default_speed.fly")
     @Explanation({
             "The flying speed",
             "-1 <= speed <= 1"
     })
-    private double flySpeed = 0.2;
+    private final double flySpeed = 0.2;
 
     @Key("misc.entity_track_min_distance")
     @Explanation("The minimum distance to ensure a tracked entity has moved")
-    private double entityTrackMinDistance = 1.5;
+    private final double entityTrackMinDistance = 1.5;
 
     @Key("misc.material_hardness")
     @Explanation("The material of blocks")
@@ -196,7 +196,7 @@ public class GeneralConfig extends ConfigurableObject {
             "until there is no server left"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> bungeeLobbies = new ArrayList<>();
+    private final List<String> bungeeLobbies = new ArrayList<>();
 
     @Key("bungeecord.reconnect_tries_per_server")
     @Explanation({
@@ -207,39 +207,39 @@ public class GeneralConfig extends ConfigurableObject {
 
     @Key("bungeecord.connection_delay")
     @Explanation("The delayed time between two connections per player")
-    private long bungeeConnectDelay = 100;
+    private final long bungeeConnectDelay = 100;
 
     @Key("control.gun_shoot")
     @Explanation("The type of mouse click for shooting gun")
     @IgnoreValue(ifNull = true)
     @PrettyEnum
-    private MouseClick gunShootClick = MouseClick.LEFT_CLICK;
+    private final MouseClick gunShootClick = MouseClick.LEFT_CLICK;
 
     @Key("control.gun_zoom")
     @Explanation("The type of mouse click for zooming in (with scope attached to gun)")
     @IgnoreValue(ifNull = true)
     @PrettyEnum
-    private MouseClick gunZoomClick = MouseClick.RIGHT_CLICK;
+    private final MouseClick gunZoomClick = MouseClick.RIGHT_CLICK;
 
     @Key("control.grenade_throw")
     @Explanation("The type of mouse click for throwing grenade")
     @IgnoreValue(ifNull = true)
     @PrettyEnum
-    private MouseClick grenadeThrowClick = MouseClick.LEFT_CLICK;
+    private final MouseClick grenadeThrowClick = MouseClick.LEFT_CLICK;
 
     @Key("control.auto_reload_gun")
     @Explanation("Automatically reload guns ammunition when needed")
-    private boolean autoReloadGun = false;
+    private final boolean autoReloadGun = false;
 
     @Key("in_game_economy.currency.name")
     @Explanation("The name of the currency that used in-game")
     @IgnoreValue(ifNull = true)
-    private String igEcoCurrencyName = "&aCoins";
+    private final String igEcoCurrencyName = "&aCoins";
 
     @Key("in_game_economy.currency.format")
     @Explanation("The price format (contains the symbol and the cost)")
     @IgnoreValue(ifNull = true)
-    private String igEcoCurrencyFormat = "%.2f coins";
+    private final String igEcoCurrencyFormat = "%.2f coins";
 
     @Key("in_game_economy.init_balance")
     @Explanation("The initial balance (given on starting a game)")

@@ -23,7 +23,7 @@ package dev.anhcraft.battle.system.debugger;
 import java.util.concurrent.TimeUnit;
 
 public class TimingStack {
-    private long start;
+    private final long start;
     private long end;
 
     public TimingStack(long start) {

@@ -31,8 +31,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DataMap<T> {
-    private Map<T, DataTag<?>> map = new HashMap<>();
-    private AtomicBoolean modifyTracker = new AtomicBoolean();
+    private final Map<T, DataTag<?>> map = new HashMap<>();
+    private final AtomicBoolean modifyTracker = new AtomicBoolean();
 
     @Nullable
     public Object readTag(T key){

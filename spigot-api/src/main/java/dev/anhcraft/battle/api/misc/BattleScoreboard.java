@@ -33,7 +33,7 @@ public class BattleScoreboard {
 
     @Key("enabled")
     @Explanation("Should we enable the scoreboard?")
-    private boolean enabled = true;
+    private final boolean enabled = true;
 
     @Key("title")
     @Explanation({
@@ -49,7 +49,7 @@ public class BattleScoreboard {
             "You can use placeholders here"
     })
     @IgnoreValue(ifNull = true)
-    private List<String> content = new ArrayList<>();
+    private final List<String> content = new ArrayList<>();
 
     @Key("fixed_length")
     @Explanation({

@@ -36,7 +36,7 @@ public class ItemSkin extends ConfigurableObject {
     @Explanation("Set the material")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private Material material = Material.AIR;
+    private final Material material = Material.AIR;
 
     @Key("damage")
     @Explanation("Set the damage")

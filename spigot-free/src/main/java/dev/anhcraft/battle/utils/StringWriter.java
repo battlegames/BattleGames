@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class StringWriter {
-    private ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
     public StringWriter append(String s) throws IOException {
         stream.write(s.getBytes(StandardCharsets.UTF_8));

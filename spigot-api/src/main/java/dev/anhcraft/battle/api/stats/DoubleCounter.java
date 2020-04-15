@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DoubleCounter extends Statistic<Double> {
-    private AtomicDouble backend;
+    private final AtomicDouble backend;
 
     public DoubleCounter(){
         backend = new AtomicDouble();

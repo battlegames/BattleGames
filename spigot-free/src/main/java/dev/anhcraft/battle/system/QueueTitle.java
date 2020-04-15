@@ -20,8 +20,8 @@
 package dev.anhcraft.battle.system;
 
 public class QueueTitle {
-    private String title;
-    private String subtitle;
+    private final String title;
+    private final String subtitle;
 
     public QueueTitle(String title, String subtitle) {
         this.title = title;

@@ -38,7 +38,7 @@ public class BedWarOptions extends ModeOptions {
 
     @Key("team_size")
     @Explanation("The size of a team")
-    private int teamSize = 2;
+    private final int teamSize = 2;
 
     @Key("teams")
     @Example({
@@ -61,7 +61,7 @@ public class BedWarOptions extends ModeOptions {
             "    bed_location: lighthouse -22.44 66.56 -76.01 0 0"
     })
     @IgnoreValue(ifNull = true)
-    private List<BWTeamOptions> teams = new ArrayList<>();
+    private final List<BWTeamOptions> teams = new ArrayList<>();
 
     public int getTeamSize() {
         return teamSize;

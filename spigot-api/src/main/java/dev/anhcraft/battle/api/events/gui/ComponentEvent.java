@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ComponentEvent extends ViewEvent {
     public static final HandlerList handlers = new HandlerList();
-    private Component component;
+    private final Component component;
 
     public ComponentEvent(@NotNull Player who, @NotNull Gui gui, @NotNull Window window, @NotNull View view, @NotNull Component component) {
         super(who, gui, window, view);

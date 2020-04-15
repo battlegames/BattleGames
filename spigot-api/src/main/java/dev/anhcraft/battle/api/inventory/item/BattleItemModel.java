@@ -32,12 +32,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Schema
 public abstract class BattleItemModel extends ConfigurableObject implements Informative {
-    private String id;
+    private final String id;
 
     @Key("name")
     @Explanation("Give a name for the item")
     @IgnoreValue(ifNull = true)
-    private String name;
+    private final String name;
 
     private InfoHolder cachedInfoHolder;
 

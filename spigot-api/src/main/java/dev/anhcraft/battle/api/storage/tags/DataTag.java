@@ -33,7 +33,7 @@ public abstract class DataTag<T> {
     public static final int FLOAT = 6;
     public static final int LIST = 7;
 
-    private T value;
+    private final T value;
 
     public DataTag(@NotNull T value) {
         Condition.argNotNull("value", value);

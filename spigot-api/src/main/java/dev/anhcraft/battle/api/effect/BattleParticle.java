@@ -34,11 +34,11 @@ public class BattleParticle extends ConfigurableObject {
     @Explanation("The type of particle")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private Particle type = Particle.CLOUD;
+    private final Particle type = Particle.CLOUD;
 
     @Key("count")
     @Explanation("The number of particles")
-    private int count = 1;
+    private final int count = 1;
 
     @Key("offset_x")
     @Explanation({

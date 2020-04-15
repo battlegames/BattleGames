@@ -126,14 +126,14 @@ public class GamePlayerDeathEvent extends GameEvent {
         }
     }
 
-    private Player player;
-    private Collection<DamageReport> damageReports;
-    private Map<Player, Contribution> damagerMap;
-    private Player mostDamager;
-    private double mostPlayerDamage;
-    private double totalPlayerDamage;
-    private double totalNatureDamage;
-    private double avgDamage;
+    private final Player player;
+    private final Collection<DamageReport> damageReports;
+    private final Map<Player, Contribution> damagerMap;
+    private final Player mostDamager;
+    private final double mostPlayerDamage;
+    private final double totalPlayerDamage;
+    private final double totalNatureDamage;
+    private final double avgDamage;
 
     public GamePlayerDeathEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull Collection<DamageReport> damageReports, @NotNull Map<Player, Contribution> damagerMap, @Nullable Player mostDamager, double mostPlayerDamage, double totalPlayerDamage, double totalNatureDamage, double avgDamage) {
         super(game);

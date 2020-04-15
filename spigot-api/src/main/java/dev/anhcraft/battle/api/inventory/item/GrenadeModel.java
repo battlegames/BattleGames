@@ -46,7 +46,7 @@ public class GrenadeModel extends SingleSkinWeapon {
 
     @Key("velocity_multiplier")
     @Explanation("The multiplier applies to the directional velocity")
-    private double velocityMultiplier = 2.0;
+    private final double velocityMultiplier = 2.0;
 
     @Key("explosion_power")
     @Explanation({

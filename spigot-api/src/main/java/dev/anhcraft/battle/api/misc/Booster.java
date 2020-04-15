@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 public class Booster extends ConfigurableObject {
     public static final ConfigSchema<Booster> SCHEMA = ConfigSchema.of(Booster.class);
 
-    private String id;
+    private final String id;
 
     @Key("icon")
     @Explanation("The icon that used to symbolize the booster")
@@ -47,7 +47,7 @@ public class Booster extends ConfigurableObject {
 
     @Key("money.multiplier")
     @Explanation("The multiplier for the total money")
-    private double moneyMultiplier = 1;
+    private final double moneyMultiplier = 1;
 
     @Key("money.limit")
     @Explanation({
@@ -58,7 +58,7 @@ public class Booster extends ConfigurableObject {
 
     @Key("exp.multiplier")
     @Explanation("The multiplier for the total experience points")
-    private double expMultiplier = 1;
+    private final double expMultiplier = 1;
 
     @Key("exp.limit")
     @Explanation({

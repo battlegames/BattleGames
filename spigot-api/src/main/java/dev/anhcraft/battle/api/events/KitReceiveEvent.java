@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public class KitReceiveEvent extends PlayerEvent implements Cancellable {
     public static final HandlerList handlers = new HandlerList();
 
-    private Kit kit;
+    private final Kit kit;
     private boolean cancelled;
 
     public KitReceiveEvent(@NotNull Player who, @NotNull Kit kit) {
