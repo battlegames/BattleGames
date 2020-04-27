@@ -209,6 +209,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         }
 
         extension = CraftExtension.of(BattlePlugin.class);
+        extension.requireAtLeastVersion("1.1.9");
         papiExpansion = new PapiExpansion(this);
         papiExpansion.register();
         taskHelper = new TaskHelper(this);
