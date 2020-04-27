@@ -23,7 +23,7 @@ package dev.anhcraft.battle.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
+import dev.anhcraft.jvmkit.utils.UserAgent;
 import org.apache.commons.lang.SystemUtils;
 import org.bukkit.Bukkit;
 
@@ -51,7 +51,7 @@ public class CraftStats {
             object.addProperty("arc", SystemUtils.OS_ARCH);
             HttpURLConnection conn = (HttpURLConnection) new URL("https://anhcraft.dev/stats/").openConnection();
             conn.setRequestMethod("POST");
-            conn.addRequestProperty("User-Agent", HTTPConnectionHelper.USER_AGENT_CHROME);
+            conn.addRequestProperty("User-Agent", UserAgent.CHROME_WINDOWS);
             conn.addRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
             BufferedOutputStream output = new BufferedOutputStream(conn.getOutputStream());
