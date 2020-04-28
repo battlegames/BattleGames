@@ -66,11 +66,20 @@ public class BattleRollback extends BattleComponent {
         BattleDebugger.startTiming("rollback-battle");
         File workingDir = world.getWorldFolder();
         File cacheDir = getCachedWorldFolder(world);
-        if(!cacheDir.exists()) return false;
+        if(!cacheDir.exists()) {
+            BattleDebugger.endTiming("rollback-battle");
+            return false;
+        }
         world.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
-        if(!Bukkit.unloadWorld(world, false)) return false;
+        if(!Bukkit.unloadWorld(world, false)) {
+            BattleDebugger.endTiming("rollback-battle");
+            return false;
+        }
         FileUtil.clean(workingDir);
-        if(!FileUtil.copy(cacheDir, workingDir)) return false;
+        if(!FileUtil.copy(cacheDir, workingDir)) {
+            BattleDebugger.endTiming("rollback-battle");
+            return false;
+        }
         new WorldCreator(world.getName()).createWorld();
         BattleDebugger.endTiming("rollback-battle");
         return true;
