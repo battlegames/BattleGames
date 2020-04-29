@@ -393,3 +393,87 @@ bw_demo:
       - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+
+dm_italy:
+  name: "&aItaly"
+  mode: dm
+  final_exp_formula: "a+b*30-c*10+d*5"
+  final_money_formula: "a*4+b*12+d*5"
+  icon:
+    material: GRASS
+    name: "<arena_name>"
+    lore:
+      - "&4Mode: &f<mode_name>"
+      - "&4Players: &f<game_current_time:0>/<arena_max_players>"
+  max_time: 8400
+  max_players: 20
+  allow_late_joins: true
+  rollback:
+    enabled: true
+    provider: async_region
+    region:
+      corner_1: "italy -346 31 3 -96 33"
+      corner_2: "italy -195 98 117 -268 10"
+  mode_options:
+    min_players: 1
+    waiting_spawn_points:
+      - italy -269 51 39 -90 1
+      - italy -269 51 41 -90 1
+      - italy -269 51 44 -90 1
+      - italy -269 51 47 -90 1
+    playing_spawn_points:
+      - italy -305 42 84 -93.7459 3.150032
+      - italy -277 42 82 -269.69574 -0.14996877
+      - italy -285 42 54 -267.44608 0.7500529
+      - italy -253 42 31 -271.64615 2.5500715
+      - italy -272 47 50 -90.89651 4.050111
+      - italy -222 46 86 -359.84628 3.9000845
+      - italy -250 42 54 -88.34592 2.2500813
+      - italy -323 39 44 -87.44594 2.2501101
+    countdown_time: 300
+    item_selection_time: 1000
+    spawn_protection_time: 40
+    respawn_waiting_time: 200
+  render_gui_on_death: true
+  end_firework:
+    power: 3
+    effects:
+      '1':
+        type: ball_large
+        trail: true
+        primary_colors:
+          - red
+          - green
+          - yellow
+        fade_colors:
+          - teal
+          - purple
+          - aqua
+          - fuchsia
+      '2':
+        type: burst
+        primary_colors:
+          - lime
+          - yellow
+          - aqua
+          - orange
+  end_delay: 100
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
