@@ -63,6 +63,7 @@ public class BattleRollback extends BattleComponent {
     }
 
     public boolean rollbackWorld(World world){
+        plugin.getLogger().info("[Rollback/Battle] Reloading world: " + world.getName());
         BattleDebugger.startTiming("rollback-battle");
         File workingDir = world.getWorldFolder();
         File cacheDir = getCachedWorldFolder(world);

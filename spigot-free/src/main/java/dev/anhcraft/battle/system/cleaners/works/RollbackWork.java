@@ -73,7 +73,6 @@ public class RollbackWork implements Work {
                         plugin.getLogger().warning("World not found: "+w);
                         it.remove();
                     } else {
-                        plugin.getLogger().info("[Rollback/Battle] Reloading world: " + w);
                         plugin.taskHelper.newTask(() -> {
                             if (plugin.battleRollback.rollbackWorld(wd)) {
                                 plugin.getLogger().info("[Rollback/Battle] World reloaded successfully!");
