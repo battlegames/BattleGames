@@ -24,6 +24,7 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,6 +88,25 @@ public class RollbackWork implements Work {
                     countDownLatch.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+            } else if (rollback.getProvider() == Rollback.Provider.ASYNC_REGION) {
+                Location l1 = rollback.getCorner1();
+                Location l2 = rollback.getCorner2();
+                if (l1 != null && l2 != null) {
+                    CountDownLatch countDownLatch = new CountDownLatch(1);
+                    plugin.taskHelper.newTask(() -> {
+                        if (plugin.asyncRegionRollback.rollbackRegion(l1, l2)) {
+                            plugin.getLogger().info("[Rollback/AsyncRegion] Region reloaded successfully!");
+                        } else {
+                            plugin.getLogger().warning("[Rollback/AsyncRegion] Failed to reset! (Please recheck the region)");
+                        }
+                        countDownLatch.countDown();
+                    });
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

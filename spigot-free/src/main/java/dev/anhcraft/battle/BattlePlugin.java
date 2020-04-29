@@ -50,6 +50,7 @@ import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
+import dev.anhcraft.battle.system.AsyncRegionRollback;
 import dev.anhcraft.battle.system.BattleRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
 import dev.anhcraft.battle.system.ResourcePack;
@@ -181,6 +182,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private boolean supportBungee;
     public PremiumConnector premiumConnector;
     public BattleRollback battleRollback;
+    public AsyncRegionRollback asyncRegionRollback;
     public ISWMIntegration SWMIntegration;
     public boolean slimeWorldManagerSupport;
 
@@ -221,6 +223,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         arenaManager = new BattleArenaManager(this);
         advancementManager = new BattleAdvancementManager(this);
         battleRollback = new BattleRollback(this);
+        asyncRegionRollback = new AsyncRegionRollback(this);
         premiumConnector.onInitSystem();
 
         initGeneral(CONFIG[1]);
@@ -634,6 +637,15 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                         } else {
                             battleRollback.backupWorld(wd);
                         }
+                    }
+                }
+                if(arena.getRollback().getProvider() == Rollback.Provider.ASYNC_REGION) {
+                    Location l1 = arena.getRollback().getCorner1();
+                    Location l2 = arena.getRollback().getCorner2();
+                    if(l1 == null || l2 == null) {
+                        getLogger().warning("Async region - Location NULL!");
+                    } else {
+                        asyncRegionRollback.backupRegion(l1, l2);
                     }
                 }
             }

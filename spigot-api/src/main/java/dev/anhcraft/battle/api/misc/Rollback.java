@@ -21,9 +21,12 @@
 package dev.anhcraft.battle.api.misc;
 
 import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,8 @@ public class Rollback extends ConfigurableObject {
 
     public enum Provider {
         SLIME_WORLD,
-        BATTLE
+        BATTLE,
+        ASYNC_REGION
     }
 
     @Key("enabled")
@@ -52,6 +56,16 @@ public class Rollback extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private final List<String> worlds = new ArrayList<>();
 
+    @Key("region.corner_1")
+    @Explanation("First corner in the region")
+    @IgnoreValue(ifNull = true)
+    private String corner1;
+
+    @Key("region.corner_2")
+    @Explanation("Second corner in the region")
+    @IgnoreValue(ifNull = true)
+    private String corner2;
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -68,5 +82,15 @@ public class Rollback extends ConfigurableObject {
     @NotNull
     public List<String> getWorlds() {
         return worlds;
+    }
+
+    @Nullable
+    public Location getCorner1() {
+        return corner1 == null ? null : LocationUtil.fromString(corner1);
+    }
+
+    @Nullable
+    public Location getCorner2() {
+        return corner2 == null ? null : LocationUtil.fromString(corner2);
     }
 }
