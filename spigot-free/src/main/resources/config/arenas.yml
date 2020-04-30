@@ -1,5 +1,4 @@
-# This configuration is a part of BattleGames
-# https://anhcraft.dev/cd/battle/Arena.html
+# Configdoc: https://anhcraft.dev/cd/battle/Arena.schema.html
 
 dm_demo:
   name: "&aDEATHMATCH"

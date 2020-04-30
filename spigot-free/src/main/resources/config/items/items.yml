@@ -1,5 +1,4 @@
-# This configuration is a part of BattleGames
-# https://wiki.anhcraft.dev/en/battle/items
+# Wiki: https://wiki.anhcraft.dev/en/battle/items
 
 ammo:
   name: "<ammo_name>"

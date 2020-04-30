@@ -1,5 +1,5 @@
-# This configuration is a part of BattleGames
-# https://wiki.anhcraft.dev/en/battle/gun
+# Wiki: https://wiki.anhcraft.dev/en/battle/gun
+# Configdoc: https://anhcraft.dev/cd/battle/GunModel.schema.html
 
 ak_47:
   name: "&e&l&nAK-47"

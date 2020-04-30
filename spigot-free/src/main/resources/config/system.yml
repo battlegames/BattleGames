@@ -1,11 +1,11 @@
-# This configuration is a part of BattleGames
+#  ====== SYSTEM CONFIGURATION ======
 
 # Here you can specify the path to the configuration folder which contains
 # general.yml, arenas.yml, locale files, etc (except this file).
 # - If you are going to host multiple Battle servers, this option should be
 # used to share the same configuration together.
-# - If you are hosting files on the cloud, check out the remote config feature.
-# - Leave blank to use the default
+# - Leave blank to use the default path
+# (*) If you are hosting files on the cloud, check out the remote config feature.
 # [optional]
 config_folder: ""
 

@@ -1,5 +1,5 @@
-# This configuration is a part of BattleGames
-# https://wiki.anhcraft.dev/en/battle/ammo
+# Wiki: https://wiki.anhcraft.dev/en/battle/ammo
+# Configdoc: https://anhcraft.dev/cd/battle/AmmoModel.schema.html
 
 7_62mm:
   name: "&f7.62mm"
