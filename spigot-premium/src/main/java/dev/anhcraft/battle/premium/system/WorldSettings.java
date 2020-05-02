@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.premium.system;
 
+import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.PrettyEnum;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Schema
-public class WorldSettings {
+public class WorldSettings extends ConfigurableObject {
     @Key("prevent_mob_drops")
     private boolean preventMobDrops;
 
