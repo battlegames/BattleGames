@@ -78,6 +78,7 @@ import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
+import dev.anhcraft.craftkit.common.utils.VersionUtil;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
@@ -462,7 +463,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(String.class).oldPath("storage_version").newPath("last_storage_version"));
         configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(String.class).oldPath("plugin_version").newPath("last_plugin_version"));
         configUpdater.update(c);
-        if(c.getString("last_plugin_version").chars().sum() < "1.1.9".chars().sum()){
+        if(VersionUtil.compareVersion(c.getString("last_plugin_version"), "1.1.9") < 0){
             getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
             getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
             getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
