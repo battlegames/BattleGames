@@ -30,6 +30,7 @@ import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public abstract class BattleItemModel extends ConfigurableObject implements Informative {
     private final String id;
@@ -37,7 +38,7 @@ public abstract class BattleItemModel extends ConfigurableObject implements Info
     @Key("name")
     @Explanation("Give a name for the item")
     @IgnoreValue(ifNull = true)
-    private final String name;
+    private String name;
 
     private InfoHolder cachedInfoHolder;
 

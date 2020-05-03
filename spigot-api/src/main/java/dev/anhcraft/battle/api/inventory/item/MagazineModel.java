@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class MagazineModel extends SingleSkinItem implements Attachable {
     public static final ConfigSchema<MagazineModel> SCHEMA = ConfigSchema.of(MagazineModel.class);
@@ -41,7 +42,7 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
             "ammo:",
             "  7_62mm: 30 # Can hold up to x30 7.62 mm ammo"
     })
-    private final Map<AmmoModel, Integer> ammunition = new HashMap<>();
+    private Map<AmmoModel, Integer> ammunition = new HashMap<>();
 
     public MagazineModel(@NotNull String id) {
         super(id);

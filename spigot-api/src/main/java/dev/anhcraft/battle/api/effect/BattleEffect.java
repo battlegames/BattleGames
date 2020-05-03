@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleEffect extends ConfigurableObject {
     public static final ConfigSchema<BattleEffect> SCHEMA = ConfigSchema.of(BattleEffect.class);
@@ -59,7 +60,7 @@ public class BattleEffect extends ConfigurableObject {
             "  repeat_delay: 20",
             "  repeat_times: 5"
     })
-    private final Map<EffectOption, Object> options = new HashMap<>();
+    private Map<EffectOption, Object> options = new HashMap<>();
 
     @NotNull
     public Map<EffectOption, Object> getOptions() {

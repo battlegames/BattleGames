@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Category extends ConfigurableObject {
     private static final PreparedItem DEFAULT_ICON = new PreparedItem();
@@ -73,7 +74,7 @@ public class Category extends ConfigurableObject {
             "    name: \"&c&lApple\"",
             "    material: apple"
     })
-    private final List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     public Category(@NotNull String id) {
         Condition.argNotNull("id", id);

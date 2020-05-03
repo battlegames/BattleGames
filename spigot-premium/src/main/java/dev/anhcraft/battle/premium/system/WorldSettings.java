@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class WorldSettings extends ConfigurableObject {
     @Key("prevent_mob_drops")
@@ -58,7 +59,7 @@ public class WorldSettings extends ConfigurableObject {
 
     @Key("except_worlds")
     @IgnoreValue(ifNull = true)
-    private final List<String> blacklistWorlds = new ArrayList<>();
+    private List<String> blacklistWorlds = new ArrayList<>();
 
     public boolean isPreventMobDrops() {
         return preventMobDrops;

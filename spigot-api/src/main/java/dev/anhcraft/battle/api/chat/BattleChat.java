@@ -27,13 +27,14 @@ import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.annotation.Validation;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleChat {
     public static final ConfigSchema<BattleChat> SCHEMA = ConfigSchema.of(BattleChat.class);
 
     @Key("enabled")
     @Explanation("Should we enable the chat system?")
-    private final boolean enabled = true;
+    private boolean enabled = true;
 
     @Key("format")
     @Explanation({

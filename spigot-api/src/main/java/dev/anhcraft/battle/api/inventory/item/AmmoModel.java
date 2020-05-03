@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class AmmoModel extends SingleSkinItem implements Attachable {
     public static final ConfigSchema<AmmoModel> SCHEMA = ConfigSchema.of(AmmoModel.class);
@@ -43,7 +44,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     @Key("bullets")
     @Explanation("Define bullets in this ammunition")
     @IgnoreValue(ifNull = true)
-    private final List<Ammo.Bullet> bullets = new ArrayList<>();
+    private List<Ammo.Bullet> bullets = new ArrayList<>();
 
     @Key("reload_delay")
     @Explanation({
@@ -52,7 +53,7 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
             "<b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; (ticks)</b>",
             "or <b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; / 20 (seconds)</b>"
     })
-    private final long reloadDelay = 1;
+    private long reloadDelay = 1;
 
     private double sumBulletDamage;
     private double avgBulletDamage;

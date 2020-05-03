@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleFireworkEffect extends ConfigurableObject {
     public static ConfigSchema<BattleFireworkEffect> SCHEMA = ConfigSchema.of(BattleFireworkEffect.class);
@@ -38,7 +39,7 @@ public class BattleFireworkEffect extends ConfigurableObject {
     @Explanation("The firework type")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final FireworkEffect.Type type = FireworkEffect.Type.BALL;
+    private FireworkEffect.Type type = FireworkEffect.Type.BALL;
 
     @Key("flicker")
     @Explanation("Make this firework flicker")
@@ -52,13 +53,13 @@ public class BattleFireworkEffect extends ConfigurableObject {
     @Explanation("All primary colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final List<ColorPalette> primaryColors = new ArrayList<>();
+    private List<ColorPalette> primaryColors = new ArrayList<>();
 
     @Key("fade_colors")
     @Explanation("All fade colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final List<ColorPalette> fadeColors = new ArrayList<>();
+    private List<ColorPalette> fadeColors = new ArrayList<>();
 
     private FireworkEffect cached;
 

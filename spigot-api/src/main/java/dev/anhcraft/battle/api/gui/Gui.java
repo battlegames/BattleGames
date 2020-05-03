@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Gui extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Gui> SCHEMA = ConfigSchema.of(Gui.class);
@@ -58,7 +59,7 @@ public class Gui extends ConfigurableObject implements Informative {
 
     @Key("components")
     @IgnoreValue(ifNull = true)
-    private final List<Component> components = new ArrayList<>();
+    private List<Component> components = new ArrayList<>();
 
     @Key("sound")
     private BattleSound sound;

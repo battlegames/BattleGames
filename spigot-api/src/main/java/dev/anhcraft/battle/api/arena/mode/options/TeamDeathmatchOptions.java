@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class TeamDeathmatchOptions extends ModeOptions {
     public static final ConfigSchema<TeamDeathmatchOptions> SCHEMA = ConfigSchema.of(TeamDeathmatchOptions.class);
@@ -41,12 +42,12 @@ public class TeamDeathmatchOptions extends ModeOptions {
     @Key("playing_spawn_points_a")
     @Explanation("The spawn points of team A (in playing phase)")
     @IgnoreValue(ifNull = true)
-    private final List<String> playSpawnPointsA = new ArrayList<>();
+    private List<String> playSpawnPointsA = new ArrayList<>();
 
     @Key("playing_spawn_points_b")
     @Explanation("The spawn points of team B (in playing phase)")
     @IgnoreValue(ifNull = true)
-    private final List<String> playSpawnPointsB = new ArrayList<>();
+    private List<String> playSpawnPointsB = new ArrayList<>();
 
     @NotNull
     public List<Location> getPlaySpawnPoints(@NotNull ABTeam team) {

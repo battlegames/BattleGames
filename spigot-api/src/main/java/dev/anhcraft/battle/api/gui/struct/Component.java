@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Component extends ConfigurableObject {
     public static final ConfigSchema<Component> SCHEMA = ConfigSchema.of(Component.class);
@@ -81,11 +82,11 @@ public class Component extends ConfigurableObject {
 
     @Key("functions.on_init")
     @IgnoreValue(ifNull = true)
-    private final List<String> rawInitFunctions = new ArrayList<>();
+    private List<String> rawInitFunctions = new ArrayList<>();
 
     @Key("functions.on_click")
     @IgnoreValue(ifNull = true)
-    private final List<String> rawClickFunctions = new ArrayList<>();
+    private List<String> rawClickFunctions = new ArrayList<>();
 
     @Key("pagination")
     private String pagination;

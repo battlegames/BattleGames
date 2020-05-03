@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class DeathmatchOptions extends ModeOptions {
     public static final ConfigSchema<DeathmatchOptions> SCHEMA = ConfigSchema.of(DeathmatchOptions.class);
@@ -40,7 +41,7 @@ public class DeathmatchOptions extends ModeOptions {
     @Key("playing_spawn_points")
     @Explanation("The spawn points (in playing phase)")
     @IgnoreValue(ifNull = true)
-    private final List<String> playSpawnPoints = new ArrayList<>();
+    private List<String> playSpawnPoints = new ArrayList<>();
 
     @NotNull
     public List<Location> getPlaySpawnPoints() {

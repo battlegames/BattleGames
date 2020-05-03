@@ -39,6 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleFirework extends ConfigurableObject {
     public static ConfigSchema<BattleFirework> SCHEMA = ConfigSchema.of(BattleFirework.class);
@@ -46,7 +47,7 @@ public class BattleFirework extends ConfigurableObject {
     @Key("effects")
     @Explanation("The firework's effects")
     @IgnoreValue(ifNull = true)
-    private final List<BattleFireworkEffect> effects = new ArrayList<>();
+    private List<BattleFireworkEffect> effects = new ArrayList<>();
 
     @Key("power")
     @Explanation("The firework's power")

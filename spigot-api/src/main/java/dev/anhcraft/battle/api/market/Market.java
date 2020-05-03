@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Market extends ConfigurableObject {
     public static final ConfigSchema<Market> SCHEMA = ConfigSchema.of(Market.class);
@@ -59,7 +60,7 @@ public class Market extends ConfigurableObject {
     @Key("categories")
     @Explanation("All categories")
     @IgnoreValue(ifNull = true)
-    private final List<Category> categories = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
 
     public boolean shouldLogTransactions() {
         return logTransactions;

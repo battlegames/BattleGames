@@ -26,6 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleParticle extends ConfigurableObject {
     public static final ConfigSchema<BattleParticle> SCHEMA = ConfigSchema.of(BattleParticle.class);
@@ -34,11 +35,11 @@ public class BattleParticle extends ConfigurableObject {
     @Explanation("The type of particle")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final Particle type = Particle.CLOUD;
+    private Particle type = Particle.CLOUD;
 
     @Key("count")
     @Explanation("The number of particles")
-    private final int count = 1;
+    private int count = 1;
 
     @Key("offset_x")
     @Explanation({

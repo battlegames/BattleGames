@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Rollback extends ConfigurableObject {
     public static final ConfigSchema<Rollback> SCHEMA = ConfigSchema.of(Rollback.class);
@@ -54,7 +55,7 @@ public class Rollback extends ConfigurableObject {
     @Key("worlds")
     @Explanation("List of worlds need to be reset")
     @IgnoreValue(ifNull = true)
-    private final List<String> worlds = new ArrayList<>();
+    private List<String> worlds = new ArrayList<>();
 
     @Key("region.corner_1")
     @Explanation("First corner in the region")

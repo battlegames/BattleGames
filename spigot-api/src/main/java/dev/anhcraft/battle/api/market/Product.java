@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Product extends ConfigurableObject implements Informative {
     private static final PreparedItem DEFAULT_ICON = new PreparedItem();
@@ -101,17 +102,17 @@ public class Product extends ConfigurableObject implements Informative {
             "from the buyer's info"
     })
     @IgnoreValue(ifNull = true)
-    private final List<String> commands = new ArrayList<>();
+    private List<String> commands = new ArrayList<>();
 
     @Key("executions.give_perks")
     @Explanation("The perks to be given later")
     @IgnoreValue(ifNull = true)
-    private final List<String> perks = new ArrayList<>();
+    private List<String> perks = new ArrayList<>();
 
     @Key("executions.give_boosters")
     @Explanation("The boosters to be given later")
     @IgnoreValue(ifNull = true)
-    private final List<String> boosters = new ArrayList<>();
+    private List<String> boosters = new ArrayList<>();
 
     @Key("executions.give_items.vanilla")
     @Explanation("The vanilla items to be given later")
@@ -136,7 +137,7 @@ public class Product extends ConfigurableObject implements Informative {
             "      gun: # gun, ammo, magazine, scope, grenade",
             "      - ak_47",
     })
-    private final Multimap<ItemType, String> battleItems = HashMultimap.create();
+    private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
     @Key("executions.give_exp.vanilla")
     @Explanation("The vanilla exp to be given later")

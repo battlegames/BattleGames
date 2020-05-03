@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
     public static final ConfigSchema<CaptureTheFlagOptions> SCHEMA = ConfigSchema.of(CaptureTheFlagOptions.class);
@@ -56,7 +57,7 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
             "      neutral: \"&7Neutral\"",
             "    max_health: 15"
     })
-    private final List<FlagOptions> flags = new ArrayList<>();
+    private List<FlagOptions> flags = new ArrayList<>();
 
     @NotNull
     public List<FlagOptions> getFlags() {

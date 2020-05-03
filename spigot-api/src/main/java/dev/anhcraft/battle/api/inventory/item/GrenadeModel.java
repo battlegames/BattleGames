@@ -29,6 +29,7 @@ import dev.anhcraft.confighelper.annotation.Schema;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class GrenadeModel extends SingleSkinWeapon {
     public static final ConfigSchema<GrenadeModel> SCHEMA = ConfigSchema.of(GrenadeModel.class);
@@ -46,7 +47,7 @@ public class GrenadeModel extends SingleSkinWeapon {
 
     @Key("velocity_multiplier")
     @Explanation("The multiplier applies to the directional velocity")
-    private final double velocityMultiplier = 2.0;
+    private double velocityMultiplier = 2.0;
 
     @Key("explosion_power")
     @Explanation({

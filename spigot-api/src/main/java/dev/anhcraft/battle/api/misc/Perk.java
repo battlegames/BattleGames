@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Perk extends ConfigurableObject {
     public static final ConfigSchema<Perk> SCHEMA = ConfigSchema.of(Perk.class);
@@ -46,7 +47,7 @@ public class Perk extends ConfigurableObject {
     @Key("name")
     @Explanation("This perk's name")
     @IgnoreValue(ifNull = true)
-    private final String name;
+    private String name;
 
     @Key("executions.give_effects")
     @Explanation("Potion effects to be applied on the player")
@@ -60,7 +61,7 @@ public class Perk extends ConfigurableObject {
             "      duration: 99999",
             "      particles: false"
     })
-    private final List<BattlePotionEffect> potionEffects = new ArrayList<>();
+    private List<BattlePotionEffect> potionEffects = new ArrayList<>();
 
     @Key("executions.set_health")
     @Explanation("Set the player's health")

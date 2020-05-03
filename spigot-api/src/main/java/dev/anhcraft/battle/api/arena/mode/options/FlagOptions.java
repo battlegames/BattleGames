@@ -31,6 +31,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class FlagOptions extends ConfigurableObject {
     public static final ConfigSchema<FlagOptions> SCHEMA = ConfigSchema.of(FlagOptions.class);
@@ -58,7 +59,7 @@ public class FlagOptions extends ConfigurableObject {
     @Key("max_health")
     @Explanation("The maximum health points of the flag")
     @Validation(notNull = true)
-    private final int maxHealth = 10;
+    private int maxHealth = 10;
 
     @Key("start_capture_sound")
     @Explanation("The sound on starting the capture")

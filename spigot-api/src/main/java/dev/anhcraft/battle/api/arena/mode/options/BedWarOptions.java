@@ -32,13 +32,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BedWarOptions extends ModeOptions {
     public static final ConfigSchema<BedWarOptions> SCHEMA = ConfigSchema.of(BedWarOptions.class);
 
     @Key("team_size")
     @Explanation("The size of a team")
-    private final int teamSize = 2;
+    private int teamSize = 2;
 
     @Key("teams")
     @Example({

@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class ScopeModel extends SingleSkinItem implements Attachable {
     public static final ConfigSchema<ScopeModel> SCHEMA = ConfigSchema.of(ScopeModel.class);
@@ -40,7 +41,7 @@ public class ScopeModel extends SingleSkinItem implements Attachable {
             "remains, the view returns to normal"
     })
     @IgnoreValue(ifNull = true)
-    private final List<Integer> zoomLevels = new ArrayList<>();
+    private List<Integer> zoomLevels = new ArrayList<>();
 
     public ScopeModel(@NotNull String id) {
         super(id);

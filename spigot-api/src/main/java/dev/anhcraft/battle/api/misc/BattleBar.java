@@ -25,13 +25,14 @@ import dev.anhcraft.confighelper.annotation.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleBar extends ConfigurableObject {
     public static final ConfigSchema<BattleBar> SCHEMA = ConfigSchema.of(BattleBar.class);
 
     @Key("primary")
     @Explanation("Make the bar appeared on the primary slot")
-    private final boolean primarySlot = true;
+    private boolean primarySlot = true;
 
     @Key("title")
     @Explanation("Set the title")
@@ -42,13 +43,13 @@ public class BattleBar extends ConfigurableObject {
     @Explanation("Set the color")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final BarColor color = BarColor.RED;
+    private BarColor color = BarColor.RED;
 
     @Key("style")
     @Explanation("Set the style")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private final BarStyle style = BarStyle.SOLID;
+    private BarStyle style = BarStyle.SOLID;
 
     public boolean isPrimarySlot() {
         return primarySlot;

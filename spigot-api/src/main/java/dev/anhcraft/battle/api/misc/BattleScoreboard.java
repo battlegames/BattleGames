@@ -27,13 +27,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class BattleScoreboard {
     public static final ConfigSchema<BattleScoreboard> SCHEMA = ConfigSchema.of(BattleScoreboard.class);
 
     @Key("enabled")
     @Explanation("Should we enable the scoreboard?")
-    private final boolean enabled = true;
+    private boolean enabled = true;
 
     @Key("title")
     @Explanation({
@@ -49,7 +50,7 @@ public class BattleScoreboard {
             "You can use placeholders here"
     })
     @IgnoreValue(ifNull = true)
-    private final List<String> content = new ArrayList<>();
+    private List<String> content = new ArrayList<>();
 
     @Key("fixed_length")
     @Explanation({

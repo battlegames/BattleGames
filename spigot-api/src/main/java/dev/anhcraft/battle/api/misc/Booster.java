@@ -30,6 +30,7 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Booster extends ConfigurableObject {
     public static final ConfigSchema<Booster> SCHEMA = ConfigSchema.of(Booster.class);
@@ -47,7 +48,7 @@ public class Booster extends ConfigurableObject {
 
     @Key("money.multiplier")
     @Explanation("The multiplier for the total money")
-    private final double moneyMultiplier = 1;
+    private double moneyMultiplier = 1;
 
     @Key("money.limit")
     @Explanation({
@@ -58,7 +59,7 @@ public class Booster extends ConfigurableObject {
 
     @Key("exp.multiplier")
     @Explanation("The multiplier for the total experience points")
-    private final double expMultiplier = 1;
+    private double expMultiplier = 1;
 
     @Key("exp.limit")
     @Explanation({

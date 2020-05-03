@@ -52,6 +52,7 @@ public class Ammo extends BattleItem<AmmoModel> {
             getModel().inform(holder);
     }
 
+    @SuppressWarnings("FieldMayBeFinal")
     @Schema
     public static class Bullet {
         public static final ConfigSchema<Bullet> SCHEMA = ConfigSchema.of(Bullet.class);
@@ -88,7 +89,7 @@ public class Ammo extends BattleItem<AmmoModel> {
                 "Higher value can help to make the entity bounding check",
                 "more accurate, but may result in laggy"
         })
-        private final double timeOffset = 5;
+        private double timeOffset = 5;
 
         public double getDamage() {
             return damage;
