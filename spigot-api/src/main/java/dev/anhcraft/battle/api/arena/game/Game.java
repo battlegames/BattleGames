@@ -80,8 +80,8 @@ public class Game extends TempDataContainer implements Resettable, Informative {
             }
             return;
         }
-        this.phase = phase;
         Bukkit.getPluginManager().callEvent(new GamePhaseChangeEvent(this, this.phase, phase));
+        this.phase = phase;
     }
 
     @Override
