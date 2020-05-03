@@ -26,7 +26,6 @@ import dev.anhcraft.battle.api.advancement.Advancement;
 import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.chat.ChatManager;
@@ -318,13 +317,14 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public void onDisable(){
         premiumConnector.onDisable();
-        arenaManager.listGames(game -> {
+        arenaManager.listGames(game -> {/*
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {
                     if (player.getBackupInventory() != null)
                         player.toBukkit().getInventory().setContents(player.getBackupInventory());
                 });
-            }
+            }*/ // the code below will handle this action
+            arenaManager.destroy(game);
         });
         dataManager.saveServerData();
         PLAYER_MAP.keySet().forEach(dataManager::savePlayerData);
