@@ -22,11 +22,14 @@ package dev.anhcraft.battle.premium;
 
 import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
+import dev.anhcraft.battle.premium.system.ArenaSettings;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
 import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
+import dev.anhcraft.battle.premium.system.listeners.GameListener;
 import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
 import dev.anhcraft.battle.premium.system.listeners.WorldListener;
 import dev.anhcraft.battle.premium.tasks.Task;
@@ -47,6 +50,7 @@ public class PremiumModule implements IPremiumModule {
     public YamlConfiguration conf;
     private WorldSettings globalWorldSettings;
     private final Map<String, WorldSettings> worldSettingsMap = new HashMap<>();
+    private final Map<String, ArenaSettings> arenaSettingsMap = new HashMap<>();
 
     private static void fillOptions(ConfigurationSection model, ConfigurationSection target){
         for(String s : model.getKeys(false)){
@@ -72,6 +76,11 @@ public class PremiumModule implements IPremiumModule {
         return globalWorldSettings.getBlacklistWorlds().contains(world) ? null : globalWorldSettings;
     }
 
+    @Nullable
+    public ArenaSettings getArenaSettings(String arena){
+        return arenaSettingsMap.get(arena);
+    }
+
     @Override
     public void onIntegrate(BattlePlugin plugin) {
     }
@@ -93,6 +102,19 @@ public class PremiumModule implements IPremiumModule {
                 fillOptions(gen, s);
                 worldSettingsMap.put(k, ConfigHelper.readConfig(s, ConfigSchema.of(WorldSettings.class)));
             }
+            ConfigurationSection ascs = conf.getConfigurationSection("arena_settings");
+            if(ascs != null) {
+                for(String k : ascs.getKeys(false)) {
+                    ConfigurationSection s = conf.getConfigurationSection("arena_settings." + k);
+                    ArenaSettings as = ConfigHelper.readConfig(s, ConfigSchema.of(ArenaSettings.class));
+                    arenaSettingsMap.put(k, as);
+                    Arena a = plugin.getArena(k);
+                    if (a != null && a.getRollback() == null) {
+                        as.getEmptyRegions().clear();
+                        plugin.getLogger().warning("You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
+                    }
+                }
+            }
         } catch (InvalidValueException e) {
             e.printStackTrace();
         }
@@ -102,6 +124,7 @@ public class PremiumModule implements IPremiumModule {
     public void onRegisterEvents(BattlePlugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(new PlayerListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new WorldListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new GameListener(), plugin);
     }
 
     @Override
