@@ -40,8 +40,6 @@ public abstract class BattleItemModel extends ConfigurableObject implements Info
     @IgnoreValue(ifNull = true)
     private String name;
 
-    private InfoHolder cachedInfoHolder;
-
     protected BattleItemModel(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         Validate.isTrue(id.matches("[A-Za-z0-9_]+"), "Id must only contains A-Z,a-z, 0-9 and underscore only");
@@ -67,10 +65,10 @@ public abstract class BattleItemModel extends ConfigurableObject implements Info
         holder.inform("id", id).inform("name", name);
     }
 
-    public synchronized InfoHolder collectInfo(@Nullable String prefix) {
-        if(cachedInfoHolder != null) return cachedInfoHolder;
-        inform(cachedInfoHolder = new InfoHolder((prefix == null ? "" : prefix) +
-                getItemType().name().toLowerCase() + "_"));
-        return cachedInfoHolder;
+    @NotNull
+    public InfoHolder collectInfo(@Nullable String prefix) {
+        InfoHolder ih = new InfoHolder((prefix == null ? "" : prefix) + getItemType().name().toLowerCase() + "_");
+        inform(ih);
+        return ih;
     }
 }
