@@ -115,7 +115,7 @@ public class BattleRegionRollback extends BattleComponent {
     }
 
     public boolean rollbackRegion(@NotNull Location first, @NotNull Location second) {
-        BattleDebugger.startTiming("rollback-async-region");
+        BattleDebugger.startTiming("rollback-battle-region");
         double minX = Math.min(first.getX(), second.getX());
         double minY = Math.min(first.getY(), second.getY());
         double minZ = Math.min(first.getZ(), second.getZ());
@@ -155,12 +155,12 @@ public class BattleRegionRollback extends BattleComponent {
                             }
                         }
                     }
-                    BattleDebugger.endTiming("rollback-async-region");
+                    BattleDebugger.endTiming("rollback-battle-region");
                     return true;
                 }
             }
         }
-        BattleDebugger.endTiming("rollback-async-region");
+        BattleDebugger.endTiming("rollback-battle-region");
         return false;
     }
 }
