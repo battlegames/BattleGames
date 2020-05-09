@@ -409,7 +409,7 @@ dm_italy:
   allow_late_joins: true
   rollback:
     enabled: true
-    provider: async_region
+    provider: battle_region
     region:
       corner_1: "italy -346 31 3 -96 33"
       corner_2: "italy -195 98 117 -268 10"

@@ -88,13 +88,13 @@ public class RollbackWork implements Work {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            } else if (rollback.getProvider() == Rollback.Provider.ASYNC_REGION) {
+            } else if (rollback.getProvider() == Rollback.Provider.BATTLE_REGION) {
                 Location l1 = rollback.getCorner1();
                 Location l2 = rollback.getCorner2();
                 if (l1 != null && l2 != null) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     plugin.taskHelper.newTask(() -> {
-                        if (plugin.asyncRegionRollback.rollbackRegion(l1, l2)) {
+                        if (plugin.battleRegionRollback.rollbackRegion(l1, l2)) {
                             plugin.getLogger().info("[Rollback/AsyncRegion] Region reloaded successfully!");
                         } else {
                             plugin.getLogger().warning("[Rollback/AsyncRegion] Failed to reset! (Please recheck the region)");

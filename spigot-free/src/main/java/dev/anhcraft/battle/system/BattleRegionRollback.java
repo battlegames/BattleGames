@@ -41,10 +41,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class AsyncRegionRollback extends BattleComponent {
+public class BattleRegionRollback extends BattleComponent {
     private final File cachedRegionFolder;
 
-    public AsyncRegionRollback(BattlePlugin plugin) {
+    public BattleRegionRollback(BattlePlugin plugin) {
         super(plugin);
 
         cachedRegionFolder = new File(plugin.getDataFolder(), "cachedRegions");
@@ -128,7 +128,7 @@ public class AsyncRegionRollback extends BattleComponent {
             CompoundTag tag = new CompoundTag();
             tag.load(f);
             if(tag.size() > 0) {
-                plugin.getLogger().info("[Rollback/AsyncRegion] Resetting region at world " + world.getName());
+                plugin.getLogger().info("[Rollback/BattleRegion] Resetting region at world " + world.getName());
                 plugin.getLogger().info("- Hash 1: " + hash1);
                 plugin.getLogger().info("- Hash 2: " + hash2);
                 CompoundTag blocks = tag.get("blocks", CompoundTag.class);

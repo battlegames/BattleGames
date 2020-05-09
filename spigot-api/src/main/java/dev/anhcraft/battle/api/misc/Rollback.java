@@ -39,7 +39,7 @@ public class Rollback extends ConfigurableObject {
     public enum Provider {
         SLIME_WORLD,
         BATTLE,
-        ASYNC_REGION
+        BATTLE_REGION
     }
 
     @Key("enabled")
