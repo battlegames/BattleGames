@@ -50,7 +50,7 @@ import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
 import dev.anhcraft.battle.system.BattleRegionRollback;
-import dev.anhcraft.battle.system.BattleRollback;
+import dev.anhcraft.battle.system.BattleWorldRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
@@ -181,7 +181,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private boolean spigotBungeeSupport;
     private boolean supportBungee;
     public PremiumConnector premiumConnector;
-    public BattleRollback battleRollback;
+    public BattleWorldRollback battleWorldRollback;
     public BattleRegionRollback battleRegionRollback;
     public ISWMIntegration SWMIntegration;
     public boolean slimeWorldManagerSupport;
@@ -222,7 +222,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         guiManager = new BattleGuiManager(this);
         arenaManager = new BattleArenaManager(this);
         advancementManager = new BattleAdvancementManager(this);
-        battleRollback = new BattleRollback(this);
+        battleWorldRollback = new BattleWorldRollback(this);
         battleRegionRollback = new BattleRegionRollback(this);
         premiumConnector.onInitSystem();
 
@@ -623,20 +623,20 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 getLogger().warning("For safety reasons, you should specify rollback for arena #"+arena.getId());
             } else {
                 if(arena.getRollback().getProvider() == Rollback.Provider.SLIME_WORLD && !slimeWorldManagerSupport){
-                    getLogger().warning("SWM not found! Uses Battle rollback instead.");
-                    arena.getRollback().setProvider(Rollback.Provider.BATTLE);
+                    getLogger().warning("[SWMValidator] SWM not found! Uses Battle World rollback instead.");
+                    arena.getRollback().setProvider(Rollback.Provider.BATTLE_WORLD);
                 }
-                if(arena.getRollback().getProvider() == Rollback.Provider.BATTLE) {
+                if(arena.getRollback().getProvider() == Rollback.Provider.BATTLE_WORLD) {
                     for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
                         String w = it.next();
                         World wd = getServer().getWorld(w);
                         if (wd == null) {
-                            getLogger().warning("World not found: " + w);
+                            getLogger().warning("[BattleWorldValidator] World not found: " + w);
                             it.remove();
                         } else if (SWMIntegration != null && SWMIntegration.isReadOnly(w) != -1) {
                             it.remove();
                         } else {
-                            battleRollback.backupWorld(wd);
+                            battleWorldRollback.backupWorld(wd);
                         }
                     }
                 }

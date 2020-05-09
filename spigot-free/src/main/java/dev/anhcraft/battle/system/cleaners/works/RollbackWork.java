@@ -64,7 +64,7 @@ public class RollbackWork implements Work {
                         e.printStackTrace();
                     }
                 }
-            } else if (rollback.getProvider() == Rollback.Provider.BATTLE) {
+            } else if (rollback.getProvider() == Rollback.Provider.BATTLE_WORLD) {
                 CountDownLatch countDownLatch = new CountDownLatch(1);
                 for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
                     String w = it.next();
@@ -74,10 +74,10 @@ public class RollbackWork implements Work {
                         it.remove();
                     } else {
                         plugin.taskHelper.newTask(() -> {
-                            if (plugin.battleRollback.rollbackWorld(wd)) {
-                                plugin.getLogger().info("[Rollback/Battle] World reloaded successfully!");
+                            if (plugin.battleWorldRollback.rollbackWorld(wd)) {
+                                plugin.getLogger().info("[Rollback/BattleWorld] World reloaded successfully!");
                             } else {
-                                plugin.getLogger().warning("[Rollback/Battle] Failed to reload! (Please check the world)");
+                                plugin.getLogger().warning("[Rollback/BattleWorld] Failed to reload! (Please check the world)");
                             }
                             countDownLatch.countDown();
                         });

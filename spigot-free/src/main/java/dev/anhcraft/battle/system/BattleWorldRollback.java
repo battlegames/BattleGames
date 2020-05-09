@@ -33,11 +33,11 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BattleRollback extends BattleComponent {
+public class BattleWorldRollback extends BattleComponent {
     private final Set<String> cachedWorlds = new HashSet<>();
     private final File cachedWorldFolder;
 
-    public BattleRollback(BattlePlugin plugin) {
+    public BattleWorldRollback(BattlePlugin plugin) {
         super(plugin);
 
         cachedWorldFolder = new File(plugin.getDataFolder(), "cachedWorlds");
@@ -63,26 +63,26 @@ public class BattleRollback extends BattleComponent {
     }
 
     public boolean rollbackWorld(World world){
-        plugin.getLogger().info("[Rollback/Battle] Reloading world: " + world.getName());
-        BattleDebugger.startTiming("rollback-battle");
+        plugin.getLogger().info("[Rollback/BattleWorld] Reloading world: " + world.getName());
+        BattleDebugger.startTiming("rollback-battle-world");
         File workingDir = world.getWorldFolder();
         File cacheDir = getCachedWorldFolder(world);
         if(!cacheDir.exists()) {
-            BattleDebugger.endTiming("rollback-battle");
+            BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }
         world.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
         if(!Bukkit.unloadWorld(world, false)) {
-            BattleDebugger.endTiming("rollback-battle");
+            BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }
         FileUtil.clean(workingDir);
         if(!FileUtil.copy(cacheDir, workingDir)) {
-            BattleDebugger.endTiming("rollback-battle");
+            BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }
         new WorldCreator(world.getName()).createWorld();
-        BattleDebugger.endTiming("rollback-battle");
+        BattleDebugger.endTiming("rollback-battle-world");
         return true;
     }
 }

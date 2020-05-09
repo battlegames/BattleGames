@@ -38,7 +38,8 @@ public class Rollback extends ConfigurableObject {
 
     public enum Provider {
         SLIME_WORLD,
-        BATTLE,
+        @Deprecated BATTLE,
+        BATTLE_WORLD,
         BATTLE_REGION
     }
 
@@ -73,7 +74,7 @@ public class Rollback extends ConfigurableObject {
 
     @NotNull
     public Provider getProvider() {
-        return provider;
+        return provider == Provider.BATTLE ? Provider.BATTLE_WORLD : provider;
     }
 
     public void setProvider(@NotNull Provider provider) {
