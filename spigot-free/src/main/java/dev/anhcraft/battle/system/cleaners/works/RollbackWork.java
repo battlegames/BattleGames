@@ -95,9 +95,9 @@ public class RollbackWork implements Work {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     plugin.taskHelper.newTask(() -> {
                         if (plugin.battleRegionRollback.rollbackRegion(l1, l2)) {
-                            plugin.getLogger().info("[Rollback/AsyncRegion] Region reloaded successfully!");
+                            plugin.getLogger().info("[Rollback/BattleRegion] Region reloaded successfully!");
                         } else {
-                            plugin.getLogger().warning("[Rollback/AsyncRegion] Failed to reset! (Please recheck the region)");
+                            plugin.getLogger().warning("[Rollback/BattleRegion] Failed to reset! (Please recheck the region)");
                         }
                         countDownLatch.countDown();
                     });
