@@ -20,10 +20,12 @@
 
 package dev.anhcraft.battle.api.arena.mode.options;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
+import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +86,15 @@ public class BedWarOptions extends ModeOptions {
                 }
             } catch (InvalidValueException e) {
                 e.printStackTrace();
+            }
+            boolean[] colors = new boolean[DyeColor.values().length];
+            for (BWTeamOptions t : teams) {
+                DyeColor c = t.getColor();
+                if(colors[c.ordinal()]) {
+                    BattleApi.getInstance().getLogger().warning("[BedWarValidator] Duplicated team color: " + c.name());
+                } else {
+                    colors[c.ordinal()] = true;
+                }
             }
             return teams;
         }
