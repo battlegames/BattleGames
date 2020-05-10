@@ -1,15 +1,19 @@
 # BattleGames
 
+## Links
+
 Spigot: https://spigotmc.org/resources/69463/
 
-![banner](https://i.imgur.com/iyUYiml.png)
+Hub: https://github.com/anhcraft/Battle-Hub/
 
-### Discord
-https://discord.gg/QSpc5xH
+Wiki: https://wiki.anhcraft.dev/battle/
 
-### Credits
-- ACF (Aikar)
-- exp4j (objecthunter)
-- Spigot
-- Vault/PlaceholderAPI
+Configdoc: https://anhcraft.dev/cd/battle/
 
+Discord: https://discord.gg/QSpc5xH
+
+## Compile
+
+```
+clean install package -o
+```
