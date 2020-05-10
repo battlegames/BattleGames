@@ -1,2 +1,2 @@
 ### Read here:
-https://wiki.anhcraft.dev/battle
+https://wiki.anhcraft.dev/battle/tac
