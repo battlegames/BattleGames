@@ -89,6 +89,38 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == team).count());
         });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_a_all_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            if(t == null) return null;
+            Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == ABTeam.TEAM_A).count());
+        });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_a_valid_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            if(t == null) return null;
+            Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == ABTeam.TEAM_A).count());
+        });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_b_all_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            if(t == null) return null;
+            Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == ABTeam.TEAM_B).count());
+        });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_b_valid_flags", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            if(t == null) return null;
+            Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
+            return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == ABTeam.TEAM_B).count());
+        });
     }
 
     @Override
