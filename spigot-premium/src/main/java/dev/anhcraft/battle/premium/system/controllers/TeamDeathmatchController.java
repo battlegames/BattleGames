@@ -78,6 +78,22 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
                 return null;
             return Integer.toString(t.countPlayers(dt));
         });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_a", (player, pd, game, gp) -> ABTeam.TEAM_A.getLocalizedName());
+
+        plugin.getPapiExpansion().handlers.put(p+"team_a_players", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            return t == null ? null : Integer.toString(t.countPlayers(ABTeam.TEAM_A));
+        });
+
+        plugin.getPapiExpansion().handlers.put(p+"team_b", (player, pd, game, gp) -> ABTeam.TEAM_B.getLocalizedName());
+
+        plugin.getPapiExpansion().handlers.put(p+"team_b_players", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            TeamManager<ABTeam> t = TEAM.get(game);
+            return t == null ? null : Integer.toString(t.countPlayers(ABTeam.TEAM_B));
+        });
     }
 
     @Override
