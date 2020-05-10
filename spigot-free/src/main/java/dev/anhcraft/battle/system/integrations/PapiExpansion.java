@@ -29,15 +29,22 @@ import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PapiExpansion extends PlaceholderExpansion {
     public interface Callback {
         String handle(Player player, PlayerData pd, LocalGame game, GamePlayer gp);
     }
+    public interface Filter {
+        boolean check(String str);
+        String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp);
+    }
     
     public final Map<String, Callback> handlers = new HashMap<>();
+    public final List<Filter> filters = new ArrayList<>();
     private final BattlePlugin plugin;
 
     public PapiExpansion(BattlePlugin plugin){
@@ -181,6 +188,17 @@ public class PapiExpansion extends PlaceholderExpansion {
                 gp = game.getPlayers().get(player);
             }
             return x.handle(player, pd, game, gp);
+        }
+        for (Filter f : filters){
+            if(f.check(identifier)) {
+                PlayerData pd = plugin.getPlayerData(player);
+                LocalGame game = plugin.getArenaManager().getGame(player);
+                GamePlayer gp = null;
+                if(game != null) {
+                    gp = game.getPlayers().get(player);
+                }
+                return f.handle(identifier, player, pd, game, gp);
+            }
         }
         return null;
     }
