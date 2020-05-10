@@ -105,7 +105,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         plugin.getPapiExpansion().filters.add(new PapiExpansion.Filter() {
             @Override
             public boolean check(String str) {
-                return str.startsWith(p+"team_");
+                return str.startsWith(p+"team_") && !str.substring((p+"team_").length()).contains("_");
             }
 
             @Override
