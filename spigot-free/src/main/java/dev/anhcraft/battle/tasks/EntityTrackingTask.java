@@ -100,6 +100,7 @@ public class EntityTrackingTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
+        double v = Math.pow(plugin.GENERAL_CONF.getEntityTrackMinDistance(), 2);
         for (Map.Entry<Entity, EntityTracker> e : MAP.entrySet()) {
             if (e.getKey().isDead()) {
                 MAP.remove(e.getKey());
@@ -108,7 +109,7 @@ public class EntityTrackingTask extends BattleComponent implements Runnable {
                 Location loc = e.getKey().getLocation();
                 EntityTracker track = e.getValue();
                 boolean b = false;
-                if (loc.distanceSquared(track.lastLoc) >= plugin.GENERAL_CONF.getEntityTrackMinDistance()) {
+                if (loc.distanceSquared(track.lastLoc) >= v) {
                     track.lastMoveTime = System.currentTimeMillis();
                     track.lastLoc = loc;
                     b = true;
