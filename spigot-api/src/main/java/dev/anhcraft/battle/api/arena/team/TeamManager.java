@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -42,6 +43,11 @@ public class TeamManager<T extends Team> implements Resettable {
     @NotNull
     public Collection<T> getTeams() {
         return PLAYER_COUNTER.keySet();
+    }
+
+    @NotNull
+    public Optional<T> findTeam(Predicate<T> teamPredicate) {
+        return PLAYER_COUNTER.keySet().stream().filter(teamPredicate).findFirst();
     }
 
     public void initTeam(@Nullable T team) {
