@@ -35,6 +35,8 @@ import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
+import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.BlockPosition;
 import dev.anhcraft.battle.utils.CooldownMap;
@@ -68,6 +70,11 @@ public class BedWarController extends DeathmatchController implements IBedWar {
 
         String p = mode.getId()+"_";
 
+        plugin.getPapiExpansion().handlers.put(p+"max_team_players", (player, pd, game, gp) -> {
+            if(game == null) return null;
+            return String.valueOf(((BedWarOptions) game.getArena().getModeOptions()).getTeamSize());
+        });
+
         plugin.getPapiExpansion().handlers.put(p+"team", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
@@ -86,11 +93,6 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             return Integer.toString(t.countPlayers(bwTeam));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"max_team_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
-            return String.valueOf(((BedWarOptions) game.getArena().getModeOptions()).getTeamSize());
-        });
-
         plugin.getPapiExpansion().handlers.put(p+"bed_status", (player, pd, game, gp) -> {
             if(game == null) return null;
             TeamManager<BWTeam> t = TEAM.get(game);
@@ -98,6 +100,54 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             BWTeam bwTeam = t.getTeam(player);
             if(bwTeam == null) return null;
             return plugin.getLocalizedMessage(blp(bwTeam.isBedPresent() ? "bed_status.present" : "bed_status.destroyed"));
+        });
+
+        plugin.getPapiExpansion().filters.add(new PapiExpansion.Filter() {
+            @Override
+            public boolean check(String str) {
+                return str.startsWith(p+"team_");
+            }
+
+            @Override
+            public String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp) {
+                TeamManager<BWTeam> t = TEAM.get(game);
+                if(t == null) return null;
+                String team = str.substring((p+"team_").length());
+                Optional<BWTeam> bwt = t.findTeam(bwTeam -> bwTeam.getColor().name().equalsIgnoreCase(team));
+                return bwt.map(BWTeam::getLocalizedName).orElse(null);
+            }
+        });
+
+        plugin.getPapiExpansion().filters.add(new PapiExpansion.Filter() {
+            @Override
+            public boolean check(String str) {
+                return str.startsWith(p+"team_") && str.endsWith("_players");
+            }
+
+            @Override
+            public String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp) {
+                TeamManager<BWTeam> t = TEAM.get(game);
+                if(t == null) return null;
+                String team = str.substring((p+"team_").length(), str.length() - ("_players").length());
+                Optional<BWTeam> bwt = t.findTeam(bwTeam -> bwTeam.getColor().name().equalsIgnoreCase(team));
+                return Integer.toString(bwt.map(t::countPlayers).orElse(0));
+            }
+        });
+
+        plugin.getPapiExpansion().filters.add(new PapiExpansion.Filter() {
+            @Override
+            public boolean check(String str) {
+                return str.startsWith(p+"bed_status_");
+            }
+
+            @Override
+            public String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp) {
+                TeamManager<BWTeam> t = TEAM.get(game);
+                if(t == null) return null;
+                String team = str.substring((p+"bed_status_").length());
+                Optional<BWTeam> bwt = t.findTeam(bwTeam -> bwTeam.getColor().name().equalsIgnoreCase(team));
+                return bwt.map(bwTeam -> plugin.getLocalizedMessage(blp(bwTeam.isBedPresent() ? "bed_status.present" : "bed_status.destroyed"))).orElse(null);
+            }
         });
     }
 
