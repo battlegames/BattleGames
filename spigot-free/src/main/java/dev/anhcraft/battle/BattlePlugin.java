@@ -623,7 +623,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 getLogger().warning("For safety reasons, you should specify rollback for arena #"+arena.getId());
             } else {
                 if(arena.getRollback().getProvider() == Rollback.Provider.SLIME_WORLD && !slimeWorldManagerSupport){
-                    getLogger().warning("[SWMValidator] SWM not found! Uses Battle World rollback instead.");
                     arena.getRollback().setProvider(Rollback.Provider.BATTLE_WORLD);
                 }
                 if(arena.getRollback().getProvider() == Rollback.Provider.BATTLE_WORLD) {
