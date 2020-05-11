@@ -60,6 +60,10 @@ public class QueueAdvancementTask implements Runnable {
             Iterator<Player> keys = queue.keys().iterator();
             while (keys.hasNext()){
                 Player player = keys.next();
+                if(!player.isOnline()) {
+                    keys.remove();
+                    continue;
+                }
                 PlayerData pd = api.getPlayerData(player);
                 if(pd == null) continue;
                 Collection<PresentPair<String, Double>> pc = queue.get(player);
