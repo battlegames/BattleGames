@@ -28,6 +28,8 @@ import dev.anhcraft.battle.utils.functions.Function;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.ItemUtil;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -117,6 +119,9 @@ public class CommonHandler extends GuiHandler {
     public void prevent(SlotReport report) {
         if(report.getEvent() instanceof Cancellable) {
             ((Cancellable) report.getEvent()).setCancelled(true);
+        }
+        if(report.getEvent() instanceof InventoryInteractEvent) {
+            ((InventoryInteractEvent) report.getEvent()).setResult(Event.Result.DENY);
         }
     }
 

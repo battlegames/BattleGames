@@ -37,6 +37,7 @@ import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -100,6 +101,7 @@ public abstract class ModeController extends BattleComponent implements Listener
             BattleItem<?> item = plugin.itemManager.read(event.getCurrentItem());
             if(item instanceof Gun && RELOADING_GUN.containsKey(player.getUniqueId())) {
                 event.setCancelled(true);
+                event.setResult(Event.Result.DENY);
             }
         }
     }
