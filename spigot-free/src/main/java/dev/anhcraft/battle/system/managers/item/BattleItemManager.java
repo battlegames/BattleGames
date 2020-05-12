@@ -34,13 +34,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class BattleItemManager extends BattleComponent implements ItemManager {
-    private final Map<ItemType, PreparedItem> ITEMS = new HashMap<>();
-    private final Map<ItemType, PreparedItem> ITEM_MODELS = new HashMap<>();
+    private final Map<ItemType, PreparedItem> ITEMS = new EnumMap<>(ItemType.class);
+    private final Map<ItemType, PreparedItem> ITEM_MODELS = new EnumMap<>(ItemType.class);
 
     public BattleItemManager(BattlePlugin plugin) {
         super(plugin);
