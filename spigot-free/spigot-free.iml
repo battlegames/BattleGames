@@ -22,7 +22,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="spigot-api" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
-    <orderEntry type="library" name="Maven: io.papermc:paperlib:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: io.papermc:paperlib:1.0.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.spigot:1.1.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:craftkit.common:1.1.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dev.anhcraft:jvmkit:1.1.5" level="project" />
