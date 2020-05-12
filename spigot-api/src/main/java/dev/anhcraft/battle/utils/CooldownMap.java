@@ -20,33 +20,31 @@
 package dev.anhcraft.battle.utils;
 
 import dev.anhcraft.jvmkit.utils.Condition;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class CooldownMap extends HashMap<Player, Long> {
+public class CooldownMap extends HashMap<UUID, Long> {
     public CooldownMap(){}
 
     public CooldownMap(@NotNull List<Player> players){
         Condition.notNull(players);
-        players.forEach(this::resetTime);
+        players.stream().map(Entity::getUniqueId).forEach(this::resetTime);
     }
 
     public CooldownMap(Player... players){
         Condition.notNull(players);
-        Arrays.stream(players).filter(Objects::nonNull).forEach(this::resetTime);
+        Arrays.stream(players).filter(Objects::nonNull).map(Entity::getUniqueId).forEach(this::resetTime);
     }
 
     public void resetTime(Player player){
-        put(player, System.currentTimeMillis()/50);
+        put(player.getUniqueId(), System.currentTimeMillis()/50);
     }
 
     public void setTime(Player player, long date){
-        put(player, date);
+        put(player.getUniqueId(), date);
     }
 
     public long getTime(Player player){
@@ -54,11 +52,11 @@ public class CooldownMap extends HashMap<Player, Long> {
     }
 
     public void extendTime(Player player, long duration){
-        put(player, getTime(player) + duration);
+        put(player.getUniqueId(), getTime(player) + duration);
     }
 
     public void contractTime(Player player, long duration){
-        put(player, getTime(player) - duration);
+        put(player.getUniqueId(), getTime(player) - duration);
     }
 
     public long elapsedTime(Player player){
@@ -68,8 +66,40 @@ public class CooldownMap extends HashMap<Player, Long> {
     public boolean isPassed(Player player, long duration){
         return elapsedTime(player) > duration;
     }
-    
+
     public long remainingTime(Player player, long duration){
+        return duration - elapsedTime(player);
+    }
+
+    public void resetTime(UUID player){
+        put(player, System.currentTimeMillis()/50);
+    }
+
+    public void setTime(UUID player, long date){
+        put(player, date);
+    }
+
+    public long getTime(UUID player){
+        return getOrDefault(player, System.currentTimeMillis()/50);
+    }
+
+    public void extendTime(UUID player, long duration){
+        put(player, getTime(player) + duration);
+    }
+
+    public void contractTime(UUID player, long duration){
+        put(player, getTime(player) - duration);
+    }
+
+    public long elapsedTime(UUID player){
+        return System.currentTimeMillis()/50 - getTime(player);
+    }
+
+    public boolean isPassed(UUID player, long duration){
+        return elapsedTime(player) > duration;
+    }
+
+    public long remainingTime(UUID player, long duration){
         return duration - elapsedTime(player);
     }
 }
