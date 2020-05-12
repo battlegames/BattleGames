@@ -27,6 +27,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 public class BlockPosition {
@@ -45,13 +46,13 @@ public class BlockPosition {
     private final int x;
     private final int y;
     private final int z;
-    private final World world;
+    private final WeakReference<World> world;
 
     public BlockPosition(int x, int y, int z, @Nullable World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.world = world;
+        this.world = new WeakReference<>(world);
     }
 
     public int getX() {
@@ -68,12 +69,12 @@ public class BlockPosition {
 
     @Nullable
     public World getWorld() {
-        return world;
+        return world.get();
     }
 
     @NotNull
     public Block getBlock(){
-        return Objects.requireNonNull(world).getBlockAt(x, y, z);
+        return Objects.requireNonNull(world.get()).getBlockAt(x, y, z);
     }
 
     @Override
@@ -84,11 +85,11 @@ public class BlockPosition {
         return x == that.x &&
                 y == that.y &&
                 z == that.z &&
-                Objects.equals(world, that.world);
+                Objects.equals(world.get(), that.world.get());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z, world);
+        return Objects.hash(x, y, z, world.get());
     }
 }
