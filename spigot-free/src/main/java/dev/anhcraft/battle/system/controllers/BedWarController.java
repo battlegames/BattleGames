@@ -333,6 +333,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                 if(pteam == null) return;
                 BlockPosition bp = BlockPosition.of(b);
                 BWTeam targetTeam = BEDS.get(bp);
+                if(targetTeam == null) return;
                 BedBreakEvent e = new BedBreakEvent(game, event.getPlayer(), b, pteam, targetTeam);
                 Bukkit.getPluginManager().callEvent(e);
                 if(pteam.equals(targetTeam)){
