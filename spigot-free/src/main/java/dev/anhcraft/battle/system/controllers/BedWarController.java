@@ -258,17 +258,24 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         }
 
         List<Player> players = new ArrayList<>(game.getPlayers().keySet());
-        int teammates = 1;
-        int maxTeammates = ((BedWarOptions) game.getArena().getModeOptions()).getTeamSize();
+        int teammates = 0;
+        int teamSize = ((BedWarOptions) game.getArena().getModeOptions()).getTeamSize();
         int teamIndex = 0;
         for(Player p : players){
             if(teamIndex == bwt.length){
                 plugin.arenaManager.quit(p);
                 continue;
             }
-            tm.addPlayer(p, bwt[teamIndex]);
-            if(teammates == maxTeammates) teamIndex++;
-            else teammates++;
+            BWTeam t = bwt[teamIndex];
+            if(t == null){
+                plugin.arenaManager.quit(p);
+                continue;
+            }
+            tm.addPlayer(p, t);
+            if(++teammates == teamSize) {
+                teamIndex++;
+                teammates = 0;
+            }
         }
 
         plugin.taskHelper.newTask(() -> {
