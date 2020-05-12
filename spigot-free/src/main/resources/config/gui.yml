@@ -16,7 +16,7 @@ item_value_editor:
         material: red_stained_glass_pane
         name: '&f'
         lore:
-          - "&fDrag and drop the item to here"
+          - "[ gui.value_editor.item_btn ]"
       functions:
         on_init:
           - common::pull_item_from_data { value; not-null }
@@ -1045,9 +1045,9 @@ statistics:
       positions: 1/3; 2
       item:
         material: iron_sword
-        name: '&fKills: &a%battle_stats_kills%'
+        name: '[ gui.statistics.kills ]'
         lore:
-          - '&7> Click to view advancements <'
+          - '[ gui.statistics.footer ]'
         flag:
           - hide_attributes
       functions:
@@ -1059,9 +1059,9 @@ statistics:
       positions: 2/3; 2
       item:
         material: pumpkin
-        name: '&fRespawns: &a%battle_stats_respawns%'
+        name: '[ gui.statistics.respawns ]'
         lore:
-          - '&7> Click to view advancements <'
+          - '[ gui.statistics.footer ]'
       functions:
         on_click:
           - common::cancel_event
@@ -1071,9 +1071,9 @@ statistics:
       positions: 3/3; 2
       item:
         material: glowstone
-        name: '&fWins: &a%battle_stats_win_matches%'
+        name: '[ gui.statistics.wins ]'
         lore:
-          - '&7> Click to view advancements <'
+          - '[ gui.statistics.footer ]'
       functions:
         on_click:
           - common::cancel_event
@@ -1107,7 +1107,9 @@ market_category_menu:
       positions: 1; 4
       item:
         material: paper
-        name: '&bView all transactions'
+        name: '[ gui.market_category_menu.transaction_name ]'
+        lore:
+          - '[ gui.market_category_menu.transaction_lore ]'
       functions:
         on_click:
           - common::cancel_event

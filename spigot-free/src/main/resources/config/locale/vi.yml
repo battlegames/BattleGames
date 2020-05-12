@@ -1,14 +1,11 @@
-﻿#
-# Vietnamese (VI-VN)
-
-name: Tiếng Việt (Vi)
+﻿name: Tiếng Việt (Vi)
 state:
   enabled: Đã bật
   disabled: Đã tắt
   enable: Bật
   disable: Tắt
-  true: Đúng
-  false: Sai
+  'true': Đúng
+  'false': Sai
 item_type:
   magazine: Băng đạn
   ammo: Đạn dược
@@ -25,8 +22,8 @@ medal:
   first_kill_title: '&l%battle_icon_gold_cup%'
   first_kill_subtitle: '&eFirst kill'
 server:
-  set_spawn_success: '&aSpawn máy chủ đã được đặt tại <location>'
-  connect_failed: '&eKhông thể kết nối tới bất kì máy chủ nào hiện tại. Vui lòng liên hệ staff.'
+  set_spawn_success: '&aVị trí hồi sinh đã được đặt tại <location>'
+  connect_failed: '&eKhông thể kết nối tới bất kì máy chủ nào. Vui lòng liên hệ staff.'
   try_reconnect: '&eĐang thử kết nối lại... &f<current>/<max>'
   switched_server:
     - '&eCó vẻ như máy chủ đích đang gặp sự cố!'
@@ -37,15 +34,17 @@ arena:
   error_already_joined: '&cBạn đã tham gia trò chơi!'
   error_attendance_disabled: '&cXin lỗi, bạn không thể tham gia trong thời gian này.'
   error_full_players: '&cĐấu trường đã đầy.'
-  error_mode_controller_unavailable: '&cLỗi hệ thống: Không tìm thấy bộ điều khiển trò chơi.'
+  error_mode_controller_unavailable: '&cLỗi hệ thống: Không tìm thấy bộ điều khiển
+    trò chơi.'
   error_attendance_refused: '&cBạn đã bị từ chối yêu cầu tham gia.'
   join_failed: '&cKhông thể ép &f<target> &ctham gia đấu trường'
   join_success: '&f<target> &ađã tham gia đấu trường!'
   quit_failed: '&cKhông thể ép &f<target> &cthoát đấu trường'
   quit_success: '&f<target> &ađã thoát trò chơi!'
+  error_already_playing: '&cTrò chơi đã bắt đầu. Bạn không thể vào lúc này.'
 game:
   list_header: '&4&l--- Các trò chơi đang diễn ra: (<size>) ---'
-  list_header_none: "&cHiện không có trò chơi nào đang được diễn ra."
+  list_header_none: '&cHiện không có trò chơi nào đang được diễn ra.'
   list_section:
     - '&eĐấu trường: &f<arena_name>'
     - '&eChế độ: &f<mode_name>'
@@ -54,13 +53,17 @@ game:
   destroy_success: '&aTrò chơi đang bị phá hủy!'
   inactive_arena: '&cKhông có trò chơi nào đang diễn ra trên đấu trường đó!'
   death_message:
-    by_nature: "&c<player> đã chết"
+    by_nature: '&c<player> đã chết'
     by_players:
-      enough: "&c<player> đã chết vì bị giết bởi &e<attackers>"
-      over: "&c<player> đã chết vì bị giết bởi &e<attackers>,..."
+      enough: '&c<player> đã chết vì bị giết bởi &e<attackers>'
+      over: '&c<player> đã chết vì bị giết bởi &e<attackers>,...'
     with_players:
-      enough: "&c<player> đã chết vì &a<nature_ptg>% &cdo tự nhiên và &a<player_ptg>% &cdo &e<attackers>"
-      over: "&c<player> đã chết vì &a<nature_ptg>% &cdo tự nhiên và &a<player_ptg>% &cdo &e<attackers>,..."
+      enough: '&c<player> đã chết vì &a<nature_ptg>% &cdo tự nhiên và &a<player_ptg>%
+        &cdo &e<attackers>'
+      over: '&c<player> đã chết vì &a<nature_ptg>% &cdo tự nhiên và &a<player_ptg>%
+        &cdo &e<attackers>,...'
+  end_success: '&aTrò chơi chuẩn bị kết thúc...'
+  outside_playable_area: '&cBạn đang ở ngoài khu vực chơi!'
 mode_dm:
   player_join_broadcast: '&f<player> đã tham gia! (%battle_game_total_players%/%battle_arena_max_players%)'
   player_quit_broadcast: '&f<player> đã thoát! (%battle_game_total_players%/%battle_arena_max_players%)'
@@ -116,13 +119,13 @@ items:
   is_null: '&cBạn phải cầm một vật phẩm trong tay!'
   not_gun: '&cĐây không phải là một khẩu súng'
 inv:
-  cleared: '&aTúi đồ đã được dọn dẹp!'
+  hotbar_full: '&aTúi đồ đã đầy!'
 player_data:
   not_found: '&cKhông thể tìm thấy dữ liệu người chơi'
 tool:
   position:
     message: '&fVị trí hiện tại của bạn là: &e<location> &7(Nhấn để sao chép)'
-    location: '/<location>'
+    location: /<location>
   exp2lv: '&a<exp> điểm kinh nghiệm = cấp <level>'
   lv2exp: '&aCấp <level> = <exp> điểm kinh nghiệm'
 kit:
@@ -130,47 +133,6 @@ kit:
   unavailable: '&cKit này hiện không có sẵn! Bạn phải chờ đến <next_available_date>'
   one_time_use: '&cKit này chỉ được nhận một lần!'
 gui:
-  empty: '&f'
-  btn:
-    close_name: '&cĐóng'
-    close_lore:
-      - '&aNhấn vào đây để đóng'
-    prev_name: '&aTrang trước'
-    prev_lore:
-      - '&fXem trang trước'
-    back_inv_name: '&cQuay về'
-    back_inv_lore:
-      - '&fQuay về GUI trước'
-    next_name: '&aTrang sau'
-    next_lore:
-      - '&fXem trang sau'
-  inventory_menu:
-    title: '&e&lTúi đồ'
-    gun_name: '&fSúng'
-    gun_lore:
-      - '&aXem toàn bộ khẩu súng đã sở hữu'
-    magazine_name: '&fBăng đạn'
-    magazine_lore:
-      - '&aXem toàn bộ băng đạn đã sở hữu'
-    ammo_name: '&fĐạn dược'
-    ammo_lore:
-      - '&aXem toàn bộ đạn dược đã sở hữu'
-    scope_name: '&fKính ngắm'
-    scope_lore:
-      - '&aXem toàn bộ kính ngắm đã sở hữu'
-    grenade_name: '&fLựu đạn'
-    grenade_lore:
-      - '&aXem toàn bộ lựu đạn đã sở hữu'
-  inventory_gun:
-    title: '&c&lTúi đồ > Súng'
-  inventory_magazine:
-    title: '&c&lTúi đồ > Băng đạn'
-  inventory_ammo:
-    title: '&c&lTúi đồ > Đạn dược'
-  inventory_scope:
-    title: '&c&lTúi đồ > Kính ngắm'
-  inventory_grenade:
-    title: '&c&lTúi đồ > Lựu đạn'
   kit_menu:
     title: '&b&lKit'
   arena_chooser:
@@ -180,14 +142,8 @@ gui:
     arena_chooser_name: '&e&lChọn đấu trường'
     arena_chooser_lore:
       - '&aTìm đấu trường phù hợp để tham gia trò chơi'
-    your_inventory_name: '&b&lTúi đồ của bạn'
-    your_inventory_lore:
-      - '&aXem túi đồ của bạn'
   game_player_inv:
     title: '&c&lHotbar trò chơi'
-    your_inventory_name: '&b&lTúi đồ'
-    your_inventory_lore:
-      - '&aXem túi đồ của bạn'
     quit_name: '&c&lThoát'
     quit_lore:
       - '&eRời khỏi trận đấu'
@@ -198,42 +154,15 @@ gui:
     prev_name: '&aTrang trước'
     prev_lore:
       - '&fXem trang trước'
-    back_inv_name: '&cQuay lại'
-    back_inv_lore:
-      - '&fQuay lại menu trước đó'
     next_name: '&aTrang sau'
     next_lore:
       - '&fXem trang kế tiếp'
-    your_inv_name: '&b&lTúi đồ của bạn'
-    your_inv_lore:
-      - '&aXem túi đồ của bạn'
-  player_inv:
-    title: '&e&lTúi đồ'
-    gun_name: "&fSúng"
-    gun_lore:
-      - "&aXem toàn bộ khẩu súng đã sở hữu"
-    magazine_name: "&fBăng đạn"
-    magazine_lore:
-      - "&aXem toàn bộ băng đạn đã sở hữu"
-    ammo_name: "&fĐạn dược"
-    ammo_lore:
-      - "&aXem toàn bộ đạn dược đã sở hữu"
-    scope_name: "&fKính ngắm"
-    scope_lore:
-      - "&aXem toàn bộ kính ngắm đã sở hữu"
-    grenade_name: "&fLựu đạn"
-    grenade_lore:
-      - "&aXem toàn bộ lựu đạn đã sở hữu"
-  player_gun_inv:
-    title: "&c&lTúi đồ > Súng"
-  player_magazine_inv:
-    title: "&c&lTúi đồ > Băng đạn"
-  player_ammo_inv:
-    title: "&c&lTúi đồ > Đạn dược"
-  player_scope_inv:
-    title: "&c&lTúi đồ > Kính ngắm"
-  player_grenade_inv:
-    title: "&c&lTúi đồ > Lựu đạn"
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fTrờ về menu trước'
+    your_bp_name: '&b&lBa lô'
+    your_bp_lore:
+      - '&aXem ba lô của bạn'
   market_product_menu:
     title: '&4&lCỬA HÀNG'
     back_name: '&eQuay lại'
@@ -242,6 +171,9 @@ gui:
       - '&fHoặc bạn có thể dùng lệnh &d/b market'
   market_category_menu:
     title: '&4&lCỬA HÀNG'
+    transaction_name: '&bGiao dịch'
+    transaction_lore:
+      - '&fXem các thứ mà bạn đã mua'
   booster_menu:
     title: '&e&lBooster'
   market_category_menu_editor:
@@ -298,19 +230,96 @@ gui:
     back_name: '&cQuay lại'
     back_lore:
       - '&fNhấn vào đây để quay về menu sản phẩm'
+    set_exp_name: '&dThay đổi exp'
+    set_exp_lore:
+      - '&fNhấn vào để thay đổi điểm kinh nghiệm nhận được'
+      - '&fkhi mua sản phẩm'
+    set_icon_name: '&dThay đổi biểu tượng'
+    set_icon_lore:
+      - '&fNhấn vào để chỉnh biểu tượng sản phẩm'
   value_editor:
     done_btn: '&a✔ Xong'
     flip_number_btn: '&cĐảo số: &eÂm <=> Dương'
     boolean_title: '&d&lTrình chỉnh sửa giá trị &e&l[Đúng/Sai]'
     int_title: '&d&lTrình chỉnh sửa giá trị &e&l[Số nguyên]'
     real_title: '&d&lTrình chỉnh sửa giá trị &e&l[Số thực]'
+    item_title: '&d&lTrình chỉnh sửa giá trị &e&l[Vật phẩm]'
+    item_btn: '&fKéo và thả vật phẩm vào đây'
+  player_bp:
+    title: '&c&lBa lô'
+    gun_name: '&fSúng'
+    gun_lore:
+      - '&aXem toàn bộ khẩu súng đã sở hữu'
+    magazine_name: '&fBăng đạn'
+    magazine_lore:
+      - '&aXem toàn bộ băng đạn đã sở hữu'
+    ammo_name: '&fĐạn dược'
+    ammo_lore:
+      - '&aXem toàn bộ đạn dược đã sở hữu'
+    scope_name: '&fKính ngắm'
+    scope_lore:
+      - '&aXem toàn bộ kính ngắm đã sở hữu'
+    grenade_name: '&fLựu đạn'
+    grenade_lore:
+      - '&aXem toàn bộ lựu đạn đã sở hữu'
+    kit_name: '&bKit'
+    kit_lore:
+      - '&fNhấn vào để mở menu kit'
+      - '&eHoặc dùng lệnh &7/b kit'
+    market_name: '&bCửa hàng'
+    market_lore:
+      - '&fNhấn vào để xem cửa hàng'
+      - '&eHoặc dùng lệnh &7/b market'
+  player_gun_bp:
+    title: '&c&lBa lô > Súng'
+  player_magazine_bp:
+    title: '&c&lBa lô > Băng đạn'
+  player_ammo_bp:
+    title: '&c&lBa lô > Đạn dược'
+  player_scope_bp:
+    title: '&c&lBa lô > Kính ngắm'
+  player_grenade_bp:
+    title: '&c&lBa lô > Lựu đạn'
+  statistics:
+    title: '&4&lThống kê'
+    footer: '&7> Nhấn vào để xem trang thành tựu <'
+    kills: '&fGiết: &a%battle_stats_kills%'
+    respawns: '&fHồi sinh: &a%battle_stats_respawns%'
+    wins: '&fThắng: &a%battle_stats_win_matches%'
+  advancements:
+    title: '&5&lThành tựu'
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fTrở về trang thống kê'
+      - '&eHoặc dùng lệnh &7/b stats'
+    status:
+      locked:
+        - '&f'
+        - '&c&l[BỊ KHOÁ]'
+        - '&7Hãy tìm cách mở khoá thành tựu này!'
+      finished:
+        - '&f'
+        - '&a&l[HOÀN THÀNH]'
+      in_progress:
+        - '&f'
+        - '&cSố lượng: <amount>/<max_amount> &7(<amount_progress>%)'
+        - '&cCấp độ: <lv>/<max_lv> &7(<lv_progress>%)'
+        - '&aPhần thưởng trong cấp này:'
+        - '&f- <reward_exp> exp'
+        - '&f- $<reward_money>'
+  market_transaction:
+    title: '&3Giao dịch của bạn'
+    back_name: '&cQuay lại'
+    back_lore:
+      - '&fTrở về cửa hàng'
+      - '&fHoặc dùng lệnh &e/b market'
 currency_format:
-  vault: "$<amount>"
-  ing: '<amount> xu'
-  iron: '<amount> sắt'
-  gold: '<amount> vàng'
-  diamond: '<amount> kim cương'
-  emerald: '<amount> ngọc lục bảo'
+  vault: $<amount>
+  ing: <amount> xu
+  iron: <amount> sắt
+  gold: <amount> vàng
+  diamond: <amount> kim cương
+  emerald: <amount> ngọc lục bảo
 perks:
   not_found: '&cKhông tìm thấy perk này'
   given: '&aĐã gửi perk (#<id>) cho &f<receiver>'
@@ -329,3 +338,23 @@ editor:
     category_created: '&aDanh mục &f#<id>&a đã được tạo.'
     product_created: '&aVật phẩm &f#<id>&a đã được tạo.'
     saved: '&aTệp cấu hình cửa hàng đã được lưu vào <path>'
+debug:
+  done: '&bTác vụ gỡ lỗi đã dừng. Đã lưu bản báo cáo vào &e<path>'
+  created_success: '&aĐã chạy tác vụ gỡ lỗi. Vui lòng chờ bản báo cáo được tạo ra.'
+  created_failure: '&cThất bại! Đã có một tác vụ gỡ lỗi khác đang chạy.'
+bp:
+  cleared: '&aTúi đồ của <target> đã được dọn dẹp!'
+progression:
+  cleared: '&aToàn bộ thống kê và thành tựu đã bị xoá.'
+advancement:
+  level_up: (%battle_icon_medal%) <advancement>&r&f đã lên cấp! &7(+<exp> exp; +$<money>)
+  level_up_overview: '&f        &7Cấp độ: <last_lv> -> <current_lv> &a(<progress>%)'
+  finished: '(%battle_icon_medal%)&a Đã hoàn thành: <advancement>&r &7(+<exp> exp;
+    +$<money>)'
+  unlocked: '(%battle_icon_medal%)&a Đã mở khoá: <advancement>'
+resource_pack:
+  notice: '&a&lVui lòng cài đặt gói tài nguyên để có thể chơi máy chủ này!'
+  declined: '&c&lGói tài nguyên đã bị từ chối (✖)'
+  failed: '&c&lCài đặt gói tài nguyên thất bại (✖)'
+  loaded: '&a&lGói tài nguyên đã được cài đặt xong (✔)'
+  accepted: '&b&lGói tài nguyên đã được chấp nhận. Vui lòng chờ cài đặt.'

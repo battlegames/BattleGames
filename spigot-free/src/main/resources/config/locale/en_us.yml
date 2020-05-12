@@ -1,6 +1,3 @@
-# This configuration is a part of BattleGames
-# Default locale file
-
 name: "English (en-US)"
 state:
   enabled: Enabled
@@ -234,6 +231,10 @@ gui:
     title: "&e&lChoose arena"
   statistics:
     title: "&4&lStatistics"
+    footer: "&7> Click to view advancements <"
+    kills: "&fKills: &a%battle_stats_kills%"
+    respawns: "&fRespawns: &a%battle_stats_respawns%"
+    wins: "&fWins: &a%battle_stats_win_matches%"
   advancements:
     title: "&5&lAdvancements"
     back_name: "&cBack"
@@ -273,6 +274,9 @@ gui:
       - "&fOr you can use &d/b market"
   market_category_menu:
     title: "&4&lMARKET"
+    transaction_name: "&bView all transactions"
+    transaction_lore:
+      - "&fSee all stuff you have purchased so far"
   booster_menu:
     title: "&e&lBoosters"
   market_category_menu_editor:
@@ -346,3 +350,4 @@ gui:
     int_title: "&d&lValue editor &e&l[Integer]"
     real_title: "&d&lValue editor &e&l[Real]"
     item_title: "&d&lValue editor &e&l[Item]"
+    item_btn: "&fDrag and drop the item to here"
