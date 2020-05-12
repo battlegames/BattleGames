@@ -65,24 +65,41 @@ public class SWMIntegration extends BattleComponent implements ISWMIntegration {
                 }
                 w.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
                 if(Bukkit.unloadWorld(w, false)) {
-                    plugin.taskHelper.newAsyncTask(() -> {
-                        try {
-                            SlimeWorld slimeWorld = api.loadWorld(loader, world, true, map);
-                            plugin.taskHelper.newTask(() -> {
-                                api.generateWorld(slimeWorld);
-                                countDownLatch.countDown();
-                            });
-                        } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | IOException | WorldInUseException e) {
-                            e.printStackTrace();
-                            countDownLatch.countDown();
-                        }
-                    });
+                    plugin.taskHelper.newAsyncTask(new a(loader, world, map, countDownLatch));
                 } else {
                     countDownLatch.countDown();
                 }
             });
         } else {
             countDownLatch.countDown();
+        }
+    }
+
+    private class a implements Runnable {
+        private final SlimeLoader loader;
+        private final String world;
+        private final SlimePropertyMap map;
+        private final CountDownLatch countDownLatch;
+
+        public a(SlimeLoader loader, String world, SlimePropertyMap map, CountDownLatch countDownLatch) {
+            this.loader = loader;
+            this.world = world;
+            this.map = map;
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                SlimeWorld slimeWorld = api.loadWorld(loader, world, true, map);
+                plugin.taskHelper.newTask(() -> {
+                    api.generateWorld(slimeWorld);
+                    countDownLatch.countDown();
+                });
+            } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | IOException | WorldInUseException e) {
+                e.printStackTrace();
+                countDownLatch.countDown();
+            }
         }
     }
 }
