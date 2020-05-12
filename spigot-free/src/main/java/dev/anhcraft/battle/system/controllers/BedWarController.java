@@ -278,7 +278,16 @@ public class BedWarController extends DeathmatchController implements IBedWar {
             }
         }
 
+        final int j_ = teammates == 0 ? teamIndex : teamIndex + 1;
         plugin.taskHelper.newTask(() -> {
+            for(int j = j_; j < bwt.length; j++){
+                BWTeam t = bwt[j];
+                if(t != null){
+                    t.getBedPart1().setType(Material.AIR);
+                    t.getBedPart2().setType(Material.AIR);
+                }
+            }
+
             game.setPhase(GamePhase.PLAYING);
             Multimap<BWTeam, Player> f = tm.toMultimap();
             f.forEach((bwTeam, player) -> {
