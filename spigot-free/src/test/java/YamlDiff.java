@@ -41,6 +41,14 @@ public class YamlDiff {
                 c2.set(s, a);
             }
         }
+        for(String s : c2.getKeys(true)){
+            Object a = c1.get(s);
+            Object b = c2.get(s);
+            if(a == null && b != null){
+                System.out.println("Redundant entry: "+s);
+                c2.set(s, null);
+            }
+        }
         try {
             File out = new File("src/main/resources/config/locale/vi.temp.yml");
             out.createNewFile();
