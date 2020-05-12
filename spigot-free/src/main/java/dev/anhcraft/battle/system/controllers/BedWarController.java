@@ -321,7 +321,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         // prevent use battle items
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBreakBed(BlockBreakEvent event){
         Block b = event.getBlock();
         if(b.getType().name().equals("BED_BLOCK") || b.getType().name().endsWith("_BED")){
@@ -331,16 +331,13 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                 if(tm == null) return;
                 BWTeam pteam = tm.getTeam(event.getPlayer());
                 if(pteam == null) return;
-                BWTeam targetTeam = BEDS.get(BlockPosition.of(b));
+                BlockPosition bp = BlockPosition.of(b);
+                BWTeam targetTeam = BEDS.get(bp);
                 BedBreakEvent e = new BedBreakEvent(game, event.getPlayer(), b, pteam, targetTeam);
                 Bukkit.getPluginManager().callEvent(e);
-                if(pteam.equals(targetTeam) || e.isCancelled()){
+                if(pteam.equals(targetTeam)){
                     event.setCancelled(true);
-                    event.setDropItems(false);
-                    event.setExpToDrop(0);
                 } else {
-                    event.setDropItems(false);
-                    event.setExpToDrop(0);
                     targetTeam.getBedPart1().setType(Material.AIR);
                     targetTeam.getBedPart2().setType(Material.AIR);
                     broadcast(game, "bed_destroy_broadcast", new InfoHolder("")
@@ -349,7 +346,10 @@ public class BedWarController extends DeathmatchController implements IBedWar {
                     for (Player p : tm.getPlayers(targetTeam)){
                         plugin.chatManager.sendPlayer(p, blp("respawn_unable"));
                     }
+                    BEDS.remove(bp);
                 }
+                event.setDropItems(false);
+                event.setExpToDrop(0);
             }
         }
     }
