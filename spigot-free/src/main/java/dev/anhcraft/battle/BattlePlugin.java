@@ -644,6 +644,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                     Location l2 = arena.getRollback().getCorner2();
                     if(l1 == null || l2 == null) {
                         getLogger().warning("[BattleRegionValidator] Location is null! (Arena #"+arena.getId()+")");
+                    } else if(l1.getWorld() == null || l2.getWorld() == null) {
+                        getLogger().warning("[BattleRegionValidator] World is absent! (Arena #"+arena.getId()+")");
                     } else if(!l1.getWorld().equals(l2.getWorld())){
                         getLogger().warning("[BattleRegionValidator] Both locations must be in the same world! (Arena #"+arena.getId()+")");
                     } else {
