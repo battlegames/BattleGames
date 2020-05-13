@@ -358,3 +358,7 @@ resource_pack:
   failed: '&c&lCài đặt gói tài nguyên thất bại (✖)'
   loaded: '&a&lGói tài nguyên đã được cài đặt xong (✔)'
   accepted: '&b&lGói tài nguyên đã được chấp nhận. Vui lòng chờ cài đặt.'
+radio:
+  not_in_game: "&cChức năng radio chỉ có trong trò chơi."
+  unsupported_mode: "&cChức năng radio không có trong chế độ này."
+  no_team: "&cBạn không thuộc về đội nào."

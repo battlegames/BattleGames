@@ -25,6 +25,7 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
+import dev.anhcraft.battle.premium.cmd.RadioCommand;
 import dev.anhcraft.battle.premium.system.ArenaSettings;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
@@ -135,6 +136,7 @@ public class PremiumModule implements IPremiumModule {
     @Override
     public void onRegisterCommands(BattlePlugin plugin, PaperCommandManager commandManager) {
         commandManager.registerCommand(new ExtendedCommand());
+        commandManager.registerCommand(new RadioCommand());
     }
 
     @Override

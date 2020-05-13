@@ -351,3 +351,7 @@ gui:
     real_title: "&d&lValue editor &e&l[Real]"
     item_title: "&d&lValue editor &e&l[Item]"
     item_btn: "&fDrag and drop the item to here"
+radio:
+  not_in_game: "&cRadio is only available in-game."
+  unsupported_mode: "&cRadio is not available in this game mode."
+  no_team: "&cYou don't belong to any team."

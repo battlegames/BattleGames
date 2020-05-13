@@ -57,3 +57,7 @@ arena_settings:
       '1':
         corner_1: "lighthouse 23 118 -20 56 30"
         corner_2: "lighthouse -10 143 15 -138 20"
+
+# Radio settings
+radio_settings:
+  format: "&6[RADIO] &8%player_displayname%&f: <message>"
