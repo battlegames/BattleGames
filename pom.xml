@@ -116,12 +116,8 @@
 
     <repositories>
         <repository>
-            <id>anhcraft-repo</id>
-            <url>https://repo.anhcraft.dev/repository/mvn/</url>
-        </repository>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>mcvn-repo</id>
+            <url>https://repo.minecraftvn.net/repository/maven-public/</url>
         </repository>
         <repository>
             <id>aikar</id>
@@ -130,10 +126,6 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
     </repositories>
 
