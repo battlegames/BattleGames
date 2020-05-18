@@ -48,7 +48,7 @@ public class CooldownMap extends HashMap<UUID, Long> {
     }
 
     public long getTime(Player player){
-        return getOrDefault(player, System.currentTimeMillis()/50);
+        return getOrDefault(player.getUniqueId(), System.currentTimeMillis()/50);
     }
 
     public void extendTime(Player player, long duration){
