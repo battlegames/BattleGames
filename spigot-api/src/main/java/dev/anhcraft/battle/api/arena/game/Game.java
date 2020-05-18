@@ -95,9 +95,9 @@ public class Game extends TempDataContainer implements Resettable, Informative {
     public void inform(@NotNull InfoHolder holder) {
         InfoHolder arenaHolder = new InfoHolder("arena_");
         arena.inform(arenaHolder);
-        holder.inform("current_time", currentTime.get())
+        holder.inform("current_time", getCurrentTime().get())
                 .inform("phase", phase.name().toLowerCase())
-                .inform("player_count", playerCount)
+                .inform("player_count", getPlayerCount())
                 .link(arenaHolder);
     }
 
@@ -106,7 +106,7 @@ public class Game extends TempDataContainer implements Resettable, Informative {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game localGame = (Game) o;
-        return currentTime.equals(localGame.currentTime) &&
+        return getCurrentTime().equals(localGame.getCurrentTime()) &&
                 phase == localGame.phase &&
                 arena.equals(localGame.arena);
     }
