@@ -55,6 +55,9 @@ public class QueueAdvancementTask implements Runnable {
 
     @Override
     public void run() {
+        // TODO recode this
+        // - combination stats
+        // - check continuously until no more new levels
         BattleApi api = BattleApi.getInstance();
         synchronized (LOCK) {
             Iterator<Player> keys = queue.keys().iterator();
@@ -169,7 +172,6 @@ public class QueueAdvancementTask implements Runnable {
                     Bukkit.getScheduler().runTask((BattlePlugin) api, () -> VaultApi.getEconomyApi().depositPlayer(player, money));
                 }
                 keys.remove();
-                break;
             }
         }
     }
