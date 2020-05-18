@@ -37,7 +37,7 @@ default_chat:
 storage:
   type: file
   file:
-    data_path: ".battle"
+    data_path: "battle"
   mysql:
     hostname: localhost
     port: 3306

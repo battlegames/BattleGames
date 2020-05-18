@@ -113,7 +113,7 @@ public class GeneralConfig extends ConfigurableObject {
     @Key("storage.file.data_path")
     @Explanation("The path to the directory where we should store data")
     @IgnoreValue(ifNull = true)
-    private String storageFilePath = ".battle";
+    private String storageFilePath = "battle";
 
     @Key("storage.mysql.hostname")
     @Explanation("The IP (or host name) of MySQL server")

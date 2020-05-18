@@ -525,9 +525,31 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             }
         }
         if(!ok){
-            File f = new File(GENERAL_CONF.getStorageFilePath());
-            f.mkdir();
-            dataManager.initFileStorage(f);
+            File old = new File(".battle");
+            if(old.exists()) {
+                getLogger().warning("Starting from v1.2.2, the default name for data folder is battle (without dot '.')");
+                getLogger().warning("This change is necessary since the old one not work for certain file systems.");
+                getLogger().warning("Trying to upgrade the data folder...");
+                File f = new File("battle");
+                f.mkdirs();
+                getLogger().warning("-- Copying old files to the new folder (1/3)...");
+                FileUtil.copy(old, f);
+                getLogger().warning("-- Cleaning old files (2/3)...");
+                FileUtil.clean(old);
+                getLogger().warning("-- Deleting old folder (3/3)...");
+                old.delete();
+                getLogger().warning("All done! :D");
+                dataManager.initFileStorage(f);
+            } else {
+                String s = GENERAL_CONF.getStorageFilePath().trim();
+                if(s.equals(".battle")) {
+                    getLogger().warning("Please change in general.yml (storage.file.data_path) from .battle -> battle");
+                    s = "battle";
+                }
+                File f = new File(s);
+                f.mkdirs();
+                dataManager.initFileStorage(f);
+            }
         }
         dataManager.loadServerData();
 
