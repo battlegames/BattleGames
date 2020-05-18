@@ -421,11 +421,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             return YamlConfiguration.loadConfiguration(reader);
         }
         File f = new File(configFolder, fp);
-        getLogger().info("Loading config file from "+f.getAbsolutePath());
+        getLogger().info("Loading config file: "+f.getName());
         try {
             if(f.exists()) return YamlConfiguration.loadConfiguration(f);
             else if(f.createNewFile()) {
-                getLogger().info("Creating new file at "+f.getAbsolutePath());
+                getLogger().info("Creating new file: "+f.getName());
                 InputStream in = getResource("config/"+cp);
                 byte[] bytes = IOUtil.toByteArray(in, FileUtil.DEFAULT_BUFF_SIZE);
                 in.close();
