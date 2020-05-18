@@ -71,7 +71,7 @@ public class ConfigUpdater {
 
             pr:
             for (PathRelocating p : pathRelocating){
-                if(f.length != p.oldPath.length || !p.type.isAssignableFrom(val.getClass())) continue;
+                if(f.length != p.oldPath.length || val == null || !p.type.isAssignableFrom(val.getClass())) continue;
                 holders.clear();
 
                 for(int i = 0; i < f.length; i++){
