@@ -10,7 +10,7 @@ dm_assault:
     name: "<arena_name>"
     lore:
       - "&4Game Mode: &f<mode_name>"
-      - "&4Players: &f<game_current_time:0>/<arena_max_players>"
+      - "&4Players: &f<game_player_count:0>/<arena_max_players>"
   max_time: 8400
   max_players: 15
   allow_late_joins: true
@@ -98,7 +98,7 @@ bw_lighthouse:
     name: "<arena_name>"
     lore:
       - "&4Game Mode: &f<mode_name>"
-      - "&bPlayers: &f<game_current_time:0>/<arena_max_players>"
+      - "&bPlayers: &f<game_player_count:0>/<arena_max_players>"
   final_exp_formula: "a*3+b*20-c*7.7+d*15.75"
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
   rollback:
