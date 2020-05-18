@@ -1,15 +1,15 @@
 # Configdoc: https://anhcraft.dev/cd/battle/Arena.schema.html
 
-dm_demo:
-  name: "&aDEATHMATCH"
+dm_assault:
+  name: "&4&lAssault"
   mode: dm
   final_exp_formula: "a+b*30-c*10+d*5"
   final_money_formula: "a*4+b*12+d*5"
   icon:
-    material: GRASS
+    material: grass
     name: "<arena_name>"
     lore:
-      - "&4Mode: &f<mode_name>"
+      - "&4Game Mode: &f<mode_name>"
       - "&4Players: &f<game_current_time:0>/<arena_max_players>"
   max_time: 8400
   max_players: 15
@@ -88,185 +88,8 @@ dm_demo:
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
-tdm_demo:
-  name: "&aTEAM DEATHMATCH"
-  mode: tdm
-  max_time: 8400
-  max_players: 10
-  rollback:
-    enabled: true
-    provider: slime_world
-    worlds:
-      - assault
-  icon:
-    material: diamond_sword
-    name: "<arena_name>"
-    lore:
-      - "&eMode: &f<mode_name>"
-      - "&ePlayers: &f<game_current_time:0>/<arena_max_players>"
-    enchant:
-      sharpness: 1
-    flag:
-      - hide_enchants
-    unbreakable: true
-  final_exp_formula: "a*2+b*28-c*8+d*3"
-  final_money_formula: "a*5+b*15+d*3"
-  mode_options:
-    min_players: 2
-    waiting_spawn_points:
-      - assault -309.37 48.00 -240.57 -270.16 5.40
-      - assault -309.23 48.00 -252.58 -272.11 3.45
-      - assault -307.24 48.00 -278.05 -1.06 5.10
-      - assault -307.50 48.00 -289.55 -1.06 4.05
-    playing_spawn_points_a:
-      - assault -369.74 37.00 -292.70 357.30 1.35
-      - assault -362.64 48.00 -216.06 256.94 8.25
-      - assault -340.42 48.00 -226.12 79.79 -1.65
-      - assault -340.60 43.00 -247.49 357.89 4.80
-      - assault -333.14 48.00 -221.80 168.89 3.00
-      - assault -367.03 40.00 -265.06 270.14 6.00
-      - assault -375.22 40.50 -236.96 179.54 1.35
-      - assault -319.64 47.50 -285.61 357.29 3.45
-    playing_spawn_points_b:
-      - assault -369.74 37.00 -292.70 357.30 1.35
-      - assault -362.64 48.00 -216.06 256.94 8.25
-      - assault -340.42 48.00 -226.12 79.79 -1.65
-      - assault -340.60 43.00 -247.49 357.89 4.80
-      - assault -333.14 48.00 -221.80 168.89 3.00
-      - assault -367.03 40.00 -265.06 270.14 6.00
-      - assault -375.22 40.50 -236.96 179.54 1.35
-      - assault -319.64 47.50 -285.61 357.29 3.45
-    countdown_time: 300
-    item_selection_time: 400
-    spawn_protection_time: 40
-    respawn_waiting_time: 200
-  end_delay: 60
-  result_broadcast:
-    won:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&a         Congratulations! You WON the game!         "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-    lost:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&7       You lost. Be better in the next match!       "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-
-ctf_demo:
-  name: "&aCTF [REMOTE]"
-  mode: ctf
-  bungeecord:
-    enabled: true
-    remote_servers:
-      - "server1"
-      - "server2"
-  rollback:
-    enabled: true
-    provider: slime_world
-    worlds:
-      - assault
-  max_time: 12000
-  max_players: 8
-  icon:
-    material: grass
-    name: "<arena_name>"
-    lore:
-      - "&eMode: &f<mode_name>"
-      - "&ePlayers: &f<game_current_time:0>/<arena_max_players>"
-  final_exp_formula: "a*3+b*25-c*8+d*5.7"
-  final_money_formula: "a*4.5+b*18+d*3"
-  mode_options:
-    min_players: 2
-    waiting_spawn_points:
-      - assault -309.37 48.00 -240.57 -270.16 5.40
-      - assault -309.23 48.00 -252.58 -272.11 3.45
-      - assault -307.24 48.00 -278.05 -1.06 5.10
-      - assault -307.50 48.00 -289.55 -1.06 4.05
-    playing_spawn_points_a:
-      - assault -369.74 37.00 -292.70 357.30 1.35
-      - assault -362.64 48.00 -216.06 256.94 8.25
-      - assault -340.42 48.00 -226.12 79.79 -1.65
-      - assault -340.60 43.00 -247.49 357.89 4.80
-      - assault -333.14 48.00 -221.80 168.89 3.00
-      - assault -367.03 40.00 -265.06 270.14 6.00
-      - assault -375.22 40.50 -236.96 179.54 1.35
-      - assault -319.64 47.50 -285.61 357.29 3.45
-    playing_spawn_points_b:
-      - assault -369.74 37.00 -292.70 357.30 1.35
-      - assault -362.64 48.00 -216.06 256.94 8.25
-      - assault -340.42 48.00 -226.12 79.79 -1.65
-      - assault -340.60 43.00 -247.49 357.89 4.80
-      - assault -333.14 48.00 -221.80 168.89 3.00
-      - assault -367.03 40.00 -265.06 270.14 6.00
-      - assault -375.22 40.50 -236.96 179.54 1.35
-      - assault -319.64 47.50 -285.61 357.29 3.45
-    countdown_time: 300
-    item_selection_time: 360
-    spawn_protection_time: 60
-    respawn_waiting_time: 200
-    flags:
-      '1':
-        location: assault -345.41 43.00 -224.30 52.35 11.55
-        display_name:
-          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
-          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
-          neutral: "&7Neutral"
-        max_health: 10
-        start_capture_sound: "$entity_player_levelup"
-        stop_capture_sound: "$ui_toast_challenge_complete"
-      '2':
-        location: assault -355.86 40.50 -285.70 176.70 90.00
-        display_name:
-          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
-          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
-          neutral: "&7Neutral"
-        max_health: 15
-      '3':
-        location: assault -385.20 40.50 -262.56 201.00 88.80
-        display_name:
-          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
-          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
-          neutral: "&7Neutral"
-        max_health: 12
-      '4':
-        location: assault -368.37 41.00 -247.33 281.70 10.95
-        display_name:
-          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
-          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
-          neutral: "&7Neutral"
-        max_health: 15
-  end_delay: 80
-  result_broadcast:
-    won:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&a         Congratulations! You WON the game!         "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-    lost:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&7       You lost. Be better in the next match!       "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-
-bw_demo:
-  name: "&aBEDWAR"
+bw_lighthouse:
+  name: "&e&lLighthouse"
   mode: bw
   max_time: 72000
   max_players: 16
@@ -274,7 +97,7 @@ bw_demo:
     material: grass
     name: "<arena_name>"
     lore:
-      - "&bMode: &f<mode_name>"
+      - "&4Game Mode: &f<mode_name>"
       - "&bPlayers: &f<game_current_time:0>/<arena_max_players>"
   final_exp_formula: "a*3+b*20-c*7.7+d*15.75"
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
@@ -394,7 +217,7 @@ bw_demo:
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
 dm_italy:
-  name: "&aItaly"
+  name: "&b&lItaly"
   mode: dm
   final_exp_formula: "a+b*30-c*10+d*5"
   final_money_formula: "a*4+b*12+d*5"
@@ -402,7 +225,7 @@ dm_italy:
     material: GRASS
     name: "<arena_name>"
     lore:
-      - "&4Mode: &f<mode_name>"
+      - "&4Game Mode: &f<mode_name>"
       - "&4Players: &f<game_current_time:0>/<arena_max_players>"
   max_time: 8400
   max_players: 20
