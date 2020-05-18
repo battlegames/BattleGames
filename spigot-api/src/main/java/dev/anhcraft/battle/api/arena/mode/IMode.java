@@ -77,7 +77,10 @@ public interface IMode {
     default void onTick(@NotNull LocalGame game){
         if(game.getPhase() == GamePhase.PLAYING && game.getCurrentTime().get() % 100 == 0) {
             List<World> worlds = game.getInvolvedWorlds();
-            for (Player p : game.getPlayers().keySet()) {
+            long time = System.currentTimeMillis();
+            for (GamePlayer gp : game.getPlayers().values()) {
+                if((time - gp.getJoinDate()) <= (1000 * 60)) continue;
+                Player p = gp.toBukkit();
                 if (!worlds.contains(p.getWorld())) {
                     p.sendMessage(BattleApi.getInstance().getLocalizedMessage("game.outside_playable_area"));
                     p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0), true);

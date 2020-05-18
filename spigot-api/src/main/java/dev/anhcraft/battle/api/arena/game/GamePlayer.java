@@ -42,12 +42,14 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     private final WeakReference<Player> player;
     private boolean spectator;
     private boolean winner;
+    private final long joinDate;
     private ItemStack[] backupInventory;
     private final Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
 
     public GamePlayer(@NotNull Player player) {
         Validate.notNull(player, "Player must be non-null");
         this.player = new WeakReference<>(player);
+        this.joinDate = System.currentTimeMillis();
     }
 
     @NotNull
@@ -105,6 +107,10 @@ public class GamePlayer extends TempDataContainer implements Resettable {
     @NotNull
     public Table<ItemType, String, BattleItem<?>> getIgBackpack() {
         return igBackpack;
+    }
+
+    public long getJoinDate() {
+        return joinDate;
     }
 
     @Override
