@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.api.arena;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
@@ -40,7 +41,6 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -327,7 +327,7 @@ public class Arena extends ConfigurableObject implements Informative {
                 case "bungeecord.enabled": {
                     boolean b = (Boolean) value;
                     if(b && !ApiProvider.consume().hasBungeecordSupport()){
-                        Bukkit.getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
+                        BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
                         return false;
                     }
                 }
