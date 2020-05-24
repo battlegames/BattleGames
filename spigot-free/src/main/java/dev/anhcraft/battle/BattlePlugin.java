@@ -49,11 +49,9 @@ import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
-import dev.anhcraft.battle.system.managers.config.*;
 import dev.anhcraft.battle.system.BattleRegionRollback;
 import dev.anhcraft.battle.system.BattleWorldRollback;
 import dev.anhcraft.battle.system.PremiumConnector;
-import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
@@ -62,6 +60,7 @@ import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
 import dev.anhcraft.battle.system.managers.*;
+import dev.anhcraft.battle.system.managers.config.*;
 import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
 import dev.anhcraft.battle.system.managers.item.BattleGunManager;
 import dev.anhcraft.battle.system.managers.item.BattleItemManager;
@@ -76,7 +75,9 @@ import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.craftkit.CraftExtension;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
-import dev.anhcraft.jvmkit.utils.*;
+import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.jvmkit.utils.MathUtil;
+import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.objecthunter.exp4j.Expression;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Location;
@@ -87,11 +88,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -265,16 +265,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         new CommandInitializer(this);
 
         Metrics metrics = new Metrics(this, 6080);
-        metrics.addCustomChart(new Metrics.SimplePie("license_type", new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return premiumConnector.isSuccess() ? "premium" : "free";
-            }
-        }));
-
-        if(generalConf.isResourcePackEnabled()) {
-            ResourcePack.init(s -> getLogger().info(s));
-        }
+        metrics.addCustomChart(new Metrics.SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
     }
 
     private void injectApiProvider() {

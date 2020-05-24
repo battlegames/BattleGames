@@ -22,6 +22,7 @@ package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.storage.StorageType;
+import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.managers.BattleDataManager;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
@@ -114,6 +115,10 @@ public class GeneralConfigManager extends ConfigManager {
             } else {
                 plugin.getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");
             }
+        }
+
+        if(plugin.generalConf.isResourcePackEnabled()) {
+            ResourcePack.init(s -> plugin.getLogger().info(s));
         }
     }
 
