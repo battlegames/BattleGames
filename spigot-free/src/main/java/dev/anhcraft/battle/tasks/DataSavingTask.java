@@ -30,6 +30,6 @@ public class DataSavingTask extends BattleComponent implements Runnable {
     @Override
     public void run() {
         plugin.dataManager.saveServerData();
-        plugin.PLAYER_MAP.keySet().forEach(p -> plugin.dataManager.savePlayerData(p));
+        plugin.playerData.keySet().forEach(p -> plugin.dataManager.savePlayerData(p));
     }
 }

@@ -35,7 +35,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -180,13 +179,13 @@ public class BattleDebugger {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
             out.putNextEntry(new ZipEntry("info.txt"));
             out.write(w.build());
-            out.closeEntry();
+            out.closeEntry();/*
             for (int i = 0; i < BattlePlugin.CONFIG_FILES.length; i++) {
                 String[] s = BattlePlugin.CONFIG_FILES[i].split(" ");
                 out.putNextEntry(new ZipEntry("config/"+(s.length == 2 ? s[1] : s[0])));
                 out.write(bp.CONFIG[i].saveToString().getBytes(StandardCharsets.UTF_8));
                 out.closeEntry();
-            }
+            }*/
             out.close();
             timings.clear();
             tps.clear();

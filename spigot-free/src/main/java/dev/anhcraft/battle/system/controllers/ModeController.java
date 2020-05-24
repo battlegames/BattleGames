@@ -74,7 +74,7 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     @Override
     public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             event.getEntity().spigot().respawn();
         });
     }
@@ -160,14 +160,14 @@ public abstract class ModeController extends BattleComponent implements Listener
 
     public void cancelTask(LocalGame game, String id){
         Integer x = RUNNING_TASKS.remove(game.getArena().getId()+id);
-        if(x != null) plugin.taskHelper.cancelTask(x);
+        if(x != null) plugin.extension.getTaskHelper().cancelTask(x);
     }
 
     public void cancelAllTasks(LocalGame game){
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(game.getArena().getId()))
                 .collect(Collectors.toList());
-        x.forEach(e -> plugin.taskHelper.cancelTask(RUNNING_TASKS.remove(e.getKey())));
+        x.forEach(e -> plugin.extension.getTaskHelper().cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
     public void playSound(LocalGame game, Sound sound){

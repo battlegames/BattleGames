@@ -122,7 +122,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             view.getInventory().setItem(slot,
                     formatPAPI(
                             info.replace(
-                                formatTranslations(item.duplicate(), plugin.getLocaleConf())
+                                formatTranslations(item.duplicate(), plugin.localeConfigManager.getSettings())
                             ),
                             player
                     ).build());
@@ -178,7 +178,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                         formatPAPI(
                                 player,
                                 replacer.replace(
-                                        localizeString(gui.getTitle(), plugin.getLocaleConf())
+                                        localizeString(gui.getTitle(), plugin.localeConfigManager.getSettings())
                                 )
                         )
                 )

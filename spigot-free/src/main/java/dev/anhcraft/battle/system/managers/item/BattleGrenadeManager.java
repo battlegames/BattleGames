@@ -35,7 +35,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class BattleGrenadeManager extends BattleComponent {
     public BattleGrenadeManager(BattlePlugin plugin) {
@@ -54,13 +53,13 @@ public class BattleGrenadeManager extends BattleComponent {
         item.setVelocity(ploc.getDirection().normalize().multiply(gm.getVelocityMultiplier()));
         item.setPickupDelay(Integer.MAX_VALUE);
         long dt = gm.getDelayTime();
-        plugin.entityTracker.track(item, new EntityTrackingTask.EntityTrackCallback() {
+        plugin.entityTrackingTask.track(item, new EntityTrackingTask.EntityTrackCallback() {
             @Override
             public void onCheck(EntityTrackingTask.EntityTracker tracker, EntityTrackingTask.EntityTrackCallback callback, Entity entity) {
                 if(tracker.deltaMoveTime() >= 500 || (dt > 0 && tracker.deltaOriginTime() > dt * 50)){
                     callback.untrack(entity);
                     Location eloc = entity.getLocation();
-                    plugin.taskHelper.newTask(() -> {
+                    plugin.extension.getTaskHelper().newTask(() -> {
                         BattleDebugger.startTiming("grenade-track");
                         entity.remove();
                         if(gm.getExplosionPower() > 0) {

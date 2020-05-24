@@ -126,7 +126,7 @@ public class DeathmatchController extends ModeController {
         if(hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getModeOptions().getCountdownTime()/20L);
         int m = Math.min(game.getArena().getModeOptions().getMinPlayers(), 1);
-        trackTask(game, "countdown", plugin.taskHelper.newAsyncTimerTask(() -> {
+        trackTask(game, "countdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             if(m <= game.getPlayerCount()) {
                 broadcastTitle(game, "countdown_title", "countdown_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                 playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
@@ -140,7 +140,7 @@ public class DeathmatchController extends ModeController {
 
     protected void play(LocalGame game) {
         broadcast(game,"game_start_broadcast");
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             game.getPlayers().values().forEach(p -> {
                 cancelTask(game, "respawn::"+p.toBukkit().getName());
@@ -246,14 +246,14 @@ public class DeathmatchController extends ModeController {
             gp.getStats().of(RespawnStat.class).increase(player);
             AtomicLong current = new AtomicLong(game.getArena().getModeOptions().getRespawnWaitTime()/20L);
             String task = "respawn::"+player.getName();
-            trackTask(game, task, plugin.taskHelper.newAsyncTimerTask(() -> {
+            trackTask(game, task, plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
                     sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                     playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);
                         gp.setSpectator(false);
-                        plugin.taskHelper.newTask(() -> respw(game, player));
+                        plugin.extension.getTaskHelper().newTask(() -> respw(game, player));
                     }
                 } else cancelTask(game, task);
             }, 0, 20));

@@ -17,19 +17,23 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.tasks;
 
-import dev.anhcraft.battle.BattleComponent;
-import dev.anhcraft.battle.BattlePlugin;
+package dev.anhcraft.battle.premium.system;
 
-public class DataLoadingTask extends BattleComponent implements Runnable {
-    public DataLoadingTask(BattlePlugin plugin) {
-        super(plugin);
+import dev.anhcraft.battle.system.managers.config.ConfigManager;
+
+public class ExConfigManager extends ConfigManager {
+    public ExConfigManager() {
+        super("ex.config.yml");
     }
 
     @Override
-    public void run() {
-        plugin.dataManager.loadServerData();
-        plugin.playerData.keySet().forEach(p -> plugin.dataManager.loadPlayerData(p));
+    protected void onLoad() {
+
+    }
+
+    @Override
+    protected void onClean() {
+
     }
 }

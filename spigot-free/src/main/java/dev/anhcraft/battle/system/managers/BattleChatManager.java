@@ -65,7 +65,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
                 }
             }
         } else {
-            BattleChat bc = plugin.GENERAL_CONF.getDefaultChat();
+            BattleChat bc = plugin.generalConf.getDefaultChat();
             if(bc == null || !bc.isEnabled()) return false;
             String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, bc.getFormat()))
                     .replace("<message>", message);

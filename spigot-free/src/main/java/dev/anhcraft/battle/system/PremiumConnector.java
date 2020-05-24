@@ -61,9 +61,9 @@ public class PremiumConnector extends BattleComponent {
         }
     }
 
-    public void onInitConfig() {
+    public void onReloadConfig() {
         if(premiumModule != null) {
-            premiumModule.onInitConfig(plugin);
+            premiumModule.onReloadConfig(plugin);
         }
     }
 

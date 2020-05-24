@@ -24,12 +24,10 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
-import dev.anhcraft.craftkit.abif.ABIF;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -40,19 +38,24 @@ import java.util.Objects;
 
 public class BattleItemManager extends BattleComponent implements ItemManager {
     private final Map<ItemType, PreparedItem> ITEMS = new EnumMap<>(ItemType.class);
-    private final Map<ItemType, PreparedItem> ITEM_MODELS = new EnumMap<>(ItemType.class);
+    private final Map<ItemType, PreparedItem> MODELS = new EnumMap<>(ItemType.class);
 
     public BattleItemManager(BattlePlugin plugin) {
         super(plugin);
 
-        ItemType[] types = ItemType.values();
-        for(ItemType type : types){
-            String k = type.name().toLowerCase();
-            ConfigurationSection sec = plugin.getItemConf().getConfigurationSection("model_"+k);
-            if(sec != null) ITEM_MODELS.put(type, ABIF.read(sec));
-            sec = plugin.getItemConf().getConfigurationSection(k);
-            if(sec != null) ITEMS.put(type, ABIF.read(sec));
+        PreparedItem empty = new PreparedItem();
+        for(ItemType type : ItemType.values()){
+            ITEMS.put(type, empty);
+            MODELS.put(type, empty);
         }
+    }
+
+    public void defineItemTemplate(ItemType itemType, PreparedItem preparedItem){
+        ITEMS.put(itemType, preparedItem);
+    }
+
+    public void defineModelTemplate(ItemType itemType, PreparedItem preparedItem){
+        MODELS.put(itemType, preparedItem);
     }
 
     public boolean selectItem(Player player, BattleItemModel m) {
@@ -122,7 +125,7 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
         if(bim == null) return null;
         InfoReplacer info = bim.collectInfo(null).compile();
         if(addition != null) info.getMap().putAll(addition);
-        return info.replace(ITEM_MODELS.get(bim.getItemType()).duplicate());
+        return info.replace(MODELS.get(bim.getItemType()).duplicate());
     }
 
     @Override

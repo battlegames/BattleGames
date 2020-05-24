@@ -17,19 +17,27 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.tasks;
 
-import dev.anhcraft.battle.BattleComponent;
-import dev.anhcraft.battle.BattlePlugin;
+package dev.anhcraft.battle.system.managers.config;
 
-public class DataLoadingTask extends BattleComponent implements Runnable {
-    public DataLoadingTask(BattlePlugin plugin) {
-        super(plugin);
+import dev.anhcraft.battle.api.arena.mode.Mode;
+
+import java.util.Objects;
+
+public class ModeConfigManager extends ConfigManager {
+    public ModeConfigManager() {
+        super("modes.yml");
     }
 
     @Override
-    public void run() {
-        plugin.dataManager.loadServerData();
-        plugin.playerData.keySet().forEach(p -> plugin.dataManager.loadPlayerData(p));
+    public void onLoad() {
+        getSettings().getKeys(false).forEach(s -> {
+            Mode.getMode(s, m -> m.init(Objects.requireNonNull(getSettings().getConfigurationSection(s))));
+        });
+    }
+
+    @Override
+    public void onClean() {
+
     }
 }

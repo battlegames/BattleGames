@@ -27,6 +27,7 @@ import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
 import dev.anhcraft.battle.premium.cmd.RadioCommand;
 import dev.anhcraft.battle.premium.system.ArenaSettings;
+import dev.anhcraft.battle.premium.system.ExConfigManager;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
 import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
@@ -45,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class PremiumModule implements IPremiumModule {
     private static PremiumModule instance;
@@ -52,6 +54,7 @@ public class PremiumModule implements IPremiumModule {
     private WorldSettings globalWorldSettings;
     private final Map<String, WorldSettings> worldSettingsMap = new HashMap<>();
     private final Map<String, ArenaSettings> arenaSettingsMap = new HashMap<>();
+    private ExConfigManager exConfigManager;
 
     private static void fillOptions(ConfigurationSection model, ConfigurationSection target){
         for(String s : model.getKeys(false)){
@@ -88,16 +91,20 @@ public class PremiumModule implements IPremiumModule {
 
     @Override
     public void onInitSystem(BattlePlugin plugin) {
+        exConfigManager = new ExConfigManager();
         plugin.arenaManager.initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
         plugin.arenaManager.initController(Mode.CTF, new CTFController(plugin));
     }
 
     @Override
-    public void onInitConfig(BattlePlugin plugin) {
-        conf = plugin.loadConfigFile("ex.config.yml", "ex.config.yml");
+    public void onReloadConfig(BattlePlugin plugin) {
+        exConfigManager.reloadConfig();
+        conf = exConfigManager.getSettings();
         try {
+            worldSettingsMap.clear();
+            arenaSettingsMap.clear();
             ConfigurationSection gen = conf.getConfigurationSection("world_settings.general");
-            globalWorldSettings = ConfigHelper.readConfig(gen, ConfigSchema.of(WorldSettings.class));
+            globalWorldSettings = ConfigHelper.readConfig(Objects.requireNonNull(gen), ConfigSchema.of(WorldSettings.class));
             for(String k : conf.getConfigurationSection("world_settings.specific").getKeys(false)){
                 ConfigurationSection s = conf.getConfigurationSection("world_settings.specific."+k);
                 fillOptions(gen, s);

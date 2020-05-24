@@ -112,7 +112,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
 
     private Game join(Player player, LocalGame localGame, IMode controller) {
         GamePlayer gp = controller.makeGamePlayer(player);
-        gp.getIgBalance().set(plugin.GENERAL_CONF.getIgEcoInitBalance());
+        gp.getIgBalance().set(plugin.generalConf.getIgEcoInitBalance());
         localGame.getPlayers().put(player, gp);
         PLAYER_GAME_MAP.put(player.getUniqueId(), localGame);
         controller.onJoin(player, localGame);
@@ -211,7 +211,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
             Multiset<String> servers = game.getDownstreamServers().keys();
             for(String s : servers) {
                 if (game.getDownstreamServers().remove(s, player)) {
-                    plugin.queueServerTask.QUEUE.add(new QueueServer(player, plugin.GENERAL_CONF.getBungeeLobbies(), null));
+                    plugin.queueServerTask.QUEUE.add(new QueueServer(player, plugin.generalConf.getBungeeLobbies(), null));
                     break;
                 }
             }
@@ -263,7 +263,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         Arena arena = game.getArena();
         for (GamePlayer gp : game.getPlayers().values()){
             Player p = gp.toBukkit();
-            if(plugin.GENERAL_CONF.shouldHealOnGameEnd()){
+            if(plugin.generalConf.shouldHealOnGameEnd()){
                 p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
             }
             plugin.gunManager.handleZoomOut(p);
@@ -324,7 +324,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
 
         long ed = arena.getEndDelay();
         if(ed <= 0) plugin.arenaManager.destroy(game);
-        else plugin.taskHelper.newDelayedTask(() -> plugin.arenaManager.destroy(game), ed);
+        else plugin.extension.getTaskHelper().newDelayedTask(() -> plugin.arenaManager.destroy(game), ed);
     }
 
     @NotNull

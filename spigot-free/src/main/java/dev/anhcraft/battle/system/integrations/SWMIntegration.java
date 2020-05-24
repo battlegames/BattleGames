@@ -57,7 +57,7 @@ public class SWMIntegration extends BattleComponent implements ISWMIntegration {
         if(worldData != null){
             SlimeLoader loader = api.getLoader(worldData.getDataSource());
             SlimePropertyMap map = worldData.toPropertyMap();
-            plugin.taskHelper.newTask(() -> {
+            plugin.extension.getTaskHelper().newTask(() -> {
                 World w = Bukkit.getWorld(world);
                 if(w == null){
                     countDownLatch.countDown();
@@ -65,7 +65,7 @@ public class SWMIntegration extends BattleComponent implements ISWMIntegration {
                 }
                 w.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
                 if(Bukkit.unloadWorld(w, false)) {
-                    plugin.taskHelper.newAsyncTask(new a(loader, world, map, countDownLatch));
+                    plugin.extension.getTaskHelper().newAsyncTask(new a(loader, world, map, countDownLatch));
                 } else {
                     countDownLatch.countDown();
                 }
@@ -92,7 +92,7 @@ public class SWMIntegration extends BattleComponent implements ISWMIntegration {
         public void run() {
             try {
                 SlimeWorld slimeWorld = api.loadWorld(loader, world, true, map);
-                plugin.taskHelper.newTask(() -> {
+                plugin.extension.getTaskHelper().newTask(() -> {
                     api.generateWorld(slimeWorld);
                     countDownLatch.countDown();
                 });

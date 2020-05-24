@@ -103,9 +103,9 @@ public class BattleGunManager extends BattleComponent {
     }
 
     public void reduceSpeed(Player player, GunModel g){
-        double w = plugin.GENERAL_CONF.getWalkSpeed();
+        double w = plugin.generalConf.getWalkSpeed();
         w = Math.max(-1f, w - g.getWeight());
-        double f = plugin.GENERAL_CONF.getFlySpeed();
+        double f = plugin.generalConf.getFlySpeed();
         f = Math.max(-1f, f - g.getWeight());
         player.setWalkSpeed((float) w);
         player.setFlySpeed((float) f);
@@ -134,8 +134,8 @@ public class BattleGunManager extends BattleComponent {
                     }
                 }
             }
-            player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
-            player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
+            player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
+            player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
         } else reduceSpeed(player, gunModel);
     }
 
@@ -265,7 +265,7 @@ public class BattleGunManager extends BattleComponent {
 
                 Block block = loc.getBlock();
                 if(lastBlock == null || !lastBlock.equals(block)) {
-                    power -= plugin.GENERAL_CONF.getMaterialHardness(block.getType());
+                    power -= plugin.generalConf.getMaterialHardness(block.getType());
                     if (power <= 0) {
                         int id = loc.hashCode();
                         int st = RandomUtil.randomInt(0, 9);
@@ -291,12 +291,12 @@ public class BattleGunManager extends BattleComponent {
                     Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
                             .normalize().multiply(b.getKnockback()));
                     ve.setVelocity(vec);
-                    power -= plugin.GENERAL_CONF.getEntityHardness(ve.getType());
+                    power -= plugin.generalConf.getEntityHardness(ve.getType());
                     EntityEquipment ee = ve.getEquipment();
                     if(ee != null) {
                         for(ItemStack item : ee.getArmorContents()){
                             if(ItemUtil.isNull(item)) continue;
-                            power -= plugin.GENERAL_CONF.getMaterialHardness(item.getType());
+                            power -= plugin.generalConf.getMaterialHardness(item.getType());
                         }
                     }
                 }

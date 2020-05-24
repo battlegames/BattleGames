@@ -70,6 +70,13 @@ public interface BattleApi {
     Logger getLogger();
 
     /**
+     * Gets the system configuration.
+     * @return system config
+     */
+    @NotNull
+    SystemConfig getSystemConfig();
+
+    /**
      * Gets the general configuration.
      * @return general config
      */

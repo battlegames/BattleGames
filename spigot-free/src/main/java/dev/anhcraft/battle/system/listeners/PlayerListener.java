@@ -97,9 +97,9 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     public void handleJoin(Player player) {
-        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
-        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
-        plugin.taskHelper.newDelayedTask(() -> {
+        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
+        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
+        plugin.extension.getTaskHelper().newDelayedTask(() -> {
             if(!player.isOnline()) return;
             BattleDebugger.startTiming("player-join");
             for(PotionEffect pe : player.getActivePotionEffects()){
@@ -107,13 +107,13 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
             EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint(), ok -> {
                 plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
-                plugin.taskHelper.newAsyncTask(() -> {
-                    if(plugin.GENERAL_CONF.isResourcePackEnabled()) {
+                plugin.extension.getTaskHelper().newAsyncTask(() -> {
+                    if(plugin.generalConf.isResourcePackEnabled()) {
                         ResourcePack.send(player);
                     }
                     PlayerData playerData = plugin.dataManager.loadPlayerData(player);
                     // back to main thread
-                    plugin.taskHelper.newTask(() -> {
+                    plugin.extension.getTaskHelper().newTask(() -> {
                         plugin.resetScoreboard(player);
                         plugin.listKits(kit -> {
                             if(kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())){
@@ -122,7 +122,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                             }
                         });
                         if(player.hasPermission("battle.pleasesetrollback")) {
-                            for (Arena arena : plugin.ARENA_MAP.values()){
+                            for (Arena arena : plugin.listArenas()){
                                 if (arena.getRollback() == null) {
                                     player.sendMessage(ChatColor.GOLD + "For safety reasons, you should specify rollback for arena #" + arena.getId());
                                 }
@@ -140,12 +140,12 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.guiManager.destroyWindow(event.getPlayer());
         plugin.arenaManager.quit(event.getPlayer());
         plugin.gunManager.handleZoomOut(event.getPlayer());
-        plugin.taskHelper.newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
+        plugin.extension.getTaskHelper().newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
 
     @EventHandler
     public void resourcePackStatus(PlayerResourcePackStatusEvent event){
-        if(plugin.GENERAL_CONF.isResourcePackEnabled()) {
+        if(plugin.generalConf.isResourcePackEnabled()) {
             Player player = event.getPlayer();
             switch (event.getStatus()){
                 case DECLINED: {
@@ -220,12 +220,12 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(game != null && game.getPhase() == GamePhase.PLAYING){
                     boolean left = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
                     boolean right = event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK;
-                    boolean act1 = (left && plugin.GENERAL_CONF.getGunShootClick() == MouseClick.LEFT_CLICK)
-                            || (right && plugin.GENERAL_CONF.getGunShootClick() == MouseClick.RIGHT_CLICK);
-                    boolean act2 = (left && plugin.GENERAL_CONF.getGunZoomClick() == MouseClick.LEFT_CLICK)
-                            || (right && plugin.GENERAL_CONF.getGunZoomClick() == MouseClick.RIGHT_CLICK);
-                    boolean act3 = (left && plugin.GENERAL_CONF.getGrenadeThrowClick() == MouseClick.LEFT_CLICK)
-                            || (right && plugin.GENERAL_CONF.getGrenadeThrowClick() == MouseClick.RIGHT_CLICK);
+                    boolean act1 = (left && plugin.generalConf.getGunShootClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.generalConf.getGunShootClick() == MouseClick.RIGHT_CLICK);
+                    boolean act2 = (left && plugin.generalConf.getGunZoomClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.generalConf.getGunZoomClick() == MouseClick.RIGHT_CLICK);
+                    boolean act3 = (left && plugin.generalConf.getGrenadeThrowClick() == MouseClick.LEFT_CLICK)
+                            || (right && plugin.generalConf.getGrenadeThrowClick() == MouseClick.RIGHT_CLICK);
                     if(item instanceof Gun && (act1 || act2)){
                         Gun gun = (Gun) item;
                         if(act1){
@@ -433,8 +433,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                     }
                 } else if(oldItem instanceof Gun){
                     if(!plugin.gunManager.handleZoomOut(player, null)){
-                        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
-                        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
+                        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
+                        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
                     }
                     updateSecondaryGunSkin(player, null);
                 }
@@ -444,8 +444,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(oldItem instanceof Gun){
                     updateSecondaryGunSkin(player, null);
                     if(!plugin.gunManager.handleZoomOut(player, null)){
-                        player.setWalkSpeed((float) plugin.GENERAL_CONF.getWalkSpeed());
-                        player.setFlySpeed((float) plugin.GENERAL_CONF.getFlySpeed());
+                        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
+                        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
                     }
                 }
             }
@@ -454,7 +454,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void death(PlayerDeathEvent e) {
-        if(plugin.GENERAL_CONF.shouldAntiDeathDrops()){
+        if(plugin.generalConf.shouldAntiDeathDrops()){
             e.getDrops().clear();
             e.setDroppedExp(0);
             e.setKeepInventory(true);
@@ -524,7 +524,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 InfoReplacer ir = new InfoHolder("")
                         .inform("player", e.getEntity().getName())
                         .compile();
-                e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocaleConf().getString("game.death_message.by_nature"))));
+                e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocalizedMessage("game.death_message.by_nature"))));
             } else {
                 boolean over = damagerMap.keySet().size() > 3;
                 String attackerNames = damagerMap.keySet()
@@ -548,15 +548,15 @@ public class PlayerListener extends BattleComponent implements Listener {
                     if(over) x = "game.death_message.with_players.over";
                     else x = "game.death_message.with_players.enough";
                 }
-                e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(plugin.getLocaleConf().getString(x))));
+                e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(Objects.requireNonNull(plugin.getLocalizedMessage(x)))));
             }
 
-            String hst = plugin.getLocaleConf().getString("medal.headshot_title");
-            String hsst = plugin.getLocaleConf().getString("medal.headshot_subtitle");
-            String ast = plugin.getLocaleConf().getString("medal.assist_title");
-            String asst = plugin.getLocaleConf().getString("medal.assist_subtitle");
-            String fkt = plugin.getLocaleConf().getString("medal.first_kill_title");
-            String fkst = plugin.getLocaleConf().getString("medal.first_kill_subtitle");
+            String hst = plugin.getLocalizedMessage("medal.headshot_title");
+            String hsst = plugin.getLocalizedMessage("medal.headshot_subtitle");
+            String ast = plugin.getLocalizedMessage("medal.assist_title");
+            String asst = plugin.getLocalizedMessage("medal.assist_subtitle");
+            String fkt = plugin.getLocalizedMessage("medal.first_kill_title");
+            String fkst = plugin.getLocalizedMessage("medal.first_kill_subtitle");
 
             for(Map.Entry<Player, GamePlayerDeathEvent.Contribution> ent : damagerMap.entrySet()){
                 Player player = ent.getKey();

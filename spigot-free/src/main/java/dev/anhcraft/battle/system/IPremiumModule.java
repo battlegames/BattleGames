@@ -28,7 +28,7 @@ public interface IPremiumModule {
 
     void onInitSystem(BattlePlugin plugin);
 
-    void onInitConfig(BattlePlugin plugin);
+    void onReloadConfig(BattlePlugin plugin);
 
     void onRegisterEvents(BattlePlugin plugin);
 

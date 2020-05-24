@@ -56,10 +56,10 @@ public class EditorCommand extends BaseCommand{
     @Subcommand("market save")
     @CommandPermission("battle.editor.market.save")
     public void marketSave(CommandSender sender){
-        ConfigHelper.writeConfig(plugin.getMarketConf(), Market.SCHEMA, plugin.getMarket(), ConfigHelper.newOptions().ignoreEmptyArray().ignoreEmptyList().ignoreFalse().ignoreZero().ignoreEmptySection());
+        ConfigHelper.writeConfig(plugin.marketConfigManager.getSettings(), Market.SCHEMA, plugin.getMarket(), ConfigHelper.newOptions().ignoreEmptyArray().ignoreEmptyList().ignoreFalse().ignoreZero().ignoreEmptySection());
         File f = new File(plugin.getEditorFolder(), "market."+System.currentTimeMillis()+".yml");
         try {
-            plugin.getMarketConf().save(f);
+            plugin.marketConfigManager.getSettings().save(f);
             plugin.chatManager.send(sender, "editor.market.saved", new InfoHolder("").inform("path", f.getAbsolutePath()).compile());
         } catch (IOException e) {
             e.printStackTrace();

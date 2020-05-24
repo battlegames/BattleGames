@@ -205,7 +205,7 @@ public class TeamDeathmatchController extends DeathmatchController implements IT
         teamManager.addPlayers(tb, ABTeam.TEAM_B);
         TEAM.put(game, teamManager);
 
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(game, "respawn::"+p.getName());

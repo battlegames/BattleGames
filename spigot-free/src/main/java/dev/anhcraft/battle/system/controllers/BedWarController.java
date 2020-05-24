@@ -279,7 +279,7 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         }
 
         final int j_ = teammates == 0 ? teamIndex : teamIndex + 1;
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             for(int j = j_; j < bwt.length; j++){
                 BWTeam t = bwt[j];
                 if(t != null){

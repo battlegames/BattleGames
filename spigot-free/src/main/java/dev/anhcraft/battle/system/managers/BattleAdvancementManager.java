@@ -69,4 +69,9 @@ public class BattleAdvancementManager extends BattleComponent implements Advance
     public void report(@NotNull Player player, @NotNull String type, double current) {
         advancementTask.put(player, type, current);
     }
+
+    @Deprecated
+    public void clean() {
+        advancements.clear();
+    }
 }

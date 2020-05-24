@@ -74,7 +74,7 @@ public class GameListener extends BattleComponent implements Listener {
 
         // its better to execute the following code later
         // we can ignore if the player is going to quit the server
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             if(p.isOnline()) {
                 plugin.resetScoreboard(p);
                 EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {
@@ -93,7 +93,7 @@ public class GameListener extends BattleComponent implements Listener {
                     ModeController mc = (ModeController) bmc;
                     ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
                 } else if(event.getNewPhase() == GamePhase.PLAYING) {
-                    if (plugin.GENERAL_CONF.shouldHealOnGameStart()) {
+                    if (plugin.generalConf.shouldHealOnGameStart()) {
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
                     }
                 }

@@ -100,7 +100,7 @@ public class EntityTrackingTask extends BattleComponent implements Runnable {
 
     @Override
     public void run() {
-        double v = Math.pow(plugin.GENERAL_CONF.getEntityTrackMinDistance(), 2);
+        double v = Math.pow(plugin.generalConf.getEntityTrackMinDistance(), 2);
         for (Map.Entry<Entity, EntityTracker> e : MAP.entrySet()) {
             if (e.getKey().isDead()) {
                 MAP.remove(e.getKey());

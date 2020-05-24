@@ -134,13 +134,13 @@ public class BattleDataManager extends BattleComponent {
             }
             pd.read(data);
         }
-        plugin.PLAYER_MAP.put(player, pd);
+        plugin.playerData.put(player, pd);
         BattleDebugger.endTiming("player-data-load");
         return pd;
     }
 
     public synchronized void unloadPlayerData(OfflinePlayer player){
-        plugin.PLAYER_MAP.remove(player);
+        plugin.playerData.remove(player);
         PLAYER_STORAGE.remove(player);
     }
 

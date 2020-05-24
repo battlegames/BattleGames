@@ -165,7 +165,7 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
     protected void play(LocalGame game) {
         super.play(game);
 
-        plugin.taskHelper.newTask(() -> {
+        plugin.extension.getTaskHelper().newTask(() -> {
             List<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getModeOptions()).getFlags();
             for(FlagOptions k : fs){
                 ArmorStand armorStand = ArmorStand.spawn(k.getLocation());
@@ -200,7 +200,7 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
         flag.setCapturing(true);
         if(flag.getCaptureStartSound() != null) flag.getCaptureStartSound().play(occupier);
         String id = "ctf_flag_occupy_"+occupier.getName();
-        int tid = plugin.taskHelper.newTimerTask(() -> {
+        int tid = plugin.extension.getTaskHelper().newTimerTask(() -> {
             if(occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5){
                 stopOccupyFlag(game, flag, occupier);
                 return;

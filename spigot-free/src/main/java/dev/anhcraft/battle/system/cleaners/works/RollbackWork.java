@@ -73,7 +73,7 @@ public class RollbackWork implements Work {
                         plugin.getLogger().warning("World not found: "+w);
                         it.remove();
                     } else {
-                        plugin.taskHelper.newTask(() -> {
+                        plugin.extension.getTaskHelper().newTask(() -> {
                             if (plugin.battleWorldRollback.rollbackWorld(wd)) {
                                 plugin.getLogger().info("[Rollback/BattleWorld] World reloaded successfully!");
                             } else {
@@ -93,7 +93,7 @@ public class RollbackWork implements Work {
                 Location l2 = rollback.getCorner2();
                 if (l1 != null && l2 != null) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
-                    plugin.taskHelper.newTask(() -> {
+                    plugin.extension.getTaskHelper().newTask(() -> {
                         if (plugin.battleRegionRollback.rollbackRegion(l1, l2)) {
                             plugin.getLogger().info("[Rollback/BattleRegion] Region reloaded successfully!");
                         } else {
