@@ -36,7 +36,12 @@ public class LocaleConfigManager extends ConfigManager {
 
     @NotNull
     protected File getConfigFile() {
-        return new File(plugin.configFolder, plugin.generalConf.getLocaleFile());
+        return new File(plugin.configFolder, "locale/" + plugin.generalConf.getLocaleFile());
+    }
+
+    @NotNull
+    protected String getConfigURL() {
+        return String.format(plugin.getSystemConfig().getRemoteConfigLink(), "locale/" + plugin.generalConf.getLocaleFile());
     }
 
     @Override

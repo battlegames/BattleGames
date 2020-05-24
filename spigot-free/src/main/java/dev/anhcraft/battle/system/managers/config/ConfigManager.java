@@ -61,6 +61,10 @@ public abstract class ConfigManager extends BattleComponent {
     protected File getConfigFile() {
         return new File(plugin.configFolder, filePath);
     }
+    @NotNull
+    protected String getConfigURL() {
+        return String.format(plugin.getSystemConfig().getRemoteConfigLink(), filePath);
+    }
 
     private void loadDefaultConfig() {
         if(defaultSettings != null) return;
@@ -106,7 +110,7 @@ public abstract class ConfigManager extends BattleComponent {
                 matchDef = true; // no need to compare with default again
             }
         } else {
-            String url = String.format(plugin.getSystemConfig().getRemoteConfigLink(), filePath);
+            String url = getConfigURL();
             plugin.getLogger().info("["+loggerName+"] Downloading config...");
             try {
                 byte[] bytes = HttpUtil.fetch(url);
