@@ -57,19 +57,26 @@ public abstract class ConfigManager extends BattleComponent {
 
     protected abstract void onLoad();
     protected abstract void onClean();
+
     @NotNull
-    protected File getConfigFile() {
+    protected String buildResourcePath() {
+        return  "config/" + resourcePath;
+    }
+
+    @NotNull
+    protected File buildConfigFile() {
         return new File(plugin.configFolder, filePath);
     }
+
     @NotNull
-    protected String getConfigURL() {
+    protected String buildConfigURL() {
         return String.format(plugin.getSystemConfig().getRemoteConfigLink(), filePath);
     }
 
     private void loadDefaultConfig() {
         if(defaultSettings != null) return;
         try {
-            String path = "config/" + resourcePath;
+            String path = buildResourcePath();
             InputStream in = plugin.getResource(path);
             if(in == null) {
                 plugin.getLogger().warning("["+loggerName+"] Resource not found: " + path);
@@ -93,7 +100,7 @@ public abstract class ConfigManager extends BattleComponent {
         }
         boolean matchDef = false;
         if(preventRemote || !plugin.getSystemConfig().isRemoteConfigEnabled()){
-            File f = getConfigFile();
+            File f = buildConfigFile();
             plugin.getLogger().info("["+loggerName+"] Loading config...");
             if (f.exists()) {
                 settings = YamlConfiguration.loadConfiguration(f);
@@ -110,7 +117,7 @@ public abstract class ConfigManager extends BattleComponent {
                 matchDef = true; // no need to compare with default again
             }
         } else {
-            String url = getConfigURL();
+            String url = buildConfigURL();
             plugin.getLogger().info("["+loggerName+"] Downloading config...");
             try {
                 byte[] bytes = HttpUtil.fetch(url);

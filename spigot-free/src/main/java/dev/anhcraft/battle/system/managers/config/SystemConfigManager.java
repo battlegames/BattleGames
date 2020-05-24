@@ -37,7 +37,7 @@ public class SystemConfigManager extends ConfigManager {
 
     @Override
     @NotNull
-    protected File getConfigFile() {
+    protected File buildConfigFile() {
         return new File(plugin.getDataFolder(), getFilePath());
     }
 
