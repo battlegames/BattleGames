@@ -59,7 +59,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @CommandAlias("b|bg|battle|battlegames")
-public class MainCommand extends BaseCommand{
+public class MainCommand extends BaseCommand {
     private final BattlePlugin plugin;
 
     public MainCommand(BattlePlugin plugin){
@@ -522,5 +522,18 @@ public class MainCommand extends BaseCommand{
     @Description("Refresh the resource pack")
     public void refreshRsp(CommandSender sender){
         ResourcePack.init(sender::sendMessage);
+    }
+
+    @Subcommand("reload")
+    @CommandPermission("battle.reload")
+    @Description("Reload the configuration")
+    public void reload(CommandSender sender){
+        Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
+        plugin.getArenaManager().listGames(g -> plugin.getArenaManager().destroy(g));
+        // wait a bit for async tasks (e.g: rollback)
+        plugin.extension.getTaskHelper().newDelayedTask(() -> {
+            plugin.reloadConfigs();
+            plugin.chatManager.send(sender, "reload.done");
+        }, 100);
     }
 }

@@ -362,3 +362,11 @@ radio:
   not_in_game: "&cChức năng radio chỉ có trong trò chơi."
   unsupported_mode: "&cChức năng radio không có trong chế độ này."
   no_team: "&cBạn không thuộc về đội nào."
+reload:
+  warn:
+    - "&6Cảnh báo: Nạp lại cấu hình là một việc không an toàn"
+    - "&6Dữ liệu có thể bị mất và bộ nhớ có thể bị tràn"
+    - "&6Chỉ nên làm điều này trong môi trường thử nghiệm!"
+    - "&b[... Vui lòng chờ 5 giây ...]"
+  done:
+    - "&aCấu hình đã được nạp lại!"

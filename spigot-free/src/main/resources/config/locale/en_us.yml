@@ -355,3 +355,11 @@ radio:
   not_in_game: "&cRadio is only available in-game."
   unsupported_mode: "&cRadio is not available in this game mode."
   no_team: "&cYou don't belong to any team."
+reload:
+  warn:
+    - "&6Warning: It is unsafe to reload the configuration"
+    - "&6Data may be loss and memory may be leaked"
+    - "&6Only do reload in testing environment!"
+    - "&b[... Please wait for 5 seconds ...]"
+  done:
+    - "&aThe configuration has been reloaded!"
