@@ -353,8 +353,8 @@ gui:
     item_btn: "&fDrag and drop the item to here"
   quit_game_confirm:
     title: "&4Confirm leave the game?"
-    yes_btn: "&a&lYes"
-    no_btn: "&c&lNo"
+    yes_btn: "&a&lAccept"
+    no_btn: "&c&lDecline"
 radio:
   not_in_game: "&cRadio is only available in-game."
   unsupported_mode: "&cRadio is not available in this game mode."

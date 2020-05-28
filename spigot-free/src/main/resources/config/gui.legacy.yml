@@ -17,7 +17,7 @@ item_value_editor:
         material: STAINED_GLASS_PANE
         name: '&f'
         lore:
-        - '&fDrag and drop the item to here'
+        - '[ gui.value_editor.item_btn ]'
         damage: 14
       functions:
         on_init:
@@ -1112,9 +1112,9 @@ statistics:
       positions: 1/3; 2
       item:
         material: iron_sword
-        name: '&fKills: &a%battle_stats_kills%'
+        name: '[ gui.statistics.kills ]'
         lore:
-        - '&7> Click to view advancements <'
+        - '[ gui.statistics.footer ]'
         flag:
         - hide_attributes
       functions:
@@ -1126,9 +1126,9 @@ statistics:
       positions: 2/3; 2
       item:
         material: pumpkin
-        name: '&fRespawns: &a%battle_stats_respawns%'
+        name: '[ gui.statistics.respawns ]'
         lore:
-        - '&7> Click to view advancements <'
+        - '[ gui.statistics.footer ]'
       functions:
         on_click:
         - common::cancel_event
@@ -1138,9 +1138,9 @@ statistics:
       positions: 3/3; 2
       item:
         material: glowstone
-        name: '&fWins: &a%battle_stats_win_matches%'
+        name: '[ gui.statistics.wins ]'
         lore:
-        - '&7> Click to view advancements <'
+        - '[ gui.statistics.footer ]'
       functions:
         on_click:
         - common::cancel_event
@@ -1175,7 +1175,9 @@ market_category_menu:
       positions: 1; 4
       item:
         material: paper
-        name: '&bView all transactions'
+        name: '[ gui.market_category_menu.transaction_name ]'
+        lore:
+        - '[ gui.market_category_menu.transaction_lore ]'
       functions:
         on_click:
         - common::cancel_event
@@ -1678,7 +1680,7 @@ game_player_inv:
       functions:
         on_click:
         - common::cancel_event
-        - common::quit_game
+        - common::open_top_gui { quit_game_confirm }
     '1':
       positions: 1 -> 9; 2 -> 4
       item:
@@ -1710,6 +1712,32 @@ game_player_inv_bw:
         name: '[ gui.game_player_inv.quit_name ]'
         lore:
         - '[ gui.game_player_inv.quit_lore ]'
+      functions:
+        on_click:
+        - common::cancel_event
+        - common::open_top_gui { quit_game_confirm }
+quit_game_confirm:
+  title: '[ gui.quit_game_confirm.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions:
+      - 1 -> 4; 1
+      - 6 -> 9; 1
+      item:
+        material: STAINED_GLASS_PANE
+        name: '[ gui.quit_game_confirm.no_btn ]'
+        damage: 14
+      functions:
+        on_click:
+        - common::cancel_event
+        - common::close_gui
+    '1':
+      positions: 5; 1
+      item:
+        material: STAINED_GLASS_PANE
+        name: '[ gui.quit_game_confirm.yes_btn ]'
+        damage: 5
       functions:
         on_click:
         - common::cancel_event

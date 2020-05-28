@@ -313,6 +313,10 @@ gui:
     back_lore:
       - '&fTrở về cửa hàng'
       - '&fHoặc dùng lệnh &e/b market'
+  quit_game_confirm:
+    title: "&4Đồng ý thoát trò chơi?"
+    yes_btn: "&a&lChấp nhận"
+    no_btn: "&c&lTừ chối"
 currency_format:
   vault: $<amount>
   ing: <amount> xu
