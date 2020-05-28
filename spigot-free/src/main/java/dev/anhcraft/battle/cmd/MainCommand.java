@@ -30,10 +30,7 @@ import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
-import dev.anhcraft.battle.api.stats.natives.ExpStat;
-import dev.anhcraft.battle.api.stats.natives.KillStat;
-import dev.anhcraft.battle.api.stats.natives.RespawnStat;
-import dev.anhcraft.battle.api.stats.natives.WinStat;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
@@ -470,6 +467,13 @@ public class MainCommand extends BaseCommand {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(WinStat.class).increase(player, delta);
     }
 
+    @Subcommand("adjust stats lose")
+    @CommandPermission("battle.adjust.stats")
+    @Description("Adjust someone's lose count")
+    public void adjustLoses(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(LoseStat.class).increase(player, delta);
+    }
+
     @Subcommand("adjust stats respawn")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's respawn count")
@@ -482,6 +486,34 @@ public class MainCommand extends BaseCommand {
     @Description("Adjust someone's kill count")
     public void adjustKills(CommandSender sender, int delta, Player player){
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(KillStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats firstkill")
+    @CommandPermission("battle.adjust.stats")
+    @Description("Adjust someone's first-kill count")
+    public void adjustFirstKills(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(FirstKillStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats headshot")
+    @CommandPermission("battle.adjust.stats")
+    @Description("Adjust someone's head-shot count")
+    public void adjustHeadshot(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(HeadshotStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats assist")
+    @CommandPermission("battle.adjust.stats")
+    @Description("Adjust someone's assist count")
+    public void adjustAssists(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(AssistStat.class).increase(player, delta);
+    }
+
+    @Subcommand("adjust stats death")
+    @CommandPermission("battle.adjust.deaths")
+    @Description("Adjust someone's deaths count")
+    public void adjustDeaths(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(DeathStat.class).increase(player, delta);
     }
 
     @Subcommand("debug 3min")
