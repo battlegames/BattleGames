@@ -74,7 +74,6 @@ public abstract class ConfigManager extends BattleComponent {
     }
 
     private void loadDefaultConfig() {
-        if(defaultSettings != null) return;
         try {
             String path = buildResourcePath();
             InputStream in = plugin.getResource(path);
