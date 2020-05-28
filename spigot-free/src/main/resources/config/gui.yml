@@ -1591,7 +1591,7 @@ game_player_inv:
       functions:
         on_click:
           - common::cancel_event
-          - common::quit_game
+          - common::open_top_gui { quit_game_confirm }
     '1':
       positions: 1 -> 9; 2 -> 4
       item:
@@ -1622,6 +1622,30 @@ game_player_inv_bw:
         name: '[ gui.game_player_inv.quit_name ]'
         lore:
           - '[ gui.game_player_inv.quit_lore ]'
+      functions:
+        on_click:
+          - common::cancel_event
+          - common::open_top_gui { quit_game_confirm }
+quit_game_confirm:
+  title: '[ gui.quit_game_confirm.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions:
+        - 1 -> 4; 1
+        - 6 -> 9; 1
+      item:
+        material: red_stained_glass_pane
+        name: '[ gui.quit_game_confirm.no_btn ]'
+      functions:
+        on_click:
+          - common::cancel_event
+          - common::close_gui
+    '1':
+      positions: 5; 1
+      item:
+        material: lime_stained_glass_pane
+        name: '[ gui.quit_game_confirm.yes_btn ]'
       functions:
         on_click:
           - common::cancel_event
