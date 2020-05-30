@@ -54,8 +54,14 @@ public class WorldSettings extends ConfigurableObject {
     @Key("prevent_hungry")
     private boolean preventHungry;
 
+    @Key("prevent_mob_spawn")
+    private boolean preventMobSpawn;
+
     @Key("anti_fire_spread")
     private boolean antiFireSpread;
+
+    @Key("disable_interact")
+    private boolean disableInteract;
 
     @Key("except_worlds")
     @IgnoreValue(ifNull = true)
@@ -121,5 +127,21 @@ public class WorldSettings extends ConfigurableObject {
 
     public void setAntiFireSpread(boolean antiFireSpread) {
         this.antiFireSpread = antiFireSpread;
+    }
+
+    public boolean isPreventMobSpawn() {
+        return preventMobSpawn;
+    }
+
+    public void setPreventMobSpawn(boolean preventMobSpawn) {
+        this.preventMobSpawn = preventMobSpawn;
+    }
+
+    public boolean isInteractDisabled() {
+        return disableInteract;
+    }
+
+    public void setInteractDisabled(boolean disableInteract) {
+        this.disableInteract = disableInteract;
     }
 }

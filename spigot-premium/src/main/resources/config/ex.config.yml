@@ -33,6 +33,9 @@ world_settings:
     # Prevent fire spread
     anti_fire_spread: true
 
+    # Disable interacts to chest, door, etc
+    disable_interact: true
+
     # Any worlds that will not get effect
     except_worlds:
       - world
@@ -45,7 +48,14 @@ world_settings:
       # If you enable, players can't place any blocks!!!
       protect_blocks: false
 
+      # A bit more challenging
       prevent_hungry: false
+
+      # Interacts should be allowed so players can access the ender chest
+      disable_interact: false
+
+      # No mobs spawn in this world
+      prevent_mob_spawn: true
 
 # Extra arenas settings
 arena_settings:

@@ -79,5 +79,9 @@ public class PlayerListener implements Listener {
                 }
             }
         }
+        WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getPlayer().getWorld().getName());
+        if(ws != null && ws.isInteractDisabled()){
+            event.setCancelled(true);
+        }
     }
 }
