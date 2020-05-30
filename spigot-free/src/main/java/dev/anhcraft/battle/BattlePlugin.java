@@ -29,6 +29,7 @@ import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.chat.ChatManager;
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.effect.EffectOption;
+import dev.anhcraft.battle.api.events.ConfigReloadEvent;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
@@ -309,6 +310,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     public synchronized void reloadConfigs(){
+        ConfigReloadEvent event = new ConfigReloadEvent();
+        getServer().getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
         systemConfigManager.reloadConfig();
         generalConfigManager.reloadConfig();
         localeConfigManager.reloadConfig();
