@@ -29,12 +29,12 @@ import java.util.Objects;
 
 public class AdvancementConfigManager extends ConfigManager {
     public AdvancementConfigManager() {
-        super("advancements.yml");
+        super("Advancement", "advancements.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Advancement", getSettings().getKeys(false), 15).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             Advancement ach = new Advancement(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

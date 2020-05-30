@@ -33,12 +33,12 @@ public class PerkConfigManager extends ConfigManager {
     public final Map<String, Perk> PERK_MAP = new HashMap<>();
 
     public PerkConfigManager() {
-        super("perks.yml");
+        super("Perk", "perks.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Perk", getSettings().getKeys(false), 5).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
             Perk perk = new Perk(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

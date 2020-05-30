@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class LocaleConfigManager extends ConfigManager {
     public LocaleConfigManager() {
-        super("locale/en_us.yml");
+        super("Locale", "locale/en_us.yml");
         setCompareDefault(true);
     }
 

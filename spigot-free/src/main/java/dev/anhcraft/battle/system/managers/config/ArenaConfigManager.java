@@ -39,7 +39,7 @@ public class ArenaConfigManager extends ConfigManager {
     private final ConfigUpdater configUpdater;
 
     public ArenaConfigManager() {
-        super("arenas.yml");
+        super("Arena", "arenas.yml");
         configUpdater = new ConfigUpdater(plugin.getLogger());
         configUpdater.getPathRelocating().add(
                 new ConfigUpdater.PathRelocating()
@@ -51,7 +51,7 @@ public class ArenaConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit("Arena", getSettings().getKeys(false), 8).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 8).forEach(s -> {
             Arena arena = new Arena(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             configUpdater.update(Objects.requireNonNull(cs));

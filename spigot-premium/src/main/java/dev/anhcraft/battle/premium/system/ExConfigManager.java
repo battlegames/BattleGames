@@ -24,7 +24,7 @@ import dev.anhcraft.battle.system.managers.config.ConfigManager;
 
 public class ExConfigManager extends ConfigManager {
     public ExConfigManager() {
-        super("ex.config.yml");
+        super("BattleX", "ex.config.yml");
     }
 
     @Override

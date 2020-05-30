@@ -31,7 +31,7 @@ import java.io.File;
 
 public class SystemConfigManager extends ConfigManager {
     public SystemConfigManager() {
-        super("system.yml");
+        super("System", "system.yml");
         setPreventRemote(true);
     }
 

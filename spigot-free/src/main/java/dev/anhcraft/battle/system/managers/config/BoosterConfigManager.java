@@ -33,12 +33,12 @@ public class BoosterConfigManager extends ConfigManager {
     public final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
 
     public BoosterConfigManager() {
-        super("boosters.yml");
+        super("Booster", "boosters.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Booster", getSettings().getKeys(false), 1).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 1).forEach(s -> {
             Booster booster = new Booster(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

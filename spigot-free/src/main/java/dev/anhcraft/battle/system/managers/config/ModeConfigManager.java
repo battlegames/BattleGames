@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class ModeConfigManager extends ConfigManager {
     public ModeConfigManager() {
-        super("modes.yml");
+        super("Mode", "modes.yml");
     }
 
     @Override

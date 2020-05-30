@@ -33,12 +33,12 @@ public class GunConfigManager extends ConfigManager {
     public final Map<String, GunModel> GUN_MAP = new HashMap<>();
 
     public GunConfigManager() {
-        super("items/guns.yml");
+        super("Gun", "items/guns.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Gun", getSettings().getKeys(false), 15).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             GunModel g = new GunModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

@@ -33,12 +33,12 @@ public class ScopeConfigManager extends ConfigManager {
     public final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
 
     public ScopeConfigManager() {
-        super("items/scopes.yml");
+        super("Scope", "items/scopes.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Scope", getSettings().getKeys(false), 3).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
             ScopeModel sm = new ScopeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

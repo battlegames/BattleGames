@@ -33,12 +33,12 @@ public class KitConfigManager extends ConfigManager {
     public final Map<String, Kit> KIT_MAP = new HashMap<>();
 
     public KitConfigManager() {
-        super("kits.yml");
+        super("Kit", "kits.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Kit", getSettings().getKeys(false), 5).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
             Kit kit = new Kit(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

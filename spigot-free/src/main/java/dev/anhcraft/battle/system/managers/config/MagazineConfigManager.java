@@ -33,12 +33,12 @@ public class MagazineConfigManager extends ConfigManager {
     public final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
 
     public MagazineConfigManager() {
-        super("items/magazines.yml");
+        super("Magazine", "items/magazines.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Magazine", getSettings().getKeys(false), 15).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             MagazineModel m = new MagazineModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

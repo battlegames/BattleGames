@@ -28,7 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class ItemConfigManager extends ConfigManager {
     public ItemConfigManager() {
-        super("items/items.yml");
+        super("Item", "items/items.yml");
     }
 
     @Override

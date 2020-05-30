@@ -27,7 +27,7 @@ import dev.anhcraft.confighelper.exception.InvalidValueException;
 
 public class MarketConfigManager extends ConfigManager {
     public MarketConfigManager() {
-        super("market.yml");
+        super("Market", "market.yml");
     }
 
     @Override

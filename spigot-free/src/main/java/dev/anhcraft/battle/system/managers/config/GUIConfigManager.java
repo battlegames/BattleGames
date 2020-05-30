@@ -32,7 +32,7 @@ import java.util.Objects;
 
 public class GUIConfigManager extends ConfigManager {
     public GUIConfigManager() {
-        super("gui.yml", (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"));
+        super("GUI", "gui.yml", (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "gui.yml" : "gui.legacy.yml"));
     }
 
     @Override

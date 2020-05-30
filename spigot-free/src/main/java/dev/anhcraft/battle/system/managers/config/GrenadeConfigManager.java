@@ -33,12 +33,12 @@ public class GrenadeConfigManager extends ConfigManager {
     public final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
 
     public GrenadeConfigManager() {
-        super("items/grenades.yml");
+        super("Grenade", "items/grenades.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Grenade", getSettings().getKeys(false), 3).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
             GrenadeModel g = new GrenadeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

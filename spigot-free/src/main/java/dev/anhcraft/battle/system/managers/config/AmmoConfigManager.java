@@ -33,12 +33,12 @@ public class AmmoConfigManager extends ConfigManager {
     public final Map<String, AmmoModel> AMMO_MAP = new HashMap<>();
 
     public AmmoConfigManager() {
-        super("items/ammo.yml");
+        super("Ammo", "items/ammo.yml");
     }
 
     @Override
     public void onLoad() {
-        plugin.limit("Ammo", getSettings().getKeys(false), 15).forEach(s -> {
+        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             AmmoModel a = new AmmoModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             try {

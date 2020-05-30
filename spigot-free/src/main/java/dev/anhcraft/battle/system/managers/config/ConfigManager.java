@@ -44,13 +44,13 @@ public abstract class ConfigManager extends BattleComponent {
     private boolean compareDefault;
     private boolean preventRemote;
 
-    public ConfigManager(@NotNull String path) {
-        this(path, null);
+    public ConfigManager(@NotNull String name, @NotNull String path) {
+        this(name, path, null);
     }
 
-    public ConfigManager(@NotNull String filePath, @Nullable String resourcePath) {
+    public ConfigManager(@NotNull String name, @NotNull String filePath, @Nullable String resourcePath) {
         super((BattlePlugin) BattleApi.getInstance());
-        this.loggerName = getClass().getSimpleName();
+        this.loggerName = name+"Config";
         this.filePath = filePath;
         this.resourcePath = (resourcePath == null ? filePath : resourcePath);
     }

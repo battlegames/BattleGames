@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 
 public class GeneralConfigManager extends ConfigManager {
     public GeneralConfigManager() {
-        super("general.yml");
+        super("General", "general.yml");
     }
 
     @Override
