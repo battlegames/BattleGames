@@ -90,6 +90,11 @@ public class BlockPosition {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z, world.get());
+        int hash = 3;
+        hash = 19 * hash + world.hashCode();
+        hash = 19 * hash + (int) (Double.doubleToLongBits(x) ^ (Double.doubleToLongBits(x) >>> 32));
+        hash = 19 * hash + (int) (Double.doubleToLongBits(y) ^ (Double.doubleToLongBits(y) >>> 32));
+        hash = 19 * hash + (int) (Double.doubleToLongBits(z) ^ (Double.doubleToLongBits(z) >>> 32));
+        return hash;
     }
 }
