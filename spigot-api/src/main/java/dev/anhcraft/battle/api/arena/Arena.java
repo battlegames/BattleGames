@@ -117,8 +117,7 @@ public class Arena extends ConfigurableObject implements Informative {
             "Placeholders can be used within the command with",
             "values parsed from each <b>winner</b>"
     })
-    @IgnoreValue(ifNull = true)
-    private List<String> endCommandWinners = new ArrayList<>();
+    private List<String> endCommandWinners;
 
     @Key("end_commands.losers")
     @Explanation({
@@ -126,8 +125,7 @@ public class Arena extends ConfigurableObject implements Informative {
             "Placeholders can be used within the command with",
             "values parsed from each <b>loser</b>"
     })
-    @IgnoreValue(ifNull = true)
-    private List<String> endCommandLosers = new ArrayList<>();
+    private List<String> endCommandLosers;
 
     @Key("render_gui_on_death")
     @Explanation({
@@ -162,11 +160,11 @@ public class Arena extends ConfigurableObject implements Informative {
 
     @Key("result_broadcast.won")
     @Explanation("The message to be sent to the winners")
-    private List<String> wonReport = new ArrayList<>();
+    private List<String> wonReport;
 
     @Key("result_broadcast.lost")
     @Explanation("The message to be sent to the winners")
-    private List<String> lostReport = new ArrayList<>();
+    private List<String> lostReport;
 
     @Key("rollback")
     @Explanation("Rollback settings")
@@ -236,12 +234,12 @@ public class Arena extends ConfigurableObject implements Informative {
         return modeOptions;
     }
 
-    @NotNull
+    @Nullable
     public List<String> getEndCommandWinners() {
         return endCommandWinners;
     }
 
-    @NotNull
+    @Nullable
     public List<String> getEndCommandLosers() {
         return endCommandLosers;
     }
@@ -273,12 +271,12 @@ public class Arena extends ConfigurableObject implements Informative {
         return rollback;
     }
 
-    @NotNull
+    @Nullable
     public List<String> getWonReport() {
         return wonReport;
     }
 
-    @NotNull
+    @Nullable
     public List<String> getLostReport() {
         return lostReport;
     }

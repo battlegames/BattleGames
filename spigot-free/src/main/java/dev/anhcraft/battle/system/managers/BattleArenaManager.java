@@ -302,21 +302,29 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 if(gp.hasFirstKill()) sm.of(FirstKillStat.class).increase(p);
                 InfoReplacer infoReplacer = new InfoHolder("").inform("money", money).inform("exp", exp).compile();
                 if(gp.isWinner()) {
-                    for (String s : arena.getWonReport()) {
-                        p.sendMessage(infoReplacer.replace(s));
+                    if (arena.getWonReport() != null) {
+                        for (String s : arena.getWonReport()) {
+                            p.sendMessage(infoReplacer.replace(s));
+                        }
                     }
                     sm.of(WinStat.class).increase(p);
-                    for (String s : arena.getEndCommandWinners()){
-                        runCmd(s, p);
+                    if (arena.getEndCommandWinners() != null) {
+                        for (String s : arena.getEndCommandWinners()){
+                            runCmd(s, p);
+                        }
                     }
                     if(arena.getEndFirework() != null) arena.getEndFirework().spawn(p.getLocation());
                 } else {
-                    for (String s : arena.getLostReport()) {
-                        p.sendMessage(infoReplacer.replace(s));
+                    if (arena.getLostReport() != null) {
+                        for (String s : arena.getLostReport()) {
+                            p.sendMessage(infoReplacer.replace(s));
+                        }
                     }
                     sm.of(LoseStat.class).increase(p);
-                    for (String s : arena.getEndCommandLosers()){
-                        runCmd(s, p);
+                    if (arena.getEndCommandLosers() != null) {
+                        for (String s : arena.getEndCommandLosers()){
+                            runCmd(s, p);
+                        }
                     }
                 }
             }
