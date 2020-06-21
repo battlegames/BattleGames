@@ -23,6 +23,7 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.struct.Component;
+import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.functions.Function;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -215,5 +216,10 @@ public class CommonHandler extends GuiHandler {
         if(f instanceof Consumer){
             ((Consumer<ValueResult>) f).accept(new ValueResult(Objects.requireNonNull(report.getView().getSlot(Integer.parseInt(slot))).getComponent().getItem()));
         }
+    }
+
+    @Function("install_resource_pack")
+    public void installResourcePack(SlotReport report) {
+        ResourcePack.send(report.getPlayer());
     }
 }
