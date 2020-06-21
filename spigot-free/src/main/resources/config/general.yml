@@ -271,3 +271,11 @@ in_game_economy:
     name: "&aCoins"
     format: "%.2f coins"
   init_balance: 0
+
+join_sign:
+  dynamic_lines:
+    - "<arena_name>"
+    - "&f&l<game_player_count:0>/<arena_max_players>"
+    - ""
+    - "&a&l<< Click to join >>"
+  update_time: 100

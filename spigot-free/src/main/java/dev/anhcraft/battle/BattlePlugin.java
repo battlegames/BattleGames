@@ -253,6 +253,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         if(syncDataTaskNeed) {
             taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         }
+        if(generalConf.getJoinSignUpdateTime() >= 20) {
+            taskHelper.newTimerTask(new JoinSignUpdateTask(this), 0, generalConf.getJoinSignUpdateTime());
+        }
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
         taskHelper.newAsyncTimerTask(entityTrackingTask = new EntityTrackingTask(this), 0, 10);

@@ -21,6 +21,7 @@
 package dev.anhcraft.battle.utils;
 
 import com.google.common.base.Preconditions;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -41,6 +42,13 @@ public class BlockPosition {
     public static BlockPosition of(@NotNull Block block) {
         Preconditions.checkNotNull(block);
         return new BlockPosition(block.getX(), block.getY(), block.getZ(), block.getWorld());
+    }
+
+    @NotNull
+    public static BlockPosition of(@NotNull String str) {
+        Preconditions.checkNotNull(str);
+        String[] a = str.split(" ");
+        return new BlockPosition(Integer.parseInt(a[1]), Integer.parseInt(a[2]), Integer.parseInt(a[3]), a[0].equals("null") ? null : Bukkit.getWorld(a[0]));
     }
 
     private final int x;
@@ -90,11 +98,18 @@ public class BlockPosition {
 
     @Override
     public int hashCode() {
+        World w = world.get();
         int hash = 3;
-        hash = 19 * hash + world.hashCode();
+        hash = 19 * hash + (w == null ? 0 : w.hashCode());
         hash = 19 * hash + (int) (Double.doubleToLongBits(x) ^ (Double.doubleToLongBits(x) >>> 32));
         hash = 19 * hash + (int) (Double.doubleToLongBits(y) ^ (Double.doubleToLongBits(y) >>> 32));
         hash = 19 * hash + (int) (Double.doubleToLongBits(z) ^ (Double.doubleToLongBits(z) >>> 32));
         return hash;
+    }
+
+    @NotNull
+    public String toString() {
+        World w = world.get();
+        return (w == null ? "null" : w.getName()) + " " + x + " " + y + " " + z;
     }
 }

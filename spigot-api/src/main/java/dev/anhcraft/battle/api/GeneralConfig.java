@@ -246,6 +246,22 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("The initial balance (given on starting a game)")
     private double igEcoInitBalance;
 
+    @Key("join_sign.dynamic_lines")
+    @Explanation({
+            "The text on join signs.",
+            "It will be updated frequently (based on the option `update_time`)",
+            "You can use placeholders for arena and game.",
+    })
+    private List<String> joinSignDynamicLines;
+
+    @Key("join_sign.update_time")
+    @Explanation({
+            "Time for each update to the text on join signs (in ticks)",
+            "Minimum are 20 ticks; set to lower will disable the task",
+            "thus make the text always fixed."
+    })
+    private long joinSignUpdateTime;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -418,6 +434,15 @@ public class GeneralConfig extends ConfigurableObject {
 
     public String getResourcePackCustomUrl() {
         return resourcePackCustomUrl;
+    }
+
+    @Nullable
+    public List<String> getJoinSignDynamicLines() {
+        return joinSignDynamicLines;
+    }
+
+    public long getJoinSignUpdateTime() {
+        return joinSignUpdateTime;
     }
 
     @Nullable

@@ -21,9 +21,13 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.utils.BlockPosition;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
 public class BlockListener extends BattleComponent implements Listener {
     public BlockListener(BattlePlugin plugin) {
@@ -33,5 +37,27 @@ public class BlockListener extends BattleComponent implements Listener {
     @EventHandler
     public void placeBlock(BlockPlaceEvent event){
         plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void changeSign(SignChangeEvent event){
+        String[] lines = event.getLines();
+        if(lines.length >= 2 && (lines[0].contains("Battle") || lines[0].contains("battle"))){
+            if(BattleApi.getInstance().getArena(lines[1]) != null) {
+                BattleApi.getInstance().getServerData().setJoinSign(BlockPosition.of(event.getBlock()), lines[1]);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void breakBlock(BlockBreakEvent event){
+        BlockPosition bp = BlockPosition.of(event.getBlock());
+        String str = BattleApi.getInstance().getServerData().getJoinSign(bp);
+        if(str != null) {
+            event.setCancelled(true);
+            if (event.getPlayer().isSneaking() && event.getPlayer().hasPermission("battle.join_signs.break")) {
+                BattleApi.getInstance().getServerData().setJoinSign(bp, null);
+            }
+        }
     }
 }

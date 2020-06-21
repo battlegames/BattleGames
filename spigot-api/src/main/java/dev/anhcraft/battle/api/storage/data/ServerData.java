@@ -19,16 +19,23 @@
  */
 package dev.anhcraft.battle.api.storage.data;
 
+import dev.anhcraft.battle.api.storage.tags.StringTag;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.impl.Serializable;
+import dev.anhcraft.battle.utils.BlockPosition;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ServerData implements Resettable, Serializable {
+    private final Map<BlockPosition, String> joinSigns = new HashMap<>();
     private Location spawnPoint;
 
     @NotNull
@@ -41,9 +48,25 @@ public class ServerData implements Resettable, Serializable {
         this.spawnPoint = spawnPoint;
     }
 
+    @Nullable
+    public String getJoinSign(@NotNull BlockPosition position) {
+        return joinSigns.get(position);
+    }
+
+    public void setJoinSign(@NotNull BlockPosition position, @Nullable String arena) {
+        if(arena != null) joinSigns.put(position, arena);
+        else joinSigns.remove(position);
+    }
+
+    @NotNull
+    public Set<Map.Entry<BlockPosition, String>> getJoinSigns() {
+        return joinSigns.entrySet();
+    }
+
     @Override
     public void reset() {
         spawnPoint = Bukkit.getWorlds().get(0).getSpawnLocation();
+        joinSigns.clear();
     }
 
     @Override
@@ -56,16 +79,19 @@ public class ServerData implements Resettable, Serializable {
                 map.readTag("sp.yw", Float.class, 0f),
                 map.readTag("sp.pt", Float.class, 0f)
         );
+        map.filterEntries(s -> s.startsWith("js.")).forEach(e -> {
+            joinSigns.put(BlockPosition.of(e.getKey().substring("js.".length())), ((StringTag) e.getValue()).getValue());
+        });
     }
 
     @Override
     public void write(DataMap<String> map) {
-        map.writeTag("sp.w", Optional.ofNullable(spawnPoint.getWorld())
-                .orElse(Bukkit.getWorlds().get(0)).getName());
+        map.writeTag("sp.w", Optional.ofNullable(spawnPoint.getWorld()).orElse(Bukkit.getWorlds().get(0)).getName());
         map.writeTag("sp.x", spawnPoint.getX());
         map.writeTag("sp.y", spawnPoint.getY());
         map.writeTag("sp.z", spawnPoint.getZ());
         map.writeTag("sp.yw", spawnPoint.getYaw());
         map.writeTag("sp.pt", spawnPoint.getPitch());
+        joinSigns.forEach((p, s) -> map.writeTag("js." + p.toString(), s));
     }
 }

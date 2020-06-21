@@ -51,6 +51,7 @@ import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.BlockPosition;
 import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -213,6 +214,16 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void interact(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         if(event.getHand() == EquipmentSlot.OFF_HAND) return;
+        if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock() != null) {
+            String s = plugin.getServerData().getJoinSign(BlockPosition.of(event.getClickedBlock()));
+            if(s != null){
+                Arena a = plugin.getArena(s);
+                if(a != null){
+                    plugin.arenaManager.join(p, a);
+                }
+                return;
+            }
+        }
         if(event.getAction() != Action.PHYSICAL) {
             BattleItem item = plugin.itemManager.read(event.getItem());
             if(item != null) {
