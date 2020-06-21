@@ -40,6 +40,7 @@ public class InfoReplacer {
 
     @NotNull
     public String replace(@NotNull String str){
+        if(str.isEmpty()) return str;
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
         while(m.find()){
