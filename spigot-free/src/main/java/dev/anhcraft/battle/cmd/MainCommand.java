@@ -553,7 +553,9 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.rsp.refresh")
     @Description("Refresh the resource pack")
     public void refreshRsp(CommandSender sender){
-        ResourcePack.init(sender::sendMessage);
+        plugin.extension.getTaskHelper().newAsyncTask(() -> {
+            ResourcePack.init(sender::sendMessage);
+        });
     }
 
     @Subcommand("reload")
