@@ -558,6 +558,13 @@ public class MainCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("rsp install")
+    @CommandPermission("battle.rsp.install")
+    @Description("Install the resource pack")
+    public void installRsp(CommandSender sender, Player target){
+        ResourcePack.send(target);
+    }
+
     @Subcommand("reload")
     @CommandPermission("battle.reload")
     @Description("Reload the configuration")
