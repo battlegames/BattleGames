@@ -24,7 +24,6 @@ public class GDataRegistry {
     public static final String MARKET_CATEGORY = "mkctg";
     public static final String MARKET_CATEGORY_EDITOR = "mkctge";
     public static final String MARKET_PRODUCT_EDITOR = "mkpd";
-    public static final String EDITOR_VALUE = "value";
     public static final String LAST_GUI = "lastgui";
     public static final String VALUE = "value";
     public static final String VALUE_CALLBACK = "vcll";
