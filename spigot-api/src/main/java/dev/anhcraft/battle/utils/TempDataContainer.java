@@ -52,6 +52,12 @@ public class TempDataContainer implements Informative {
             else if(v instanceof State){
                 holder.inform("data_"+ent.getKey(), (State) v);
             }
+            else if(v instanceof Byte){
+                holder.inform("data_"+ent.getKey(), (Byte) v);
+            }
+            else if(v instanceof Short){
+                holder.inform("data_"+ent.getKey(), (Short) v);
+            }
             else if(v instanceof Integer){
                 holder.inform("data_"+ent.getKey(), (Integer) v);
             }
