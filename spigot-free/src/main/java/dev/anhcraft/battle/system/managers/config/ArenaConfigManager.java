@@ -51,8 +51,10 @@ public class ArenaConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        plugin.getLogger().info("[DEBUG] Total arenas found: " + getSettings().getKeys(false).size());
         plugin.limit(loggerName, getSettings().getKeys(false), 8).forEach(s -> {
             Arena arena = new Arena(s);
+            plugin.getLogger().info("- Loading arena " + s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             configUpdater.update(Objects.requireNonNull(cs));
             try {

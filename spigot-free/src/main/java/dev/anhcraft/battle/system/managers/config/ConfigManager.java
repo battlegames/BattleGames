@@ -24,6 +24,7 @@ import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.utils.ColorUtil;
+import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.HttpUtil;
 import dev.anhcraft.jvmkit.utils.IOUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -73,6 +74,14 @@ public abstract class ConfigManager extends BattleComponent {
         return String.format(plugin.getSystemConfig().getRemoteConfigLink(), filePath);
     }
 
+    public void saveConfig() {
+        try {
+            settings.save(buildConfigFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadDefaultConfig() {
         try {
             String path = buildResourcePath();
@@ -93,22 +102,44 @@ public abstract class ConfigManager extends BattleComponent {
     }
 
     public synchronized void reloadConfig() {
+        reloadConfig(false);
+    }
+
+    public synchronized void reloadConfig(boolean forceUpdateConfig) {
         if(reloadCount > 0) {
             plugin.getLogger().info("["+loggerName+"] Cleaning cache...");
             cleanCache();
         }
         boolean matchDef = false;
-        if(preventRemote || !plugin.getSystemConfig().isRemoteConfigEnabled()){
+        if(forceUpdateConfig || preventRemote || !plugin.getSystemConfig().isRemoteConfigEnabled()){
             File f = buildConfigFile();
             plugin.getLogger().info("["+loggerName+"] Loading config...");
-            if (f.exists()) {
+            if (!forceUpdateConfig && f.exists()) {
                 settings = YamlConfiguration.loadConfiguration(f);
             } else {
                 loadDefaultConfig();
                 settings = defaultSettings;
                 try {
-                    f.createNewFile();
-                    settings.save(f);
+                    if(forceUpdateConfig) {
+                        if(plugin.getSystemConfig().isRemoteConfigEnabled()) {
+                            plugin.getLogger().warning("["+loggerName+"] Cannot update the config since remote-config feature has been turned on. You need to update (manually) ASAP!");
+                        } else if (f.exists()) {
+                            plugin.getLogger().info("["+loggerName+"] The system detected this config need to be updated!");
+                            plugin.getLogger().warning("["+loggerName+"] Creating backup for the current config...");
+                            File of = new File(f.getParentFile(), "old." + f.getName());
+                            of.createNewFile();
+                            FileUtil.copy(f, of);
+                            plugin.getLogger().warning("["+loggerName+"] The old config has been saved to " + of.getAbsolutePath());
+                            settings.save(f);
+                            plugin.getLogger().warning("["+loggerName+"] The new config has been saved to " + f.getAbsolutePath());
+                        } else {
+                            f.createNewFile();
+                            settings.save(f);
+                        }
+                    } else {
+                        f.createNewFile();
+                        settings.save(f);
+                    }
                 } catch (IOException e) {
                     plugin.getLogger().warning("["+loggerName+"] Failed to save config to " + f.getAbsolutePath());
                     e.printStackTrace();

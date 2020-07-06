@@ -14,7 +14,7 @@
     <artifactId>battle.spigot.free</artifactId>
 
     <properties>
-        <config.version>1</config.version>
+        <config.version>2</config.version>
         <storage.version>1</storage.version>
     </properties>
 

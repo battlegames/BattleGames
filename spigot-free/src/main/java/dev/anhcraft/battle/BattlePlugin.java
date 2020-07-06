@@ -73,7 +73,10 @@ import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.CraftStats;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.State;
+import dev.anhcraft.confighelper.ConfigHelper;
+import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
+import dev.anhcraft.craftkit.common.utils.VersionUtil;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -332,7 +335,27 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         boosterConfigManager.reloadConfig();
         marketConfigManager.reloadConfig();
         advancementConfigManager.reloadConfig();
-        guiConfigManager.reloadConfig();
+        if(VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0){
+            getLogger().info("Looks like the current config system has been outdated.");
+            getLogger().info("The plugin will try to update it for you!");
+            getLogger().info("Update details: v1 -> v2");
+            getLogger().info("- " + guiConfigManager.getFilePath());
+            ///////////////
+            guiConfigManager.reloadConfig(true);
+            ///////////////
+            if(!systemConf.isRemoteConfigEnabled()) {
+                getLogger().info("All done! Saving changes...");
+                systemConfigManager.getSettings().set("last_config_version", 2);
+                systemConfigManager.saveConfig();
+                try {
+                    ConfigHelper.readConfig(systemConfigManager.getSettings(), SystemConfig.SCHEMA, systemConf);
+                } catch (InvalidValueException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            guiConfigManager.reloadConfig();
+        }
         premiumConnector.onReloadConfig();
     }
 
