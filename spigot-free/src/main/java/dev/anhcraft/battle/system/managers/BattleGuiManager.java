@@ -37,13 +37,13 @@ import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.SignedInt;
+import dev.anhcraft.battle.utils.VMUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.VM;
 import dev.anhcraft.inst.exceptions.FunctionRegisterFailed;
 import dev.anhcraft.inst.lang.Instruction;
-import dev.anhcraft.inst.values.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import org.bukkit.Bukkit;
@@ -65,74 +65,6 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     private final Map<String, Pagination> PAGES = new HashMap<>();
     private final Map<UUID, Window> WINDOWS = new HashMap<>();
     
-    private void setVariable(VM vm, String k, Object v){
-        if(v instanceof String) {
-            vm.setVariable(k, new StringVal() {
-                @NotNull
-                @Override
-                public String get() {
-                    return (String) v;
-                }
-            });
-        } if(v instanceof Boolean) {
-            vm.setVariable(k, new BoolVal() {
-                @NotNull
-                @Override
-                public Boolean get() {
-                    return (Boolean) v;
-                }
-            });
-        } else if(v instanceof Byte) {
-            vm.setVariable(k, new IntVal() {
-                @NotNull
-                @Override
-                public Integer get() {
-                    return ((Byte) v).intValue();
-                }
-            });
-        } else if(v instanceof Short) {
-            vm.setVariable(k, new IntVal() {
-                @NotNull
-                @Override
-                public Integer get() {
-                    return ((Short) v).intValue();
-                }
-            });
-        } else if(v instanceof Integer) {
-            vm.setVariable(k, new IntVal() {
-                @NotNull
-                @Override
-                public Integer get() {
-                    return (Integer) v;
-                }
-            });
-        } else if(v instanceof Long) {
-            vm.setVariable(k, new LongVal() {
-                @NotNull
-                @Override
-                public Long get() {
-                    return (Long) v;
-                }
-            });
-        } else if(v instanceof Float) {
-            vm.setVariable(k, new DoubleVal() {
-                @NotNull
-                @Override
-                public Double get() {
-                    return ((Float) v).doubleValue();
-                }
-            });
-        } else if(v instanceof Double) {
-            vm.setVariable(k, new DoubleVal() {
-                @NotNull
-                @Override
-                public Double get() {
-                    return (Double) v;
-                }
-            });
-        }
-    }
-    
     private VM createVM(SlotReport report) throws FunctionRegisterFailed {
         VM vm = new VM();
         for(Class<? extends GuiHandler> c : GUI_HANDLERS){
@@ -140,10 +72,10 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             vm.registerFunctions(c, o);
         }
         for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
-            setVariable(vm, "view_data_"+e.getKey(), e.getValue());
+            VMUtil.setVariable(vm, "view_data_"+e.getKey(), e.getValue());
         }
         for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
-            setVariable(vm, "window_data_"+e.getKey(), e.getValue());
+            VMUtil.setVariable(vm, "window_data_"+e.getKey(), e.getValue());
         }
         return vm;
     }

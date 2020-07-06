@@ -27,6 +27,7 @@ import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.gui.ValueResult;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.VMUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.utils.ItemUtil;
 import dev.anhcraft.inst.VM;
@@ -88,56 +89,20 @@ public class CommonFunctions extends GuiHandler {
         }
     }
 
-    private int getInt(NumberVal<?> val){
-        if (val instanceof IntVal) {
-            return ((IntVal) val).get();
-        } else if (val instanceof LongVal) {
-            return (int) ((LongVal) val).get().longValue();
-        } else if (val instanceof DoubleVal) {
-            return (int) ((DoubleVal) val).get().doubleValue();
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    private long getLong(NumberVal<?> val){
-        if (val instanceof IntVal) {
-            return ((IntVal) val).get();
-        } else if (val instanceof LongVal) {
-            return ((LongVal) val).get();
-        } else if (val instanceof DoubleVal) {
-            return (long) ((DoubleVal) val).get().doubleValue();
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    private double getDouble(NumberVal<?> val){
-        if (val instanceof IntVal) {
-            return ((IntVal) val).get();
-        } else if (val instanceof LongVal) {
-            return ((LongVal) val).get();
-        } else if (val instanceof DoubleVal) {
-            return ((DoubleVal) val).get();
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
     private void add(String key, NumberVal<?> val, TempDataContainer tdc){
         Object o = tdc.getDataContainer().get(key);
         if(o instanceof Byte){
-            tdc.getDataContainer().put(key, ((Byte) o) + ((byte) getInt(val)));
+            tdc.getDataContainer().put(key, ((Byte) o) + ((byte) VMUtil.getInt(val)));
         } else if(o instanceof Short){
-            tdc.getDataContainer().put(key, ((Short) o) + ((short) getInt(val)));
+            tdc.getDataContainer().put(key, ((Short) o) + ((short) VMUtil.getInt(val)));
         } else if(o instanceof Integer){
-            tdc.getDataContainer().put(key, ((Integer) o) + getInt(val));
+            tdc.getDataContainer().put(key, ((Integer) o) + VMUtil.getInt(val));
         } else if(o instanceof Double){
-            tdc.getDataContainer().put(key, ((Double) o) + getDouble(val));
+            tdc.getDataContainer().put(key, ((Double) o) + VMUtil.getDouble(val));
         } else if(o instanceof Float){
-            tdc.getDataContainer().put(key, ((Float) o) + ((float) getDouble(val)));
+            tdc.getDataContainer().put(key, ((Float) o) + ((float) VMUtil.getDouble(val)));
         } else if(o instanceof Long){
-            tdc.getDataContainer().put(key, ((Long) o) + getLong(val));
+            tdc.getDataContainer().put(key, ((Long) o) + VMUtil.getLong(val));
         }
     }
 
