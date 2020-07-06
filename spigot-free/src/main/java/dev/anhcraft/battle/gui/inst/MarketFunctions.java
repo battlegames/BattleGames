@@ -18,7 +18,7 @@
  *
  */
 
-package dev.anhcraft.battle.gui;
+package dev.anhcraft.battle.gui.inst;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
@@ -27,15 +27,24 @@ import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Product;
-import dev.anhcraft.battle.utils.functions.Function;
+import dev.anhcraft.battle.gui.GDataRegistry;
+import dev.anhcraft.battle.gui.ValueResult;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.inst.VM;
+import dev.anhcraft.inst.annotations.Function;
+import dev.anhcraft.inst.annotations.Namespace;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 
 import java.util.function.Consumer;
 
-public class MarketHandler extends GuiHandler {
-    @Function("remove_category")
-    public void rmvCtg(SlotReport report){
+@Namespace("Market")
+public class MarketFunctions extends GuiHandler {
+    public MarketFunctions(SlotReport report) {
+        super(report);
+    }
+
+    @Function("RemoveCategory")
+    public void rmvCtg(VM vm){
         Window w = report.getView().getWindow();
         Category c = (Category) w.getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
         if(c != null) {
@@ -43,8 +52,8 @@ public class MarketHandler extends GuiHandler {
         }
     }
 
-    @Function("remove_product")
-    public void rmvPd(SlotReport report){
+    @Function("RemoveProduct")
+    public void rmvPd(VM vm){
         Window w = report.getView().getWindow();
         Category c = (Category) w.getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
@@ -53,8 +62,8 @@ public class MarketHandler extends GuiHandler {
         }
     }
 
-    @Function("igo_editor")
-    public void ige(SlotReport report){
+    @Function("IgoEditor")
+    public void ige(VM vm){
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
         if(p != null) {
@@ -71,8 +80,8 @@ public class MarketHandler extends GuiHandler {
         }
     }
 
-    @Function("price_editor")
-    public void pve(SlotReport report){
+    @Function("PriceEditor")
+    public void pve(VM vm){
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
         if(p == null) return;
@@ -82,8 +91,8 @@ public class MarketHandler extends GuiHandler {
         });
     }
 
-    @Function("exp_editor")
-    public void ee(SlotReport report){
+    @Function("ExpEditor")
+    public void ee(VM vm){
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
         if(p == null) return;
@@ -93,8 +102,8 @@ public class MarketHandler extends GuiHandler {
         });
     }
 
-    @Function("icon_editor")
-    public void ie(SlotReport report){
+    @Function("IconEditor")
+    public void ie(VM vm){
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
         if(p == null) return;
@@ -104,8 +113,8 @@ public class MarketHandler extends GuiHandler {
         });
     }
 
-    @Function("create_product")
-    public void createProduct(SlotReport report){
+    @Function("CreateProduct")
+    public void createProduct(VM vm){
         Category ctg = (Category) report.getView().getWindow().getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
         if(ctg == null) return;
         String id = new String(RandomUtil.randomLetters(7));
@@ -115,8 +124,8 @@ public class MarketHandler extends GuiHandler {
         ApiProvider.consume().getChatManager().sendPlayer(report.getPlayer(), "editor.market.product_created", new InfoHolder("").inform("id", id).compile());
     }
 
-    @Function("create_category")
-    public void createCategory(SlotReport report){
+    @Function("CreateCategory")
+    public void createCategory(VM vm){
         String id = new String(RandomUtil.randomLetters(7));
         Category category = new Category(id);
         category.getIcon().name(id);

@@ -54,7 +54,7 @@ public class BoosterMenu implements Pagination {
                 }
                 Slot slot = chain.next();
                 slot.setPaginationItem(b.getIcon().duplicate());
-                slot.setAdditionalFunction(object -> {
+                slot.setExtraClickFunction(object -> {
                     if(pd.getActiveBooster() != null){
                         if(pd.getActiveBooster().equals(id)){
                             api.getChatManager().sendPlayer(object.getPlayer(), "booster.already_used");

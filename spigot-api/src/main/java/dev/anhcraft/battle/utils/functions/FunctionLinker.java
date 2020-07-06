@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.utils.functions;
 
+import dev.anhcraft.inst.lang.Instruction;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 

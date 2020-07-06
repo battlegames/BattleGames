@@ -47,11 +47,10 @@ public interface GuiManager {
 
     /**
      * Registers a new GUI handler.
-     * @param namespace the namespace
-     * @param handler the handler
+     * @param handlerClass the handler's class
      * @return {@code true} if success, or {@code false} if not
      */
-    boolean registerGuiHandler(@NotNull String namespace, @NotNull GuiHandler handler);
+    <T extends GuiHandler> boolean registerGuiHandler(@NotNull Class<T> handlerClass);
 
     /**
      * Registers the given pagination.
@@ -60,14 +59,6 @@ public interface GuiManager {
      * @return {@code true} if success, or {@code false} if not
      */
     boolean registerPagination(@NotNull String id, @NotNull Pagination pagination);
-
-    /**
-     * Gets the gui handler from its namespace.
-     * @param namespace the namespace
-     * @return the gui handler (or {@code null} if not exist)
-     */
-    @Nullable
-    GuiHandler getGuiHandler(@Nullable String namespace);
 
     /**
      * Gets the {@link Window} of the given player.<br>

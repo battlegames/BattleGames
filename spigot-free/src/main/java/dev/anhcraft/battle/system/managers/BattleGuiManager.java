@@ -21,13 +21,13 @@ package dev.anhcraft.battle.system.managers;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.events.gui.PaginationUpdateEvent;
-import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.events.gui.ComponentRenderEvent;
 import dev.anhcraft.battle.api.events.gui.GuiOpenEvent;
+import dev.anhcraft.battle.api.events.gui.PaginationUpdateEvent;
 import dev.anhcraft.battle.api.events.gui.ViewRenderEvent;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiHandler;
+import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
@@ -37,11 +37,15 @@ import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.SignedInt;
-import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.inst.VM;
+import dev.anhcraft.inst.exceptions.FunctionRegisterFailed;
+import dev.anhcraft.inst.lang.Instruction;
+import dev.anhcraft.inst.values.*;
 import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -57,21 +61,109 @@ import static dev.anhcraft.battle.utils.PlaceholderUtil.*;
 
 public class BattleGuiManager extends BattleComponent implements GuiManager {
     public final Map<String, Gui> GUI = new HashMap<>();
-    private final Map<String, GuiHandler> GUI_HANDLERS = new HashMap<>();
+    private final List<Class<? extends GuiHandler>> GUI_HANDLERS = new ArrayList<>();
     private final Map<String, Pagination> PAGES = new HashMap<>();
     private final Map<UUID, Window> WINDOWS = new HashMap<>();
+    
+    private void setVariable(VM vm, String k, Object v){
+        if(v instanceof String) {
+            vm.setVariable(k, new StringVal() {
+                @NotNull
+                @Override
+                public String get() {
+                    return (String) v;
+                }
+            });
+        } if(v instanceof Boolean) {
+            vm.setVariable(k, new BoolVal() {
+                @NotNull
+                @Override
+                public Boolean get() {
+                    return (Boolean) v;
+                }
+            });
+        } else if(v instanceof Byte) {
+            vm.setVariable(k, new IntVal() {
+                @NotNull
+                @Override
+                public Integer get() {
+                    return ((Byte) v).intValue();
+                }
+            });
+        } else if(v instanceof Short) {
+            vm.setVariable(k, new IntVal() {
+                @NotNull
+                @Override
+                public Integer get() {
+                    return ((Short) v).intValue();
+                }
+            });
+        } else if(v instanceof Integer) {
+            vm.setVariable(k, new IntVal() {
+                @NotNull
+                @Override
+                public Integer get() {
+                    return (Integer) v;
+                }
+            });
+        } else if(v instanceof Long) {
+            vm.setVariable(k, new LongVal() {
+                @NotNull
+                @Override
+                public Long get() {
+                    return (Long) v;
+                }
+            });
+        } else if(v instanceof Float) {
+            vm.setVariable(k, new DoubleVal() {
+                @NotNull
+                @Override
+                public Double get() {
+                    return ((Float) v).doubleValue();
+                }
+            });
+        } else if(v instanceof Double) {
+            vm.setVariable(k, new DoubleVal() {
+                @NotNull
+                @Override
+                public Double get() {
+                    return (Double) v;
+                }
+            });
+        }
+    }
+    
+    private VM createVM(SlotReport report) throws FunctionRegisterFailed {
+        VM vm = new VM();
+        for(Class<? extends GuiHandler> c : GUI_HANDLERS){
+            GuiHandler o = (GuiHandler) ReflectionUtil.invokeConstructor(c, new Class[]{SlotReport.class}, new Object[]{report});
+            vm.registerFunctions(c, o);
+        }
+        for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
+            setVariable(vm, "view_data_"+e.getKey(), e.getValue());
+        }
+        for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
+            setVariable(vm, "window_data_"+e.getKey(), e.getValue());
+        }
+        return vm;
+    }
 
-    public Window callEvent(Player p, int slot, boolean isTop, Event event) {
+    public Window callClickEvent(Player p, int slot, boolean isTop, Event event) {
         Window w = getWindow(p);
         View v = isTop ? w.getTopView() : w.getBottomView();
         if(v == null) return w;
         Slot s = v.getSlot(slot);
         if(s == null) return w;
-        for (FunctionLinker<SlotReport> fc : s.getComponent().getClickFunctions()){
-            fc.call(new SlotReport(p, event, v, slot));
-        }
-        if (s.getAdditionalFunction() != null) {
-            s.getAdditionalFunction().call(new SlotReport(p, event, v, slot));
+        SlotReport slotReport = new SlotReport(p, event, v, slot);
+        try {
+            VM vm = createVM(slotReport);
+            Instruction[] ins = s.getComponent().getClickFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+            vm.newSession(ins).execute();
+            if (s.getExtraClickFunction() != null) {
+                s.getExtraClickFunction().call(new SlotReport(p, event, v, slot));
+            }
+        } catch (FunctionRegisterFailed functionRegisterFailed) {
+            functionRegisterFailed.printStackTrace();
         }
         return w;
     }
@@ -90,14 +182,14 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                 view.setPage(pgn, si.isNegative() ? SignedInt.ZERO : si);
                 while (chain.hasNext()) {
                     Slot x = chain.next();
-                    x.setAdditionalFunction(null);
+                    x.setExtraClickFunction(null);
                     x.setPaginationItem(null);
                 }
             } else if (chain.getAllocatedSlot() < cpn.getSlots().size()) {
                 view.setPage(pgn, page.toNegative());
                 while (chain.hasNext()) {
                     Slot x = chain.next();
-                    x.setAdditionalFunction(null);
+                    x.setExtraClickFunction(null);
                     x.setPaginationItem(null);
                 }
             } else if (chain.getAllocatedSlot() == cpn.getSlots().size()) {
@@ -186,7 +278,21 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     private View createView(Window window, Gui gui, Inventory inventory){
-        return new View(gui, window, inventory);
+        View view = new View(gui, window, inventory);
+        for (int i = 0; i < view.getGui().getSize(); i++){
+            Component c = gui.getComponentAt(i);
+            if(c != null) {
+                SlotReport slotReport = new SlotReport(Objects.requireNonNull(window.getPlayer()), null, view, i);
+                try {
+                    VM vm = createVM(slotReport);
+                    Instruction[] ins = c.getInitFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
+                } catch (FunctionRegisterFailed functionRegisterFailed) {
+                    functionRegisterFailed.printStackTrace();
+                }
+            }
+        }
+        return view;
     }
 
     public BattleGuiManager(BattlePlugin plugin) {
@@ -212,11 +318,10 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     @Override
-    public boolean registerGuiHandler(@NotNull String namespace, @NotNull GuiHandler handler) {
-        Condition.argNotNull("namespace", namespace);
-        Condition.argNotNull("handler", handler);
-        if(GUI_HANDLERS.containsKey(namespace)) return false;
-        GUI_HANDLERS.put(namespace, handler);
+    public <T extends GuiHandler> boolean registerGuiHandler(@NotNull Class<T> handlerClass) {
+        Condition.argNotNull("handlerClass", handlerClass);
+        if(GUI_HANDLERS.contains(handlerClass)) return false;
+        GUI_HANDLERS.add(handlerClass);
         return true;
     }
 
@@ -227,12 +332,6 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         if(PAGES.containsKey(id)) return false;
         PAGES.put(id, pagination);
         return true;
-    }
-
-    @Override
-    @Nullable
-    public GuiHandler getGuiHandler(@Nullable String namespace) {
-        return GUI_HANDLERS.get(namespace);
     }
 
     @Override

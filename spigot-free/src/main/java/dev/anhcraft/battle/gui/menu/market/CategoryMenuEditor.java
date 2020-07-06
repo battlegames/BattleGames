@@ -45,7 +45,7 @@ public class CategoryMenuEditor implements Pagination {
             }
             Slot slot = chain.next();
             slot.setPaginationItem(c.getIcon().duplicate());
-            slot.setAdditionalFunction(report -> {
+            slot.setExtraClickFunction(report -> {
                 view.getWindow().getDataContainer().put(GDataRegistry.MARKET_CATEGORY_EDITOR, c);
                 api.getGuiManager().openTopGui(player, NativeGui.MARKET_CATEGORY_EDITOR);
             });

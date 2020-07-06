@@ -48,7 +48,7 @@ public class CategoryMenu implements Pagination {
             }
             Slot slot = chain.next();
             slot.setPaginationItem(c.getIcon().duplicate());
-            slot.setAdditionalFunction(report -> {
+            slot.setExtraClickFunction(report -> {
                 view.getWindow().getDataContainer().put(GDataRegistry.MARKET_CATEGORY, c);
                 api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_MENU);
             });

@@ -20,15 +20,7 @@
 
 package dev.anhcraft.battle.api.gui.struct;
 
-import dev.anhcraft.battle.ApiProvider;
-import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.gui.GuiHandler;
-import dev.anhcraft.battle.api.gui.GuiManager;
-import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.functions.FunctionLinker;
-import dev.anhcraft.battle.utils.functions.Instruction;
-import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
@@ -36,7 +28,6 @@ import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.annotation.Validation;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,8 +60,6 @@ public class Component extends ConfigurableObject {
     }
 
     private final String id;
-    private List<FunctionLinker<SlotReport>> initFunctions;
-    private List<FunctionLinker<SlotReport>> clickFunctions;
 
     @Key("positions")
     @Validation(notNull = true)
@@ -82,11 +71,11 @@ public class Component extends ConfigurableObject {
 
     @Key("functions.on_init")
     @IgnoreValue(ifNull = true)
-    private List<String> rawInitFunctions = new ArrayList<>();
+    private List<String> initFunction = new ArrayList<>();
 
     @Key("functions.on_click")
     @IgnoreValue(ifNull = true)
-    private List<String> rawClickFunctions = new ArrayList<>();
+    private List<String> clickFunction = new ArrayList<>();
 
     @Key("pagination")
     private String pagination;
@@ -115,48 +104,6 @@ public class Component extends ConfigurableObject {
         this.item = item;
     }
 
-    private void compileFunction(List<String> rawFunctions, List<FunctionLinker<SlotReport>> functions){
-        if(!rawFunctions.isEmpty()){
-            GuiManager bgm = ApiProvider.consume().getGuiManager();
-            for (Iterator<String> it = rawFunctions.iterator(); it.hasNext(); ) {
-                String str = it.next();
-                Instruction fn = Instruction.parse(str);
-                if(fn != null) {
-                    GuiHandler gh = bgm.getGuiHandler(fn.getNamespace());
-                    // if gui handler does not exist, don't remove immediately
-                    // it may be available in the future
-                    if (gh == null) continue;
-                    functions.add(new FunctionLinker<>(
-                            fn,
-                            event -> {
-                                BattleApi a = ApiProvider.consume();
-                                InfoReplacer f = a.getGuiManager().collectInfo(event.getView()).compile();
-                                String[] x = (String[]) ArrayUtils.clone(fn.getArgs());
-                                if(!gh.fireEvent(fn.getTarget(), event, f.replace(x))){
-                                    throw new IllegalStateException("Event fired failed");
-                                }
-                            })
-                    );
-                }
-                it.remove();
-            }
-        }
-    }
-
-    @NotNull
-    public synchronized List<FunctionLinker<SlotReport>> getClickFunctions() {
-        if(clickFunctions == null) clickFunctions = new ArrayList<>();
-        compileFunction(rawClickFunctions, clickFunctions);
-        return clickFunctions;
-    }
-
-    @NotNull
-    public synchronized List<FunctionLinker<SlotReport>> getInitFunctions() {
-        if(initFunctions == null) initFunctions = new ArrayList<>();
-        compileFunction(rawInitFunctions, initFunctions);
-        return initFunctions;
-    }
-
     @Nullable
     public String getPagination() {
         return pagination;
@@ -164,6 +111,16 @@ public class Component extends ConfigurableObject {
 
     public void setPagination(@Nullable String pagination) {
         this.pagination = pagination;
+    }
+
+    @NotNull
+    public List<String> getInitFunction() {
+        return initFunction;
+    }
+
+    @NotNull
+    public List<String> getClickFunction() {
+        return clickFunction;
     }
 
     private int parseNum(String s){
@@ -224,25 +181,6 @@ public class Component extends ConfigurableObject {
                 for(String s : list) parsePos(ints, s);
             }
             return ints;
-        }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null){
-            if(entry.getKey().equals("functions.on_init")) {
-                List<String> strs = new ArrayList<>();
-                // don't use "functions", call the getter to do some init works first
-                for (FunctionLinker fc : getClickFunctions())
-                    strs.add(fc.getInstruction().toString());
-                return strs;
-            } else if(entry.getKey().equals("functions.on_click")) {
-                List<String> strs = new ArrayList<>();
-                for (FunctionLinker fc : getInitFunctions())
-                    strs.add(fc.getInstruction().toString());
-                return strs;
-            }
         }
         return value;
     }

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class Slot {
     private final int position;
     private final Component component;
-    private FunctionCaller<SlotReport> additionalFunction;
+    private FunctionCaller<SlotReport> extraClickFunction;
     private PreparedItem paginationItem;
 
     public Slot(int position, @NotNull Component component) {
@@ -58,11 +58,11 @@ public class Slot {
     }
 
     @Nullable
-    public FunctionCaller<SlotReport> getAdditionalFunction() {
-        return additionalFunction;
+    public FunctionCaller<SlotReport> getExtraClickFunction() {
+        return extraClickFunction;
     }
 
-    public void setAdditionalFunction(@Nullable FunctionCaller<SlotReport> additionalFunction) {
-        this.additionalFunction = additionalFunction;
+    public void setExtraClickFunction(@Nullable FunctionCaller<SlotReport> extraClickFunction) {
+        this.extraClickFunction = extraClickFunction;
     }
 }

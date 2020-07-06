@@ -21,12 +21,10 @@ package dev.anhcraft.battle.api.gui.screen;
 
 import com.google.common.base.Preconditions;
 import dev.anhcraft.battle.api.gui.Gui;
-import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.utils.SignedInt;
 import dev.anhcraft.battle.utils.TempDataContainer;
-import dev.anhcraft.battle.utils.functions.FunctionLinker;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class View extends TempDataContainer {
     private final Map<String, SignedInt> PAGE = new HashMap<>();
@@ -55,9 +52,6 @@ public class View extends TempDataContainer {
             Component c = gui.getComponentAt(i);
             if(c != null) {
                 slots[i] = new Slot(i, c);
-                for (FunctionLinker<SlotReport> fc : c.getInitFunctions()) {
-                    fc.call(new SlotReport(Objects.requireNonNull(window.getPlayer()), null, this, i));
-                }
             }
         }
         for (String s : gui.getAllPagination()){

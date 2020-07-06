@@ -36,7 +36,7 @@ public class BlockListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void placeBlock(BlockPlaceEvent event){
-        plugin.guiManager.callEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+        plugin.guiManager.callClickEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -18,7 +18,7 @@
  *
  */
 
-package dev.anhcraft.battle.gui;
+package dev.anhcraft.battle.gui.inst;
 
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -26,15 +26,23 @@ import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
-import dev.anhcraft.battle.utils.functions.Function;
 import dev.anhcraft.craftkit.utils.ItemUtil;
+import dev.anhcraft.inst.VM;
+import dev.anhcraft.inst.annotations.Function;
+import dev.anhcraft.inst.annotations.Namespace;
+import dev.anhcraft.inst.values.StringVal;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemHandler extends GuiHandler {
-    @Function("handle_item_drop")
-    public void handleItemDrop(SlotReport report, String type) {
+@Namespace("Item")
+public class ItemFunctions extends GuiHandler {
+    public ItemFunctions(SlotReport report) {
+        super(report);
+    }
+
+    @Function("HandleItemDrop")
+    public void handleItemDrop(VM vm, StringVal type) {
         Player player = report.getPlayer();
         ItemStack item = player.getItemOnCursor();
         if(!ItemUtil.isNull(item)) {
@@ -43,7 +51,7 @@ public class ItemHandler extends GuiHandler {
                 BattleItem<?> bi = BattleApi.getInstance().getItemManager().read(item);
                 if (bi != null && bi.getModel() != null) {
                     BattleItemModel m = bi.getModel();
-                    if (m.getItemType().name().equalsIgnoreCase(type)) {
+                    if (m.getItemType().name().equalsIgnoreCase(type.get())) {
                         gp.getIgBackpack().put(m.getItemType(), m.getId(), bi);
                         player.setItemOnCursor(null);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);

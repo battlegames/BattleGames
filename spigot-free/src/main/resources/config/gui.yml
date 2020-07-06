@@ -9,22 +9,22 @@ item_value_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/2; 2
       item:
         material: red_stained_glass_pane
         name: '&f'
         lore:
-          - "[ gui.value_editor.item_btn ]"
+          - '[ gui.value_editor.item_btn ]'
       functions:
         on_init:
-          - common::pull_item_from_data { value; not-null }
-          - common::copy_current_slot { window; itemSlot }
+          - Common:PullItemFromData("value" "not-null")
+          - Common:CopyCurrentSlot("window" "itemSlot")
         on_click:
-          - common::cancel_event
-          - common::pull_item_from_cursor { not-null }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:PullItemFromCursor("not-null")
+          - Common:RefreshView()
     '2':
       positions: 2/2; 2
       item:
@@ -32,11 +32,11 @@ item_value_editor:
         material: diamond
       functions:
         on_click:
-          - common::cancel_event
-          - common::push_item_to_value { <window_data_itemSlot> }
-          - common::del_window_data { itemSlot }
-          - common::del_window_data { value }
-          - common::switch_gui { <window_data_lastgui> }
+          - Common:CancelEvent()
+          - Common:PushItemToValue($window_data_itemSlot)
+          - Common:DelWindowData("itemSlot")
+          - Common:DelWindowData("value")
+          - Common:SwitchGUI($window_data_lastgui)
 boolean_value_editor:
   title: '[ gui.value_editor.boolean_title ]'
   sound: $block_chest_open
@@ -48,7 +48,7 @@ boolean_value_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/2; 2
       item:
@@ -61,9 +61,9 @@ boolean_value_editor:
           - hide_enchants
       functions:
         on_click:
-          - common::cancel_event
-          - common::flip_window_data { value }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:NegateWindowData("value")
+          - Common:RefreshView()
     '2':
       positions: 2/2; 2
       item:
@@ -71,10 +71,10 @@ boolean_value_editor:
         material: diamond
       functions:
         on_click:
-          - common::cancel_event
-          - common::apply_value { <window_data_value:false> }
-          - common::del_window_data { value }
-          - common::switch_gui { <window_data_lastgui> }
+          - Common:CancelEvent()
+          - Common:ApplyValue($window_data_value)
+          - Common:DelWindowData("value")
+          - Common:SwitchGUI($window_data_lastgui)
 int_value_editor:
   title: '[ gui.value_editor.int_title ]'
   sound: $block_chest_open
@@ -86,7 +86,7 @@ int_value_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/2; 2
       item:
@@ -99,7 +99,7 @@ int_value_editor:
           - hide_enchants
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 2/2; 2
       item:
@@ -107,10 +107,10 @@ int_value_editor:
         material: diamond
       functions:
         on_click:
-          - common::cancel_event
-          - common::apply_value { <window_data_value:0> }
-          - common::del_window_data { value }
-          - common::switch_gui { <window_data_lastgui> }
+          - Common:CancelEvent()
+          - Common:ApplyValue($window_data_value)
+          - Common:DelWindowData("value")
+          - Common:SwitchGUI($window_data_lastgui)
     '3':
       positions: 1; 4
       item:
@@ -118,9 +118,9 @@ int_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -10 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -10)
+          - Common:RefreshView()
     '4':
       positions: 2; 4
       item:
@@ -128,9 +128,9 @@ int_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -5)
+          - Common:RefreshView()
     '5':
       positions: 3; 4
       item:
@@ -138,9 +138,9 @@ int_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -2)
+          - Common:RefreshView()
     '6':
       positions: 4; 4
       item:
@@ -148,9 +148,9 @@ int_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -1)
+          - Common:RefreshView()
     '7':
       positions: 5; 4
       item:
@@ -158,9 +158,9 @@ int_value_editor:
         material: light_blue_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::flip_window_data { value }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:NegateWindowData("value")
+          - Common:RefreshView()
     '8':
       positions: 6; 4
       item:
@@ -168,9 +168,9 @@ int_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 1)
+          - Common:RefreshView()
     '9':
       positions: 7; 4
       item:
@@ -178,9 +178,9 @@ int_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 2)
+          - Common:RefreshView()
     '10':
       positions: 8; 4
       item:
@@ -188,9 +188,9 @@ int_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 5)
+          - Common:RefreshView()
     '11':
       positions: 9; 4
       item:
@@ -198,9 +198,9 @@ int_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 10 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 10)
+          - Common:RefreshView()
 real_value_editor:
   title: '[ gui.value_editor.real_title ]'
   sound: $block_chest_open
@@ -212,7 +212,7 @@ real_value_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/2; 2
       item:
@@ -225,7 +225,7 @@ real_value_editor:
           - hide_enchants
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 2/2; 2
       item:
@@ -233,10 +233,10 @@ real_value_editor:
         material: diamond
       functions:
         on_click:
-          - common::cancel_event
-          - common::apply_value { <window_data_value:0> }
-          - common::del_window_data { value }
-          - common::switch_gui { <window_data_lastgui> }
+          - Common:CancelEvent()
+          - Common:ApplyValue($window_data_value)
+          - Common:DelWindowData("value")
+          - Common:SwitchGUI($window_data_lastgui)
     '3':
       positions: 1; 4
       item:
@@ -244,9 +244,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -10 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -10)
+          - Common:RefreshView()
     '4':
       positions: 2; 4
       item:
@@ -254,9 +254,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -5)
+          - Common:RefreshView()
     '5':
       positions: 3; 4
       item:
@@ -264,9 +264,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -2)
+          - Common:RefreshView()
     '6':
       positions: 4; 4
       item:
@@ -274,9 +274,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -1)
+          - Common:RefreshView()
     '7':
       positions: 5; 4
       item:
@@ -284,9 +284,9 @@ real_value_editor:
         material: light_blue_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::flip_window_data { value }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:NegateWindowData("value")
+          - Common:RefreshView()
     '8':
       positions: 6; 4
       item:
@@ -294,9 +294,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 1)
+          - Common:RefreshView()
     '9':
       positions: 7; 4
       item:
@@ -304,9 +304,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 2)
+          - Common:RefreshView()
     '10':
       positions: 8; 4
       item:
@@ -314,9 +314,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 5)
+          - Common:RefreshView()
     '11':
       positions: 9; 4
       item:
@@ -324,9 +324,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 10 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 10)
+          - Common:RefreshView()
     '12':
       positions: 1; 5
       item:
@@ -334,9 +334,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -0.01 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -0.01)
+          - Common:RefreshView()
     '13':
       positions: 2; 5
       item:
@@ -344,9 +344,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -0.5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -0.5)
+          - Common:RefreshView()
     '14':
       positions: 3; 5
       item:
@@ -354,9 +354,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -0.2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -0.2)
+          - Common:RefreshView()
     '15':
       positions: 4; 5
       item:
@@ -364,9 +364,9 @@ real_value_editor:
         material: red_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; -0.1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" -0.1)
+          - Common:RefreshView()
     '16':
       positions: 5; 5
       item:
@@ -374,9 +374,9 @@ real_value_editor:
         material: light_blue_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::flip_window_data { value }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:NegateWindowData("value")
+          - Common:RefreshView()
     '17':
       positions: 6; 5
       item:
@@ -384,9 +384,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 0.1 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 0.1)
+          - Common:RefreshView()
     '18':
       positions: 7; 5
       item:
@@ -394,9 +394,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 0.2 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 0.2)
+          - Common:RefreshView()
     '19':
       positions: 8; 5
       item:
@@ -404,9 +404,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 0.5 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 0.5)
+          - Common:RefreshView()
     '20':
       positions: 9; 5
       item:
@@ -414,9 +414,9 @@ real_value_editor:
         material: lime_stained_glass_pane
       functions:
         on_click:
-          - common::cancel_event
-          - common::add_window_data { value; 0.01 }
-          - common::refresh
+          - Common:CancelEvent()
+          - Common:AddWindowData("value" 0.01)
+          - Common:RefreshView()
 player_bp:
   title: '[ gui.player_bp.title ]'
   sound: $block_chest_open
@@ -428,7 +428,7 @@ player_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/5; 2
       item:
@@ -443,8 +443,8 @@ player_bp:
           - hide_unbreakable
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { player_gun_bp }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("player_gun_bp")
     '2':
       positions: 2/5; 2
       item:
@@ -454,8 +454,8 @@ player_bp:
         material: chest
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { player_magazine_bp }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("player_magazine_bp")
     '3':
       positions: 3/5; 2
       item:
@@ -465,8 +465,8 @@ player_bp:
           - '[ gui.player_bp.ammo_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { player_ammo_bp }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("player_ammo_bp")
     '4':
       positions: 4/5; 2
       item:
@@ -476,8 +476,8 @@ player_bp:
           - '[ gui.player_bp.scope_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { player_scope_bp }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("player_scope_bp")
     '5':
       positions: 5/5; 2
       item:
@@ -487,8 +487,8 @@ player_bp:
           - '[ gui.player_bp.grenade_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { player_grenade_bp }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("player_grenade_bp")
     '6':
       positions: 1; 4
       item:
@@ -498,8 +498,8 @@ player_bp:
           - '[ gui.player_bp.kit_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { kit_menu }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("kit_menu")
     '7':
       positions: 1/1; 4
       item:
@@ -509,8 +509,8 @@ player_bp:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
     '8':
       positions: 9; 4
       item:
@@ -520,8 +520,8 @@ player_bp:
           - '[ gui.player_bp.market_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_category_menu }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_category_menu")
 player_gun_bp:
   title: '[ gui.player_gun_bp.title ]'
   sound: $block_chest_open
@@ -534,8 +534,8 @@ player_gun_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { gun }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("gun")
     '1':
       positions:
         - 1 -> 5; 4
@@ -545,8 +545,8 @@ player_gun_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { gun }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("gun")
     '2':
       positions: 6; 4
       item:
@@ -556,8 +556,8 @@ player_gun_bp:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { player_gun }
+          - Common:CancelEvent()
+          - Common:PrevPage("player_gun")
     '3':
       positions: 7; 4
       item:
@@ -567,8 +567,8 @@ player_gun_bp:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { player_gun }
+          - Common:CancelEvent()
+          - Common:NextPage("player_gun")
     '4':
       positions: 9; 4
       item:
@@ -578,7 +578,7 @@ player_gun_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
-          - common::switch_gui { player_bp }
+          - Common:SwitchGUI("player_bp")
 player_magazine_bp:
   title: '[ gui.player_magazine_bp.title ]'
   sound: $block_chest_open
@@ -591,8 +591,8 @@ player_magazine_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { magazine }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("magazine")
     '1':
       positions:
         - 1 -> 5; 4
@@ -602,8 +602,8 @@ player_magazine_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { magazine }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("magazine")
     '2':
       positions: 6; 4
       item:
@@ -613,8 +613,8 @@ player_magazine_bp:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { player_magazine }
+          - Common:CancelEvent()
+          - Common:PrevPage("player_magazine")
     '3':
       positions: 7; 4
       item:
@@ -624,8 +624,8 @@ player_magazine_bp:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { player_magazine }
+          - Common:CancelEvent()
+          - Common:NextPage("player_magazine")
     '4':
       positions: 9; 4
       item:
@@ -635,7 +635,7 @@ player_magazine_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
-          - common::switch_gui { player_bp }
+          - Common:SwitchGUI("player_bp")
 player_ammo_bp:
   title: '[ gui.player_ammo_bp.title ]'
   sound: $block_chest_open
@@ -648,7 +648,7 @@ player_ammo_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -658,7 +658,7 @@ player_ammo_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -668,8 +668,8 @@ player_ammo_bp:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { player_ammo }
+          - Common:CancelEvent()
+          - Common:PrevPage("player_ammo")
     '3':
       positions: 7; 4
       item:
@@ -679,8 +679,8 @@ player_ammo_bp:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { player_ammo }
+          - Common:CancelEvent()
+          - Common:NextPage("player_ammo")
     '4':
       positions: 9; 4
       item:
@@ -690,7 +690,7 @@ player_ammo_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
-          - common::switch_gui { player_bp }
+          - Common:SwitchGUI("player_bp")
 player_scope_bp:
   title: '[ gui.player_scope_bp.title ]'
   sound: $block_chest_open
@@ -703,8 +703,8 @@ player_scope_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { scope }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("scope")
     '1':
       positions:
         - 1 -> 5; 4
@@ -714,8 +714,8 @@ player_scope_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { scope }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("scope")
     '2':
       positions: 6; 4
       item:
@@ -725,8 +725,8 @@ player_scope_bp:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { player_scope }
+          - Common:CancelEvent()
+          - Common:PrevPage("player_scope")
     '3':
       positions: 7; 4
       item:
@@ -736,8 +736,8 @@ player_scope_bp:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { player_scope }
+          - Common:CancelEvent()
+          - Common:NextPage("player_scope")
     '4':
       positions: 9; 4
       item:
@@ -747,7 +747,7 @@ player_scope_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
-          - common::switch_gui { player_bp }
+          - Common:SwitchGUI("player_bp")
 player_grenade_bp:
   title: '[ gui.player_grenade_bp.title ]'
   sound: $block_chest_open
@@ -760,8 +760,8 @@ player_grenade_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { grenade }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("grenade")
     '1':
       positions:
         - 1 -> 5; 4
@@ -771,8 +771,8 @@ player_grenade_bp:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
-          - item::handle_item_drop { grenade }
+          - Common:CancelEvent()
+          - Item:HandleItemDrop("grenade")
     '2':
       positions: 6; 4
       item:
@@ -782,8 +782,8 @@ player_grenade_bp:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { player_grenade }
+          - Common:CancelEvent()
+          - Common:PrevPage("player_grenade")
     '3':
       positions: 7; 4
       item:
@@ -793,8 +793,8 @@ player_grenade_bp:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { player_grenade }
+          - Common:CancelEvent()
+          - Common:NextPage("player_grenade")
     '4':
       positions: 9; 4
       item:
@@ -804,7 +804,7 @@ player_grenade_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
-          - common::switch_gui { player_bp }
+          - Common:SwitchGUI("player_bp")
 kit_menu:
   title: '[ gui.kit_menu.title ]'
   sound: $block_chest_open
@@ -817,7 +817,7 @@ kit_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -827,7 +827,7 @@ kit_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -837,8 +837,8 @@ kit_menu:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { kits }
+          - Common:CancelEvent()
+          - Common:PrevPage("kits")
     '3':
       positions: 7; 4
       item:
@@ -848,8 +848,8 @@ kit_menu:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { kits }
+          - Common:CancelEvent()
+          - Common:NextPage("kits")
     '4':
       positions: 9; 4
       item:
@@ -859,8 +859,8 @@ kit_menu:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 booster_menu:
   title: '[ gui.booster_menu.title ]'
   sound: $block_chest_open
@@ -873,7 +873,7 @@ booster_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -883,7 +883,7 @@ booster_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -893,8 +893,8 @@ booster_menu:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { boosters }
+          - Common:CancelEvent()
+          - Common:PrevPage("boosters")
     '3':
       positions: 7; 4
       item:
@@ -904,8 +904,8 @@ booster_menu:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { boosters }
+          - Common:CancelEvent()
+          - Common:NextPage("boosters")
     '4':
       positions: 9; 4
       item:
@@ -915,8 +915,8 @@ booster_menu:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 arena_chooser:
   title: '[ gui.arena_chooser.title ]'
   sound: $block_chest_open
@@ -929,7 +929,7 @@ arena_chooser:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -939,7 +939,7 @@ arena_chooser:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -949,8 +949,8 @@ arena_chooser:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { arena_chooser }
+          - Common:CancelEvent()
+          - Common:PrevPage("arena_chooser")
     '3':
       positions: 7; 4
       item:
@@ -960,8 +960,8 @@ arena_chooser:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { arena_chooser }
+          - Common:CancelEvent()
+          - Common:NextPage("arena_chooser")
     '4':
       positions: 9; 4
       item:
@@ -971,8 +971,8 @@ arena_chooser:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 advancements:
   title: '[ gui.advancements.title ]'
   sound: $block_chest_open
@@ -985,7 +985,7 @@ advancements:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -995,7 +995,7 @@ advancements:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -1005,8 +1005,8 @@ advancements:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { advancements }
+          - Common:CancelEvent()
+          - Common:PrevPage("advancements")
     '3':
       positions: 7; 4
       item:
@@ -1016,8 +1016,8 @@ advancements:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { advancements }
+          - Common:CancelEvent()
+          - Common:NextPage("advancements")
     '4':
       positions: 9; 4
       item:
@@ -1027,8 +1027,8 @@ advancements:
           - '[ gui.advancements.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { statistics }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("statistics")
 statistics:
   title: '[ gui.statistics.title ]'
   sound: $block_chest_open
@@ -1040,7 +1040,7 @@ statistics:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/3; 2
       item:
@@ -1052,9 +1052,9 @@ statistics:
           - hide_attributes
       functions:
         on_click:
-          - common::cancel_event
-          - common::set_window_data { stat; kills }
-          - common::switch_gui { advancements }
+          - Common:CancelEvent()
+          - Common:SetWindowData("stat" "kills")
+          - Common:SwitchGUI("advancements")
     '2':
       positions: 2/3; 2
       item:
@@ -1064,9 +1064,9 @@ statistics:
           - '[ gui.statistics.footer ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::set_window_data { stat; respawns }
-          - common::switch_gui { advancements }
+          - Common:CancelEvent()
+          - Common:SetWindowData("stat" "respawns")
+          - Common:SwitchGUI("advancements")
     '3':
       positions: 3/3; 2
       item:
@@ -1076,9 +1076,9 @@ statistics:
           - '[ gui.statistics.footer ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::set_window_data { stat; wins }
-          - common::switch_gui { advancements }
+          - Common:CancelEvent()
+          - Common:SetWindowData("stat" "wins")
+          - Common:SwitchGUI("advancements")
     '4':
       positions: 1/1; 4
       item:
@@ -1088,8 +1088,8 @@ statistics:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 market_category_menu:
   title: '[ gui.market_category_menu.title ]'
   sound: $block_chest_open
@@ -1102,7 +1102,7 @@ market_category_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1; 4
       item:
@@ -1112,8 +1112,8 @@ market_category_menu:
           - '[ gui.market_category_menu.transaction_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_transaction }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_transaction")
     '2':
       positions:
         - 2 -> 5; 4
@@ -1123,7 +1123,7 @@ market_category_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '3':
       positions: 6; 4
       item:
@@ -1133,8 +1133,8 @@ market_category_menu:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { market_category }
+          - Common:CancelEvent()
+          - Common:PrevPage("market_category")
     '4':
       positions: 7; 4
       item:
@@ -1144,8 +1144,8 @@ market_category_menu:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { market_category }
+          - Common:CancelEvent()
+          - Common:NextPage("market_category")
     '5':
       positions: 9; 4
       item:
@@ -1155,8 +1155,8 @@ market_category_menu:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 market_product_menu:
   title: '[ gui.market_product_menu.title ]'
   sound: $block_chest_open
@@ -1169,7 +1169,7 @@ market_product_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions:
         - 1 -> 5; 4
@@ -1179,7 +1179,7 @@ market_product_menu:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 6; 4
       item:
@@ -1189,8 +1189,8 @@ market_product_menu:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { market_product }
+          - Common:CancelEvent()
+          - Common:PrevPage("market_product")
     '3':
       positions: 7; 4
       item:
@@ -1200,8 +1200,8 @@ market_product_menu:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { market_product }
+          - Common:CancelEvent()
+          - Common:NextPage("market_product")
     '4':
       positions: 9; 4
       item:
@@ -1211,8 +1211,8 @@ market_product_menu:
           - '[ gui.market_product_menu.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_category_menu }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_category_menu")
 market_category_menu_editor:
   title: '[ gui.market_category_menu_editor.title ]'
   sound: $block_chest_open
@@ -1225,7 +1225,7 @@ market_category_menu_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1; 4
       item:
@@ -1235,9 +1235,9 @@ market_category_menu_editor:
           - '[ gui.market_category_menu_editor.create_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::create_category
-          - common::refresh
+          - Common:CancelEvent()
+          - Market:CreateCategory()
+          - Common:RefreshView()
     '2':
       positions:
         - 2 -> 5; 4
@@ -1247,7 +1247,7 @@ market_category_menu_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '3':
       positions: 6; 4
       item:
@@ -1257,8 +1257,8 @@ market_category_menu_editor:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { editor_market_category }
+          - Common:CancelEvent()
+          - Common:PrevPage("editor_market_category")
     '4':
       positions: 7; 4
       item:
@@ -1268,8 +1268,8 @@ market_category_menu_editor:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { editor_market_category }
+          - Common:CancelEvent()
+          - Common:NextPage("editor_market_category")
     '5':
       positions: 9; 4
       item:
@@ -1279,8 +1279,8 @@ market_category_menu_editor:
           - '[ gui.common.close_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
 market_category_editor:
   title: '[ gui.market_category_editor.title ]'
   sound: $block_chest_open
@@ -1292,7 +1292,7 @@ market_category_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1/3; 2
       item:
@@ -1302,10 +1302,10 @@ market_category_editor:
           - '[ gui.market_category_editor.set_igo_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::igo_editor
-          - common::set_window_data { lastgui; market_category_editor }
-          - common::switch_gui { boolean_value_editor }
+          - Common:CancelEvent()
+          - Market:IgoEditor()
+          - Common:SetWindowData("lastgui" "market_category_editor")
+          - Common:SwitchGUI("boolean_value_editor")
     '2':
       positions: 2/3; 2
       item:
@@ -1315,8 +1315,8 @@ market_category_editor:
           - '[ gui.market_category_editor.edit_product_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_product_menu_editor }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_product_menu_editor")
     '3':
       positions: 3/3; 2
       item:
@@ -1326,9 +1326,9 @@ market_category_editor:
           - '[ gui.market_category_editor.remove_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::remove_category
-          - common::switch_gui { market_category_menu_editor }
+          - Common:CancelEvent()
+          - Market:RemoveCategory()
+          - Common:SwitchGUI("market_category_menu_editor")
     '4':
       positions: 1/1; 4
       item:
@@ -1338,8 +1338,8 @@ market_category_editor:
           - '[ gui.market_category_editor.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_category_menu_editor }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_category_menu_editor")
 market_product_menu_editor:
   title: '[ gui.market_product_menu_editor.title ]'
   sound: $block_chest_open
@@ -1352,7 +1352,7 @@ market_product_menu_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1; 4
       item:
@@ -1362,9 +1362,9 @@ market_product_menu_editor:
           - '[ gui.market_product_menu_editor.create_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::create_product
-          - common::refresh
+          - Common:CancelEvent()
+          - Market:CreateProduct()
+          - Common:RefreshView()
     '2':
       positions:
         - 2 -> 5; 4
@@ -1374,7 +1374,7 @@ market_product_menu_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '3':
       positions: 6; 4
       item:
@@ -1384,8 +1384,8 @@ market_product_menu_editor:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { editor_market_product }
+          - Common:CancelEvent()
+          - Common:PrevPage("editor_market_product")
     '4':
       positions: 7; 4
       item:
@@ -1395,8 +1395,8 @@ market_product_menu_editor:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { editor_market_product }
+          - Common:CancelEvent()
+          - Common:NextPage("editor_market_product")
     '5':
       positions: 9; 4
       item:
@@ -1406,8 +1406,8 @@ market_product_menu_editor:
           - '[ gui.market_product_menu_editor.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_category_editor }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_category_editor")
 market_product_editor:
   title: '[ gui.market_product_editor.title ]'
   sound: $block_chest_open
@@ -1419,7 +1419,7 @@ market_product_editor:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1; 1
       item:
@@ -1429,10 +1429,10 @@ market_product_editor:
           - '[ gui.market_product_editor.set_igo_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::igo_editor
-          - common::set_window_data { lastgui; market_product_editor }
-          - common::switch_gui { boolean_value_editor }
+          - Common:CancelEvent()
+          - Market:IgoEditor()
+          - Common:SetWindowData("lastgui" "market_product_editor")
+          - Common:SwitchGUI("boolean_value_editor")
     '2':
       positions: 2; 1
       item:
@@ -1442,10 +1442,10 @@ market_product_editor:
           - '[ gui.market_product_editor.set_price_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::price_editor
-          - common::set_window_data { lastgui; market_product_editor }
-          - common::switch_gui { real_value_editor }
+          - Common:CancelEvent()
+          - Market:PriceEditor()
+          - Common:SetWindowData("lastgui" "market_product_editor")
+          - Common:SwitchGUI("real_value_editor")
     '3':
       positions: 3; 1
       item:
@@ -1455,10 +1455,10 @@ market_product_editor:
           - '[ gui.market_product_editor.set_exp_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::exp_editor
-          - common::set_window_data { lastgui; market_product_editor }
-          - common::switch_gui { real_value_editor }
+          - Common:CancelEvent()
+          - Market:ExpEditor()
+          - Common:SetWindowData("lastgui" "market_product_editor")
+          - Common:SwitchGUI("real_value_editor")
     '4':
       positions: 4; 1
       item:
@@ -1468,10 +1468,10 @@ market_product_editor:
           - '[ gui.market_product_editor.set_icon_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::icon_editor
-          - common::set_window_data { lastgui; market_product_editor }
-          - common::switch_gui { item_value_editor }
+          - Common:CancelEvent()
+          - Market:IconEditor()
+          - Common:SetWindowData("lastgui" "market_product_editor")
+          - Common:SwitchGUI("item_value_editor")
     '5':
       positions: 9; 1
       item:
@@ -1481,9 +1481,9 @@ market_product_editor:
           - '[ gui.market_product_editor.remove_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - market::remove_product
-          - common::switch_gui { market_product_menu_editor }
+          - Common:CancelEvent()
+          - Market:RemoveProduct()
+          - Common:SwitchGUI("market_product_menu_editor")
     '6':
       positions: 1/1; 3
       item:
@@ -1493,8 +1493,8 @@ market_product_editor:
           - '[ gui.market_product_editor.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_product_menu_editor }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_product_menu_editor")
 market_transaction:
   title: '[ gui.market_transaction.title ]'
   sound: $block_chest_open
@@ -1507,7 +1507,7 @@ market_transaction:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '1':
       positions: 1; 4
       item:
@@ -1517,8 +1517,8 @@ market_transaction:
           - '[ gui.market_transaction.back_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::switch_gui { market_category_menu }
+          - Common:CancelEvent()
+          - Common:SwitchGUI("market_category_menu")
     '2':
       positions:
         - 2 -> 5; 4
@@ -1528,7 +1528,7 @@ market_transaction:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '3':
       positions: 6; 4
       item:
@@ -1538,8 +1538,8 @@ market_transaction:
           - '[ gui.common.prev_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::prev_page { market_transaction }
+          - Common:CancelEvent()
+          - Common:PrevPage("market_transaction")
     '4':
       positions: 7; 4
       item:
@@ -1549,8 +1549,8 @@ market_transaction:
           - '[ gui.common.next_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::next_page { market_transaction }
+          - Common:CancelEvent()
+          - Common:NextPage("market_transaction")
 main_player_inv:
   title: '[ gui.main_player_inv.title ]'
   sound: $block_chest_open
@@ -1564,8 +1564,8 @@ main_player_inv:
           - '[ gui.main_player_inv.arena_chooser_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::open_top_gui { arena_chooser }
+          - Common:CancelEvent()
+          - Common:OpenTopGUI("arena_chooser")
     '1':
       positions: 2; 1
       item:
@@ -1575,8 +1575,8 @@ main_player_inv:
           - '[ gui.common.your_bp_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::open_top_gui { player_bp }
+          - Common:CancelEvent()
+          - Common:OpenTopGUI("player_bp")
 game_player_inv:
   title: '[ gui.game_player_inv.title ]'
   sound: $block_chest_open
@@ -1590,8 +1590,8 @@ game_player_inv:
           - '[ gui.game_player_inv.quit_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::open_top_gui { quit_game_confirm }
+          - Common:CancelEvent()
+          - Common:OpenTopGUI("quit_game_confirm")
     '1':
       positions: 1 -> 9; 2 -> 4
       item:
@@ -1599,7 +1599,7 @@ game_player_inv:
         name: '&f'
       functions:
         on_click:
-          - common::cancel_event
+          - Common:CancelEvent()
     '2':
       positions: 1/1; 3
       item:
@@ -1609,8 +1609,8 @@ game_player_inv:
           - '[ gui.common.your_bp_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::open_top_gui { player_bp }
+          - Common:CancelEvent()
+          - Common:OpenTopGUI("player_bp")
 game_player_inv_bw:
   title: '[ gui.game_player_inv.title ]'
   sound: $block_chest_open
@@ -1624,8 +1624,8 @@ game_player_inv_bw:
           - '[ gui.game_player_inv.quit_lore ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::open_top_gui { quit_game_confirm }
+          - Common:CancelEvent()
+          - Common:OpenTopGUI("quit_game_confirm")
 quit_game_confirm:
   title: '[ gui.quit_game_confirm.title ]'
   sound: $block_chest_open
@@ -1639,8 +1639,8 @@ quit_game_confirm:
         name: '[ gui.quit_game_confirm.no_btn ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::close_gui
+          - Common:CancelEvent()
+          - Common:CloseGUI()
     '1':
       positions: 5; 1
       item:
@@ -1648,5 +1648,5 @@ quit_game_confirm:
         name: '[ gui.quit_game_confirm.yes_btn ]'
       functions:
         on_click:
-          - common::cancel_event
-          - common::quit_game
+          - Common:CancelEvent()
+          - Common:QuitGame()
