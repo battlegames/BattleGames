@@ -77,6 +77,8 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
             VMUtil.setVariable(vm, VMUtil.WINDOW_DATA_PREFIX+e.getKey(), e.getValue());
         }
+        VMUtil.setVariable(vm, "_player_", report.getPlayer().getName());
+        VMUtil.setVariable(vm, "_slot_", report.getPosition());
         return vm;
     }
 
