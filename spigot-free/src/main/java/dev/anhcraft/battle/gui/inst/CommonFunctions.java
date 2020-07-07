@@ -42,7 +42,6 @@ import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Namespace("Common")
@@ -91,11 +90,19 @@ public class CommonFunctions extends GuiHandler {
         }
     }
 
-    @Function("ApplyItemValue")
-    public void applyItemValue(VM vm, IntVal slot){
+    @Function("ApplyValue")
+    public void applyValue(VM vm, StringVal container, StringVal data){
+        Object v;
+        if(container.get().equalsIgnoreCase("window")) {
+            v = report.getView().getWindow().getDataContainer().get(data.get());
+        } else if(container.get().equalsIgnoreCase("view")) {
+            v = report.getView().getDataContainer().get(data.get());
+        } else {
+            return;
+        }
         Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
-        if(f instanceof Consumer){
-            ((Consumer<ValueResult>) f).accept(new ValueResult(Objects.requireNonNull(report.getView().getSlot(slot.get())).getComponent().getItem()));
+        if (f instanceof Consumer) {
+            ((Consumer<ValueResult>) f).accept(new ValueResult(v));
         }
     }
 

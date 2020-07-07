@@ -19,11 +19,12 @@ item_value_editor:
           - '[ gui.value_editor.item_btn ]'
       functions:
         on_init:
-          - Common:PullItemFromData("value" "not-null")
           - Common:CopyCurrentSlot("window" "itemSlot")
+        on_render:
+          - Common:SetItemFromData("window" "value" $window_data_itemSlot "not-null")
         on_click:
           - Common:CancelEvent()
-          - Common:PullItemFromCursor("not-null")
+          - Common:SetDataFromCursor("window" "value" "not-null")
           - Common:RefreshView()
     '2':
       positions: 2/2; 2
@@ -33,7 +34,7 @@ item_value_editor:
       functions:
         on_click:
           - Common:CancelEvent()
-          - Common:PushItemToValue($window_data_itemSlot)
+          - Common:ApplyValue("window" "value")
           - Common:DelWindowData("itemSlot")
           - Common:DelWindowData("value")
           - Common:SwitchGUI($window_data_lastgui)
