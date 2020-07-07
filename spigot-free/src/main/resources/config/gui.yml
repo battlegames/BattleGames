@@ -21,7 +21,7 @@ item_value_editor:
         on_init:
           - Common:CopyCurrentSlot("window" "itemSlot")
         on_render:
-          - Common:SetItemFromData("window" "value" $window_data_itemSlot "not-null")
+          - Common:SetItemFromData("window" "value" $_window_itemSlot "not-null")
         on_click:
           - Common:CancelEvent()
           - Common:SetDataFromCursor("window" "value" "not-null")
@@ -37,7 +37,7 @@ item_value_editor:
           - Common:ApplyValue("window" "value")
           - Common:DelWindowData("itemSlot")
           - Common:DelWindowData("value")
-          - Common:SwitchGUI($window_data_lastgui)
+          - Common:SwitchGUI($_window_lastgui)
 boolean_value_editor:
   title: '[ gui.value_editor.boolean_title ]'
   sound: $block_chest_open
@@ -73,9 +73,9 @@ boolean_value_editor:
       functions:
         on_click:
           - Common:CancelEvent()
-          - Common:ApplyValue($window_data_value)
+          - Common:ApplyValue($_window_value)
           - Common:DelWindowData("value")
-          - Common:SwitchGUI($window_data_lastgui)
+          - Common:SwitchGUI($_window_lastgui)
 int_value_editor:
   title: '[ gui.value_editor.int_title ]'
   sound: $block_chest_open
@@ -109,9 +109,9 @@ int_value_editor:
       functions:
         on_click:
           - Common:CancelEvent()
-          - Common:ApplyValue($window_data_value)
+          - Common:ApplyValue($_window_value)
           - Common:DelWindowData("value")
-          - Common:SwitchGUI($window_data_lastgui)
+          - Common:SwitchGUI($_window_lastgui)
     '3':
       positions: 1; 4
       item:
@@ -235,9 +235,9 @@ real_value_editor:
       functions:
         on_click:
           - Common:CancelEvent()
-          - Common:ApplyValue($window_data_value)
+          - Common:ApplyValue($_window_value)
           - Common:DelWindowData("value")
-          - Common:SwitchGUI($window_data_lastgui)
+          - Common:SwitchGUI($_window_lastgui)
     '3':
       positions: 1; 4
       item:

@@ -25,8 +25,8 @@ import dev.anhcraft.inst.values.*;
 import org.jetbrains.annotations.NotNull;
 
 public class VMUtil {
-    public static final String WINDOW_DATA_PREFIX = "window_data_";
-    public static final String VIEW_DATA_PREFIX = "view_data_";
+    public static final String WINDOW_DATA_PREFIX = "_window_";
+    public static final String VIEW_DATA_PREFIX = "_view_";
 
     public static void setVariable(VM vm, String k, Object v){
         if(v instanceof String) {
