@@ -77,6 +77,10 @@ public class Component extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private List<String> clickFunction = new ArrayList<>();
 
+    @Key("functions.on_render")
+    @IgnoreValue(ifNull = true)
+    private List<String> renderFunction = new ArrayList<>();
+
     @Key("pagination")
     private String pagination;
 
@@ -121,6 +125,11 @@ public class Component extends ConfigurableObject {
     @NotNull
     public List<String> getClickFunction() {
         return clickFunction;
+    }
+
+    @NotNull
+    public List<String> getRenderFunction() {
+        return renderFunction;
     }
 
     private int parseNum(String s){

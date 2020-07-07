@@ -150,6 +150,14 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                             ),
                             player
                     ).build());
+            SlotReport slotReport = new SlotReport(player, null, view, slot);
+            try {
+                VM vm = createVM(slotReport);
+                Instruction[] ins = c.getRenderFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                vm.newSession(ins).execute();
+            } catch (FunctionRegisterFailed functionRegisterFailed) {
+                functionRegisterFailed.printStackTrace();
+            }
         }
         BattleDebugger.endTiming("gui-component-render");
     }
