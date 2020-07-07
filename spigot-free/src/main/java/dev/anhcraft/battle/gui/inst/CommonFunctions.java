@@ -22,6 +22,8 @@ package dev.anhcraft.battle.gui.inst;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.gui.ValueResult;
@@ -89,140 +91,170 @@ public class CommonFunctions extends GuiHandler {
         }
     }
 
-    private void add(String key, NumberVal<?> val, TempDataContainer tdc){
+    @Function("ApplyItemValue")
+    public void applyItemValue(VM vm, IntVal slot){
+        Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
+        if(f instanceof Consumer){
+            ((Consumer<ValueResult>) f).accept(new ValueResult(Objects.requireNonNull(report.getView().getSlot(slot.get())).getComponent().getItem()));
+        }
+    }
+
+    private void add(VM vm, String key, NumberVal<?> val, TempDataContainer tdc){
         Object o = tdc.getDataContainer().get(key);
         if(o instanceof Byte){
-            tdc.getDataContainer().put(key, ((Byte) o) + ((byte) VMUtil.getInt(val)));
+            tdc.getDataContainer().put(key, o = ((Byte) o) + ((byte) VMUtil.getInt(val)));
         } else if(o instanceof Short){
-            tdc.getDataContainer().put(key, ((Short) o) + ((short) VMUtil.getInt(val)));
+            tdc.getDataContainer().put(key, o = ((Short) o) + ((short) VMUtil.getInt(val)));
         } else if(o instanceof Integer){
-            tdc.getDataContainer().put(key, ((Integer) o) + VMUtil.getInt(val));
+            tdc.getDataContainer().put(key, o = ((Integer) o) + VMUtil.getInt(val));
         } else if(o instanceof Double){
-            tdc.getDataContainer().put(key, ((Double) o) + VMUtil.getDouble(val));
+            tdc.getDataContainer().put(key, o = ((Double) o) + VMUtil.getDouble(val));
         } else if(o instanceof Float){
-            tdc.getDataContainer().put(key, ((Float) o) + ((float) VMUtil.getDouble(val)));
+            tdc.getDataContainer().put(key, o = ((Float) o) + ((float) VMUtil.getDouble(val)));
         } else if(o instanceof Long){
-            tdc.getDataContainer().put(key, ((Long) o) + VMUtil.getLong(val));
+            tdc.getDataContainer().put(key, o = ((Long) o) + VMUtil.getLong(val));
+        }
+        if(tdc instanceof Window) {
+            VMUtil.setVariable(vm, VMUtil.WINDOW_DATA_PREFIX+key, o);
+        } else if(tdc instanceof View) {
+            VMUtil.setVariable(vm, VMUtil.VIEW_DATA_PREFIX+key, o);
         }
     }
 
     @Function("AddWindowData")
     public void addWindowData(VM vm, StringVal key, IntVal delta) {
-        add(key.get(), delta, report.getView().getWindow());
+        add(vm, key.get(), delta, report.getView().getWindow());
     }
 
     @Function("AddWindowData")
     public void addWindowData(VM vm, StringVal key, LongVal delta) {
-        add(key.get(), delta, report.getView().getWindow());
+        add(vm, key.get(), delta, report.getView().getWindow());
     }
 
     @Function("AddWindowData")
     public void addWindowData(VM vm, StringVal key, DoubleVal delta) {
-        add(key.get(), delta, report.getView().getWindow());
+        add(vm, key.get(), delta, report.getView().getWindow());
     }
 
     @Function("AddViewData")
     public void addViewData(VM vm, StringVal key, IntVal delta) {
-        add(key.get(), delta, report.getView());
+        add(vm, key.get(), delta, report.getView());
     }
 
     @Function("AddViewData")
     public void addViewData(VM vm, StringVal key, LongVal delta) {
-        add(key.get(), delta, report.getView());
+        add(vm, key.get(), delta, report.getView());
     }
 
     @Function("AddViewData")
     public void addViewData(VM vm, StringVal key, DoubleVal delta) {
-        add(key.get(), delta, report.getView());
+        add(vm, key.get(), delta, report.getView());
     }
 
-    private void negate(String key, TempDataContainer tdc){
+    private void negate(VM vm, String key, TempDataContainer tdc){
         Object o = tdc.getDataContainer().get(key);
         if(o instanceof Boolean){
-            tdc.getDataContainer().put(key, !((Boolean) o));
+            tdc.getDataContainer().put(key, o = !((Boolean) o));
         } else if(o instanceof Byte){
-            tdc.getDataContainer().put(key, -((Byte) o));
+            tdc.getDataContainer().put(key, o = -((Byte) o));
         } else if(o instanceof Short){
-            tdc.getDataContainer().put(key, -((Short) o));
+            tdc.getDataContainer().put(key, o = -((Short) o));
         }  else if(o instanceof Integer){
-            tdc.getDataContainer().put(key, -((Integer) o));
+            tdc.getDataContainer().put(key, o = -((Integer) o));
         } else if(o instanceof Double){
-            tdc.getDataContainer().put(key, -((Double) o));
+            tdc.getDataContainer().put(key, o = -((Double) o));
         } else if(o instanceof Float){
-            tdc.getDataContainer().put(key, -((Float) o));
+            tdc.getDataContainer().put(key, o = -((Float) o));
         } else if(o instanceof Long){
-            tdc.getDataContainer().put(key, -((Long) o));
+            tdc.getDataContainer().put(key, o = -((Long) o));
+        }
+        if(tdc instanceof Window) {
+            VMUtil.setVariable(vm, VMUtil.WINDOW_DATA_PREFIX+key, o);
+        } else if(tdc instanceof View) {
+            VMUtil.setVariable(vm, VMUtil.VIEW_DATA_PREFIX+key, o);
         }
     }
 
     @Function("NegateWindowData")
     public void negateWindowData(VM vm, StringVal key) {
-        negate(key.get(), report.getView().getWindow());
+        negate(vm, key.get(), report.getView().getWindow());
     }
 
     @Function("NegateViewData")
     public void negateViewData(VM vm, StringVal key) {
-        negate(key.get(), report.getView());
+        negate(vm, key.get(), report.getView());
     }
 
     @Function("SetViewData")
     public void setViewData(VM vm, StringVal key, StringVal value) {
         report.getView().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetViewData")
     public void setViewData(VM vm, StringVal key, BoolVal value) {
         report.getView().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetViewData")
     public void setViewData(VM vm, StringVal key, IntVal value) {
         report.getView().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetViewData")
     public void setViewData(VM vm, StringVal key, LongVal value) {
         report.getView().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetViewData")
     public void setViewData(VM vm, StringVal key, DoubleVal value) {
         report.getView().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), value);
     }
     
     @Function("SetWindowData")
     public void setWindowData(VM vm, StringVal key, StringVal value) {
         report.getView().getWindow().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetWindowData")
     public void setWindowData(VM vm, StringVal key, BoolVal value) {
         report.getView().getWindow().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetWindowData")
     public void setWindowData(VM vm, StringVal key, IntVal value) {
         report.getView().getWindow().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetWindowData")
     public void setWindowData(VM vm, StringVal key, LongVal value) {
         report.getView().getWindow().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("SetWindowData")
     public void setWindowData(VM vm, StringVal key, DoubleVal value) {
         report.getView().getWindow().getDataContainer().put(key.get(), value.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), value);
     }
 
     @Function("DelViewData")
     public void delViewData(VM vm, StringVal key) {
         report.getView().getDataContainer().remove(key.get());
+        vm.setVariable(VMUtil.VIEW_DATA_PREFIX+key.get(), null);
     }
 
     @Function("DelWindowData")
     public void delWindowData(VM vm, StringVal key) {
         report.getView().getWindow().getDataContainer().remove(key.get());
+        vm.setVariable(VMUtil.WINDOW_DATA_PREFIX+key.get(), null);
     }
 
     @Function("CancelEvent")
@@ -290,40 +322,50 @@ public class CommonFunctions extends GuiHandler {
     @Function("CopyCurrentSlot")
     public void copyCurrentSlot(VM vm, StringVal container, StringVal data){
         if(container.get().equalsIgnoreCase("window")) {
-            report.getView().getWindow().getDataContainer().put(data.get(), report.getPosition());
+            String k = data.get();
+            int p = report.getPosition();
+            report.getView().getWindow().getDataContainer().put(k, p);
+            VMUtil.setVariable(vm, VMUtil.WINDOW_DATA_PREFIX+k, p);
         } else if(container.get().equalsIgnoreCase("view")) {
-            report.getView().getDataContainer().put(data.get(), report.getPosition());
+            String k = data.get();
+            int p = report.getPosition();
+            report.getView().getDataContainer().put(k, p);
+            VMUtil.setVariable(vm, VMUtil.VIEW_DATA_PREFIX+k, p);
         }
     }
 
-    @Function("PullItemFromData")
-    public void pullItemFromData(VM vm, StringVal data, StringVal notNull){
-        Object f = report.getView().getWindow().getDataContainer().remove(data.get());
+    @Function("SetItemFromData")
+    public void setItemFromData(VM vm, StringVal container, StringVal data, IntVal slot, StringVal notNull){
+        Object f;
+        if(container.get().equalsIgnoreCase("window")) {
+            f = report.getView().getWindow().getDataContainer().get(data.get());
+        } else if(container.get().equalsIgnoreCase("view")) {
+            f = report.getView().getDataContainer().get(data.get());
+        } else {
+            return;
+        }
         if(f instanceof ItemStack) {
             if(!notNull.get().equalsIgnoreCase("not-null") || !ItemUtil.isNull((ItemStack) f)) {
-                report.getSlot().getComponent().setItem(PreparedItem.of((ItemStack) f));
+                report.getView().getInventory().setItem(slot.get(), (ItemStack) f);
             }
         } else if(f instanceof PreparedItem) {
             if(!notNull.get().equalsIgnoreCase("not-null") || !ItemUtil.isNull(((PreparedItem) f).material())) {
-                report.getSlot().getComponent().setItem((PreparedItem) f);
+                report.getView().getInventory().setItem(slot.get(), ((PreparedItem) f).build());
             }
         }
     }
 
-    @Function("PullItemFromCursor")
-    public void pullItemFromCursor(VM vm, StringVal notNull){
+    @Function("SetDataFromCursor")
+    public void setDataFromCursor(VM vm, StringVal container, StringVal data, StringVal notNull){
         ItemStack i = report.getPlayer().getItemOnCursor();
         if(!notNull.get().equalsIgnoreCase("not-null") || !ItemUtil.isNull(i)) {
-            report.getSlot().getComponent().setItem(PreparedItem.of(i));
-            report.getPlayer().setItemOnCursor(null);
-        }
-    }
-
-    @Function("PushItemToValue")
-    public void pushItemToValue(VM vm, IntVal slot){
-        Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
-        if(f instanceof Consumer){
-            ((Consumer<ValueResult>) f).accept(new ValueResult(Objects.requireNonNull(report.getView().getSlot(slot.get())).getComponent().getItem()));
+            if(container.get().equalsIgnoreCase("window")) {
+                report.getView().getWindow().getDataContainer().put(data.get(), i.clone());
+                report.getPlayer().setItemOnCursor(null);
+            } else if(container.get().equalsIgnoreCase("view")) {
+                report.getView().getDataContainer().put(data.get(), i.clone());
+                report.getPlayer().setItemOnCursor(null);
+            }
         }
     }
 
