@@ -82,7 +82,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         return vm;
     }
 
-    public Window callClickEvent(Player p, int slot, boolean isTop, Event event) {
+    public Window callClickEvent(@NotNull Player p, int slot, boolean isTop, @NotNull Event event, @NotNull String clickType) {
         Window w = getWindow(p);
         View v = isTop ? w.getTopView() : w.getBottomView();
         if(v == null) return w;
@@ -91,6 +91,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         SlotReport slotReport = new SlotReport(p, event, v, slot);
         try {
             VM vm = createVM(slotReport);
+            VMUtil.setVariable(vm, "_click_type_", clickType);
             Instruction[] ins = s.getComponent().getClickFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
             vm.newSession(ins).execute();
             if (s.getExtraClickFunction() != null) {

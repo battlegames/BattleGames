@@ -182,7 +182,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
-        plugin.guiManager.callClickEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event);
+        plugin.guiManager.callClickEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event, "SWAP_ITEM");
         LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
         if(game != null){
             game.getMode().getController(c -> c.onSwapItem(event, game));
@@ -198,7 +198,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
         InventoryType f = p.getOpenInventory().getType();
         if(f == InventoryType.CRAFTING || (f == InventoryType.CREATIVE && p.getGameMode() == GameMode.CREATIVE)){
-            plugin.guiManager.callClickEvent(p, p.getInventory().getHeldItemSlot(), false, event);
+            plugin.guiManager.callClickEvent(p, p.getInventory().getHeldItemSlot(), false, event, "DROP_ITEM");
         }
     }
 
@@ -266,8 +266,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 event.setUseInteractedBlock(Event.Result.DENY);
                 return;
             }
+            plugin.guiManager.callClickEvent(p, p.getInventory().getHeldItemSlot(), false, event, "INTERACT_" + event.getAction().name());
         }
-        plugin.guiManager.callClickEvent(p, p.getInventory().getHeldItemSlot(), false, event);
     }
 
     @EventHandler
@@ -618,7 +618,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void clickInv(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
-            Window w = plugin.guiManager.callClickEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event);
+            Window w = plugin.guiManager.callClickEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event, "INVENTORY_" + event.getAction().name());
             LocalGame game = plugin.arenaManager.getGame(p);
             if(game != null) {
                 game.getMode().getController(c -> c.onClickInventory(event, game, p, w));
