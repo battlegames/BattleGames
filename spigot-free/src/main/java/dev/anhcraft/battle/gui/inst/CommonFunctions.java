@@ -28,6 +28,7 @@ import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.gui.ValueResult;
 import dev.anhcraft.battle.system.ResourcePack;
+import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.TempDataContainer;
 import dev.anhcraft.battle.utils.VMUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -41,6 +42,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -379,5 +381,18 @@ public class CommonFunctions extends GuiHandler {
     @Function("InstallResourcePack")
     public void installResourcePack(VM vm) {
         ResourcePack.send(report.getPlayer());
+    }
+
+    @Function("FormatPAPI")
+    public void formatPAPI(VM vm, StringVal var, StringVal text) {
+        vm.setVariable(var.get(), new StringVal() {
+            final String o = PlaceholderUtil.formatPAPI(report.getPlayer(), text.get());
+
+            @NotNull
+            @Override
+            public String get() {
+                return o;
+            }
+        });
     }
 }
