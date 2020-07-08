@@ -618,7 +618,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     public void clickInv(InventoryClickEvent event) {
         if(event.getWhoClicked() instanceof Player && event.getClickedInventory() != null) {
             Player p = (Player) event.getWhoClicked();
-            Window w = plugin.guiManager.callClickEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event, "INVENTORY_" + event.getAction().name());
+            Window w = plugin.guiManager.callClickEvent(p, event.getSlot(), !(event.getClickedInventory() instanceof PlayerInventory), event, "INVENTORY_" + event.getClick().name());
             LocalGame game = plugin.arenaManager.getGame(p);
             if(game != null) {
                 game.getMode().getController(c -> c.onClickInventory(event, game, p, w));
