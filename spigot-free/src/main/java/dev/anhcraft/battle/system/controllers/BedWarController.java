@@ -34,6 +34,7 @@ import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
+import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
@@ -184,11 +185,9 @@ public class BedWarController extends DeathmatchController implements IBedWar {
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player, null);
-                if(game.getMode().isWaitingScoreboardEnabled()) {
-                    String title = game.getMode().getWaitingScoreboardTitle();
-                    List<String> content = game.getMode().getWaitingScoreboardContent();
-                    int len = game.getMode().isWaitingScoreboardFixedLength();
-                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
+                BattleScoreboard bs = game.getMode().getWaitingScoreboard();
+                if(bs.isEnabled()) {
+                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength()));
                 }
                 if(m <= game.getPlayerCount()) countdown(game);
                 break;
@@ -305,11 +304,9 @@ public class BedWarController extends DeathmatchController implements IBedWar {
     @Nullable
     private PlayerScoreboard addPlayer(LocalGame game, Player player, BWTeam dt) {
         PlayerScoreboard ps = null;
-        if(game.getMode().isPlayingScoreboardEnabled()) {
-            String title = game.getMode().getPlayingScoreboardTitle();
-            List<String> content = game.getMode().getPlayingScoreboardContent();
-            int len = game.getMode().isPlayingScoreboardFixedLength();
-            ps = new PlayerScoreboard(player, title, content, len);
+        BattleScoreboard bs = game.getMode().getPlayingScoreboard();
+        if(bs.isEnabled()) {
+            ps = new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength());
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
         respw(game, player, dt);

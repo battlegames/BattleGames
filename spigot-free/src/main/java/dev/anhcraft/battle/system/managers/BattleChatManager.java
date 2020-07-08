@@ -48,17 +48,17 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
         LocalGame g = plugin.arenaManager.getGame(player);
         if(g != null){
             if (g.getPhase() == GamePhase.WAITING) {
-                if (!g.getMode().isWaitingChatEnabled()) return false;
+                if (!g.getMode().getWaitingChat().isEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
-                        .getMode().getWaitingChatFormat())
+                        .getMode().getWaitingChat().getFormat())
                         .replace("<message>", message);
                 for (Player p : g.getPlayers().keySet()){
                     p.sendMessage(q);
                 }
             } else {
-                if (!g.getMode().isPlayingChatEnabled()) return false;
+                if (!g.getMode().getPlayingChat().isEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
-                        .getMode().getPlayingChatFormat())
+                        .getMode().getPlayingChat().getFormat())
                         .replace("<message>", message);
                 for (Player p : g.getPlayers().keySet()){
                     p.sendMessage(q);

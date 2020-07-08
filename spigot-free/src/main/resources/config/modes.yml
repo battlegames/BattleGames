@@ -1,42 +1,17 @@
-# You'll configure modes here
-dm: # <-- This mode's id (do not change)
-  # The mode's name
-  # [required]
+# Configdoc: https://anhcraft.dev/cd/battle/Mode.schema.html
+
+dm:
   name: "&bDeathmatch"
-
-  # You can write a short sentence to describe this mode
-  # [required]
   description: "&fA game where single players attack each other to know who is the winner"
-
-  # Chat for waiting phase
   waiting_chat:
-    # Should we enable it?
     enabled: true
-
-    # The format
-    # [optional] [default: <empty>] [placeholder supported]
     format: "&8%player_displayname%&f: <message>"
-
-  # Chat for playing phase
   playing_chat:
-    # Should we enable it?
     enabled: true
-
-    # The format
-    # [optional] [default: <empty>] [placeholder supported]
     format: "&8%player_displayname%&f: <message>"
-
-  # A built-in scoreboard which is used during the waiting phase
   waiting_scoreboard:
-    # Use this or not?
     enabled: true
-
-    # This scoreboard's title
-    # [optional] [default: <empty>] [placeholder supported]
     title: "&a &c&lBATTLE"
-
-    # The content of this scoreboard
-    # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
       - "&aDeathmatch - %battle_arena_name%"
@@ -46,26 +21,10 @@ dm: # <-- This mode's id (do not change)
       - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
-
-    # The fixed length of this scoreboard
-    # Set to 0 if you wanna disabling this option
-    # Maximum length for a scoreboard is:
-    # - 128 characters (1.13+)
-    # - 32 characters (1.12)
-    # [optional] [default: 0]
     fixed_length: 0
-
-  # A built-in scoreboard which is used during the playing phase
   playing_scoreboard:
-    # Use this or not?
     enabled: true
-
-    # The title
-    # [optional] [default: <empty>] [placeholder supported]
     title: "&a &c&lBATTLE"
-
-    # The content
-    # [optional] [placeholder supported] [maximum lines: 15]
     content:
       - "&e"
       - "&aDeathmatch - %battle_arena_name%"
@@ -78,13 +37,6 @@ dm: # <-- This mode's id (do not change)
       - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
       - "&c"
       - "&dminecraft.net"
-
-    # The fixed length of this scoreboard
-    # Set to 0 if you wanna disabling this option
-    # Maximum length for a scoreboard is:
-    # - 128 characters (1.13+)
-    # - 32 characters (1.12)
-    # [optional] [default: 0]
     fixed_length: 0
 
 tdm:

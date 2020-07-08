@@ -24,30 +24,40 @@ import dev.anhcraft.battle.api.arena.mode.options.BedWarOptions;
 import dev.anhcraft.battle.api.arena.mode.options.CaptureTheFlagOptions;
 import dev.anhcraft.battle.api.arena.mode.options.DeathmatchOptions;
 import dev.anhcraft.battle.api.arena.mode.options.TeamDeathmatchOptions;
-import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.api.chat.BattleChat;
+import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.Validation;
 import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.configuration.ConfigurationSection;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-public final class Mode implements Informative {
-    private static final Map<String, Mode> MODE_REGISTRY = new ConcurrentHashMap<>();
+@Schema
+public class Mode extends ConfigurableObject implements Informative {
+    public static final ConfigSchema<Mode> SCHEMA = ConfigSchema.of(Mode.class);
+    private static final Map<String, Mode> MODE_REGISTRY = new HashMap<>();
 
-    @Contract("!null -> param1")
     @NotNull
     public static Mode registerMode(@NotNull Mode mode){
         Condition.argNotNull("mode", mode);
         if(MODE_REGISTRY.containsKey(mode.id)) throw new IllegalStateException("Mode is already registered");
         MODE_REGISTRY.put(mode.id, mode);
         return mode;
+    }
+
+    public static boolean unregisterMode(@NotNull String id){
+        return MODE_REGISTRY.remove(id) != null;
     }
 
     @NotNull
@@ -94,49 +104,42 @@ public final class Mode implements Informative {
 
     private final ConfigSchema<?> optionSchema;
     private final String id;
-    private String name;
-    private String description;
-    private boolean waitingChatEnabled;
-    private String waitingChatFormat;
-    private boolean playingChatEnabled;
-    private String playingChatFormat;
-    private boolean waitingScoreboardEnabled;
-    private String waitingScoreboardTitle;
-    private List<String> waitingScoreboardContent;
-    private int waitingScoreboardFixedLength;
-    private boolean playingScoreboardEnabled;
-    private String playingScoreboardTitle;
-    private List<String> playingScoreboardContent;
-    private int playingScoreboardFixedLength;
-    private ConfigurationSection config;
     private IMode controller;
 
-    public Mode(@NotNull String id, @NotNull ConfigSchema optionSchema){
+    @Key("name")
+    @Validation(notNull = true)
+    @Explanation("A nice name for the game mode")
+    private String name;
+
+    @Key("description")
+    @Validation(notNull = true)
+    @Explanation("A nice description for the game mode")
+    private String description;
+
+    @Key("waiting_chat")
+    @Validation(notNull = true)
+    @Explanation("Chat configuration (during waiting phase)")
+    private BattleChat waitingChat;
+
+    @Key("playing_chat")
+    @Validation(notNull = true)
+    @Explanation("Chat configuration (during playing phase)")
+    private BattleChat playingChat;
+
+    @Key("waiting_scoreboard")
+    @Validation(notNull = true)
+    @Explanation("Scoreboard configuration (during waiting phase)")
+    private BattleScoreboard waitingScoreboard;
+
+    @Key("playing_scoreboard")
+    @Validation(notNull = true)
+    @Explanation("Scoreboard configuration (during playing phase)")
+    private BattleScoreboard playingScoreboard;
+
+    public Mode(@NotNull String id, @NotNull ConfigSchema<?> optionSchema){
         Condition.argNotNull("id", id);
         this.id = id.toLowerCase();
         this.optionSchema = optionSchema;
-    }
-
-    public void init(@NotNull ConfigurationSection conf){
-        Condition.argNotNull("conf", conf);
-
-        config = conf;
-        name = conf.getString("name");
-        if(name == null) throw new NullPointerException("Name must be specified");
-        description = conf.getString("description");
-        if(description == null) throw new NullPointerException("Description must be specified");
-        waitingChatEnabled = conf.getBoolean("waiting_chat.enabled");
-        waitingChatFormat = conf.getString("waiting_chat.format", "");
-        playingChatEnabled = conf.getBoolean("playing_chat.enabled");
-        playingChatFormat = conf.getString("playing_chat.format", "");
-        waitingScoreboardEnabled = conf.getBoolean("waiting_scoreboard.enabled");
-        waitingScoreboardTitle = conf.getString("waiting_scoreboard.title", "");
-        waitingScoreboardContent = conf.getStringList("waiting_scoreboard.content");
-        waitingScoreboardFixedLength = conf.getInt("waiting_scoreboard.fixed_length");
-        playingScoreboardEnabled = conf.getBoolean("playing_scoreboard.enabled");
-        playingScoreboardTitle = conf.getString("playing_scoreboard.title", "");
-        playingScoreboardContent = conf.getStringList("playing_scoreboard.content");
-        playingScoreboardFixedLength = conf.getInt("playing_scoreboard.fixed_length");
     }
 
     @NotNull
@@ -154,63 +157,24 @@ public final class Mode implements Informative {
         return description;
     }
 
-    public boolean isWaitingChatEnabled() {
-        return waitingChatEnabled;
+    @NotNull
+    public BattleChat getWaitingChat() {
+        return waitingChat;
     }
 
     @NotNull
-    public String getWaitingChatFormat() {
-        return waitingChatFormat;
-    }
-
-    public boolean isPlayingChatEnabled() {
-        return playingChatEnabled;
+    public BattleChat getPlayingChat() {
+        return playingChat;
     }
 
     @NotNull
-    public String getPlayingChatFormat() {
-        return playingChatFormat;
-    }
-
-    public boolean isWaitingScoreboardEnabled() {
-        return waitingScoreboardEnabled;
+    public BattleScoreboard getWaitingScoreboard() {
+        return waitingScoreboard;
     }
 
     @NotNull
-    public String getWaitingScoreboardTitle() {
-        return waitingScoreboardTitle;
-    }
-
-    @NotNull
-    public List<String> getWaitingScoreboardContent() {
-        return waitingScoreboardContent;
-    }
-
-    public int isWaitingScoreboardFixedLength() {
-        return waitingScoreboardFixedLength;
-    }
-
-    public boolean isPlayingScoreboardEnabled() {
-        return playingScoreboardEnabled;
-    }
-
-    @NotNull
-    public String getPlayingScoreboardTitle() {
-        return playingScoreboardTitle;
-    }
-
-    @NotNull
-    public List<String> getPlayingScoreboardContent() {
-        return playingScoreboardContent;
-    }
-
-    public int isPlayingScoreboardFixedLength() {
-        return playingScoreboardFixedLength;
-    }
-
-    @NotNull
-    public ConfigurationSection getConfig() {
-        return config;
+    public BattleScoreboard getPlayingScoreboard() {
+        return playingScoreboard;
     }
 
     @NotNull

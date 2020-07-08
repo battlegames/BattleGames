@@ -33,6 +33,7 @@ import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.inventory.item.NullBattleItem;
+import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -96,11 +97,9 @@ public class DeathmatchController extends ModeController {
         switch (game.getPhase()){
             case WAITING:{
                 respw(game, player);
-                if(game.getMode().isWaitingScoreboardEnabled()) {
-                    String title = game.getMode().getWaitingScoreboardTitle();
-                    List<String> content = game.getMode().getWaitingScoreboardContent();
-                    int len = game.getMode().isWaitingScoreboardFixedLength();
-                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, title, content, len));
+                BattleScoreboard bs = game.getMode().getWaitingScoreboard();
+                if(bs.isEnabled()) {
+                    plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength()));
                 }
                 if(m <= game.getPlayerCount()) countdown(game);
                 break;
@@ -153,11 +152,9 @@ public class DeathmatchController extends ModeController {
     @Nullable
     private PlayerScoreboard addPlayer(LocalGame game, Player player) {
         PlayerScoreboard ps = null;
-        if(game.getMode().isPlayingScoreboardEnabled()) {
-            String title = game.getMode().getPlayingScoreboardTitle();
-            List<String> content = game.getMode().getPlayingScoreboardContent();
-            int len = game.getMode().isPlayingScoreboardFixedLength();
-            ps = new PlayerScoreboard(player, title, content, len);
+        BattleScoreboard bs = game.getMode().getPlayingScoreboard();
+        if(bs.isEnabled()) {
+            ps = new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength());
             ps.setNameTagVisibility(Team.OptionStatus.NEVER);
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
