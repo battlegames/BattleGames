@@ -25,6 +25,8 @@ item_value_editor:
         on_render:
         - Common:SetItemFromData("window" "value" $_window_itemSlot "not-null")
         on_click:
+        - Inst:Return() ? $_click_type_ == "INVENTORY_RIGHT"
+        - Inst:Return() ? $_click_type_ == "INVENTORY_SHIFT_RIGHT"
         - Common:CancelEvent()
         - Common:SetDataFromCursor("window" "value" "not-null")
         - Common:RefreshView()
