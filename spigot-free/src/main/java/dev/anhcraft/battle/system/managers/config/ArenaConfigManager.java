@@ -29,10 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ArenaConfigManager extends ConfigManager {
     public final Map<String, Arena> ARENA_MAP = new HashMap<>();
@@ -51,8 +48,9 @@ public class ArenaConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.getLogger().info("[DEBUG] Total arenas found: " + getSettings().getKeys(false).size());
-        plugin.limit(loggerName, getSettings().getKeys(false), 8).forEach(s -> {
+        Set<String> keys = getSettings().getKeys(false);
+        plugin.getLogger().info("Total arenas found: " + keys.size());
+        plugin.limit(loggerName, keys, 8).forEach(s -> {
             Arena arena = new Arena(s);
             plugin.getLogger().info("- Loading arena " + s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
