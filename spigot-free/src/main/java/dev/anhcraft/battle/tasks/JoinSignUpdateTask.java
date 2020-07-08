@@ -31,6 +31,7 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,31 +44,32 @@ public class JoinSignUpdateTask extends BattleComponent implements Runnable {
     public void run() {
         List<String> lines = plugin.getGeneralConfig().getJoinSignDynamicLines();
         if(lines == null || lines.isEmpty()) return;
-        for (Map.Entry<BlockPosition, String> e : plugin.getServerData().getJoinSigns()) {
+        for (Iterator<Map.Entry<BlockPosition, String>> it = plugin.getServerData().getJoinSigns().iterator(); it.hasNext(); ) {
+            Map.Entry<BlockPosition, String> e = it.next();
             Block b = e.getKey().getBlock();
-            if (b.getType().name().contains("SIGN")) {
-                if (b.getState() instanceof Sign) {
-                    Arena arena = plugin.getArena(e.getValue());
-                    if (arena == null) continue;
-                    InfoHolder infoHolder;
-                    Game game = ApiProvider.consume().getArenaManager().getGame(arena);
-                    if(game != null) {
-                        infoHolder = new InfoHolder("game_");
-                        game.inform(infoHolder);
-                    } else {
-                        infoHolder = new InfoHolder("arena_");
-                        arena.inform(infoHolder);
-                    }
-                    InfoReplacer compiled = infoHolder.compile();
-                    Sign state = (Sign) b.getState();
-                    int i = 0;
-                    for (String s : lines) {
-                        state.setLine(i, compiled.replace(s));
-                        i++;
-                    }
-                    state.update(true);
+            if (b.getState() instanceof Sign) {
+                Arena arena = plugin.getArena(e.getValue());
+                if (arena == null) continue;
+                InfoHolder infoHolder;
+                Game game = ApiProvider.consume().getArenaManager().getGame(arena);
+                if(game != null) {
+                    infoHolder = new InfoHolder("game_");
+                    game.inform(infoHolder);
+                } else {
+                    infoHolder = new InfoHolder("arena_");
+                    arena.inform(infoHolder);
                 }
+                InfoReplacer compiled = infoHolder.compile();
+                Sign state = (Sign) b.getState();
+                int i = 0;
+                for (String s : lines) {
+                    state.setLine(i, compiled.replace(s));
+                    i++;
+                }
+                state.update(true);
+                continue;
             }
+            it.remove();
         }
     }
 }
