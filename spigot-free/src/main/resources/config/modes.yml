@@ -2,7 +2,6 @@
 
 dm:
   name: "&bDeathmatch"
-  description: "&fA game where single players attack each other to know who is the winner"
   waiting_chat:
     enabled: true
     format: "&8%player_displayname%&f: <message>"
@@ -41,7 +40,6 @@ dm:
 
 tdm:
   name: "&eTeam &bDeathmatch"
-  description: "&fA game where two teams attack each other to know who is the winner"
   waiting_chat:
     enabled: true
     format: "&8%player_displayname%&f: <message>"
@@ -79,7 +77,6 @@ tdm:
 
 ctf:
   name: "&cCapture &fthe &eflag"
-  description: "&fA game where two teams capture as many flags as possible to become the winner"
   waiting_chat:
     enabled: true
     format: "&8%player_displayname%&f: <message>"
@@ -120,7 +117,6 @@ ctf:
 
 bw:
   name: "&eBedWars"
-  description: "&fA game where you (and your teammates) have to protect your bed against enemies and kill them to obtain the victory"
   waiting_chat:
     enabled: true
     format: "&8%player_displayname%&f: <message>"

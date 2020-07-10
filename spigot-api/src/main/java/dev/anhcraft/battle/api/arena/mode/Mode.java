@@ -111,11 +111,6 @@ public class Mode extends ConfigurableObject implements Informative {
     @Explanation("A nice name for the game mode")
     private String name;
 
-    @Key("description")
-    @Validation(notNull = true)
-    @Explanation("A nice description for the game mode")
-    private String description;
-
     @Key("waiting_chat")
     @Validation(notNull = true)
     @Explanation("Chat configuration (during waiting phase)")
@@ -150,11 +145,6 @@ public class Mode extends ConfigurableObject implements Informative {
     @NotNull
     public String getName() {
         return name;
-    }
-
-    @NotNull
-    public String getDescription() {
-        return description;
     }
 
     @NotNull
@@ -197,8 +187,6 @@ public class Mode extends ConfigurableObject implements Informative {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        holder.inform("id", id)
-                .inform("name", name)
-                .inform("description", description);
+        holder.inform("id", id).inform("name", name);
     }
 }

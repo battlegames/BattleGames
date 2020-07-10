@@ -147,9 +147,6 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("mode_name", (player, pd, game, gp) -> {
             return game == null ? null : game.getArena().getMode().getName();
         });
-        handlers.put("mode_description", (player, pd, game, gp) -> {
-            return game == null ? null : game.getArena().getMode().getDescription();
-        });
         handlers.put("ig_eco_currency", (player, pd, game, gp) -> plugin.generalConf.getIgEcoCurrencyName());
         handlers.put("ig_eco_balance", (player, pd, game, gp) -> {
             return gp == null ? null : String.format(plugin.generalConf.getIgEcoCurrencyFormat(), gp.getIgBalance().get());
