@@ -404,6 +404,7 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                 p.removePassenger(ent);
                 p.setWalkSpeed(p.getWalkSpeed() + sr);
                 p.setFlySpeed(p.getFlySpeed() + sr);
+                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 0f);
                 if(tm.getTeam(p) == MRTeam.THIEF) {
                     cancelTask(game, p.getName() + "-StealMobTask");
                     if (match.getGatheringRegion().contains(p.getLocation())) {
