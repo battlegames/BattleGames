@@ -30,6 +30,7 @@ import dev.anhcraft.battle.premium.system.ArenaSettings;
 import dev.anhcraft.battle.premium.system.ExConfigManager;
 import dev.anhcraft.battle.premium.system.WorldSettings;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
+import dev.anhcraft.battle.premium.system.controllers.MobRescueController;
 import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
 import dev.anhcraft.battle.premium.system.listeners.GameListener;
 import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
@@ -94,6 +95,7 @@ public class PremiumModule implements IPremiumModule {
         exConfigManager = new ExConfigManager();
         plugin.arenaManager.initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
         plugin.arenaManager.initController(Mode.CTF, new CTFController(plugin));
+        plugin.arenaManager.initController(Mode.MOB_RESCUE, new MobRescueController(plugin));
     }
 
     @Override

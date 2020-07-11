@@ -299,3 +299,138 @@ dm_italy:
       - "&b         • Exp: &e+<exp>"
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+
+mr_farm:
+  name: "&6&lFarm"
+  mode: mr
+  max_time: 18000
+  max_players: 10
+  icon:
+    material: grass
+    name: "<arena_name>"
+    lore:
+      - "&4Game Mode: &f<mode_name>"
+      - "&bPlayers: &f<game_player_count:0>/<arena_max_players>"
+  final_exp_formula: "a*4+b*18-c*7.5+d*18"
+  final_money_formula: "a*4+b*15-c*3+d*20"
+  rollback:
+    enabled: true
+    provider: battle_region
+    region:
+      corner_1: "farm -121 50.0 61 -115 -1"
+      corner_2: "farm 119.5 96.0 -117.5 1 74"
+  end_delay: 100
+  mode_options:
+    min_players: 2
+    countdown_time: 300
+    extra_farmer_countdown_time: 900
+    waiting_spawn_points:
+      - farm 70.6692 72.0 -80.1981 -180.30035 4.649932
+      - farm 72.6050 72.0 -80.2021 -180.30035 4.649932
+      - farm 72.6041 72.0 -82.1380 -180.30035 4.649932
+      - farm 70.0207 72.0 -82.1356 -180.30035 4.649932
+      - farm 71.7258 72.0 -85.1463 -180.30035 4.649932
+    respawn_waiting_time: 300
+    spawn_protection_time: 100
+    item_selection_time: 300
+    playing_spawn_points_farmer:
+      - farm 44.0767 72.0 -55.6723 -88.80261 6.5999303
+      - farm 43.7786 67.0 -55.0568 -359.40295 1.7999194
+      - farm 46.1403 67.0 -52.0235 -90.3042 6.8999195
+      - farm 48.4205 67.0 -54.9111 -359.55432 5.699922
+      - farm 37.0319 67.0 -64.6029 -180.15479 9.299963
+    playing_spawn_points_thief:
+      - farm -92.6053 69.0 -9.7805 -182.55615 1.2000034
+      - farm -89.8089 69.0 -9.8372 -182.55615 1.2000034
+      - farm -86.1126 69.0 -7.13499 -157.65686 5.7000356
+      - farm -90.2418 69.0 -19.8053 -85.506226 2.700028
+      - farm -95.8993 69.0 -15.6838 -88.355225 2.700038
+    mob_groups:
+      '0':
+        location: "farm 15.6338 65.0 -59.4813 -95.411865 3.89998"
+        entity_type: horse
+        weight: 800
+        stealable: false
+        amount: 1
+      '1':
+        location: "farm 15.6295 65.0 -55.3090 -91.36191 2.8499768"
+        entity_type: horse
+        weight: 800
+        stealable: false
+        amount: 1
+      '2':
+        location: "farm 15.3668 65.0 -51.2762 -93.31171 1.4999669"
+        entity_type: horse
+        weight: 800
+        stealable: false
+        amount: 1
+      '3':
+        location: "farm 66.0071 72.0 -83.4858 -180.01172 -1.5000186"
+        entity_type: cow
+        weight: 600
+        stealable: true
+        amount: 1
+      '4':
+        location: "farm 71.6872 72.0 -82.5225 -180.01123 1.7999761"
+        entity_type: cow
+        weight: 700
+        stealable: true
+        amount: 1
+      '5':
+        location: "farm 77.9929 72.0 -82.4463 -181.8114 0.8999981"
+        entity_type: pig
+        weight: 300
+        stealable: true
+        amount: 3
+      '6':
+        location: "farm 70.9739 72.0 -94.8057 -2.4117432 2.1000266"
+        entity_type: pig
+        weight: 400
+        stealable: true
+        amount: 2
+      '7':
+        location: "farm 66.3540 72.0 -95.0543 -1.66156 2.85002"
+        entity_type: pig
+        weight: 230
+        stealable: true
+        amount: 3
+      '8':
+        location: "farm 89.0294 72.0 -84.3773 -268.6612 3.600062"
+        entity_type: cow
+        weight: 650
+        stealable: true
+        amount: 2
+    objectives:
+      cow:
+        amount:
+          min: 1
+          max: 2
+        reward_coins: 50
+      pig:
+        amount:
+          min: 2
+          max: 5
+        reward_coins: 10
+    weight_speed_ratio: 5000
+    gathering_region:
+      corner_1: "farm -94 72 -7 0 0"
+      corner_2: "farm -91 70 -2 0 0"
+  result_broadcast:
+    won:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&a         Congratulations! You WON the game!         "
+      - "&f"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+    lost:
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - "&f"
+      - "&7       You lost. Be better in the next match!       "
+      - "&f"
+      - "&b         • Money: &e+$<money>"
+      - "&b         • Exp: &e+<exp>"
+      - "&f"
+      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"

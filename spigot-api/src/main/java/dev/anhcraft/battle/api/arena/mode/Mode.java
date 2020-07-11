@@ -20,10 +20,7 @@
 package dev.anhcraft.battle.api.arena.mode;
 
 import com.google.common.collect.ImmutableList;
-import dev.anhcraft.battle.api.arena.mode.options.BedWarOptions;
-import dev.anhcraft.battle.api.arena.mode.options.CaptureTheFlagOptions;
-import dev.anhcraft.battle.api.arena.mode.options.DeathmatchOptions;
-import dev.anhcraft.battle.api.arena.mode.options.TeamDeathmatchOptions;
+import dev.anhcraft.battle.api.arena.mode.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.impl.Informative;
@@ -101,6 +98,11 @@ public class Mode extends ConfigurableObject implements Informative {
      * ID: <b>bw</b>
      */
     public static final Mode BEDWAR = registerMode(new Mode("bw", BedWarOptions.SCHEMA));
+
+    /**
+     * ID: <b>mr</b>
+     */
+    public static final Mode MOB_RESCUE = registerMode(new Mode("mr", MobRescueOptions.SCHEMA));
 
     private final ConfigSchema<?> optionSchema;
     private final String id;

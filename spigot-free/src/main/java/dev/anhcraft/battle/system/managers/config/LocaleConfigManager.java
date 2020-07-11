@@ -21,6 +21,7 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.arena.team.ABTeam;
+import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -61,8 +62,10 @@ public class LocaleConfigManager extends ConfigManager {
             }
         }
 
-        ABTeam.TEAM_A.setLocalizedName(Objects.requireNonNull(getSettings().getString("ab_team.team_a")));
-        ABTeam.TEAM_B.setLocalizedName(Objects.requireNonNull(getSettings().getString("ab_team.team_b")));
+        ABTeam.TEAM_A.setLocalizedName(Objects.requireNonNull(getSettings().getString("ab_team.team_a", "")));
+        ABTeam.TEAM_B.setLocalizedName(Objects.requireNonNull(getSettings().getString("ab_team.team_b", "")));
+        MRTeam.THIEF.setLocalizedName(Objects.requireNonNull(getSettings().getString("mr_team.thief", "")));
+        MRTeam.FARMER.setLocalizedName(Objects.requireNonNull(getSettings().getString("mr_team.farmer", "")));
     }
 
     @Override

@@ -57,6 +57,9 @@ world_settings:
       # No mobs spawn in this world
       prevent_mob_spawn: true
 
+    farm:
+      always_time: 18000
+
 # Extra arenas settings
 arena_settings:
   bw_demo: # Write arena's id here

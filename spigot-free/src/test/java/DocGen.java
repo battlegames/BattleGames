@@ -22,6 +22,8 @@ import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.advancement.Advancement;
 import dev.anhcraft.battle.api.advancement.Progression;
 import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.api.arena.mode.MobGroup;
+import dev.anhcraft.battle.api.arena.mode.MobRescueObjective;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.api.arena.mode.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
@@ -79,6 +81,9 @@ public class DocGen {
                 .withSchema(FlagOptions.SCHEMA)
                 .withSchema(BedWarOptions.SCHEMA)
                 .withSchema(BWTeamOptions.SCHEMA)
+                .withSchema(MobRescueOptions.SCHEMA)
+                .withSchema(MobGroup.SCHEMA)
+                .withSchema(MobRescueObjective.SCHEMA)
                 .withSchema(Advancement.SCHEMA)
                 .withSchema(Progression.SCHEMA)
                 .withSchema(Mode.SCHEMA)

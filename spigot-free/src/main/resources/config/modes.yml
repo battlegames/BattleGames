@@ -155,3 +155,43 @@ bw:
       - "&e"
       - "&eminecraft.net"
     fixed_length: 32
+
+mr:
+  name: "&aMob &fRescue"
+  waiting_chat:
+    enabled: true
+    format: "&8%player_displayname%&f: <message>"
+  playing_chat:
+    enabled: true
+    format: "&7[%battle_mr_team%] &8%player_displayname%&f: <message>"
+  waiting_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&f"
+      - "&cMob Rescue - %battle_arena_name%"
+      - "&d"
+      - "%battle_icon_money_bag% &a%battle_ig_eco_currency%: &f%battle_ig_eco_balance%"
+      - "%battle_icon_user% &aOnline: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&e"
+      - "&eminecraft.net"
+    fixed_length: 32
+  playing_scoreboard:
+    enabled: true
+    title: "&a &c&lBATTLE"
+    content:
+      - "&f"
+      - "&cMob Rescue - %battle_arena_name%"
+      - "&c%battle_game_remaining_time_formatted% left"
+      - "&d"
+      - "%battle_icon_money_bag% &a%battle_ig_eco_currency%: &f%battle_ig_eco_balance%"
+      - "%battle_icon_letter% &aTeam: &f%battle_mr_team% &e(%battle_mr_team_players% players)"
+      - "%battle_icon_medal% &aMobs: &f%battle_mr_mobs_stolen%/%battle_mr_mobs_all%"
+      - "%battle_icon_headshot% &aHS/AS:&r &b%battle_game_stats_headshots%/%battle_game_stats_assists%"
+      - "%battle_icon_gun% &aK/D:&r &b%battle_game_stats_kills%/%battle_game_stats_deaths%"
+      - "%battle_icon_user% &aOnline: &f%battle_game_total_players%/%battle_arena_max_players%"
+      - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+      - "&e"
+      - "&eminecraft.net"
+    fixed_length: 32

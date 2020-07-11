@@ -14,6 +14,9 @@ item_type:
 ab_team:
   team_a: Team A
   team_b: Team B
+mr_team:
+  thief: Thief
+  farmer: Farmer
 currency_format:
   vault: "$<amount>"
   ing: "<amount> coins"
@@ -115,6 +118,18 @@ mode_bw:
     destroyed: "&c✘"
   bed_destroy_broadcast: "&e<player>&c has destroyed team &e<team>'s bed"
   respawn_unable: "&bYou are no longer able to respawn after death. Be careful!"
+mode_mr:
+  player_join_broadcast: "&a[+] &7<player> (%battle_game_total_players%/%battle_arena_max_players%)"
+  player_quit_broadcast: "&c[-] &7<player> (%battle_game_total_players%/%battle_arena_max_players%)"
+  countdown_title: "&6&lStart in"
+  countdown_subtitle: "&e&l<current>"
+  extra_farmer_countdown_title: ""
+  extra_farmer_countdown_subtitle: "&2&l<current>"
+  game_start_broadcast: "&bStarted the game!"
+  error_item_selection_overtime: "&cYou can't choose items now!"
+  error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
+  respawn_title: "&6&lRespawn in"
+  respawn_subtitle: "&e&l<current>"
 gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."
