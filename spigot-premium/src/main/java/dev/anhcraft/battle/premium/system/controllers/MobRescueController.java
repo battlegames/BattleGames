@@ -416,6 +416,11 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                             MobRescueOptions opt = (MobRescueOptions) game.getArena().getModeOptions();
                             double reward = opt.getObjectives().get(ent.getType()).getRewardCoins();
                             Objects.requireNonNull(game.getPlayer(p)).getIgBalance().addAndGet(reward);
+                            InfoReplacer ir = new InfoHolder("")
+                                    .inform("player", p.getName())
+                                    .inform("localized_entity", EnumEntity.getLocalePath(ent.getType()))
+                                    .compile();
+                            broadcast(game, "on_thief_stole", ir);
                             if (match.getStolenMobs() == match.getTotalMobs()) {
                                 game.end();
                             }

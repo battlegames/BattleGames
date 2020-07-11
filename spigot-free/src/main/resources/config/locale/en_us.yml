@@ -133,6 +133,7 @@ mode_mr:
   on_thief_carry:
     teammates: "&a<player> is carrying a %battle_mc_locale_<localized_entity>%."
     opponent: "&cWARNING: <player> is taking a %battle_mc_locale_<localized_entity>% off the farm."
+  on_thief_stole: "&b<player> has stolen a %battle_mc_locale_<localized_entity>%."
 gun:
   none_magazine_message: "&cThis gun doesn't have the magazine!"
   out_of_ammo: "&cThis gun is out of ammunition."
