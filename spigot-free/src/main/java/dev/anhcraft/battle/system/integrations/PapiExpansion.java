@@ -151,6 +151,17 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("ig_eco_balance", (player, pd, game, gp) -> {
             return gp == null ? null : String.format(plugin.generalConf.getIgEcoCurrencyFormat(), gp.getIgBalance().get());
         });
+        filters.add(new PapiExpansion.Filter() {
+            @Override
+            public boolean check(String str) {
+                return str.startsWith("mc_locale_");
+            }
+
+            @Override
+            public String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp) {
+                return plugin.getMinecraftLocale().get(str.substring("mc_locale_".length())).getAsString();
+            }
+        });
     }
 
     @Override
