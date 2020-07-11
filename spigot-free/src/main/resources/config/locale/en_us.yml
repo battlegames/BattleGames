@@ -130,6 +130,13 @@ mode_mr:
   error_disabled_item_type: "&cThat kind of item is unavailable in this mode!"
   respawn_title: "&6&lRespawn in"
   respawn_subtitle: "&e&l<current>"
+  objective_details:
+    header:
+      - "&f&l----------------------------------------"
+      - "&5&lObjectives"
+    each: "&e- Steal &cx<amount> &e%battle_mc_locale_<localized_entity>% &7(+<coins> coins)"
+    footer:
+      - "&f&l----------------------------------------"
   on_thief_carry:
     teammates: "&a<player> is carrying a %battle_mc_locale_<localized_entity>%."
     opponent: "&cWARNING: <player> is taking a %battle_mc_locale_<localized_entity>% off the farm."

@@ -218,7 +218,8 @@ public class MobRescueController extends DeathmatchController implements IMobRes
         broadcast(game,"game_start_broadcast");
 
         MobRescueOptions options = (MobRescueOptions) game.getArena().getModeOptions();
-        MATCH.put(game, MobRescueMatch.create(options));
+        MobRescueMatch m = MobRescueMatch.create(options);
+        MATCH.put(game, m);
 
         List<Player> x = new ArrayList<>(game.getPlayers().keySet());
         int sz = Math.floorDiv(x.size(), 2);
@@ -250,6 +251,7 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                     }
                 });
             });
+            plugin.chatManager.sendPlayers(ta, blp("objective_details.header"));
             options.getMobGroups().forEach(mg -> {
                 for (int i = 0; i < mg.getAmount(); i++){
                     Location loc = mg.getLocation();
@@ -261,7 +263,16 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                         ent.setGlowing(true);
                     }
                 }
+                if(mg.isStealable()) {
+                    InfoReplacer ir = new InfoHolder("")
+                            .inform("localized_entity", EnumEntity.getLocalePath(mg.getEntityType()))
+                            .inform("amount", m.getMobCount().getOrDefault(mg.getEntityType(), 0))
+                            .inform("coins", mg.getAmount())
+                            .compile();
+                    plugin.chatManager.sendPlayers(ta, blp("objective_details.each"), ir);
+                }
             });
+            plugin.chatManager.sendPlayers(ta, blp("objective_details.footer"));
         });
     }
 

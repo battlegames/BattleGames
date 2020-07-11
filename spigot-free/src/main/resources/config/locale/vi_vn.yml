@@ -122,6 +122,13 @@ mode_mr:
   error_disabled_item_type: "&cLoại vật phẩm này hiện đang bị cấm!"
   respawn_title: "&6&lHồi sinh sau"
   respawn_subtitle: "&e&l<current>"
+  objective_details:
+    header:
+      - "&f&l----------------------------------------"
+      - "&5&lMục tiêu"
+    each: "&e- Trộm &cx<amount> &e%battle_mc_locale_<localized_entity>% &7(+<coins> xu)"
+    footer:
+      - "&f&l----------------------------------------"
   on_thief_carry:
     teammates: "&a<player> đang bế %battle_mc_locale_<localized_entity>%."
     opponent: "&cCẢNH BÁO: <player> đang bế %battle_mc_locale_<localized_entity>% khỏi trang trại."
