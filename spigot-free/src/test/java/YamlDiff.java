@@ -29,7 +29,7 @@ public class YamlDiff {
     @Test
     public void a(){
         FileConfiguration c1 = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/locale/en_us.yml"));
-        FileConfiguration c2 = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/locale/vi.yml"));
+        FileConfiguration c2 = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/locale/vi_vn.yml"));
         for(String s : c1.getKeys(true)){
             Object a = c1.get(s);
             Object b = c2.get(s);
@@ -50,7 +50,7 @@ public class YamlDiff {
             }
         }
         try {
-            File out = new File("src/main/resources/config/locale/vi.temp.yml");
+            File out = new File("src/main/resources/config/locale/vi_vn.temp.yml");
             out.createNewFile();
             c2.save(out);
         } catch (IOException e) {
