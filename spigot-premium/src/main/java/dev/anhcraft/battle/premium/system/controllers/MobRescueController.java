@@ -269,9 +269,7 @@ public class MobRescueController extends DeathmatchController implements IMobRes
         AtomicLong current = new AtomicLong(time/20L);
         trackTask(game, "extraFarmerCountdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             InfoReplacer f = new InfoHolder("").inform("current", current.get()).compile();
-            for(Player p : tb) {
-                sendTitle(p, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
-            }
+            sendTitle(tb, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
             playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
             if(current.getAndDecrement() == 0) {
                 cancelTask(game, "extraFarmerCountdown");

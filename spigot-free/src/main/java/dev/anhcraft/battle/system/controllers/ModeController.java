@@ -47,10 +47,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -123,13 +120,11 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath){
-        for(Player player : game.getPlayers().keySet())
-            sendTitle(player, titleLocalePath, subtitleLocalePath, null);
+        sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, null);
     }
 
     public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
-        for(Player player : game.getPlayers().keySet())
-            sendTitle(player, titleLocalePath, subtitleLocalePath, infoReplacer);
+        sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, infoReplacer);
     }
 
     public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath){
@@ -143,6 +138,22 @@ public abstract class ModeController extends BattleComponent implements Listener
             player.sendTitle(s1, s2, 10, 70, 20);
         } else {
             player.sendTitle(infoReplacer.replace(s1), infoReplacer.replace(s2), 10, 70, 20);
+        }
+    }
+
+    public void sendTitle(Collection<Player> players, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+        String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
+        String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
+        if(infoReplacer == null) {
+            for(Player player : players) {
+                player.sendTitle(s1, s2, 10, 70, 20);
+            }
+        } else {
+            s1 = infoReplacer.replace(s1);
+            s2 = infoReplacer.replace(s2);
+            for(Player player : players) {
+                player.sendTitle(s1, s2, 10, 70, 20);
+            }
         }
     }
 
