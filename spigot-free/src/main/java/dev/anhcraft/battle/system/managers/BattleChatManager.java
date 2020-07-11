@@ -96,7 +96,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
     }
 
     @Override
-    public void sendPlayer(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
+    public void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
         String msg = getLocaleMsg(localePath);
         msg = infoReplacer == null ? msg : infoReplacer.replace(msg);
         for(Player player : players){

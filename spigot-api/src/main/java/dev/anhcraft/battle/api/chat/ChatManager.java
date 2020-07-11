@@ -43,10 +43,14 @@ public interface ChatManager {
     void sendPlayer(@NotNull Player player, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
 
     default void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath){
-        sendPlayer(players, localePath, ChatMessageType.CHAT, null);
+        sendPlayers(players, localePath, ChatMessageType.CHAT, null);
     }
 
-    void sendPlayer(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
+    default void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath, @Nullable InfoReplacer infoReplacer){
+        sendPlayers(players, localePath, ChatMessageType.CHAT, infoReplacer);
+    }
+
+    void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer);
 
     default void sendConsole(@NotNull String localePath){
         send(Bukkit.getConsoleSender(), localePath, null);

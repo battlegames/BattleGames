@@ -107,23 +107,19 @@ public abstract class ModeController extends BattleComponent implements Listener
     }
 
     public void broadcast(LocalGame game, String localePath){
-        for(Player player : game.getPlayers().keySet())
-            plugin.chatManager.sendPlayer(player, blp(localePath));
+        plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath));
     }
 
     public void broadcast(LocalGame game, String localePath, InfoReplacer infoReplacer){
-        for(Player player : game.getPlayers().keySet())
-            plugin.chatManager.sendPlayer(player, blp(localePath), infoReplacer);
+        plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), infoReplacer);
     }
 
     public void broadcast(LocalGame game, String localePath, ChatMessageType type){
-        for(Player player : game.getPlayers().keySet())
-            plugin.chatManager.sendPlayer(player, blp(localePath), type, null);
+        plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, null);
     }
 
     public void broadcast(LocalGame game, String localePath, ChatMessageType type, InfoReplacer infoReplacer){
-        for(Player player : game.getPlayers().keySet())
-            plugin.chatManager.sendPlayer(player, blp(localePath), type, infoReplacer);
+        plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, infoReplacer);
     }
 
     public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath){
