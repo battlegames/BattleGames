@@ -35,6 +35,7 @@ import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.EnumEntity;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -359,10 +360,27 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                 float sr = ent.getMetadata("stealable").get(0).asFloat();
                 Player p = event.getPlayer();
                 if(p.getPassengers().isEmpty()) {
+                    LocalGame game = plugin.arenaManager.getGame(p);
+                    if(game == null) return;
+                    if (game.getMode() != getMode()) return;
+                    TeamManager<MRTeam> tm = TEAM.get(game);
+                    if(tm == null) return;
                     p.addPassenger(ent);
                     p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 0f);
                     p.setWalkSpeed(Math.max(p.getWalkSpeed() - sr, 0));
                     p.setFlySpeed(Math.max(p.getFlySpeed() - sr, 0));
+                    if(tm.getTeam(p) == MRTeam.THIEF) {
+                        trackTask(game, p.getName() + "-StealMobTask", plugin.extension.getTaskHelper().newDelayedTask(() -> {
+                            if (hasTask(game, p.getName() + "-StealMobTask")) {
+                                InfoReplacer ir = new InfoHolder("")
+                                        .inform("player", p.getName())
+                                        .inform("localized_entity", EnumEntity.getLocalePath(ent.getType()))
+                                        .compile();
+                                plugin.chatManager.sendPlayers(tm.getPlayers(MRTeam.THIEF), blp("on_thief_carry.teammates"), ir);
+                                plugin.chatManager.sendPlayers(tm.getPlayers(MRTeam.FARMER), blp("on_thief_carry.opponent"), ir);
+                            }
+                        }, RandomUtil.randomInt(40, 100)));
+                    }
                 }
             }
         }
@@ -379,22 +397,27 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                 LocalGame game = plugin.arenaManager.getGame(p);
                 if(game == null) return;
                 if (game.getMode() != getMode()) return;
+                TeamManager<MRTeam> tm = TEAM.get(game);
+                if(tm == null) return;
                 MobRescueMatch match = MATCH.get(game);
                 float sr = ent.getMetadata("stealable").get(0).asFloat();
                 p.removePassenger(ent);
                 p.setWalkSpeed(p.getWalkSpeed() + sr);
                 p.setFlySpeed(p.getFlySpeed() + sr);
-                if(match.getGatheringRegion().contains(p.getLocation())) {
-                    plugin.extension.getTaskHelper().newTask(ent::remove);
-                    Integer i = match.getMobCount().get(ent.getType());
-                    if(i != null && i > 0) {
-                        match.setStolenMobs(match.getStolenMobs() + 1);
-                        match.getMobCount().put(ent.getType(), i - 1);
-                        MobRescueOptions opt = (MobRescueOptions) game.getArena().getModeOptions();
-                        double reward = opt.getObjectives().get(ent.getType()).getRewardCoins();
-                        Objects.requireNonNull(game.getPlayer(p)).getIgBalance().addAndGet(reward);
-                        if(match.getStolenMobs() == match.getTotalMobs()) {
-                            game.end();
+                if(tm.getTeam(p) == MRTeam.THIEF) {
+                    cancelTask(game, p.getName() + "-StealMobTask");
+                    if (match.getGatheringRegion().contains(p.getLocation())) {
+                        plugin.extension.getTaskHelper().newTask(ent::remove);
+                        Integer i = match.getMobCount().get(ent.getType());
+                        if (i != null && i > 0) {
+                            match.setStolenMobs(match.getStolenMobs() + 1);
+                            match.getMobCount().put(ent.getType(), i - 1);
+                            MobRescueOptions opt = (MobRescueOptions) game.getArena().getModeOptions();
+                            double reward = opt.getObjectives().get(ent.getType()).getRewardCoins();
+                            Objects.requireNonNull(game.getPlayer(p)).getIgBalance().addAndGet(reward);
+                            if (match.getStolenMobs() == match.getTotalMobs()) {
+                                game.end();
+                            }
                         }
                     }
                 }

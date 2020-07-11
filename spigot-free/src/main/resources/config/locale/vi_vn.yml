@@ -122,6 +122,9 @@ mode_mr:
   error_disabled_item_type: "&cLoại vật phẩm này hiện đang bị cấm!"
   respawn_title: "&6&lHồi sinh sau"
   respawn_subtitle: "&e&l<current>"
+  on_thief_carry:
+    teammates: "&a<player> đang bế %battle_mc_locale_<localized_entity>%."
+    opponent: "&cCẢNH BÁO: <player> đang bế %battle_mc_locale_<localized_entity>% khỏi trang trại."
 gun:
   none_magazine_message: '&cKhẩu súng này chưa có băng đạn!'
   out_of_ammo: '&cSúng đã hết đạn.'
