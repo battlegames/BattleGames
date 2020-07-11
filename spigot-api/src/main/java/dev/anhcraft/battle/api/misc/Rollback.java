@@ -68,6 +68,13 @@ public class Rollback extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private String corner2;
 
+    @Key("clear_entities")
+    @Explanation({
+            "Clear all entities in the configured worlds",
+            "This option only works with BATTLE_REGION"
+    })
+    private boolean clearEntities;
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -94,5 +101,9 @@ public class Rollback extends ConfigurableObject {
     @Nullable
     public Location getCorner2() {
         return corner2 == null ? null : LocationUtil.fromString(corner2);
+    }
+
+    public boolean shouldClearEntities() {
+        return clearEntities;
     }
 }

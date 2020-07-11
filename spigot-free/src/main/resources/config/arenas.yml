@@ -316,9 +316,12 @@ mr_farm:
   rollback:
     enabled: true
     provider: battle_region
+    worlds:
+      - "farm"
     region:
       corner_1: "farm -121 50.0 61 -115 -1"
       corner_2: "farm 119.5 96.0 -117.5 1 74"
+    clear_entities: true
   end_delay: 100
   mode_options:
     min_players: 2

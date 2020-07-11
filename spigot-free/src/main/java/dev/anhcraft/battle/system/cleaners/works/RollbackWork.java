@@ -24,11 +24,15 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 public class RollbackWork implements Work {
@@ -98,6 +102,14 @@ public class RollbackWork implements Work {
                             plugin.getLogger().info("[Rollback/BattleRegion] Region reloaded successfully!");
                         } else {
                             plugin.getLogger().warning("[Rollback/BattleRegion] Failed to reset! (Please recheck the region)");
+                        }
+                        if(rollback.shouldClearEntities()) {
+                            rollback.getWorlds().stream()
+                                    .map(Bukkit::getWorld)
+                                    .filter(Objects::nonNull)
+                                    .map(World::getEntities)
+                                    .flatMap(Collection::stream)
+                                    .forEach(Entity::remove);
                         }
                         countDownLatch.countDown();
                     });
