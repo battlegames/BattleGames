@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api;
 
+import com.google.gson.JsonObject;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
@@ -82,6 +83,13 @@ public interface BattleApi {
      */
     @NotNull
     GeneralConfig getGeneralConfig();
+
+    /**
+     * Gets Minecraft locale file.
+     * @return {@link JsonObject}
+     */
+    @NotNull
+    JsonObject getMinecraftLocale();
 
     /**
      * Gets the localized message.

@@ -20,6 +20,7 @@
 package dev.anhcraft.battle;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonObject;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.SystemConfig;
@@ -111,6 +112,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private final Market market = new Market();
     public final SystemConfig systemConf = new SystemConfig();
     public final GeneralConfig generalConf = new GeneralConfig();
+    public JsonObject minecraftLocale;
     public PremiumConnector premiumConnector;
     public CraftExtension extension;
     public File configFolder;
@@ -396,6 +398,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public @NotNull GeneralConfig getGeneralConfig() {
         return generalConf;
+    }
+
+    @Override
+    public @NotNull JsonObject getMinecraftLocale() {
+        return minecraftLocale;
     }
 
     @Override
