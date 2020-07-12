@@ -25,9 +25,15 @@ import com.google.common.hash.Hashing;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
+import dev.anhcraft.jvmkit.trackers.BufferedStreamReadTracker;
+import dev.anhcraft.jvmkit.trackers.reports.FixedStreamTransferReport;
+import dev.anhcraft.jvmkit.utils.MathUtil;
+import dev.anhcraft.jvmkit.utils.RandomUtil;
 import dev.anhcraft.jvmkit.utils.UserAgent;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -48,13 +54,28 @@ public class ResourcePack {
             default: FILE = "abm-1.15.zip";
         }
         stringConsumer.accept("Downloading resource pack....");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
                 .setProperty("User-Agent", UserAgent.CHROME_WINDOWS)
                 .connect();
-        HashCode hashCode = Hashing.sha1().hashBytes(conn.read());
-        HASH = hashCode.asBytes();
-        stringConsumer.accept("Finished! Hash: "+hashCode.toString());
-        conn.disconnect();
+        BufferedStreamReadTracker tracker = new BufferedStreamReadTracker(4096, conn.getInput());
+        FixedStreamTransferReport report = new FixedStreamTransferReport(conn.getContentLength());
+        tracker.setBufferCallback(bytes -> {
+            if(RandomUtil.randomInt(0, 10) == 0) {
+                stringConsumer.accept(report.getTransferredBytes() + " bytes ... " + MathUtil.round(report.getProgress(), 3) + "%");
+            }
+            try {
+                out.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tracker.start(report, () -> {
+            conn.disconnect();
+            HashCode hashCode = Hashing.sha1().hashBytes(out.toByteArray());
+            HASH = hashCode.asBytes();
+            stringConsumer.accept("Finished! Hash: "+hashCode.toString());
+        });
     }
 
     public static void send(Player player){
