@@ -94,7 +94,7 @@ public class ArenaConfigManager extends ConfigManager {
                     } else {
                         List<BoundingBox> list = arena.getRollback().getCachedRegionPartitions();
                         plugin.battleRegionRollback.handleDivision(l1, l2, list);
-                        plugin.getLogger().info("[BattleRegion] Total partitions: " + list.size());
+                        plugin.getLogger().info("[BattleRegion] Arena #"+arena.getId()+" | Total partitions: " + list.size());
                         for (BoundingBox box : list) {
                             Location a = box.getMin().toLocation(l1.getWorld());
                             Location b = box.getMax().toLocation(l1.getWorld());

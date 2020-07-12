@@ -77,7 +77,6 @@ public class BattleRegionRollback extends BattleComponent {
         int hash1 = first.hashCode();
         int hash2 = second.hashCode();
         World world = Objects.requireNonNull(first.getWorld());
-        plugin.getLogger().info("Making region backup: " + world.getName() + ", " + hash1 + ", " + hash2);
         CompoundTag root = new CompoundTag();
         CompoundTag blocks = new CompoundTag();
         long i = 0;
@@ -141,7 +140,6 @@ public class BattleRegionRollback extends BattleComponent {
             CompoundTag tag = new CompoundTag();
             tag.load(f);
             if(tag.size() > 0) {
-                plugin.getLogger().info("[Rollback/BattleRegion] Resetting region: " + world.getName() + ", " + hash1 + ", " + hash2);
                 CompoundTag blocks = tag.get("blocks", CompoundTag.class);
                 if (blocks != null) {
                     for(String s : blocks.listNames()){
