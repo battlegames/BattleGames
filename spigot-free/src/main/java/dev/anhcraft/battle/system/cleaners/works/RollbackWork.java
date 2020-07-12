@@ -28,10 +28,16 @@ import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
+import org.bukkit.entity.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 public class RollbackWork implements Work {
@@ -112,6 +118,9 @@ public class RollbackWork implements Work {
                                     .filter(Objects::nonNull)
                                     .map(World::getEntities)
                                     .flatMap(Collection::stream)
+                                    .filter(entity -> !(entity instanceof Hanging
+                                            || entity instanceof Vehicle
+                                            || entity instanceof ArmorStand))
                                     .forEach(Entity::remove);
                         }
                         countDownLatch.countDown();
