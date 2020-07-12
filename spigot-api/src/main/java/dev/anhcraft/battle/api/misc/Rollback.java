@@ -24,6 +24,7 @@ import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +43,8 @@ public class Rollback extends ConfigurableObject {
         BATTLE_WORLD,
         BATTLE_REGION
     }
+
+    private List<BoundingBox> cachedRegionPartitions = new ArrayList<>();
 
     @Key("enabled")
     @Explanation("Enabled/Disabled the rollback system")
@@ -105,5 +108,10 @@ public class Rollback extends ConfigurableObject {
 
     public boolean shouldClearEntities() {
         return clearEntities;
+    }
+
+    @NotNull
+    public List<BoundingBox> getCachedRegionPartitions() {
+        return cachedRegionPartitions;
     }
 }

@@ -23,6 +23,7 @@ package dev.anhcraft.battle.system;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class BattleRegionRollback extends BattleComponent {
@@ -51,6 +53,20 @@ public class BattleRegionRollback extends BattleComponent {
         cachedRegionFolder.mkdir();
     }
 
+    public void handleDivision(@NotNull Location first, @NotNull Location second, @NotNull List<BoundingBox> list) {
+        BoundingBox box = BoundingBox.of(first, second);
+        if(box.getVolume() > plugin.generalConf.getRegionPartitionSize()) {
+            World world = Objects.requireNonNull(first.getWorld());
+            Location center = box.getCenter().toLocation(world);
+            for (Location loc : box.getLocationCorners(world)) {
+                handleDivision(center, loc, list);
+            }
+            //list.add(box); <-- don't add the original!!!
+        } else {
+            list.add(box);
+        }
+    }
+
     public boolean backupRegion(@NotNull Location first, @NotNull Location second) {
         int minX = Math.min(first.getBlockX(), second.getBlockX());
         int maxX = Math.max(first.getBlockX(), second.getBlockX());
@@ -61,9 +77,7 @@ public class BattleRegionRollback extends BattleComponent {
         int hash1 = first.hashCode();
         int hash2 = second.hashCode();
         World world = Objects.requireNonNull(first.getWorld());
-        plugin.getLogger().info("Making region backup at world " + world.getName());
-        plugin.getLogger().info("- Hash 1: " + hash1);
-        plugin.getLogger().info("- Hash 2: " + hash2);
+        plugin.getLogger().info("Making region backup: " + world.getName() + ", " + hash1 + ", " + hash2);
         CompoundTag root = new CompoundTag();
         CompoundTag blocks = new CompoundTag();
         long i = 0;
@@ -93,7 +107,6 @@ public class BattleRegionRollback extends BattleComponent {
         root.put("width", maxX - minX + 1);
         root.put("depth", maxZ - minZ + 1);
         root.put("height", maxY - minY + 1);
-        plugin.getLogger().info("Total: " + blocks.size() + " blocks");
         CompoundTag brd = new CompoundTag();
         brd.put("hash1", hash1);
         brd.put("hash2", hash2);
@@ -128,9 +141,7 @@ public class BattleRegionRollback extends BattleComponent {
             CompoundTag tag = new CompoundTag();
             tag.load(f);
             if(tag.size() > 0) {
-                plugin.getLogger().info("[Rollback/BattleRegion] Resetting region at world " + world.getName());
-                plugin.getLogger().info("- Hash 1: " + hash1);
-                plugin.getLogger().info("- Hash 2: " + hash2);
+                plugin.getLogger().info("[Rollback/BattleRegion] Resetting region: " + world.getName() + ", " + hash1 + ", " + hash2);
                 CompoundTag blocks = tag.get("blocks", CompoundTag.class);
                 if (blocks != null) {
                     for(String s : blocks.listNames()){

@@ -25,6 +25,7 @@ import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.utils.ConfigUpdater;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -91,7 +92,14 @@ public class ArenaConfigManager extends ConfigManager {
                     } else if(!l1.getWorld().equals(l2.getWorld())){
                         plugin.getLogger().warning("[BattleRegionValidator] Both locations must be in the same world! (Arena #"+arena.getId()+")");
                     } else {
-                        plugin.battleRegionRollback.backupRegion(l1, l2);
+                        List<BoundingBox> list = arena.getRollback().getCachedRegionPartitions();
+                        plugin.battleRegionRollback.handleDivision(l1, l2, list);
+                        plugin.getLogger().info("[BattleRegion] Total partitions: " + list.size());
+                        for (BoundingBox box : list) {
+                            Location a = box.getMin().toLocation(l1.getWorld());
+                            Location b = box.getMax().toLocation(l1.getWorld());
+                            plugin.battleRegionRollback.backupRegion(a, b);
+                        }
                     }
                 }
             }

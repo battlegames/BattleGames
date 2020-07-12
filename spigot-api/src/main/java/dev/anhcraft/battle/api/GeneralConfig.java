@@ -174,6 +174,10 @@ public class GeneralConfig extends ConfigurableObject {
     })
     private double flySpeed = 0.2;
 
+    @Key("misc.region_partition_size")
+    @Explanation("The maximum size for each region partition")
+    private int regionPartitionSize = 125000;
+
     @Key("misc.entity_track_min_distance")
     @Explanation("The minimum distance to ensure a tracked entity has moved")
     private double entityTrackMinDistance = 1.5;
@@ -426,6 +430,10 @@ public class GeneralConfig extends ConfigurableObject {
 
     public boolean shouldHealOnGameEnd() {
         return healOnGameEnd;
+    }
+
+    public int getRegionPartitionSize() {
+        return regionPartitionSize;
     }
 
     public boolean isResourcePackEnabled() {

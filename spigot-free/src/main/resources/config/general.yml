@@ -60,6 +60,7 @@ misc:
   default_speed:
     walk: 0.2
     fly: 0.2
+  region_partition_size: 125000
   entity_track_min_distance: 1.5
   entity_hardness:
     _default_: 3

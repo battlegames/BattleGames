@@ -24,15 +24,14 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.misc.Rollback;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
+import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 public class RollbackWork implements Work {
@@ -96,12 +95,16 @@ public class RollbackWork implements Work {
                 Location l1 = rollback.getCorner1();
                 Location l2 = rollback.getCorner2();
                 if (l1 != null && l2 != null) {
+                    List<BoundingBox> crp = rollback.getCachedRegionPartitions();
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     plugin.extension.getTaskHelper().newTask(() -> {
-                        if (plugin.battleRegionRollback.rollbackRegion(l1, l2)) {
-                            plugin.getLogger().info("[Rollback/BattleRegion] Region reloaded successfully!");
-                        } else {
-                            plugin.getLogger().warning("[Rollback/BattleRegion] Failed to reset! (Please recheck the region)");
+                        plugin.getLogger().info("[Rollback/BattleRegion] Total partitions: " + crp.size());
+                        for (BoundingBox box : crp) {
+                            Location a = box.getMin().toLocation(Objects.requireNonNull(l1.getWorld()));
+                            Location b = box.getMax().toLocation(l1.getWorld());
+                            if (!plugin.battleRegionRollback.rollbackRegion(a, b)) {
+                                plugin.getLogger().warning("[Rollback/BattleRegion] Failed to reset!");
+                            }
                         }
                         if(rollback.shouldClearEntities()) {
                             rollback.getWorlds().stream()
