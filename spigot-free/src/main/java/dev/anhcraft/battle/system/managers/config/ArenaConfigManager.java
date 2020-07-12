@@ -50,10 +50,10 @@ public class ArenaConfigManager extends ConfigManager {
     @Override
     public void onLoad() {
         Set<String> keys = getSettings().getKeys(false);
-        plugin.getLogger().info("Total arenas found: " + keys.size());
+        plugin.getLogger().info("["+loggerName+"] Total arenas found: " + keys.size());
         plugin.limit(loggerName, keys, 8).forEach(s -> {
             Arena arena = new Arena(s);
-            plugin.getLogger().info("- Loading arena " + s);
+            plugin.getLogger().info("["+loggerName+"] Loading arena " + s + "...");
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             configUpdater.update(Objects.requireNonNull(cs));
             try {
@@ -63,7 +63,7 @@ public class ArenaConfigManager extends ConfigManager {
             }
             ARENA_MAP.put(s, arena);
             if(arena.getRollback() == null){
-                plugin.getLogger().warning("For safety reasons, you should specify rollback for arena #"+arena.getId());
+                plugin.getLogger().warning("["+loggerName+"] For safety reasons, you should specify rollback for arena #"+arena.getId());
             } else {
                 if(arena.getRollback().getProvider() == Rollback.Provider.SLIME_WORLD && !plugin.hasSlimeWorldManagerSupport()){
                     arena.getRollback().setProvider(Rollback.Provider.BATTLE_WORLD);
@@ -73,7 +73,7 @@ public class ArenaConfigManager extends ConfigManager {
                         String w = it.next();
                         World wd = plugin.getServer().getWorld(w);
                         if (wd == null) {
-                            plugin.getLogger().warning("[BattleWorldValidator] World not found: " + w);
+                            plugin.getLogger().warning("["+loggerName+"/BattleWorldValidator] World not found: " + w);
                             it.remove();
                         } else if (plugin.SWMIntegration != null && plugin.SWMIntegration.isReadOnly(w) != -1) {
                             it.remove();
@@ -86,15 +86,15 @@ public class ArenaConfigManager extends ConfigManager {
                     Location l1 = arena.getRollback().getCorner1();
                     Location l2 = arena.getRollback().getCorner2();
                     if(l1 == null || l2 == null) {
-                        plugin.getLogger().warning("[BattleRegionValidator] Location is null! (Arena #"+arena.getId()+")");
+                        plugin.getLogger().warning("["+loggerName+"/BattleRegionValidator] Location is null! (Arena #"+arena.getId()+")");
                     } else if(l1.getWorld() == null || l2.getWorld() == null) {
-                        plugin.getLogger().warning("[BattleRegionValidator] World is absent! (Arena #"+arena.getId()+")");
+                        plugin.getLogger().warning("["+loggerName+"/BattleRegionValidator] World is absent! (Arena #"+arena.getId()+")");
                     } else if(!l1.getWorld().equals(l2.getWorld())){
-                        plugin.getLogger().warning("[BattleRegionValidator] Both locations must be in the same world! (Arena #"+arena.getId()+")");
+                        plugin.getLogger().warning("["+loggerName+"/BattleRegionValidator] Both locations must be in the same world! (Arena #"+arena.getId()+")");
                     } else {
                         List<BoundingBox> list = arena.getRollback().getCachedRegionPartitions();
                         plugin.battleRegionRollback.handleDivision(l1, l2, list);
-                        plugin.getLogger().info("[BattleRegion] Arena #"+arena.getId()+" | Total partitions: " + list.size());
+                        plugin.getLogger().info("["+loggerName+"/BattleRegion] Arena #"+arena.getId()+": " + list.size() + " partitions");
                         for (BoundingBox box : list) {
                             Location a = box.getMin().toLocation(l1.getWorld());
                             Location b = box.getMax().toLocation(l1.getWorld());
