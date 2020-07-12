@@ -41,6 +41,7 @@ import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.SpeedUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -115,6 +116,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         gp.getIgBalance().set(plugin.generalConf.getIgEcoInitBalance());
         localGame.getPlayers().put(player, gp);
         PLAYER_GAME_MAP.put(player.getUniqueId(), localGame);
+        SpeedUtil.resetSpeed(player);
         controller.onJoin(player, localGame);
         Bukkit.getPluginManager().callEvent(new GameJoinEvent(localGame, gp));
         return localGame;

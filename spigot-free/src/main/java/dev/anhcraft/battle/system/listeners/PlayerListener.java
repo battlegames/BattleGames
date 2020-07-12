@@ -51,9 +51,7 @@ import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.controllers.ModeController;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
-import dev.anhcraft.battle.utils.BlockPosition;
-import dev.anhcraft.battle.utils.EntityUtil;
-import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -98,8 +96,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     public void handleJoin(Player player) {
-        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
-        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
+        SpeedUtil.resetSpeed(player);
         plugin.extension.getTaskHelper().newDelayedTask(() -> {
             if(!player.isOnline()) return;
             BattleDebugger.startTiming("player-join");
@@ -422,7 +419,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 if(newItem instanceof Gun) {
                     GunModel gm = ((Gun) newItem).getModel();
                     if(gm != null) {
-                        plugin.gunManager.reduceSpeed(player, gm);
+                        SpeedUtil.setModifier(player, SpeedFactor.ITEM, -gm.getWeight());
                         updateSecondaryGunSkin(player, gm);
                     }
                 }
@@ -434,30 +431,23 @@ public class PlayerListener extends BattleComponent implements Listener {
                     GunModel gm = ((Gun) newItem).getModel();
                     if(gm != null) {
                         if(oldItem instanceof Gun){
-                            if(!plugin.gunManager.handleZoomOut(player, gm)){
-                                player.setWalkSpeed(plugin.getDefaultWalkingSpeed());
-                                player.setFlySpeed(plugin.getDefaultFlyingSpeed());
-                            }
+                            plugin.gunManager.handleZoomOut(player);
                         }
-                        plugin.gunManager.reduceSpeed(player, gm);
+                        SpeedUtil.setModifier(player, SpeedFactor.ITEM, -gm.getWeight());
                         updateSecondaryGunSkin(player, gm);
                     }
                 } else if(oldItem instanceof Gun){
-                    if(!plugin.gunManager.handleZoomOut(player, null)){
-                        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
-                        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
-                    }
+                    plugin.gunManager.handleZoomOut(player);
                     updateSecondaryGunSkin(player, null);
+                    SpeedUtil.setModifier(player, SpeedFactor.ITEM, 0);
                 }
             }
             // old != null & new == null
             else {
                 if(oldItem instanceof Gun){
+                    plugin.gunManager.handleZoomOut(player);
                     updateSecondaryGunSkin(player, null);
-                    if(!plugin.gunManager.handleZoomOut(player, null)){
-                        player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
-                        player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
-                    }
+                    SpeedUtil.setModifier(player, SpeedFactor.ITEM, 0);
                 }
             }
         }
@@ -470,6 +460,8 @@ public class PlayerListener extends BattleComponent implements Listener {
             e.setDroppedExp(0);
             e.setKeepInventory(true);
             e.setKeepLevel(true);
+        } else {
+            SpeedUtil.setModifier(e.getEntity(), SpeedFactor.ITEM, 0);
         }
         LocalGame game = plugin.arenaManager.getGame(e.getEntity());
         if(game != null){
@@ -597,6 +589,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                 gamePlayer.getIgBackpack().clear();
                 e.getEntity().getInventory().clear();
                 plugin.guiManager.updateView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()).getBottomView());
+                SpeedUtil.setModifier(e.getEntity(), SpeedFactor.ITEM, 0);
             }
 
             game.getMode().getController(c -> {

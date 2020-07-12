@@ -33,9 +33,7 @@ import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.premium.system.MobRescueMatch;
 import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
-import dev.anhcraft.battle.utils.CooldownMap;
-import dev.anhcraft.battle.utils.EntityUtil;
-import dev.anhcraft.battle.utils.EnumEntity;
+import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
@@ -339,6 +337,7 @@ public class MobRescueController extends DeathmatchController implements IMobRes
             Entity ent = event.getEntity().getPassengers().get(0);
             if (ent instanceof LivingEntity && ent.hasMetadata("stealable")) {
                 event.getEntity().removePassenger(ent);
+                SpeedUtil.setModifier(event.getEntity(), SpeedFactor.PASSENGER, 0);
             }
         }
         super.onDeath(event, game);
@@ -378,8 +377,7 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                     if(tm == null) return;
                     p.addPassenger(ent);
                     p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 0f);
-                    p.setWalkSpeed(Math.max(p.getWalkSpeed() - sr, 0));
-                    p.setFlySpeed(Math.max(p.getFlySpeed() - sr, 0));
+                    SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, -sr);
                     if(tm.getTeam(p) == MRTeam.THIEF) {
                         trackTask(game, p.getName() + "-StealMobTask", plugin.extension.getTaskHelper().newDelayedTask(() -> {
                             if (hasTask(game, p.getName() + "-StealMobTask")) {
@@ -411,11 +409,9 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                 TeamManager<MRTeam> tm = TEAM.get(game);
                 if(tm == null) return;
                 MobRescueMatch match = MATCH.get(game);
-                float sr = ent.getMetadata("stealable").get(0).asFloat();
                 p.removePassenger(ent);
-                p.setWalkSpeed(p.getWalkSpeed() + sr);
-                p.setFlySpeed(p.getFlySpeed() + sr);
                 p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 0f);
+                SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, 0);
                 if(tm.getTeam(p) == MRTeam.THIEF) {
                     cancelTask(game, p.getName() + "-StealMobTask");
                     if (match.getGatheringRegion().contains(p.getLocation())) {

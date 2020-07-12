@@ -252,7 +252,7 @@ public abstract class ModeController extends BattleComponent implements Listener
         int curCap = m.getAmmoCount();
         if(curCap >= maxCap) return;
 
-        plugin.gunManager.handleZoomOut(player, gm);
+        plugin.gunManager.handleZoomOut(player);
 
         int slot = player.getInventory().getHeldItemSlot();
         long delay = am.getReloadDelay();

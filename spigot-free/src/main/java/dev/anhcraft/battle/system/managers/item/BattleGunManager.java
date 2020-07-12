@@ -21,13 +21,15 @@ package dev.anhcraft.battle.system.managers.item;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.reports.PlayerAttackReport;
-import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
-import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.SpeedFactor;
+import dev.anhcraft.battle.utils.SpeedUtil;
 import dev.anhcraft.battle.utils.VectUtil;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
@@ -51,7 +53,6 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -97,18 +98,9 @@ public class BattleGunManager extends BattleComponent {
         int held = player.getInventory().getHeldItemSlot();
         if(held == slot) {
             player.getInventory().setItemInOffHand(createGun(gun, true));
-            reduceSpeed(player, g);
+            SpeedUtil.setModifier(player, SpeedFactor.ITEM, -g.getWeight());
         }
         return true;
-    }
-
-    public void reduceSpeed(Player player, GunModel g){
-        double w = plugin.generalConf.getWalkSpeed();
-        w = Math.max(-1f, w - g.getWeight());
-        double f = plugin.generalConf.getFlySpeed();
-        f = Math.max(-1f, f - g.getWeight());
-        player.setWalkSpeed((float) w);
-        player.setFlySpeed((float) f);
     }
 
     private boolean isHeadShot(Location q, BoundingBox box) {
@@ -117,38 +109,20 @@ public class BattleGunManager extends BattleComponent {
         return d2 < d1 / 4;
     }
 
-    private void rmvZoom(Player player, @Nullable GunModel gunModel){
+    private void rmvZoom(Player player){
         PlayerUtil.unfreeze(player);
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
         player.removeMetadata("zoom", plugin);
-        if(gunModel == null) {
-            ItemStack item = player.getInventory().getItemInMainHand();
-            if (!ItemUtil.isNull(item)) {
-                BattleItem battleItem = plugin.itemManager.read(item);
-                if(battleItem instanceof Gun){
-                    GunModel gm = ((Gun) battleItem).getModel();
-                    if (gm != null) {
-                        reduceSpeed(player, gm);
-                        return;
-                    }
-                }
-            }
-            player.setWalkSpeed((float) plugin.generalConf.getWalkSpeed());
-            player.setFlySpeed((float) plugin.generalConf.getFlySpeed());
-        } else reduceSpeed(player, gunModel);
+        SpeedUtil.setModifier(player, SpeedFactor.ZOOM, 0);
     }
 
     public boolean handleZoomOut(Player player){
-        return handleZoomOut(player, null);
-    }
-
-    public boolean handleZoomOut(Player player, @Nullable GunModel currentModel){
         if(player.hasMetadata("zoom")) {
             List<MetadataValue> x = player.getMetadata("zoom");
             for(MetadataValue v : x){
                 if(v.getOwningPlugin() == plugin && v.asInt() != -1) {
-                    rmvZoom(player, currentModel);
+                    rmvZoom(player);
                     return true;
                 }
             }
@@ -179,14 +153,13 @@ public class BattleGunManager extends BattleComponent {
         }
         int next = scp.nextZoomLevel();
         if(next == -1) {
-            rmvZoom(player, gm);
+            rmvZoom(player);
         } else {
             ScopeModel sm = scp.getModel();
             int nextLv = sm.getZoomLevels().get(next);
             player.getInventory().setHelmet(PUMPKIN_HELMET);
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
-            player.setWalkSpeed(-0.5f);
-            player.setFlySpeed(-0.5f);
+            SpeedUtil.setModifier(player, SpeedFactor.ZOOM, -9999);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
             PlayerUtil.freeze(player);
         }
