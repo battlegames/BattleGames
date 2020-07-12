@@ -58,6 +58,7 @@ public class ResourcePack {
     }
 
     public static void send(Player player){
+        if(HASH == null) return;
         String url = getUrl();
         String s = BattleApi.getInstance().getGeneralConfig().getResourcePackCustomUrl();
         if(s != null && !(s = s.trim()).isEmpty()) url = s;
