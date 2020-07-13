@@ -51,7 +51,7 @@ public class ArenaChooser implements Pagination {
             }
             PreparedItem icon = infoHolder.compile().replace(arena.getIcon().duplicate());
             slot.setPaginationItem(icon);
-            slot.setExtraClickFunction(object -> api.getArenaManager().join(object.getPlayer(), arena));
+            slot.setExtraClickFunction((vm, report) -> api.getArenaManager().join(report.getPlayer(), arena));
         }
     }
 }

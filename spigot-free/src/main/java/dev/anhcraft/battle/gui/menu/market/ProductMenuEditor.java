@@ -45,7 +45,7 @@ public class ProductMenuEditor implements Pagination {
             }
             Slot slot = chain.next();
             slot.setPaginationItem(p.getIcon().duplicate());
-            slot.setExtraClickFunction(report -> {
+            slot.setExtraClickFunction((vm, report) -> {
                 view.getWindow().getDataContainer().put(GDataRegistry.MARKET_PRODUCT_EDITOR, p);
                 api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_EDITOR);
             });

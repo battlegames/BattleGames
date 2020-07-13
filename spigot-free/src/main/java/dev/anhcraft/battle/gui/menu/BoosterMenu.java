@@ -54,16 +54,16 @@ public class BoosterMenu implements Pagination {
                 }
                 Slot slot = chain.next();
                 slot.setPaginationItem(b.getIcon().duplicate());
-                slot.setExtraClickFunction(object -> {
+                slot.setExtraClickFunction((vm, report) -> {
                     if(pd.getActiveBooster() != null){
                         if(pd.getActiveBooster().equals(id)){
-                            api.getChatManager().sendPlayer(object.getPlayer(), "booster.already_used");
+                            api.getChatManager().sendPlayer(report.getPlayer(), "booster.already_used");
                         } else {
-                            api.getChatManager().sendPlayer(object.getPlayer(), "booster.another_used");
+                            api.getChatManager().sendPlayer(report.getPlayer(), "booster.another_used");
                         }
                     } else {
                         pd.setActiveBooster(id);
-                        api.getChatManager().sendPlayer(object.getPlayer(), "booster.active_success");
+                        api.getChatManager().sendPlayer(report.getPlayer(), "booster.active_success");
                     }
                 });
             }

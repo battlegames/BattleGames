@@ -21,16 +21,18 @@
 package dev.anhcraft.battle.api.gui.struct;
 
 import dev.anhcraft.battle.api.gui.SlotReport;
-import dev.anhcraft.battle.utils.functions.FunctionCaller;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.inst.VM;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
+
 public class Slot {
     private final int position;
     private final Component component;
-    private FunctionCaller<SlotReport> extraClickFunction;
+    private BiConsumer<VM, SlotReport> extraClickFunction;
     private PreparedItem paginationItem;
 
     public Slot(int position, @NotNull Component component) {
@@ -58,11 +60,11 @@ public class Slot {
     }
 
     @Nullable
-    public FunctionCaller<SlotReport> getExtraClickFunction() {
+    public BiConsumer<VM, SlotReport> getExtraClickFunction() {
         return extraClickFunction;
     }
 
-    public void setExtraClickFunction(@Nullable FunctionCaller<SlotReport> extraClickFunction) {
+    public void setExtraClickFunction(@Nullable BiConsumer<VM, SlotReport> extraClickFunction) {
         this.extraClickFunction = extraClickFunction;
     }
 }

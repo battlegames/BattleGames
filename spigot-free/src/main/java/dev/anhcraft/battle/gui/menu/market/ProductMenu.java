@@ -82,7 +82,7 @@ public class ProductMenu implements Pagination {
 
             Slot slot = chain.next();
             slot.setPaginationItem(ic);
-            slot.setExtraClickFunction(report -> {
+            slot.setExtraClickFunction((vm, report) -> {
                 PlayerData pd = api.getPlayerData(player);
                 if(pd == null) return;
 

@@ -47,36 +47,36 @@ public class KitMenu implements Pagination {
                 Slot slot = chain.next();
                 if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
                     slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
-                    slot.setExtraClickFunction(object -> api.getChatManager().sendPlayer(object.getPlayer(), "kit.no_permission"));
+                    slot.setExtraClickFunction((vm, report) -> api.getChatManager().sendPlayer(report.getPlayer(), "kit.no_permission"));
                     return;
                 }
                 long last = pd.getKits().getOrDefault(kit.getId(), 0L);
                 if(last != 0){
                     if(kit.getRenewTime() == -1){
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
-                        slot.setExtraClickFunction(object -> api.getChatManager().sendPlayer(object.getPlayer(), "kit.one_time_use"));
+                        slot.setExtraClickFunction((vm, report) -> api.getChatManager().sendPlayer(report.getPlayer(), "kit.one_time_use"));
                         return;
                     }
                     long next = last + kit.getRenewTime()*50;
                     if(next > System.currentTimeMillis()){
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
-                        slot.setExtraClickFunction(object -> {
+                        slot.setExtraClickFunction((vm, report) -> {
                             String f = api.formatLongFormDate(new Date(next));
-                            api.getChatManager().sendPlayer(object.getPlayer(), "kit.unavailable", new InfoHolder("").inform("next_available_date", f).compile());
+                            api.getChatManager().sendPlayer(report.getPlayer(), "kit.unavailable", new InfoHolder("").inform("next_available_date", f).compile());
                         });
                         return;
                     }
                 }
 
                 slot.setPaginationItem(kit.getIcon().duplicate());
-                slot.setExtraClickFunction(object -> {
+                slot.setExtraClickFunction((vm, report) -> {
                     KitReceiveEvent event = new KitReceiveEvent(player, kit);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) return;
 
-                    kit.givePlayer(object.getPlayer(), pd);
+                    kit.givePlayer(report.getPlayer(), pd);
                     pd.getKits().put(kit.getId(), System.currentTimeMillis());
-                    api.getGuiManager().openTopGui(object.getPlayer(), "kit_menu");
+                    api.getGuiManager().openTopGui(report.getPlayer(), "kit_menu");
                 });
             }
         }

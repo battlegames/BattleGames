@@ -95,7 +95,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             Instruction[] ins = s.getComponent().getClickFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
             vm.newSession(ins).execute();
             if (s.getExtraClickFunction() != null) {
-                s.getExtraClickFunction().call(new SlotReport(p, event, v, slot));
+                s.getExtraClickFunction().accept(vm, new SlotReport(p, event, v, slot));
             }
         } catch (FunctionRegisterFailed functionRegisterFailed) {
             functionRegisterFailed.printStackTrace();
