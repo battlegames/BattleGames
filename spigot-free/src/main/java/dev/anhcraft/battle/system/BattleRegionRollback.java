@@ -27,7 +27,6 @@ import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
-import dev.anhcraft.craftkit.utils.BlockUtil;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
@@ -35,7 +34,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.MultipleFacing;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -151,7 +153,10 @@ public class BattleRegionRollback extends BattleComponent {
                                     ObjectUtil.optional(b.getValue("z", IntTag.class), 0)
                             );
                             BlockData bd = Bukkit.createBlockData(Objects.requireNonNull(b.getValue("data", StringTag.class)));
-                            BlockUtil.setBlockFast(pos.getBlock(), bd, false, true);
+                            pos.getBlock().setBlockData(bd,
+                                    bd instanceof Directional
+                                    || bd instanceof MultipleFacing
+                                    || bd instanceof Bisected);
                             BlockState te = pos.getBlock().getState();
                             if(te.isPlaced()) {
                                 CompoundTag tileEntity = b.get("tileEntity", CompoundTag.class);
