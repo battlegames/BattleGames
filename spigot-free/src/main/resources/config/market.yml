@@ -2,7 +2,7 @@
 
 options:
   log_transactions: true
-  summary_product_info:
+  product_lore_footer:
     enabled: true
     lore:
       - "&f"

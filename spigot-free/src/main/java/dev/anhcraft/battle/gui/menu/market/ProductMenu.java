@@ -68,8 +68,8 @@ public class ProductMenu implements Pagination {
                     .compile()
                     .replace(currencyFormat);
             PreparedItem ic = p.getIcon().duplicate();
-            if(mk.isSummaryProductInfoEnabled()){
-                List<String> lore = mk.getSummaryProductLore();
+            if(mk.isProductLoreFooterEnabled()){
+                List<String> lore = mk.getProductLoreFooter();
                 if(lore != null) {
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);

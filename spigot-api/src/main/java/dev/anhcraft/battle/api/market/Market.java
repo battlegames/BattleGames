@@ -47,11 +47,11 @@ public class Market extends ConfigurableObject {
 
     @Key("options.summary_product_info.enabled")
     @Explanation("Should we summarize the details of each product")
-    private boolean summaryProductInfoEnabled;
+    private boolean productLoreFooterEnabled;
 
     @Key("options.summary_product_info.lore")
     @Explanation("Additional lore that contains common stuff about the product (e.g: price)")
-    private List<String> summaryProductLore;
+    private List<String> productLoreFooter;
 
     @Key("options.transaction_item")
     @Explanation("The item to be displayed for each transaction in the transaction menu")
@@ -70,17 +70,17 @@ public class Market extends ConfigurableObject {
         this.logTransactions = logTransactions;
     }
 
-    public boolean isSummaryProductInfoEnabled() {
-        return summaryProductInfoEnabled;
+    public boolean isProductLoreFooterEnabled() {
+        return productLoreFooterEnabled;
     }
 
-    public void setSummaryProductInfoEnabled(boolean summaryProductInfoEnabled) {
-        this.summaryProductInfoEnabled = summaryProductInfoEnabled;
+    public void setProductLoreFooterEnabled(boolean productLoreFooterEnabled) {
+        this.productLoreFooterEnabled = productLoreFooterEnabled;
     }
 
     @Nullable
-    public List<String> getSummaryProductLore() {
-        return summaryProductLore;
+    public List<String> getProductLoreFooter() {
+        return productLoreFooter;
     }
 
     @NotNull
