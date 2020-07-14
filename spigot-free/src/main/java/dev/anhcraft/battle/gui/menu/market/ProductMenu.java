@@ -39,6 +39,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.lang.Instruction;
+import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -119,7 +120,7 @@ public class ProductMenu implements Pagination {
                 if(mk.shouldLogTransactions()){
                     pd.getTransactions().add(new Transaction(
                             player.getUniqueId(),
-                            p.getId(),
+                            ObjectUtil.optional(p.getIcon().name(), p.getId()),
                             p.getPrice(),
                             p.getCurrency().name(),
                             System.currentTimeMillis()
