@@ -335,14 +335,15 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         kitConfigManager.reloadConfig();
         perkConfigManager.reloadConfig();
         boosterConfigManager.reloadConfig();
-        marketConfigManager.reloadConfig();
         advancementConfigManager.reloadConfig();
         if(VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0){
             getLogger().info("Looks like the current config system has been outdated.");
             getLogger().info("The plugin will try to update it for you!");
             getLogger().info("Update details: v1 -> v2");
+            getLogger().info("- " + marketConfigManager.getFilePath());
             getLogger().info("- " + guiConfigManager.getFilePath());
             ///////////////
+            marketConfigManager.reloadConfig(true);
             guiConfigManager.reloadConfig(true);
             ///////////////
             if(!systemConf.isRemoteConfigEnabled()) {
@@ -356,6 +357,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 }
             }
         } else {
+            marketConfigManager.reloadConfig();
             guiConfigManager.reloadConfig();
         }
         premiumConnector.onReloadConfig();
