@@ -147,6 +147,10 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("The Battle exp to be given later")
     private long battleExp;
 
+    @Key("executions.call_function")
+    @Explanation("Function to be called when purchased successfully")
+    private List<String> callFunction;
+
     public Product(@NotNull String id) {
         Condition.argNotNull("id", id);
         this.id = id;
@@ -236,6 +240,11 @@ public class Product extends ConfigurableObject implements Informative {
     @Nullable
     public List<String> getGameModeReserved() {
         return gameModeReserved;
+    }
+
+    @Nullable
+    public List<String> getCallFunction() {
+        return callFunction;
     }
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){

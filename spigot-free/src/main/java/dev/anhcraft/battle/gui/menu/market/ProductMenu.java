@@ -38,6 +38,7 @@ import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.inst.lang.Instruction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -110,6 +111,10 @@ public class ProductMenu implements Pagination {
                 Bukkit.getPluginManager().callEvent(new PlayerPurchaseEvent(player, mk, ctg, p));
 
                 p.givePlayer(player, pd);
+                if(p.getCallFunction() != null) {
+                    Instruction[] ins = p.getCallFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
+                }
                 api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_success");
                 if(mk.shouldLogTransactions()){
                     pd.getTransactions().add(new Transaction(
