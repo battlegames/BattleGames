@@ -21,7 +21,9 @@
 package dev.anhcraft.battle.api.misc;
 
 import dev.anhcraft.battle.api.effect.potion.BattlePotionEffect;
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -39,7 +41,7 @@ import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
-public class Perk extends ConfigurableObject {
+public class Perk extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Perk> SCHEMA = ConfigSchema.of(Perk.class);
 
     private final String id;
@@ -143,5 +145,14 @@ public class Perk extends ConfigurableObject {
             return parent;
         }
         return value;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        holder.inform("id", id)
+                .inform("name", name)
+                .inform("effects", potionEffects.size())
+                .inform("new_health", newHealth)
+                .inform("new_food_level", newFoodLevel);
     }
 }

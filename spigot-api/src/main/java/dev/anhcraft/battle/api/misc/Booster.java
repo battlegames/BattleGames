@@ -20,7 +20,9 @@
 
 package dev.anhcraft.battle.api.misc;
 
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
-public class Booster extends ConfigurableObject {
+public class Booster extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Booster> SCHEMA = ConfigSchema.of(Booster.class);
 
     private final String id;
@@ -101,5 +103,15 @@ public class Booster extends ConfigurableObject {
 
     public int getExpLimit() {
         return expLimit;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        holder.inform("id", id)
+                .inform("expiry_time", expiryTime)
+                .inform("money_multiplier", moneyMultiplier)
+                .inform("money_limit", moneyLimit)
+                .inform("exp_multiplier", expMultiplier)
+                .inform("exp_limit", expLimit);
     }
 }

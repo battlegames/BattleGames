@@ -24,8 +24,11 @@ import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.EnumUtil;
+import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.battle.utils.info.State;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -46,7 +49,7 @@ import java.util.Set;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
-public class Kit extends ConfigurableObject {
+public class Kit extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Kit> SCHEMA = ConfigSchema.of(Kit.class);
     private static final PreparedItem DEF_NO_ACCESS = new PreparedItem();
 
@@ -244,5 +247,15 @@ public class Kit extends ConfigurableObject {
             }
         }
         return o;
+    }
+
+    @Override
+    public void inform(@NotNull InfoHolder holder) {
+        holder.inform("id", id)
+                .inform("renew_time", renewTime)
+                .inform("vanilla_items", vanillaItems.length)
+                .inform("battle_items", battleItems.size())
+                .inform("boosters", boosters.size())
+                .inform("first_join", State.TRUE.inCaseOf(firstJoin));
     }
 }
