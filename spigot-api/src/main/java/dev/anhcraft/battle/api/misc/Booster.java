@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.api.misc;
 
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -30,6 +31,7 @@ import dev.anhcraft.confighelper.annotation.Schema;
 import dev.anhcraft.confighelper.annotation.Validation;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
+import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
@@ -108,7 +110,9 @@ public class Booster extends ConfigurableObject implements Informative {
     @Override
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id)
+                .inform("name", ObjectUtil.optional(icon.name(), id))
                 .inform("expiry_time", expiryTime)
+                .inform("formatted_expiry_time", BattleApi.getInstance().formatShortFormTime(expiryTime))
                 .inform("money_multiplier", moneyMultiplier)
                 .inform("money_limit", moneyLimit)
                 .inform("exp_multiplier", expMultiplier)
