@@ -553,6 +553,23 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     @Override
+    public @Nullable BattleItemModel getItemModel(@NotNull ItemType itemType, @NotNull String id) {
+        switch (itemType) {
+            case AMMO:
+                return getAmmoModel(id);
+            case GUN:
+                return getGunModel(id);
+            case MAGAZINE:
+                return getMagazineModel(id);
+            case SCOPE:
+                return getScopeModel(id);
+            case GRENADE:
+                return getGrenadeModel(id);
+        }
+        return null;
+    }
+
+    @Override
     public AmmoModel getAmmoModel(@Nullable String id) {
         return ammoConfigManager.AMMO_MAP.get(id);
     }

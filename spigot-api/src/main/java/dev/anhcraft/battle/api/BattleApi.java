@@ -254,6 +254,16 @@ public interface BattleApi {
     Gui getGui(@Nullable String id);
 
     /**
+     * Gets item model by type and id.
+     * @param itemType the type of item
+     * @param id the id of item
+     * @param <T> the item model
+     * @return item model
+     */
+    @Nullable
+    BattleItemModel getItemModel(@NotNull ItemType itemType, @NotNull String id);
+
+    /**
      * Gets the ammo that matches the given id.
      * @param id the id of the ammo
      * @return {@link AmmoModel} if found or null if not
