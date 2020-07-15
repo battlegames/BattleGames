@@ -22,10 +22,7 @@ package dev.anhcraft.battle.api.gui.struct;
 
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
@@ -62,26 +59,69 @@ public class Component extends ConfigurableObject {
     private final String id;
 
     @Key("positions")
+    @Explanation("List of slots belong to this component")
+    @Example("positions: 1 -> 9; 1 -> 3")
+    @Example("positions: 3 -> 5; 4")
+    @Example({
+            "positions:",
+            " - 1 ; 2",
+            " - 1 ; 2 -> 4"
+    })
     @Validation(notNull = true)
     private List<Integer> positions;
 
     @Key("item")
+    @Explanation({
+            "The item to set in the GUI",
+            "All slots belong to this component will have the same item"
+    })
     @IgnoreValue(ifNull = true)
     private PreparedItem item = DEFAULT_ITEM;
 
     @Key("functions.on_init")
+    @Explanation({
+            "The function that gets called when one slot of this component is initialized",
+            "The function is a set of instructions.",
+            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+    })
+    @Example({
+            "on_init:",
+            " - Common:CopyCurrentSlot(\"window\" \"positionOfThisSlot\")"
+    })
     @IgnoreValue(ifNull = true)
     private List<String> initFunction = new ArrayList<>();
 
     @Key("functions.on_click")
+    @Explanation({
+            "The function that gets called when one slot of this component is clicked",
+            "The function is a set of instructions.",
+            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+    })
+    @Example({
+            "on_click:",
+            " - Common:CancelEvent() # Prevent steal items"
+    })
     @IgnoreValue(ifNull = true)
     private List<String> clickFunction = new ArrayList<>();
 
     @Key("functions.on_render")
+    @Explanation({
+            "The function that gets called when one slot of this component is rendered",
+            "The function is a set of instructions.",
+            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+    })
+    @Example({
+            "on_render:",
+            " - Common:SetItemFromData(\"window\" \"value\" &#36;_window_positionOfThisSlot \"not-null\")"
+    })
     @IgnoreValue(ifNull = true)
     private List<String> renderFunction = new ArrayList<>();
 
     @Key("pagination")
+    @Explanation({
+            "Pagination that support multiple items to display in this component",
+            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+    })
     private String pagination;
 
     public Component(@NotNull String id) {

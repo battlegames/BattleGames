@@ -44,6 +44,7 @@ public class BedWarOptions extends ModeOptions {
     private int teamSize = 2;
 
     @Key("teams")
+    @Explanation("List of teams")
     @Example({
             "teams:",
             "  '1':",

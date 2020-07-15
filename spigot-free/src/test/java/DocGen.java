@@ -39,56 +39,113 @@ import dev.anhcraft.battle.api.inventory.ItemSkin;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.battle.api.market.PackageDetails;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.configdoc.ConfigDocGenerator;
+import dev.anhcraft.jvmkit.utils.FileUtil;
+import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class DocGen {
-    public static void main(String[] args){
+    @Test
+    public void sort() {
+        String s = "\n" +
+                "                .withSchema(Ammo.Bullet.SCHEMA)\n" +
+                "                .withSchema(AmmoModel.SCHEMA)\n" +
+                "                .withSchema(MagazineModel.SCHEMA)\n" +
+                "                .withSchema(GrenadeModel.SCHEMA)\n" +
+                "                .withSchema(GunModel.SCHEMA)\n" +
+                "                .withSchema(ScopeModel.SCHEMA)\n" +
+                "                .withSchema(Kit.SCHEMA)\n" +
+                "                .withSchema(ItemSkin.SCHEMA)\n" +
+                "                .withSchema(BattleScoreboard.SCHEMA)\n" +
+                "                .withSchema(BattleChat.SCHEMA)\n" +
+                "                .withSchema(BattleBar.SCHEMA)\n" +
+                "                .withSchema(BattleEffect.SCHEMA)\n" +
+                "                .withSchema(BattleFirework.SCHEMA)\n" +
+                "                .withSchema(BattleFireworkEffect.SCHEMA)\n" +
+                "                .withSchema(BattlePotionEffect.SCHEMA)\n" +
+                "                .withSchema(BattleParticle.SCHEMA)\n" +
+                "                .withSchema(FakeBlockEffect.SCHEMA)\n" +
+                "                .withSchema(Perk.SCHEMA)\n" +
+                "                .withSchema(Booster.SCHEMA)\n" +
+                "                .withSchema(Arena.SCHEMA)\n" +
+                "                .withSchema(Rollback.SCHEMA)\n" +
+                "                .withSchema(Product.SCHEMA)\n" +
+                "                .withSchema(PackageDetails.SCHEMA)\n" +
+                "                .withSchema(Category.SCHEMA)\n" +
+                "                .withSchema(Market.SCHEMA)\n" +
+                "                .withSchema(GeneralConfig.SCHEMA)\n" +
+                "                .withSchema(Gui.SCHEMA)\n" +
+                "                .withSchema(Component.SCHEMA)\n" +
+                "                .withSchema(DeathmatchOptions.SCHEMA)\n" +
+                "                .withSchema(TeamDeathmatchOptions.SCHEMA)\n" +
+                "                .withSchema(CaptureTheFlagOptions.SCHEMA)\n" +
+                "                .withSchema(FlagOptions.SCHEMA)\n" +
+                "                .withSchema(BedWarOptions.SCHEMA)\n" +
+                "                .withSchema(BWTeamOptions.SCHEMA)\n" +
+                "                .withSchema(MobRescueOptions.SCHEMA)\n" +
+                "                .withSchema(MobGroup.SCHEMA)\n" +
+                "                .withSchema(MobRescueObjective.SCHEMA)\n" +
+                "                .withSchema(Advancement.SCHEMA)\n" +
+                "                .withSchema(Progression.SCHEMA)\n" +
+                "                .withSchema(Mode.SCHEMA)";
+        List<String> x = Arrays.asList(s.split("\n"));
+        Collections.sort(x);
+        System.out.println(String.join("\n", x));
+    }
+
+    @Test
+    public void gen(){
         new ConfigDocGenerator()
+                .withSchema(Advancement.SCHEMA)
                 .withSchema(Ammo.Bullet.SCHEMA)
                 .withSchema(AmmoModel.SCHEMA)
-                .withSchema(MagazineModel.SCHEMA)
-                .withSchema(GrenadeModel.SCHEMA)
-                .withSchema(GunModel.SCHEMA)
-                .withSchema(ScopeModel.SCHEMA)
-                .withSchema(Kit.SCHEMA)
-                .withSchema(ItemSkin.SCHEMA)
-                .withSchema(BattleScoreboard.SCHEMA)
-                .withSchema(BattleChat.SCHEMA)
+                .withSchema(Arena.SCHEMA)
+                .withSchema(BWTeamOptions.SCHEMA)
                 .withSchema(BattleBar.SCHEMA)
+                .withSchema(BattleChat.SCHEMA)
                 .withSchema(BattleEffect.SCHEMA)
                 .withSchema(BattleFirework.SCHEMA)
                 .withSchema(BattleFireworkEffect.SCHEMA)
-                .withSchema(BattlePotionEffect.SCHEMA)
                 .withSchema(BattleParticle.SCHEMA)
-                .withSchema(FakeBlockEffect.SCHEMA)
-                .withSchema(Perk.SCHEMA)
+                .withSchema(BattlePotionEffect.SCHEMA)
+                .withSchema(BattleScoreboard.SCHEMA)
+                .withSchema(BedWarOptions.SCHEMA)
                 .withSchema(Booster.SCHEMA)
-                .withSchema(Arena.SCHEMA)
-                .withSchema(Rollback.SCHEMA)
-                .withSchema(Product.SCHEMA)
+                .withSchema(CaptureTheFlagOptions.SCHEMA)
                 .withSchema(Category.SCHEMA)
-                .withSchema(Market.SCHEMA)
-                .withSchema(GeneralConfig.SCHEMA)
-                .withSchema(Gui.SCHEMA)
                 .withSchema(Component.SCHEMA)
                 .withSchema(DeathmatchOptions.SCHEMA)
-                .withSchema(TeamDeathmatchOptions.SCHEMA)
-                .withSchema(CaptureTheFlagOptions.SCHEMA)
+                .withSchema(FakeBlockEffect.SCHEMA)
                 .withSchema(FlagOptions.SCHEMA)
-                .withSchema(BedWarOptions.SCHEMA)
-                .withSchema(BWTeamOptions.SCHEMA)
-                .withSchema(MobRescueOptions.SCHEMA)
+                .withSchema(GeneralConfig.SCHEMA)
+                .withSchema(GrenadeModel.SCHEMA)
+                .withSchema(Gui.SCHEMA)
+                .withSchema(GunModel.SCHEMA)
+                .withSchema(ItemSkin.SCHEMA)
+                .withSchema(Kit.SCHEMA)
+                .withSchema(MagazineModel.SCHEMA)
+                .withSchema(Market.SCHEMA)
                 .withSchema(MobGroup.SCHEMA)
                 .withSchema(MobRescueObjective.SCHEMA)
-                .withSchema(Advancement.SCHEMA)
-                .withSchema(Progression.SCHEMA)
+                .withSchema(MobRescueOptions.SCHEMA)
                 .withSchema(Mode.SCHEMA)
+                .withSchema(PackageDetails.SCHEMA)
+                .withSchema(Perk.SCHEMA)
+                .withSchema(Product.SCHEMA)
+                .withSchema(Progression.SCHEMA)
+                .withSchema(Rollback.SCHEMA)
+                .withSchema(ScopeModel.SCHEMA)
+                .withSchema(TeamDeathmatchOptions.SCHEMA)
                 .addJavadoc("dev.anhcraft.battle.*", "https://anhcraft.dev/jd/battle")
                 .addJavadoc("dev.anhcraft.craftkit.*", "https://anhcraft.dev/jd/craftkit/spigot")
-                .generate(new File("docs"));
+                .generate(new File(Paths.get(FileUtil.WORKING_DIR_PATH).getParent().toFile(), "docs"));
     }
 }

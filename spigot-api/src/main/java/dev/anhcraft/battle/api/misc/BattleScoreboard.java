@@ -39,7 +39,7 @@ public class BattleScoreboard {
     @Key("title")
     @Explanation({
             "The title of the scoreboard",
-            "You can use placeholders here"
+            "You can use PAPI placeholders here"
     })
     @Validation(notNull = true)
     private String title;
@@ -47,7 +47,7 @@ public class BattleScoreboard {
     @Key("content")
     @Explanation({
             "The content of the scoreboard",
-            "You can use placeholders here"
+            "You can use PAPI placeholders here"
     })
     @IgnoreValue(ifNull = true)
     private List<String> content = new ArrayList<>();

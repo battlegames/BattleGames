@@ -24,6 +24,7 @@ import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import org.jetbrains.annotations.NotNull;
@@ -35,12 +36,18 @@ public class Progression extends ConfigurableObject implements Comparable<Progre
     public static final ConfigSchema<Progression> SCHEMA = ConfigSchema.of(Progression.class);
 
     @Key("amount")
+    @Explanation({
+            "Amount of objects need to be achieved",
+            "E.g: 10 kills, 10 wins, 10 deaths, etc"
+    })
     private double amount;
 
     @Key("reward.exp")
+    @Explanation("Amount of exp points to reward the player")
     private long rewardExp;
 
     @Key("reward.money")
+    @Explanation("Some money to reward the player")
     private double rewardMoney;
 
     public double getAmount() {

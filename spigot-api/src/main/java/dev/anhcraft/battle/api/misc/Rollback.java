@@ -62,12 +62,18 @@ public class Rollback extends ConfigurableObject {
     private List<String> worlds = new ArrayList<>();
 
     @Key("region.corner_1")
-    @Explanation("First corner in the region")
+    @Explanation({
+            "First corner in the region",
+            "This option only works with BATTLE_REGION"
+    })
     @IgnoreValue(ifNull = true)
     private String corner1;
 
     @Key("region.corner_2")
-    @Explanation("Second corner in the region")
+    @Explanation({
+            "Second corner in the region",
+            "This option only works with BATTLE_REGION"
+    })
     @IgnoreValue(ifNull = true)
     private String corner2;
 

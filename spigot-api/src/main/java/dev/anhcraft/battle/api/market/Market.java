@@ -40,15 +40,16 @@ public class Market extends ConfigurableObject {
     public static final ConfigSchema<Market> SCHEMA = ConfigSchema.of(Market.class);
 
     @Key("log_transactions")
+    @Explanation("Should we log the transactions made by players")
     private boolean logTransactions;
 
-    @Key("summary_product_info.enabled")
-    @Explanation("Should we summarize the details of each product")
+    @Key("product_lore_footer.enabled")
+    @Explanation("Should we add a nice footer to the lore of every product?")
     private boolean productLoreFooterEnabled;
 
-    @Key("summary_product_info.lore")
-    @Explanation("Additional lore that contains common stuff about the product (e.g: price)")
-    private List<String> productLoreFooter;
+    @Key("product_lore_footer.content")
+    @Explanation("Content of the footer")
+    private List<String> productLoreFooterContent;
 
     @Key("transaction_item")
     @Explanation("The item to be displayed for each transaction in the transaction menu")
@@ -114,8 +115,8 @@ public class Market extends ConfigurableObject {
     }
 
     @Nullable
-    public List<String> getProductLoreFooter() {
-        return productLoreFooter;
+    public List<String> getProductLoreFooterContent() {
+        return productLoreFooterContent;
     }
 
     @NotNull

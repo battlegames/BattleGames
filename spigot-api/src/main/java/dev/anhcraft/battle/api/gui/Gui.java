@@ -28,10 +28,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
@@ -54,14 +51,17 @@ public class Gui extends ConfigurableObject implements Informative {
     private int size;
 
     @Key("title")
+    @Explanation("A nice title for the GUI")
     @Validation(notNull = true)
     private String title;
 
     @Key("components")
+    @Explanation("List of components")
     @IgnoreValue(ifNull = true)
     private List<Component> components = new ArrayList<>();
 
     @Key("sound")
+    @Explanation("Sound to play on opening")
     private BattleSound sound;
 
     public Gui(@NotNull String id) {

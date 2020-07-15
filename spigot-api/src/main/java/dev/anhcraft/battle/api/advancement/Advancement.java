@@ -44,29 +44,20 @@ public class Advancement extends ConfigurableObject implements Informative {
 
     @Key("type")
     @Explanation({
-            "The type of this advancement",
-            "This is also the name of statistic type",
-            "All statistic types:",
-            "- kills",
-            "- first_kills",
-            "- assists",
-            "- headshot",
-            "- deaths",
-            "- wins",
-            "- loses",
-            "- respawns",
-            "Except for \"exp\", it is not supported."
+            "The statistic type",
+            "All statistic types can be seen here: <a href=\"https://wiki.anhcraft.dev/battle/stats\">https://wiki.anhcraft.dev/battle/stats</a>",
+            "Except \"exp\" which is not supported."
     })
     @Validation(notNull = true)
     private String type;
 
     @Key("name")
-    @Explanation("The name of this advancement")
+    @Explanation("The advancement's name")
     @Validation(notNull = true)
     private String name;
 
     @Key("description")
-    @Explanation("What this advancement about")
+    @Explanation("A nice description for this advancement")
     private List<String> description;
 
     @Key("icon")
@@ -87,7 +78,7 @@ public class Advancement extends ConfigurableObject implements Informative {
     @Key("progression")
     @Explanation({
             "Different period of this advancements",
-            "They can be known as 'level'"
+            "They can be known as 'levels'"
     })
     @Validation(notNull = true)
     private SortedSet<Progression> progression;

@@ -21,6 +21,7 @@
 package dev.anhcraft.battle.api.market;
 
 import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
@@ -30,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class PackageDetails extends ConfigurableObject {
+    public static final ConfigSchema<?> SCHEMA = ConfigSchema.of(PackageDetails.class);
+
     @Key("item_header")
     @Explanation("A nice header for the Item part")
     @Validation(notNull = true)
@@ -38,7 +41,7 @@ public class PackageDetails extends ConfigurableObject {
     @Key("item_format.vanilla")
     @Explanation({
             "The format of each Vanilla item to show in the details",
-            "Placeholders: <name>, <amount>"
+            "Placeholders: &lt;name&gt;, &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String vanillaItemFormat;
@@ -46,7 +49,7 @@ public class PackageDetails extends ConfigurableObject {
     @Key("item_format.battle")
     @Explanation({
             "The format of each Battle item to show in the details",
-            "Placeholders: <name>"
+            "Placeholders: &lt;name&gt;"
     })
     @Validation(notNull = true)
     private String battleItemFormat;
@@ -59,7 +62,7 @@ public class PackageDetails extends ConfigurableObject {
     @Key("exp_format.vanilla")
     @Explanation({
             "A line to show how many Vanilla exp points will be given",
-            "Placeholders: <amount>"
+            "Placeholders: &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String vanillaExpFormat;
@@ -67,7 +70,7 @@ public class PackageDetails extends ConfigurableObject {
     @Key("exp_format.battle")
     @Explanation({
             "A line to show how many Battle exp points will be given",
-            "Placeholders: <amount>"
+            "Placeholders: &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String battleExpFormat;
@@ -81,7 +84,7 @@ public class PackageDetails extends ConfigurableObject {
     @Explanation({
             "The format for each perk to show in the details",
             "You can use all informative placeholders for Perk here.",
-            "<id>, <name>, <effects>, <new_health>, <new_food_level>"
+            "&lt;id&gt;, &lt;name&gt;, &lt;effects&gt;, &lt;new_health&gt;, &lt;new_food_level&gt;"
     })
     @Validation(notNull = true)
     private String perkFormat;
@@ -95,8 +98,8 @@ public class PackageDetails extends ConfigurableObject {
     @Explanation({
             "The format for each booster to show in the details",
             "You can use all informative placeholders for Booster here.",
-            "<id>, <name>, <expiry_time>, <formatted_expiry_time>, <money_limit>",
-            "<money_multiplier>, <exp_limit>, <exp_multiplier>"
+            "&lt;id&gt;, &lt;name&gt;, &lt;expiry_time&gt;, &lt;formatted_expiry_time&gt;, &lt;money_limit&gt;",
+            "&lt;money_multiplier&gt;, &lt;exp_limit&gt;, &lt;exp_multiplier&gt;"
     })
     @Validation(notNull = true)
     private String boosterFormat;

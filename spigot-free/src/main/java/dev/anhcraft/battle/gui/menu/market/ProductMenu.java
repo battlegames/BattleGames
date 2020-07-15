@@ -70,7 +70,7 @@ public class ProductMenu implements Pagination {
                     .replace(currencyFormat);
             PreparedItem ic = p.getIcon().duplicate();
             if(mk.isProductLoreFooterEnabled()){
-                List<String> lore = mk.getProductLoreFooter();
+                List<String> lore = mk.getProductLoreFooterContent();
                 if(lore != null) {
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);

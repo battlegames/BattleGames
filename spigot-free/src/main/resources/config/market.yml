@@ -4,7 +4,7 @@ log_transactions: true
 
 product_lore_footer:
   enabled: true
-  lore:
+  content:
     - "&f"
     - "&fPrice: &d<product_price_formatted>"
     - "&f"

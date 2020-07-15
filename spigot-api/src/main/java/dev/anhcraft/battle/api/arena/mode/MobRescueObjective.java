@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.arena.mode;
 
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
+import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 
@@ -31,12 +32,15 @@ public class MobRescueObjective extends ConfigurableObject {
     public static final ConfigSchema<MobRescueObjective> SCHEMA = ConfigSchema.of(MobRescueObjective.class);
 
     @Key("amount.min")
+    @Explanation("Minimum amount of entities")
     private int minAmount = 1;
 
     @Key("amount.max")
+    @Explanation("Maximum amount of entities")
     private int maxAmount = 1;
 
     @Key("reward_coins")
+    @Explanation("Some coins to reward the player")
     private double rewardCoins;
 
     public int getMinAmount() {

@@ -73,11 +73,11 @@ public class Arena extends ConfigurableObject implements Informative {
     private PreparedItem icon;
 
     @Key("max_time")
-    @Explanation("The maximum playing time in this arena")
+    @Explanation("The maximum playing time")
     private long maxTime;
 
     @Key("max_players")
-    @Explanation("The maximum players in this arena")
+    @Explanation("The maximum number of players")
     private int maxPlayers;
 
     @Key("allow_late_joins")
@@ -163,7 +163,7 @@ public class Arena extends ConfigurableObject implements Informative {
     private List<String> wonReport;
 
     @Key("result_broadcast.lost")
-    @Explanation("The message to be sent to the winners")
+    @Explanation("The message to be sent to the losers")
     private List<String> lostReport;
 
     @Key("rollback")

@@ -39,7 +39,8 @@ public class BattleChat {
     @Key("format")
     @Explanation({
             "The format of messages",
-            "You can use placeholders here"
+            "You can use PAPI placeholders here",
+            "Informative placeholders: &lt;message&gt;"
     })
     @Validation(notNull = true)
     private String format;

@@ -58,24 +58,29 @@ public class Ammo extends BattleItem<AmmoModel> {
         public static final ConfigSchema<Bullet> SCHEMA = ConfigSchema.of(Bullet.class);
 
         @Key("damage")
-        @Explanation("The damage")
+        @Explanation({
+                "Amount of damage to the target",
+                "This damage may be increased or decreased relying on other",
+                "factors like damage buff, damage resistance, etc"
+        })
         private double damage;
 
         @Key("knockback")
-        @Explanation("The knockback power")
+        @Explanation("The knockback power to push the target backward")
         private double knockback;
 
         @Key("penetration_power")
         @Explanation({
                 "The penetration power",
-                "Every time a bullet digs through a block, its power will be reduced until reaches zero and stop flying."
+                "Every time a bullet digs through a block, its power will be",
+                "reduced until reaches zero and stop flying."
         })
         private int penetrationPower;
 
         @Key("fire_ticks")
         @Explanation({
                 "How long does the fire remain on the target",
-                "Set to 0 to prevent the fire"
+                "Set to 0 to turn off the fire"
         })
         private int fireTicks;
 
