@@ -23,10 +23,7 @@ package dev.anhcraft.battle.api.market;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.confighelper.annotation.*;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,20 +39,58 @@ import java.util.List;
 public class Market extends ConfigurableObject {
     public static final ConfigSchema<Market> SCHEMA = ConfigSchema.of(Market.class);
 
-    @Key("options.log_transactions")
+    @Key("log_transactions")
     private boolean logTransactions;
 
-    @Key("options.summary_product_info.enabled")
+    @Key("summary_product_info.enabled")
     @Explanation("Should we summarize the details of each product")
     private boolean productLoreFooterEnabled;
 
-    @Key("options.summary_product_info.lore")
+    @Key("summary_product_info.lore")
     @Explanation("Additional lore that contains common stuff about the product (e.g: price)")
     private List<String> productLoreFooter;
 
-    @Key("options.transaction_item")
+    @Key("transaction_item")
     @Explanation("The item to be displayed for each transaction in the transaction menu")
     private PreparedItem transactionItem;
+
+    @Key("default_product_icon.empty")
+    @Explanation({
+            "<b>Default</b> icon for empty products",
+            "A product is considered as <i>'empty'</i> when it has nothing to benefit the player",
+            "in other words: <b>no exp points, no items are given, no perks and no boosters.</b>"
+    })
+    @Validation(notNull = true)
+    private PreparedItem defaultIconForEmptyProduct;
+
+    @Key("default_product_icon.package")
+    @Explanation({
+            "<b>Default</b> icon for packages",
+            "A package is a product that gives player booster, perks, exp or items",
+            "(for items, <b>requires the amount of two or more</b>)",
+            "<i>To change the package name, you can set the option `package_name` that",
+            "can be seen more in the Product schema.</i>",
+            "A product with one item only will not be considered as a package, the default",
+            "icon for that product is the item. However, you can change that by looking at",
+            "the below option ('default_product_icon.single_item_package')"
+    })
+    @Validation(notNull = true)
+    private PreparedItem defaultIconForPackage;
+
+    @Key("default_product_icon.package_details")
+    @Explanation("Details for the default icon for packages")
+    @Validation(notNull = true)
+    private PackageDetails packageDetails;
+
+    @Key("default_product_icon.single_item_package")
+    @Explanation({
+            "Should we treat single item as 'package'",
+            "As explained above, if a product only gives",
+            "the player one item, the default icon will be",
+            "that item. Set this option to true will make",
+            "it rendered as a package."
+    })
+    private boolean treatSingleItemAsPackage;
 
     @Key("categories")
     @Explanation("All categories")
@@ -91,6 +126,25 @@ public class Market extends ConfigurableObject {
     @Nullable
     public PreparedItem getTransactionItem() {
         return transactionItem;
+    }
+
+    @NotNull
+    public PreparedItem getDefaultIconForEmptyProduct() {
+        return defaultIconForEmptyProduct;
+    }
+
+    @NotNull
+    public PreparedItem getDefaultIconForPackage() {
+        return defaultIconForPackage;
+    }
+
+    @NotNull
+    public PackageDetails getPackageDetails() {
+        return packageDetails;
+    }
+
+    public boolean shouldTreatSingleItemAsPackage() {
+        return treatSingleItemAsPackage;
     }
 
     @Override

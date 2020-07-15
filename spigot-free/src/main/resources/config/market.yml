@@ -1,19 +1,45 @@
 # Configdoc: https://anhcraft.dev/cd/battle/Market.schema.html
 
-options:
-  log_transactions: true
-  product_lore_footer:
-    enabled: true
+log_transactions: true
+
+product_lore_footer:
+  enabled: true
+  lore:
+    - "&f"
+    - "&fPrice: &d<product_price_formatted>"
+    - "&f"
+    - "&e>> Click to purchase <<"
+
+transaction_item:
+  material: paper
+  name: "&f<product> &7(<formatted_price>)"
+  lore:
+    - "&7<formatted_date>"
+
+default_product_icon:
+  empty:
+    material: barrier
+    name: "&e&lEmpty"
     lore:
-      - "&f"
-      - "&fPrice: &d<product_price_formatted>"
-      - "&f"
-      - "&e>> Click to purchase <<"
-  transaction_item:
-    material: paper
-    name: "&f<product> &7(<formatted_price>)"
-    lore:
-      - "&7<formatted_date>"
+      - "&cDon't buy!!!"
+  package:
+    material: chest
+    name: "&e&lPackage"
+  package_details:
+    item_header: "&e◆ Items"
+    item_format:
+      vanilla: "&f- <name> &7(x<amount>)"
+      battle: "&f- <name>"
+    perk_header: "&e◆ Perks"
+    perk_format: "&f- <name>"
+    booster_header: "&e◆ Boosters"
+    booster_format: "&f- <name> &7(<formatted_expiry_time>)"
+    exp_header: "&e◆ Exp"
+    exp_format:
+      vanilla: "&a+<amount> &7Minecraft exp"
+      battle: "&a+<amount> &7exp"
+    separated_part_by_new_line: true
+  single_item_package: false
 
 categories:
   perks:
@@ -28,9 +54,8 @@ categories:
         - hide_enchants
     products:
       '1':
-        icon:
-          name: "&c&lHealth boost"
-          material: redstone
+        package_name: "&cHealth boost"
+        package_material: redstone
         currency: vault
         price: 75
         executions:
@@ -38,7 +63,7 @@ categories:
             - health_boost
       '2':
         icon:
-          name: "&a&lSpeed"
+          name: "&aSpeed"
           material: redstone
           lore:
             - "&aSpeed up your movement!"
@@ -71,9 +96,8 @@ categories:
                 material: bread
                 amount: 8
       '2':
-        icon:
-          name: "&4Meat"
-          material: cookie
+        package_name: "&4Meat"
+        package_material: cookie
         currency: vault
         price: 40
         executions:
@@ -91,29 +115,23 @@ categories:
       name: "&5&lMiscellaneous shop"
     products:
       '1':
-        icon:
-          name: "&aBuy 200 in-game exp"
-          material: ice
+        package_name: "&a200 exp"
         currency: vault
         price: 5000
         executions:
           give_exp:
-            vanilla: 200
+            battle: 200
       '2':
-        icon:
-          name: "&aBuy 1000 in-game exp"
-          material: ice
-          lore:
-            - "&eBonus: Get 20% Battle exp"
+        package_name: "&a1200 exp &c&l[HOT]"
         currency: vault
         price: 25000
         executions:
           give_exp:
-            vanilla: 1000
-            battle: 200
+            battle: 1200
+            vanilla: 199
       '3':
         icon:
-          name: "&bFlying&f ability"
+          name: "&bFlying &fAbility"
           material: feather
         currency: ing
         price: 200
@@ -131,9 +149,6 @@ categories:
       - bw
     products:
       stone_sword:
-        icon:
-          name: "&ax1 Stone Sword"
-          material: stone_sword
         currency: iron
         price: 10
         executions:
@@ -142,9 +157,6 @@ categories:
               '1':
                 material: stone_sword
       iron_sword:
-        icon:
-          name: "&ax1 Iron Sword"
-          material: iron_sword
         currency: gold
         price: 7
         executions:
@@ -153,9 +165,6 @@ categories:
               '1':
                 material: iron_sword
       diamond_sword:
-        icon:
-          name: "&ax1 Diamond Sword"
-          material: diamond_sword
         currency: emerald
         price: 4
         executions:
@@ -164,9 +173,6 @@ categories:
               '1':
                 material: diamond_sword
       arrow:
-        icon:
-          name: "&bx8 Arrows"
-          material: arrow
         currency: gold
         price: 2
         executions:
@@ -176,9 +182,6 @@ categories:
                 material: arrow
                 amount: 8
       bow:
-        icon:
-          name: "&bx1 Bow"
-          material: bow
         currency: gold
         price: 12
         executions:
@@ -187,11 +190,6 @@ categories:
               '1':
                 material: bow
       bow1:
-        icon:
-          name: "&bx1 Bow [+1]"
-          material: bow
-          enchant:
-            power: 1
         currency: gold
         price: 24
         executions:
@@ -202,12 +200,6 @@ categories:
                 enchant:
                   power: 1
       bow2:
-        icon:
-          name: "&bx1 Bow [+2]"
-          material: bow
-          enchant:
-            power: 1
-            punch: 1
         currency: emerald
         price: 6
         executions:
@@ -219,9 +211,6 @@ categories:
                   power: 1
                   punch: 1
       stone_pickaxe:
-        icon:
-          name: "&dx1 Stone Pickaxe"
-          material: stone_pickaxe
         currency: iron
         price: 10
         executions:
@@ -230,11 +219,6 @@ categories:
               '1':
                 material: stone_pickaxe
       iron_pickaxe:
-        icon:
-          name: "&dx1 Iron Pickaxe"
-          material: iron_pickaxe
-          enchant:
-            efficiency: 1
         currency: gold
         price: 8
         executions:
@@ -245,11 +229,6 @@ categories:
                 enchant:
                   efficiency: 1
       iron_pickaxe1:
-        icon:
-          name: "&dx1 Iron Pickaxe [+1]"
-          material: iron_pickaxe
-          enchant:
-            efficiency: 2
         currency: gold
         price: 16
         executions:
@@ -260,15 +239,15 @@ categories:
                 enchant:
                   efficiency: 2
       wool:
-        icon:
-          name: "&ax16 Wools"
-          material: white_wool
         currency: iron
         price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: white_wool
+                amount: 16
       sandstone:
-        icon:
-          name: "&ax16 Sandstones"
-          material: sandstone
         currency: iron
         price: 16
         executions:
@@ -278,9 +257,6 @@ categories:
                 material: sandstone
                 amount: 16
       obsidian:
-        icon:
-          name: "&ax4 Obsidians"
-          material: obsidian
         currency: emerald
         price: 4
         executions:
@@ -290,9 +266,6 @@ categories:
                 material: obsidian
                 amount: 4
       ender_pearl:
-        icon:
-          name: "&5x1 Ender Pearl"
-          material: ender_pearl
         currency: emerald
         price: 3
         executions:
@@ -301,9 +274,6 @@ categories:
               '1':
                 material: ender_pearl
       water_bucket:
-        icon:
-          name: "&5x1 Water Bucket"
-          material: water_bucket
         currency: emerald
         price: 2
         executions:
@@ -312,9 +282,6 @@ categories:
               '1':
                 material: water_bucket
       tnt:
-        icon:
-          name: "&5x1 TNT"
-          material: tnt
         currency: gold
         price: 7
         executions:
@@ -323,9 +290,6 @@ categories:
               '1':
                 material: tnt
       cookie:
-        icon:
-          name: "&5x3 Cookie"
-          material: cookie
         currency: gold
         price: 5
         executions:

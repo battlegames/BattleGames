@@ -23,9 +23,12 @@ package dev.anhcraft.battle.api.market;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.inventory.Backpack;
+import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
+import dev.anhcraft.battle.api.misc.Booster;
 import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
@@ -42,6 +45,7 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.CollectionUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -51,16 +55,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Product extends ConfigurableObject implements Informative {
-    private static final PreparedItem DEFAULT_ICON = new PreparedItem();
+    public static final PreparedItem DEFAULT_ICON = new PreparedItem();
     public static final ConfigSchema<Product> SCHEMA = ConfigSchema.of(Product.class);
 
     static {
@@ -71,8 +72,25 @@ public class Product extends ConfigurableObject implements Informative {
 
     @Key("icon")
     @Explanation("Product's icon")
-    @IgnoreValue(ifNull = true)
-    private PreparedItem icon = DEFAULT_ICON.duplicate();
+    private PreparedItem icon;
+
+    @Key("package_name")
+    @Explanation({
+            "A nice name for the package icon.",
+            "This product is 'a package' when it gives player booster, perks, exp or items",
+            "(for items, <b>requires the amount of two or more</b>). You can read more",
+            "at the Market schema (option 'default_product_icon.package')",
+            "The icon for a package will be created automatically when no icon is set"
+    })
+    private String packageName;
+
+    @Key("package_material")
+    @Explanation({
+            "The material for the package icon",
+            "<i>What is a package?</i> Read above (option 'package_name')"
+    })
+    @PrettyEnum
+    private Material packageMaterial;
 
     @Key("currency")
     @Explanation("The currency to be used")
@@ -161,9 +179,19 @@ public class Product extends ConfigurableObject implements Informative {
         return id;
     }
 
+    @Nullable
+    public String getPackageName() {
+        return packageName;
+    }
+
+    @Nullable
+    public Material getPackageMaterial() {
+        return packageMaterial;
+    }
+
     @NotNull
     public PreparedItem getIcon() {
-        return icon;
+        return icon == null ? createIcon() : icon;
     }
 
     public void setIcon(@NotNull PreparedItem icon) {
@@ -204,6 +232,11 @@ public class Product extends ConfigurableObject implements Informative {
     @NotNull
     public List<String> getPerks() {
         return perks;
+    }
+
+    @NotNull
+    public List<String> getBoosters() {
+        return boosters;
     }
 
     @NotNull
@@ -271,6 +304,135 @@ public class Product extends ConfigurableObject implements Informative {
         for(String booster : boosters){
             playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());
         }
+    }
+
+    @NotNull
+    private PreparedItem createIcon() {
+        BattleApi api = BattleApi.getInstance();
+        Market market = api.getMarket();
+        List<String> perks = getPerks();
+        List<String> boosters = getBoosters();
+        double battleExp = getBattleExp();
+        double vanillaExp = getVanillaExp();
+        Multimap<ItemType, String> battleItems = getBattleItems();
+        PreparedItem[] vanillaItems = getVanillaItems();
+
+        if(perks.isEmpty() && boosters.isEmpty() && battleExp <= 0 && vanillaExp <= 0){
+            if(battleItems.isEmpty() && vanillaItems.length == 0) {
+                return icon = market.getDefaultIconForEmptyProduct().duplicate();
+            } else if(!market.shouldTreatSingleItemAsPackage()) {
+                if (battleItems.size() == 1 && vanillaItems.length == 0) {
+                    Map.Entry<ItemType, String> e = battleItems.entries().iterator().next();
+                    BattleItemModel bi = api.getItemModel(e.getKey(), e.getValue());
+                    if(bi != null) {
+                        PreparedItem pi = api.getItemManager().make(bi);
+                        if(pi != null) {
+                            return icon = pi.duplicate();
+                        }
+                    }
+                } else if (battleItems.isEmpty() && vanillaItems.length == 1) {
+                    return icon = vanillaItems[0].duplicate();
+                }
+            }
+        }
+
+        PreparedItem pi = market.getDefaultIconForPackage().duplicate();
+        if(packageName != null) {
+            pi.name(packageName);
+        }
+        if(packageMaterial != null) {
+            pi.material(packageMaterial);
+        }
+        PackageDetails details = market.getPackageDetails();
+        boolean fe = false;
+
+        if(!battleItems.isEmpty() || vanillaItems.length > 0) {
+            pi.lore().add(details.getItemHeader());
+            battleItems.forEach((type, _id) -> {
+                BattleItemModel bi = api.getItemModel(type, _id);
+                if(bi != null) {
+                    InfoHolder ih = new InfoHolder("");
+                    bi.inform(ih);
+                    pi.lore().add(ih.compile().replace(details.getBattleItemFormat()));
+                } else {
+                    pi.lore().add(new InfoHolder("")
+                            .inform("id", _id)
+                            .inform("name", _id)
+                            .compile().replace(details.getBattleItemFormat()));
+                }
+            });
+            for (PreparedItem i : vanillaItems) {
+                String n = i.name();
+                if(n == null) {
+                    n = i.build().getItemMeta().getLocalizedName();
+                }
+                pi.lore().add(new InfoHolder("")
+                        .inform("name", n)
+                        .inform("amount", i.amount())
+                        .compile().replace(details.getVanillaItemFormat()));
+            }
+            fe = true;
+        }
+
+        if(!perks.isEmpty()) {
+            if(fe && details.shouldSeparatedPartByNewLine()) {
+                pi.lore().add(ChatColor.WHITE.toString());
+            }
+            pi.lore().add(details.getPerkHeader());
+            for (String perk : perks) {
+                Perk p = api.getPerk(perk);
+                if(p == null) {
+                    pi.lore().add(new InfoHolder("")
+                            .inform("id", perk)
+                            .inform("name", perk)
+                            .compile().replace(details.getPerkFormat()));
+                } else {
+                    InfoHolder ih = new InfoHolder("");
+                    p.inform(ih);
+                    pi.lore().add(ih.compile().replace(details.getPerkFormat()));
+                }
+            }
+            fe = true;
+        }
+
+        if(!boosters.isEmpty()) {
+            if(fe && details.shouldSeparatedPartByNewLine()) {
+                pi.lore().add(ChatColor.WHITE.toString());
+            }
+            pi.lore().add(details.getBoosterHeader());
+            for (String booster : boosters) {
+                Booster b = api.getBooster(booster);
+                if(b == null) {
+                    pi.lore().add(new InfoHolder("")
+                            .inform("id", booster)
+                            .inform("name", booster)
+                            .compile().replace(details.getBoosterFormat()));
+                } else {
+                    InfoHolder ih = new InfoHolder("");
+                    b.inform(ih);
+                    pi.lore().add(ih.compile().replace(details.getBoosterFormat()));
+                }
+            }
+            fe = true;
+        }
+
+        if(battleExp > 0 || vanillaExp > 0) {
+            if(fe && details.shouldSeparatedPartByNewLine()) {
+                pi.lore().add(ChatColor.WHITE.toString());
+            }
+            pi.lore().add(details.getExpHeader());
+            if(battleExp > 0) {
+                pi.lore().add(new InfoHolder("")
+                        .inform("amount", battleExp)
+                        .compile().replace(details.getBattleExpFormat()));
+            }
+            if(vanillaExp > 0) {
+                pi.lore().add(new InfoHolder("")
+                        .inform("amount", vanillaExp)
+                        .compile().replace(details.getVanillaExpFormat()));
+            }
+        }
+        return icon = pi;
     }
 
     @Override
