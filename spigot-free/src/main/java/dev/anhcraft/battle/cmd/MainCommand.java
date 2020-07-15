@@ -516,6 +516,13 @@ public class MainCommand extends BaseCommand {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(DeathStat.class).increase(player, delta);
     }
 
+    @Subcommand("adjust stats stolen-mobs")
+    @CommandPermission("battle.adjust.stats")
+    @Description("Adjust someone's stolen mobs count")
+    public void adjustStolenMobs(CommandSender sender, int delta, Player player){
+        Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(StolenMobStat.class).increase(player, delta);
+    }
+
     @Subcommand("debug 3min")
     @CommandPermission("battle.debug")
     @Description("Make a 3-minutes debugging task")

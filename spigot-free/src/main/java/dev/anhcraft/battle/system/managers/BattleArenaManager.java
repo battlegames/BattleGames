@@ -301,6 +301,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 sm.of(AssistStat.class).increase(p, gp.getStats().of(AssistStat.class).get());
                 sm.of(DeathStat.class).increase(p, gp.getStats().of(DeathStat.class).get());
                 sm.of(RespawnStat.class).increase(p, gp.getStats().of(RespawnStat.class).get());
+                sm.of(StolenMobStat.class).increase(p, gp.getStats().of(StolenMobStat.class).get());
                 if(gp.hasFirstKill()) sm.of(FirstKillStat.class).increase(p);
                 InfoReplacer infoReplacer = new InfoHolder("").inform("money", money).inform("exp", exp).compile();
                 if(gp.isWinner()) {

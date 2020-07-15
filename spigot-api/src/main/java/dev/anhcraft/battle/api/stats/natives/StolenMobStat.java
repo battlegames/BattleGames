@@ -18,17 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.api.stats;
+package dev.anhcraft.battle.api.stats.natives;
 
-public class NativeStats {
-    public static String ASSIST = "assists";
-    public static String HEADSHOT = "headshot";
-    public static String FIRST_KILL = "first_kills";
-    public static String KILL = "kills";
-    public static String DEATH = "deaths";
-    public static String WIN = "wins";
-    public static String LOSE = "loses";
-    public static String EXP = "exp";
-    public static String RESPAWN = "respawns";
-    public static String STOLEN_MOBS = "stolen_mobs";
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
+import org.jetbrains.annotations.NotNull;
+
+public class StolenMobStat extends IntCounter {
+    @Override
+    public @NotNull String getId() {
+        return NativeStats.STOLEN_MOBS;
+    }
 }

@@ -22,6 +22,7 @@ package dev.anhcraft.battle.premium.system.controllers;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.mode.IMobRescue;
 import dev.anhcraft.battle.api.arena.mode.Mode;
@@ -30,6 +31,7 @@ import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import dev.anhcraft.battle.api.misc.BattleScoreboard;
+import dev.anhcraft.battle.api.stats.natives.StolenMobStat;
 import dev.anhcraft.battle.premium.system.MobRescueMatch;
 import dev.anhcraft.battle.system.controllers.DeathmatchController;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -418,11 +420,13 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                         plugin.extension.getTaskHelper().newTask(ent::remove);
                         Integer i = match.getMobCount().get(ent.getType());
                         if (i != null && i > 0) {
+                            GamePlayer gp = Objects.requireNonNull(game.getPlayer(p));
+                            gp.getStats().of(StolenMobStat.class).increase(p);
                             match.setStolenMobs(match.getStolenMobs() + 1);
                             match.getMobCount().put(ent.getType(), i - 1);
                             MobRescueOptions opt = (MobRescueOptions) game.getArena().getModeOptions();
                             double reward = opt.getObjectives().get(ent.getType()).getRewardCoins();
-                            Objects.requireNonNull(game.getPlayer(p)).getIgBalance().addAndGet(reward);
+                            gp.getIgBalance().addAndGet(reward);
                             InfoReplacer ir = new InfoHolder("")
                                     .inform("player", p.getName())
                                     .inform("localized_entity", EnumEntity.getLocalePath(ent.getType()))

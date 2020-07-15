@@ -99,6 +99,9 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("stats_respawns", (player, pd, game, gp) -> {
             return pd == null ? null : Integer.toString(pd.getStats().of(RespawnStat.class).get());
         });
+        handlers.put("stats_stolen_mobs", (player, pd, game, gp) -> {
+            return pd == null ? null : Integer.toString(pd.getStats().of(StolenMobStat.class).get());
+        });
         handlers.put("game_stats_headshots", (player, pd, game, gp) -> {
             return gp == null ? null : Integer.toString(gp.getStats().of(HeadshotStat.class).get());
         });
@@ -113,6 +116,9 @@ public class PapiExpansion extends PlaceholderExpansion {
         });
         handlers.put("game_stats_respawns", (player, pd, game, gp) -> {
             return gp == null ? null : Integer.toString(gp.getStats().of(RespawnStat.class).get());
+        });
+        handlers.put("game_stats_stolen_mobs", (player, pd, game, gp) -> {
+            return gp == null ? null : Integer.toString(gp.getStats().of(StolenMobStat.class).get());
         });
         handlers.put("game_total_players", (player, pd, game, gp) -> {
             return game == null ? null : Integer.toString(game.getPlayerCount());
