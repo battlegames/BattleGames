@@ -44,6 +44,8 @@ import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.VM;
 import dev.anhcraft.inst.exceptions.FunctionRegisterFailed;
 import dev.anhcraft.inst.lang.Instruction;
+import dev.anhcraft.inst.values.BoolVal;
+import dev.anhcraft.inst.values.Val;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import org.bukkit.Bukkit;
@@ -146,17 +148,28 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                     item = s.getPaginationItem();
                 }
             }
-            view.getInventory().setItem(slot,
-                    formatPAPI(
-                            info.replace(
-                                formatTranslations(item.duplicate(), plugin.localeConfigManager.getSettings())
-                            ),
-                            player
-                    ).build());
             SlotReport slotReport = new SlotReport(player, null, view, slot);
             try {
                 VM vm = createVM(slotReport);
+                vm.setVariable("_cancel_render_", new BoolVal() {
+                    @NotNull
+                    @Override
+                    public Boolean get() {
+                        return false;
+                    }
+                });
                 Instruction[] ins = c.getRenderFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                vm.newSession(ins).execute();
+                Val<?> val = vm.getVariable("_cancel_render_");
+                if(val instanceof BoolVal && ((BoolVal) val).get()) return;
+                view.getInventory().setItem(slot,
+                        formatPAPI(
+                                info.replace(
+                                        formatTranslations(item.duplicate(), plugin.localeConfigManager.getSettings())
+                                ),
+                                player
+                        ).build());
+                ins = c.getRenderedFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                 vm.newSession(ins).execute();
             } catch (FunctionRegisterFailed functionRegisterFailed) {
                 functionRegisterFailed.printStackTrace();

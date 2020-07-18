@@ -20,7 +20,7 @@ item_value_editor:
       functions:
         on_init:
           - Common:CopyCurrentSlot("window" "itemSlot")
-        on_render:
+        on_rendered:
           - Common:SetItemFromData("window" "value" $_window_itemSlot "not-null")
         on_click:
           - Inst:Return() ? $_click_type_ == "INVENTORY_RIGHT"

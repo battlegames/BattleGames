@@ -81,7 +81,6 @@ public class Component extends ConfigurableObject {
     @Key("functions.on_init")
     @Explanation({
             "The function that gets called when one slot of this component is initialized",
-            "The function is a set of instructions.",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
     @Example({
@@ -94,7 +93,6 @@ public class Component extends ConfigurableObject {
     @Key("functions.on_click")
     @Explanation({
             "The function that gets called when one slot of this component is clicked",
-            "The function is a set of instructions.",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
     @Example({
@@ -106,16 +104,28 @@ public class Component extends ConfigurableObject {
 
     @Key("functions.on_render")
     @Explanation({
-            "The function that gets called when one slot of this component is rendered",
-            "The function is a set of instructions.",
+            "The function that gets called when one slot of this component is going to be rendered",
+            "Set _cancel_render_ to `true` to prevent this action; `false` is set by default",
+            "It is not recommended to do any modifications to the item on that slot, you would be better",
+            "to look at on_rendered, which is called <b>after</b> the rendering has done.",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
     @Example({
             "on_render:",
+            " - Cache:SetBool(\"_cancel_render_\" true) ? _slot_ == 27"
+    })
+    private List<String> renderFunction;
+
+    @Key("functions.on_rendered")
+    @Explanation({
+            "The function that gets called when one slot of this component was rendered successfully",
+            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+    })
+    @Example({
+            "on_rendered:",
             " - Common:SetItemFromData(\"window\" \"value\" &#36;_window_positionOfThisSlot \"not-null\")"
     })
-    @IgnoreValue(ifNull = true)
-    private List<String> renderFunction = new ArrayList<>();
+    private List<String> renderedFunction;
 
     @Key("pagination")
     @Explanation({
@@ -170,6 +180,11 @@ public class Component extends ConfigurableObject {
     @NotNull
     public List<String> getRenderFunction() {
         return renderFunction;
+    }
+
+    @NotNull
+    public List<String> getRenderedFunction() {
+        return renderedFunction;
     }
 
     private int parseNum(String s){
