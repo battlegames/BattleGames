@@ -23,6 +23,7 @@ import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.economy.Currency;
+import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.events.PlayerPrePurchaseEvent;
 import dev.anhcraft.battle.api.events.PlayerPurchaseEvent;
 import dev.anhcraft.battle.api.gui.page.Pagination;
@@ -39,6 +40,9 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.lang.Instruction;
+import dev.anhcraft.inst.values.DoubleVal;
+import dev.anhcraft.inst.values.StringVal;
+import dev.anhcraft.jvmkit.utils.EnumUtil;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -64,7 +68,7 @@ public class ProductMenu implements Pagination {
             }
 
             String currencyFormat = Objects.requireNonNull(ApiProvider.consume().getLocalizedMessage("currency_format." + p.getCurrency().name().toLowerCase()));
-            String price = new InfoHolder("")
+            String priceFormatter = new InfoHolder("")
                     .inform("amount", p.getPrice())
                     .compile()
                     .replace(currencyFormat);
@@ -74,7 +78,7 @@ public class ProductMenu implements Pagination {
                 if(lore != null) {
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);
-                    holder.inform("price_formatted", price);
+                    holder.inform("price_formatted", priceFormatter);
                     InfoReplacer replacer = holder.compile();
                     for (String s : lore) {
                         ic.lore().add(replacer.replace(s));
@@ -88,15 +92,38 @@ public class ProductMenu implements Pagination {
                 PlayerData pd = api.getPlayerData(player);
                 if(pd == null) return;
 
-                Currency c = p.getCurrency().get();
+                CurrencyType ct = p.getCurrency();
+                Currency c = ct.get();
+                double price = p.getPrice();
                 double balance = c.getBalance(player);
                 String balanceFormat = new InfoHolder("")
                         .inform("amount", balance)
                         .compile()
                         .replace(currencyFormat);
 
-                PlayerPrePurchaseEvent ev = new PlayerPrePurchaseEvent(player, mk, ctg, p, balance >= p.getPrice());
-                ev.setCancelled(balance < p.getPrice());
+                if(p.getPurchaseFunction() != null) {
+                    double finalPrice = price;
+                    DoubleVal pv = () -> finalPrice;
+                    StringVal cv = ct::name;
+                    vm.setVariable("_price_", pv);
+                    vm.setVariable("_currency_", cv);
+                    Instruction[] ins = p.getPurchaseFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
+                    DoubleVal npv = (DoubleVal) vm.getVariable("_price_");
+                    StringVal ncv = (StringVal) vm.getVariable("_currency_");
+                    if(npv != null && npv != pv) {
+                        price = npv.get();
+                    }
+                    if(ncv != null && ncv != cv) {
+                        String cvx = ncv.get().toUpperCase();
+                        CurrencyType nct = (CurrencyType) EnumUtil.findEnum(CurrencyType.class, cvx);
+                        ct = ObjectUtil.optional(nct, ct);
+                        c = ct.get();
+                    }
+                }
+
+                PlayerPrePurchaseEvent ev = new PlayerPrePurchaseEvent(player, mk, ctg, p, balance >= price);
+                ev.setCancelled(balance < price);
                 Bukkit.getPluginManager().callEvent(ev);
 
                 if(!ev.hasEnoughBalance()){
@@ -104,7 +131,7 @@ public class ProductMenu implements Pagination {
                     return;
                 } else if(ev.isCancelled()) return;
 
-                if(!c.withdraw(player, p.getPrice())){
+                if(!c.withdraw(player, price)){
                     api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_failed");
                     return;
                 }
@@ -112,19 +139,35 @@ public class ProductMenu implements Pagination {
                 Bukkit.getPluginManager().callEvent(new PlayerPurchaseEvent(player, mk, ctg, p));
 
                 p.givePlayer(player, pd);
-                if(p.getCallFunction() != null) {
-                    Instruction[] ins = p.getCallFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
-                    vm.newSession(ins).execute();
-                }
                 api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_success");
                 if(mk.shouldLogTransactions()){
                     pd.getTransactions().add(new Transaction(
                             player.getUniqueId(),
                             ObjectUtil.optional(p.getIcon().name(), p.getId()),
-                            p.getPrice(),
-                            p.getCurrency().name(),
+                            price,
+                            ct.name(),
                             System.currentTimeMillis()
                     ));
+                }
+                if(p.getPurchasedFunction() != null) {
+                    double finalPrice1 = price;
+                    vm.setVariable("_price_", new DoubleVal() {
+                        @NotNull
+                        @Override
+                        public Double get() {
+                            return finalPrice1;
+                        }
+                    });
+                    CurrencyType finalCt = ct;
+                    vm.setVariable("_currency_", new StringVal() {
+                        @NotNull
+                        @Override
+                        public String get() {
+                            return finalCt.name();
+                        }
+                    });
+                    Instruction[] ins = p.getPurchasedFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
                 }
             });
         }

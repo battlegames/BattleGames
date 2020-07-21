@@ -165,9 +165,24 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("The Battle exp to be given later")
     private long battleExp;
 
-    @Key("executions.call_function")
-    @Explanation("Function to be called when purchased successfully")
-    private List<String> callFunction;
+    @Key("function.on_purchase")
+    @Explanation({
+            "Function to be called when a player purchases this product, and the transaction",
+            "has not been created (no money is taken, nothing is given to the player)",
+            "This function is very useful that allows you to change the cost. For example,",
+            "the cost can be reduced by half if the player has a specific rank. Or you can",
+            "make a 'tier cost' system that increase the cost each time the player purchases",
+            "so the first time is $10, then $20, $50, $100. etc",
+            "Variables: _price_, _currency_"
+    })
+    private List<String> purchaseFunction;
+
+    @Key("function.on_purchased")
+    @Explanation({
+            "Function to be called when a player purchased this product successfully",
+            "Variables: _price_, _currency_"
+    })
+    private List<String> purchasedFunction;
 
     public Product(@NotNull String id) {
         Condition.argNotNull("id", id);
@@ -276,8 +291,13 @@ public class Product extends ConfigurableObject implements Informative {
     }
 
     @Nullable
-    public List<String> getCallFunction() {
-        return callFunction;
+    public List<String> getPurchaseFunction() {
+        return purchaseFunction;
+    }
+
+    @Nullable
+    public List<String> getPurchasedFunction() {
+        return purchaseFunction;
     }
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
