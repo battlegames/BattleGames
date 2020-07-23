@@ -574,7 +574,7 @@ real_value_editor:
       item:
         name: '&f+1'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
         material: lime_stained_glass_pane
       functions:
         on_click:
@@ -587,7 +587,7 @@ real_value_editor:
       item:
         name: '&f+2 &7(+0.5)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -604,7 +604,7 @@ real_value_editor:
       item:
         name: '&f+5 &7(+0.2)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -621,7 +621,7 @@ real_value_editor:
       item:
         name: '&f+10 &7(+0.1)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -638,7 +638,7 @@ real_value_editor:
       item:
         name: '&f+20 &7(+0.05)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -655,7 +655,7 @@ real_value_editor:
       item:
         name: '&f+50 &7(+0.02)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -672,7 +672,7 @@ real_value_editor:
       item:
         name: '&f+100 &7(+0.01)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -689,7 +689,7 @@ real_value_editor:
       item:
         name: '&f+200 &7(+0.005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -706,7 +706,7 @@ real_value_editor:
       item:
         name: '&f+500 &7(+0.002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -723,7 +723,7 @@ real_value_editor:
       item:
         name: '&f+1000 &7(+0.001)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -740,7 +740,7 @@ real_value_editor:
       item:
         name: '&f+2000 &7(+0.0005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -757,7 +757,7 @@ real_value_editor:
       item:
         name: '&f+5000 &7(+0.0002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -774,7 +774,7 @@ real_value_editor:
       item:
         name: '&f+10000 &7(+0.0001)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -791,7 +791,7 @@ real_value_editor:
       item:
         name: '&f+20000 &7(+0.00005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -808,7 +808,7 @@ real_value_editor:
       item:
         name: '&f+50000 &7(+0.00002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: lime_stained_glass_pane
@@ -825,7 +825,7 @@ real_value_editor:
       item:
         name: '&f-1'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
         material: red_stained_glass_pane
       functions:
         on_click:
@@ -838,7 +838,7 @@ real_value_editor:
       item:
         name: '&f-2 &7(-0.5)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -855,7 +855,7 @@ real_value_editor:
       item:
         name: '&f-5 &7(-0.2)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -872,7 +872,7 @@ real_value_editor:
       item:
         name: '&f-10 &7(-0.1)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -889,7 +889,7 @@ real_value_editor:
       item:
         name: '&f-20 &7(-0.05)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -906,7 +906,7 @@ real_value_editor:
       item:
         name: '&f-50 &7(-0.02)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -923,7 +923,7 @@ real_value_editor:
       item:
         name: '&f-100 &7(-0.01)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -940,7 +940,7 @@ real_value_editor:
       item:
         name: '&f-200 &7(-0.005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -957,7 +957,7 @@ real_value_editor:
       item:
         name: '&f-500 &7(-0.002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -974,7 +974,7 @@ real_value_editor:
       item:
         name: '&f-1000 &7(-0.001)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -991,7 +991,7 @@ real_value_editor:
       item:
         name: '&f-2000 &7(-0.0005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -1008,7 +1008,7 @@ real_value_editor:
       item:
         name: '&f-5000 &7(-0.0002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -1025,7 +1025,7 @@ real_value_editor:
       item:
         name: '&f-10000 &7(-0.0001)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -1042,7 +1042,7 @@ real_value_editor:
       item:
         name: '&f-20000 &7(-0.00005)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
@@ -1059,7 +1059,7 @@ real_value_editor:
       item:
         name: '&f-50000 &7(-0.00002)'
         lore:
-          - '&e= <window_data_value:0.0>'
+          - '&e= <window_data_value:0>'
           - '&7'
           - '&7[SHIFT]'
         material: red_stained_glass_pane
