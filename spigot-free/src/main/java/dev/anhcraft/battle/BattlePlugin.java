@@ -79,7 +79,6 @@ import dev.anhcraft.craftkit.common.utils.VersionUtil;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
 import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
-import dev.anhcraft.jvmkit.utils.MathUtil;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.objecthunter.exp4j.Expression;
 import org.bstats.bukkit.Metrics;
@@ -450,10 +449,48 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                         String s = localeConfigManager.getSettings().getString(((State) data).getLocalePath());
                         return s == null ? "" : s;
                     }
-                    else if(data instanceof Double)
-                        return MathUtil.formatRound((Double) data, 3);
-                    else if(data instanceof Float)
-                        return MathUtil.formatRound((Float) data, 3);
+                    else if(data instanceof Double) {
+                        double v = (double) data;
+                        if(Double.isNaN(v) || Double.isInfinite(v)) {
+                            return String.valueOf(v);
+                        } else {
+                            char[] arr = String.format("%f", v).toCharArray();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            boolean b = false;
+                            for (int j = arr.length - 1; j >= 0; j--) {
+                                if (arr[j] == '0' && !b) continue;
+                                if (arr[j] != '0') {
+                                    b = true;
+                                    if (arr[j] == '.' && stringBuilder.length() == 0) {
+                                        stringBuilder.append('0');
+                                    }
+                                }
+                                stringBuilder.insert(0, arr[j]);
+                            }
+                            return stringBuilder.toString();
+                        }
+                    }
+                    else if(data instanceof Float) {
+                        float v = (float) data;
+                        if(Float.isNaN(v) || Float.isInfinite(v)) {
+                            return String.valueOf(v);
+                        } else {
+                            char[] arr = String.format("%f", v).toCharArray();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            boolean b = false;
+                            for (int j = arr.length - 1; j >= 0; j--) {
+                                if (arr[j] == '0' && !b) continue;
+                                if (arr[j] != '0') {
+                                    b = true;
+                                    if (arr[j] == '.' && stringBuilder.length() == 0) {
+                                        stringBuilder.append('0');
+                                    }
+                                }
+                                stringBuilder.insert(0, arr[j]);
+                            }
+                            return stringBuilder.toString();
+                        }
+                    }
                     else if(data instanceof Integer)
                         return Integer.toString((Integer) data);
                     else if(data instanceof Long)
