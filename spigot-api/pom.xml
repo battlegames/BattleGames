@@ -59,7 +59,7 @@
         <dependency>
             <groupId>dev.anhcraft</groupId>
             <artifactId>inst</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

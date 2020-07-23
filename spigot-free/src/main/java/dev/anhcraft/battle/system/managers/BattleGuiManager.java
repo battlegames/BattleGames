@@ -37,7 +37,6 @@ import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.SignedInt;
-import dev.anhcraft.battle.utils.VMUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
@@ -45,6 +44,8 @@ import dev.anhcraft.inst.VM;
 import dev.anhcraft.inst.exceptions.FunctionRegisterFailed;
 import dev.anhcraft.inst.lang.Instruction;
 import dev.anhcraft.inst.values.BoolVal;
+import dev.anhcraft.inst.values.IntVal;
+import dev.anhcraft.inst.values.StringVal;
 import dev.anhcraft.inst.values.Val;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
@@ -66,21 +67,27 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     private final List<Class<? extends GuiHandler>> GUI_HANDLERS = new ArrayList<>();
     private final Map<String, Pagination> PAGES = new HashMap<>();
     private final Map<UUID, Window> WINDOWS = new HashMap<>();
-    
+
     private VM createVM(SlotReport report) throws FunctionRegisterFailed {
         VM vm = new VM();
         for(Class<? extends GuiHandler> c : GUI_HANDLERS){
             GuiHandler o = (GuiHandler) ReflectionUtil.invokeConstructor(c, new Class[]{SlotReport.class}, new Object[]{report});
             vm.registerFunctions(c, o);
         }
-        for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
-            VMUtil.setVariable(vm, VMUtil.VIEW_DATA_PREFIX+e.getKey(), e.getValue());
-        }
         for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
-            VMUtil.setVariable(vm, VMUtil.WINDOW_DATA_PREFIX+e.getKey(), e.getValue());
+            Object v = e.getValue();
+            if(v instanceof Number || v instanceof String || v instanceof Boolean) {
+                vm.setVariable("w_" + e.getKey(), Val.of(v));
+            }
         }
-        VMUtil.setVariable(vm, "_player_", report.getPlayer().getName());
-        VMUtil.setVariable(vm, "_slot_", report.getPosition());
+        for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
+            Object v = e.getValue();
+            if(v instanceof Number || v instanceof String || v instanceof Boolean) {
+                vm.setVariable("v_" + e.getKey(), Val.of(v));
+            }
+        }
+        vm.setVariable("player", new StringVal(report.getPlayer().getName()));
+        vm.setVariable("slot", new IntVal(report.getPosition()));
         return vm;
     }
 
@@ -93,7 +100,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         SlotReport slotReport = new SlotReport(p, event, v, slot);
         try {
             VM vm = createVM(slotReport);
-            VMUtil.setVariable(vm, "_click_type_", clickType);
+            vm.setVariable("click_type", new StringVal(clickType));
             Instruction[] ins = s.getComponent().getClickFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
             vm.newSession(ins).execute();
             if (s.getExtraClickFunction() != null) {
@@ -150,18 +157,18 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             }
             SlotReport slotReport = new SlotReport(player, null, view, slot);
             try {
-                VM vm = createVM(slotReport);
-                vm.setVariable("_cancel_render_", new BoolVal() {
-                    @NotNull
-                    @Override
-                    public Boolean get() {
-                        return false;
-                    }
-                });
-                Instruction[] ins = c.getRenderFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
-                vm.newSession(ins).execute();
-                Val<?> val = vm.getVariable("_cancel_render_");
-                if(val instanceof BoolVal && ((BoolVal) val).get()) return;
+                List<String> rf = c.getRenderFunction();
+                List<String> rdf = c.getRenderedFunction();
+                VM vm = (rf != null || rdf != null) ? createVM(slotReport) : null;
+
+                if(rf != null) {
+                    vm.setVariable("cancel_render", new BoolVal(false));
+                    Instruction[] ins = rf.stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
+                    Val<?> val = vm.getVariable("cancel_render");
+                    if (val instanceof BoolVal && ((BoolVal) val).getData()) return;
+                }
+
                 view.getInventory().setItem(slot,
                         formatPAPI(
                                 info.replace(
@@ -169,8 +176,11 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                                 ),
                                 player
                         ).build());
-                ins = c.getRenderedFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
-                vm.newSession(ins).execute();
+
+                if(rdf != null) {
+                    Instruction[] ins = rdf.stream().map(vm::compileInstruction).toArray(Instruction[]::new);
+                    vm.newSession(ins).execute();
+                }
             } catch (FunctionRegisterFailed functionRegisterFailed) {
                 functionRegisterFailed.printStackTrace();
             }

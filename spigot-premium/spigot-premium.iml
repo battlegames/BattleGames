@@ -24,7 +24,7 @@
     <orderEntry type="module" module-name="spigot-api" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
     <orderEntry type="library" name="Maven: io.papermc:paperlib:1.0.4" level="project" />
-    <orderEntry type="library" name="Maven: dev.anhcraft:inst:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: dev.anhcraft:inst:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.5" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="module-library">

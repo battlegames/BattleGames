@@ -371,7 +371,8 @@ gui:
       - "&fOr you can use &e/b market"
   value_editor:
     done_btn: "&a✔ Done"
-    flip_number_btn: "&cFlip number: &eNegative <=> Positive"
+    negate_number_btn: "&cNegate: &eNegative <=> Positive"
+    fraction_number_btn: "&cFraction: &ex <=> 1/x"
     boolean_title: "&d&lValue editor &e&l[Boolean]"
     int_title: "&d&lValue editor &e&l[Integer]"
     real_title: "&d&lValue editor &e&l[Real]"

@@ -42,9 +42,7 @@ import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.CommandInitializer;
-import dev.anhcraft.battle.gui.inst.CommonFunctions;
-import dev.anhcraft.battle.gui.inst.ItemFunctions;
-import dev.anhcraft.battle.gui.inst.MarketFunctions;
+import dev.anhcraft.battle.gui.BattleFunction;
 import dev.anhcraft.battle.gui.menu.Advancements;
 import dev.anhcraft.battle.gui.menu.ArenaChooser;
 import dev.anhcraft.battle.gui.menu.BoosterMenu;
@@ -223,9 +221,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         battleRegionRollback = new BattleRegionRollback(this);
         premiumConnector.onInitSystem();
 
-        guiManager.registerGuiHandler(CommonFunctions.class);
-        guiManager.registerGuiHandler(MarketFunctions.class);
-        guiManager.registerGuiHandler(ItemFunctions.class);
+        guiManager.registerGuiHandler(BattleFunction.class);
         guiManager.registerPagination("player_gun", new GunCompartment());
         guiManager.registerPagination("player_magazine", new MagazineCompartment());
         guiManager.registerPagination("player_ammo", new AmmoCompartment());

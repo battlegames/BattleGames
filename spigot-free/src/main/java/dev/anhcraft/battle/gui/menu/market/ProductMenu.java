@@ -102,20 +102,19 @@ public class ProductMenu implements Pagination {
                         .replace(currencyFormat);
 
                 if(p.getPurchaseFunction() != null) {
-                    double finalPrice = price;
-                    DoubleVal pv = () -> finalPrice;
-                    StringVal cv = ct::name;
-                    vm.setVariable("_price_", pv);
-                    vm.setVariable("_currency_", cv);
+                    DoubleVal pv = new DoubleVal(price);
+                    StringVal cv = new StringVal(ct.name());
+                    vm.setVariable("price", pv);
+                    vm.setVariable("currency", cv);
                     Instruction[] ins = p.getPurchaseFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
-                    DoubleVal npv = (DoubleVal) vm.getVariable("_price_");
-                    StringVal ncv = (StringVal) vm.getVariable("_currency_");
+                    DoubleVal npv = (DoubleVal) vm.getVariable("price");
+                    StringVal ncv = (StringVal) vm.getVariable("currency");
                     if(npv != null && npv != pv) {
-                        price = npv.get();
+                        price = npv.getData();
                     }
                     if(ncv != null && ncv != cv) {
-                        String cvx = ncv.get().toUpperCase();
+                        String cvx = ncv.getData().toUpperCase();
                         CurrencyType nct = (CurrencyType) EnumUtil.findEnum(CurrencyType.class, cvx);
                         ct = ObjectUtil.optional(nct, ct);
                         c = ct.get();
@@ -150,22 +149,8 @@ public class ProductMenu implements Pagination {
                     ));
                 }
                 if(p.getPurchasedFunction() != null) {
-                    double finalPrice1 = price;
-                    vm.setVariable("_price_", new DoubleVal() {
-                        @NotNull
-                        @Override
-                        public Double get() {
-                            return finalPrice1;
-                        }
-                    });
-                    CurrencyType finalCt = ct;
-                    vm.setVariable("_currency_", new StringVal() {
-                        @NotNull
-                        @Override
-                        public String get() {
-                            return finalCt.name();
-                        }
-                    });
+                    vm.setVariable("price", new DoubleVal(price));
+                    vm.setVariable("currency", new StringVal(ct.name()));
                     Instruction[] ins = p.getPurchasedFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
                 }
