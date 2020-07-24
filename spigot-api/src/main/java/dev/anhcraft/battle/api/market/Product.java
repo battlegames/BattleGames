@@ -173,7 +173,8 @@ public class Product extends ConfigurableObject implements Informative {
             "the cost can be reduced by half if the player has a specific rank. Or you can",
             "make a 'tier cost' system that increase the cost each time the player purchases",
             "so the first time is $10, then $20, $50, $100. etc",
-            "Variables: $price, $currency (modifiable)"
+            "You can also reject the transaction by setting $forbidden to `true`",
+            "Variables: $price, $currency, $forbidden (modifiable)"
     })
     private List<String> purchaseFunction;
 

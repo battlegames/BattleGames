@@ -40,8 +40,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.lang.Instruction;
-import dev.anhcraft.inst.values.DoubleVal;
-import dev.anhcraft.inst.values.StringVal;
+import dev.anhcraft.inst.values.*;
 import dev.anhcraft.jvmkit.utils.EnumUtil;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
@@ -106,15 +105,20 @@ public class ProductMenu implements Pagination {
                     StringVal cv = new StringVal(ct.name());
                     vm.setVariable("price", pv);
                     vm.setVariable("currency", cv);
+                    vm.setVariable("forbidden", new BoolVal(false));
                     Instruction[] ins = p.getPurchaseFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
-                    DoubleVal npv = (DoubleVal) vm.getVariable("price");
-                    StringVal ncv = (StringVal) vm.getVariable("currency");
-                    if(npv != null && npv != pv) {
-                        price = npv.getData();
+                    Val<?> fb = vm.getVariable("forbidden");
+                    if(fb instanceof BoolVal && ((BoolVal) fb).getData()){
+                        return;
                     }
-                    if(ncv != null && ncv != cv) {
-                        String cvx = ncv.getData().toUpperCase();
+                    Val<?> npv = vm.getVariable("price");
+                    Val<?> ncv = vm.getVariable("currency");
+                    if(npv instanceof NumberVal<?> && npv != pv) {
+                        price = ((Number) npv.getData()).doubleValue();
+                    }
+                    if(ncv instanceof StringVal && ncv != cv) {
+                        String cvx = ((String) ncv.getData()).toUpperCase();
                         CurrencyType nct = (CurrencyType) EnumUtil.findEnum(CurrencyType.class, cvx);
                         ct = ObjectUtil.optional(nct, ct);
                         c = ct.get();
