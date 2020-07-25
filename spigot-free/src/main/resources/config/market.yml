@@ -307,39 +307,47 @@ categories:
     reserved_game_modes:
       - bw
     products:
-      upLocalGen:
+      forge:
         icon:
-          name: "&e&lUpgrade iron/gold generator"
-          material: chest
-        currency: diamond
-        price: 15
-        executions:
-          call_function:
-            - BWGenerator:UpgradeLocal
-      healthPool:
-        icon:
-          name: "&4&lHeal pool"
+          name: "&e&lForge"
+          material: furnace
           lore:
-            - "&aGet &bRegeneration &a if you and your teammates"
-            - "&aare present near the base"
+            - "&7Increases the spawn rate and the amount of irons and golds!"
+        currency: diamond
+        price: 3
+        executions:
+          on_purchase:
+            - BedwarPack:PreGeneratorUpgrade($result "local")
+            - Var:Set($forbidden true) ? $result == false
+          on_purchased:
+            - BedwarPack:PostGeneratorUpgrade("local")
+      recovery:
+        icon:
+          name: "&4&lRecovery"
+          lore:
+            - "&7Get &8Regeneration&7 if you or teammates near your bed"
           material: cake
         currency: diamond
-        price: 6
+        price: 2
         executions:
-          call_function:
-            - BWPool:RemovePotion { * }
-            - BWPool:SetPotion { 0; regeneration; 0; 20; teammates }
-      slownessPool:
+          on_purchase:
+            - BedwarPack:HasPotionInPool($x "regeneration" -1 -1 "teammates")
+            - Var:Set($forbidden $x)
+          on_purchased:
+            - BedwarPack:RemovePotionFromPool("*")
+            - BedwarPack:SetPotionInPool(0 "regeneration" 0 20 "teammates")
+      freeze:
         icon:
-          name: "&6&lSlowness pool"
+          name: "&f&lFreeze"
           lore:
-            - "&aYour enemies get &bSlowness &aif they are near to"
-            - "&ayour bed."
-          material: cake
+            - "&7Your enemies get &8Slowness&7 if they are near to your bed"
+          material: cobweb
         currency: diamond
-        price: 8
+        price: 4
         executions:
-          call_function:
-          - BWPool:RemovePotion { * }
-          - BWPool:SetPotion { 0; slow_digging; 0; 20; enemies }
-          - BWPool:SetPotion { 1; slow; 0; 20; enemies }
+          on_purchase:
+            - BedwarPack:HasPotionInPool($x "slow" -1 -1 "enemies")
+            - Var:Set($forbidden $x)
+          on_purchased:
+            - BedwarPack:RemovePotionFromPool("*")
+            - BedwarPack:SetPotionInPool(0 "slow" 0 20 "enemies")
