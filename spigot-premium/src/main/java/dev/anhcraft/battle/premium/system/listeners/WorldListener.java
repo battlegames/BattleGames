@@ -28,13 +28,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 
 public class WorldListener implements Listener {
     @EventHandler(ignoreCancelled = true)
-    public void spawn(EntitySpawnEvent event){
+    public void spawn(CreatureSpawnEvent event){
+        if(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
         WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getEntity().getWorld().getName());
         if(ws != null && ws.isPreventMobSpawn()){
             event.setCancelled(true);
