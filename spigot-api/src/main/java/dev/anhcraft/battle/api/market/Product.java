@@ -165,7 +165,7 @@ public class Product extends ConfigurableObject implements Informative {
     @Explanation("The Battle exp to be given later")
     private long battleExp;
 
-    @Key("function.on_purchase")
+    @Key("functions.on_purchase")
     @Explanation({
             "Function to be called when a player purchases this product, and the transaction",
             "has not been created (no money is taken, nothing is given to the player)",
@@ -178,7 +178,7 @@ public class Product extends ConfigurableObject implements Informative {
     })
     private List<String> purchaseFunction;
 
-    @Key("function.on_purchased")
+    @Key("functions.on_purchased")
     @Explanation({
             "Function to be called when a player purchased this product successfully",
             "Variables: $price, $currency (read-only)"

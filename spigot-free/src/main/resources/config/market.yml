@@ -315,10 +315,12 @@ categories:
             - "&7Increases the spawn rate and the amount of irons and golds!"
         currency: diamond
         price: 3
-        executions:
+        functions:
           on_purchase:
             - BedwarPack:PreGeneratorUpgrade($result "local")
-            - Var:Set($forbidden true) ? $result == false
+            - Inst:Return() ? $result == true
+            - Var:Set($forbidden true)
+            - Battle:CloseGUI()
           on_purchased:
             - BedwarPack:PostGeneratorUpgrade("local")
       recovery:
@@ -329,13 +331,13 @@ categories:
           material: cake
         currency: diamond
         price: 2
-        executions:
+        functions:
           on_purchase:
-            - BedwarPack:HasPotionInPool($x "regeneration" -1 -1 "teammates")
+            - BedwarPack:HasPotionInPool($x "regeneration" "teammates")
             - Var:Set($forbidden $x)
           on_purchased:
-            - BedwarPack:RemovePotionFromPool("*")
-            - BedwarPack:SetPotionInPool(0 "regeneration" 0 20 "teammates")
+            - BedwarPack:RemovePotionFromPool("*" "teammates")
+            - BedwarPack:AddPotionToPool("regeneration" 0 5 "teammates")
       freeze:
         icon:
           name: "&f&lFreeze"
@@ -344,10 +346,10 @@ categories:
           material: cobweb
         currency: diamond
         price: 4
-        executions:
+        functions:
           on_purchase:
-            - BedwarPack:HasPotionInPool($x "slow" -1 -1 "enemies")
+            - BedwarPack:HasPotionInPool($x "slow" "enemies")
             - Var:Set($forbidden $x)
           on_purchased:
-            - BedwarPack:RemovePotionFromPool("*")
-            - BedwarPack:SetPotionInPool(0 "slow" 0 20 "enemies")
+            - BedwarPack:RemovePotionFromPool("*" "enemies")
+            - BedwarPack:AddPotionToPool("slow" 0 7 "enemies")
