@@ -62,7 +62,7 @@ world_settings:
 
 # Extra arenas settings
 arena_settings:
-  bw_demo: # Write arena's id here
+  bw_lighthouse: # Write arena's id here
     # Remove all blocks in a specific region when the game starts.
     # Two locations must be in THE SAME WORLD.
     # [WARNING] Rollback system must be enabled! Otherwise your worlds will be broken forever!!!
