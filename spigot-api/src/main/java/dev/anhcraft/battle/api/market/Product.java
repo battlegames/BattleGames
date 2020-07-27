@@ -298,7 +298,7 @@ public class Product extends ConfigurableObject implements Informative {
 
     @Nullable
     public List<String> getPurchasedFunction() {
-        return purchaseFunction;
+        return purchasedFunction;
     }
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
