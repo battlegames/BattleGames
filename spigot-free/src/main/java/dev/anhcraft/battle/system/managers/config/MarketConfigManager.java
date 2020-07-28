@@ -24,10 +24,11 @@ import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.utils.ConfigUpdater;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.craftkit.cb_common.NMSVersion;
 
 public class MarketConfigManager extends ConfigManager {
     public MarketConfigManager() {
-        super("Market", "market.yml");
+        super("Market", "market.yml", (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0 ? "market.yml" : "market.legacy.yml"));
     }
 
     @Override

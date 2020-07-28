@@ -34,7 +34,6 @@ item_value_editor:
       item:
         name: '[ gui.value_editor.done_btn ]'
         material: diamond
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -64,7 +63,6 @@ boolean_value_editor:
           sharpness: 1
         flag:
         - hide_enchants
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -76,7 +74,6 @@ boolean_value_editor:
       item:
         name: '[ gui.value_editor.done_btn ]'
         material: diamond
-        damage: 0
       functions:
         on_init:
         - Var:Exists($x $w_value)
@@ -118,7 +115,6 @@ int_value_editor:
       item:
         name: '[ gui.value_editor.done_btn ]'
         material: diamond
-        damage: 0
       functions:
         on_init:
         - Var:Exists($x $w_value)
@@ -589,7 +585,6 @@ real_value_editor:
       item:
         name: '[ gui.value_editor.done_btn ]'
         material: diamond
-        damage: 0
       functions:
         on_init:
         - Var:Exists($x $w_value)
@@ -1165,7 +1160,7 @@ player_bp:
         lore:
         - '[ gui.player_bp.gun_lore ]'
         material: diamond_axe
-        damage: 0
+        damage: 1
         unbreakable: true
         flag:
         - hide_attributes
@@ -1181,7 +1176,6 @@ player_bp:
         lore:
         - '[ gui.player_bp.magazine_lore ]'
         material: chest
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1193,7 +1187,6 @@ player_bp:
         name: '[ gui.player_bp.ammo_name ]'
         lore:
         - '[ gui.player_bp.ammo_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1205,7 +1198,6 @@ player_bp:
         name: '[ gui.player_bp.scope_name ]'
         lore:
         - '[ gui.player_bp.scope_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1217,7 +1209,6 @@ player_bp:
         name: '[ gui.player_bp.grenade_name ]'
         lore:
         - '[ gui.player_bp.grenade_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1229,7 +1220,6 @@ player_bp:
         name: '[ gui.player_bp.kit_name ]'
         lore:
         - '[ gui.player_bp.kit_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1241,7 +1231,6 @@ player_bp:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1253,7 +1242,6 @@ player_bp:
         name: '[ gui.player_bp.market_name ]'
         lore:
         - '[ gui.player_bp.market_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1316,7 +1304,6 @@ player_gun_bp:
         name: '[ gui.common.back_name ]'
         lore:
         - '[ gui.common.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:SwitchGUI("player_bp")
@@ -1378,7 +1365,6 @@ player_magazine_bp:
         name: '[ gui.common.back_name ]'
         lore:
         - '[ gui.common.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:SwitchGUI("player_bp")
@@ -1438,7 +1424,6 @@ player_ammo_bp:
         name: '[ gui.common.back_name ]'
         lore:
         - '[ gui.common.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:SwitchGUI("player_bp")
@@ -1500,7 +1485,6 @@ player_scope_bp:
         name: '[ gui.common.back_name ]'
         lore:
         - '[ gui.common.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:SwitchGUI("player_bp")
@@ -1562,7 +1546,6 @@ player_grenade_bp:
         name: '[ gui.common.back_name ]'
         lore:
         - '[ gui.common.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:SwitchGUI("player_bp")
@@ -1622,7 +1605,6 @@ kit_menu:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1683,7 +1665,6 @@ booster_menu:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1744,7 +1725,6 @@ arena_chooser:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1805,7 +1785,6 @@ advancements:
         name: '[ gui.advancements.back_name ]'
         lore:
         - '[ gui.advancements.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1832,7 +1811,6 @@ statistics:
         - '[ gui.statistics.footer ]'
         flag:
         - hide_attributes
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1857,7 +1835,6 @@ statistics:
         name: '[ gui.statistics.wins ]'
         lore:
         - '[ gui.statistics.footer ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1870,7 +1847,6 @@ statistics:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1896,7 +1872,6 @@ market_category_menu:
         name: '[ gui.market_category_menu.transaction_name ]'
         lore:
         - '[ gui.market_category_menu.transaction_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -1943,7 +1918,6 @@ market_category_menu:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2004,7 +1978,6 @@ market_product_menu:
         name: '[ gui.market_product_menu.back_name ]'
         lore:
         - '[ gui.market_product_menu.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2030,7 +2003,6 @@ market_category_menu_editor:
         name: '[ gui.market_category_menu_editor.create_name ]'
         lore:
         - '[ gui.market_category_menu_editor.create_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2078,7 +2050,6 @@ market_category_menu_editor:
         name: '[ gui.common.close_name ]'
         lore:
         - '[ gui.common.close_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2103,7 +2074,6 @@ market_category_editor:
         name: '[ gui.market_category_editor.set_igo_name ]'
         lore:
         - '[ gui.market_category_editor.set_igo_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2117,7 +2087,6 @@ market_category_editor:
         name: '[ gui.market_category_editor.edit_product_name ]'
         lore:
         - '[ gui.market_category_editor.edit_product_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2129,7 +2098,6 @@ market_category_editor:
         name: '[ gui.market_category_editor.remove_name ]'
         lore:
         - '[ gui.market_category_editor.remove_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2144,7 +2112,6 @@ market_category_editor:
         name: '[ gui.market_category_editor.back_name ]'
         lore:
         - '[ gui.market_category_editor.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2170,7 +2137,6 @@ market_product_menu_editor:
         name: '[ gui.market_product_menu_editor.create_name ]'
         lore:
         - '[ gui.market_product_menu_editor.create_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2218,7 +2184,6 @@ market_product_menu_editor:
         name: '[ gui.market_product_menu_editor.back_name ]'
         lore:
         - '[ gui.market_product_menu_editor.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2243,7 +2208,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.set_igo_name ]'
         lore:
         - '[ gui.market_product_editor.set_igo_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2257,7 +2221,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.set_price_name ]'
         lore:
         - '[ gui.market_product_editor.set_price_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2271,7 +2234,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.set_exp_name ]'
         lore:
         - '[ gui.market_product_editor.set_exp_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2285,7 +2247,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.set_icon_name ]'
         lore:
         - '[ gui.market_product_editor.set_icon_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2299,7 +2260,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.remove_name ]'
         lore:
         - '[ gui.market_product_editor.remove_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2314,7 +2274,6 @@ market_product_editor:
         name: '[ gui.market_product_editor.back_name ]'
         lore:
         - '[ gui.market_product_editor.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2340,7 +2299,6 @@ market_transaction:
         name: '[ gui.market_transaction.back_name ]'
         lore:
         - '[ gui.market_transaction.back_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2391,7 +2349,6 @@ main_player_inv:
         name: '[ gui.main_player_inv.arena_chooser_name ]'
         lore:
         - '[ gui.main_player_inv.arena_chooser_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2403,7 +2360,6 @@ main_player_inv:
         name: '[ gui.common.your_bp_name ]'
         lore:
         - '[ gui.common.your_bp_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2419,7 +2375,6 @@ game_player_inv:
         name: '[ gui.game_player_inv.quit_name ]'
         lore:
         - '[ gui.game_player_inv.quit_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2440,7 +2395,6 @@ game_player_inv:
         name: '[ gui.common.your_bp_name ]'
         lore:
         - '[ gui.common.your_bp_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
@@ -2456,7 +2410,6 @@ game_player_inv_bw:
         name: '[ gui.game_player_inv.quit_name ]'
         lore:
         - '[ gui.game_player_inv.quit_lore ]'
-        damage: 0
       functions:
         on_click:
         - Battle:CancelEvent()
