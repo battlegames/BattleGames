@@ -34,9 +34,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 
 public class LocaleConfigManager extends ConfigManager {
     private static final Map<NMSVersion, String> ASSETS_VERSION = new EnumMap<>(NMSVersion.class);
@@ -89,7 +91,8 @@ public class LocaleConfigManager extends ConfigManager {
 
         new File(plugin.configFolder, "locale/minecraft/").mkdirs();
         String version = ASSETS_VERSION.get(NMSVersion.current());
-        File f = new File(plugin.configFolder, "locale/minecraft/" + version.hashCode() + "." + plugin.generalConf.getLocaleFile());
+        //noinspection UnstableApiUsage
+        File f = new File(plugin.configFolder, "locale/minecraft/" + version.hashCode() + "." + Files.getNameWithoutExtension(plugin.generalConf.getLocaleFile()) + ".json");
         try {
             if (f.exists()) {
                 plugin.minecraftLocale = CKPlugin.GSON.fromJson(FileUtil.readText(f), JsonObject.class);
@@ -100,9 +103,20 @@ public class LocaleConfigManager extends ConfigManager {
                 plugin.getLogger().warning("[" + loggerName + "] Downloading Minecraft language file...");
                 plugin.getLogger().warning("- Hash: " + version.hashCode());
                 plugin.getLogger().warning("- Locale: " + locale);
-                String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".json");
-                FileUtil.write(f, str);
-                plugin.minecraftLocale = CKPlugin.GSON.fromJson(str, JsonObject.class);
+                if(NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
+                    String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".json");
+                    FileUtil.write(f, str);
+                    plugin.minecraftLocale = CKPlugin.GSON.fromJson(str, JsonObject.class);
+                } else {
+                    String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".lang");
+                    Properties p = new Properties();
+                    p.load(new StringReader(str));
+                    plugin.minecraftLocale = new JsonObject();
+                    for(Map.Entry<Object, Object> e : p.entrySet()){
+                        plugin.minecraftLocale.addProperty(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+                    }
+                    FileUtil.write(f, CKPlugin.GSON.toJson(plugin.minecraftLocale));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
