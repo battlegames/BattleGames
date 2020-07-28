@@ -48,9 +48,6 @@ world_settings:
       # If you enable, players can't place any blocks!!!
       protect_blocks: false
 
-      # A bit more challenging
-      prevent_hungry: false
-
       # Interacts should be allowed so players can access the ender chest
       disable_interact: false
 
