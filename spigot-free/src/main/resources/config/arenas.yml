@@ -113,7 +113,7 @@ bw_lighthouse:
       - "lighthouse"
     region:
       corner_1: lighthouse 99 45 96 0 0
-      corner_2: lighthouse -92 107 -95 0 0
+      corner_2: lighthouse -92 143 -95 0 0
   end_firework:
     power: 4
     effects:
