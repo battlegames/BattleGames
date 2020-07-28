@@ -39,6 +39,7 @@ import dev.anhcraft.battle.gui.GDataRegistry;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.inst.lang.DataType;
 import dev.anhcraft.inst.lang.Instruction;
 import dev.anhcraft.inst.values.*;
 import dev.anhcraft.jvmkit.utils.EnumUtil;
@@ -109,15 +110,15 @@ public class ProductMenu implements Pagination {
                     Instruction[] ins = p.getPurchaseFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
                     Val<?> fb = vm.getVariable("forbidden");
-                    if(fb instanceof BoolVal && ((BoolVal) fb).getData()){
+                    if(fb != null && fb.getType() == DataType.BOOL && (Boolean) fb.getData()){
                         return;
                     }
                     Val<?> npv = vm.getVariable("price");
                     Val<?> ncv = vm.getVariable("currency");
-                    if(npv instanceof NumberVal<?> && npv != pv) {
+                    if(npv != null && npv.getType().isNumber() && npv != pv){
                         price = ((Number) npv.getData()).doubleValue();
                     }
-                    if(ncv instanceof StringVal && ncv != cv) {
+                    if(ncv != null && ncv.getType().isNumber() && ncv != cv){
                         String cvx = ((String) ncv.getData()).toUpperCase();
                         CurrencyType nct = (CurrencyType) EnumUtil.findEnum(CurrencyType.class, cvx);
                         ct = ObjectUtil.optional(nct, ct);

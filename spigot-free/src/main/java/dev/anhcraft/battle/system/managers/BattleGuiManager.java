@@ -42,6 +42,7 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.VM;
 import dev.anhcraft.inst.exceptions.FunctionRegisterFailed;
+import dev.anhcraft.inst.lang.DataType;
 import dev.anhcraft.inst.lang.Instruction;
 import dev.anhcraft.inst.values.BoolVal;
 import dev.anhcraft.inst.values.IntVal;
@@ -166,7 +167,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                     Instruction[] ins = rf.stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
                     Val<?> val = vm.getVariable("cancel_render");
-                    if (val instanceof BoolVal && ((BoolVal) val).getData()) return;
+                    if (val != null && val.getType() == DataType.BOOL && (Boolean) val.getData()) return;
                 }
 
                 view.getInventory().setItem(slot,
