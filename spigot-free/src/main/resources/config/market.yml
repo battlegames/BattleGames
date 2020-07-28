@@ -337,7 +337,7 @@ categories:
             - Var:Set($forbidden $x)
           on_purchased:
             - BedwarPack:RemovePotionFromPool("*" "teammates")
-            - BedwarPack:AddPotionToPool("regeneration" 0 5 "teammates")
+            - BedwarPack:AddPotionToPool("regeneration" 0 18 "teammates")
       freeze:
         icon:
           name: "&f&lFreeze"
@@ -352,4 +352,4 @@ categories:
             - Var:Set($forbidden $x)
           on_purchased:
             - BedwarPack:RemovePotionFromPool("*" "enemies")
-            - BedwarPack:AddPotionToPool("slow" 0 7 "enemies")
+            - BedwarPack:AddPotionToPool("slow" 0 18 "enemies")
