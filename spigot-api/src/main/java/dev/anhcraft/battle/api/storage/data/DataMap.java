@@ -68,9 +68,6 @@ public class DataMap<T> {
         if(!Objects.equals(tag, map.put(key, tag))) modifyTracker.set(true);
     }
 
-    /**
-     * @deprecated INTERNAL ONLY!
-     */
     @Deprecated
     public void fastPut(T key, DataTag<?> tag){
         map.put(key, tag);

@@ -48,6 +48,7 @@ public interface GuiManager {
     /**
      * Registers a new GUI handler.
      * @param handlerClass the handler's class
+     * @param <T> gui handler
      * @return {@code true} if success, or {@code false} if not
      */
     <T extends GuiHandler> boolean registerGuiHandler(@NotNull Class<T> handlerClass);

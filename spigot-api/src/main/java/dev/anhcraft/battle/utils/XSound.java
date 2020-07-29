@@ -1128,41 +1128,18 @@ public enum XSound {
         this.legacy = legacy;
     }
 
-    /**
-     * Attempts to build the string like an enum name.<br>
-     * Removes all the spaces, numbers and extra non-English characters. Also removes some config/in-game based strings.
-     *
-     * @param name the sound name to modify.
-     * @return a Sound enum name.
-     * @since 1.0.0
-     */
     @NotNull
     private static String format(@NotNull String name) {
         return FORMAT_PATTERN.matcher(
                 name.trim().replace('-', '_').replace(' ', '_')).replaceAll("").toUpperCase(Locale.ENGLISH);
     }
 
-    /**
-     * Parses the XSound with the given name.
-     *
-     * @param sound the name of the sound.
-     * @return a matched XSound.
-     * @since 1.0.0
-     */
     @NotNull
     public static Optional<XSound> matchXSound(@NotNull String sound) {
         Validate.notEmpty(sound, "Cannot match XSound of a null or empty sound name");
         return getIfPresent(format(sound));
     }
 
-    /**
-     * Parses the XSound with the given bukkit sound.
-     *
-     * @param sound the Bukkit sound.
-     * @return a matched sound.
-     * @throws IllegalArgumentException may be thrown as an unexpected exception.
-     * @since 2.0.0
-     */
     @NotNull
     public static XSound matchXSound(@NotNull Sound sound) {
         Objects.requireNonNull(sound, "Cannot match XSound of a null sound");
@@ -1170,63 +1147,17 @@ public enum XSound {
                 .orElseThrow(() -> new IllegalArgumentException("Unsupported Sound: " + sound.name()));
     }
 
-    /**
-     * @see #play(Location, String)
-     * @since 1.0.0
-     */
     @NotNull
     public static CompletableFuture<Record> play(@Nullable Player player, @Nullable String sound) {
         Objects.requireNonNull(player, "Cannot play sound to null player");
         return parse(player, player.getLocation(), sound, true);
     }
 
-    /**
-     * @see #play(Location, String)
-     * @since 3.0.0
-     */
     @NotNull
     public static CompletableFuture<Record> play(@NotNull Location location, @Nullable String sound) {
         return parse(null, location, sound, true);
     }
 
-    /**
-     * Just an extra feature that loads sounds from strings.
-     * Useful for getting sounds from config files.
-     * Sounds are thread safe.
-     * <p>
-     * It's strongly recommended to use this method while using it inside a loop.
-     * This can help to avoid parsing the sound properties multiple times.
-     * A simple usage of using it in a loop is:
-     * <blockquote><pre>
-     *     Record record = XSound.parse(player, location, sound, false).join();
-     *     // Loop:
-     *     if (record != null) record.play();
-     * </pre></blockquote>
-     * <p>
-     * This will also ignore {@code none} and {@code null} strings.
-     * <p>
-     * <b>Format:</b> [LOC:]Sound, [Volume], [Pitch]<br>
-     * Where {@code LOC:} will play the sound at the location if a player is specified.
-     * A sound played at a location will be heard by everyone around.
-     * Comma separators are optional.
-     * <p>
-     * <b>Examples:</b>
-     * <p>
-     * <pre>
-     *     LOC:ENTITY_PLAYER_BURP, 2.5f, 0.5
-     *     ENTITY_PLAYER_BURP, 0.5, 1f
-     *     BURP 0.5f 1
-     *     MUSIC_END, 10f
-     *     none
-     *     null
-     * </pre>
-     *
-     * @param player   the only player to play the sound to if requested to do so.
-     * @param location the location to play the sound to.
-     * @param sound    the string of the sound with volume and pitch (if needed).
-     * @param play     if the sound should be played right away.
-     * @since 3.0.0
-     */
     @NotNull
     public static CompletableFuture<Record> parse(@Nullable Player player, @NotNull Location location, @Nullable String sound, boolean play) {
         Objects.requireNonNull(location, "Cannot play sound to null location");
@@ -1269,18 +1200,6 @@ public enum XSound {
         });
     }
 
-    /**
-     * Stops all the playing musics (not all the sounds)
-     * <p>
-     * Note that this method will only work for the sound
-     * that are sent from {@link Player#playSound} and
-     * the sounds played from the client will not be
-     * affected by this.
-     *
-     * @param player the player to stop all the sounds from.
-     * @see #stopSound(Player)
-     * @since 2.0.0
-     */
     public static CompletableFuture<Void> stopMusic(@NotNull Player player) {
         Objects.requireNonNull(player, "Cannot stop playing musics from null player");
 
@@ -1299,44 +1218,20 @@ public enum XSound {
         });
     }
 
-    /**
-     * Gets the {@link XSound} with this name without throwing an exception.
-     *
-     * @param name the name of the sound.
-     * @return an optional that can be empty.
-     * @since 5.1.0
-     */
     private static Optional<XSound> getIfPresent(@NotNull String name) {
         return Optional.ofNullable(NAMES.get(name));
     }
 
-    /**
-     * In most cases your should be using {@link #name()} instead.
-     *
-     * @return a friendly readable string name.
-     */
     @Override
     public String toString() {
         return WordUtils.capitalize(this.name().replace('_', ' ').toLowerCase(Locale.ENGLISH));
     }
 
-    /**
-     * Gets all the previous sound names used for this sound.
-     *
-     * @return a list of legacy sound names.
-     * @since 1.0.0
-     */
     @NotNull
     public String[] getLegacy() {
         return legacy;
     }
 
-    /**
-     * Parses the XSound as a {@link Sound} based on the server version.
-     *
-     * @return the vanilla sound.
-     * @since 1.0.0
-     */
     @Nullable
     @SuppressWarnings("OptionalAssignedToNull")
     public Sound parseSound() {
@@ -1360,34 +1255,10 @@ public enum XSound {
         return sound;
     }
 
-    /**
-     * Checks if this sound is supported in the current Minecraft version.
-     * <p>
-     * An invocation of this method yields exactly the same result as the expression:
-     * <p>
-     * <blockquote>
-     * {@link #parseSound()} != null
-     * </blockquote>
-     *
-     * @return true if the current version has this sound, otherwise false.
-     * @since 1.0.0
-     */
     public boolean isSupported() {
         return this.parseSound() != null;
     }
 
-    /**
-     * Plays a sound repeatedly with the given delay at a moving target's location.
-     *
-     * @param plugin the plugin handling schedulers. (You can replace this with a static instance)
-     * @param entity the entity to play the sound to. We exactly need an entity to keep the track of location changes.
-     * @param volume the volume of the sound.
-     * @param pitch  the pitch of the sound.
-     * @param repeat the amount of times to repeat playing.
-     * @param delay  the delay between each repeat.
-     * @see #play(Location, float, float)
-     * @since 2.0.0
-     */
     public void playRepeatedly(JavaPlugin plugin, Entity entity, float volume, float pitch, int repeat, int delay) {
         Objects.requireNonNull(plugin, "Cannot play repeating sound from null plugin");
         Objects.requireNonNull(entity, "Cannot play repeating sound at null location");
@@ -1406,18 +1277,6 @@ public enum XSound {
         }.runTaskTimer(plugin, 0, delay);
     }
 
-    /**
-     * Plays an instrument's notes in an ascending form.
-     * This method is not really relevant to this utility class, but a nice feature.
-     *
-     * @param plugin      the plugin handling schedulers.
-     * @param player      the player to play the note from.
-     * @param playTo      the entity to play the note to.
-     * @param instrument  the instrument.
-     * @param ascendLevel the ascend level of notes. Can only be positive and not higher than 7
-     * @param delay       the delay between each play.
-     * @since 2.0.0
-     */
     public void playAscendingNote(@NotNull JavaPlugin plugin, @NotNull Player player, @NotNull Entity playTo, Instrument instrument, int ascendLevel, int delay) {
         Objects.requireNonNull(player, "Cannot play note from null player");
         Objects.requireNonNull(playTo, "Cannot play note to null entity");
@@ -1437,13 +1296,6 @@ public enum XSound {
         }.runTaskTimerAsynchronously(plugin, 0, delay);
     }
 
-    /**
-     * Stops playing the specified sound from the player.
-     *
-     * @param player the player to stop playing the sound to.
-     * @see #stopMusic(Player)
-     * @since 2.0.0
-     */
     public void stopSound(@NotNull Player player) {
         Objects.requireNonNull(player, "Cannot stop playing sound from null player");
 
@@ -1451,24 +1303,10 @@ public enum XSound {
         if (sound != null) player.stopSound(sound);
     }
 
-    /**
-     * Plays a normal sound to an entity.
-     *
-     * @param entity the entity to play the sound to.
-     * @since 1.0.0
-     */
     public void play(@NotNull Entity entity) {
         play(entity, 1.0f, 1.0f);
     }
 
-    /**
-     * Plays a sound to an entity with the given volume and pitch.
-     *
-     * @param entity the entity to play the sound to.
-     * @param volume the volume of the sound, 1 is normal.
-     * @param pitch  the pitch of the sound, 0 is normal.
-     * @since 1.0.0
-     */
     public void play(@NotNull Entity entity, float volume, float pitch) {
         Objects.requireNonNull(entity, "Cannot play sound to a null entity");
         if (entity instanceof Player) {
@@ -1480,24 +1318,10 @@ public enum XSound {
         }
     }
 
-    /**
-     * Plays a normal sound in a location.
-     *
-     * @param location the location to play the sound in.
-     * @since 2.0.0
-     */
     public void play(@NotNull Location location) {
         play(location, 1.0f, 1.0f);
     }
 
-    /**
-     * Plays a sound in a location with the given volume and pitch.
-     *
-     * @param location the location to play this sound.
-     * @param volume   the volume of the sound, 1 is normal.
-     * @param pitch    the pitch of the sound, 0 is normal.
-     * @since 2.0.0
-     */
     public void play(@NotNull Location location, float volume, float pitch) {
         Objects.requireNonNull(location, "Cannot play sound to null location");
         Sound sound = this.parseSound();
@@ -1505,11 +1329,6 @@ public enum XSound {
         location.getWorld().playSound(location, sound, volume, pitch);
     }
 
-    /**
-     * A class to help caching sound properties parsed from config.
-     *
-     * @since 3.0.0
-     */
     public static class Record {
         public final Sound sound;
         public final Player player;
@@ -1527,21 +1346,10 @@ public enum XSound {
             this.playAtLocation = playAtLocation;
         }
 
-        /**
-         * Plays the sound with the given options and updating the players location.
-         *
-         * @since 3.0.0
-         */
         public void play() {
             play(player == null ? location : player.getLocation());
         }
 
-        /**
-         * Plays the sound with the updated location.
-         *
-         * @param updatedLocation the upated location.
-         * @since 3.0.0
-         */
         public void play(Location updatedLocation) {
             if (playAtLocation) location.getWorld().playSound(updatedLocation, sound, volume, pitch);
             else if (player.isOnline()) player.playSound(updatedLocation, sound, volume, pitch);

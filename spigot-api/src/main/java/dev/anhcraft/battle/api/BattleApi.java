@@ -257,7 +257,6 @@ public interface BattleApi {
      * Gets item model by type and id.
      * @param itemType the type of item
      * @param id the id of item
-     * @param <T> the item model
      * @return item model
      */
     @Nullable

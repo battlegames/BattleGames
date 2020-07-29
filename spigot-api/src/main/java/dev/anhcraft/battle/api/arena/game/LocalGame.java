@@ -112,9 +112,9 @@ public class LocalGame extends Game {
     }
 
     /**
-     * @deprecated internal uses
+     * Adds world that involves in the game.
+     * @param world the world
      */
-    @Deprecated
     public synchronized void addInvolvedWorld(@Nullable World world) {
         if(world == null) return;
         for(WeakReference<World> w : involvedWorlds){
