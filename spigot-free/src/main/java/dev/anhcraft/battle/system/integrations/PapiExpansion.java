@@ -27,12 +27,13 @@ import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PapiExpansion extends PlaceholderExpansion {
     public interface Callback {
@@ -171,27 +172,39 @@ public class PapiExpansion extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean persist(){
+        return true;
+    }
+
+    @Override
     public boolean canRegister() {
         return true;
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "battle";
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return String.join(", ", plugin.getDescription().getAuthors());
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return plugin.getDescription().getVersion();
     }
 
+    @NotNull
+    public List<String> getPlaceholders() {
+        return handlers.keySet().stream().map(s -> "%battle_" + s + "%").collect(Collectors.toList());
+    }
+
     @Override
-    public String onPlaceholderRequest(Player player, String identifier){
+    public String onRequest(@Nullable OfflinePlayer offlinePlayer, @NotNull String identifier) {
+        if(offlinePlayer == null) return null;
+        Player player = offlinePlayer.getPlayer();
         if(player == null) return null;
         Callback x = handlers.get(identifier);
         if(x != null) {

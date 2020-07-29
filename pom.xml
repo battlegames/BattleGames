@@ -127,6 +127,10 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>rayzr-repo</id>
+            <url>https://rayzr.dev/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
