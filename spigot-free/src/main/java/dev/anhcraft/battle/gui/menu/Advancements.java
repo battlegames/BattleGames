@@ -43,7 +43,7 @@ import java.util.List;
 public class Advancements implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
-        String stat = (String) view.getWindow().getDataContainer().remove(GDataRegistry.STAT);
+        String stat = (String) view.getWindow().getBackend().remove(GDataRegistry.STAT);
         if(stat == null) return;
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);

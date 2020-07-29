@@ -26,7 +26,7 @@ import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.impl.Resettable;
-import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.CustomDataContainer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
-public class GamePlayer extends TempDataContainer implements Resettable {
+public class GamePlayer extends CustomDataContainer implements Resettable {
     private final StatisticMap stats = new StatisticMap(x -> {});
     private final AtomicDouble igBalance = new AtomicDouble();
     private boolean hasFirstKill;

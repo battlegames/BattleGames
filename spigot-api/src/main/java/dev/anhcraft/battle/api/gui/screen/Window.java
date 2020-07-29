@@ -19,13 +19,13 @@
  */
 package dev.anhcraft.battle.api.gui.screen;
 
-import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.CustomDataContainer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
-public class Window extends TempDataContainer {
+public class Window extends CustomDataContainer {
     private final WeakReference<Player> player;
     private View topView;
     private View bottomView;

@@ -23,7 +23,7 @@ package dev.anhcraft.battle.api.arena.game;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.impl.Resettable;
-import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Game extends TempDataContainer implements Resettable, Informative {
+public class Game extends CustomDataContainer implements Resettable, Informative {
     private final AtomicLong currentTime = new AtomicLong();
     protected int playerCount;
     private GamePhase phase = GamePhase.WAITING;

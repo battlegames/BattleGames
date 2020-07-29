@@ -36,7 +36,7 @@ public class ProductMenuEditor implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
-        Category ctg = (Category) view.getWindow().getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
+        Category ctg = (Category) view.getWindow().getBackend().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
         if(ctg == null) return;
         for(Product p : ctg.getProducts()){
             if(!chain.hasNext()) break;
@@ -46,7 +46,7 @@ public class ProductMenuEditor implements Pagination {
             Slot slot = chain.next();
             slot.setPaginationItem(p.getIcon().duplicate());
             slot.setExtraClickFunction((vm, report) -> {
-                view.getWindow().getDataContainer().put(GDataRegistry.MARKET_PRODUCT_EDITOR, p);
+                view.getWindow().getBackend().put(GDataRegistry.MARKET_PRODUCT_EDITOR, p);
                 api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_EDITOR);
             });
         }

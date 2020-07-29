@@ -55,7 +55,7 @@ public class ProductMenu implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
-        Category ctg = (Category) view.getWindow().getDataContainer().remove(GDataRegistry.MARKET_CATEGORY);
+        Category ctg = (Category) view.getWindow().getBackend().remove(GDataRegistry.MARKET_CATEGORY);
         if(ctg == null) return;
         Market mk = api.getMarket();
         Game g = api.getArenaManager().getGame(player);

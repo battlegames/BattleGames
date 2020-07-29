@@ -24,7 +24,7 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.utils.SignedInt;
-import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class View extends TempDataContainer {
+public class View extends CustomDataContainer {
     private final Map<String, SignedInt> PAGE = new HashMap<>();
     private final Slot[] slots;
     private final Gui gui;

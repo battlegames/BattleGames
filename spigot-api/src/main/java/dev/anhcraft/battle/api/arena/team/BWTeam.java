@@ -23,7 +23,7 @@ package dev.anhcraft.battle.api.arena.team;
 import com.google.common.base.Preconditions;
 import com.google.common.math.Stats;
 import dev.anhcraft.battle.api.arena.mode.options.BWTeamOptions;
-import dev.anhcraft.battle.utils.TempDataContainer;
+import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BWTeam extends TempDataContainer implements Team {
+public class BWTeam extends CustomDataContainer implements Team {
     private String name;
     private final DyeColor color;
     private final List<Location> spawnPoints;

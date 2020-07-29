@@ -28,11 +28,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TempDataContainer implements Informative {
+/**
+ * A container for storing data.
+ */
+public class CustomDataContainer implements Informative {
     private Map<String, Object> dataContainer;
 
+    /**
+     * Gets the backend of this container (which is a HashMap).
+     * @return backend map
+     */
     @NotNull
-    public Map<String, Object> getDataContainer() {
+    public Map<String, Object> getBackend() {
         if(dataContainer == null){
             dataContainer = new HashMap<>();
         }
@@ -41,7 +48,7 @@ public class TempDataContainer implements Informative {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        for(Map.Entry<String, Object> ent : getDataContainer().entrySet()){
+        for(Map.Entry<String, Object> ent : getBackend().entrySet()){
             Object v = ent.getValue();
             if(v instanceof String){
                 holder.inform("data_"+ent.getKey(), (String) v);
