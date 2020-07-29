@@ -19,11 +19,13 @@
  */
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.utils.EnumUtil;
+import dev.anhcraft.battle.utils.XSound;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.function.Supplier;
 
 public class BattleSound {
     private String soundName;
@@ -36,11 +38,16 @@ public class BattleSound {
         String[] x = s.split(":");
         if(x.length >= 1){
             String sound = x[0];
-            if(sound.charAt(0) == '$')
-                bukkitSound = EnumUtil.getEnum(Sound.values(), sound.substring(1));
-            else
+            if(sound.charAt(0) == '$') {
+                try {
+                    bukkitSound = XSound.matchXSound(sound.substring(1)).orElseThrow((Supplier<Throwable>) () ->
+                            new IllegalArgumentException("No sound matched")).parseSound();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            } else {
                 soundName = sound;
-
+            }
             if(x.length >= 2) {
                 volume = Float.parseFloat(x[1]);
 
