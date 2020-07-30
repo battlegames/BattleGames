@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.premium.system;
 
-import dev.anhcraft.battle.api.arena.mode.MobRescueObjective;
-import dev.anhcraft.battle.api.arena.mode.options.MobRescueOptions;
+import dev.anhcraft.battle.api.arena.game.MobRescueObjective;
+import dev.anhcraft.battle.api.arena.game.options.MobRescueOptions;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.entity.EntityType;

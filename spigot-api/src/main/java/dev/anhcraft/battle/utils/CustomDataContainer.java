@@ -22,7 +22,6 @@ package dev.anhcraft.battle.utils;
 
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.info.State;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

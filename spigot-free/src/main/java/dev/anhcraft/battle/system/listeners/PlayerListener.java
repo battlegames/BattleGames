@@ -30,7 +30,7 @@ import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.events.WeaponUseEvent;
+import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerDamageEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerDeathEvent;
 import dev.anhcraft.battle.api.events.game.GamePlayerWeaponUseEvent;
@@ -49,7 +49,7 @@ import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.ResourcePack;
-import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -594,7 +594,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
             game.getMode().getController(c -> {
                 c.onDeath(e, game);
-                ((ModeController) c).cancelReloadGun(e.getEntity());
+                ((GameControllerImpl) c).cancelReloadGun(e.getEntity());
             });
 
             plugin.gunManager.handleZoomOut(e.getEntity());

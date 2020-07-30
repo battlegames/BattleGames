@@ -22,7 +22,7 @@ package dev.anhcraft.battle.api.arena.team;
 
 import com.google.common.base.Preconditions;
 import com.google.common.math.Stats;
-import dev.anhcraft.battle.api.arena.mode.options.BWTeamOptions;
+import dev.anhcraft.battle.api.arena.game.options.BWTeamOptions;
 import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.DyeColor;

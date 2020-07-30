@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.api.effect.firework;
 
-import dev.anhcraft.battle.api.ColorPalette;
+import dev.anhcraft.battle.api.BattleColor;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -53,13 +53,13 @@ public class BattleFireworkEffect extends ConfigurableObject {
     @Explanation("All primary colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<ColorPalette> primaryColors = new ArrayList<>();
+    private List<BattleColor> primaryColors = new ArrayList<>();
 
     @Key("fade_colors")
     @Explanation("All fade colors")
     @PrettyEnum
     @IgnoreValue(ifNull = true)
-    private List<ColorPalette> fadeColors = new ArrayList<>();
+    private List<BattleColor> fadeColors = new ArrayList<>();
 
     private FireworkEffect cached;
 
@@ -77,12 +77,12 @@ public class BattleFireworkEffect extends ConfigurableObject {
     }
 
     @NotNull
-    public List<ColorPalette> getPrimaryColors() {
+    public List<BattleColor> getPrimaryColors() {
         return primaryColors;
     }
 
     @NotNull
-    public List<ColorPalette> getFadeColors() {
+    public List<BattleColor> getFadeColors() {
         return fadeColors;
     }
 
@@ -90,10 +90,10 @@ public class BattleFireworkEffect extends ConfigurableObject {
     public FireworkEffect getFireworkEffect() {
         if(cached == null) {
             FireworkEffect.Builder b = FireworkEffect.builder().with(type).flicker(flicker).trail(trail);
-            for (ColorPalette c : primaryColors) {
+            for (BattleColor c : primaryColors) {
                 b.withColor(c.asBukkit());
             }
-            for (ColorPalette c : fadeColors) {
+            for (BattleColor c : fadeColors) {
                 b.withFade(c.asBukkit());
             }
             cached = b.build();

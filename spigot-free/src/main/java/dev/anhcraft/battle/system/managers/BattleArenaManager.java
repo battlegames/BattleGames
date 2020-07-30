@@ -26,19 +26,19 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.arena.game.*;
-import dev.anhcraft.battle.api.arena.mode.IMode;
-import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
-import dev.anhcraft.battle.api.misc.Booster;
+import dev.anhcraft.battle.api.Booster;
 import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
-import dev.anhcraft.battle.system.controllers.BedWarController;
-import dev.anhcraft.battle.system.controllers.DeathmatchController;
-import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.controllers.BWControllerImpl;
+import dev.anhcraft.battle.system.controllers.DMControllerImpl;
+import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.SpeedUtil;
@@ -67,11 +67,11 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
     public BattleArenaManager(BattlePlugin plugin) {
         super(plugin);
         cleaner = new GameCleaner(plugin);
-        initController(Mode.DEATHMATCH, new DeathmatchController(plugin));
-        initController(Mode.BEDWAR, new BedWarController(plugin));
+        initController(Mode.DEATHMATCH, new DMControllerImpl(plugin));
+        initController(Mode.BEDWAR, new BWControllerImpl(plugin));
     }
 
-    public void initController(Mode mode, ModeController controller) {
+    public void initController(Mode mode, GameControllerImpl controller) {
         mode.setController(controller);
         Bukkit.getPluginManager().registerEvents(controller, plugin);
     }
@@ -111,7 +111,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         return ARENA_GAME_MAP.get(arena);
     }
 
-    private Game join(Player player, LocalGame localGame, IMode controller) {
+    private Game join(Player player, LocalGame localGame, GameController controller) {
         GamePlayer gp = controller.makeGamePlayer(player);
         gp.getIgBalance().set(plugin.generalConf.getIgEcoInitBalance());
         localGame.getPlayers().put(player, gp);
@@ -148,13 +148,13 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 }
             } else {
                 game = arena.hasBungeecordSupport() && !forceLocal ? new RemoteGame(arena) : new LocalGame(arena);
-                IMode controller = arena.getMode().getController();
+                GameController controller = arena.getMode().getController();
                 if(controller != null) controller.onInitGame(game);
                 ARENA_GAME_MAP.put(arena, game);
             }
             if(game instanceof LocalGame) {
                 LocalGame localGame = (LocalGame) game;
-                IMode controller = localGame.getMode().getController();
+                GameController controller = localGame.getMode().getController();
                 if (controller == null) {
                     plugin.chatManager.sendPlayer(player, "arena.error_mode_controller_unavailable");
                 }
@@ -186,7 +186,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
             }
             if(game instanceof LocalGame) {
                 LocalGame localGame = (LocalGame) game;
-                IMode controller = localGame.getMode().getController();
+                GameController controller = localGame.getMode().getController();
                 if (controller != null)
                     return join(player, localGame, controller);
             }

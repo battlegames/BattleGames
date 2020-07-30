@@ -18,14 +18,14 @@
  *
  */
 
-import dev.anhcraft.battle.api.GeneralConfig;
+import dev.anhcraft.battle.api.*;
 import dev.anhcraft.battle.api.advancement.Advancement;
 import dev.anhcraft.battle.api.advancement.Progression;
 import dev.anhcraft.battle.api.arena.Arena;
-import dev.anhcraft.battle.api.arena.mode.MobGroup;
-import dev.anhcraft.battle.api.arena.mode.MobRescueObjective;
-import dev.anhcraft.battle.api.arena.mode.Mode;
-import dev.anhcraft.battle.api.arena.mode.options.*;
+import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.arena.game.MobGroup;
+import dev.anhcraft.battle.api.arena.game.MobRescueObjective;
+import dev.anhcraft.battle.api.arena.game.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.effect.BattleParticle;
@@ -41,7 +41,6 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.api.market.PackageDetails;
 import dev.anhcraft.battle.api.market.Product;
-import dev.anhcraft.battle.api.misc.*;
 import dev.anhcraft.configdoc.ConfigDocGenerator;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import org.junit.Test;

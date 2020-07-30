@@ -21,7 +21,7 @@ package dev.anhcraft.battle.tasks;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.mode.IMode;
+import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.RemoteGame;
@@ -38,7 +38,7 @@ public class GameTask extends BattleComponent implements Runnable {
         plugin.arenaManager.listGames(g -> {
             if(g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;
-                IMode mc = game.getMode().getController();
+                GameController mc = game.getMode().getController();
                 if (mc != null) mc.onTick(game);
 
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {

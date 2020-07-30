@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.api.events;
 
-import dev.anhcraft.battle.api.misc.Kit;
+import dev.anhcraft.battle.api.Kit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

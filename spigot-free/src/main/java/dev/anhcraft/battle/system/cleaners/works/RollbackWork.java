@@ -22,7 +22,7 @@ package dev.anhcraft.battle.system.cleaners.works;
 
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.Arena;
-import dev.anhcraft.battle.api.misc.Rollback;
+import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Bukkit;

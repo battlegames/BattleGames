@@ -30,9 +30,6 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.Booster;
-import dev.anhcraft.battle.api.misc.Kit;
-import dev.anhcraft.battle.api.misc.Perk;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -497,31 +494,6 @@ public interface BattleApi {
      */
     // NOTE: THIS METHOD IS [DIFFERENT] THAN THE SIMILAR ONE IN GENERAL CONFIG
     boolean hasBungeecordSupport();
-
-    /**
-     * Gets all lobby servers
-     * @deprecated better to get this value from {@link #getGeneralConfig()}
-     * @return an immutable list contains lobby servers.
-     */
-    @Deprecated
-    @NotNull
-    List<String> getLobbyServers();
-
-    /**
-     * Gets the maximum reconnection tries.
-     * @deprecated better to get this value from {@link #getGeneralConfig()}
-     * @return maximum reconnection tries
-     */
-    @Deprecated
-    int getMaxReconnectionTries();
-
-    /**
-     * Gets the connection delay.
-     * @deprecated better to get this value from {@link #getGeneralConfig()}
-     * @return connection delay
-     */
-    @Deprecated
-    long getConnectionDelay();
 
     /**
      * Checks if the plugin has SlimeWorldManager support.

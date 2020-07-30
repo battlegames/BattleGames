@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.system.managers.config;
 
-import dev.anhcraft.battle.api.misc.Kit;
+import dev.anhcraft.battle.api.Kit;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import org.bukkit.configuration.ConfigurationSection;

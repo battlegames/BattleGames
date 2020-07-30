@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.utils.info;
 
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

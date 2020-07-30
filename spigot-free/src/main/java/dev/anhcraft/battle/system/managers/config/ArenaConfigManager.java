@@ -21,7 +21,7 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.arena.Arena;
-import dev.anhcraft.battle.api.misc.Rollback;
+import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.utils.ConfigUpdater;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;

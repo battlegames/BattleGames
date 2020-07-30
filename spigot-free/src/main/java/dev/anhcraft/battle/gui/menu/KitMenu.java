@@ -26,7 +26,7 @@ import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.misc.Kit;
+import dev.anhcraft.battle.api.Kit;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.Bukkit;

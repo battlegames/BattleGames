@@ -35,10 +35,10 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.misc.BattleScoreboard;
-import dev.anhcraft.battle.api.misc.Booster;
-import dev.anhcraft.battle.api.misc.Kit;
-import dev.anhcraft.battle.api.misc.Perk;
+import dev.anhcraft.battle.api.BattleScoreboard;
+import dev.anhcraft.battle.api.Booster;
+import dev.anhcraft.battle.api.Kit;
+import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.CommandInitializer;
@@ -71,7 +71,7 @@ import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.CraftStats;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.utils.info.State;
+import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -787,22 +787,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public boolean hasBungeecordSupport() {
         return supportBungee;
-    }
-
-    @Override
-    @NotNull
-    public List<String> getLobbyServers() {
-        return generalConf.getBungeeLobbies();
-    }
-
-    @Override
-    public int getMaxReconnectionTries() {
-        return generalConf.getBungeeReconnectTries();
-    }
-
-    @Override
-    public long getConnectionDelay() {
-        return generalConf.getBungeeConnectDelay();
     }
 
     @Override

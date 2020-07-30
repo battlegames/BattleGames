@@ -23,7 +23,6 @@ package dev.anhcraft.battle.api;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import dev.anhcraft.battle.api.chat.BattleChat;
-import dev.anhcraft.battle.api.misc.BattleScoreboard;
 import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;

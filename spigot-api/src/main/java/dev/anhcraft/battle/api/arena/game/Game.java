@@ -24,7 +24,6 @@ import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.CustomDataContainer;
-import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
 import org.apache.commons.lang.Validate;

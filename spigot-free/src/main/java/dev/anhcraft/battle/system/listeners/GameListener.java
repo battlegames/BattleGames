@@ -21,14 +21,14 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.mode.IMode;
+import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
-import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.utils.EntityUtil;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public class GameListener extends BattleComponent implements Listener {
             if(p.isOnline()) {
                 plugin.resetScoreboard(p);
                 EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {
-                    event.getGame().getMode().getController(c -> ((ModeController) c).cancelReloadGun(p));
+                    event.getGame().getMode().getController(c -> ((GameControllerImpl) c).cancelReloadGun(p));
                 });
             }
         });
@@ -87,11 +87,13 @@ public class GameListener extends BattleComponent implements Listener {
     @EventHandler
     public void phaseChange(GamePhaseChangeEvent event){
         if(event.getGame() instanceof LocalGame) {
-            IMode bmc = event.getGame().getMode().getController();
-            if (bmc != null) {
+            GameController controller = event.getGame().getMode().getController();
+            if (controller != null) {
                 if(event.getOldPhase() == GamePhase.PLAYING) {
-                    ModeController mc = (ModeController) bmc;
-                    ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
+                    if(controller instanceof GameControllerImpl) {
+                        GameControllerImpl mc = (GameControllerImpl) controller;
+                        ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
+                    }
                 } else if(event.getNewPhase() == GamePhase.PLAYING) {
                     if (plugin.generalConf.shouldHealOnGameStart()) {
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));

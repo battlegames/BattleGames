@@ -27,9 +27,9 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.arena.mode.IBedWar;
-import dev.anhcraft.battle.api.arena.mode.IMode;
-import dev.anhcraft.battle.api.arena.mode.ITeamDeathmatch;
+import dev.anhcraft.battle.api.arena.game.controllers.BedWarController;
+import dev.anhcraft.battle.api.arena.game.controllers.GameController;
+import dev.anhcraft.battle.api.arena.game.controllers.TeamDeathmatchController;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
@@ -51,9 +51,9 @@ public class RadioCommand extends BaseCommand {
             player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.not_in_game"));
             return;
         }
-        IMode mode = game.getMode().getController();
-        if (mode instanceof ITeamDeathmatch) {
-            TeamManager<ABTeam> tm = ((ITeamDeathmatch) mode).getTeamManager(game);
+        GameController mode = game.getMode().getController();
+        if (mode instanceof TeamDeathmatchController) {
+            TeamManager<ABTeam> tm = ((TeamDeathmatchController) mode).getTeamManager(game);
             if (tm == null) {
                 player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
                 return;
@@ -68,8 +68,8 @@ public class RadioCommand extends BaseCommand {
             for (Player p : players) {
                 p.sendMessage(q);
             }
-        } else if(mode instanceof IBedWar) {
-            TeamManager<BWTeam> tm = ((IBedWar) mode).getTeamManager(game);
+        } else if(mode instanceof BedWarController) {
+            TeamManager<BWTeam> tm = ((BedWarController) mode).getTeamManager(game);
             if (tm == null) {
                 player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
                 return;

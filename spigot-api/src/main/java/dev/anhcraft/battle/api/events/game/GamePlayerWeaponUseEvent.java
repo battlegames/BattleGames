@@ -22,7 +22,6 @@ package dev.anhcraft.battle.api.events.game;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.reports.PlayerAttackReport;
-import dev.anhcraft.battle.api.events.WeaponUseEvent;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

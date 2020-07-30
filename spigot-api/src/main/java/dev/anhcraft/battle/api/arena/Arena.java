@@ -22,17 +22,17 @@ package dev.anhcraft.battle.api.arena;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.mode.Mode;
-import dev.anhcraft.battle.api.arena.mode.options.ModeOptions;
+import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.arena.game.options.GameOptions;
 import dev.anhcraft.battle.api.effect.firework.BattleFirework;
-import dev.anhcraft.battle.api.misc.Rollback;
+import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.utils.info.State;
+import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -109,7 +109,7 @@ public class Arena extends ConfigurableObject implements Informative {
     @Key("mode_options")
     @Explanation("Game mode settings")
     @Validation(notNull = true)
-    private ModeOptions modeOptions;
+    private GameOptions gameOptions;
 
     @Key("end_commands.winners")
     @Explanation({
@@ -230,8 +230,8 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @NotNull
-    public ModeOptions getModeOptions() {
-        return modeOptions;
+    public GameOptions getGameOptions() {
+        return gameOptions;
     }
 
     @Nullable
@@ -312,7 +312,7 @@ public class Arena extends ConfigurableObject implements Informative {
         if(value != null) {
             switch (entry.getKey()) {
                 case "mode": {
-                    return Mode.getMode((String) value);
+                    return Mode.get((String) value);
                 }
                 case "final_exp_formula": {
                     finalExpExpression = (String) value;

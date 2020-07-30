@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.api.arena.team;
 
-import dev.anhcraft.battle.api.arena.mode.options.FlagOptions;
+import dev.anhcraft.battle.api.arena.game.options.FlagOptions;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.info.InfoHolder;

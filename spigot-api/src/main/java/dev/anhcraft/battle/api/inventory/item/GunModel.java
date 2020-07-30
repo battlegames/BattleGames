@@ -22,7 +22,7 @@ package dev.anhcraft.battle.api.inventory.item;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
-import dev.anhcraft.battle.api.misc.BattleBar;
+import dev.anhcraft.battle.api.BattleBar;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;

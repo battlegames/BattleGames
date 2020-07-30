@@ -22,11 +22,11 @@ package dev.anhcraft.battle.system.managers.item;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.events.WeaponUseEvent;
+import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.reports.PlayerAttackReport;
-import dev.anhcraft.battle.system.controllers.ModeController;
+import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.SpeedFactor;
 import dev.anhcraft.battle.utils.SpeedUtil;
@@ -131,7 +131,7 @@ public class BattleGunManager extends BattleComponent {
     }
 
     public boolean handleZoomIn(LocalGame localGame, Player player, Gun gunItem){
-        ModeController mc = (ModeController) localGame.getMode().getController();
+        GameControllerImpl mc = (GameControllerImpl) localGame.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
@@ -169,7 +169,7 @@ public class BattleGunManager extends BattleComponent {
     public boolean shoot(LocalGame localGame, Player player, Gun gunItem){
         GunModel gm = gunItem.getModel();
         if(gm == null) return false;
-        ModeController mc = (ModeController) localGame.getMode().getController();
+        GameControllerImpl mc = (GameControllerImpl) localGame.getMode().getController();
         if(mc != null){
             if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
@@ -183,7 +183,7 @@ public class BattleGunManager extends BattleComponent {
         }
         if(mag.getAmmo().getModel() == null || mag.getAmmoCount() == 0) {
             if(plugin.getGeneralConfig().shouldAutoReloadGun()){
-                Objects.requireNonNull((ModeController) localGame.getMode().getController()).doReloadGun(player, gunItem);
+                Objects.requireNonNull((GameControllerImpl) localGame.getMode().getController()).doReloadGun(player, gunItem);
                 return false;
             }
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");

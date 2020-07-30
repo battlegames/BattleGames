@@ -22,16 +22,16 @@ package dev.anhcraft.battle.premium;
 
 import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.mode.Mode;
+import dev.anhcraft.battle.api.arena.game.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
 import dev.anhcraft.battle.premium.cmd.RadioCommand;
 import dev.anhcraft.battle.premium.config.managers.ArenaConfigManagerX;
 import dev.anhcraft.battle.premium.config.managers.ItemConfigManagerX;
 import dev.anhcraft.battle.premium.config.managers.RadioConfigManagerX;
 import dev.anhcraft.battle.premium.config.managers.WorldConfigManagerX;
-import dev.anhcraft.battle.premium.system.controllers.CTFController;
-import dev.anhcraft.battle.premium.system.controllers.MobRescueController;
-import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
+import dev.anhcraft.battle.premium.system.controllers.CTFControllerImpl;
+import dev.anhcraft.battle.premium.system.controllers.MRControllerImpl;
+import dev.anhcraft.battle.premium.system.controllers.TDMControllerImpl;
 import dev.anhcraft.battle.premium.system.listeners.GameListener;
 import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
 import dev.anhcraft.battle.premium.system.listeners.WorldListener;
@@ -67,9 +67,9 @@ public class PremiumModule implements IPremiumModule {
         radioConfigManagerX = new RadioConfigManagerX();
         worldConfigManagerX = new WorldConfigManagerX();
         // gamemode
-        plugin.arenaManager.initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
-        plugin.arenaManager.initController(Mode.CTF, new CTFController(plugin));
-        plugin.arenaManager.initController(Mode.MOB_RESCUE, new MobRescueController(plugin));
+        plugin.arenaManager.initController(Mode.TEAM_DEATHMATCH, new TDMControllerImpl(plugin));
+        plugin.arenaManager.initController(Mode.CTF, new CTFControllerImpl(plugin));
+        plugin.arenaManager.initController(Mode.MOB_RESCUE, new MRControllerImpl(plugin));
     }
 
     @Override
