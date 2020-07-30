@@ -18,15 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system;
+package dev.anhcraft.battle.premium.config;
 
+import dev.anhcraft.battle.premium.system.PositionPair;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -36,7 +36,12 @@ import java.util.List;
 @Schema
 public class ArenaSettings extends ConfigurableObject {
     @Key("empty_regions")
-    private List<PositionPair> emptyRegions = new ArrayList<>();
+    private List<PositionPair> emptyRegions;
+
+    @Nullable
+    public List<PositionPair> getEmptyRegions() {
+        return emptyRegions;
+    }
 
     @Nullable
     protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
@@ -67,10 +72,5 @@ public class ArenaSettings extends ConfigurableObject {
             }
         }
         return value;
-    }
-
-    @NotNull
-    public List<PositionPair> getEmptyRegions() {
-        return emptyRegions;
     }
 }

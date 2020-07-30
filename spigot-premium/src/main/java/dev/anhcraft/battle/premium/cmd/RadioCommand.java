@@ -63,7 +63,7 @@ public class RadioCommand extends BaseCommand {
                 player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
                 return;
             }
-            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().conf.getString("radio_settings.format"))).replace("<message>", String.join(" ", msgs));
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().getRadioConfigManagerX().getRadioSettings().getMessageFormat())).replace("<message>", String.join(" ", msgs));
             List<Player> players = tm.getPlayers(abt);
             for (Player p : players) {
                 p.sendMessage(q);
@@ -79,7 +79,7 @@ public class RadioCommand extends BaseCommand {
                 player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
                 return;
             }
-            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().conf.getString("radio_settings.format"))).replace("<message>", String.join(" ", msgs));
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().getRadioConfigManagerX().getRadioSettings().getMessageFormat())).replace("<message>", String.join(" ", msgs));
             List<Player> players = tm.getPlayers(abt);
             for (Player p : players) {
                 p.sendMessage(q);

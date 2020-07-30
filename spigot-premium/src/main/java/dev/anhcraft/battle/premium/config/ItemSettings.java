@@ -18,22 +18,20 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system;
+package dev.anhcraft.battle.premium.config;
 
-import dev.anhcraft.battle.system.managers.config.ConfigManager;
+import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.confighelper.annotation.Explanation;
+import dev.anhcraft.confighelper.annotation.Key;
+import dev.anhcraft.confighelper.annotation.Schema;
 
-public class ExConfigManager extends ConfigManager {
-    public ExConfigManager() {
-        super("BattleX", "ex.config.yml");
-    }
+@Schema
+public class ItemSettings extends ConfigurableObject {
+    @Key("medical_kit.health_bonus")
+    @Explanation("Additional health give to the player")
+    private int medicalKitBonusHealth;
 
-    @Override
-    protected void onLoad() {
-
-    }
-
-    @Override
-    protected void onClean() {
-
+    public int getMedicalKitBonusHealth() {
+        return medicalKitBonusHealth;
     }
 }

@@ -25,7 +25,7 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.premium.PremiumModule;
 import dev.anhcraft.battle.premium.stats.AdrenalineShotUseStat;
 import dev.anhcraft.battle.premium.stats.MedicalKitUseStat;
-import dev.anhcraft.battle.premium.system.WorldSettings;
+import dev.anhcraft.battle.premium.config.WorldSettings;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -43,7 +43,7 @@ import org.bukkit.potion.PotionEffectType;
 public class PlayerListener implements Listener {
     @EventHandler
     public void food(FoodLevelChangeEvent event){
-        WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getEntity().getWorld().getName());
+        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
         if(ws != null && ws.isPreventHungry()){
             event.setFoodLevel(20);
         }
@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
                     double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                     double now = p.getHealth();
                     if (max != now) {
-                        double add = PremiumModule.getInstance().conf.getDouble("medical_kit.health_bonus");
+                        double add = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings().getMedicalKitBonusHealth();
                         p.setHealth(Math.min(max, add + now));
                         p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 4f, 1f);
                         p.getInventory().setItemInMainHand(null);
@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
                 }
             }
         }
-        WorldSettings ws = PremiumModule.getInstance().getWorldSettings(event.getPlayer().getWorld().getName());
+        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getPlayer().getWorld().getName());
         if(ws != null && ws.isInteractDisabled()){
             event.setCancelled(true);
         }

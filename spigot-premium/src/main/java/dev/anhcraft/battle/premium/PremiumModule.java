@@ -22,13 +22,13 @@ package dev.anhcraft.battle.premium;
 
 import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.mode.Mode;
 import dev.anhcraft.battle.premium.cmd.ExtendedCommand;
 import dev.anhcraft.battle.premium.cmd.RadioCommand;
-import dev.anhcraft.battle.premium.system.ArenaSettings;
-import dev.anhcraft.battle.premium.system.ExConfigManager;
-import dev.anhcraft.battle.premium.system.WorldSettings;
+import dev.anhcraft.battle.premium.config.managers.ArenaConfigManagerX;
+import dev.anhcraft.battle.premium.config.managers.ItemConfigManagerX;
+import dev.anhcraft.battle.premium.config.managers.RadioConfigManagerX;
+import dev.anhcraft.battle.premium.config.managers.WorldConfigManagerX;
 import dev.anhcraft.battle.premium.system.controllers.CTFController;
 import dev.anhcraft.battle.premium.system.controllers.MobRescueController;
 import dev.anhcraft.battle.premium.system.controllers.TeamDeathmatchController;
@@ -37,33 +37,14 @@ import dev.anhcraft.battle.premium.system.listeners.PlayerListener;
 import dev.anhcraft.battle.premium.system.listeners.WorldListener;
 import dev.anhcraft.battle.premium.tasks.Task;
 import dev.anhcraft.battle.system.IPremiumModule;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class PremiumModule implements IPremiumModule {
     private static PremiumModule instance;
-    public YamlConfiguration conf;
-    private WorldSettings globalWorldSettings;
-    private final Map<String, WorldSettings> worldSettingsMap = new HashMap<>();
-    private final Map<String, ArenaSettings> arenaSettingsMap = new HashMap<>();
-    private ExConfigManager exConfigManager;
-
-    private static void fillOptions(ConfigurationSection model, ConfigurationSection target){
-        for(String s : model.getKeys(false)){
-            if(!target.isSet(s)){
-                target.set(s, model.get(s));
-            }
-        }
-    }
+    private ArenaConfigManagerX arenaConfigManagerX;
+    private ItemConfigManagerX itemConfigManagerX;
+    private RadioConfigManagerX radioConfigManagerX;
+    private WorldConfigManagerX worldConfigManagerX;
 
     @NotNull
     public static PremiumModule getInstance() {
@@ -74,25 +55,18 @@ public class PremiumModule implements IPremiumModule {
         instance = this;
     }
 
-    @Nullable
-    public WorldSettings getWorldSettings(String world){
-        WorldSettings ws = worldSettingsMap.get(world);
-        if(ws != null) return ws;
-        return globalWorldSettings.getBlacklistWorlds().contains(world) ? null : globalWorldSettings;
-    }
-
-    @Nullable
-    public ArenaSettings getArenaSettings(String arena){
-        return arenaSettingsMap.get(arena);
-    }
-
     @Override
     public void onIntegrate(BattlePlugin plugin) {
     }
 
     @Override
     public void onInitSystem(BattlePlugin plugin) {
-        exConfigManager = new ExConfigManager();
+        // configs
+        arenaConfigManagerX = new ArenaConfigManagerX();
+        itemConfigManagerX = new ItemConfigManagerX();
+        radioConfigManagerX = new RadioConfigManagerX();
+        worldConfigManagerX = new WorldConfigManagerX();
+        // gamemode
         plugin.arenaManager.initController(Mode.TEAM_DEATHMATCH, new TeamDeathmatchController(plugin));
         plugin.arenaManager.initController(Mode.CTF, new CTFController(plugin));
         plugin.arenaManager.initController(Mode.MOB_RESCUE, new MobRescueController(plugin));
@@ -100,34 +74,10 @@ public class PremiumModule implements IPremiumModule {
 
     @Override
     public void onReloadConfig(BattlePlugin plugin) {
-        exConfigManager.reloadConfig();
-        conf = exConfigManager.getSettings();
-        try {
-            worldSettingsMap.clear();
-            arenaSettingsMap.clear();
-            ConfigurationSection gen = conf.getConfigurationSection("world_settings.general");
-            globalWorldSettings = ConfigHelper.readConfig(Objects.requireNonNull(gen), ConfigSchema.of(WorldSettings.class));
-            for(String k : conf.getConfigurationSection("world_settings.specific").getKeys(false)){
-                ConfigurationSection s = conf.getConfigurationSection("world_settings.specific."+k);
-                fillOptions(gen, s);
-                worldSettingsMap.put(k, ConfigHelper.readConfig(s, ConfigSchema.of(WorldSettings.class)));
-            }
-            ConfigurationSection ascs = conf.getConfigurationSection("arena_settings");
-            if(ascs != null) {
-                for(String k : ascs.getKeys(false)) {
-                    ConfigurationSection s = conf.getConfigurationSection("arena_settings." + k);
-                    ArenaSettings as = ConfigHelper.readConfig(s, ConfigSchema.of(ArenaSettings.class));
-                    arenaSettingsMap.put(k, as);
-                    Arena a = plugin.getArena(k);
-                    if (a != null && a.getRollback() == null) {
-                        as.getEmptyRegions().clear();
-                        plugin.getLogger().warning("You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
-                    }
-                }
-            }
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
-        }
+        arenaConfigManagerX.reloadConfig();
+        itemConfigManagerX.reloadConfig();
+        radioConfigManagerX.reloadConfig();
+        worldConfigManagerX.reloadConfig();
     }
 
     @Override
@@ -151,5 +101,25 @@ public class PremiumModule implements IPremiumModule {
     @Override
     public void onDisable(BattlePlugin plugin) {
 
+    }
+
+    @NotNull
+    public ArenaConfigManagerX getArenaConfigManagerX() {
+        return arenaConfigManagerX;
+    }
+
+    @NotNull
+    public ItemConfigManagerX getItemConfigManagerX() {
+        return itemConfigManagerX;
+    }
+
+    @NotNull
+    public RadioConfigManagerX getRadioConfigManagerX() {
+        return radioConfigManagerX;
+    }
+
+    @NotNull
+    public WorldConfigManagerX getWorldConfigManagerX() {
+        return worldConfigManagerX;
     }
 }

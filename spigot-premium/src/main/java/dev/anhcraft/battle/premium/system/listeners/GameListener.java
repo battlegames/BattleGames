@@ -23,7 +23,7 @@ package dev.anhcraft.battle.premium.system.listeners;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.premium.PremiumModule;
-import dev.anhcraft.battle.premium.system.ArenaSettings;
+import dev.anhcraft.battle.premium.config.ArenaSettings;
 import dev.anhcraft.battle.premium.system.PositionPair;
 import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.Location;
@@ -35,22 +35,24 @@ public class GameListener implements Listener {
     @EventHandler
     public void gamePhaseChange(GamePhaseChangeEvent event){
         if(event.getOldPhase() == GamePhase.WAITING && event.getNewPhase() == GamePhase.PLAYING) {
-            ArenaSettings as = PremiumModule.getInstance().getArenaSettings(event.getGame().getArena().getId());
+            ArenaSettings as = PremiumModule.getInstance().getArenaConfigManagerX().getArenaSettings(event.getGame().getArena().getId());
             if (as != null) {
-                for (PositionPair pair : as.getEmptyRegions()) {
-                    Location first = pair.getCorner1();
-                    Location second = pair.getCorner2();
-                    if (first == null || second == null) continue;
-                    int minX = Math.min(first.getBlockX(), second.getBlockX());
-                    int maxX = Math.max(first.getBlockX(), second.getBlockX());
-                    int minY = Math.min(first.getBlockY(), second.getBlockY());
-                    int maxY = Math.max(first.getBlockY(), second.getBlockY());
-                    int minZ = Math.min(first.getBlockZ(), second.getBlockZ());
-                    int maxZ = Math.max(first.getBlockZ(), second.getBlockZ());
-                    for (int x = minX; x <= maxX; x++) {
-                        for (int y = minY; y <= maxY; y++) {
-                            for (int z = minZ; z <= maxZ; z++) {
-                                BlockUtil.setBlockFast(first.getWorld().getBlockAt(x, y, z), Material.AIR, false, true);
+                if (as.getEmptyRegions() != null) {
+                    for (PositionPair pair : as.getEmptyRegions()) {
+                        Location first = pair.getCorner1();
+                        Location second = pair.getCorner2();
+                        if (first == null || second == null) continue;
+                        int minX = Math.min(first.getBlockX(), second.getBlockX());
+                        int maxX = Math.max(first.getBlockX(), second.getBlockX());
+                        int minY = Math.min(first.getBlockY(), second.getBlockY());
+                        int maxY = Math.max(first.getBlockY(), second.getBlockY());
+                        int minZ = Math.min(first.getBlockZ(), second.getBlockZ());
+                        int maxZ = Math.max(first.getBlockZ(), second.getBlockZ());
+                        for (int x = minX; x <= maxX; x++) {
+                            for (int y = minY; y <= maxY; y++) {
+                                for (int z = minZ; z <= maxZ; z++) {
+                                    BlockUtil.setBlockFast(first.getWorld().getBlockAt(x, y, z), Material.AIR, false, true);
+                                }
                             }
                         }
                     }

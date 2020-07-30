@@ -18,7 +18,7 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system;
+package dev.anhcraft.battle.premium.config;
 
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;

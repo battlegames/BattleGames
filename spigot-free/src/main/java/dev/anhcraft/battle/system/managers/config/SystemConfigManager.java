@@ -89,6 +89,9 @@ public class SystemConfigManager extends ConfigManager {
             new File(plugin.configFolder, "locale").mkdir();
             new File(plugin.configFolder, "items").mkdir();
             new File(plugin.configFolder, "editor").mkdir();
+            if(plugin.isPremium()) {
+                new File(plugin.configFolder, "premium").mkdir();
+            }
         } catch (InvalidValueException e) {
             e.printStackTrace();
         }
