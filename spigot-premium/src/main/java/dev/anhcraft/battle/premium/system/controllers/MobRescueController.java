@@ -378,7 +378,10 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                     TeamManager<MRTeam> tm = TEAM.get(game);
                     if(tm == null) return;
                     p.addPassenger(ent);
-                    p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 0f);
+                    MobRescueOptions mro = (MobRescueOptions) game.getArena().getModeOptions();
+                    if(mro.getPickUpMobSound() != null) {
+                        mro.getPickUpMobSound().play(p);
+                    }
                     SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, -sr);
                     if(tm.getTeam(p) == MRTeam.THIEF) {
                         trackTask(game, p.getName() + "-StealMobTask", plugin.extension.getTaskHelper().newDelayedTask(() -> {
@@ -412,7 +415,10 @@ public class MobRescueController extends DeathmatchController implements IMobRes
                 if(tm == null) return;
                 MobRescueMatch match = MATCH.get(game);
                 p.removePassenger(ent);
-                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 0f);
+                MobRescueOptions mro = (MobRescueOptions) game.getArena().getModeOptions();
+                if(mro.getPutDownMobSound() != null) {
+                    mro.getPutDownMobSound().play(p);
+                }
                 SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, 0);
                 if(tm.getTeam(p) == MRTeam.THIEF) {
                     cancelTask(game, p.getName() + "-StealMobTask");

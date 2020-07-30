@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.api.arena.mode.options;
 
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.mode.MobGroup;
 import dev.anhcraft.battle.api.arena.mode.MobRescueObjective;
 import dev.anhcraft.battle.api.arena.team.MRTeam;
@@ -90,6 +91,14 @@ public class MobRescueOptions extends ModeOptions {
     @Validation(notNull = true)
     private Map<EntityType, MobRescueObjective> objectives;
 
+    @Key("sounds.on_pick_up_mob")
+    @Explanation("Sound to be played on picking up mobs")
+    private BattleSound pickUpMobSound;
+
+    @Key("sounds.on_put_down_mob")
+    @Explanation("Sound to be played on putting down mobs")
+    private BattleSound putDownMobSound;
+
     public long getExtraCountdownTimeFarmer() {
         return extraCountdownTimeFarmer;
     }
@@ -121,6 +130,16 @@ public class MobRescueOptions extends ModeOptions {
     @NotNull
     public Map<EntityType, MobRescueObjective> getObjectives() {
         return objectives;
+    }
+
+    @Nullable
+    public BattleSound getPickUpMobSound() {
+        return pickUpMobSound;
+    }
+
+    @Nullable
+    public BattleSound getPutDownMobSound() {
+        return putDownMobSound;
     }
 
     @Nullable

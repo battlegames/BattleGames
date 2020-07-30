@@ -429,6 +429,9 @@ mr_farm:
     gathering_region:
       corner_1: "farm -94 72 -7 0 0"
       corner_2: "farm -91 70 -2 0 0"
+    sounds:
+      on_pick_up_mob: "$entity_item_pickup"
+      on_put_down_mob: "$block_anvil_place"
   result_broadcast:
     won:
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
