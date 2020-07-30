@@ -21,6 +21,7 @@ package dev.anhcraft.battle.gui;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.gui.GuiHandler;
 import dev.anhcraft.battle.api.gui.SlotReport;
@@ -43,7 +44,6 @@ import dev.anhcraft.inst.values.IntVal;
 import dev.anhcraft.inst.values.StringVal;
 import dev.anhcraft.inst.values.Val;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -228,10 +228,21 @@ public class BattleFunction extends GuiHandler {
                     if (m.getItemType().name().equalsIgnoreCase(type.getData())) {
                         gp.getIgBackpack().put(m.getItemType(), m.getId(), bi);
                         player.setItemOnCursor(null);
-                        player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
                         BattleApi.getInstance().getGuiManager().updateView(report.getPlayer(), report.getView());
+                        BattleSound bs = BattleApi.getInstance().getGeneralConfig().getBackpackSoundAddItemSuccess();
+                        if (bs != null) {
+                            bs.play(player);
+                        }
                     } else {
-                        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 3f, 1f);
+                        BattleSound bs = BattleApi.getInstance().getGeneralConfig().getBackpackSoundAddItemFailure();
+                        if (bs != null) {
+                            bs.play(player);
+                        }
+                    }
+                } else {
+                    BattleSound bs = BattleApi.getInstance().getGeneralConfig().getBackpackSoundAddItemFailure();
+                    if (bs != null) {
+                        bs.play(player);
                     }
                 }
             }

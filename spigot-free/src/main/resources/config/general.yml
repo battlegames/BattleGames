@@ -280,3 +280,9 @@ join_sign:
     - ""
     - "&a&l<< Click to join >>"
   update_time: 100
+
+backpack:
+  sounds:
+    on_add_success: "$item_armor_equip_generic"
+    on_add_failure: "$item_shield_block"
+    on_remove: "$item_armor_equip_generic"

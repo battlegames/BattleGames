@@ -266,6 +266,18 @@ public class GeneralConfig extends ConfigurableObject {
     })
     private long joinSignUpdateTime;
 
+    @Key("backpack.sounds.on_add_success")
+    @Explanation("Sound to be played when an item is put into the backpack successfully")
+    private BattleSound backpackSoundAddItemSuccess;
+
+    @Key("backpack.sounds.on_add_failure")
+    @Explanation("Sound to be played when a <b>wrong</b> item is put into the backpack")
+    private BattleSound backpackSoundAddItemFailure;
+
+    @Key("backpack.sounds.on_remove")
+    @Explanation("Sound to be played when the player takes out item from backpack")
+    private BattleSound backpackSoundRemoveItem;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -451,6 +463,21 @@ public class GeneralConfig extends ConfigurableObject {
 
     public long getJoinSignUpdateTime() {
         return joinSignUpdateTime;
+    }
+
+    @Nullable
+    public BattleSound getBackpackSoundAddItemSuccess() {
+        return backpackSoundAddItemSuccess;
+    }
+
+    @Nullable
+    public BattleSound getBackpackSoundAddItemFailure() {
+        return backpackSoundAddItemFailure;
+    }
+
+    @Nullable
+    public BattleSound getBackpackSoundRemoveItem() {
+        return backpackSoundRemoveItem;
     }
 
     @Nullable

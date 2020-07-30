@@ -22,6 +22,7 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.Table;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -204,7 +205,10 @@ public class DeathmatchController extends ModeController {
                     } else {
                         if (plugin.itemManager.selectItem(player, event.getItemModel())) {
                             igbp.put(type, id, NullBattleItem.INSTANCE);
-                            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                            BattleSound bs = BattleApi.getInstance().getGeneralConfig().getBackpackSoundRemoveItem();
+                            if (bs != null) {
+                                bs.play(player);
+                            }
                             BattleApi.getInstance().getGuiManager().updateView(player, event.getSlotReport().getView());
                         } else {
                             plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
@@ -214,7 +218,10 @@ public class DeathmatchController extends ModeController {
             } else if(item.getModel() != null && item.getModel().getItemType() == type) {
                 if(plugin.itemManager.selectItem(player, item)) {
                     igbp.put(type, id, NullBattleItem.INSTANCE);
-                    player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 3f, 1f);
+                    BattleSound bs = BattleApi.getInstance().getGeneralConfig().getBackpackSoundRemoveItem();
+                    if (bs != null) {
+                        bs.play(player);
+                    }
                     BattleApi.getInstance().getGuiManager().updateView(player, event.getSlotReport().getView());
                 } else {
                     plugin.chatManager.sendPlayer(player, "inv.hotbar_full");
