@@ -20,10 +20,10 @@
 
 package dev.anhcraft.battle.api.arena.team;
 
-import dev.anhcraft.battle.api.BattleSound;
+import dev.anhcraft.battle.api.arena.mode.options.FlagOptions;
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
@@ -31,25 +31,36 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.UnaryOperator;
 
 public class TeamFlag<T extends Team> implements Informative, Resettable {
-    private final String[] displayNames = new String[3];
     private final AtomicInteger health = new AtomicInteger();
     private final TrackedEntity<ArmorStand> armorStand;
-    private boolean valid;
+    private final FlagOptions options;
     private T team;
-    private int maxHealth;
+    private boolean valid;
     private boolean capturing;
-    private BattleSound captureStartSound;
-    private BattleSound captureStopSound;
 
-    public TeamFlag(@NotNull TrackedEntity<ArmorStand> armorStand, int maxHealth) {
+    public TeamFlag(@NotNull TrackedEntity<ArmorStand> armorStand, @NotNull FlagOptions options) {
         Condition.argNotNull("armorStand", armorStand);
+        Condition.argNotNull("options", options);
         this.armorStand = armorStand;
-        this.maxHealth = maxHealth;
+        this.options = options;
+    }
+
+    @NotNull
+    public TrackedEntity<ArmorStand> getArmorStand() {
+        return armorStand;
+    }
+
+    @NotNull
+    public FlagOptions getOptions() {
+        return options;
+    }
+
+    @NotNull
+    public AtomicInteger getHealth() {
+        return health;
     }
 
     @Nullable
@@ -61,21 +72,11 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
         this.team = team;
     }
 
-    @NotNull
-    public TrackedEntity<ArmorStand> getArmorStand() {
-        return armorStand;
-    }
-
-    @NotNull
-    public AtomicInteger getHealth() {
-        return health;
-    }
-
     public boolean isValid() {
         return valid;
     }
 
-    public void setValid(boolean valid) {
+    public synchronized void setValid(boolean valid) {
         this.valid = valid;
     }
 
@@ -87,67 +88,25 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
         this.capturing = capturing;
     }
 
-    @NotNull
-    public String[] getDisplayNames() {
-        return displayNames;
-    }
-
-    public void updateDisplayName(UnaryOperator<String> uo){
-        String n = uo.apply(displayNames[team != null ? (valid ? 0 : 1) : 2]);
-        armorStand.getEntity().setName(ChatUtil.formatColorCodes(n));
+    public void updateDisplayName(){
+        InfoHolder h;
+        inform(h = new InfoHolder("flag_"));
+        String n = team != null ? (valid ? options.getValidDisplayName() : options.getInvalidDisplayName()) : options.getNeutralDisplayName();
+        armorStand.getEntity().setName(ChatUtil.formatColorCodes(h.compile().replace(n)));
         armorStand.getEntity().sendUpdate();
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    @Nullable
-    public BattleSound getCaptureStartSound() {
-        return captureStartSound;
-    }
-
-    public void setCaptureStartSound(@Nullable BattleSound captureStartSound) {
-        this.captureStartSound = captureStartSound;
-    }
-
-    @Nullable
-    public BattleSound getCaptureStopSound() {
-        return captureStopSound;
-    }
-
-    public void setCaptureStopSound(@Nullable BattleSound captureStopSound) {
-        this.captureStopSound = captureStopSound;
     }
 
     @Override
     public void reset() {
         valid = false;
         health.set(0);
-        displayNames[0] = null;
-        displayNames[1] = null;
-        displayNames[2] = null;
-        maxHealth = 0;
-        captureStartSound = null;
-        captureStopSound = null;
     }
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        holder.inform("health", health.get()).inform("max_health", maxHealth);
-        if(team != null) holder.inform("team", team.getLocalizedName());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TeamFlag<?> teamFlag = (TeamFlag<?>) o;
-        return maxHealth == teamFlag.maxHealth && armorStand.equals(teamFlag.armorStand);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(armorStand, maxHealth);
+        holder.inform("health", health.get()).inform("max_health", options.getMaxHealth());
+        if(team != null) {
+            holder.inform("team", team.getLocalizedName());
+        }
     }
 }

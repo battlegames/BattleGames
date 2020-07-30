@@ -22,7 +22,6 @@ package dev.anhcraft.battle.premium.system.controllers;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -34,7 +33,6 @@ import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
 import org.bukkit.Bukkit;
@@ -174,21 +172,8 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
                 TrackedEntity<ArmorStand> te = plugin.extension.trackEntity(armorStand);
                 te.setViewDistance(50);
                 te.setViewers(new ArrayList<>(game.getPlayers().keySet()));
-                TeamFlag<ABTeam> flag = new TeamFlag<>(te, k.getMaxHealth());
-                flag.getDisplayNames()[0] = k.getValidDisplayName();
-                flag.getDisplayNames()[1] = k.getInvalidDisplayName();
-                flag.getDisplayNames()[2] = k.getNeutralDisplayName();
-                flag.updateDisplayName(s -> {
-                    InfoHolder h = new InfoHolder("flag_");
-                    flag.inform(h);
-                    return h.compile().replace(s);
-                });
-                if(k.getStartCaptureSound() != null) {
-                    flag.setCaptureStartSound(new BattleSound(k.getStartCaptureSound()));
-                }
-                if(k.getStopCaptureSound() != null) {
-                    flag.setCaptureStopSound(new BattleSound(k.getStopCaptureSound()));
-                }
+                TeamFlag<ABTeam> flag = new TeamFlag<>(te, k);
+                flag.updateDisplayName();
                 FLAG.put(game, flag);
             }
         });
@@ -198,7 +183,9 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
         ABTeam team = TEAM.get(game).getTeam(occupier);
         if(team == null || flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
         flag.setCapturing(true);
-        if(flag.getCaptureStartSound() != null) flag.getCaptureStartSound().play(occupier);
+        if(flag.getOptions().getStartCaptureSound() != null) {
+            flag.getOptions().getStartCaptureSound().play(occupier);
+        }
         String id = "ctf_flag_occupy_"+occupier.getName();
         int tid = plugin.extension.getTaskHelper().newTimerTask(() -> {
             if(occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5){
@@ -208,7 +195,7 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             if(flag.getTeam() == null || flag.getTeam() == team){
                 int h = flag.getHealth().incrementAndGet();
                 if(h == 1) flag.setTeam(team);
-                else if(h == flag.getMaxHealth()){
+                else if(h == flag.getOptions().getMaxHealth()){
                     flag.setValid(true);
                     stopOccupyFlag(game, flag, occupier);
                 }
@@ -216,13 +203,9 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
             else {
                 int h = flag.getHealth().decrementAndGet();
                 if(h == 0) flag.setTeam(null);
-                else if(h == flag.getMaxHealth() - 1) flag.setValid(false);
+                else if(h == flag.getOptions().getMaxHealth() - 1) flag.setValid(false);
             }
-            flag.updateDisplayName(s -> {
-                InfoHolder h = new InfoHolder("flag_");
-                flag.inform(h);
-                return h.compile().replace(s);
-            });
+            flag.updateDisplayName();
             FlagUpdateEvent e = new FlagUpdateEvent(game, occupier, team, flag);
             Bukkit.getPluginManager().callEvent(e);
         }, 0, 20);
@@ -232,7 +215,9 @@ public class CTFController extends TeamDeathmatchController implements ICaptureT
     private void stopOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier){
         cancelTask(game, "ctf_flag_occupy_"+occupier.getName());
         flag.setCapturing(false);
-        if(flag.getCaptureStopSound() != null) flag.getCaptureStopSound().play(occupier);
+        if(flag.getOptions().getStopCaptureSound() != null) {
+            flag.getOptions().getStopCaptureSound().play(occupier);
+        }
     }
 
     @EventHandler

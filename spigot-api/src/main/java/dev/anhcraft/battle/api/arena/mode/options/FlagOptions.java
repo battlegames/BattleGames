@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.api.arena.mode.options;
 
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
@@ -63,11 +64,11 @@ public class FlagOptions extends ConfigurableObject {
 
     @Key("start_capture_sound")
     @Explanation("The sound on starting the capture")
-    private String startCaptureSound;
+    private BattleSound startCaptureSound;
 
     @Key("stop_capture_sound")
     @Explanation("The sound on stopping the capture")
-    private String stopCaptureSound;
+    private BattleSound stopCaptureSound;
 
     @NotNull
     public Location getLocation() {
@@ -94,12 +95,12 @@ public class FlagOptions extends ConfigurableObject {
     }
 
     @Nullable
-    public String getStartCaptureSound() {
+    public BattleSound getStartCaptureSound() {
         return startCaptureSound;
     }
 
     @Nullable
-    public String getStopCaptureSound() {
+    public BattleSound getStopCaptureSound() {
         return stopCaptureSound;
     }
 }
