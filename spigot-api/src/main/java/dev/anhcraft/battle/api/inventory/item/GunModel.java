@@ -207,9 +207,6 @@ public class GunModel extends WeaponModel {
     @Override
     protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null){
-            if(entry.getKey().startsWith("sounds.")) {
-                return new BattleSound((String) o);
-            }
             switch (entry.getKey()){
                 case "magazine.default": {
                     return ApiProvider.consume().getMagazineModel((String) o);
@@ -247,9 +244,6 @@ public class GunModel extends WeaponModel {
     @Override
     protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
         if(o != null){
-            if(entry.getKey().startsWith("sounds.")) {
-                return o.toString();
-            }
             switch (entry.getKey()){
                 case "scope.default":
                 case "magazine.default": {

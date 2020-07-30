@@ -111,43 +111,38 @@ public class Gui extends ConfigurableObject implements Informative {
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null) {
-            switch (entry.getKey()) {
-                case "components": {
-                    ConfigurationSection cs = (ConfigurationSection) value;
-                    List<Component> components = new ArrayList<>();
-                    int highestSlot = 0;
-                    for(String s : cs.getKeys(false)){
-                        try {
-                            Component c = ConfigHelper.readConfig(cs.getConfigurationSection(s), Component.SCHEMA, new Component(s));
-                            for(Integer i : c.getSlots()){
-                                Component prev = S2C.put(i, c);
-                                // if this slot exists in previous component, we will remove it
-                                if(prev != null){
-                                    prev.getSlots().remove(i);
-                                }
+            if (entry.getKey().equals("components")) {
+                ConfigurationSection cs = (ConfigurationSection) value;
+                List<Component> components = new ArrayList<>();
+                int highestSlot = 0;
+                for (String s : cs.getKeys(false)) {
+                    try {
+                        Component c = ConfigHelper.readConfig(cs.getConfigurationSection(s), Component.SCHEMA, new Component(s));
+                        for (Integer i : c.getSlots()) {
+                            Component prev = S2C.put(i, c);
+                            // if this slot exists in previous component, we will remove it
+                            if (prev != null) {
+                                prev.getSlots().remove(i);
                             }
-                            if(c.getPagination() != null){
-                                if(!P2C.put(c.getPagination(), c)){
-                                    Bukkit.getLogger().warning("Pagination should not be duplicated! `"+c.getPagination()+"` in component: "+c.getId());
-                                }
-                            }
-                            int hs = Collections.max(c.getSlots());
-                            if(hs > highestSlot) highestSlot = hs;
-                            components.add(c);
-                        } catch (InvalidValueException e) {
-                            e.printStackTrace();
                         }
+                        if (c.getPagination() != null) {
+                            if (!P2C.put(c.getPagination(), c)) {
+                                Bukkit.getLogger().warning("Pagination should not be duplicated! `" + c.getPagination() + "` in component: " + c.getId());
+                            }
+                        }
+                        int hs = Collections.max(c.getSlots());
+                        if (hs > highestSlot) highestSlot = hs;
+                        components.add(c);
+                    } catch (InvalidValueException e) {
+                        e.printStackTrace();
                     }
-                    size = MathUtil.nextMultiple(highestSlot, 9);
-                    if(size > 54){
-                        Bukkit.getLogger().warning("The inventory size is out of bound: "+size);
-                        size = 54;
-                    }
-                    return components;
                 }
-                case "sound": {
-                    return new BattleSound((String) value);
+                size = MathUtil.nextMultiple(highestSlot, 9);
+                if (size > 54) {
+                    Bukkit.getLogger().warning("The inventory size is out of bound: " + size);
+                    size = 54;
                 }
+                return components;
             }
         }
         return value;
@@ -156,20 +151,15 @@ public class Gui extends ConfigurableObject implements Informative {
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
         if(value != null) {
-            switch (entry.getKey()) {
-                case "components": {
-                    ConfigurationSection parent = new YamlConfiguration();
-                    int i = 0;
-                    for(Component cpn : (List<Component>) value){
-                        YamlConfiguration c = new YamlConfiguration();
-                        ConfigHelper.writeConfig(c, Component.SCHEMA, cpn);
-                        parent.set(String.valueOf(i++), c);
-                    }
-                    return parent;
+            if (entry.getKey().equals("components")) {
+                ConfigurationSection parent = new YamlConfiguration();
+                int i = 0;
+                for (Component cpn : (List<Component>) value) {
+                    YamlConfiguration c = new YamlConfiguration();
+                    ConfigHelper.writeConfig(c, Component.SCHEMA, cpn);
+                    parent.set(String.valueOf(i++), c);
                 }
-                case "sound": {
-                    return value.toString();
-                }
+                return parent;
             }
         }
         return value;

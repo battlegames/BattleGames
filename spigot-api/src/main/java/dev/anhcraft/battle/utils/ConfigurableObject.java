@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.utils;
 
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.Middleware;
 import dev.anhcraft.confighelper.annotation.Schema;
@@ -30,12 +31,20 @@ public class ConfigurableObject {
     @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
     @Nullable
     private Object c2s(ConfigSchema.Entry entry, @Nullable Object value){
+        if(value == null) return conf2schema(null, entry);
+        if(BattleSound.class.isAssignableFrom(entry.getField().getType())){
+            return new BattleSound(String.valueOf(value));
+        }
         return conf2schema(ColorUtil.colorize(value), entry);
     }
 
     @Middleware(Middleware.Direction.SCHEMA_TO_CONFIG)
     @Nullable
     private Object s2c(ConfigSchema.Entry entry, @Nullable Object value){
+        if(value == null) return schema2conf(null, entry);
+        if(value instanceof BattleSound){
+            return value.toString();
+        }
         return ColorUtil.uncolorize(schema2conf(value, entry));
     }
 
