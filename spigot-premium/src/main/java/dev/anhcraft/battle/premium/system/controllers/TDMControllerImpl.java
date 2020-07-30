@@ -20,17 +20,13 @@
 package dev.anhcraft.battle.premium.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.BattleScoreboard;
+import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.game.controllers.TeamDeathmatchController;
 import dev.anhcraft.battle.api.arena.game.options.TeamDeathmatchOptions;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
-import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.system.controllers.DMControllerImpl;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -38,6 +34,7 @@ import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -243,7 +240,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     }
 
     private void respw(LocalGame game, Player player, ABTeam team) {
-        player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+        player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {

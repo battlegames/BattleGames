@@ -36,6 +36,7 @@ import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
 import dev.anhcraft.craftkit.entity.ArmorStand;
 import dev.anhcraft.craftkit.entity.TrackedEntity;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -227,7 +228,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
 
     @EventHandler
     public void sneak(PlayerToggleSneakEvent event){
-        if(event.getPlayer().getGameMode() == org.bukkit.GameMode.SPECTATOR) return;
+        if(event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
         LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
         if(game != null){
             if(game.getMode() != getMode()) return;

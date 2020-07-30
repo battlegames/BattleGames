@@ -22,19 +22,15 @@ package dev.anhcraft.battle.system.controllers;
 import com.google.common.collect.Table;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.api.BattleSound;
-import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.game.options.DeathmatchOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.inventory.item.NullBattleItem;
-import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -42,6 +38,7 @@ import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -163,7 +160,7 @@ public class DMControllerImpl extends GameControllerImpl {
     }
 
     protected void respw(LocalGame game, Player player) {
-        player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+        player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {
@@ -245,7 +242,7 @@ public class DMControllerImpl extends GameControllerImpl {
             event.setRespawnLocation(loc);
             gp.setSpectator(true);
             if(!shouldAcceptRespawn(event, game, gp)) return;
-            player.setGameMode(org.bukkit.GameMode.SPECTATOR);
+            player.setGameMode(GameMode.SPECTATOR);
             gp.getStats().of(RespawnStat.class).increase(player);
             AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getRespawnWaitTime()/20L);
             String task = "respawn::"+player.getName();

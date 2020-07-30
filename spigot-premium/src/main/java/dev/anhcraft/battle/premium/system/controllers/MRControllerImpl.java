@@ -20,17 +20,13 @@
 package dev.anhcraft.battle.premium.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.BattleScoreboard;
+import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.game.controllers.MobRescueController;
 import dev.anhcraft.battle.api.arena.game.options.MobRescueOptions;
 import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
-import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.api.stats.natives.StolenMobStat;
 import dev.anhcraft.battle.premium.system.MobRescueMatch;
 import dev.anhcraft.battle.system.controllers.DMControllerImpl;
@@ -39,6 +35,7 @@ import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -308,7 +305,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     private void respw(LocalGame game, Player player, MRTeam team) {
-        player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+        player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {

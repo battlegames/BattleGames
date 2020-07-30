@@ -21,20 +21,16 @@ package dev.anhcraft.battle.system.controllers;
 
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.BattleScoreboard;
+import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.game.controllers.BedWarController;
-import dev.anhcraft.battle.api.arena.game.Mode;
 import dev.anhcraft.battle.api.arena.game.options.BWTeamOptions;
 import dev.anhcraft.battle.api.arena.game.options.BedWarOptions;
 import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
-import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.events.game.BedBreakEvent;
-import dev.anhcraft.battle.api.BattleScoreboard;
+import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
@@ -45,6 +41,7 @@ import dev.anhcraft.battle.utils.EntityUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -372,7 +369,7 @@ public class BWControllerImpl extends DMControllerImpl implements BedWarControll
     }
 
     private void respw(LocalGame game, Player player, BWTeam team) {
-        player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+        player.setGameMode(GameMode.SURVIVAL);
         switch (game.getPhase()) {
             case END:
             case WAITING: {
