@@ -113,7 +113,7 @@ xm1014:
     default: default_xm1014
     max_capacity: 35
   sounds:
-    on_shoot: "bg.guns.shotgun:3"
+    on_shoot: "bg.guns.shotgun:1"
     on_start_reloading: "$entity_player_levelup"
     on_end_reloading: "$entity_player_levelup"
   bossbar:

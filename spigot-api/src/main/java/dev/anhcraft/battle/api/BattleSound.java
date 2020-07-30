@@ -30,8 +30,8 @@ import java.util.function.Supplier;
 public class BattleSound {
     private String soundName;
     private Sound bukkitSound;
-    private float volume = 2;
-    private float pitch = 1;
+    private float volume = 0.5f;
+    private float pitch = 1.0f;
 
     public BattleSound(String s) {
         if(s.length() == 0) return;
