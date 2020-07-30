@@ -20,10 +20,12 @@
 
 package dev.anhcraft.battle.premium.config;
 
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
+import org.jetbrains.annotations.Nullable;
 
 @Schema
 public class ItemSettings extends ConfigurableObject {
@@ -31,7 +33,25 @@ public class ItemSettings extends ConfigurableObject {
     @Explanation("Additional health give to the player")
     private int medicalKitBonusHealth;
 
+    @Key("medical_kit.use_sound")
+    @Explanation("Sound to be played when using the medical kit")
+    private BattleSound medicalKitUseSound;
+
+    @Key("adrenaline_shot.use_sound")
+    @Explanation("Sound to be played when using the adrenaline shot")
+    private BattleSound adrenalineShotUseSound;
+
     public int getMedicalKitBonusHealth() {
         return medicalKitBonusHealth;
+    }
+
+    @Nullable
+    public BattleSound getMedicalKitUseSound() {
+        return medicalKitUseSound;
+    }
+
+    @Nullable
+    public BattleSound getAdrenalineShotUseSound() {
+        return adrenalineShotUseSound;
     }
 }

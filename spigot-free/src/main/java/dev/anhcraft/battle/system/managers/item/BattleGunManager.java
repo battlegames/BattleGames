@@ -190,7 +190,7 @@ public class BattleGunManager extends BattleComponent {
             return false;
         }
         mag.setAmmoCount(mag.getAmmoCount()-1);
-        gm.getShootSound().play(player.getWorld(), player.getLocation());
+        gm.getShootSound().play(player.getLocation());
 
         BattleDebugger.startTiming("gun-shoot");
         Location start = player.getEyeLocation();

@@ -23,11 +23,11 @@ package dev.anhcraft.battle.premium.system.listeners;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.premium.PremiumModule;
+import dev.anhcraft.battle.premium.config.ItemSettings;
+import dev.anhcraft.battle.premium.config.WorldSettings;
 import dev.anhcraft.battle.premium.stats.AdrenalineShotUseStat;
 import dev.anhcraft.battle.premium.stats.MedicalKitUseStat;
-import dev.anhcraft.battle.premium.config.WorldSettings;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,10 +60,12 @@ public class PlayerListener implements Listener {
                     double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                     double now = p.getHealth();
                     if (max != now) {
-                        double add = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings().getMedicalKitBonusHealth();
-                        p.setHealth(Math.min(max, add + now));
-                        p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 4f, 1f);
+                        ItemSettings is = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings();
+                        p.setHealth(Math.min(max, is.getMedicalKitBonusHealth() + now));
                         p.getInventory().setItemInMainHand(null);
+                        if(is.getMedicalKitUseSound() != null) {
+                            is.getMedicalKitUseSound().play(p.getLocation());
+                        }
                         PlayerData pd = BattleApi.getInstance().getPlayerData(p);
                         if(pd != null) pd.getStats().of(MedicalKitUseStat.class).increase(p);
                     }
@@ -71,7 +73,10 @@ public class PlayerListener implements Listener {
                 } else if (item.getDurability() == 4) {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 0));
                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 0));
-                    p.playSound(p.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 4f, 1f);
+                    ItemSettings is = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings();
+                    if(is.getAdrenalineShotUseSound() != null) {
+                        is.getAdrenalineShotUseSound().play(p.getLocation());
+                    }
                     p.getInventory().setItemInMainHand(null);
                     PlayerData pd = BattleApi.getInstance().getPlayerData(p);
                     if(pd != null) pd.getStats().of(AdrenalineShotUseStat.class).increase(p);

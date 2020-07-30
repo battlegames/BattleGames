@@ -22,7 +22,6 @@ package dev.anhcraft.battle.api;
 import dev.anhcraft.battle.utils.XSound;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
@@ -65,11 +64,11 @@ public class BattleSound {
             player.playSound(player.getLocation(), bukkitSound, volume, pitch);
     }
 
-    public void play(World world, Location location){
+    public void play(Location location){
         if(soundName != null)
-            world.playSound(location, soundName, volume, pitch);
+            location.getWorld().playSound(location, soundName, volume, pitch);
         else if(bukkitSound != null)
-            world.playSound(location, bukkitSound, volume, pitch);
+            location.getWorld().playSound(location, bukkitSound, volume, pitch);
     }
 
     @Override
