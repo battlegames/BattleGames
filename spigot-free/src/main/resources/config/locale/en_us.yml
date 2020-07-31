@@ -134,7 +134,7 @@ mode_mr:
     header:
       - "&f&l----------------------------------------"
       - "&5&lObjectives"
-    each: "&e- Steal &cx<amount> &e%battle_mc_locale_<localized_entity>% &7(+<coins> coins)"
+    each: "&e- Steal &cx<amount> &e%battle_mc_locale_<localized_entity>% &7(+<total_coins> coins)"
     footer:
       - "&f&l----------------------------------------"
   on_thief_carry:

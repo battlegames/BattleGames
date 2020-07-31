@@ -262,10 +262,12 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
             });
             plugin.chatManager.sendPlayers(ta, blp("objective_details.header"));
             for (Map.Entry<EntityType, Integer> e : m.getMobCount().entrySet()) {
+                double c = options.getObjectives().get(e.getKey()).getRewardCoins();
                 InfoReplacer ir = new InfoHolder("")
                         .inform("localized_entity", EnumEntity.getLocalePath(e.getKey()))
                         .inform("amount", e.getValue())
-                        .inform("coins", options.getObjectives().get(e.getKey()).getRewardCoins())
+                        .inform("coins", c)
+                        .inform("total_coins", c * e.getValue())
                         .compile();
                 plugin.chatManager.sendPlayers(ta, blp("objective_details.each"), ir);
             }
