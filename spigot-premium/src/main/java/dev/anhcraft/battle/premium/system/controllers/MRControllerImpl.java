@@ -278,7 +278,9 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
         trackTask(game, "extraFarmerCountdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             InfoReplacer f = new InfoHolder("").inform("current", current.get()).compile();
             sendTitle(tb, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
-            playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
+            for(Player p : tb) {
+                p.playSound(p.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
+            }
             if(current.getAndDecrement() == 0) {
                 cancelTask(game, "extraFarmerCountdown");
                 plugin.extension.getTaskHelper().newTask(callback);
