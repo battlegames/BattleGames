@@ -39,6 +39,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -247,7 +248,6 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                     }
                 });
             });
-            plugin.chatManager.sendPlayers(ta, blp("objective_details.header"));
             options.getMobGroups().forEach(mg -> {
                 for (int i = 0; i < mg.getAmount(); i++){
                     Location loc = mg.getLocation();
@@ -259,15 +259,16 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                         ent.setGlowing(true);
                     }
                 }
-                if(mg.isStealable()) {
-                    InfoReplacer ir = new InfoHolder("")
-                            .inform("localized_entity", EnumEntity.getLocalePath(mg.getEntityType()))
-                            .inform("amount", m.getMobCount().getOrDefault(mg.getEntityType(), 0))
-                            .inform("coins", mg.getAmount())
-                            .compile();
-                    plugin.chatManager.sendPlayers(ta, blp("objective_details.each"), ir);
-                }
             });
+            plugin.chatManager.sendPlayers(ta, blp("objective_details.header"));
+            for (Map.Entry<EntityType, Integer> e : m.getMobCount().entrySet()) {
+                InfoReplacer ir = new InfoHolder("")
+                        .inform("localized_entity", EnumEntity.getLocalePath(e.getKey()))
+                        .inform("amount", e.getValue())
+                        .inform("coins", options.getObjectives().get(e.getKey()).getRewardCoins())
+                        .compile();
+                plugin.chatManager.sendPlayers(ta, blp("objective_details.each"), ir);
+            }
             plugin.chatManager.sendPlayers(ta, blp("objective_details.footer"));
         });
     }
