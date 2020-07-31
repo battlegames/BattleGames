@@ -107,7 +107,7 @@ public abstract class ConfigManager extends BattleComponent {
 
     public synchronized void reloadConfig(boolean forceUpdateConfig) {
         if(reloadCount > 0) {
-            plugin.getLogger().info("["+loggerName+"] Cleaning cache...");
+            //plugin.getLogger().info("["+loggerName+"] Cleaning cache...");
             cleanCache();
         }
         boolean matchDef = false;

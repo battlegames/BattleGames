@@ -51,8 +51,8 @@ public class BattleRegionRollback extends BattleComponent {
     public BattleRegionRollback(BattlePlugin plugin) {
         super(plugin);
 
-        cachedRegionFolder = new File(plugin.getDataFolder(), "cachedRegions");
-        cachedRegionFolder.mkdir();
+        cachedRegionFolder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"regions");
+        cachedRegionFolder.mkdirs();
     }
 
     public void handleDivision(@NotNull Location first, @NotNull Location second, @NotNull List<BoundingBox> list) {

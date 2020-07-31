@@ -40,8 +40,8 @@ public class BattleWorldRollback extends BattleComponent {
     public BattleWorldRollback(BattlePlugin plugin) {
         super(plugin);
 
-        cachedWorldFolder = new File(plugin.getDataFolder(), "cachedWorlds");
-        cachedWorldFolder.mkdir();
+        cachedWorldFolder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"worlds");
+        cachedWorldFolder.mkdirs();
     }
 
     @NotNull
