@@ -106,7 +106,7 @@ public class Arena extends ConfigurableObject implements Informative {
     @Validation(notNull = true)
     private Expression finalMoneyCalculator;
 
-    @Key("mode_options")
+    @Key("game_options")
     @Explanation("Game mode settings")
     @Validation(notNull = true)
     private GameOptions gameOptions;

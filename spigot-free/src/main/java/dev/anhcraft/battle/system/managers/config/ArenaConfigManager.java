@@ -42,8 +42,14 @@ public class ArenaConfigManager extends ConfigManager {
         configUpdater.getPathRelocating().add(
                 new ConfigUpdater.PathRelocating()
                 .oldPath("attr")
-                .newPath("mode_options")
+                .newPath("game_options")
                 .type(ConfigurationSection.class)
+        );
+        configUpdater.getPathRelocating().add(
+                new ConfigUpdater.PathRelocating()
+                        .oldPath("mode_options")
+                        .newPath("game_options")
+                        .type(ConfigurationSection.class)
         );
     }
 
