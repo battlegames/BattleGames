@@ -22,17 +22,21 @@ package dev.anhcraft.battle.system;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
 import dev.anhcraft.jvmkit.trackers.BufferedStreamReadTracker;
 import dev.anhcraft.jvmkit.trackers.reports.FixedStreamTransferReport;
+import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import dev.anhcraft.jvmkit.utils.UserAgent;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.function.Consumer;
 
@@ -46,36 +50,67 @@ public class ResourcePack {
     }
 
     public static void init(Consumer<String> stringConsumer) {
+        BattlePlugin plugin = (BattlePlugin) BattleApi.getInstance();
         switch (NMSVersion.current()){
-            case v1_12_R1: FILE = "abm-1.12.zip";
+            case v1_12_R1: {
+                FILE = "abm-1.12.zip";
+                break;
+            }
             case v1_13_R1:
             case v1_13_R2:
-            case v1_14_R1: FILE = "abm-1.13-1.14.zip";
-            default: FILE = "abm-1.15.zip";
-        }
-        stringConsumer.accept("Downloading resource pack....");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
-                .setProperty("User-Agent", UserAgent.CHROME_WINDOWS)
-                .connect();
-        BufferedStreamReadTracker tracker = new BufferedStreamReadTracker(4096, conn.getInput());
-        FixedStreamTransferReport report = new FixedStreamTransferReport(conn.getContentLength());
-        tracker.setBufferCallback(bytes -> {
-            if(RandomUtil.randomInt(0, 10) == 0) {
-                stringConsumer.accept(report.getTransferredBytes() + " bytes ... " + MathUtil.round(report.getProgress(), 3) + "%");
+            case v1_14_R1: {
+                FILE = "abm-1.13-1.14.zip";
+                break;
             }
+            default: {
+                FILE = "abm-1.15.zip";
+                break;
+            }
+        }
+        File folder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"resourcepacks");
+        folder.mkdirs();
+        File f = new File(folder, plugin.getDescription().getVersion().hashCode() + "." + FILE);
+        if(f.exists()) {
             try {
-                out.write(bytes);
+                byte[] arr = FileUtil.read(f);
+                HashCode hashCode = Hashing.sha1().hashBytes(arr);
+                HASH = hashCode.asBytes();
+                stringConsumer.accept("Found hash: " + hashCode.toString());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                f.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-        tracker.start(report, () -> {
-            conn.disconnect();
-            HashCode hashCode = Hashing.sha1().hashBytes(out.toByteArray());
-            HASH = hashCode.asBytes();
-            stringConsumer.accept("Finished! Hash: "+hashCode.toString());
-        });
+            stringConsumer.accept("Downloading resource pack....");
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            HTTPConnectionHelper conn = new HTTPConnectionHelper(getUrl())
+                    .setProperty("User-Agent", UserAgent.CHROME_WINDOWS)
+                    .connect();
+            BufferedStreamReadTracker tracker = new BufferedStreamReadTracker(4096, conn.getInput());
+            FixedStreamTransferReport report = new FixedStreamTransferReport(conn.getContentLength());
+            tracker.setBufferCallback(bytes -> {
+                if(RandomUtil.randomInt(0, 10) == 0) {
+                    stringConsumer.accept(report.getTransferredBytes() + " bytes ... " + MathUtil.round(report.getProgress(), 3) + "%");
+                }
+                try {
+                    out.write(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            tracker.start(report, () -> {
+                conn.disconnect();
+                byte[] arr = out.toByteArray();
+                FileUtil.write(f, arr);
+                HashCode hashCode = Hashing.sha1().hashBytes(arr);
+                HASH = hashCode.asBytes();
+                stringConsumer.accept("Finished! Hash: "+hashCode.toString());
+            });
+        }
     }
 
     public static void send(Player player){
