@@ -28,6 +28,7 @@ import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
 import dev.anhcraft.battle.api.chat.ChatManager;
+import dev.anhcraft.battle.api.economy.NativeCurrencies;
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.api.effect.EffectOption;
 import dev.anhcraft.battle.api.events.ConfigReloadEvent;
@@ -174,7 +175,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             exit("BattleGames can only work on Spigot-based servers.");
             return;
         }
-        if (!VaultApi.init()) exit("Failed to hook to Vault");
+        if (VaultApi.init()) {
+            NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
+        } else {
+            exit("Failed to hook to Vault");
+        }
         getLogger().info("Consider to donate me if you think BattleGames is awesome <3");
         injectApiProvider();
 

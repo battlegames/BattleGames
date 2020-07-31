@@ -21,30 +21,29 @@
 package dev.anhcraft.battle.api.economy.natives;
 
 import dev.anhcraft.battle.api.economy.Currency;
-import dev.anhcraft.craftkit.utils.VaultApiUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class VaultCurrency implements Currency {
-    private final Economy eco;
+    private Economy economy;
 
-    public VaultCurrency(){
-        eco = VaultApiUtil.getEconomyApi();
+    public void setEconomy(Economy economy) {
+        this.economy = economy;
     }
 
     @Override
     public double getBalance(@NotNull Player player) {
-        return eco.getBalance(player);
+        return economy.getBalance(player);
     }
 
     @Override
     public boolean withdraw(@NotNull Player player, double delta) {
-        return eco.withdrawPlayer(player, delta).transactionSuccess();
+        return economy.withdrawPlayer(player, delta).transactionSuccess();
     }
 
     @Override
     public boolean deposit(@NotNull Player player, double delta) {
-        return eco.depositPlayer(player, delta).transactionSuccess();
+        return economy.depositPlayer(player, delta).transactionSuccess();
     }
 }
