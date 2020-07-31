@@ -105,7 +105,7 @@ public class Component extends ConfigurableObject {
     @Key("functions.on_render")
     @Explanation({
             "The function that gets called when one slot of this component is going to be rendered",
-            "Set $cancel_render to `true` to prevent this action; `false` is set by default",
+            "Set &#36;cancel_render to `true` to prevent this action; `false` is set by default",
             "It is not recommended to do any modifications to the item on that slot, you would be better",
             "to look at on_rendered, which is called <b>after</b> the rendering has done.",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"

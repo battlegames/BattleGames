@@ -172,16 +172,16 @@ public class Product extends ConfigurableObject implements Informative {
             "This function is very useful that allows you to change the cost. For example,",
             "the cost can be reduced by half if the player has a specific rank. Or you can",
             "make a 'tier cost' system that increase the cost each time the player purchases",
-            "so the first time is $10, then $20, $50, $100. etc",
-            "You can also reject the transaction by setting $forbidden to `true`",
-            "Variables: $price, $currency, $forbidden (modifiable)"
+            "so the first time is &#36;10, then &#36;20, &#36;50, &#36;100. etc",
+            "You can also reject the transaction by setting &#36;forbidden to `true`",
+            "Variables: &#36;price, &#36;currency, &#36;forbidden (modifiable)"
     })
     private List<String> purchaseFunction;
 
     @Key("functions.on_purchased")
     @Explanation({
             "Function to be called when a player purchased this product successfully",
-            "Variables: $price, $currency (read-only)"
+            "Variables: &#36;price, &#36;currency (read-only)"
     })
     private List<String> purchasedFunction;
 
