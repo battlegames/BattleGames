@@ -24,6 +24,7 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -67,8 +68,9 @@ public class PlaceholderUtil {
 
     @Contract("_, null -> null")
     public static String formatPAPI(@NotNull Player player, @Nullable String str){
+        if(str == null) return null;
         Condition.notNull(player);
-        return PlaceholderAPI.setPlaceholders(player, str);
+        return PlaceholderAPI.setPlaceholders((OfflinePlayer) player, str);
     }
 
     @Contract("_, null -> null")
