@@ -297,8 +297,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                 e.setCancelled(event.isCancelled());
             }
             if(!e.isCancelled()){
-                gp1.getBackend().put("lastWeaponUsed", e.getWeapon());
-                gp1.getBackend().put("lastDamageReport", e.getReport());
+                gp1.getDataContainer().put("lastWeaponUsed", e.getWeapon());
+                gp1.getDataContainer().put("lastDamageReport", e.getReport());
                 Objects.requireNonNull(g1.getMode().getController()).onUseWeapon(e, g1);
             }
         } else {
@@ -330,9 +330,9 @@ public class PlayerListener extends BattleComponent implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                Weapon weaponUsed = (Weapon) gp1.getBackend().remove("lastWeaponUsed");
+                Weapon weaponUsed = (Weapon) gp1.getDataContainer().remove("lastWeaponUsed");
                 if(weaponUsed != null){
-                    report = (PlayerAttackReport) gp1.getBackend().remove("lastDamageReport");
+                    report = (PlayerAttackReport) gp1.getDataContainer().remove("lastDamageReport");
                 }
 
                 if(ed.getEntity() instanceof Player){
@@ -622,7 +622,7 @@ public class PlayerListener extends BattleComponent implements Listener {
     @EventHandler
     public void closeInv(InventoryCloseEvent event) {
         Window w = plugin.guiManager.getWindow(event.getPlayer());
-        Object v = w.getBackend().remove("switchView");
+        Object v = w.getDataContainer().remove("switchView");
         if(v instanceof Boolean && (Boolean) v) return;
         w.setTopView(null);
     }

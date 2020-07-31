@@ -75,13 +75,13 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
             GuiHandler o = (GuiHandler) ReflectionUtil.invokeConstructor(c, new Class[]{SlotReport.class}, new Object[]{report});
             vm.registerFunctions(c, o);
         }
-        for(Map.Entry<String, Object> e : report.getView().getWindow().getBackend().entrySet()){
+        for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
             Object v = e.getValue();
             if(v instanceof Number || v instanceof String || v instanceof Boolean) {
                 vm.setVariable("w_" + e.getKey(), Val.of(v));
             }
         }
-        for(Map.Entry<String, Object> e : report.getView().getBackend().entrySet()){
+        for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
             Object v = e.getValue();
             if(v instanceof Number || v instanceof String || v instanceof Boolean) {
                 vm.setVariable("v_" + e.getKey(), Val.of(v));
@@ -359,7 +359,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         InfoReplacer info = collectInfo(w).compile();
         View v = createView(player, w, g, info);
         if(w.getTopView() != null){
-            w.getBackend().put("switchView", true);
+            w.getDataContainer().put("switchView", true);
         }
         w.setTopView(v);
         refreshView(player, v, info);

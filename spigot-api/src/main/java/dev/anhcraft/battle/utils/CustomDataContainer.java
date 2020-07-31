@@ -38,7 +38,7 @@ public class CustomDataContainer implements Informative {
      * @return backend map
      */
     @NotNull
-    public Map<String, Object> getBackend() {
+    public Map<String, Object> getDataContainer() {
         if(dataContainer == null){
             dataContainer = new HashMap<>();
         }
@@ -47,7 +47,7 @@ public class CustomDataContainer implements Informative {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        for(Map.Entry<String, Object> ent : getBackend().entrySet()){
+        for(Map.Entry<String, Object> ent : getDataContainer().entrySet()){
             Object v = ent.getValue();
             if(v instanceof String){
                 holder.inform("data_"+ent.getKey(), (String) v);
