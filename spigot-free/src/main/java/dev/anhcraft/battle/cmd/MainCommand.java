@@ -22,14 +22,15 @@ package dev.anhcraft.battle.cmd;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.Booster;
+import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
-import dev.anhcraft.battle.api.Booster;
-import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.ResourcePack;
@@ -101,8 +102,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.open")
     @CommandCompletion("@gui")
     @Description("Open a GUI for you or someone")
-    public void openGui(Player player, String name, @Optional Player target){
-        plugin.guiManager.openTopGui(target == null ? player : target, name);
+    public void openGui(Player player, String name, @Optional OnlinePlayer target){
+        plugin.guiManager.openTopGui(target == null ? player : target.getPlayer(), name);
     }
 
     @Subcommand("game list")
@@ -171,8 +172,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.arena.join")
     @CommandCompletion("@arena")
     @Description("Force you or someone to join an arena")
-    public void join(Player player, String arena, @Optional Player target){
-        Player t = (target == null) ? player : target;
+    public void join(Player player, String arena, @Optional OnlinePlayer target){
+        Player t = (target == null) ? player : target.getPlayer();
         Arena a = plugin.getArena(arena);
         if(a != null) {
             if(plugin.arenaManager.join(t, a) != null) {
@@ -188,8 +189,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.arena.quit")
     @CommandCompletion("@players")
     @Description("Force you or someone to quit the current arena")
-    public void quit(Player player, @Optional Player target){
-        Player t = (target == null) ? player : target;
+    public void quit(Player player, @Optional OnlinePlayer target){
+        Player t = (target == null) ? player : target.getPlayer();
         if(plugin.arenaManager.quit(t)) {
             plugin.chatManager.sendPlayer(player, "arena.quit_success", new InfoHolder("").inform("target", t.getName()).compile());
         } else {
@@ -260,8 +261,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.gun")
     @CommandCompletion("@gun @players")
     @Description("Give you or someone a gun")
-    public void giveGun(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveGun(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         GunModel gun = plugin.getGunModel(id);
         if(gun != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -279,8 +280,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.magazine")
     @CommandCompletion("@magazine @players")
     @Description("Give you or someone a magazine")
-    public void giveMagazine(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveMagazine(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         MagazineModel mag = plugin.getMagazineModel(id);
         if(mag != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -298,8 +299,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.ammo")
     @CommandCompletion("@ammo @players")
     @Description("Give you or someone ammo")
-    public void giveAmmo(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveAmmo(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         AmmoModel ammo = plugin.getAmmoModel(id);
         if(ammo != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -317,8 +318,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.scope")
     @CommandCompletion("@scope @players")
     @Description("Give you or someone a scope")
-    public void giveScope(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveScope(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         ScopeModel sc = plugin.getScopeModel(id);
         if(sc != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -336,8 +337,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.grenade")
     @CommandCompletion("@grenade @players")
     @Description("Give you or someone a grenade")
-    public void giveGrenade(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveGrenade(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         GrenadeModel gm = plugin.getGrenadeModel(id);
         if(gm != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -355,8 +356,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.perk")
     @CommandCompletion("@perk @players")
     @Description("Give you or someone a perk")
-    public void givePerk(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void givePerk(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         Perk perk = plugin.getPerk(id);
         if(perk != null) {
             perk.give(target);
@@ -369,8 +370,8 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.booster")
     @CommandCompletion("@booster @players")
     @Description("Give you or someone a booster")
-    public void giveBooster(Player player, String id, @Optional Player target){
-        target = (target == null ? player : target);
+    public void giveBooster(Player player, String id, @Optional OnlinePlayer targetPlayer){
+        Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         Booster b = plugin.getBooster(id);
         if(b != null) {
             PlayerData playerData = plugin.getPlayerData(target);
@@ -423,7 +424,7 @@ public class MainCommand extends BaseCommand {
         if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
         else {
             pd.getBackpack().clear();
-            plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", target.getName()).compile());
+            plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", Objects.requireNonNull(target.getName())).compile());
         }
     }
 
