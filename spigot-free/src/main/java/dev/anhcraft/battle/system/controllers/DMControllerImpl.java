@@ -249,7 +249,7 @@ public class DMControllerImpl extends GameControllerImpl {
             trackTask(game, task, plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
                 if(player.isOnline()) {
                     sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
-                    playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
+                    player.playSound(player.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
                     if(current.getAndDecrement() == 0) {
                         cancelTask(game, task);
                         gp.setSpectator(false);
