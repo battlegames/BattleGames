@@ -78,7 +78,8 @@ public class DMControllerImpl extends GameControllerImpl {
 
     @Override
     public void onQuit(@NotNull Player player, @NotNull LocalGame game){
-        broadcast(game, "player_quit_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
+        //moved to dev.anhcraft.battle.system.managers.BattleArenaManager.quit
+        //broadcast(game, "player_quit_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         for (Player p : game.getPlayers().keySet()){
             PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
             if (ps != null) {

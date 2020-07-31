@@ -210,6 +210,11 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
             if(gp == null) return false;
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(game, gp));
             game.getPlayers().remove(player);
+            game.getMode().getController(c -> {
+                if(c instanceof GameControllerImpl) {
+                    ((GameControllerImpl) c).broadcast(game, "player_quit_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
+                }
+            });
             Multiset<String> servers = game.getDownstreamServers().keys();
             for(String s : servers) {
                 if (game.getDownstreamServers().remove(s, player)) {
