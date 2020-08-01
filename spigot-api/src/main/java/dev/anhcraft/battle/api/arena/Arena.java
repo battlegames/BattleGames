@@ -329,7 +329,7 @@ public class Arena extends ConfigurableObject implements Informative {
                         return false;
                     }
                 }
-                case "mode_options": {
+                case "game_options": {
                     if (value instanceof ConfigurationSection && mode != null) {
                         ConfigurationSection c = (ConfigurationSection) value;
                         try {
