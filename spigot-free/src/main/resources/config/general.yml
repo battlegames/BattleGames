@@ -231,6 +231,13 @@ misc:
       value: 7
     '8':
       material:
+        - netherite_helmet
+        - netherite_chestplate
+        - netherite_leggings
+        - netherite_boots
+      value: 10
+    '9':
+      material:
         - (coal|iron|gold|diamond|emerald|lapis|redstone)_(.+)
         - anvil
         - barrier
