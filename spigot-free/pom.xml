@@ -8,7 +8,7 @@
     <parent>
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
-        <version>1.2.5</version>
+        <version>1.2.6</version>
     </parent>
 
     <artifactId>battle.spigot.free</artifactId>
@@ -22,13 +22,13 @@
         <dependency>
             <groupId>dev.anhcraft</groupId>
             <artifactId>battle.spigot.api</artifactId>
-            <version>1.2.5</version>
+            <version>1.2.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dev.anhcraft</groupId>
             <artifactId>craftkit.spigot</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
