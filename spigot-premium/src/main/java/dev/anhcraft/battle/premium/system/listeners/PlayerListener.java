@@ -30,10 +30,12 @@ import dev.anhcraft.battle.premium.stats.MedicalKitUseStat;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +43,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener {
+    @EventHandler
+    public void craft(CraftItemEvent event){
+        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getWhoClicked().getWorld().getName());
+        if(ws != null && ws.isDisableCrafting()){
+            event.setCancelled(true);
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
     @EventHandler
     public void food(FoodLevelChangeEvent event){
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());

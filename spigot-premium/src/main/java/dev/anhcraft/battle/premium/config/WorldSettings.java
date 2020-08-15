@@ -63,6 +63,9 @@ public class WorldSettings extends ConfigurableObject {
     @Key("disable_interact")
     private boolean disableInteract;
 
+    @Key("disable_crafting")
+    private boolean disableCrafting;
+
     @Key("except_worlds")
     @IgnoreValue(ifNull = true)
     private List<String> blacklistWorlds = new ArrayList<>();
@@ -143,5 +146,13 @@ public class WorldSettings extends ConfigurableObject {
 
     public void setInteractDisabled(boolean disableInteract) {
         this.disableInteract = disableInteract;
+    }
+
+    public boolean isDisableCrafting() {
+        return disableCrafting;
+    }
+
+    public void setDisableCrafting(boolean disableCrafting) {
+        this.disableCrafting = disableCrafting;
     }
 }

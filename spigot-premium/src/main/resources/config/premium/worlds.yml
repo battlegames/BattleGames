@@ -26,6 +26,9 @@ general:
   # Disable interacts to chest, door, etc
   disable_interact: true
 
+  # Disable crafting
+  disable_crafting: true
+
   # Any worlds that will not get effect
   except_worlds:
     - world
