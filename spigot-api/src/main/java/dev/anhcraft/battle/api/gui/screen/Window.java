@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
+import java.util.function.Predicate;
 
 public class Window extends CustomDataContainer {
     private final WeakReference<Player> player;
@@ -55,5 +56,15 @@ public class Window extends CustomDataContainer {
     @Nullable
     public Player getPlayer() {
         return player.get();
+    }
+
+    public void cleanData(Predicate<String> test) {
+        getDataContainer().keySet().removeIf(test);
+        if(topView != null) {
+            topView.getDataContainer().keySet().removeIf(test);
+        }
+        if(bottomView != null) {
+            bottomView.getDataContainer().keySet().removeIf(test);
+        }
     }
 }
