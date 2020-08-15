@@ -20,12 +20,12 @@
 
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A container for storing data.
@@ -40,7 +40,7 @@ public class CustomDataContainer implements Informative {
     @NotNull
     public Map<String, Object> getDataContainer() {
         if(dataContainer == null){
-            dataContainer = new HashMap<>();
+            dataContainer = new ConcurrentHashMap<>();
         }
         return dataContainer;
     }
