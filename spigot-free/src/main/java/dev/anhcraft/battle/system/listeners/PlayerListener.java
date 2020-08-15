@@ -585,17 +585,18 @@ public class PlayerListener extends BattleComponent implements Listener {
                 }
             }
 
+            game.getMode().getController(c -> {
+                c.onDeath(e, game);
+                ((GameControllerImpl) c).cancelReloadGun(e.getEntity());
+            });
+
+            // note: render gui on death should be put after the call to game controller
             if(game.getArena().isRenderGuiOnDeath()){
                 gamePlayer.getIgBackpack().clear();
                 e.getEntity().getInventory().clear();
                 plugin.guiManager.updateView(e.getEntity(), plugin.guiManager.getWindow(e.getEntity()).getBottomView());
                 SpeedUtil.setModifier(e.getEntity(), SpeedFactor.ITEM, 0);
             }
-
-            game.getMode().getController(c -> {
-                c.onDeath(e, game);
-                ((GameControllerImpl) c).cancelReloadGun(e.getEntity());
-            });
 
             plugin.gunManager.handleZoomOut(e.getEntity());
         }
