@@ -50,6 +50,7 @@ public class LocaleConfigManager extends ConfigManager {
         ASSETS_VERSION.put(NMSVersion.v1_14_R1, "1.14.4");
         ASSETS_VERSION.put(NMSVersion.v1_15_R1, "1.15.2");
         ASSETS_VERSION.put(NMSVersion.v1_16_R1, "1.16.1");
+        ASSETS_VERSION.put(NMSVersion.v1_16_R2, "1.16.2");
     }
 
     public LocaleConfigManager() {
