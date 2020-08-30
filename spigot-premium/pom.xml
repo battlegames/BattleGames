@@ -12,6 +12,10 @@
 
     <artifactId>battle.spigot.premium</artifactId>
 
+    <properties>
+        <fileName>Battle.Spigot.Premium</fileName>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>dev.anhcraft</groupId>

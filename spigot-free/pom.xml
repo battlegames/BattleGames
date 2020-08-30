@@ -16,6 +16,7 @@
     <properties>
         <config.version>2</config.version>
         <storage.version>1</storage.version>
+        <fileName>Battle.Spigot.Free</fileName>
     </properties>
 
     <dependencies>

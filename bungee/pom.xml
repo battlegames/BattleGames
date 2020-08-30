@@ -13,6 +13,10 @@
 
     <artifactId>battle.bungee</artifactId>
 
+    <properties>
+        <fileName>Battle.Bungeecord</fileName>
+    </properties>
+
     <repositories>
         <repository>
             <id>bungeecord-repo</id>

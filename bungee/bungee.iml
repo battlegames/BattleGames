@@ -37,6 +37,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-resolver:4.1.49.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.25" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:21.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:19.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:20.0.0" level="project" />
   </component>
 </module>

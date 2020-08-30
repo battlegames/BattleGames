@@ -21,7 +21,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="spigot-free" />
-    <orderEntry type="module" module-name="spigot-api" />
+    <orderEntry type="module" module-name="battle.spigot.api" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
     <orderEntry type="library" name="Maven: io.papermc:paperlib:1.0.5" level="project" />
     <orderEntry type="library" name="Maven: dev.anhcraft:inst:1.0.3" level="project" />
@@ -56,6 +56,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.12-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:PlaceholderAPI:2.10.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.rayzr522:jsonmessage:1.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:19.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:20.0.0" level="project" />
   </component>
 </module>
