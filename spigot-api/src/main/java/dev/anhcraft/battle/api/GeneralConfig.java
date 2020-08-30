@@ -181,6 +181,14 @@ public class GeneralConfig extends ConfigurableObject {
     @Explanation("The minimum distance to ensure a tracked entity has moved")
     private double entityTrackMinDistance = 1.5;
 
+    @Key("misc.blood_effect.enabled")
+    @Explanation("Should we show the blood effects")
+    private boolean bloodEffectEnabled = true;
+
+    @Key("misc.blood_effect.particles_ratio")
+    @Explanation("The amount of blood particles will be spawned per each health point")
+    private double bloodEffectParticleRatio = 1;
+
     @Key("misc.material_hardness")
     @Explanation("The material of blocks")
     private Map<Material, Integer> materialHardness;
@@ -421,6 +429,14 @@ public class GeneralConfig extends ConfigurableObject {
 
     public double getIgEcoInitBalance() {
         return igEcoInitBalance;
+    }
+
+    public boolean isBloodEffectEnabled() {
+        return bloodEffectEnabled;
+    }
+
+    public double getBloodEffectParticleRatio() {
+        return bloodEffectParticleRatio;
     }
 
     public double getEntityTrackMinDistance() {
