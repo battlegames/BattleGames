@@ -55,9 +55,9 @@ import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.*;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -84,11 +84,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PlayerListener extends BattleComponent implements Listener {
-    private final BlockData redstoneBlockData;
-
     public PlayerListener(BattlePlugin plugin) {
         super(plugin);
-        redstoneBlockData = Bukkit.createBlockData(Material.REDSTONE);
     }
 
     @EventHandler
@@ -394,10 +391,10 @@ public class PlayerListener extends BattleComponent implements Listener {
         e.setCancelled(event.isCancelled());
         if (!event.isCancelled() && p2 != null) {
             g.getDamageReports().put(p2, report);
-            if (plugin.generalConf.isBloodEffectEnabled()) {
+            if (plugin.generalConf.isBloodEffectEnabled() && NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
                 double ratio = plugin.generalConf.getBloodEffectParticleRatio();
                 int amount = (int) Math.ceil(ratio * Math.min(report.getDamage(), p2.getHealth()));
-                p2.getWorld().spawnParticle(Particle.BLOCK_CRACK, p2.getLocation(), amount, redstoneBlockData);
+                p2.getWorld().spawnParticle(Particle.BLOCK_CRACK, p2.getLocation(), amount, Bukkit.createBlockData(Material.REDSTONE_BLOCK));
             }
         }
     }
