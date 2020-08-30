@@ -22,12 +22,13 @@ package dev.anhcraft.battle.system.controllers;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.BattleBar;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.Mode;
 import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.gui.screen.Window;
 import dev.anhcraft.battle.api.inventory.item.*;
-import dev.anhcraft.battle.api.BattleBar;
 import dev.anhcraft.battle.system.renderers.bossbar.PlayerBossBar;
 import dev.anhcraft.battle.utils.CooldownMap;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
@@ -35,7 +36,6 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import net.md_5.bungee.api.ChatMessageType;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -103,35 +103,35 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         }
     }
 
-    public void broadcast(LocalGame game, String localePath){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath){
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath));
     }
 
-    public void broadcast(LocalGame game, String localePath, InfoReplacer infoReplacer){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull InfoReplacer infoReplacer){
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), infoReplacer);
     }
 
-    public void broadcast(LocalGame game, String localePath, ChatMessageType type){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type){
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, null);
     }
 
-    public void broadcast(LocalGame game, String localePath, ChatMessageType type, InfoReplacer infoReplacer){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type, @NotNull InfoReplacer infoReplacer){
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, infoReplacer);
     }
 
-    public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath){
+    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath){
         sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void broadcastTitle(LocalGame game, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
         sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, infoReplacer);
     }
 
-    public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath){
+    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath){
         sendTitle(player, titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void sendTitle(Player player, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
         String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
         String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
         if(infoReplacer == null) {
@@ -141,7 +141,7 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         }
     }
 
-    public void sendTitle(Collection<Player> players, String titleLocalePath, String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void sendTitle(@NotNull Collection<Player> players, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
         String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
         String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
         if(infoReplacer == null) {
@@ -157,34 +157,31 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         }
     }
 
-    public void trackTask(LocalGame game, String id, int task){
+    public void trackTask(@NotNull LocalGame game, @NotNull String id, int task){
         RUNNING_TASKS.put(game.getArena().getId()+id, task);
     }
 
-    public boolean hasTask(LocalGame game, String id){
+    public boolean hasTask(@NotNull LocalGame game, @NotNull String id){
         return RUNNING_TASKS.containsKey(game.getArena().getId()+id);
     }
 
-    public void cancelTask(LocalGame game, String id){
+    public void cancelTask(@NotNull LocalGame game, @NotNull String id){
         Integer x = RUNNING_TASKS.remove(game.getArena().getId()+id);
         if(x != null) plugin.extension.getTaskHelper().cancelTask(x);
     }
 
-    public void cancelAllTasks(LocalGame game){
+    public void cancelAllTasks(@NotNull LocalGame game){
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(game.getArena().getId()))
                 .collect(Collectors.toList());
         x.forEach(e -> plugin.extension.getTaskHelper().cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
-    public void playSound(LocalGame game, Sound sound){
-        for(Player p : game.getPlayers().keySet())
-            p.playSound(p.getLocation(), sound, 3f, 1f);
-    }
-
-    public void playSound(LocalGame game, String sound){
-        for(Player p : game.getPlayers().keySet())
-            p.playSound(p.getLocation(), sound, 3f, 1f);
+    public void playSound(@NotNull LocalGame game, @Nullable BattleSound sound){
+        if(sound == null) return;
+        for(Player p : game.getPlayers().keySet()) {
+            sound.play(p);
+        }
     }
 
     @Nullable
@@ -196,13 +193,13 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         COOLDOWN.clear();
     }
 
-    public void performCooldownMap(LocalGame game, String id, Consumer<CooldownMap> ifPresent){
+    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent){
         String k = game.getArena().getId()+id;
         CooldownMap m = COOLDOWN.get(k);
         if(m != null) ifPresent.accept(m);
     }
 
-    public void performCooldownMap(LocalGame game, String id, Consumer<CooldownMap> ifPresent, Callable<CooldownMap> otherwise){
+    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent, @NotNull Callable<CooldownMap> otherwise){
         String k = game.getArena().getId()+id;
         CooldownMap m = COOLDOWN.get(k);
         if(m == null) {
@@ -221,12 +218,12 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         return mode;
     }
 
-    public void cancelReloadGun(Player player){
+    public void cancelReloadGun(@NotNull Player player){
         Runnable runnable = RELOADING_GUN.remove(player.getUniqueId());
         if(runnable != null) runnable.run();
     }
 
-    public void doReloadGun(Player player, Gun gun){
+    public void doReloadGun(@NotNull Player player, @NotNull Gun gun){
         GunModel gm = gun.getModel();
         if(gm == null) return;
         Magazine m = gun.getMagazine();

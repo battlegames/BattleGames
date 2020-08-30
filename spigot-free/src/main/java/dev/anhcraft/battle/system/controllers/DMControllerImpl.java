@@ -126,7 +126,7 @@ public class DMControllerImpl extends GameControllerImpl {
         trackTask(game, "countdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             if(m <= game.getPlayerCount()) {
                 broadcastTitle(game, "countdown_title", "countdown_subtitle", new InfoHolder("").inform("current", current.get()).compile());
-                playSound(game, Sound.BLOCK_FENCE_GATE_OPEN);
+                playSound(game, game.getArena().getGameOptions().getCountdownSound());
                 if(current.getAndDecrement() == 0) {
                     cancelTask(game, "countdown");
                     play(game);

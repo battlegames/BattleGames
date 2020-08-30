@@ -99,6 +99,10 @@ public class MobRescueOptions extends GameOptions {
     @Explanation("Sound to be played on putting down mobs")
     private BattleSound putDownMobSound;
 
+    @Key("sounds.extra_countdown")
+    @Explanation("Sound during extra countdown phrase")
+    private BattleSound extraCountdownSound;
+
     public long getExtraCountdownTimeFarmer() {
         return extraCountdownTimeFarmer;
     }
@@ -140,6 +144,11 @@ public class MobRescueOptions extends GameOptions {
     @Nullable
     public BattleSound getPutDownMobSound() {
         return putDownMobSound;
+    }
+
+    @Nullable
+    public BattleSound getExtraCountdownSound() {
+        return extraCountdownSound;
     }
 
     @Nullable

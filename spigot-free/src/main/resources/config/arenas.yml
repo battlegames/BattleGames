@@ -43,6 +43,8 @@ dm_assault:
     item_selection_time: 400
     spawn_protection_time: 40
     respawn_waiting_time: 200
+    sounds:
+      countdown: "$block_fence_gate_open"
   end_commands:
     winners:
       - "msg %player_name% &aYour last K/D ratio: &e<? (%battle_game_stats_kills%+1)/(%battle_game_stats_deaths%+1) ?>"
@@ -138,6 +140,8 @@ bw_lighthouse:
       - lighthouse 6.79 127 0.35 -271.35 2.70
     respawn_waiting_time: 300
     spawn_protection_time: 60
+    sounds:
+      countdown: "$block_fence_gate_open"
     team_size: 2
     teams:
       '1':
@@ -267,6 +271,8 @@ dm_italy:
     item_selection_time: 1000
     spawn_protection_time: 40
     respawn_waiting_time: 200
+    sounds:
+      countdown: "$block_fence_gate_open"
   render_gui_on_death: true
   end_firework:
     power: 3
@@ -432,6 +438,8 @@ mr_farm:
     sounds:
       on_pick_up_mob: "$entity_item_pickup"
       on_put_down_mob: "$block_anvil_place"
+      countdown: "$block_fence_gate_open"
+      extra_countdown: "$block_fence_gate_open"
   result_broadcast:
     won:
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"

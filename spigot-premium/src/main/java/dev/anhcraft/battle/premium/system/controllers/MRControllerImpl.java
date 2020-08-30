@@ -37,7 +37,6 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -281,8 +280,11 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
         trackTask(game, "extraFarmerCountdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             InfoReplacer f = new InfoHolder("").inform("current", current.get()).compile();
             sendTitle(tb, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
-            for(Player p : tb) {
-                p.playSound(p.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
+            MobRescueOptions mro = (MobRescueOptions) game.getArena().getGameOptions();
+            if(mro.getExtraCountdownSound() != null) {
+                for (Player p : tb) {
+                    mro.getExtraCountdownSound().play(p);
+                }
             }
             if(current.getAndDecrement() == 0) {
                 cancelTask(game, "extraFarmerCountdown");

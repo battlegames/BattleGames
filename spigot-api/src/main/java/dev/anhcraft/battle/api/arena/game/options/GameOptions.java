@@ -20,6 +20,7 @@
 
 package dev.anhcraft.battle.api.arena.game.options;
 
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.confighelper.ConfigSchema;
@@ -29,6 +30,7 @@ import dev.anhcraft.confighelper.annotation.Key;
 import dev.anhcraft.confighelper.annotation.Schema;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +66,10 @@ public class GameOptions extends ConfigurableObject {
     @IgnoreValue(ifNull = true)
     private List<String> waitSpawnPoints = new ArrayList<>();
 
+    @Key("sounds.countdown")
+    @Explanation("Sound during countdown phrase")
+    private BattleSound countdownSound;
+
     public int getMinPlayers() {
         return minPlayers;
     }
@@ -87,5 +93,10 @@ public class GameOptions extends ConfigurableObject {
     @NotNull
     public List<Location> getWaitSpawnPoints() {
         return waitSpawnPoints.stream().map(LocationUtil::fromString).collect(Collectors.toList());
+    }
+
+    @Nullable
+    public BattleSound getCountdownSound() {
+        return countdownSound;
     }
 }
