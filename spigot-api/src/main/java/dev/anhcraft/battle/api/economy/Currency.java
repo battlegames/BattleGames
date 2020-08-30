@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Currency {
     double getBalance(@NotNull Player player);
+
     boolean withdraw(@NotNull Player player, double delta);
+
     boolean deposit(@NotNull Player player, double delta);
 }

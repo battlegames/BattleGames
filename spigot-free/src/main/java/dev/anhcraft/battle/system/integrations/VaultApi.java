@@ -27,18 +27,18 @@ import org.bukkit.plugin.ServicesManager;
 public class VaultApi {
     private static Economy eco;
 
-    public static boolean init(){
+    public static boolean init() {
         ServicesManager sm = Bukkit.getServicesManager();
 
         RegisteredServiceProvider<Economy> ecoPr = sm.getRegistration(Economy.class);
-        if(ecoPr != null) {
+        if (ecoPr != null) {
             eco = ecoPr.getProvider();
         }
 
         return eco != null;
     }
 
-    public static Economy getEconomyApi(){
+    public static Economy getEconomyApi() {
         return eco;
     }
 }

@@ -45,6 +45,10 @@ public class PaginationUpdateEvent extends ComponentEvent implements Cancellable
         this.pagination = pagination;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Pagination getPagination() {
         return pagination;
@@ -59,10 +63,11 @@ public class PaginationUpdateEvent extends ComponentEvent implements Cancellable
      * Set the slot filter.
      * <br>
      * <b>
-     *     If you are trying to add a new filter, then instead of using this method, use {@link #getSlotFilter()}.
-     *     <br>
-     *     Join these filters like a chain with {@link Predicate#and(Predicate)} and {@link Predicate#or(Predicate)}.
+     * If you are trying to add a new filter, then instead of using this method, use {@link #getSlotFilter()}.
+     * <br>
+     * Join these filters like a chain with {@link Predicate#and(Predicate)} and {@link Predicate#or(Predicate)}.
      * </b>
+     *
      * @param slotFilter slot filter
      */
     public void setSlotFilter(@Nullable Predicate<Slot> slotFilter) {
@@ -81,10 +86,6 @@ public class PaginationUpdateEvent extends ComponentEvent implements Cancellable
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

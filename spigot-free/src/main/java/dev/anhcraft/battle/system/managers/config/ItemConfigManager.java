@@ -33,10 +33,10 @@ public class ItemConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        for(ItemType type : ItemType.values()){
+        for (ItemType type : ItemType.values()) {
             String k = type.name().toLowerCase();
-            ConfigurationSection sec = getSettings().getConfigurationSection("model_"+k);
-            if(sec != null) {
+            ConfigurationSection sec = getSettings().getConfigurationSection("model_" + k);
+            if (sec != null) {
                 try {
                     plugin.itemManager.defineModelTemplate(type, ConfigHelper.readConfig(sec, PreparedItem.SCHEMA));
                 } catch (InvalidValueException e) {
@@ -44,7 +44,7 @@ public class ItemConfigManager extends ConfigManager {
                 }
             }
             sec = getSettings().getConfigurationSection(k);
-            if(sec != null) {
+            if (sec != null) {
                 try {
                     plugin.itemManager.defineItemTemplate(type, ConfigHelper.readConfig(sec, PreparedItem.SCHEMA));
                 } catch (InvalidValueException e) {

@@ -34,7 +34,10 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("FieldMayBeFinal")
@@ -496,9 +499,9 @@ public class GeneralConfig extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null){
-            if(entry.getKey().equals("misc.material_hardness")) {
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null) {
+            if (entry.getKey().equals("misc.material_hardness")) {
                 ConfigurationSection cs = (ConfigurationSection) value;
                 Map<Material, Integer> map = new EnumMap<>(Material.class);
                 for (String s : cs.getKeys(false)) {
@@ -521,7 +524,7 @@ public class GeneralConfig extends ConfigurableObject {
                     }
                 }
                 return map;
-            } else if(entry.getKey().equals("misc.entity_hardness")) {
+            } else if (entry.getKey().equals("misc.entity_hardness")) {
                 ConfigurationSection cs = (ConfigurationSection) value;
                 Map<EntityType, Integer> map = new EnumMap<>(EntityType.class);
                 for (String s : cs.getKeys(false)) {
@@ -550,9 +553,9 @@ public class GeneralConfig extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null){
-            if(entry.getKey().equals("misc.material_hardness")) {
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null) {
+            if (entry.getKey().equals("misc.material_hardness")) {
                 Map<Material, Integer> materialHardness = (Map<Material, Integer>) value;
                 Multimap<Integer, String> map = MultimapBuilder.treeKeys().treeSetValues().build();
                 for (Map.Entry<Material, Integer> e : materialHardness.entrySet()) {
@@ -567,7 +570,7 @@ public class GeneralConfig extends ConfigurableObject {
                     i++;
                 }
                 return c;
-            } else if(entry.getKey().equals("misc.entity_hardness")) {
+            } else if (entry.getKey().equals("misc.entity_hardness")) {
                 Map<EntityType, Integer> blockHardness = (Map<EntityType, Integer>) value;
                 Multimap<Integer, String> map = MultimapBuilder.treeKeys().treeSetValues().build();
                 for (Map.Entry<EntityType, Integer> e : blockHardness.entrySet()) {

@@ -30,6 +30,10 @@ public class ConfigReloadEvent extends Event implements Cancellable {
 
     private boolean cancelled;
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -42,10 +46,6 @@ public class ConfigReloadEvent extends Event implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

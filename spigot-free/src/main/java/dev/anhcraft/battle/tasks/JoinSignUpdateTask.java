@@ -43,7 +43,7 @@ public class JoinSignUpdateTask extends BattleComponent implements Runnable {
     @Override
     public void run() {
         List<String> lines = plugin.getGeneralConfig().getJoinSignDynamicLines();
-        if(lines == null || lines.isEmpty()) return;
+        if (lines == null || lines.isEmpty()) return;
         for (Iterator<Map.Entry<BlockPosition, String>> it = plugin.getServerData().getJoinSigns().iterator(); it.hasNext(); ) {
             Map.Entry<BlockPosition, String> e = it.next();
             Block b = e.getKey().getBlock();
@@ -52,7 +52,7 @@ public class JoinSignUpdateTask extends BattleComponent implements Runnable {
                 if (arena == null) continue;
                 InfoHolder infoHolder;
                 Game game = ApiProvider.consume().getArenaManager().getGame(arena);
-                if(game != null) {
+                if (game != null) {
                     infoHolder = new InfoHolder("game_");
                     game.inform(infoHolder);
                 } else {

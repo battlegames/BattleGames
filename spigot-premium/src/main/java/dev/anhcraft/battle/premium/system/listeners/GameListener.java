@@ -33,8 +33,8 @@ import org.bukkit.event.Listener;
 
 public class GameListener implements Listener {
     @EventHandler
-    public void gamePhaseChange(GamePhaseChangeEvent event){
-        if(event.getOldPhase() == GamePhase.WAITING && event.getNewPhase() == GamePhase.PLAYING) {
+    public void gamePhaseChange(GamePhaseChangeEvent event) {
+        if (event.getOldPhase() == GamePhase.WAITING && event.getNewPhase() == GamePhase.PLAYING) {
             ArenaSettings as = PremiumModule.getInstance().getArenaConfigManagerX().getArenaSettings(event.getGame().getArena().getId());
             if (as != null) {
                 if (as.getEmptyRegions() != null) {

@@ -25,8 +25,10 @@ public abstract class StorageProvider {
     private final DataMap<String> data = new DataMap<>();
 
     public abstract boolean load();
+
     public abstract boolean save();
-    public void destroy(){
+
+    public void destroy() {
 
     }
 

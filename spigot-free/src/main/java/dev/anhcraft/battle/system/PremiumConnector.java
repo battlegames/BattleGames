@@ -36,7 +36,7 @@ public class PremiumConnector extends BattleComponent {
         } catch (ClassNotFoundException ignored) {
         }
 
-        if(c != null){
+        if (c != null) {
             try {
                 premiumModule = (IPremiumModule) c.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
@@ -50,43 +50,43 @@ public class PremiumConnector extends BattleComponent {
     }
 
     public void onIntegrate() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onIntegrate(plugin);
         }
     }
 
     public void onInitSystem() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onInitSystem(plugin);
         }
     }
 
     public void onReloadConfig() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onReloadConfig(plugin);
         }
     }
 
     public void onRegisterEvents() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onRegisterEvents(plugin);
         }
     }
 
     public void onRegisterTasks() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onRegisterTasks(plugin);
         }
     }
 
     public void onRegisterCommands(PaperCommandManager commandManager) {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onRegisterCommands(plugin, commandManager);
         }
     }
 
     public void onDisable() {
-        if(premiumModule != null) {
+        if (premiumModule != null) {
             premiumModule.onDisable(plugin);
         }
     }

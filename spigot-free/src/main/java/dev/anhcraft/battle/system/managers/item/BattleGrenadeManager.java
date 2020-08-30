@@ -41,12 +41,12 @@ public class BattleGrenadeManager extends BattleComponent {
         super(plugin);
     }
 
-    public boolean throwGrenade(Player player, Grenade grenade){
+    public boolean throwGrenade(Player player, Grenade grenade) {
         GrenadeModel gm = grenade.getModel();
-        if(gm == null) return false;
+        if (gm == null) return false;
         Location ploc = player.getLocation();
         PreparedItem pi = plugin.itemManager.make(gm);
-        if(pi == null) return false;
+        if (pi == null) return false;
         Item item = player.getWorld().dropItem(ploc, gm.getSkin().transform(pi).build());
         item.setInvulnerable(true);
         item.setGravity(true);
@@ -56,17 +56,17 @@ public class BattleGrenadeManager extends BattleComponent {
         plugin.entityTrackingTask.track(item, new EntityTrackingTask.EntityTrackCallback() {
             @Override
             public void onCheck(EntityTrackingTask.EntityTracker tracker, EntityTrackingTask.EntityTrackCallback callback, Entity entity) {
-                if(tracker.deltaMoveTime() >= 500 || (dt > 0 && tracker.deltaOriginTime() > dt * 50)){
+                if (tracker.deltaMoveTime() >= 500 || (dt > 0 && tracker.deltaOriginTime() > dt * 50)) {
                     callback.untrack(entity);
                     Location eloc = entity.getLocation();
                     plugin.extension.getTaskHelper().newTask(() -> {
                         BattleDebugger.startTiming("grenade-track");
                         entity.remove();
-                        if(gm.getExplosionPower() > 0) {
+                        if (gm.getExplosionPower() > 0) {
                             entity.getWorld().createExplosion(eloc.getX(), eloc.getY(), eloc.getZ(), (float) gm.getExplosionPower(), false, false);
                         }
                         int fbr = gm.getFireBlockRadius();
-                        if(fbr > 0) {
+                        if (fbr > 0) {
                             for (Block b : BlockUtil.getNearbyBlocks(eloc, fbr, 1, fbr)) {
                                 if (b.getType() == Material.AIR || b.getType().name().endsWith("_AIR")) {
                                     b.setType(Material.FIRE);
@@ -75,18 +75,18 @@ public class BattleGrenadeManager extends BattleComponent {
                         }
                         double fmr = gm.getFireMobRadius();
                         int fmt = gm.getFireMobTicks();
-                        if(fmr > 0 && fmt > 0) {
+                        if (fmr > 0 && fmt > 0) {
                             eloc.getWorld().getNearbyEntities(eloc, fmr, fmr, fmr).forEach(c -> {
-                                if(c.getEntityId() != player.getEntityId()
+                                if (c.getEntityId() != player.getEntityId()
                                         && c.getEntityId() != entity.getEntityId()
-                                        && c instanceof LivingEntity){
+                                        && c instanceof LivingEntity) {
                                     entity.setFireTicks(fmt);
                                 }
                             });
                         }
                         BattleDebugger.endTiming("grenade-track");
                     });
-                    if(gm.getExplosionEffect() != null){
+                    if (gm.getExplosionEffect() != null) {
                         plugin.playEffect(eloc, gm.getExplosionEffect());
                     }
                 }

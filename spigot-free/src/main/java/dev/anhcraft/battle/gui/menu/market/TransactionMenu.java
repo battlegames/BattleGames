@@ -38,13 +38,13 @@ public class TransactionMenu implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
-        if(pd == null) return;
+        if (pd == null) return;
         PreparedItem pi = api.getMarket().getTransactionItem();
-        for(Transaction t : pd.getTransactions()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
+        for (Transaction t : pd.getTransactions()) {
+            if (!chain.hasNext()) break;
+            if (chain.shouldSkip()) continue;
             Slot slot = chain.next();
-            if(pi != null) {
+            if (pi != null) {
                 InfoHolder ih = new InfoHolder("");
                 t.inform(ih);
                 slot.setPaginationItem(ih.compile().replace(pi.duplicate()));

@@ -67,9 +67,9 @@ public class Gun extends Weapon<GunModel> {
     }
 
     public int nextSpray() {
-        if(getModel() != null){
+        if (getModel() != null) {
             int max = getModel().getSprayPattern().size();
-            if(max > 0) {
+            if (max > 0) {
                 if (System.currentTimeMillis() - lastSprayTime >= 500) nextSpray = 0;
                 else if (++nextSpray == max) nextSpray = max - 1;
                 lastSprayTime = System.currentTimeMillis();
@@ -89,13 +89,13 @@ public class Gun extends Weapon<GunModel> {
 
     @Override
     public void save(CompoundTag compound) {
-        if(getModel() != null) compound.put(ItemTag.GUN_ID, getModel().getId());
+        if (getModel() != null) compound.put(ItemTag.GUN_ID, getModel().getId());
 
         CompoundTag mc = new CompoundTag();
         magazine.save(mc);
         compound.put(ItemTag.GUN_MAGAZINE, mc);
 
-        if(scope != null) {
+        if (scope != null) {
             CompoundTag sc = new CompoundTag();
             scope.save(sc);
             compound.put(ItemTag.GUN_SCOPE, sc);
@@ -108,24 +108,24 @@ public class Gun extends Weapon<GunModel> {
     public void load(CompoundTag compound) {
         setModel(ApiProvider.consume().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)));
         CompoundTag mag = compound.get(ItemTag.GUN_MAGAZINE, CompoundTag.class);
-        if(mag != null) magazine.load(mag);
+        if (mag != null) magazine.load(mag);
 
         CompoundTag scp = compound.get(ItemTag.GUN_SCOPE, CompoundTag.class);
-        if(scp != null) (scope = (scope == null) ? new Scope() : scope).load(scp);
+        if (scp != null) (scope = (scope == null) ? new Scope() : scope).load(scp);
 
         Integer nextSpray = compound.getValue(ItemTag.GUN_NEXT_SPRAY, IntTag.class);
-        if(nextSpray != null) this.nextSpray = nextSpray;
+        if (nextSpray != null) this.nextSpray = nextSpray;
 
         Long lastSprayTime = compound.getValue(ItemTag.GUN_LAST_SPRAY_TIME, LongTag.class);
-        if(lastSprayTime != null) this.lastSprayTime = lastSprayTime;
+        if (lastSprayTime != null) this.lastSprayTime = lastSprayTime;
     }
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        if(getModel() != null)
+        if (getModel() != null)
             getModel().inform(holder);
         holder.link(magazine.collectInfo(null));
-        if(scope != null)
+        if (scope != null)
             holder.link(scope.collectInfo(null));
     }
 }

@@ -41,6 +41,10 @@ public class GamePlayerWeaponUseEvent extends WeaponUseEvent {
         this.gp2 = gp2;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public GamePlayer getDamager() {
         return gp1;
@@ -53,10 +57,6 @@ public class GamePlayerWeaponUseEvent extends WeaponUseEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

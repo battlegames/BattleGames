@@ -36,6 +36,10 @@ public class ViewEvent extends GuiEvent {
         this.view = view;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public View getView() {
         return view;
@@ -43,10 +47,6 @@ public class ViewEvent extends GuiEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

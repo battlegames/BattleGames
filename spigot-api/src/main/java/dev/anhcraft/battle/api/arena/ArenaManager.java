@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 public interface ArenaManager {
     /**
      * Gets the {@link GamePlayer} of the given player.
+     *
      * @param player the player
      * @return a unique {@link GamePlayer} represents an in-game player, or null if the player has not joined the game yet
      */
@@ -41,6 +42,7 @@ public interface ArenaManager {
 
     /**
      * Gets the {@link Game} that the given player is currently playing on.
+     *
      * @param player the player
      * @return {@link Game} or null if the player has not joined the game yet
      */
@@ -49,6 +51,7 @@ public interface ArenaManager {
 
     /**
      * Gets the {@link Game} where a certain player is currently playing on.
+     *
      * @param playerId the id of the player
      * @return {@link Game} or null if the player has not joined the game yet
      */
@@ -57,6 +60,7 @@ public interface ArenaManager {
 
     /**
      * Gets the {@link Game} which happens in the given arena.
+     *
      * @param arena the arena
      * @return {@link Arena} or null if the arena is inactive
      */
@@ -65,19 +69,21 @@ public interface ArenaManager {
 
     /**
      * Makes the given players joins the arena.
+     *
      * @param player the player
-     * @param arena the arena
+     * @param arena  the arena
      * @return {@link Game} or null if the action is failed
      */
     @Nullable
-    default Game join(@NotNull Player player, @NotNull Arena arena){
+    default Game join(@NotNull Player player, @NotNull Arena arena) {
         return join(player, arena, false);
     }
 
     /**
      * Makes the given players joins the arena.
-     * @param player the player
-     * @param arena the arena
+     *
+     * @param player     the player
+     * @param arena      the arena
      * @param forceLocal forces the game to be created as {@link LocalGame}
      * @return {@link Game} or null if the action is failed
      */
@@ -88,8 +94,9 @@ public interface ArenaManager {
      * Makes the given players joins the arena.
      * <br>
      * This method will not send any messages to the player like {@link #join(Player, Arena)}
+     *
      * @param player the player
-     * @param arena the arena
+     * @param arena  the arena
      * @return {@link Game} or null if the action is failed
      */
     @Nullable
@@ -101,8 +108,9 @@ public interface ArenaManager {
      * Makes the given players joins the arena.
      * <br>
      * This method will not send any messages to the player like {@link #join(Player, Arena, boolean)}
-     * @param player the player
-     * @param arena the arena
+     *
+     * @param player     the player
+     * @param arena      the arena
      * @param forceLocal forces the game to be created as {@link LocalGame}
      * @return {@link Game} or null if the action is failed
      */
@@ -111,6 +119,7 @@ public interface ArenaManager {
 
     /**
      * Makes the given player quit the game.
+     *
      * @param player the player
      * @return the status of the action, {@code true} if success or {@code false} if not
      */
@@ -118,12 +127,14 @@ public interface ArenaManager {
 
     /**
      * Destroys the given game.
+     *
      * @param game the game
      */
     void destroy(@NotNull Game game);
 
     /**
      * Lists all active games.
+     *
      * @return an immutable list of games.
      */
     @NotNull
@@ -131,6 +142,7 @@ public interface ArenaManager {
 
     /**
      * Lists all active games and gets them.
+     *
      * @param consumer the consumer
      */
     void listGames(@NotNull Consumer<Game> consumer);

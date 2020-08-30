@@ -43,33 +43,49 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class BattleDebugger {
-    private static BattleDebugger activeDebugger;
     private static final Object SYNC_LOCK = new Object();
     private static final int MAX_RECORDS = 50;
     private static final int MAX_STACK_TRACES = 200;
     private static final int TPS_DELAY_TICKS = 60;
     private static final long STACK_DELAY_MS = 1500;
+    private static BattleDebugger activeDebugger;
+    private final ListMultimap<String, TimingStack> timings = MultimapBuilder.hashKeys().linkedListValues().build();
+    private final List<PresentPair<Long, Double>> tps = new ArrayList<>();
+    private int tpsTickDelay;
 
-    public static synchronized boolean create(Consumer<String> callback, long time){
-        if(activeDebugger == null){
+    private BattleDebugger(Consumer<String> callback, long time) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.accept(end());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskLater((Plugin) BattleApi.getInstance(), time);
+    }
+
+    public static synchronized boolean create(Consumer<String> callback, long time) {
+        if (activeDebugger == null) {
             activeDebugger = new BattleDebugger(callback, time);
             return true;
         }
         return false;
     }
 
-    public static void startTiming(String id){
-        if(activeDebugger != null){
+    public static void startTiming(String id) {
+        if (activeDebugger != null) {
             synchronized (SYNC_LOCK) {
                 List<TimingStack> x = activeDebugger.timings.get(id);
                 long current = System.currentTimeMillis();
-                if(x.isEmpty()){
+                if (x.isEmpty()) {
                     x.add(0, new TimingStack(current));
                 } else {
                     TimingStack ts = x.get(0);
                     if (ts.inProgress()) {
                         throw new IllegalStateException("Another timing record is in progress #" + id);
-                    } else if((current - ts.getEnd()) > STACK_DELAY_MS) {
+                    } else if ((current - ts.getEnd()) > STACK_DELAY_MS) {
                         x.add(0, new TimingStack(current));
                     }
                 }
@@ -77,8 +93,8 @@ public class BattleDebugger {
         }
     }
 
-    public static void endTiming(String id){
-        if(activeDebugger != null){
+    public static void endTiming(String id) {
+        if (activeDebugger != null) {
             synchronized (SYNC_LOCK) {
                 List<TimingStack> x = activeDebugger.timings.get(id);
                 if (x.isEmpty()) {
@@ -97,9 +113,9 @@ public class BattleDebugger {
         }
     }
 
-    public static void reportTps(){
-        if(activeDebugger != null){
-            if(activeDebugger.tpsTickDelay == TPS_DELAY_TICKS) {
+    public static void reportTps() {
+        if (activeDebugger != null) {
+            if (activeDebugger.tpsTickDelay == TPS_DELAY_TICKS) {
                 synchronized (SYNC_LOCK) {
                     activeDebugger.tps.add(new PresentPair<>(System.currentTimeMillis(), ServerUtil.getTPS()[0]));
                 }
@@ -108,25 +124,8 @@ public class BattleDebugger {
         }
     }
 
-    private final ListMultimap<String, TimingStack> timings = MultimapBuilder.hashKeys().linkedListValues().build();
-    private final List<PresentPair<Long, Double>> tps = new ArrayList<>();
-    private int tpsTickDelay;
-
-    private BattleDebugger(Consumer<String> callback, long time){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    callback.accept(end());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.runTaskLater((Plugin) BattleApi.getInstance(), time);
-    }
-
-    private String formatTime(long date){
-        return BattleApi.getInstance().formatLongFormDate(new Date(date)) + " ("+date+")";
+    private String formatTime(long date) {
+        return BattleApi.getInstance().formatLongFormDate(new Date(date)) + " (" + date + ")";
     }
 
     public String end() throws IOException {
@@ -156,16 +155,16 @@ public class BattleDebugger {
                     return "  + From " + formatTime(v.getStart()) + " to " + formatTime(v.getEnd()) + ": " + v.delta() + " ms (" + v.delta(TimeUnit.SECONDS) + " s)";
                 }).collect(Collectors.joining("\n"));
                 w.append("- #").append(s).append(":").append('\n').append(r).append('\n');
-                if(stacks.size() > MAX_RECORDS){
+                if (stacks.size() > MAX_RECORDS) {
                     w.append("  + ...[").append(String.valueOf(stacks.size() - MAX_RECORDS)).append(" records hided]\n");
                 }
-                w.append("  (avg = ").append(Double.toString(ms.get()/stacks.size())).append(" ms)\n");
+                w.append("  (avg = ").append(Double.toString(ms.get() / stacks.size())).append(" ms)\n");
             }
             w.append("III. Threads & Stack traces\n");
-            for(Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()){
+            for (Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
                 Thread k = entry.getKey();
                 w.append("  - #").append(String.valueOf(k.getId())).append(' ').append(k.getName()).append(" | Status: ").append(k.getState().name()).append('\n');
-                if(entry.getValue().length > 0) {
+                if (entry.getValue().length > 0) {
                     w.append(Arrays.stream(entry.getValue()).limit(MAX_STACK_TRACES).map(s -> "    " + s.toString()).collect(Collectors.joining("\n"))).append('\n');
                     if (entry.getValue().length > MAX_STACK_TRACES) {
                         w.append("    ...[").append(String.valueOf(entry.getValue().length - MAX_STACK_TRACES)).append(" elements hided]\n");

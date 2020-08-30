@@ -33,6 +33,10 @@ public class GameJoinEvent extends GameEvent {
         this.gamePlayer = gamePlayer;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public GamePlayer getGamePlayer() {
         return gamePlayer;
@@ -40,10 +44,6 @@ public class GameJoinEvent extends GameEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

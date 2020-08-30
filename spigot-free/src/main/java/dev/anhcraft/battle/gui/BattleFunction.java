@@ -62,17 +62,17 @@ public class BattleFunction extends GuiHandler {
     @Function("ApplyValue")
     public void applyVal(Val<?> val) {
         Object f = report.getView().getWindow().getDataContainer().get(GDataRegistry.VALUE_CALLBACK);
-        if(f instanceof Consumer){
+        if (f instanceof Consumer) {
             ((Consumer<ValueResult>) f).accept(new ValueResult(val.getData()));
         }
     }
 
     @Function("ApplyDataValue")
-    public void applyDataValue(StringVal container, StringVal key){
+    public void applyDataValue(StringVal container, StringVal key) {
         Object v;
-        if(container.getData().equalsIgnoreCase("window")) {
+        if (container.getData().equalsIgnoreCase("window")) {
             v = report.getView().getWindow().getDataContainer().get(key.getData());
-        } else if(container.getData().equalsIgnoreCase("view")) {
+        } else if (container.getData().equalsIgnoreCase("view")) {
             v = report.getView().getDataContainer().get(key.getData());
         } else {
             return;
@@ -105,10 +105,10 @@ public class BattleFunction extends GuiHandler {
 
     @Function("CancelEvent")
     public void cancelEvent() {
-        if(report.getEvent() instanceof Cancellable) {
+        if (report.getEvent() instanceof Cancellable) {
             ((Cancellable) report.getEvent()).setCancelled(true);
         }
-        if(report.getEvent() instanceof InventoryInteractEvent) {
+        if (report.getEvent() instanceof InventoryInteractEvent) {
             ((InventoryInteractEvent) report.getEvent()).setResult(Event.Result.DENY);
         }
     }
@@ -125,7 +125,7 @@ public class BattleFunction extends GuiHandler {
 
     @Function("SwitchGUI")
     public void switchGui(StringVal gui) {
-        if(report.getView().getInventory() instanceof PlayerInventory){
+        if (report.getView().getInventory() instanceof PlayerInventory) {
             setBottom(gui);
         } else {
             openTop(gui);
@@ -143,8 +143,8 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("PrevPage")
-    public void prevPage(StringVal pagination){
-        if(report.getView().prevPage(pagination.getData())) {
+    public void prevPage(StringVal pagination) {
+        if (report.getView().prevPage(pagination.getData())) {
             for (Component c : report.getView().getGui().getComponentOf(pagination.getData())) {
                 ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), c);
             }
@@ -152,8 +152,8 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("NextPage")
-    public void nextPage(StringVal pagination){
-        if(report.getView().nextPage(pagination.getData())) {
+    public void nextPage(StringVal pagination) {
+        if (report.getView().nextPage(pagination.getData())) {
             for (Component c : report.getView().getGui().getComponentOf(pagination.getData())) {
                 ApiProvider.consume().getGuiManager().updateComponent(report.getPlayer(), report.getView(), c);
             }
@@ -161,44 +161,44 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("QuitGame")
-    public void quitGame(){
+    public void quitGame() {
         ApiProvider.consume().getArenaManager().quit(report.getPlayer());
     }
 
     @Function("CopyCurrentSlot")
-    public void copyCurrentSlot(VM vm, Reference resultVar){
+    public void copyCurrentSlot(VM vm, Reference resultVar) {
         vm.setVariable(resultVar.getTarget(), new IntVal(report.getPosition()));
     }
 
     @Function("SetItemFromData")
-    public void setItemFromData(StringVal container, StringVal data, IntVal slot, StringVal notNull){
+    public void setItemFromData(StringVal container, StringVal data, IntVal slot, StringVal notNull) {
         Object f;
-        if(container.getData().equalsIgnoreCase("window")) {
+        if (container.getData().equalsIgnoreCase("window")) {
             f = report.getView().getWindow().getDataContainer().get(data.getData());
-        } else if(container.getData().equalsIgnoreCase("view")) {
+        } else if (container.getData().equalsIgnoreCase("view")) {
             f = report.getView().getDataContainer().get(data.getData());
         } else {
             return;
         }
-        if(f instanceof ItemStack) {
-            if(!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull((ItemStack) f)) {
+        if (f instanceof ItemStack) {
+            if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull((ItemStack) f)) {
                 report.getView().getInventory().setItem(slot.getData(), (ItemStack) f);
             }
-        } else if(f instanceof PreparedItem) {
-            if(!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(((PreparedItem) f).material())) {
+        } else if (f instanceof PreparedItem) {
+            if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(((PreparedItem) f).material())) {
                 report.getView().getInventory().setItem(slot.getData(), ((PreparedItem) f).build());
             }
         }
     }
 
     @Function("SetDataFromCursor")
-    public void setDataFromCursor(StringVal container, StringVal data, StringVal notNull){
+    public void setDataFromCursor(StringVal container, StringVal data, StringVal notNull) {
         ItemStack i = report.getPlayer().getItemOnCursor();
-        if(!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(i)) {
-            if(container.getData().equalsIgnoreCase("window")) {
+        if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(i)) {
+            if (container.getData().equalsIgnoreCase("window")) {
                 report.getView().getWindow().getDataContainer().put(data.getData(), i.clone());
                 report.getPlayer().setItemOnCursor(null);
-            } else if(container.getData().equalsIgnoreCase("view")) {
+            } else if (container.getData().equalsIgnoreCase("view")) {
                 report.getView().getDataContainer().put(data.getData(), i.clone());
                 report.getPlayer().setItemOnCursor(null);
             }
@@ -219,9 +219,9 @@ public class BattleFunction extends GuiHandler {
     public void handleItemDrop(StringVal type) {
         Player player = report.getPlayer();
         ItemStack item = player.getItemOnCursor();
-        if(!ItemUtil.isNull(item)) {
+        if (!ItemUtil.isNull(item)) {
             GamePlayer gp = BattleApi.getInstance().getArenaManager().getGamePlayer(player);
-            if(gp != null) {
+            if (gp != null) {
                 BattleItem<?> bi = BattleApi.getInstance().getItemManager().read(item);
                 if (bi != null && bi.getModel() != null) {
                     BattleItemModel m = bi.getModel();
@@ -250,29 +250,29 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("RemoveCategory")
-    public void rmvCtg(){
+    public void rmvCtg() {
         Window w = report.getView().getWindow();
         Category c = (Category) w.getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
-        if(c != null) {
+        if (c != null) {
             ApiProvider.consume().getMarket().getCategories().remove(c);
         }
     }
 
     @Function("RemoveProduct")
-    public void rmvPd(){
+    public void rmvPd() {
         Window w = report.getView().getWindow();
         Category c = (Category) w.getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(c != null && p != null) {
+        if (c != null && p != null) {
             c.getProducts().remove(p);
         }
     }
 
     @Function("IgoEditor")
-    public void ige(){
+    public void ige() {
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(p != null) {
+        if (p != null) {
             w.getDataContainer().put(GDataRegistry.VALUE, p.isInGameOnly());
             w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
                 p.setInGameOnly(r.asBoolean());
@@ -287,10 +287,10 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("PriceEditor")
-    public void pve(){
+    public void pve() {
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(p == null) return;
+        if (p == null) return;
         w.getDataContainer().put(GDataRegistry.VALUE, p.getPrice());
         w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
             p.setPrice(r.asDouble());
@@ -298,10 +298,10 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("ExpEditor")
-    public void ee(){
+    public void ee() {
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(p == null) return;
+        if (p == null) return;
         w.getDataContainer().put(GDataRegistry.VALUE, p.getVanillaExp());
         w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
             p.setVanillaExp(r.asInt());
@@ -309,10 +309,10 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("IconEditor")
-    public void ie(){
+    public void ie() {
         Window w = report.getView().getWindow();
         Product p = (Product) w.getDataContainer().get(GDataRegistry.MARKET_PRODUCT_EDITOR);
-        if(p == null) return;
+        if (p == null) return;
         w.getDataContainer().put(GDataRegistry.VALUE, p.getIcon().build());
         w.getDataContainer().put(GDataRegistry.VALUE_CALLBACK, (Consumer<ValueResult>) r -> {
             p.setIcon(r.asPreparedItem());
@@ -320,9 +320,9 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("CreateProduct")
-    public void createProduct(){
+    public void createProduct() {
         Category ctg = (Category) report.getView().getWindow().getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
-        if(ctg == null) return;
+        if (ctg == null) return;
         String id = new String(RandomUtil.randomLetters(7));
         Product p = new Product(id);
         p.getIcon().name(id);
@@ -331,7 +331,7 @@ public class BattleFunction extends GuiHandler {
     }
 
     @Function("CreateCategory")
-    public void createCategory(){
+    public void createCategory() {
         String id = new String(RandomUtil.randomLetters(7));
         Category category = new Category(id);
         category.getIcon().name(id);

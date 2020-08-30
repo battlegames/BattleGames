@@ -50,29 +50,36 @@ public class FileStorage extends StorageProvider {
     }
 
     private DataTag readTag(int type, ByteArrayDataInput input) {
-        switch (type){
-            case DataTag.INT: return new IntTag(input.readInt());
-            case DataTag.BOOL: return new BoolTag(input.readBoolean());
-            case DataTag.DOUBLE: return new DoubleTag(input.readDouble());
-            case DataTag.STRING: return new StringTag(input.readUTF());
-            case DataTag.LONG: return new LongTag(input.readLong());
-            case DataTag.FLOAT: return new FloatTag(input.readFloat());
+        switch (type) {
+            case DataTag.INT:
+                return new IntTag(input.readInt());
+            case DataTag.BOOL:
+                return new BoolTag(input.readBoolean());
+            case DataTag.DOUBLE:
+                return new DoubleTag(input.readDouble());
+            case DataTag.STRING:
+                return new StringTag(input.readUTF());
+            case DataTag.LONG:
+                return new LongTag(input.readLong());
+            case DataTag.FLOAT:
+                return new FloatTag(input.readFloat());
             case DataTag.LIST: {
                 int size = input.readInt();
-                if(size > 0) {
+                if (size > 0) {
                     int elemtype = input.readInt();
                     List<DataTag> e = new ArrayList<>();
-                    for(int i = 0; i < size; i++) e.add(readTag(elemtype, input));
+                    for (int i = 0; i < size; i++) e.add(readTag(elemtype, input));
                     return new ListTag<>(e);
                 }
                 return new ListTag(new ArrayList<>());
             }
-            default: throw new IllegalStateException("Unexpected value: " + type);
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
     }
 
     private void writeTag(int type, DataTag tag, ByteArrayDataOutput output) {
-        switch (type){
+        switch (type) {
             case DataTag.INT: {
                 output.writeInt((Integer) tag.getValue());
                 break;
@@ -100,32 +107,33 @@ public class FileStorage extends StorageProvider {
             case DataTag.LIST: {
                 List<DataTag> t = (List<DataTag>) tag.getValue();
                 output.writeInt(t.size());
-                if(!t.isEmpty()){
+                if (!t.isEmpty()) {
                     int typeId = t.get(0).getId();
                     output.writeInt(typeId);
                     t.forEach(e -> writeTag(typeId, e, output));
                 }
                 break;
             }
-            default: throw new IllegalStateException("Unexpected value: " + type);
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
     }
 
     @Override
     public boolean load() {
-        if(file.exists()) {
+        if (file.exists()) {
             try {
                 FileInputStream fis = new FileInputStream(file);
                 byte[] bytes = ByteStreams.toByteArray(fis);
                 fis.close();
-                if(Arrays.equals(Arrays.copyOfRange(bytes, 0, MAGIC_VALUE.length), MAGIC_VALUE)){
+                if (Arrays.equals(Arrays.copyOfRange(bytes, 0, MAGIC_VALUE.length), MAGIC_VALUE)) {
                     try {
                         bytes = CompressUtil.decompress(Arrays.copyOfRange(bytes, MAGIC_VALUE.length, bytes.length));
                     } catch (DataFormatException e) {
                         e.printStackTrace();
                     }
                 }
-                if(bytes.length > 0) {
+                if (bytes.length > 0) {
                     ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
                     int size = in.readInt();
                     for (int i = 0; i < size; i++) {

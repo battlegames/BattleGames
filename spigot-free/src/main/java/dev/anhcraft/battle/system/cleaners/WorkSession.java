@@ -36,12 +36,12 @@ public class WorkSession {
         start = System.currentTimeMillis();
     }
 
-    public void done(Work work){
+    public void done(Work work) {
         logger.info(String.format("Finished work #%s in %s ms", work.id(), System.currentTimeMillis() - start));
         countDownLatch.countDown();
     }
 
-    public void await(){
+    public void await() {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {

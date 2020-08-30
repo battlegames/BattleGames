@@ -38,6 +38,10 @@ public class GuiEvent extends PlayerEvent {
         this.window = window;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Gui getGui() {
         return gui;
@@ -50,10 +54,6 @@ public class GuiEvent extends PlayerEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

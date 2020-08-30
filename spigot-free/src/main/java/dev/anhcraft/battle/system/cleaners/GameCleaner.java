@@ -36,16 +36,16 @@ public class GameCleaner extends BattleComponent {
         super(plugin);
     }
 
-    public void newSession(Arena arena, Consumer<Arena> onFinished){
+    public void newSession(Arena arena, Consumer<Arena> onFinished) {
         plugin.extension.getTaskHelper().newDelayedAsyncTask(() -> {
             plugin.getLogger().info(String.format("Cleaning arena %s (%s works remaining)", arena.getId(), works.length));
 
             WorkSession workSession = new WorkSession(works.length, plugin.getLogger());
-            for(Work work : works){
+            for (Work work : works) {
                 work.handle(plugin, workSession, arena);
             }
             workSession.await();
-            plugin.getLogger().info("Finished works! Arena "+arena.getId()+" is now ready.");
+            plugin.getLogger().info("Finished works! Arena " + arena.getId() + " is now ready.");
             onFinished.accept(arena);
         }, 60);
     }

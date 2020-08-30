@@ -41,7 +41,10 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.inst.lang.DataType;
 import dev.anhcraft.inst.lang.Instruction;
-import dev.anhcraft.inst.values.*;
+import dev.anhcraft.inst.values.BoolVal;
+import dev.anhcraft.inst.values.DoubleVal;
+import dev.anhcraft.inst.values.StringVal;
+import dev.anhcraft.inst.values.Val;
 import dev.anhcraft.jvmkit.utils.EnumUtil;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
@@ -56,15 +59,16 @@ public class ProductMenu implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         Category ctg = (Category) view.getWindow().getDataContainer().remove(GDataRegistry.MARKET_CATEGORY);
-        if(ctg == null) return;
+        if (ctg == null) return;
         Market mk = api.getMarket();
         Game g = api.getArenaManager().getGame(player);
-        for(Product p : ctg.getProducts()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
-            if(p.isInGameOnly()) {
-                if(g == null) continue;
-                if(p.getGameModeReserved() != null && p.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId()))) continue;
+        for (Product p : ctg.getProducts()) {
+            if (!chain.hasNext()) break;
+            if (chain.shouldSkip()) continue;
+            if (p.isInGameOnly()) {
+                if (g == null) continue;
+                if (p.getGameModeReserved() != null && p.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId())))
+                    continue;
             }
 
             String currencyFormat = Objects.requireNonNull(ApiProvider.consume().getLocalizedMessage("currency_format." + p.getCurrency().name().toLowerCase()));
@@ -73,9 +77,9 @@ public class ProductMenu implements Pagination {
                     .compile()
                     .replace(currencyFormat);
             PreparedItem ic = p.getIcon().duplicate();
-            if(mk.isProductLoreFooterEnabled()){
+            if (mk.isProductLoreFooterEnabled()) {
                 List<String> lore = mk.getProductLoreFooterContent();
-                if(lore != null) {
+                if (lore != null) {
                     InfoHolder holder = new InfoHolder("product_");
                     p.inform(holder);
                     holder.inform("price_formatted", priceFormatter);
@@ -90,7 +94,7 @@ public class ProductMenu implements Pagination {
             slot.setPaginationItem(ic);
             slot.setExtraClickFunction((vm, report) -> {
                 PlayerData pd = api.getPlayerData(player);
-                if(pd == null) return;
+                if (pd == null) return;
 
                 CurrencyType ct = p.getCurrency();
                 Currency c = ct.get();
@@ -101,7 +105,7 @@ public class ProductMenu implements Pagination {
                         .compile()
                         .replace(currencyFormat);
 
-                if(p.getPurchaseFunction() != null) {
+                if (p.getPurchaseFunction() != null) {
                     DoubleVal pv = new DoubleVal(price);
                     StringVal cv = new StringVal(ct.name());
                     vm.setVariable("price", pv);
@@ -110,15 +114,15 @@ public class ProductMenu implements Pagination {
                     Instruction[] ins = p.getPurchaseFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
                     Val<?> fb = vm.getVariable("forbidden");
-                    if(fb != null && fb.getType() == DataType.BOOL && (Boolean) fb.getData()){
+                    if (fb != null && fb.getType() == DataType.BOOL && (Boolean) fb.getData()) {
                         return;
                     }
                     Val<?> npv = vm.getVariable("price");
                     Val<?> ncv = vm.getVariable("currency");
-                    if(npv != null && npv.getType().isNumber() && npv != pv){
+                    if (npv != null && npv.getType().isNumber() && npv != pv) {
                         price = ((Number) npv.getData()).doubleValue();
                     }
-                    if(ncv != null && ncv.getType().isNumber() && ncv != cv){
+                    if (ncv != null && ncv.getType().isNumber() && ncv != cv) {
                         String cvx = ((String) ncv.getData()).toUpperCase();
                         CurrencyType nct = (CurrencyType) EnumUtil.findEnum(CurrencyType.class, cvx);
                         ct = ObjectUtil.optional(nct, ct);
@@ -130,12 +134,12 @@ public class ProductMenu implements Pagination {
                 ev.setCancelled(balance < price);
                 Bukkit.getPluginManager().callEvent(ev);
 
-                if(!ev.hasEnoughBalance()){
+                if (!ev.hasEnoughBalance()) {
                     api.getChatManager().sendPlayer(report.getPlayer(), "market.not_enough_money", new InfoHolder("").inform("balance", balanceFormat).compile());
                     return;
-                } else if(ev.isCancelled()) return;
+                } else if (ev.isCancelled()) return;
 
-                if(!c.withdraw(player, price)){
+                if (!c.withdraw(player, price)) {
                     api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_failed");
                     return;
                 }
@@ -144,7 +148,7 @@ public class ProductMenu implements Pagination {
 
                 p.givePlayer(player, pd);
                 api.getChatManager().sendPlayer(report.getPlayer(), "market.purchase_success");
-                if(mk.shouldLogTransactions()){
+                if (mk.shouldLogTransactions()) {
                     pd.getTransactions().add(new Transaction(
                             player.getUniqueId(),
                             ObjectUtil.optional(p.getIcon().name(), p.getId()),
@@ -153,7 +157,7 @@ public class ProductMenu implements Pagination {
                             System.currentTimeMillis()
                     ));
                 }
-                if(p.getPurchasedFunction() != null) {
+                if (p.getPurchasedFunction() != null) {
                     vm.setVariable("price", new DoubleVal(price));
                     vm.setVariable("currency", new StringVal(ct.name()));
                     Instruction[] ins = p.getPurchasedFunction().stream().map(vm::compileInstruction).toArray(Instruction[]::new);

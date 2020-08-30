@@ -33,31 +33,31 @@ public class ValueResult {
         this.val = val;
     }
 
-    public boolean asBoolean(){
+    public boolean asBoolean() {
         return BooleanUtils.toBooleanObject(String.valueOf(val));
     }
 
-    public int asInt(){
+    public int asInt() {
         return (int) Double.parseDouble(String.valueOf(val));
     }
 
-    public double asDouble(){
+    public double asDouble() {
         return Double.parseDouble(String.valueOf(val));
     }
 
-    public float asFloat(){
+    public float asFloat() {
         return Float.parseFloat(String.valueOf(val));
     }
 
-    public long asLong(){
+    public long asLong() {
         return (long) Double.parseDouble(String.valueOf(val));
     }
 
-    public ItemStack asItem(){
+    public ItemStack asItem() {
         return val instanceof PreparedItem ? ((PreparedItem) val).build() : (ItemStack) val;
     }
 
-    public PreparedItem asPreparedItem(){
+    public PreparedItem asPreparedItem() {
         return val instanceof ItemStack ? PreparedItem.of((ItemStack) val) : (PreparedItem) val;
     }
 

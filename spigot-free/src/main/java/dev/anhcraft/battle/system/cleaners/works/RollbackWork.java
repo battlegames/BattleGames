@@ -21,8 +21,8 @@
 package dev.anhcraft.battle.system.cleaners.works;
 
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.Rollback;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Bukkit;
@@ -48,7 +48,7 @@ public class RollbackWork implements Work {
 
     @Override
     public void handle(@NotNull BattlePlugin plugin, WorkSession session, @NotNull Arena arena) {
-        if(arena.getRollback() != null) {
+        if (arena.getRollback() != null) {
             Rollback rollback = arena.getRollback();
             if (rollback.getProvider() == Rollback.Provider.SLIME_WORLD && plugin.hasSlimeWorldManagerSupport()) {
                 for (String w : rollback.getWorlds()) {
@@ -78,8 +78,8 @@ public class RollbackWork implements Work {
                 for (Iterator<String> it = arena.getRollback().getWorlds().iterator(); it.hasNext(); ) {
                     String w = it.next();
                     World wd = plugin.getServer().getWorld(w);
-                    if(wd == null){
-                        plugin.getLogger().warning("World not found: "+w);
+                    if (wd == null) {
+                        plugin.getLogger().warning("World not found: " + w);
                         it.remove();
                     } else {
                         plugin.extension.getTaskHelper().newTask(() -> {
@@ -112,7 +112,7 @@ public class RollbackWork implements Work {
                                 plugin.getLogger().warning("[Rollback/BattleRegion] Failed to reset!");
                             }
                         }
-                        if(rollback.shouldClearEntities()) {
+                        if (rollback.shouldClearEntities()) {
                             rollback.getWorlds().stream()
                                     .map(Bukkit::getWorld)
                                     .filter(Objects::nonNull)

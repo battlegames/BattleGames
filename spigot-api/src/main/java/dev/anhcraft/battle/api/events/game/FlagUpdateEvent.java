@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -39,6 +39,10 @@ public class FlagUpdateEvent extends GameEvent {
         this.player = player;
         this.team = team;
         this.flag = flag;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
@@ -64,10 +68,6 @@ public class FlagUpdateEvent extends GameEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

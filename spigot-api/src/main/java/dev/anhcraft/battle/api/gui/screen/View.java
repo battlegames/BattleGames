@@ -23,8 +23,8 @@ import com.google.common.base.Preconditions;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.utils.SignedInt;
 import dev.anhcraft.battle.utils.CustomDataContainer;
+import dev.anhcraft.battle.utils.SignedInt;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -48,13 +48,13 @@ public class View extends CustomDataContainer {
         this.window = window;
         this.inventory = inventory;
         slots = new Slot[gui.getSize()];
-        for (int i = 0; i < slots.length; i++){
+        for (int i = 0; i < slots.length; i++) {
             Component c = gui.getComponentAt(i);
-            if(c != null) {
+            if (c != null) {
                 slots[i] = new Slot(i, c);
             }
         }
-        for (String s : gui.getAllPagination()){
+        for (String s : gui.getAllPagination()) {
             PAGE.put(s, SignedInt.ZERO);
         }
     }
@@ -75,32 +75,32 @@ public class View extends CustomDataContainer {
     }
 
     @Nullable
-    public Slot getSlot(int position){
-        if(position < 0 || position >= gui.getSize()) return null;
+    public Slot getSlot(int position) {
+        if (position < 0 || position >= gui.getSize()) return null;
         return slots[position];
     }
 
     @NotNull
-    public SignedInt getPage(@Nullable String pagination){
+    public SignedInt getPage(@Nullable String pagination) {
         SignedInt f = PAGE.get(pagination);
-        if(f == null) {
+        if (f == null) {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
         }
         return f;
     }
 
-    public void setPage(@Nullable String pagination, @NotNull SignedInt page){
-        if(gui.getAllPagination().contains(pagination)){
+    public void setPage(@Nullable String pagination, @NotNull SignedInt page) {
+        if (gui.getAllPagination().contains(pagination)) {
             PAGE.put(pagination, page);
         } else {
             throw new IllegalArgumentException("The given pagination was not registered in this GUI");
         }
     }
 
-    public boolean nextPage(@Nullable String pagination){
-        if(gui.getAllPagination().contains(pagination)){
+    public boolean nextPage(@Nullable String pagination) {
+        if (gui.getAllPagination().contains(pagination)) {
             SignedInt f = PAGE.getOrDefault(pagination, SignedInt.ZERO);
-            if(f.isNegative()) return false;
+            if (f.isNegative()) return false;
             PAGE.put(pagination, f.add(SignedInt.ONE));
             return true;
         } else {
@@ -108,10 +108,10 @@ public class View extends CustomDataContainer {
         }
     }
 
-    public boolean prevPage(@Nullable String pagination){
-        if(gui.getAllPagination().contains(pagination)){
+    public boolean prevPage(@Nullable String pagination) {
+        if (gui.getAllPagination().contains(pagination)) {
             SignedInt f = PAGE.getOrDefault(pagination, SignedInt.ZERO);
-            if(f.asInt() == 0) return false;
+            if (f.asInt() == 0) return false;
             PAGE.put(pagination, f.toPositive().subtract(SignedInt.ONE));
             return true;
         } else {

@@ -52,53 +52,53 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     TDMControllerImpl(BattlePlugin plugin, Mode mode) {
         super(plugin, mode);
 
-        String p = mode.getId()+"_";
+        String p = mode.getId() + "_";
 
-        plugin.getPapiExpansion().handlers.put(p+"team", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null)
+            if (t == null)
                 return null;
             ABTeam dt = t.getTeam(player);
-            if(dt == null)
+            if (dt == null)
                 return null;
             return dt.getLocalizedName();
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null)
+            if (t == null)
                 return null;
             ABTeam dt = t.getTeam(player);
-            if(dt == null)
+            if (dt == null)
                 return null;
             return Integer.toString(t.countPlayers(dt));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_a", (player, pd, game, gp) -> ABTeam.TEAM_A.getLocalizedName());
+        plugin.getPapiExpansion().handlers.put(p + "team_a", (player, pd, game, gp) -> ABTeam.TEAM_A.getLocalizedName());
 
-        plugin.getPapiExpansion().handlers.put(p+"team_a_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_a_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             return t == null ? null : Integer.toString(t.countPlayers(ABTeam.TEAM_A));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_b", (player, pd, game, gp) -> ABTeam.TEAM_B.getLocalizedName());
+        plugin.getPapiExpansion().handlers.put(p + "team_b", (player, pd, game, gp) -> ABTeam.TEAM_B.getLocalizedName());
 
-        plugin.getPapiExpansion().handlers.put(p+"team_b_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_b_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
             return t == null ? null : Integer.toString(t.countPlayers(ABTeam.TEAM_B));
         });
     }
 
     @Override
-    public void onInitGame(@NotNull Game game){
+    public void onInitGame(@NotNull Game game) {
         super.onInitGame(game);
-        if(game instanceof LocalGame) {
+        if (game instanceof LocalGame) {
             LocalGame lc = (LocalGame) game;
-            if(game.getArena().getGameOptions() instanceof TeamDeathmatchOptions) {
+            if (game.getArena().getGameOptions() instanceof TeamDeathmatchOptions) {
                 TeamDeathmatchOptions options = (TeamDeathmatchOptions) game.getArena().getGameOptions();
                 for (Location loc : options.getPlaySpawnPoints(ABTeam.TEAM_A)) {
                     lc.addInvolvedWorld(loc.getWorld());
@@ -111,10 +111,10 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     }
 
     @Override
-    public void onTick(@NotNull LocalGame game){
+    public void onTick(@NotNull LocalGame game) {
         super.onTick(game);
         TeamManager<ABTeam> x = TEAM.get(game);
-        if(x != null && x.nextEmptyTeam().isPresent()) {
+        if (x != null && x.nextEmptyTeam().isPresent()) {
             game.end();
         }
     }
@@ -123,14 +123,14 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         int m = Math.max(game.getArena().getGameOptions().getMinPlayers(), 1);
-        switch (game.getPhase()){
-            case WAITING:{
+        switch (game.getPhase()) {
+            case WAITING: {
                 respw(game, player, null);
                 BattleScoreboard bs = game.getMode().getWaitingScoreboard();
-                if(bs.isEnabled()) {
+                if (bs.isEnabled()) {
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength()));
                 }
-                if(m <= game.getPlayerCount()) countdown(game);
+                if (m <= game.getPlayerCount()) countdown(game);
                 break;
             }
             case PLAYING: {
@@ -152,16 +152,16 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
 
                 List<Player> lc = Collections.singletonList(player);
 
-                for(Player p : ta) {
-                    if(p.equals(player)) continue;
+                for (Player p : ta) {
+                    if (p.equals(player)) continue;
                     PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
                     if (ps != null) {
                         ps.addTeamPlayers(t.name(), lc);
                     }
                 }
 
-                for(Player p : tb) {
-                    if(p.equals(player)) continue;
+                for (Player p : tb) {
+                    if (p.equals(player)) continue;
                     PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
                     if (ps != null) {
                         ps.addTeamPlayers(t.name(), lc);
@@ -172,12 +172,12 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     }
 
     @Override
-    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game) {
         super.onQuit(player, game);
         TeamManager<ABTeam> teamManager = TEAM.get(game);
-        if(teamManager != null) {
+        if (teamManager != null) {
             ABTeam abTeam = teamManager.removePlayer(player);
-            for(Map.Entry<Player, ABTeam> ent : teamManager.getPlayerTeam()) {
+            for (Map.Entry<Player, ABTeam> ent : teamManager.getPlayerTeam()) {
                 PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(ent.getKey());
                 if (ps != null) {
                     ps.removeTeamPlayer(abTeam.name(), player);
@@ -188,7 +188,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
 
     @Override
     protected void play(LocalGame game) {
-        broadcast(game,"game_start_broadcast");
+        broadcast(game, "game_start_broadcast");
 
         List<Player> x = new ArrayList<>(game.getPlayers().keySet());
         int sz = Math.floorDiv(x.size(), 2);
@@ -203,7 +203,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
         plugin.extension.getTaskHelper().newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
-                cancelTask(game, "respawn::"+p.getName());
+                cancelTask(game, "respawn::" + p.getName());
                 PlayerScoreboard ps = addPlayer(game, p, ABTeam.TEAM_A);
                 if (ps != null) {
                     ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
@@ -211,7 +211,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
                 }
             });
             tb.forEach(p -> {
-                cancelTask(game, "respawn::"+p.getName());
+                cancelTask(game, "respawn::" + p.getName());
                 PlayerScoreboard ps = addPlayer(game, p, ABTeam.TEAM_B);
                 if (ps != null) {
                     ps.addTeamPlayers(ABTeam.TEAM_A.name(), ta);
@@ -225,7 +225,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
     private PlayerScoreboard addPlayer(LocalGame game, Player player, ABTeam dt) {
         PlayerScoreboard ps = null;
         BattleScoreboard bs = game.getMode().getPlayingScoreboard();
-        if(bs.isEnabled()) {
+        if (bs.isEnabled()) {
             ps = new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength());
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
@@ -251,7 +251,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
             case PLAYING: {
                 Location loc = RandomUtil.pickRandom(((TeamDeathmatchOptions) game.getArena().getGameOptions()).getPlaySpawnPoints(team));
                 EntityUtil.teleport(player, loc, ok -> {
-                    if(ok){
+                    if (ok) {
                         performCooldownMap(game, "spawn_protection",
                                 cooldownMap -> cooldownMap.resetTime(player),
                                 () -> new CooldownMap(player));
@@ -266,10 +266,10 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
 
     @Override
     public void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game) {
-        if(event.getReport().getEntity() instanceof Player){
+        if (event.getReport().getEntity() instanceof Player) {
             Player target = (Player) event.getReport().getEntity();
             TeamManager<ABTeam> teamManager = TEAM.get(game);
-            if(teamManager.getTeam(event.getReport().getDamager()) == teamManager.getTeam(target)) {
+            if (teamManager.getTeam(event.getReport().getDamager()) == teamManager.getTeam(target)) {
                 event.setCancelled(true);
             } else {
                 performCooldownMap(game, "spawn_protection",
@@ -291,7 +291,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
         Map<ABTeam, List<GamePlayer>> map = teamManager.reverse(game::getPlayer);
         List<GamePlayer> aPlayers = map.get(ABTeam.TEAM_A);
         List<GamePlayer> bPlayers = map.get(ABTeam.TEAM_B);
-        if(aPlayers != null & bPlayers != null) {
+        if (aPlayers != null & bPlayers != null) {
             IntSummaryStatistics sa = aPlayers.stream().mapToInt(value -> {
                 respw(game, value.toBukkit(), ABTeam.TEAM_A);
                 value.setSpectator(false);

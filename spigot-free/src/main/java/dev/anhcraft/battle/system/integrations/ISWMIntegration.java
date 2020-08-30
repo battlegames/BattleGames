@@ -24,5 +24,6 @@ import java.util.concurrent.CountDownLatch;
 
 public interface ISWMIntegration {
     int isReadOnly(String world);
+
     void reloadWorld(CountDownLatch countDownLatch, String world);
 }

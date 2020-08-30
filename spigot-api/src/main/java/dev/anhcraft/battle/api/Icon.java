@@ -29,9 +29,9 @@ public enum Icon {
     HEADSHOT("\u3406"),
     GUN("\u3407"),
     EXIT("\u3408"),
-    CHART( "\u3409"),
+    CHART("\u3409"),
     ACCEPT("\u340a"),
-    DENY( "\u340b"),
+    DENY("\u340b"),
     WARN("\u340c"),
     INFO("\u340d");
 

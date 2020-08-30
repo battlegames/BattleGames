@@ -83,13 +83,13 @@ public class BattleEffect extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("options")){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("options")) {
             Map<EffectOption, Object> options = new HashMap<>();
             ConfigurationSection cs = (ConfigurationSection) value;
-            for(String k : cs.getKeys(false)){
+            for (String k : cs.getKeys(false)) {
                 EffectOption eo = (EffectOption) EnumUtil.findEnum(EffectOption.class, k);
-                if(eo == null) continue;
+                if (eo == null) continue;
                 options.put(eo, cs.get(k));
             }
             return options;
@@ -98,11 +98,11 @@ public class BattleEffect extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("options")){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("options")) {
             Map<EffectOption, Object> options = (Map<EffectOption, Object>) value;
             ConfigurationSection cs = new YamlConfiguration();
-            for(Map.Entry<EffectOption, Object> ent : options.entrySet()){
+            for (Map.Entry<EffectOption, Object> ent : options.entrySet()) {
                 cs.set(ent.getKey().name().toLowerCase(), ent.getValue());
             }
             return cs;
@@ -110,12 +110,12 @@ public class BattleEffect extends ConfigurableObject {
         return value;
     }
 
-    public void spawn(@NotNull Location location){
+    public void spawn(@NotNull Location location) {
         Condition.argNotNull("location", location);
-        if(particle != null){
+        if (particle != null) {
             particle.spawn(location);
         }
-        if(blockEffect != null){
+        if (blockEffect != null) {
             blockEffect.spawn(location);
         }
     }

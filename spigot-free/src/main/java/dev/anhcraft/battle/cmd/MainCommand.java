@@ -60,23 +60,23 @@ import java.util.Objects;
 public class MainCommand extends BaseCommand {
     private final BattlePlugin plugin;
 
-    public MainCommand(BattlePlugin plugin){
+    public MainCommand(BattlePlugin plugin) {
         this.plugin = plugin;
     }
 
     @CatchUnknown
     @HelpCommand
-    public void help(CommandSender sender, CommandHelp help){
+    public void help(CommandSender sender, CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("info")
     @CommandPermission("battle.info")
     @Description("Show plugin information")
-    public void info(CommandSender sender){
+    public void info(CommandSender sender) {
         Chat.noPrefix()
-                .message(sender, "&e&lBattleGames Minigame &7&lv"+plugin.getDescription().getVersion())
-                .message(sender, "&d◈ License: "+(plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
+                .message(sender, "&e&lBattleGames Minigame &7&lv" + plugin.getDescription().getVersion())
+                .message(sender, "&d◈ License: " + (plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
                 .message(sender, "&d◈ Author: &fanhcraft")
                 .message(sender, "&d◈ Discord: &fhttps://discord.gg/QSpc5xH")
                 .message(sender, "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463");
@@ -85,7 +85,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("setspawn")
     @CommandPermission("battle.setspawn")
     @Description("Set the server spawn")
-    public void setSpawn(Player player){
+    public void setSpawn(Player player) {
         Location loc = player.getLocation();
         plugin.getServerData().setSpawnPoint(loc);
         plugin.chatManager.sendPlayer(player, "server.set_spawn_success", new InfoHolder("").inform("location", LocationUtil.toString(loc)).compile());
@@ -94,7 +94,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("spawn")
     @CommandPermission("battle.spawn")
     @Description("Teleport to the spawn")
-    public void spawn(Player player){
+    public void spawn(Player player) {
         EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint());
     }
 
@@ -102,21 +102,21 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.open")
     @CommandCompletion("@gui")
     @Description("Open a GUI for you or someone")
-    public void openGui(Player player, String name, @Optional OnlinePlayer target){
+    public void openGui(Player player, String name, @Optional OnlinePlayer target) {
         plugin.guiManager.openTopGui(target == null ? player : target.getPlayer(), name);
     }
 
     @Subcommand("game list")
     @CommandPermission("battle.game.list")
     @Description("List all games are happening now")
-    public void listGames(CommandSender sender){
+    public void listGames(CommandSender sender) {
         Collection<Game> q = plugin.arenaManager.listGames();
-        if(q.isEmpty()){
+        if (q.isEmpty()) {
             plugin.chatManager.send(sender, "game.list_header_none");
             return;
         }
         plugin.chatManager.send(sender, "game.list_header", new InfoHolder("").inform("size", q.size()).compile());
-        for (Game game : q){
+        for (Game game : q) {
             InfoHolder holder = new InfoHolder("game_");
             game.inform(holder);
             plugin.chatManager.send(sender, "game.list_section", holder.compile());
@@ -127,11 +127,11 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.game.destroy")
     @CommandCompletion("@arena")
     @Description("Destroy a game (without ending)")
-    public void destroyGame(CommandSender sender, String arena){
+    public void destroyGame(CommandSender sender, String arena) {
         Arena a = plugin.getArena(arena);
-        if(a != null) {
+        if (a != null) {
             Game g = plugin.arenaManager.getGame(a);
-            if(g != null){
+            if (g != null) {
                 plugin.arenaManager.destroy(g);
                 plugin.chatManager.send(sender, "game.destroy_success");
             } else
@@ -144,12 +144,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.game.end")
     @CommandCompletion("@arena")
     @Description("End a game")
-    public void endGame(CommandSender sender, String arena){
+    public void endGame(CommandSender sender, String arena) {
         Arena a = plugin.getArena(arena);
-        if(a != null) {
+        if (a != null) {
             Game g = plugin.arenaManager.getGame(a);
-            if(g != null){
-                if(g instanceof LocalGame){
+            if (g != null) {
+                if (g instanceof LocalGame) {
                     ((LocalGame) g).end();
                 } else {
                     plugin.arenaManager.destroy(g);
@@ -164,7 +164,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("arena menu")
     @CommandPermission("battle.arena.menu")
     @Description("Open the arena menu")
-    public void arenaMenu(Player player){
+    public void arenaMenu(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.ARENA_CHOOSER);
     }
 
@@ -172,26 +172,25 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.arena.join")
     @CommandCompletion("@arena")
     @Description("Force you or someone to join an arena")
-    public void join(Player player, String arena, @Optional OnlinePlayer target){
+    public void join(Player player, String arena, @Optional OnlinePlayer target) {
         Player t = (target == null) ? player : target.getPlayer();
         Arena a = plugin.getArena(arena);
-        if(a != null) {
-            if(plugin.arenaManager.join(t, a) != null) {
+        if (a != null) {
+            if (plugin.arenaManager.join(t, a) != null) {
                 plugin.chatManager.sendPlayer(player, "arena.join_success", new InfoHolder("").inform("target", t.getName()).compile());
             } else {
                 plugin.chatManager.sendPlayer(player, "arena.join_failed", new InfoHolder("").inform("target", t.getName()).compile());
             }
-        }
-        else plugin.chatManager.sendPlayer(player, "arena.not_found");
+        } else plugin.chatManager.sendPlayer(player, "arena.not_found");
     }
 
     @Subcommand("arena quit")
     @CommandPermission("battle.arena.quit")
     @CommandCompletion("@players")
     @Description("Force you or someone to quit the current arena")
-    public void quit(Player player, @Optional OnlinePlayer target){
+    public void quit(Player player, @Optional OnlinePlayer target) {
         Player t = (target == null) ? player : target.getPlayer();
-        if(plugin.arenaManager.quit(t)) {
+        if (plugin.arenaManager.quit(t)) {
             plugin.chatManager.sendPlayer(player, "arena.quit_success", new InfoHolder("").inform("target", t.getName()).compile());
         } else {
             plugin.chatManager.sendPlayer(player, "arena.quit_failed", new InfoHolder("").inform("target", t.getName()).compile());
@@ -201,7 +200,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("tool position")
     @CommandPermission("battle.tool.position")
     @Description("Get your current position")
-    public void pos(Player player){
+    public void pos(Player player) {
         Location loc = player.getLocation();
         InfoReplacer replacer = new InfoHolder("")
                 .inform("location", LocationUtil.toString(loc))
@@ -216,7 +215,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("tool exp2lv")
     @CommandPermission("battle.tool.exp.to.level")
     @Description("Convert X exp points to levels")
-    public void exp2lv(CommandSender sender, long exp){
+    public void exp2lv(CommandSender sender, long exp) {
         int lv = plugin.calculateLevel(exp);
         plugin.chatManager.send(sender, "tool.exp2lv", new InfoHolder("").inform("exp", exp).inform("level", lv).compile());
     }
@@ -224,7 +223,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("tool lv2exp")
     @CommandPermission("battle.tool.level.to.exp")
     @Description("Convert X levels to exp points")
-    public void lv2exp(CommandSender sender, int lv){
+    public void lv2exp(CommandSender sender, int lv) {
         long exp = plugin.calculateExp(lv);
         plugin.chatManager.send(sender, "tool.lv2exp", new InfoHolder("").inform("exp", exp).inform("level", lv).compile());
     }
@@ -233,7 +232,7 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.tool.spawn")
     @CommandCompletion("@entityTypes")
     @Description("Spawn mass of mobs at your location")
-    public void spawn(Player player, EntityType entityType, int amount, @Optional Double health){
+    public void spawn(Player player, EntityType entityType, int amount, @Optional Double health) {
         Location loc = player.getLocation();
         for (int i = 0; i < amount; i++) {
             Entity entity = player.getWorld().spawnEntity(loc, entityType);
@@ -248,9 +247,9 @@ public class MainCommand extends BaseCommand {
     @Subcommand("give exp")
     @CommandPermission("battle.give.exp")
     @Description("Give someone exp points")
-    public void giveExp(CommandSender sender, long exp, Player player){
+    public void giveExp(CommandSender sender, long exp, Player player) {
         PlayerData playerData = plugin.getPlayerData(player);
-        if(playerData != null) {
+        if (playerData != null) {
             playerData.getStats().of(ExpStat.class).increase(player, exp);
         } else {
             plugin.chatManager.sendPlayer(player, "player_data.not_found");
@@ -261,12 +260,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.gun")
     @CommandCompletion("@gun @players")
     @Description("Give you or someone a gun")
-    public void giveGun(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveGun(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         GunModel gun = plugin.getGunModel(id);
-        if(gun != null) {
+        if (gun != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null){
+            if (playerData != null) {
                 playerData.getBackpack().getStorage(ItemType.GUN).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -280,12 +279,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.magazine")
     @CommandCompletion("@magazine @players")
     @Description("Give you or someone a magazine")
-    public void giveMagazine(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveMagazine(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         MagazineModel mag = plugin.getMagazineModel(id);
-        if(mag != null) {
+        if (mag != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null){
+            if (playerData != null) {
                 playerData.getBackpack().getStorage(ItemType.MAGAZINE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -299,12 +298,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.ammo")
     @CommandCompletion("@ammo @players")
     @Description("Give you or someone ammo")
-    public void giveAmmo(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveAmmo(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         AmmoModel ammo = plugin.getAmmoModel(id);
-        if(ammo != null) {
+        if (ammo != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null) {
+            if (playerData != null) {
                 playerData.getBackpack().getStorage(ItemType.AMMO).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -318,12 +317,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.scope")
     @CommandCompletion("@scope @players")
     @Description("Give you or someone a scope")
-    public void giveScope(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveScope(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         ScopeModel sc = plugin.getScopeModel(id);
-        if(sc != null) {
+        if (sc != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null) {
+            if (playerData != null) {
                 playerData.getBackpack().getStorage(ItemType.SCOPE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -337,12 +336,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.grenade")
     @CommandCompletion("@grenade @players")
     @Description("Give you or someone a grenade")
-    public void giveGrenade(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveGrenade(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         GrenadeModel gm = plugin.getGrenadeModel(id);
-        if(gm != null) {
+        if (gm != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null) {
+            if (playerData != null) {
                 playerData.getBackpack().getStorage(ItemType.GRENADE).put(id);
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "items.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -356,10 +355,10 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.perk")
     @CommandCompletion("@perk @players")
     @Description("Give you or someone a perk")
-    public void givePerk(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void givePerk(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         Perk perk = plugin.getPerk(id);
-        if(perk != null) {
+        if (perk != null) {
             perk.give(target);
             String receiver = target.getName();
             plugin.chatManager.sendPlayer(player, "perks.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -370,12 +369,12 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.give.booster")
     @CommandCompletion("@booster @players")
     @Description("Give you or someone a booster")
-    public void giveBooster(Player player, String id, @Optional OnlinePlayer targetPlayer){
+    public void giveBooster(Player player, String id, @Optional OnlinePlayer targetPlayer) {
         Player target = (targetPlayer == null ? player : targetPlayer.getPlayer());
         Booster b = plugin.getBooster(id);
-        if(b != null) {
+        if (b != null) {
             PlayerData playerData = plugin.getPlayerData(target);
-            if(playerData != null) {
+            if (playerData != null) {
                 playerData.getBoosters().putIfAbsent(id, System.currentTimeMillis());
                 String receiver = target.getName();
                 plugin.chatManager.sendPlayer(player, "booster.given", new InfoHolder("").inform("id", id).inform("receiver", receiver).compile());
@@ -387,41 +386,41 @@ public class MainCommand extends BaseCommand {
 
     @Subcommand("booster")
     @Description("Open the booster GUI")
-    public void booster(Player player){
+    public void booster(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.BOOSTER_MENU);
     }
 
     @Subcommand("market")
     @Description("Open the market")
-    public void market(Player player){
+    public void market(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU);
     }
 
     @Subcommand("kit")
     @Description("Open the kit menu")
-    public void kit(Player player){
+    public void kit(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.KIT_MENU);
     }
 
     @Subcommand("stats")
     @Description("Open the statistics menu")
-    public void stats(Player player){
+    public void stats(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.STATISTICS);
     }
 
     @Subcommand("bp")
     @Description("Open your backpack")
-    public void openBackpack(Player player){
+    public void openBackpack(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.PLAYER_BP);
     }
 
     @Subcommand("clear bp")
     @CommandPermission("battle.clear.bp")
     @Description("Clear your or someone's backpack")
-    public void clearBackpack(Player player, @Optional OfflinePlayer target){
+    public void clearBackpack(Player player, @Optional OfflinePlayer target) {
         target = (target == null ? player : target);
         PlayerData pd = plugin.getPlayerData(target);
-        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        if (pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
         else {
             pd.getBackpack().clear();
             plugin.chatManager.sendPlayer(player, "bp.cleared", new InfoHolder("").inform("target", Objects.requireNonNull(target.getName())).compile());
@@ -431,10 +430,10 @@ public class MainCommand extends BaseCommand {
     @Subcommand("clear progression")
     @CommandPermission("battle.clear.progression")
     @Description("Clear your or someone's progression")
-    public void clearProgression(Player player, @Optional OfflinePlayer target){
+    public void clearProgression(Player player, @Optional OfflinePlayer target) {
         target = (target == null ? player : target);
         PlayerData pd = plugin.getPlayerData(target);
-        if(pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
+        if (pd == null) plugin.chatManager.sendPlayer(player, "player_data.not_found");
         else {
             pd.clearProgression();
             plugin.chatManager.sendPlayer(player, "progression.cleared");
@@ -444,14 +443,14 @@ public class MainCommand extends BaseCommand {
     @Subcommand("gun reload")
     @CommandPermission("battle.gun.reload")
     @Description("Reload your gun instantly")
-    public void reloadGun(Player player){
+    public void reloadGun(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
-        if(ItemUtil.isNull(item)){
+        if (ItemUtil.isNull(item)) {
             plugin.chatManager.sendPlayer(player, "items.is_null");
             return;
         }
         BattleItem<?> bi = plugin.itemManager.read(item);
-        if(bi instanceof Gun){
+        if (bi instanceof Gun) {
             Gun g = (Gun) bi;
             g.getMagazine().resetAmmo();
             player.getInventory().setItemInMainHand(plugin.gunManager.createGun(g, false));
@@ -464,71 +463,71 @@ public class MainCommand extends BaseCommand {
     @Subcommand("adjust stats win")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's win count")
-    public void adjustWins(CommandSender sender, int delta, Player player){
+    public void adjustWins(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(WinStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats lose")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's lose count")
-    public void adjustLoses(CommandSender sender, int delta, Player player){
+    public void adjustLoses(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(LoseStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats respawn")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's respawn count")
-    public void adjustRespawns(CommandSender sender, int delta, Player player){
+    public void adjustRespawns(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(RespawnStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats kill")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's kill count")
-    public void adjustKills(CommandSender sender, int delta, Player player){
+    public void adjustKills(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(KillStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats firstkill")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's first-kill count")
-    public void adjustFirstKills(CommandSender sender, int delta, Player player){
+    public void adjustFirstKills(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(FirstKillStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats headshot")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's head-shot count")
-    public void adjustHeadshot(CommandSender sender, int delta, Player player){
+    public void adjustHeadshot(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(HeadshotStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats assist")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's assist count")
-    public void adjustAssists(CommandSender sender, int delta, Player player){
+    public void adjustAssists(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(AssistStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats death")
     @CommandPermission("battle.adjust.deaths")
     @Description("Adjust someone's deaths count")
-    public void adjustDeaths(CommandSender sender, int delta, Player player){
+    public void adjustDeaths(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(DeathStat.class).increase(player, delta);
     }
 
     @Subcommand("adjust stats stolen-mobs")
     @CommandPermission("battle.adjust.stats")
     @Description("Adjust someone's stolen mobs count")
-    public void adjustStolenMobs(CommandSender sender, int delta, Player player){
+    public void adjustStolenMobs(CommandSender sender, int delta, Player player) {
         Objects.requireNonNull(plugin.getPlayerData(player)).getStats().of(StolenMobStat.class).increase(player, delta);
     }
 
     @Subcommand("debug 3min")
     @CommandPermission("battle.debug")
     @Description("Make a 3-minutes debugging task")
-    public void debug3(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 3)){
+    public void debug3(CommandSender sender) {
+        if (BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 3)) {
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
@@ -538,8 +537,8 @@ public class MainCommand extends BaseCommand {
     @Subcommand("debug 5min")
     @CommandPermission("battle.debug")
     @Description("Make a 5-minutes debugging task")
-    public void debug5(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 5)){
+    public void debug5(CommandSender sender) {
+        if (BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 5)) {
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
@@ -549,8 +548,8 @@ public class MainCommand extends BaseCommand {
     @Subcommand("debug 15min")
     @CommandPermission("battle.debug")
     @Description("Make a 15-minutes debugging task")
-    public void debug15(CommandSender sender){
-        if(BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 15)){
+    public void debug15(CommandSender sender) {
+        if (BattleDebugger.create(s -> plugin.chatManager.send(sender, "debug.done", new InfoHolder("").inform("path", s).compile()), 20 * 60 * 15)) {
             plugin.chatManager.send(sender, "debug.created_success");
         } else {
             plugin.chatManager.send(sender, "debug.created_failure");
@@ -560,7 +559,7 @@ public class MainCommand extends BaseCommand {
     @Subcommand("rsp refresh")
     @CommandPermission("battle.rsp.refresh")
     @Description("Refresh the resource pack")
-    public void refreshRsp(CommandSender sender){
+    public void refreshRsp(CommandSender sender) {
         plugin.extension.getTaskHelper().newAsyncTask(() -> {
             ResourcePack.init(sender::sendMessage);
         });
@@ -569,14 +568,14 @@ public class MainCommand extends BaseCommand {
     @Subcommand("rsp install")
     @CommandPermission("battle.rsp.install")
     @Description("Install the resource pack")
-    public void installRsp(CommandSender sender, Player target){
+    public void installRsp(CommandSender sender, Player target) {
         ResourcePack.send(target);
     }
 
     @Subcommand("reload")
     @CommandPermission("battle.reload")
     @Description("Reload the configuration")
-    public void reload(CommandSender sender){
+    public void reload(CommandSender sender) {
         Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
         plugin.getArenaManager().listGames(g -> plugin.getArenaManager().destroy(g));
         // wait a bit for async tasks (e.g: rollback)

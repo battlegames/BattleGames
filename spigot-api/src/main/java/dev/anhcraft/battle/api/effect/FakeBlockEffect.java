@@ -51,7 +51,7 @@ public class FakeBlockEffect extends ConfigurableObject {
         return data;
     }
 
-    public void spawn(@NotNull Location location){
+    public void spawn(@NotNull Location location) {
         Condition.argNotNull("location", location);
         location.getWorld().getPlayers().forEach(player -> {
             player.sendBlockChange(location, material, data);

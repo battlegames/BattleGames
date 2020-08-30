@@ -21,10 +21,10 @@ package dev.anhcraft.battle.tasks;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.RemoteGame;
+import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 
 public class GameTask extends BattleComponent implements Runnable {
@@ -36,18 +36,18 @@ public class GameTask extends BattleComponent implements Runnable {
     public void run() {
         BattleDebugger.reportTps();
         plugin.arenaManager.listGames(g -> {
-            if(g instanceof LocalGame) {
+            if (g instanceof LocalGame) {
                 LocalGame game = (LocalGame) g;
                 GameController mc = game.getMode().getController();
                 if (mc != null) mc.onTick(game);
 
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
                     game.end();
-                } else if(plugin.hasBungeecordSupport() && game.getBungeeSyncTick().incrementAndGet() == 60) {
+                } else if (plugin.hasBungeecordSupport() && game.getBungeeSyncTick().incrementAndGet() == 60) {
                     game.getBungeeSyncTick().set(0);
                     plugin.bungeeMessenger.sendGameUpdate(game);
                 }
-            } else if(g instanceof RemoteGame) {
+            } else if (g instanceof RemoteGame) {
                 RemoteGame game = (RemoteGame) g;
                 if (game.getPhase() == GamePhase.PLAYING && game.getArena().getMaxTime() <= game.getCurrentTime().getAndIncrement()) {
                     plugin.arenaManager.destroy(game);

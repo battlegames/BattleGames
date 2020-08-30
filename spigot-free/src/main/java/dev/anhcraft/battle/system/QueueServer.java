@@ -32,10 +32,10 @@ public class QueueServer {
     private final List<String> serverList;
     private final int maxConnect;
     private final long connectInterval;
+    private final String arena;
     private int connectCount;
     private long nextConnectTime;
     private int serverIndex;
-    private final String arena;
 
     public QueueServer(Player player, List<String> serverList, String arena) {
         this(player, serverList, ApiProvider.consume().getGeneralConfig().getBungeeReconnectTries(), ApiProvider.consume().getGeneralConfig().getBungeeConnectDelay(), arena);
@@ -49,23 +49,23 @@ public class QueueServer {
         this.arena = arena;
     }
 
-    public boolean canConnect(){
+    public boolean canConnect() {
         return System.currentTimeMillis() >= nextConnectTime;
     }
 
     @Nullable
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player.get();
     }
 
     @Nullable
-    public String nextServer(){
+    public String nextServer() {
         nextConnectTime = System.currentTimeMillis() + connectInterval;
-        if(maxConnect == connectCount) {
+        if (maxConnect == connectCount) {
             serverIndex++;
             connectCount = 0;
         }
-        if(serverIndex >= serverList.size()) return null;
+        if (serverIndex >= serverList.size()) return null;
         connectCount++;
         return serverList.get(serverIndex);
     }

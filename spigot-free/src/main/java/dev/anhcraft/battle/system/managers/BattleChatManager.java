@@ -46,13 +46,13 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
     @Override
     public boolean chat(@NotNull Player player, @NotNull String message) {
         LocalGame g = plugin.arenaManager.getGame(player);
-        if(g != null){
+        if (g != null) {
             if (g.getPhase() == GamePhase.WAITING) {
                 if (!g.getMode().getWaitingChat().isEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                         .getMode().getWaitingChat().getFormat())
                         .replace("<message>", message);
-                for (Player p : g.getPlayers().keySet()){
+                for (Player p : g.getPlayers().keySet()) {
                     p.sendMessage(q);
                 }
             } else {
@@ -60,17 +60,17 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
                         .getMode().getPlayingChat().getFormat())
                         .replace("<message>", message);
-                for (Player p : g.getPlayers().keySet()){
+                for (Player p : g.getPlayers().keySet()) {
                     p.sendMessage(q);
                 }
             }
         } else {
             BattleChat bc = plugin.generalConf.getDefaultChat();
-            if(bc == null || !bc.isEnabled()) return false;
+            if (bc == null || !bc.isEnabled()) return false;
             String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, bc.getFormat()))
                     .replace("<message>", message);
-            for(Player p : Bukkit.getOnlinePlayers()){
-                if(p.equals(player) || plugin.arenaManager.getGame(player) == null) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.equals(player) || plugin.arenaManager.getGame(player) == null) {
                     p.sendMessage(q);
                 }
             }
@@ -79,10 +79,10 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
     }
 
     @NotNull
-    private String getLocaleMsg(String localePath){
+    private String getLocaleMsg(String localePath) {
         String msg = plugin.getLocalizedMessage(localePath);
-        if(msg == null) {
-            msg = "[ Missing localized message: "+localePath+" ]";
+        if (msg == null) {
+            msg = "[ Missing localized message: " + localePath + " ]";
         }
         return msg;
     }
@@ -99,7 +99,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
     public void sendPlayers(@NotNull Collection<Player> players, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
         String msg = getLocaleMsg(localePath);
         msg = infoReplacer == null ? msg : infoReplacer.replace(msg);
-        for(Player player : players){
+        for (Player player : players) {
             player.spigot().sendMessage(type, new TextComponent(TextComponent.fromLegacyText(
                     PlaceholderUtil.formatPAPI(player, msg)
             )));
@@ -109,7 +109,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
     @Override
     public void send(CommandSender commandSender, @NotNull String localePath, @Nullable InfoReplacer infoReplacer) {
         String msg = getLocaleMsg(localePath);
-        if(commandSender instanceof Player) {
+        if (commandSender instanceof Player) {
             commandSender.sendMessage(PlaceholderUtil.formatPAPI((Player) commandSender, infoReplacer == null ? msg : infoReplacer.replace(msg)));
         } else {
             commandSender.sendMessage(infoReplacer == null ? msg : infoReplacer.replace(msg));
@@ -118,7 +118,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
 
     @Override
     public void send(CommandSender commandSender, @NotNull String localePath, @NotNull ChatMessageType type, @Nullable InfoReplacer infoReplacer) {
-        if(commandSender instanceof Player){
+        if (commandSender instanceof Player) {
             sendPlayer((Player) commandSender, localePath, type, infoReplacer);
         } else {
             send(commandSender, localePath, infoReplacer);

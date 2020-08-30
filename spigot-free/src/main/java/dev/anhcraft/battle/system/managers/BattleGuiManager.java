@@ -69,21 +69,25 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     private final Map<String, Pagination> PAGES = new HashMap<>();
     private final Map<UUID, Window> WINDOWS = new HashMap<>();
 
+    public BattleGuiManager(BattlePlugin plugin) {
+        super(plugin);
+    }
+
     private VM createVM(SlotReport report) throws FunctionRegisterFailed {
         VM vm = new VM();
-        for(Class<? extends GuiHandler> c : GUI_HANDLERS){
+        for (Class<? extends GuiHandler> c : GUI_HANDLERS) {
             GuiHandler o = (GuiHandler) ReflectionUtil.invokeConstructor(c, new Class[]{SlotReport.class}, new Object[]{report});
             vm.registerFunctions(c, o);
         }
-        for(Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()){
+        for (Map.Entry<String, Object> e : report.getView().getWindow().getDataContainer().entrySet()) {
             Object v = e.getValue();
-            if(v instanceof Number || v instanceof String || v instanceof Boolean) {
+            if (v instanceof Number || v instanceof String || v instanceof Boolean) {
                 vm.setVariable("w_" + e.getKey(), Val.of(v));
             }
         }
-        for(Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()){
+        for (Map.Entry<String, Object> e : report.getView().getDataContainer().entrySet()) {
             Object v = e.getValue();
-            if(v instanceof Number || v instanceof String || v instanceof Boolean) {
+            if (v instanceof Number || v instanceof String || v instanceof Boolean) {
                 vm.setVariable("v_" + e.getKey(), Val.of(v));
             }
         }
@@ -95,9 +99,9 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     public Window callClickEvent(@NotNull Player p, int slot, boolean isTop, @NotNull Event event, @NotNull String clickType) {
         Window w = getWindow(p);
         View v = isTop ? w.getTopView() : w.getBottomView();
-        if(v == null) return w;
+        if (v == null) return w;
         Slot s = v.getSlot(slot);
-        if(s == null) return w;
+        if (s == null) return w;
         SlotReport slotReport = new SlotReport(p, event, v, slot);
         try {
             VM vm = createVM(slotReport);
@@ -113,11 +117,11 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         return w;
     }
 
-    private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn){
+    private void updatePagination(Player player, View view, Component cpn, Pagination pg, String pgn) {
         BattleDebugger.startTiming("gui-pagination-update");
         PaginationUpdateEvent event = new PaginationUpdateEvent(player, view.getGui(), view.getWindow(), view, cpn, pg);
         Bukkit.getPluginManager().callEvent(event);
-        if(!event.isCancelled()) {
+        if (!event.isCancelled()) {
             SignedInt page = view.getPage(pgn);
             PagedSlotChain chain = new PagedSlotChain(cpn.getSlots(), view, page.toPositive().asInt(), event.getSlotFilter());
             pg.supply(player, view, chain);
@@ -146,13 +150,13 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         BattleDebugger.endTiming("gui-pagination-update");
     }
 
-    private void drawComponent(Player player, View view, Component c, InfoReplacer info){
+    private void drawComponent(Player player, View view, Component c, InfoReplacer info) {
         BattleDebugger.startTiming("gui-component-render");
         for (int slot : c.getSlots()) {
             PreparedItem item = c.getItem();
-            if(c.getPagination() != null){
+            if (c.getPagination() != null) {
                 Slot s = view.getSlot(slot);
-                if(s != null && s.getPaginationItem() != null) {
+                if (s != null && s.getPaginationItem() != null) {
                     item = s.getPaginationItem();
                 }
             }
@@ -162,7 +166,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                 List<String> rdf = c.getRenderedFunction();
                 VM vm = (rf != null || rdf != null) ? createVM(slotReport) : null;
 
-                if(rf != null) {
+                if (rf != null) {
                     vm.setVariable("cancel_render", new BoolVal(false));
                     Instruction[] ins = rf.stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
@@ -178,7 +182,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
                                 player
                         ).build());
 
-                if(rdf != null) {
+                if (rdf != null) {
                     Instruction[] ins = rdf.stream().map(vm::compileInstruction).toArray(Instruction[]::new);
                     vm.newSession(ins).execute();
                 }
@@ -189,46 +193,46 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         BattleDebugger.endTiming("gui-component-render");
     }
 
-    private InfoHolder collectInfo(Window window){
+    private InfoHolder collectInfo(Window window) {
         InfoHolder wdHolder = new InfoHolder("window_");
         window.inform(wdHolder);
         return wdHolder;
     }
 
-    private InfoHolder collectInfo(View view, InfoHolder holder){
+    private InfoHolder collectInfo(View view, InfoHolder holder) {
         InfoHolder vwHolder = new InfoHolder("view_");
         view.inform(vwHolder);
         holder.link(vwHolder);
         return holder;
     }
 
-    private void refreshComponent(Player player, View view, Component c, InfoReplacer infoMap){
+    private void refreshComponent(Player player, View view, Component c, InfoReplacer infoMap) {
         ComponentRenderEvent event = new ComponentRenderEvent(player, view.getGui(), view.getWindow(), view, c);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) return;
-        if(c.getPagination() != null) {
+        if (event.isCancelled()) return;
+        if (c.getPagination() != null) {
             Pagination pagination = PAGES.get(c.getPagination());
-            if(pagination == null) {
+            if (pagination == null) {
                 plugin.getLogger().warning("Unknown pagination in component: " + c.getId());
             } else updatePagination(player, view, c, pagination, c.getPagination());
         }
         drawComponent(player, view, c, infoMap);
     }
 
-    private void refreshView(Player player, View view){
+    private void refreshView(Player player, View view) {
         ViewRenderEvent event = new ViewRenderEvent(player, view.getGui(), view.getWindow(), view);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
         refreshView(player, view, collectInfo(view).compile());
     }
 
-    private void refreshView(Player player, View view, InfoReplacer replacer){
-        for(Component c : view.getGui().getComponents()) {
+    private void refreshView(Player player, View view, InfoReplacer replacer) {
+        for (Component c : view.getGui().getComponents()) {
             refreshComponent(player, view, c, replacer);
         }
     }
 
-    private View createView(Player player, Window window, Gui gui, InfoReplacer replacer){
+    private View createView(Player player, Window window, Gui gui, InfoReplacer replacer) {
         return createView(
                 window, gui,
                 Bukkit.createInventory(
@@ -244,11 +248,11 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         );
     }
 
-    private View createView(Window window, Gui gui, Inventory inventory){
+    private View createView(Window window, Gui gui, Inventory inventory) {
         View view = new View(gui, window, inventory);
-        for (int i = 0; i < view.getGui().getSize(); i++){
+        for (int i = 0; i < view.getGui().getSize(); i++) {
             Component c = gui.getComponentAt(i);
-            if(c != null) {
+            if (c != null) {
                 SlotReport slotReport = new SlotReport(Objects.requireNonNull(window.getPlayer()), null, view, i);
                 try {
                     VM vm = createVM(slotReport);
@@ -262,12 +266,8 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         return view;
     }
 
-    public BattleGuiManager(BattlePlugin plugin) {
-        super(plugin);
-    }
-
     @NotNull
-    public InfoHolder collectInfo(@NotNull View view){
+    public InfoHolder collectInfo(@NotNull View view) {
         Condition.argNotNull("view", view);
         return collectInfo(view, collectInfo(view.getWindow()));
     }
@@ -275,19 +275,19 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     @Override
     public boolean registerGui(@NotNull Gui gui) {
         Condition.argNotNull("gui", gui);
-        if(GUI.containsKey(gui.getId())) return false;
+        if (GUI.containsKey(gui.getId())) return false;
         GUI.put(gui.getId(), gui);
         return true;
     }
 
-    public void destroyWindow(Player player){
+    public void destroyWindow(Player player) {
         WINDOWS.remove(player.getUniqueId());
     }
 
     @Override
     public <T extends GuiHandler> boolean registerGuiHandler(@NotNull Class<T> handlerClass) {
         Condition.argNotNull("handlerClass", handlerClass);
-        if(GUI_HANDLERS.contains(handlerClass)) return false;
+        if (GUI_HANDLERS.contains(handlerClass)) return false;
         GUI_HANDLERS.add(handlerClass);
         return true;
     }
@@ -296,17 +296,17 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     public boolean registerPagination(@NotNull String id, @NotNull Pagination pagination) {
         Condition.argNotNull("id", id);
         Condition.argNotNull("pagination", pagination);
-        if(PAGES.containsKey(id)) return false;
+        if (PAGES.containsKey(id)) return false;
         PAGES.put(id, pagination);
         return true;
     }
 
     @Override
     @NotNull
-    public Window getWindow(@NotNull HumanEntity player){
+    public Window getWindow(@NotNull HumanEntity player) {
         Condition.argNotNull("player", player);
         Window x = WINDOWS.get(player.getUniqueId());
-        if(x == null) {
+        if (x == null) {
             if (player instanceof Player) {
                 WINDOWS.put(player.getUniqueId(), x = new Window((Player) player));
             } else {
@@ -317,7 +317,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     @Override
-    public void updateView(@NotNull Player player, @Nullable View view){
+    public void updateView(@NotNull Player player, @Nullable View view) {
         Condition.argNotNull("player", player);
         if (view == null) return;
         refreshView(player, view);
@@ -331,15 +331,15 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     @Override
-    public View setBottomGui(@NotNull Player player, @NotNull String name){
+    public View setBottomGui(@NotNull Player player, @NotNull String name) {
         Condition.argNotNull("player", player);
         Condition.argNotNull("name", name);
         Window w = getWindow(player);
         Gui g = GUI.get(name);
-        if(g == null) return null;
+        if (g == null) return null;
         GuiOpenEvent event = new GuiOpenEvent(player, g, w);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) return null;
+        if (event.isCancelled()) return null;
         View v = createView(w, g, player.getInventory());
         w.setBottomView(v);
         refreshView(player, v);
@@ -347,18 +347,18 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     }
 
     @Override
-    public View openTopGui(@NotNull Player player, @NotNull String name){
+    public View openTopGui(@NotNull Player player, @NotNull String name) {
         Condition.argNotNull("player", player);
         Condition.argNotNull("name", name);
         Window w = getWindow(player);
         Gui g = GUI.get(name);
-        if(g == null) return null;
+        if (g == null) return null;
         GuiOpenEvent event = new GuiOpenEvent(player, g, w);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) return null;
+        if (event.isCancelled()) return null;
         InfoReplacer info = collectInfo(w).compile();
         View v = createView(player, w, g, info);
-        if(w.getTopView() != null){
+        if (w.getTopView() != null) {
             w.getDataContainer().put("switchView", true);
         }
         w.setTopView(v);
@@ -373,10 +373,10 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
     private static class PagedSlotChain implements SlotChain {
         private final View view;
         private final List<Integer> slots;
+        private final Predicate<Slot> slotFilter;
         private int prevSlots;
         private int allocatedSlot;
         private int cursor = -1;
-        private final Predicate<Slot> slotFilter;
 
         private PagedSlotChain(@NotNull List<Integer> slots, @NotNull View view, int page, @Nullable Predicate<Slot> slotFilter) {
             this.slots = slots;
@@ -386,9 +386,9 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         }
 
         @NotNull
-        private Slot get(int cursor){
+        private Slot get(int cursor) {
             Slot s = view.getSlot(slots.get(cursor));
-            if(s == null){
+            if (s == null) {
                 throw new IllegalStateException("Pagination slot is null");
             }
             if (slotFilter == null || slotFilter.test(s)) {
@@ -401,15 +401,15 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         }
 
         @NotNull
-        public Slot get(){
+        public Slot get() {
             return get(cursor);
         }
 
         @Override
         @NotNull
         public Slot next() {
-            if(cursor == slots.size()){
-                throw new IndexOutOfBoundsException(cursor+" = "+slots.size());
+            if (cursor == slots.size()) {
+                throw new IndexOutOfBoundsException(cursor + " = " + slots.size());
             }
             cursor++;
             allocatedSlot++;
@@ -418,8 +418,8 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
 
         @NotNull
         public Slot prev() {
-            if(cursor == 0){
-                throw new IndexOutOfBoundsException(cursor+" = 0");
+            if (cursor == 0) {
+                throw new IndexOutOfBoundsException(cursor + " = 0");
             }
             cursor--;
             return get();
@@ -436,7 +436,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
 
         @Override
         public boolean shouldSkip() {
-            if(prevSlots > 0){
+            if (prevSlots > 0) {
                 prevSlots--;
                 return true;
             }

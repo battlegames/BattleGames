@@ -44,22 +44,22 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
         super(plugin);
 
         PreparedItem empty = new PreparedItem();
-        for(ItemType type : ItemType.values()){
+        for (ItemType type : ItemType.values()) {
             ITEMS.put(type, empty);
             MODELS.put(type, empty);
         }
     }
 
-    public void defineItemTemplate(ItemType itemType, PreparedItem preparedItem){
+    public void defineItemTemplate(ItemType itemType, PreparedItem preparedItem) {
         ITEMS.put(itemType, preparedItem);
     }
 
-    public void defineModelTemplate(ItemType itemType, PreparedItem preparedItem){
+    public void defineModelTemplate(ItemType itemType, PreparedItem preparedItem) {
         MODELS.put(itemType, preparedItem);
     }
 
     public boolean selectItem(Player player, BattleItemModel m) {
-        if(m instanceof GunModel) {
+        if (m instanceof GunModel) {
             return plugin.gunManager.selectGun(player, (GunModel) m);
         }
         //noinspection rawtypes
@@ -70,44 +70,44 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     }
 
     public boolean selectItem(Player player, BattleItem<?> bi) {
-        if(bi instanceof Gun) {
+        if (bi instanceof Gun) {
             return plugin.gunManager.selectGun(player, (Gun) bi);
         }
         BattleItemModel m = Objects.requireNonNull(bi.getModel());
         int slot = player.getInventory().firstEmpty();
-        if(slot == -1) return false;
+        if (slot == -1) return false;
         player.getInventory().setItem(slot, createItem(bi, m));
         return true;
     }
 
     public ItemStack createItem(BattleItem<?> bi, BattleItemModel m) {
-        if(bi instanceof Gun) {
+        if (bi instanceof Gun) {
             throw new UnsupportedOperationException("call GunManager#createItem instead");
         }
         PreparedItem pi = plugin.itemManager.make(bi);
-        if(pi == null) return null;
+        if (pi == null) return null;
         else {
-            if(m instanceof SingleSkinItem) pi = ((SingleSkinItem) m).getSkin().transform(pi);
+            if (m instanceof SingleSkinItem) pi = ((SingleSkinItem) m).getSkin().transform(pi);
             return plugin.itemManager.write(pi.build(), bi);
         }
     }
 
     @Override
     @Nullable
-    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem){
+    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem) {
         return make(battleItem, null);
     }
 
     @Override
     @Nullable
-    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition){
-        if(battleItem == null) return null;
+    public <R extends BattleItemModel> PreparedItem make(@Nullable BattleItem<R> battleItem, @Nullable Map<String, String> addition) {
+        if (battleItem == null) return null;
         R model = battleItem.getModel();
-        if(model != null){
+        if (model != null) {
             InfoHolder map = battleItem.collectInfo(null);
-            if(map == null) return null;
+            if (map == null) return null;
             InfoReplacer ipr = map.compile();
-            if(addition != null) ipr.getMap().putAll(addition);
+            if (addition != null) ipr.getMap().putAll(addition);
             return ipr.replace(ITEMS.get(model.getItemType()).duplicate());
         }
         return null;
@@ -115,28 +115,28 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
 
     @Override
     @Nullable
-    public PreparedItem make(@Nullable BattleItemModel bim){
+    public PreparedItem make(@Nullable BattleItemModel bim) {
         return make(bim, null);
     }
 
     @Override
     @Nullable
-    public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition){
-        if(bim == null) return null;
+    public PreparedItem make(@Nullable BattleItemModel bim, @Nullable Map<String, String> addition) {
+        if (bim == null) return null;
         InfoReplacer info = bim.collectInfo(null).compile();
-        if(addition != null) info.getMap().putAll(addition);
+        if (addition != null) info.getMap().putAll(addition);
         return info.replace(MODELS.get(bim.getItemType()).duplicate());
     }
 
     @Override
     @Nullable
-    public BattleItem read(@Nullable ItemStack itemStack){
-        if(itemStack == null) return null;
+    public BattleItem read(@Nullable ItemStack itemStack) {
+        if (itemStack == null) return null;
         ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
         CompoundTag compoundTag = nbtHelper.getTag().get("abm", CompoundTag.class);
-        if(compoundTag == null) return null;
+        if (compoundTag == null) return null;
         StringTag typeTag = compoundTag.get(ItemTag.ITEM_TYPE, StringTag.class);
-        if(typeTag == null) return null;
+        if (typeTag == null) return null;
         BattleItem item = ItemType.valueOf(typeTag.getValue()).make();
         item.load(compoundTag);
         return item;
@@ -144,12 +144,12 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
 
     @Override
     @Nullable
-    public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem){
-        if(itemStack == null || battleItem == null) return null;
+    public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem) {
+        if (itemStack == null || battleItem == null) return null;
         ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
         CompoundTag compoundTag = nbtHelper.getTag().getOrCreateDefault("abm", CompoundTag.class);
         battleItem.save(compoundTag);
-        if(battleItem.getModel() != null)
+        if (battleItem.getModel() != null)
             compoundTag.put(ItemTag.ITEM_TYPE, battleItem.getModel().getItemType().name());
         nbtHelper.getTag().put("abm", compoundTag);
         return nbtHelper.save();

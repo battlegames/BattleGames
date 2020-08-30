@@ -40,24 +40,26 @@ import java.util.Map;
 
 public abstract class ItemCompartment implements Pagination {
     public abstract ItemType getItemType();
+
     public abstract BattleItemModel getItem(String id, BattleApi api);
+
     public abstract boolean isObtainable();
 
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
-        if(pd == null) return;
+        if (pd == null) return;
         Collection<String> ids = pd.getBackpack().getStorage(getItemType()).listIds();
         GamePlayer gp = api.getArenaManager().getGamePlayer(player);
-        if(gp != null) {
+        if (gp != null) {
             for (Map.Entry<String, BattleItem<?>> e : gp.getIgBackpack().row(getItemType()).entrySet()) {
-                if(e.getValue() instanceof NullBattleItem) {
+                if (e.getValue() instanceof NullBattleItem) {
                     ids.remove(e.getKey());
                 }
             }
         }
-        for(String id : ids) {
+        for (String id : ids) {
             if (!chain.hasNext()) break;
             if (chain.shouldSkip()) continue;
             BattleItemModel bi = getItem(id, api);
@@ -65,9 +67,9 @@ public abstract class ItemCompartment implements Pagination {
             PreparedItem pi = api.getItemManager().make(bi);
             if (pi == null) continue;
             Slot slot = chain.next();
-            if(bi instanceof SingleSkinItem) {
+            if (bi instanceof SingleSkinItem) {
                 slot.setPaginationItem(((SingleSkinItem) bi).getSkin().transform(pi));
-            } else if(bi instanceof GunModel) {
+            } else if (bi instanceof GunModel) {
                 slot.setPaginationItem(((GunModel) bi).getPrimarySkin().transform(pi));
             }
             if (isObtainable()) {

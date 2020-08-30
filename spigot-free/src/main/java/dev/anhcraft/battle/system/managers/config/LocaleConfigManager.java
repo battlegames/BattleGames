@@ -59,7 +59,7 @@ public class LocaleConfigManager extends ConfigManager {
 
     @NotNull
     protected String buildResourcePath() {
-        return  "config/locale/" + plugin.generalConf.getLocaleFile();
+        return "config/locale/" + plugin.generalConf.getLocaleFile();
     }
 
     @NotNull
@@ -75,10 +75,10 @@ public class LocaleConfigManager extends ConfigManager {
     @Override
     public void onLoad() {
         ConfigurationSection itemTypeSec = getSettings().getConfigurationSection("item_type");
-        if(itemTypeSec != null){
-            for(ItemType t : ItemType.values()){
+        if (itemTypeSec != null) {
+            for (ItemType t : ItemType.values()) {
                 String n = itemTypeSec.getString(t.name().toLowerCase());
-                if(n != null) {
+                if (n != null) {
                     t.setLocalizedName(n);
                 }
             }
@@ -103,7 +103,7 @@ public class LocaleConfigManager extends ConfigManager {
                 plugin.getLogger().warning("[" + loggerName + "] Downloading Minecraft language file...");
                 plugin.getLogger().warning("- Hash: " + version.hashCode());
                 plugin.getLogger().warning("- Locale: " + locale);
-                if(NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
+                if (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
                     String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".json");
                     FileUtil.write(f, str);
                     plugin.minecraftLocale = CKPlugin.GSON.fromJson(str, JsonObject.class);
@@ -112,7 +112,7 @@ public class LocaleConfigManager extends ConfigManager {
                     Properties p = new Properties();
                     p.load(new StringReader(str));
                     plugin.minecraftLocale = new JsonObject();
-                    for(Map.Entry<Object, Object> e : p.entrySet()){
+                    for (Map.Entry<Object, Object> e : p.entrySet()) {
                         plugin.minecraftLocale.addProperty(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
                     }
                     FileUtil.write(f, CKPlugin.GSON.toJson(plugin.minecraftLocale));

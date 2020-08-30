@@ -88,7 +88,7 @@ public class BattleFireworkEffect extends ConfigurableObject {
 
     @NotNull
     public FireworkEffect getFireworkEffect() {
-        if(cached == null) {
+        if (cached == null) {
             FireworkEffect.Builder b = FireworkEffect.builder().with(type).flicker(flicker).trail(trail);
             for (BattleColor c : primaryColors) {
                 b.withColor(c.asBukkit());

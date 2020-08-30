@@ -19,9 +19,9 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.confighelper.annotation.Explanation;
 import dev.anhcraft.confighelper.annotation.IgnoreValue;
 import dev.anhcraft.confighelper.annotation.Key;
@@ -61,7 +61,7 @@ public abstract class BattleItemModel extends ConfigurableObject implements Info
     }
 
     @Override
-    public void inform(@NotNull InfoHolder holder){
+    public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id).inform("name", name);
     }
 

@@ -93,7 +93,7 @@ public class BattleParticle extends ConfigurableObject {
         return speed;
     }
 
-    public void spawn(@NotNull Location location){
+    public void spawn(@NotNull Location location) {
         location.getWorld().spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null);
     }
 }

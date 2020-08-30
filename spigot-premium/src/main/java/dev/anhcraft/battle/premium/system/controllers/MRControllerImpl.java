@@ -63,65 +63,65 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     MRControllerImpl(BattlePlugin plugin, Mode mode) {
         super(plugin, mode);
 
-        String p = mode.getId()+"_";
+        String p = mode.getId() + "_";
 
-        plugin.getPapiExpansion().handlers.put(p+"team", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<MRTeam> t = TEAM.get(game);
-            if(t == null)
+            if (t == null)
                 return null;
             MRTeam dt = t.getTeam(player);
-            if(dt == null)
+            if (dt == null)
                 return null;
             return dt.getLocalizedName();
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<MRTeam> t = TEAM.get(game);
-            if(t == null)
+            if (t == null)
                 return null;
             MRTeam dt = t.getTeam(player);
-            if(dt == null)
+            if (dt == null)
                 return null;
             return Integer.toString(t.countPlayers(dt));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_thief", (player, pd, game, gp) -> MRTeam.THIEF.getLocalizedName());
+        plugin.getPapiExpansion().handlers.put(p + "team_thief", (player, pd, game, gp) -> MRTeam.THIEF.getLocalizedName());
 
-        plugin.getPapiExpansion().handlers.put(p+"team_thief_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_thief_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<MRTeam> t = TEAM.get(game);
             return t == null ? null : Integer.toString(t.countPlayers(MRTeam.THIEF));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_farmer", (player, pd, game, gp) -> MRTeam.FARMER.getLocalizedName());
+        plugin.getPapiExpansion().handlers.put(p + "team_farmer", (player, pd, game, gp) -> MRTeam.FARMER.getLocalizedName());
 
-        plugin.getPapiExpansion().handlers.put(p+"team_farmer_players", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_farmer_players", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<MRTeam> t = TEAM.get(game);
             return t == null ? null : Integer.toString(t.countPlayers(MRTeam.FARMER));
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"mobs_stolen", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "mobs_stolen", (player, pd, game, gp) -> {
+            if (game == null) return null;
             MobRescueMatch m = MATCH.get(game);
             return m == null ? null : Integer.toString(m.getStolenMobs());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"mobs_all", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "mobs_all", (player, pd, game, gp) -> {
+            if (game == null) return null;
             MobRescueMatch m = MATCH.get(game);
             return m == null ? null : Integer.toString(m.getTotalMobs());
         });
     }
 
     @Override
-    public void onInitGame(@NotNull Game game){
+    public void onInitGame(@NotNull Game game) {
         super.onInitGame(game);
-        if(game instanceof LocalGame) {
+        if (game instanceof LocalGame) {
             LocalGame lc = (LocalGame) game;
-            if(game.getArena().getGameOptions() instanceof MobRescueOptions) {
+            if (game.getArena().getGameOptions() instanceof MobRescueOptions) {
                 MobRescueOptions options = (MobRescueOptions) game.getArena().getGameOptions();
                 for (Location loc : options.getPlaySpawnPoints(MRTeam.THIEF)) {
                     lc.addInvolvedWorld(loc.getWorld());
@@ -134,10 +134,10 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     @Override
-    public void onTick(@NotNull LocalGame game){
+    public void onTick(@NotNull LocalGame game) {
         super.onTick(game);
         TeamManager<MRTeam> x = TEAM.get(game);
-        if(x != null && x.nextEmptyTeam().isPresent()) {
+        if (x != null && x.nextEmptyTeam().isPresent()) {
             game.end();
         }
     }
@@ -146,14 +146,14 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
         broadcast(game, "player_join_broadcast", new InfoHolder("").inform("player", player.getName()).compile());
         int m = Math.max(game.getArena().getGameOptions().getMinPlayers(), 1);
-        switch (game.getPhase()){
-            case WAITING:{
+        switch (game.getPhase()) {
+            case WAITING: {
                 respw(game, player, null);
                 BattleScoreboard bs = game.getMode().getWaitingScoreboard();
-                if(bs.isEnabled()) {
+                if (bs.isEnabled()) {
                     plugin.scoreboardRenderer.setScoreboard(new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength()));
                 }
-                if(m <= game.getPlayerCount()) countdown(game);
+                if (m <= game.getPlayerCount()) countdown(game);
                 break;
             }
             case PLAYING: {
@@ -175,16 +175,16 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
 
                 List<Player> lc = Collections.singletonList(player);
 
-                for(Player p : ta) {
-                    if(p.equals(player)) continue;
+                for (Player p : ta) {
+                    if (p.equals(player)) continue;
                     PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
                     if (ps != null) {
                         ps.addTeamPlayers(t.name(), lc);
                     }
                 }
 
-                for(Player p : tb) {
-                    if(p.equals(player)) continue;
+                for (Player p : tb) {
+                    if (p.equals(player)) continue;
                     PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(p);
                     if (ps != null) {
                         ps.addTeamPlayers(t.name(), lc);
@@ -195,15 +195,17 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     @Override
-    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game) {
         super.onQuit(player, game);
         TeamManager<MRTeam> teamManager = TEAM.get(game);
-        if(teamManager != null) {
+        if (teamManager != null) {
             MRTeam abTeam = teamManager.removePlayer(player);
-            for(Map.Entry<Player, MRTeam> ent : teamManager.getPlayerTeam()) {
-                PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(ent.getKey());
-                if (ps != null) {
-                    ps.removeTeamPlayer(abTeam.name(), player);
+            if (abTeam != null) {
+                for (Map.Entry<Player, MRTeam> ent : teamManager.getPlayerTeam()) {
+                    PlayerScoreboard ps = plugin.scoreboardRenderer.getScoreboard(ent.getKey());
+                    if (ps != null) {
+                        ps.removeTeamPlayer(abTeam.name(), player);
+                    }
                 }
             }
         }
@@ -211,7 +213,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
 
     @Override
     protected void play(LocalGame game) {
-        broadcast(game,"game_start_broadcast");
+        broadcast(game, "game_start_broadcast");
 
         MobRescueOptions options = (MobRescueOptions) game.getArena().getGameOptions();
         MobRescueMatch m = MobRescueMatch.create(options);
@@ -230,7 +232,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
         plugin.extension.getTaskHelper().newTask(() -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
-                cancelTask(game, "respawn::"+p.getName());
+                cancelTask(game, "respawn::" + p.getName());
                 PlayerScoreboard ps = addPlayer(game, p, MRTeam.THIEF);
                 if (ps != null) {
                     ps.addTeamPlayers(MRTeam.THIEF.name(), ta);
@@ -238,7 +240,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                 }
             });
             tb.forEach(p -> {
-                cancelTask(game, "respawn::"+p.getName());
+                cancelTask(game, "respawn::" + p.getName());
                 extraFarmerCountdown(game, tb, options.getExtraCountdownTimeFarmer(), () -> {
                     PlayerScoreboard ps = addPlayer(game, p, MRTeam.FARMER);
                     if (ps != null) {
@@ -248,11 +250,11 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                 });
             });
             options.getMobGroups().forEach(mg -> {
-                for (int i = 0; i < mg.getAmount(); i++){
+                for (int i = 0; i < mg.getAmount(); i++) {
                     Location loc = mg.getLocation();
                     Entity ent = loc.getWorld().spawnEntity(loc, mg.getEntityType());
                     ent.setInvulnerable(true);
-                    if(mg.isStealable()) {
+                    if (mg.isStealable()) {
                         float speed = (float) (mg.getWeight() / options.getWeightSpeedRatio());
                         ent.setMetadata("stealable", new FixedMetadataValue(plugin, speed));
                         ent.setGlowing(true);
@@ -275,18 +277,18 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     protected void extraFarmerCountdown(LocalGame game, List<Player> tb, long time, Runnable callback) {
-        if(hasTask(game, "extraFarmerCountdown")) return;
-        AtomicLong current = new AtomicLong(time/20L);
+        if (hasTask(game, "extraFarmerCountdown")) return;
+        AtomicLong current = new AtomicLong(time / 20L);
         trackTask(game, "extraFarmerCountdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
             InfoReplacer f = new InfoHolder("").inform("current", current.get()).compile();
             sendTitle(tb, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
             MobRescueOptions mro = (MobRescueOptions) game.getArena().getGameOptions();
-            if(mro.getExtraCountdownSound() != null) {
+            if (mro.getExtraCountdownSound() != null) {
                 for (Player p : tb) {
                     mro.getExtraCountdownSound().play(p);
                 }
             }
-            if(current.getAndDecrement() == 0) {
+            if (current.getAndDecrement() == 0) {
                 cancelTask(game, "extraFarmerCountdown");
                 plugin.extension.getTaskHelper().newTask(callback);
             }
@@ -297,7 +299,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     private PlayerScoreboard addPlayer(LocalGame game, Player player, MRTeam dt) {
         PlayerScoreboard ps = null;
         BattleScoreboard bs = game.getMode().getPlayingScoreboard();
-        if(bs.isEnabled()) {
+        if (bs.isEnabled()) {
             ps = new PlayerScoreboard(player, bs.getTitle(), bs.getContent(), bs.getFixedLength());
             plugin.scoreboardRenderer.setScoreboard(ps);
         }
@@ -323,7 +325,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
             case PLAYING: {
                 Location loc = RandomUtil.pickRandom(((MobRescueOptions) game.getArena().getGameOptions()).getPlaySpawnPoints(team));
                 EntityUtil.teleport(player, loc, ok -> {
-                    if(ok){
+                    if (ok) {
                         performCooldownMap(game, "spawn_protection",
                                 cooldownMap -> cooldownMap.resetTime(player),
                                 () -> new CooldownMap(player));
@@ -337,8 +339,8 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     @Override
-    public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
-        if(!event.getEntity().getPassengers().isEmpty()) {
+    public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game) {
+        if (!event.getEntity().getPassengers().isEmpty()) {
             Entity ent = event.getEntity().getPassengers().get(0);
             if (ent instanceof LivingEntity && ent.hasMetadata("stealable")) {
                 event.getEntity().removePassenger(ent);
@@ -350,10 +352,10 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
 
     @Override
     public void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game) {
-        if(event.getReport().getEntity() instanceof Player){
+        if (event.getReport().getEntity() instanceof Player) {
             Player target = (Player) event.getReport().getEntity();
             TeamManager<MRTeam> teamManager = TEAM.get(game);
-            if(teamManager.getTeam(event.getReport().getDamager()) == teamManager.getTeam(target)) {
+            if (teamManager.getTeam(event.getReport().getDamager()) == teamManager.getTeam(target)) {
                 event.setCancelled(true);
             } else {
                 performCooldownMap(game, "spawn_protection",
@@ -368,25 +370,25 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     @EventHandler
-    public void interactMob(PlayerInteractEntityEvent event){
+    public void interactMob(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof LivingEntity) {
             LivingEntity ent = (LivingEntity) event.getRightClicked();
-            if(ent.hasMetadata("stealable")) {
+            if (ent.hasMetadata("stealable")) {
                 float sr = ent.getMetadata("stealable").get(0).asFloat();
                 Player p = event.getPlayer();
-                if(p.getPassengers().isEmpty()) {
+                if (p.getPassengers().isEmpty()) {
                     LocalGame game = plugin.arenaManager.getGame(p);
-                    if(game == null) return;
+                    if (game == null) return;
                     if (game.getMode() != getMode()) return;
                     TeamManager<MRTeam> tm = TEAM.get(game);
-                    if(tm == null) return;
+                    if (tm == null) return;
                     p.addPassenger(ent);
                     MobRescueOptions mro = (MobRescueOptions) game.getArena().getGameOptions();
-                    if(mro.getPickUpMobSound() != null) {
+                    if (mro.getPickUpMobSound() != null) {
                         mro.getPickUpMobSound().play(p);
                     }
                     SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, -sr);
-                    if(tm.getTeam(p) == MRTeam.THIEF) {
+                    if (tm.getTeam(p) == MRTeam.THIEF) {
                         trackTask(game, p.getName() + "-StealMobTask", plugin.extension.getTaskHelper().newDelayedTask(() -> {
                             if (hasTask(game, p.getName() + "-StealMobTask")) {
                                 InfoReplacer ir = new InfoHolder("")
@@ -404,26 +406,26 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     }
 
     @EventHandler
-    public void sneak(PlayerToggleSneakEvent event){
-        if(event.isSneaking()) {
+    public void sneak(PlayerToggleSneakEvent event) {
+        if (event.isSneaking()) {
             Player p = event.getPlayer();
-            if(p.getPassengers().isEmpty()) return;
+            if (p.getPassengers().isEmpty()) return;
             Entity ent = p.getPassengers().get(0);
-            if(!ent.hasMetadata("stealable")) return;
-            if(ent instanceof LivingEntity) {
+            if (!ent.hasMetadata("stealable")) return;
+            if (ent instanceof LivingEntity) {
                 LocalGame game = plugin.arenaManager.getGame(p);
-                if(game == null) return;
+                if (game == null) return;
                 if (game.getMode() != getMode()) return;
                 TeamManager<MRTeam> tm = TEAM.get(game);
-                if(tm == null) return;
+                if (tm == null) return;
                 MobRescueMatch match = MATCH.get(game);
                 p.removePassenger(ent);
                 MobRescueOptions mro = (MobRescueOptions) game.getArena().getGameOptions();
-                if(mro.getPutDownMobSound() != null) {
+                if (mro.getPutDownMobSound() != null) {
                     mro.getPutDownMobSound().play(p);
                 }
                 SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, 0);
-                if(tm.getTeam(p) == MRTeam.THIEF) {
+                if (tm.getTeam(p) == MRTeam.THIEF) {
                     cancelTask(game, p.getName() + "-StealMobTask");
                     if (match.getGatheringRegion().contains(p.getLocation())) {
                         plugin.extension.getTaskHelper().newTask(ent::remove);

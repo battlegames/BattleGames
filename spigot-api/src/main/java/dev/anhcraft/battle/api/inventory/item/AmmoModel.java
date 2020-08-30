@@ -81,16 +81,16 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     }
 
     @Override
-    public void inform(@NotNull InfoHolder holder){
+    public void inform(@NotNull InfoHolder holder) {
         super.inform(holder);
         holder.inform("bullet_count", bullets.size())
-        .inform("total_bullet_damage", sumBulletDamage)
-        .inform("total_bullet_knockback", sumBulletKnockback)
-        .inform("total_bullet_penetration", sumBulletPenetration)
-        .inform("avg_bullet_damage", avgBulletDamage)
-        .inform("avg_bullet_knockback", avgBulletKnockback)
-        .inform("avg_bullet_penetration", avgBulletPenetration)
-        .inform("reload_delay", reloadDelay);
+                .inform("total_bullet_damage", sumBulletDamage)
+                .inform("total_bullet_knockback", sumBulletKnockback)
+                .inform("total_bullet_penetration", sumBulletPenetration)
+                .inform("avg_bullet_damage", avgBulletDamage)
+                .inform("avg_bullet_knockback", avgBulletKnockback)
+                .inform("avg_bullet_penetration", avgBulletPenetration)
+                .inform("reload_delay", reloadDelay);
     }
 
     @Override
@@ -102,11 +102,11 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("bullets")){
+        if (value != null && entry.getKey().equals("bullets")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Ammo.Bullet> bullets = new ArrayList<>();
             Set<String> keys = cs.getKeys(false);
-            for(String s : keys){
+            for (String s : keys) {
                 try {
                     Ammo.Bullet b = ConfigHelper.readConfig(cs.getConfigurationSection(s), Ammo.Bullet.SCHEMA);
                     bullets.add(b);
@@ -127,10 +127,10 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("bullets")){
+        if (value != null && entry.getKey().equals("bullets")) {
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
-            for(Ammo.Bullet b : (List<Ammo.Bullet>) value){
+            for (Ammo.Bullet b : (List<Ammo.Bullet>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, Ammo.Bullet.SCHEMA, b);
                 parent.set(String.valueOf(i++), c);

@@ -45,8 +45,8 @@ public class LocalGame extends Game {
     private final Map<Player, GamePlayer> players = new ConcurrentHashMap<>();
     private final Multimap<String, Player> downstreamServers = Multimaps.synchronizedMultimap(HashMultimap.create());
     private final AtomicInteger bungeeSyncTick = new AtomicInteger();
-    private boolean hasFirstKill;
     private final List<WeakReference<World>> involvedWorlds = new ArrayList<>();
+    private boolean hasFirstKill;
 
     public LocalGame(@NotNull Arena arena) {
         super(arena);
@@ -83,8 +83,8 @@ public class LocalGame extends Game {
     }
 
     public void end() {
-        if(getPhase() == GamePhase.END) return;
-        if(!Bukkit.isPrimaryThread()){
+        if (getPhase() == GamePhase.END) return;
+        if (!Bukkit.isPrimaryThread()) {
             try {
                 throw new IllegalStateException("Don't call #end from another thread");
             } catch (IllegalStateException e) {
@@ -113,13 +113,14 @@ public class LocalGame extends Game {
 
     /**
      * Adds world that involves in the game.
+     *
      * @param world the world
      */
     public synchronized void addInvolvedWorld(@Nullable World world) {
-        if(world == null) return;
-        for(WeakReference<World> w : involvedWorlds){
+        if (world == null) return;
+        for (WeakReference<World> w : involvedWorlds) {
             World x = w.get();
-            if(x != null && x.getName().equals(world.getName())){
+            if (x != null && x.getName().equals(world.getName())) {
                 return;
             }
         }

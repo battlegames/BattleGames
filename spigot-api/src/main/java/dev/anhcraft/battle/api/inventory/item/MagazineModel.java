@@ -67,12 +67,12 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null && entry.getKey().equals("ammo")){
+        if (o != null && entry.getKey().equals("ammo")) {
             ConfigurationSection cs = (ConfigurationSection) o;
             Map<AmmoModel, Integer> ammo = new HashMap<>();
-            for(String a : cs.getKeys(false)){
+            for (String a : cs.getKeys(false)) {
                 AmmoModel am = ApiProvider.consume().getAmmoModel(a);
-                if(am != null) {
+                if (am != null) {
                     ammo.put(am, cs.getInt(a));
                 }
             }
@@ -83,10 +83,10 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null && entry.getKey().equals("ammo")){
+        if (o != null && entry.getKey().equals("ammo")) {
             ConfigurationSection parent = new YamlConfiguration();
             Map<AmmoModel, Integer> map = (Map<AmmoModel, Integer>) o;
-            for(Map.Entry<AmmoModel, Integer> x : map.entrySet()){
+            for (Map.Entry<AmmoModel, Integer> x : map.entrySet()) {
                 parent.set(x.getKey().getId(), x.getValue());
             }
             return parent;

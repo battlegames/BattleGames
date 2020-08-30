@@ -35,11 +35,6 @@ import java.util.Set;
 
 public class MySQLStorage extends StorageProvider {
     private static final Gson GSON = new Gson();
-    private final Object SAFE_LOCK = new Object();
-    private final HikariDataSource dataSource;
-    private long localSyncTime;
-    private long remoteSyncTime;
-    private final String tablePre;
 
     static {
         try {
@@ -49,11 +44,52 @@ public class MySQLStorage extends StorageProvider {
         }
     }
 
-    private boolean needSync(Connection conn){
+    private final Object SAFE_LOCK = new Object();
+    private final HikariDataSource dataSource;
+    private final String tablePre;
+    private long localSyncTime;
+    private long remoteSyncTime;
+
+    public MySQLStorage(HikariDataSource dataSource, String tablePre) {
+        this.dataSource = dataSource;
+        this.tablePre = tablePre;
+
+        try {
+            Connection conn = dataSource.getConnection();
+            Statement s = conn.createStatement();
+            if (s.executeUpdate(
+                    "CREATE TABLE IF NOT EXISTS `" + tablePre + "data` (" +
+                            "  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL," +
+                            "  `value` mediumtext COLLATE utf8_unicode_ci NOT NULL," +
+                            "  `type` tinyint(4) NOT NULL" +
+                            ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+            ) > 0) {
+                s.executeUpdate(
+                        "ALTER TABLE `" + tablePre + "data` ADD UNIQUE KEY `name` (`name`);"
+                );
+            }
+            if (s.executeUpdate(
+                    "CREATE TABLE IF NOT EXISTS `" + tablePre + "var` (" +
+                            "  `name` varchar(15) COLLATE utf8_unicode_ci NOT NULL," +
+                            "  `value` text COLLATE utf8_unicode_ci NOT NULL" +
+                            ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+            ) > 0) {
+                s.executeUpdate(
+                        "ALTER TABLE `" + tablePre + "var` ADD UNIQUE KEY `name` (`name`);"
+                );
+            }
+            s.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean needSync(Connection conn) {
         return localSyncTime < getLastSync(conn);
     }
 
-    private long getLastSync(Connection conn){
+    private long getLastSync(Connection conn) {
         try {
             PreparedStatement s = conn.prepareStatement("SELECT `value` FROM `" + tablePre + "var` WHERE `name` = ?");
             s.setString(1, "lastSync");
@@ -70,7 +106,7 @@ public class MySQLStorage extends StorageProvider {
         return remoteSyncTime;
     }
 
-    public void updateLastSync(Connection conn){
+    public void updateLastSync(Connection conn) {
         try {
             long now = System.currentTimeMillis();
             PreparedStatement s = conn.prepareStatement("INSERT INTO `" + tablePre + "var` (`name`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?;");
@@ -87,53 +123,24 @@ public class MySQLStorage extends StorageProvider {
         }
     }
 
-    public MySQLStorage(HikariDataSource dataSource, String tablePre){
-        this.dataSource = dataSource;
-        this.tablePre = tablePre;
-
-        try {
-            Connection conn = dataSource.getConnection();
-            Statement s = conn.createStatement();
-            if(s.executeUpdate(
-                    "CREATE TABLE IF NOT EXISTS `"+tablePre+"data` (" +
-                            "  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL," +
-                            "  `value` mediumtext COLLATE utf8_unicode_ci NOT NULL," +
-                            "  `type` tinyint(4) NOT NULL" +
-                            ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
-            ) > 0){
-                s.executeUpdate(
-                        "ALTER TABLE `"+tablePre+"data` ADD UNIQUE KEY `name` (`name`);"
-                );
-            }
-            if(s.executeUpdate(
-                    "CREATE TABLE IF NOT EXISTS `"+tablePre+"var` (" +
-                            "  `name` varchar(15) COLLATE utf8_unicode_ci NOT NULL," +
-                            "  `value` text COLLATE utf8_unicode_ci NOT NULL" +
-                            ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
-            ) > 0){
-                s.executeUpdate(
-                        "ALTER TABLE `"+tablePre+"var` ADD UNIQUE KEY `name` (`name`);"
-                );
-            }
-            s.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private DataTag<?> parse(String value, int type){
-        switch (type){
-            case DataTag.INT: return new IntTag(Integer.parseInt(value));
-            case DataTag.BOOL: return new BoolTag(Boolean.parseBoolean(value));
-            case DataTag.DOUBLE: return new DoubleTag(Double.parseDouble(value));
-            case DataTag.STRING: return new StringTag(value);
-            case DataTag.LONG: return new LongTag(Long.parseLong(value));
-            case DataTag.FLOAT: return new FloatTag(Float.parseFloat(value));
+    private DataTag<?> parse(String value, int type) {
+        switch (type) {
+            case DataTag.INT:
+                return new IntTag(Integer.parseInt(value));
+            case DataTag.BOOL:
+                return new BoolTag(Boolean.parseBoolean(value));
+            case DataTag.DOUBLE:
+                return new DoubleTag(Double.parseDouble(value));
+            case DataTag.STRING:
+                return new StringTag(value);
+            case DataTag.LONG:
+                return new LongTag(Long.parseLong(value));
+            case DataTag.FLOAT:
+                return new FloatTag(Float.parseFloat(value));
             case DataTag.LIST: {
                 List<DataTag<?>> list = new ArrayList<>();
                 JsonObject jo = GSON.fromJson(value, JsonObject.class);
-                if(jo.has("data")) {
+                if (jo.has("data")) {
                     JsonArray array = jo.getAsJsonArray("data");
                     if (array.size() > 0) {
                         int s = jo.getAsJsonPrimitive("type").getAsInt();
@@ -146,11 +153,11 @@ public class MySQLStorage extends StorageProvider {
         return null;
     }
 
-    private String toStr(DataTag<?> tag){
-        if(tag.getId() == DataTag.LIST){
+    private String toStr(DataTag<?> tag) {
+        if (tag.getId() == DataTag.LIST) {
             ListTag<DataTag<?>> listTag = (ListTag<DataTag<?>>) tag;
             JsonObject obj = new JsonObject();
-            if(!listTag.getValue().isEmpty()) {
+            if (!listTag.getValue().isEmpty()) {
                 obj.addProperty("type", listTag.getValue().get(0).getId());
                 JsonArray array = new JsonArray();
                 listTag.getValue().forEach(dataTag -> array.add(toStr(dataTag)));
@@ -194,7 +201,7 @@ public class MySQLStorage extends StorageProvider {
                 if (needSync(conn)) return true; // it doesn't mean the saving is fail
                 boolean f = false;
                 Set<Map.Entry<String, DataTag<?>>> entries = getData().entrySet();
-                for (Map.Entry<String, DataTag<?>> entry : entries){
+                for (Map.Entry<String, DataTag<?>> entry : entries) {
                     String name = entry.getKey();
                     DataTag<?> tag = entry.getValue();
                     try {
@@ -211,7 +218,7 @@ public class MySQLStorage extends StorageProvider {
                         return false;
                     }
                 }
-                if(f) updateLastSync(conn);
+                if (f) updateLastSync(conn);
                 conn.close();
                 return true;
             } catch (SQLException e) {
@@ -222,7 +229,7 @@ public class MySQLStorage extends StorageProvider {
     }
 
     @Override
-    public void destroy(){
+    public void destroy() {
         dataSource.close();
     }
 }

@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.arena.game.controllers;
 
-import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import org.jetbrains.annotations.Nullable;
 

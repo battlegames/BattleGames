@@ -46,13 +46,13 @@ public class PremiumModule implements IPremiumModule {
     private RadioConfigManagerX radioConfigManagerX;
     private WorldConfigManagerX worldConfigManagerX;
 
+    public PremiumModule() {
+        instance = this;
+    }
+
     @NotNull
     public static PremiumModule getInstance() {
         return instance;
-    }
-
-    public PremiumModule(){
-        instance = this;
     }
 
     @Override

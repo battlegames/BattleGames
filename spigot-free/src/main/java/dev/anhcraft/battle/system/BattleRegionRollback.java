@@ -51,13 +51,13 @@ public class BattleRegionRollback extends BattleComponent {
     public BattleRegionRollback(BattlePlugin plugin) {
         super(plugin);
 
-        cachedRegionFolder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"regions");
+        cachedRegionFolder = new File(plugin.getDataFolder(), "cache" + File.separatorChar + "regions");
         cachedRegionFolder.mkdirs();
     }
 
     public void handleDivision(@NotNull Location first, @NotNull Location second, @NotNull List<BoundingBox> list) {
         BoundingBox box = BoundingBox.of(first, second);
-        if(box.getVolume() > plugin.generalConf.getRegionPartitionSize()) {
+        if (box.getVolume() > plugin.generalConf.getRegionPartitionSize()) {
             World world = Objects.requireNonNull(first.getWorld());
             Location center = box.getCenter().toLocation(world);
             for (Location loc : box.getLocationCorners(world)) {
@@ -86,14 +86,14 @@ public class BattleRegionRollback extends BattleComponent {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
                     Block block = world.getBlockAt(x, y, z);
-                    if(!block.isEmpty()) {
+                    if (!block.isEmpty()) {
                         CompoundTag b = new CompoundTag();
                         b.put("x", x - minX);
                         b.put("y", y - minY);
                         b.put("z", z - minZ);
                         b.put("data", block.getBlockData().getAsString());
                         CompoundTag te = CompoundTag.of(block);
-                        if(te.size() > 0) {
+                        if (te.size() > 0) {
                             te.remove("x");
                             te.remove("y");
                             te.remove("z");
@@ -118,7 +118,7 @@ public class BattleRegionRollback extends BattleComponent {
         dir.mkdirs();
         File f = new File(dir, world.getName() + ".struct");
         try {
-            if(!f.createNewFile()) {
+            if (!f.createNewFile()) {
                 FileUtil.clean(f);
             }
         } catch (IOException e) {
@@ -138,13 +138,13 @@ public class BattleRegionRollback extends BattleComponent {
         int hash2 = second.hashCode();
         World world = Objects.requireNonNull(first.getWorld());
         File f = new File(cachedRegionFolder, hash1 + File.separator + hash2 + File.separator + world.getName() + ".struct");
-        if(f.exists()) {
+        if (f.exists()) {
             CompoundTag tag = new CompoundTag();
             tag.load(f);
-            if(tag.size() > 0) {
+            if (tag.size() > 0) {
                 CompoundTag blocks = tag.get("blocks", CompoundTag.class);
                 if (blocks != null) {
-                    for(String s : blocks.listNames()){
+                    for (String s : blocks.listNames()) {
                         CompoundTag b = blocks.get(s, CompoundTag.class);
                         if (b != null && b.has("data")) {
                             Location pos = loc.clone().add(
@@ -155,12 +155,12 @@ public class BattleRegionRollback extends BattleComponent {
                             BlockData bd = Bukkit.createBlockData(Objects.requireNonNull(b.getValue("data", StringTag.class)));
                             pos.getBlock().setBlockData(bd,
                                     bd instanceof Directional
-                                    || bd instanceof MultipleFacing
-                                    || bd instanceof Bisected);
+                                            || bd instanceof MultipleFacing
+                                            || bd instanceof Bisected);
                             BlockState te = pos.getBlock().getState();
-                            if(te.isPlaced()) {
+                            if (te.isPlaced()) {
                                 CompoundTag tileEntity = b.get("tileEntity", CompoundTag.class);
-                                if(tileEntity != null) {
+                                if (tileEntity != null) {
                                     tileEntity.put("x", pos.getBlockX());
                                     tileEntity.put("y", pos.getBlockY());
                                     tileEntity.put("z", pos.getBlockZ());

@@ -39,8 +39,8 @@ public class ItemTag {
 
     static {
         Field[] fields = ItemTag.class.getDeclaredFields();
-        for(Field field : fields){
-            if(Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) {
+        for (Field field : fields) {
+            if (Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) {
                 try {
                     field.set(null, field.getName().toLowerCase());
                 } catch (IllegalAccessException e) {

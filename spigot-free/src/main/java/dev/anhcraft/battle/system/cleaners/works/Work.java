@@ -27,5 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Work {
     String id();
+
     void handle(@NotNull BattlePlugin plugin, WorkSession session, @NotNull Arena arena);
 }

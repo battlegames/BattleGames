@@ -42,24 +42,24 @@ public class QueueServerTask extends BattleComponent implements Runnable {
     public void run() {
         for (Iterator<QueueServer> it = QUEUE.iterator(); it.hasNext(); ) {
             QueueServer qs = it.next();
-            if(qs.canConnect()){
+            if (qs.canConnect()) {
                 Player p = qs.getPlayer();
                 String ns = qs.nextServer();
-                if(p == null) it.remove();
-                else if(ns == null) {
+                if (p == null) it.remove();
+                else if (ns == null) {
                     plugin.chatManager.sendPlayer(p, "server.connect_failed");
                     it.remove();
                 } else {
-                    if(qs.getConnectCount() == 1) {
-                        if(qs.getServerIndex() > 0) {
-                            plugin.chatManager.sendPlayer(p, "server.switched_server", new InfoHolder("").inform("index", qs.getServerIndex()+1).inform("size", qs.getConnectCount()).compile());
+                    if (qs.getConnectCount() == 1) {
+                        if (qs.getServerIndex() > 0) {
+                            plugin.chatManager.sendPlayer(p, "server.switched_server", new InfoHolder("").inform("index", qs.getServerIndex() + 1).inform("size", qs.getConnectCount()).compile());
                         } else {
                             plugin.chatManager.sendPlayer(p, "server.server_connecting");
                         }
                     } else {
                         plugin.chatManager.sendPlayer(p, "server.try_reconnect", new InfoHolder("").inform("current", qs.getConnectCount() - 1).inform("max", qs.getMaxConnect() - 1).compile());
                     }
-                    if(qs.getArena() != null){
+                    if (qs.getArena() != null) {
                         plugin.bungeeMessenger.requestGameJoin(p, qs.getArena(), ns);
                     } else {
                         BungeeUtil.connect(p, ns);

@@ -44,6 +44,10 @@ public class PlayerPurchaseEvent extends PlayerEvent {
         this.product = product;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Market getMarket() {
         return market;
@@ -61,10 +65,6 @@ public class PlayerPurchaseEvent extends PlayerEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

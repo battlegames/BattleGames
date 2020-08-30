@@ -28,26 +28,26 @@ public class BossbarRenderer implements Runnable {
     private final Map<Player, PlayerBossBar> ACTIVE_1 = new ConcurrentHashMap<>();
     private final Map<Player, PlayerBossBar> ACTIVE_2 = new ConcurrentHashMap<>();
 
-    public void setPrimaryBar(PlayerBossBar bar){
+    public void setPrimaryBar(PlayerBossBar bar) {
         PlayerBossBar old = ACTIVE_1.get(bar.getPlayer());
-        if(old != null) old.remove();
+        if (old != null) old.remove();
         ACTIVE_1.put(bar.getPlayer(), bar);
     }
 
-    public void setSecondaryBar(PlayerBossBar bar){
+    public void setSecondaryBar(PlayerBossBar bar) {
         PlayerBossBar old = ACTIVE_2.get(bar.getPlayer());
-        if(old != null) old.remove();
+        if (old != null) old.remove();
         ACTIVE_2.put(bar.getPlayer(), bar);
     }
 
-    public void removePrimaryBar(Player player){
+    public void removePrimaryBar(Player player) {
         PlayerBossBar old = ACTIVE_1.remove(player);
-        if(old != null) old.remove();
+        if (old != null) old.remove();
     }
 
-    public void removeSecondaryBar(Player player){
+    public void removeSecondaryBar(Player player) {
         PlayerBossBar old = ACTIVE_2.remove(player);
-        if(old != null) old.remove();
+        if (old != null) old.remove();
     }
 
     @Override

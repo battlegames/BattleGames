@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,11 +37,12 @@ public abstract class BattleItem<M extends BattleItemModel> implements Informati
     }
 
     public abstract void save(CompoundTag compound);
+
     public abstract void load(CompoundTag compound);
 
     @Nullable
     public InfoHolder collectInfo(@Nullable String prefix) {
-        if(model != null) {
+        if (model != null) {
             InfoHolder h = new InfoHolder((prefix == null ? "" : prefix) +
                     model.getItemType().name().toLowerCase() + "_")
                     .link(model.collectInfo(prefix));

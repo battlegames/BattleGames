@@ -20,11 +20,7 @@
 package dev.anhcraft.battle.api.arena.game.controllers;
 
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.arena.game.Game;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.GamePlayer;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
-import dev.anhcraft.battle.api.arena.game.Mode;
+import dev.anhcraft.battle.api.arena.game.*;
 import dev.anhcraft.battle.api.arena.game.options.GameOptions;
 import dev.anhcraft.battle.api.events.ItemChooseEvent;
 import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
@@ -44,22 +40,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface GameController {
-    default void onInitGame(@NotNull Game game){
-        if(game instanceof LocalGame) {
+    default void onInitGame(@NotNull Game game) {
+        if (game instanceof LocalGame) {
             LocalGame lc = (LocalGame) game;
             GameOptions options = game.getArena().getGameOptions();
-            for(Location loc : options.getWaitSpawnPoints()){
+            for (Location loc : options.getWaitSpawnPoints()) {
                 lc.addInvolvedWorld(loc.getWorld());
             }
         }
     }
 
     @NotNull
-    default GamePlayer makeGamePlayer(@NotNull Player player){
+    default GamePlayer makeGamePlayer(@NotNull Player player) {
         return new GamePlayer(player);
     }
 
-    default boolean canJoin(@NotNull Player player, @NotNull LocalGame game){
+    default boolean canJoin(@NotNull Player player, @NotNull LocalGame game) {
         return true;
     }
 
@@ -67,20 +63,20 @@ public interface GameController {
 
     void onEnd(@NotNull LocalGame game);
 
-    default void onQuit(@NotNull Player player, @NotNull LocalGame game){
+    default void onQuit(@NotNull Player player, @NotNull LocalGame game) {
 
     }
 
-    default void onRespawn(@NotNull PlayerRespawnEvent event, @NotNull LocalGame game){
+    default void onRespawn(@NotNull PlayerRespawnEvent event, @NotNull LocalGame game) {
 
     }
 
-    default void onTick(@NotNull LocalGame game){
-        if(game.getPhase() == GamePhase.PLAYING && game.getCurrentTime().get() % 100 == 0) {
+    default void onTick(@NotNull LocalGame game) {
+        if (game.getPhase() == GamePhase.PLAYING && game.getCurrentTime().get() % 100 == 0) {
             List<World> worlds = game.getInvolvedWorlds();
             long time = System.currentTimeMillis();
             for (GamePlayer gp : game.getPlayers().values()) {
-                if((time - gp.getJoinDate()) <= (1000 * 60)) continue;
+                if ((time - gp.getJoinDate()) <= (1000 * 60)) continue;
                 Player p = gp.toBukkit();
                 if (!worlds.contains(p.getWorld())) {
                     p.sendMessage(BattleApi.getInstance().getLocalizedMessage("game.outside_playable_area"));
@@ -90,27 +86,27 @@ public interface GameController {
         }
     }
 
-    default void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
+    default void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game) {
 
     }
 
-    default void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game){
+    default void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game) {
 
     }
 
-    default void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game){
+    default void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game) {
 
     }
 
-    default void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window){
+    default void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window) {
 
     }
 
-    default void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game){
+    default void onChooseItem(@NotNull ItemChooseEvent event, @NotNull LocalGame game) {
 
     }
 
-    default void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game){
+    default void onUseWeapon(@NotNull WeaponUseEvent event, @NotNull LocalGame game) {
 
     }
 

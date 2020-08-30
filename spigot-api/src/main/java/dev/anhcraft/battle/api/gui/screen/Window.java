@@ -60,10 +60,10 @@ public class Window extends CustomDataContainer {
 
     public void cleanData(Predicate<String> test) {
         getDataContainer().keySet().removeIf(test);
-        if(topView != null) {
+        if (topView != null) {
             topView.getDataContainer().keySet().removeIf(test);
         }
-        if(bottomView != null) {
+        if (bottomView != null) {
             bottomView.getDataContainer().keySet().removeIf(test);
         }
     }

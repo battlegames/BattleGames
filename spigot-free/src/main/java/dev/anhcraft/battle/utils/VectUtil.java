@@ -24,7 +24,7 @@ import org.bukkit.util.Vector;
 public class VectUtil {
     public static Vector rotate(Vector v, float yawDegrees, float pitchDegrees) {
         double yaw = Math.toRadians(-1.0f * (yawDegrees + 90.0f));
-        double pitch = Math.toRadians(- pitchDegrees);
+        double pitch = Math.toRadians(-pitchDegrees);
         double cosYaw = Math.cos(yaw);
         double cosPitch = Math.cos(pitch);
         double sinYaw = Math.sin(yaw);
@@ -40,7 +40,7 @@ public class VectUtil {
         return new Vector(x, y, z);
     }
 
-    public static void rotateNew(Vector vec, float yawDeg, float pitchDeg){
+    public static void rotateNew(Vector vec, float yawDeg, float pitchDeg) {
         double yaw = Math.toRadians(yawDeg); // trái - phải
         double pitch = Math.toRadians(pitchDeg); // trên - dưới
 

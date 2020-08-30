@@ -27,79 +27,80 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class CooldownMap extends HashMap<UUID, Long> {
-    public CooldownMap(){}
+    public CooldownMap() {
+    }
 
-    public CooldownMap(@NotNull List<Player> players){
+    public CooldownMap(@NotNull List<Player> players) {
         Condition.notNull(players);
         players.stream().map(Entity::getUniqueId).forEach(this::resetTime);
     }
 
-    public CooldownMap(Player... players){
+    public CooldownMap(Player... players) {
         Condition.notNull(players);
         Arrays.stream(players).filter(Objects::nonNull).map(Entity::getUniqueId).forEach(this::resetTime);
     }
 
-    public void resetTime(Player player){
-        put(player.getUniqueId(), System.currentTimeMillis()/50);
+    public void resetTime(Player player) {
+        put(player.getUniqueId(), System.currentTimeMillis() / 50);
     }
 
-    public void setTime(Player player, long date){
+    public void setTime(Player player, long date) {
         put(player.getUniqueId(), date);
     }
 
-    public long getTime(Player player){
-        return getOrDefault(player.getUniqueId(), System.currentTimeMillis()/50);
+    public long getTime(Player player) {
+        return getOrDefault(player.getUniqueId(), System.currentTimeMillis() / 50);
     }
 
-    public void extendTime(Player player, long duration){
+    public void extendTime(Player player, long duration) {
         put(player.getUniqueId(), getTime(player) + duration);
     }
 
-    public void contractTime(Player player, long duration){
+    public void contractTime(Player player, long duration) {
         put(player.getUniqueId(), getTime(player) - duration);
     }
 
-    public long elapsedTime(Player player){
-        return System.currentTimeMillis()/50 - getTime(player);
+    public long elapsedTime(Player player) {
+        return System.currentTimeMillis() / 50 - getTime(player);
     }
 
-    public boolean isPassed(Player player, long duration){
+    public boolean isPassed(Player player, long duration) {
         return elapsedTime(player) > duration;
     }
 
-    public long remainingTime(Player player, long duration){
+    public long remainingTime(Player player, long duration) {
         return duration - elapsedTime(player);
     }
 
-    public void resetTime(UUID player){
-        put(player, System.currentTimeMillis()/50);
+    public void resetTime(UUID player) {
+        put(player, System.currentTimeMillis() / 50);
     }
 
-    public void setTime(UUID player, long date){
+    public void setTime(UUID player, long date) {
         put(player, date);
     }
 
-    public long getTime(UUID player){
-        return getOrDefault(player, System.currentTimeMillis()/50);
+    public long getTime(UUID player) {
+        return getOrDefault(player, System.currentTimeMillis() / 50);
     }
 
-    public void extendTime(UUID player, long duration){
+    public void extendTime(UUID player, long duration) {
         put(player, getTime(player) + duration);
     }
 
-    public void contractTime(UUID player, long duration){
+    public void contractTime(UUID player, long duration) {
         put(player, getTime(player) - duration);
     }
 
-    public long elapsedTime(UUID player){
-        return System.currentTimeMillis()/50 - getTime(player);
+    public long elapsedTime(UUID player) {
+        return System.currentTimeMillis() / 50 - getTime(player);
     }
 
-    public boolean isPassed(UUID player, long duration){
+    public boolean isPassed(UUID player, long duration) {
         return elapsedTime(player) > duration;
     }
 
-    public long remainingTime(UUID player, long duration){
+    public long remainingTime(UUID player, long duration) {
         return duration - elapsedTime(player);
     }
 }

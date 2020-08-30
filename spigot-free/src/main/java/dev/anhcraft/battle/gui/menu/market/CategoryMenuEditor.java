@@ -38,9 +38,9 @@ public class CategoryMenuEditor implements Pagination {
         BattleApi api = ApiProvider.consume();
         Market mk = api.getMarket();
         boolean inGame = api.getArenaManager().getGame(player) != null;
-        for(Category c : mk.getCategories()){
-            if(!chain.hasNext()) break;
-            if((c.isInGameOnly() && !inGame) || chain.shouldSkip()){
+        for (Category c : mk.getCategories()) {
+            if (!chain.hasNext()) break;
+            if ((c.isInGameOnly() && !inGame) || chain.shouldSkip()) {
                 continue;
             }
             Slot slot = chain.next();

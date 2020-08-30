@@ -54,7 +54,7 @@ public class PlayerScoreboard {
         this.lines = new ScoreboardLine[maxLines];
         this.title = title;
         fixedLength = fixedLength / 2;
-        if(fixedLength <= 0 || fixedLength > MAX_ENTRY_LENGTH) maxEntryLength = MAX_ENTRY_LENGTH;
+        if (fixedLength <= 0 || fixedLength > MAX_ENTRY_LENGTH) maxEntryLength = MAX_ENTRY_LENGTH;
         else {
             maxEntryLength = fixedLength;
             this.fixedLength = true;
@@ -64,7 +64,7 @@ public class PlayerScoreboard {
         objective = scoreboard.registerNewObjective(StringUtil.cutString("abm." + player.getName(), 16), "dummy");
         renderTitle();
         int i = 0;
-        while(i < maxLines){
+        while (i < maxLines) {
             ChatColor color = ChatColor.values()[i];
             String entry = color.toString() + ChatColor.RESET.toString();
             this.lines[i] = new ScoreboardLine(scoreboard.registerNewTeam(entry), color, lines.get(i));
@@ -72,17 +72,17 @@ public class PlayerScoreboard {
         }
     }
 
-    public void renderTitle(){
+    public void renderTitle() {
         objective.setDisplayName(StringUtil.cutString(PlaceholderUtil.formatPAPI(player, title), 2 * maxEntryLength));
     }
 
-    public void renderLines(){
+    public void renderLines() {
         int i = 0;
-        while(i < lines.length)
+        while (i < lines.length)
             renderLine(i++);
     }
 
-    public void renderLine(int index){
+    public void renderLine(int index) {
         BattleDebugger.startTiming("scoreboard-line-render");
         ScoreboardLine line = lines[index];
         String content = PlaceholderUtil.formatPAPI(player, line.getContent());
@@ -91,7 +91,7 @@ public class PlayerScoreboard {
         // if the prefix ends with colors, remove it!
         if (prefix.charAt(prefix.length() - 2) == ChatColor.COLOR_CHAR)
             prefix.delete(prefix.length() - 2, prefix.length());
-        if(prefix.length() == 0) {
+        if (prefix.length() == 0) {
             BattleDebugger.endTiming("scoreboard-line-render");
             return;
         }
@@ -99,12 +99,12 @@ public class PlayerScoreboard {
         boolean rendered = false;
 
         // only change the suffix if needed
-        if(content.length() > maxEntryLength) {
+        if (content.length() > maxEntryLength) {
             // sometimes, dividing prefix and suffix causes the prefix to be ended with a color sign
             // we can remove it here
             if (prefix.charAt(prefix.length() - 1) == ChatColor.COLOR_CHAR)
                 prefix.deleteCharAt(prefix.length() - 1);
-            if(prefix.length() == 0) {
+            if (prefix.length() == 0) {
                 BattleDebugger.endTiming("scoreboard-line-render");
                 return;
             }
@@ -113,7 +113,7 @@ public class PlayerScoreboard {
             StringBuilder suffix = new StringBuilder();
             int maxSufLen = Math.min(prefix.length() + maxEntryLength - suffix.length(), content.length());
             String s = content.substring(prefix.length(), maxSufLen);
-            if(s.length() == 0) {
+            if (s.length() == 0) {
                 BattleDebugger.endTiming("scoreboard-line-render");
                 return;
             }
@@ -121,15 +121,15 @@ public class PlayerScoreboard {
 
             // if the beginning of the suffix did not have colors, we will try to add
             // color codes from the end of the prefix
-            if(s.charAt(0) != ChatColor.COLOR_CHAR) {
+            if (s.charAt(0) != ChatColor.COLOR_CHAR) {
                 String lc = ChatColor.getLastColors(preStr);
-                if(suffix.length() + lc.length() <= maxEntryLength) suffix.insert(0, lc);
+                if (suffix.length() + lc.length() <= maxEntryLength) suffix.insert(0, lc);
             }
 
             // if the suffix ends with colors, remove it!
-            if(suffix.charAt(suffix.length() - 2) == ChatColor.COLOR_CHAR)
+            if (suffix.charAt(suffix.length() - 2) == ChatColor.COLOR_CHAR)
                 suffix.delete(suffix.length() - 2, suffix.length());
-            if(suffix.length() == 0) {
+            if (suffix.length() == 0) {
                 BattleDebugger.endTiming("scoreboard-line-render");
                 return;
             }
@@ -138,7 +138,7 @@ public class PlayerScoreboard {
             // we can remove it here
             if (suffix.charAt(suffix.length() - 1) == ChatColor.COLOR_CHAR)
                 suffix.deleteCharAt(suffix.length() - 1);
-            if(suffix.length() == 0) {
+            if (suffix.length() == 0) {
                 BattleDebugger.endTiming("scoreboard-line-render");
                 return;
             }
@@ -149,7 +149,7 @@ public class PlayerScoreboard {
             line.getTeam().setSuffix(suffix.toString());
             rendered = true;
         }
-        if(!rendered) {
+        if (!rendered) {
             // add spaces to the end if needed
             while (fixedLength && prefix.length() < maxEntryLength) prefix.append(" ");
             line.getTeam().setPrefix(prefix.toString());
@@ -172,13 +172,13 @@ public class PlayerScoreboard {
         return lines;
     }
 
-    void show(){
+    void show() {
         renderLines();
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         player.setScoreboard(scoreboard);
     }
 
-    void remove(){
+    void remove() {
         objective.unregister();
         scoreboard.clearSlot(DisplaySlot.SIDEBAR);
     }
@@ -188,22 +188,22 @@ public class PlayerScoreboard {
         renderLines();
     }
 
-    public void addTeamPlayers(String team, Collection<Player> players){
+    public void addTeamPlayers(String team, Collection<Player> players) {
         Team t = scoreboard.getTeam(team);
-        if(t == null) {
+        if (t == null) {
             t = scoreboard.registerNewTeam(team);
             t.setOption(Team.Option.NAME_TAG_VISIBILITY, nameTagVisibility);
         }
-        for(Player p : players){
+        for (Player p : players) {
             t.addEntry(p.getName());
         }
     }
 
-    public void removeTeamPlayer(String team, Player player){
+    public void removeTeamPlayer(String team, Player player) {
         Team t = scoreboard.getTeam(team);
-        if(t == null) return;
+        if (t == null) return;
         t.removeEntry(player.getName());
-        if(t.getSize() == 0) t.unregister();
+        if (t.getSize() == 0) t.unregister();
     }
 
     public Team.OptionStatus getNameTagVisibility() {

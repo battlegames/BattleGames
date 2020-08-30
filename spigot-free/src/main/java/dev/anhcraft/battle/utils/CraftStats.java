@@ -34,7 +34,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class CraftStats {
-    public static void sendData(BattlePlugin plugin){
+    public static void sendData(BattlePlugin plugin) {
         try {
             JsonObject object = new JsonObject();
             object.addProperty("pn", plugin.getDescription().getName());
@@ -61,6 +61,7 @@ public class CraftStats {
             input.close();
             output.close();
             conn.disconnect();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 }

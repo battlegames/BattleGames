@@ -46,7 +46,7 @@ public class GeneralConfigManager extends ConfigManager {
         } catch (InvalidValueException e) {
             e.printStackTrace();
         }
-        if(getReloadCount() == 0) {
+        if (getReloadCount() == 0) {
             plugin.dataManager = new BattleDataManager(plugin, plugin.generalConf.getStorageType());
             boolean ok = false;
             if (plugin.generalConf.getStorageType() == StorageType.MYSQL) {
@@ -96,8 +96,8 @@ public class GeneralConfigManager extends ConfigManager {
                 }
             }
             plugin.dataManager.loadServerData();
-        } else if(oldStorageType != plugin.generalConf.getStorageType()) {
-            plugin.getLogger().warning("["+loggerName+"] Storage type can not be changed with reloads! Please restart the server.");
+        } else if (oldStorageType != plugin.generalConf.getStorageType()) {
+            plugin.getLogger().warning("[" + loggerName + "] Storage type can not be changed with reloads! Please restart the server.");
         }
 
         plugin.toLevelConverter = new ExpressionBuilder(plugin.generalConf.getExp2LvFormula()).variables("x").build();
@@ -107,17 +107,17 @@ public class GeneralConfigManager extends ConfigManager {
         plugin.shortFormDate2 = new SimpleDateFormat(plugin.generalConf.getDateFormatShortMinutes());
         plugin.shortFormDate3 = new SimpleDateFormat(plugin.generalConf.getDateFormatShortSeconds());
 
-        if(plugin.generalConf.isBungeeEnabled()){
-            if(!plugin.premiumConnector.isSuccess()) {
+        if (plugin.generalConf.isBungeeEnabled()) {
+            if (!plugin.premiumConnector.isSuccess()) {
                 plugin.getLogger().warning("Bungeecord support is not provided in free version.");
-            } else if(plugin.spigotBungeeEnabled) {
+            } else if (plugin.spigotBungeeEnabled) {
                 plugin.supportBungee = true;
             } else {
                 plugin.getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");
             }
         }
 
-        if(plugin.generalConf.isResourcePackEnabled()) {
+        if (plugin.generalConf.isResourcePackEnabled()) {
             ResourcePack.init(s -> plugin.getLogger().info(s));
         }
     }

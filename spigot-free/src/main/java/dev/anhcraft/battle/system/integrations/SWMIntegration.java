@@ -46,25 +46,25 @@ public class SWMIntegration extends BattleComponent implements ISWMIntegration {
     }
 
     @Override
-    public int isReadOnly(String world){
+    public int isReadOnly(String world) {
         WorldData worldData = ConfigManager.getWorldConfig().getWorlds().get(world);
         return worldData == null ? -1 : (worldData.isReadOnly() ? 1 : 0);
     }
 
     @Override
-    public void reloadWorld(CountDownLatch countDownLatch, String world){
+    public void reloadWorld(CountDownLatch countDownLatch, String world) {
         WorldData worldData = ConfigManager.getWorldConfig().getWorlds().get(world);
-        if(worldData != null){
+        if (worldData != null) {
             SlimeLoader loader = api.getLoader(worldData.getDataSource());
             SlimePropertyMap map = worldData.toPropertyMap();
             plugin.extension.getTaskHelper().newTask(() -> {
                 World w = Bukkit.getWorld(world);
-                if(w == null){
+                if (w == null) {
                     countDownLatch.countDown();
                     return;
                 }
                 w.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
-                if(Bukkit.unloadWorld(w, false)) {
+                if (Bukkit.unloadWorld(w, false)) {
                     plugin.extension.getTaskHelper().newAsyncTask(new a(loader, world, map, countDownLatch));
                 } else {
                     countDownLatch.countDown();

@@ -21,9 +21,7 @@ package dev.anhcraft.battle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
-import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.GeneralConfig;
-import dev.anhcraft.battle.api.SystemConfig;
+import dev.anhcraft.battle.api.*;
 import dev.anhcraft.battle.api.advancement.AdvancementManager;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.ArenaManager;
@@ -36,10 +34,6 @@ import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.api.gui.GuiManager;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.market.Market;
-import dev.anhcraft.battle.api.BattleScoreboard;
-import dev.anhcraft.battle.api.Booster;
-import dev.anhcraft.battle.api.Kit;
-import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.api.storage.data.ServerData;
 import dev.anhcraft.battle.cmd.CommandInitializer;
@@ -71,8 +65,8 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.CraftStats;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.State;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
@@ -106,10 +100,10 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public static final int SCOREBOARD_UPDATE_INTERVAL = 10;
 
     public final Map<OfflinePlayer, PlayerData> playerData = new ConcurrentHashMap<>();
-    private final ServerData serverData = new ServerData();
-    private final Market market = new Market();
     public final SystemConfig systemConf = new SystemConfig();
     public final GeneralConfig generalConf = new GeneralConfig();
+    private final ServerData serverData = new ServerData();
+    private final Market market = new Market();
     public JsonObject minecraftLocale;
     public PremiumConnector premiumConnector;
     public CraftExtension extension;
@@ -118,7 +112,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public boolean supportBungee;
     public boolean spigotBungeeEnabled;
     public boolean slimeWorldManagerSupport;
-    private PapiExpansion papiExpansion;
     public ISWMIntegration SWMIntegration;
     public Expression toExpConverter;
     public Expression toLevelConverter;
@@ -164,6 +157,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public QueueTitleTask queueTitleTask;
     public QueueServerTask queueServerTask;
     public EntityTrackingTask entityTrackingTask;
+    private PapiExpansion papiExpansion;
 
     @Override
     public void onEnable() {
@@ -189,7 +183,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         extension.requireAtLeastVersion("1.1.9");
         premiumConnector = new PremiumConnector(this);
         premiumConnector.onIntegrate();
-        if(getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")){
+        if (getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")) {
             slimeWorldManagerSupport = true;
             SWMIntegration = new SWMIntegration(this);
             getLogger().info("Hooked to SlimeWorldManager");
@@ -255,16 +249,16 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         taskHelper.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
         taskHelper.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
-        if(syncDataTaskNeed) {
+        if (syncDataTaskNeed) {
             taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
         }
-        if(generalConf.getJoinSignUpdateTime() >= 20) {
+        if (generalConf.getJoinSignUpdateTime() >= 20) {
             taskHelper.newTimerTask(new JoinSignUpdateTask(this), 0, generalConf.getJoinSignUpdateTime());
         }
         taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
         taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
         taskHelper.newAsyncTimerTask(entityTrackingTask = new EntityTrackingTask(this), 0, 10);
-        if(supportBungee){
+        if (supportBungee) {
             taskHelper.newAsyncTimerTask(queueServerTask = new QueueServerTask(this), 0, 20);
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
             getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
@@ -291,7 +285,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         premiumConnector.onDisable();
         arenaManager.listGames(game -> {/*
             if(game instanceof LocalGame) {
@@ -305,22 +299,22 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         dataManager.saveServerData();
         playerData.keySet().forEach(dataManager::savePlayerData);
         ServerUtil.getAllEntities(entity -> {
-            if(entity instanceof HumanEntity) return;
-            if(entity.hasMetadata("abm_temp_entity")) entity.remove();
+            if (entity instanceof HumanEntity) return;
+            if (entity.hasMetadata("abm_temp_entity")) entity.remove();
         });
         dataManager.destroy();
         CraftExtension.unregister(BattlePlugin.class);
     }
 
     @Override
-    public void reloadConfig(){
+    public void reloadConfig() {
 
     }
 
-    public synchronized void reloadConfigs(){
+    public synchronized void reloadConfigs() {
         ConfigReloadEvent event = new ConfigReloadEvent();
         getServer().getPluginManager().callEvent(event);
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
         systemConfigManager.reloadConfig();
         generalConfigManager.reloadConfig();
         localeConfigManager.reloadConfig();
@@ -336,7 +330,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         perkConfigManager.reloadConfig();
         boosterConfigManager.reloadConfig();
         advancementConfigManager.reloadConfig();
-        if(VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0){
+        if (VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0) {
             getLogger().info("Looks like the current config system has been outdated.");
             getLogger().info("The plugin will try to update it for you!");
             getLogger().info("Update details: v1 -> v2");
@@ -346,7 +340,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             marketConfigManager.reloadConfig(true);
             guiConfigManager.reloadConfig(true);
             ///////////////
-            if(!systemConf.isRemoteConfigEnabled()) {
+            if (!systemConf.isRemoteConfigEnabled()) {
                 getLogger().info("All done! Saving changes...");
                 systemConfigManager.getSettings().set("last_config_version", 2);
                 systemConfigManager.saveConfig();
@@ -364,22 +358,22 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     }
 
     @NotNull
-    public File getEditorFolder(){
+    public File getEditorFolder() {
         return new File(configFolder, "editor");
     }
 
-    public <T> Collection<T> limit(String k, Set<T> strings, int max){
-        if(premiumConnector.isSuccess() || strings.size() <= max){
+    public <T> Collection<T> limit(String k, Set<T> strings, int max) {
+        if (premiumConnector.isSuccess() || strings.size() <= max) {
             return strings;
         } else {
-            getLogger().warning(k+" is limited in free version! ("+strings.size()+"/"+max+")");
+            getLogger().warning(k + " is limited in free version! (" + strings.size() + "/" + max + ")");
             return strings.stream().limit(max).collect(Collectors.toSet());
         }
     }
 
     public void resetScoreboard(Player player) {
         BattleScoreboard sb = generalConf.getDefaultScoreboard();
-        if(sb == null || !sb.isEnabled()) {
+        if (sb == null || !sb.isEnabled()) {
             scoreboardRenderer.removeScoreboard(player);
             return;
         }
@@ -410,53 +404,52 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public @Nullable String getLocalizedMessage(@NotNull String path) {
         Object o = localeConfigManager.getSettings().get(path);
-        if(o == null) return null;
+        if (o == null) return null;
         return o instanceof Collection ? ((Collection<?>) o).stream().map(Object::toString).collect(Collectors.joining(", ")) : o.toString();
     }
 
     @Override
     public @NotNull String getLocalizedMessage(@NotNull String path, @NotNull String def) {
         Object o = localeConfigManager.getSettings().get(path);
-        if(o == null) return def;
+        if (o == null) return def;
         return o instanceof Collection ? ((Collection<?>) o).stream().map(Object::toString).collect(Collectors.joining(", ")) : o.toString();
     }
 
     @Override
     public @Nullable List<String> getLocalizedMessages(@NotNull String path) {
         Object o = localeConfigManager.getSettings().get(path);
-        if(o == null) return null;
+        if (o == null) return null;
         return o instanceof Collection ? ((Collection<?>) o).stream().map(Object::toString).collect(Collectors.toList()) : Collections.singletonList(o.toString());
     }
 
     @Override
     public @NotNull List<String> getLocalizedMessages(@NotNull String path, @NotNull String def) {
         Object o = localeConfigManager.getSettings().get(path);
-        if(o == null) return Collections.singletonList(def);
+        if (o == null) return Collections.singletonList(def);
         return o instanceof Collection ? ((Collection<?>) o).stream().map(Object::toString).collect(Collectors.toList()) : Collections.singletonList(o.toString());
     }
 
     @Override
     public @NotNull List<String> getLocalizedMessages(@NotNull String path, @NotNull List<String> def) {
         Object o = localeConfigManager.getSettings().get(path);
-        if(o == null) return def;
+        if (o == null) return def;
         return o instanceof Collection ? ((Collection<?>) o).stream().map(Object::toString).collect(Collectors.toList()) : Collections.singletonList(o.toString());
     }
 
     @Override
     @NotNull
-    public Map<String, String> mapInfo(@NotNull InfoHolder holder){
+    public Map<String, String> mapInfo(@NotNull InfoHolder holder) {
         Condition.argNotNull("holder", holder);
         return holder.getMap().entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> {
                     Object data = entry.getValue();
-                    if(data instanceof State){
+                    if (data instanceof State) {
                         String s = localeConfigManager.getSettings().getString(((State) data).getLocalePath());
                         return s == null ? "" : s;
-                    }
-                    else if(data instanceof Double) {
+                    } else if (data instanceof Double) {
                         double v = (double) data;
-                        if(Double.isNaN(v) || Double.isInfinite(v)) {
+                        if (Double.isNaN(v) || Double.isInfinite(v)) {
                             return String.valueOf(v);
                         } else {
                             char[] arr = String.format("%f", v).toCharArray();
@@ -474,10 +467,9 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                             }
                             return stringBuilder.toString();
                         }
-                    }
-                    else if(data instanceof Float) {
+                    } else if (data instanceof Float) {
                         float v = (float) data;
-                        if(Float.isNaN(v) || Float.isInfinite(v)) {
+                        if (Float.isNaN(v) || Float.isInfinite(v)) {
                             return String.valueOf(v);
                         } else {
                             char[] arr = String.format("%f", v).toCharArray();
@@ -495,14 +487,13 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                             }
                             return stringBuilder.toString();
                         }
-                    }
-                    else if(data instanceof Integer)
+                    } else if (data instanceof Integer)
                         return Integer.toString((Integer) data);
-                    else if(data instanceof Long)
+                    else if (data instanceof Long)
                         return Long.toString((Long) data);
-                    else if(data instanceof String)
+                    else if (data instanceof String)
                         return data.toString();
-                    return "Error! (data class="+data.getClass().getSimpleName()+")";
+                    return "Error! (data class=" + data.getClass().getSimpleName() + ")";
                 }
         ));
     }
@@ -513,37 +504,37 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
     @NotNull
     @Override
-    public String formatLongFormDate(@NotNull Date date){
+    public String formatLongFormDate(@NotNull Date date) {
         Condition.argNotNull("date", date);
         return longFormDate.format(date);
     }
 
     @NotNull
     @Override
-    public String formatShortFormTime(long time){
+    public String formatShortFormTime(long time) {
         final long x = 1000;
-        if(time < 60 * x) return formatShortFormDateSeconds(new Date(time));
-        else if(time < 60 * 60 * x) return formatShortFormDateMinutes(new Date(time));
+        if (time < 60 * x) return formatShortFormDateSeconds(new Date(time));
+        else if (time < 60 * 60 * x) return formatShortFormDateMinutes(new Date(time));
         else return formatShortFormDateHours(new Date(time));
     }
 
     @NotNull
     @Override
-    public String formatShortFormDateHours(@NotNull Date date){
+    public String formatShortFormDateHours(@NotNull Date date) {
         Condition.argNotNull("date", date);
         return shortFormDate1.format(date);
     }
 
     @NotNull
     @Override
-    public String formatShortFormDateMinutes(@NotNull Date date){
+    public String formatShortFormDateMinutes(@NotNull Date date) {
         Condition.argNotNull("date", date);
         return shortFormDate2.format(date);
     }
 
     @NotNull
     @Override
-    public String formatShortFormDateSeconds(@NotNull Date date){
+    public String formatShortFormDateSeconds(@NotNull Date date) {
         Condition.argNotNull("date", date);
         return shortFormDate3.format(date);
     }
@@ -810,7 +801,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
             @Override
             public void run() {
-                if(counter++ == maxRepeat){
+                if (counter++ == maxRepeat) {
                     extension.getTaskHelper().cancelTask(id.get());
                     return;
                 }
@@ -826,7 +817,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
     private void exit(String msg) {
         getLogger().warning("Plugin is now shutting down...");
-        getLogger().info("Reason: "+msg);
+        getLogger().info("Reason: " + msg);
         getServer().getPluginManager().disablePlugin(this);
     }
 }

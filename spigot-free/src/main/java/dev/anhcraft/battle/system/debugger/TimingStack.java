@@ -30,15 +30,15 @@ public class TimingStack {
         this.start = start;
     }
 
-    public boolean inProgress(){
+    public boolean inProgress() {
         return end == 0;
     }
 
-    public long delta(){
+    public long delta() {
         return end - start;
     }
 
-    public long delta(TimeUnit unit){
+    public long delta(TimeUnit unit) {
         return unit.convert(end - start, TimeUnit.MILLISECONDS);
     }
 

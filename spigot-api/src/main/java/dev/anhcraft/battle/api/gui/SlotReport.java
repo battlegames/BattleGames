@@ -67,7 +67,7 @@ public class SlotReport {
         // since the function can only be triggered when there is a component, the following slot should be
         // non-null, if null then we are in an invalid state
         Slot s = view.getSlot(position);
-        if(s == null)
+        if (s == null)
             throw new IllegalStateException("Invalid slot detected!");
         return s;
     }

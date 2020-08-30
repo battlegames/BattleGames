@@ -35,6 +35,10 @@ public class GamePhaseChangeEvent extends GameEvent {
         this.newPhase = newPhase;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public GamePhase getOldPhase() {
         return oldPhase;
@@ -47,10 +51,6 @@ public class GamePhaseChangeEvent extends GameEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

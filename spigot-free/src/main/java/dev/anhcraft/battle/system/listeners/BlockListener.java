@@ -35,25 +35,25 @@ public class BlockListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void placeBlock(BlockPlaceEvent event){
+    public void placeBlock(BlockPlaceEvent event) {
         plugin.guiManager.callClickEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event, "PLACE_BLOCK");
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void changeSign(SignChangeEvent event){
+    public void changeSign(SignChangeEvent event) {
         String[] lines = event.getLines();
-        if(lines.length >= 2 && (lines[0].contains("Battle") || lines[0].contains("battle"))){
-            if(BattleApi.getInstance().getArena(lines[1]) != null) {
+        if (lines.length >= 2 && (lines[0].contains("Battle") || lines[0].contains("battle"))) {
+            if (BattleApi.getInstance().getArena(lines[1]) != null) {
                 BattleApi.getInstance().getServerData().setJoinSign(BlockPosition.of(event.getBlock()), lines[1]);
             }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void breakBlock(BlockBreakEvent event){
+    public void breakBlock(BlockBreakEvent event) {
         BlockPosition bp = BlockPosition.of(event.getBlock());
         String str = BattleApi.getInstance().getServerData().getJoinSign(bp);
-        if(str != null) {
+        if (str != null) {
             event.setCancelled(true);
             if (event.getPlayer().isSneaking() && event.getPlayer().hasPermission("battle.join_signs.break")) {
                 BattleApi.getInstance().getServerData().setJoinSign(bp, null);

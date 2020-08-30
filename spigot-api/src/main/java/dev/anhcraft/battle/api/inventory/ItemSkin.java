@@ -52,7 +52,7 @@ public class ItemSkin extends ConfigurableObject {
     }
 
     @NotNull
-    public PreparedItem transform(@NotNull PreparedItem preparedItem){
+    public PreparedItem transform(@NotNull PreparedItem preparedItem) {
         Condition.argNotNull("preparedItem", preparedItem);
         preparedItem.material(material);
         preparedItem.damage(damage);

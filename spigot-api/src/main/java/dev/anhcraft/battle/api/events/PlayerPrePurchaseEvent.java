@@ -48,6 +48,10 @@ public class PlayerPrePurchaseEvent extends PlayerEvent implements Cancellable {
         this.hasEnoughBalance = hasEnoughBalance;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Market getMarket() {
         return market;
@@ -83,10 +87,6 @@ public class PlayerPrePurchaseEvent extends PlayerEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

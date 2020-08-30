@@ -37,10 +37,10 @@ public class ProductMenuEditor implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         Category ctg = (Category) view.getWindow().getDataContainer().get(GDataRegistry.MARKET_CATEGORY_EDITOR);
-        if(ctg == null) return;
-        for(Product p : ctg.getProducts()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()){
+        if (ctg == null) return;
+        for (Product p : ctg.getProducts()) {
+            if (!chain.hasNext()) break;
+            if (chain.shouldSkip()) {
                 continue;
             }
             Slot slot = chain.next();

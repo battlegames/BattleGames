@@ -36,31 +36,19 @@ import java.util.List;
 @Schema
 public class Rollback extends ConfigurableObject {
     public static final ConfigSchema<Rollback> SCHEMA = ConfigSchema.of(Rollback.class);
-
-    public enum Provider {
-        SLIME_WORLD,
-        @Deprecated BATTLE,
-        BATTLE_WORLD,
-        BATTLE_REGION
-    }
-
     private List<BoundingBox> cachedRegionPartitions = new ArrayList<>();
-
     @Key("enabled")
     @Explanation("Enabled/Disabled the rollback system")
     private boolean enabled;
-
     @Key("provider")
     @Explanation("The provider which handles the rollback")
     @PrettyEnum
     @Validation(notNull = true)
     private Provider provider;
-
     @Key("worlds")
     @Explanation("List of worlds need to be reset")
     @IgnoreValue(ifNull = true)
     private List<String> worlds = new ArrayList<>();
-
     @Key("region.corner_1")
     @Explanation({
             "First corner in the region",
@@ -68,7 +56,6 @@ public class Rollback extends ConfigurableObject {
     })
     @IgnoreValue(ifNull = true)
     private String corner1;
-
     @Key("region.corner_2")
     @Explanation({
             "Second corner in the region",
@@ -76,7 +63,6 @@ public class Rollback extends ConfigurableObject {
     })
     @IgnoreValue(ifNull = true)
     private String corner2;
-
     @Key("clear_entities")
     @Explanation({
             "Clear all entities in the configured worlds",
@@ -119,5 +105,12 @@ public class Rollback extends ConfigurableObject {
     @NotNull
     public List<BoundingBox> getCachedRegionPartitions() {
         return cachedRegionPartitions;
+    }
+
+    public enum Provider {
+        SLIME_WORLD,
+        @Deprecated BATTLE,
+        BATTLE_WORLD,
+        BATTLE_REGION
     }
 }

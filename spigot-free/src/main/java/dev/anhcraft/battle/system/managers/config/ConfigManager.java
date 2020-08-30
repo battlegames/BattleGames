@@ -51,17 +51,18 @@ public abstract class ConfigManager extends BattleComponent {
 
     public ConfigManager(@NotNull String name, @NotNull String filePath, @Nullable String resourcePath) {
         super((BattlePlugin) BattleApi.getInstance());
-        this.loggerName = name+"Config";
+        this.loggerName = name + "Config";
         this.filePath = filePath;
         this.resourcePath = (resourcePath == null ? filePath : resourcePath);
     }
 
     protected abstract void onLoad();
+
     protected abstract void onClean();
 
     @NotNull
     protected String buildResourcePath() {
-        return  "config/" + resourcePath;
+        return "config/" + resourcePath;
     }
 
     @NotNull
@@ -86,8 +87,8 @@ public abstract class ConfigManager extends BattleComponent {
         try {
             String path = buildResourcePath();
             InputStream in = plugin.getResource(path);
-            if(in == null) {
-                plugin.getLogger().warning("["+loggerName+"] Resource not found: " + path);
+            if (in == null) {
+                plugin.getLogger().warning("[" + loggerName + "] Resource not found: " + path);
                 return;
             }
             byte[] bytes = IOUtil.toByteArray(in, 1024);
@@ -96,7 +97,7 @@ public abstract class ConfigManager extends BattleComponent {
             defaultSettings = YamlConfiguration.loadConfiguration(reader);
             reader.close();
         } catch (IOException e) {
-            plugin.getLogger().warning("["+loggerName+"] Failed to load default config!");
+            plugin.getLogger().warning("[" + loggerName + "] Failed to load default config!");
             e.printStackTrace();
         }
     }
@@ -106,32 +107,32 @@ public abstract class ConfigManager extends BattleComponent {
     }
 
     public synchronized void reloadConfig(boolean forceUpdateConfig) {
-        if(reloadCount > 0) {
+        if (reloadCount > 0) {
             //plugin.getLogger().info("["+loggerName+"] Cleaning cache...");
             cleanCache();
         }
         boolean matchDef = false;
-        if(forceUpdateConfig || preventRemote || !plugin.getSystemConfig().isRemoteConfigEnabled()){
+        if (forceUpdateConfig || preventRemote || !plugin.getSystemConfig().isRemoteConfigEnabled()) {
             File f = buildConfigFile();
-            plugin.getLogger().info("["+loggerName+"] Loading config...");
+            plugin.getLogger().info("[" + loggerName + "] Loading config...");
             if (!forceUpdateConfig && f.exists()) {
                 settings = YamlConfiguration.loadConfiguration(f);
             } else {
                 loadDefaultConfig();
                 settings = defaultSettings;
                 try {
-                    if(forceUpdateConfig) {
-                        if(plugin.getSystemConfig().isRemoteConfigEnabled()) {
-                            plugin.getLogger().warning("["+loggerName+"] Cannot update the config since remote-config feature has been turned on. You need to update (manually) ASAP!");
+                    if (forceUpdateConfig) {
+                        if (plugin.getSystemConfig().isRemoteConfigEnabled()) {
+                            plugin.getLogger().warning("[" + loggerName + "] Cannot update the config since remote-config feature has been turned on. You need to update (manually) ASAP!");
                         } else if (f.exists()) {
-                            plugin.getLogger().info("["+loggerName+"] The system detected this config need to be updated!");
-                            plugin.getLogger().warning("["+loggerName+"] Creating backup for the current config...");
+                            plugin.getLogger().info("[" + loggerName + "] The system detected this config need to be updated!");
+                            plugin.getLogger().warning("[" + loggerName + "] Creating backup for the current config...");
                             File of = new File(f.getParentFile(), "old." + f.getName());
                             of.createNewFile();
                             FileUtil.copy(f, of);
-                            plugin.getLogger().warning("["+loggerName+"] The old config has been saved to " + of.getAbsolutePath());
+                            plugin.getLogger().warning("[" + loggerName + "] The old config has been saved to " + of.getAbsolutePath());
                             settings.save(f);
-                            plugin.getLogger().warning("["+loggerName+"] The new config has been saved to " + f.getAbsolutePath());
+                            plugin.getLogger().warning("[" + loggerName + "] The new config has been saved to " + f.getAbsolutePath());
                         } else {
                             f.createNewFile();
                             settings.save(f);
@@ -141,30 +142,30 @@ public abstract class ConfigManager extends BattleComponent {
                         settings.save(f);
                     }
                 } catch (IOException e) {
-                    plugin.getLogger().warning("["+loggerName+"] Failed to save config to " + f.getAbsolutePath());
+                    plugin.getLogger().warning("[" + loggerName + "] Failed to save config to " + f.getAbsolutePath());
                     e.printStackTrace();
                 }
                 matchDef = true; // no need to compare with default again
             }
         } else {
             String url = buildConfigURL();
-            plugin.getLogger().info("["+loggerName+"] Downloading config...");
+            plugin.getLogger().info("[" + loggerName + "] Downloading config...");
             try {
                 byte[] bytes = HttpUtil.fetch(url);
                 Reader reader = new StringReader(new String(bytes, StandardCharsets.UTF_8));
                 settings = YamlConfiguration.loadConfiguration(reader);
                 reader.close();
             } catch (IOException e) {
-                plugin.getLogger().warning("["+loggerName+"] Failed to download config from " + url);
+                plugin.getLogger().warning("[" + loggerName + "] Failed to download config from " + url);
                 e.printStackTrace();
                 loadDefaultConfig();
                 settings = defaultSettings;
                 matchDef = true; // no need to compare with default again
             }
         }
-        if(!matchDef && shouldCompareDefault()) {
+        if (!matchDef && shouldCompareDefault()) {
             loadDefaultConfig();
-            if(defaultSettings != null) {
+            if (defaultSettings != null) {
                 int errorCount = 0;
                 for (String s : settings.getKeys(true)) {
                     if (!defaultSettings.isSet(s)) {

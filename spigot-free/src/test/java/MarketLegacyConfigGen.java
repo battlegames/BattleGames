@@ -27,42 +27,42 @@ import java.io.File;
 import java.io.IOException;
 
 public class MarketLegacyConfigGen {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         FileConfiguration fc = YamlConfiguration.loadConfiguration(new File("spigot-free/src/main/resources/config/market.yml"));
-        for (String s : fc.getConfigurationSection("categories").getKeys(false)){
-            System.out.println("Visiting category `"+s+"`");
-            String q = fc.getString("categories."+s+".icon.material");
-            if(q != null){
+        for (String s : fc.getConfigurationSection("categories").getKeys(false)) {
+            System.out.println("Visiting category `" + s + "`");
+            String q = fc.getString("categories." + s + ".icon.material");
+            if (q != null) {
                 PresentPair<String, Integer> p = LegacyUtils.LEGACY.get(q.toUpperCase());
-                if(p != null) {
+                if (p != null) {
                     System.out.println(">> Upgrading category icon...");
-                    fc.set("categories."+s+".icon.material", p.getFirst().toLowerCase());
-                    if(p.getSecond() != 0) fc.set("categories."+s+".icon.damage", p.getSecond());
+                    fc.set("categories." + s + ".icon.material", p.getFirst().toLowerCase());
+                    if (p.getSecond() != 0) fc.set("categories." + s + ".icon.damage", p.getSecond());
                 }
             }
 
-            ConfigurationSection cs = fc.getConfigurationSection("categories."+s+".products");
-            for (String k : cs.getKeys(false)){
-                System.out.println("  | Visiting product `"+k+"`");
+            ConfigurationSection cs = fc.getConfigurationSection("categories." + s + ".products");
+            for (String k : cs.getKeys(false)) {
+                System.out.println("  | Visiting product `" + k + "`");
                 String q1 = cs.getString(k + ".icon.material");
-                if(q1 != null){
+                if (q1 != null) {
                     PresentPair<String, Integer> p1 = LegacyUtils.LEGACY.get(q1.toUpperCase());
-                    if(p1 != null) {
+                    if (p1 != null) {
                         System.out.println("  >> Upgrading product icon...");
                         cs.set(k + ".icon.material", p1.getFirst().toLowerCase());
-                        if(p1.getSecond() != 0) cs.set(k + ".icon.damage", p1.getSecond());
+                        if (p1.getSecond() != 0) cs.set(k + ".icon.damage", p1.getSecond());
                     }
                 }
                 ConfigurationSection gi = cs.getConfigurationSection(k + ".executions.give_items.vanilla");
                 if (gi != null) {
-                    for (String t : gi.getKeys(false)){
-                        String q2 = gi.getString(t+".material");
-                        if(q2 != null){
+                    for (String t : gi.getKeys(false)) {
+                        String q2 = gi.getString(t + ".material");
+                        if (q2 != null) {
                             PresentPair<String, Integer> p2 = LegacyUtils.LEGACY.get(q2.toUpperCase());
-                            if(p2 != null) {
+                            if (p2 != null) {
                                 System.out.println("  >> Upgrading product item giving...");
-                                gi.set(t+".material", p2.getFirst().toLowerCase());
-                                if(p2.getSecond() != 0) gi.set(t+".damage", p2.getSecond());
+                                gi.set(t + ".material", p2.getFirst().toLowerCase());
+                                if (p2.getSecond() != 0) gi.set(t + ".damage", p2.getSecond());
                             }
                         }
                     }

@@ -45,6 +45,10 @@ public class WeaponUseEvent extends GameEvent implements Cancellable {
         this.report = report;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     @NotNull
     public LocalGame getGame() {
@@ -73,10 +77,6 @@ public class WeaponUseEvent extends GameEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

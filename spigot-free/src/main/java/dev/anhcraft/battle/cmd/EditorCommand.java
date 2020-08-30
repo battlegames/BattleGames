@@ -37,27 +37,27 @@ import java.io.IOException;
 public class EditorCommand extends BaseCommand {
     private final BattlePlugin plugin;
 
-    public EditorCommand(BattlePlugin plugin){
+    public EditorCommand(BattlePlugin plugin) {
         this.plugin = plugin;
     }
 
     @CatchUnknown
     @HelpCommand
-    public void help(CommandSender sender, CommandHelp help){
+    public void help(CommandSender sender, CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("market open")
     @CommandPermission("battle.editor.market.open")
-    public void marketOpen(Player player){
+    public void marketOpen(Player player) {
         plugin.guiManager.openTopGui(player, NativeGui.MARKET_CATEGORY_MENU_EDITOR);
     }
 
     @Subcommand("market save")
     @CommandPermission("battle.editor.market.save")
-    public void marketSave(CommandSender sender){
+    public void marketSave(CommandSender sender) {
         ConfigHelper.writeConfig(plugin.marketConfigManager.getSettings(), Market.SCHEMA, plugin.getMarket(), ConfigHelper.newOptions().ignoreEmptyArray().ignoreEmptyList().ignoreFalse().ignoreZero().ignoreEmptySection());
-        File f = new File(plugin.getEditorFolder(), "market."+System.currentTimeMillis()+".yml");
+        File f = new File(plugin.getEditorFolder(), "market." + System.currentTimeMillis() + ".yml");
         try {
             plugin.marketConfigManager.getSettings().save(f);
             plugin.chatManager.send(sender, "editor.market.saved", new InfoHolder("").inform("path", f.getAbsolutePath()).compile());

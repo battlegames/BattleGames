@@ -32,11 +32,11 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class LongCounter extends Statistic<Long> {
     private final AtomicLong backend;
 
-    public LongCounter(){
+    public LongCounter() {
         backend = new AtomicLong();
     }
 
-    public LongCounter(long value){
+    public LongCounter(long value) {
         backend = new AtomicLong(value);
     }
 
@@ -64,9 +64,9 @@ public abstract class LongCounter extends Statistic<Long> {
     }
 
     public long increase(@Nullable Player who, long delta) {
-        if(delta == 0) return backend.get();
+        if (delta == 0) return backend.get();
         long x = backend.addAndGet(delta);
-        if(hasAdvancementSupport() && who != null) {
+        if (hasAdvancementSupport() && who != null) {
             BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
         }
         return x;

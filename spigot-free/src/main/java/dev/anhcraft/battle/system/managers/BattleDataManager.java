@@ -42,8 +42,8 @@ import java.util.Set;
 
 public class BattleDataManager extends BattleComponent {
     private final Map<OfflinePlayer, Storage> PLAYER_STORAGE = new HashMap<>();
-    private Storage serverStorage;
     private final StorageType storageType;
+    private Storage serverStorage;
     private File dataDir;
     private HikariDataSource dataSource;
 
@@ -62,37 +62,37 @@ public class BattleDataManager extends BattleComponent {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(pass);
-        if(dsc != null){
+        if (dsc != null) {
             Set<String> keys = dsc.getKeys(true);
-            for(String k : keys) config.addDataSourceProperty(k, dsc.get(k));
+            for (String k : keys) config.addDataSourceProperty(k, dsc.get(k));
         }
         dataSource = new HikariDataSource(config);
         serverStorage = new Storage(new MySQLStorage(dataSource, "abm_server_"));
     }
 
-    public synchronized void loadServerData(){
-        if(serverStorage != null) {
+    public synchronized void loadServerData() {
+        if (serverStorage != null) {
             BattleDebugger.startTiming("server-data-load");
             plugin.getServerData().reset();
-            if(serverStorage.load()) plugin.getServerData().read(serverStorage.getData());
+            if (serverStorage.load()) plugin.getServerData().read(serverStorage.getData());
             BattleDebugger.endTiming("server-data-load");
         }
     }
 
-    public synchronized void saveServerData(){
-        if(serverStorage != null) {
+    public synchronized void saveServerData() {
+        if (serverStorage != null) {
             BattleDebugger.startTiming("server-data-save");
             plugin.getServerData().write(serverStorage.getData());
-            if(serverStorage.getData().getModifyTracker().get() && serverStorage.save())
+            if (serverStorage.getData().getModifyTracker().get() && serverStorage.save())
                 serverStorage.getData().getModifyTracker().set(false);
             BattleDebugger.endTiming("server-data-save");
         }
     }
 
     @NotNull
-    public synchronized PlayerData loadPlayerData(OfflinePlayer player){
+    public synchronized PlayerData loadPlayerData(OfflinePlayer player) {
         Storage provider = PLAYER_STORAGE.get(player);
-        if(provider == null) {
+        if (provider == null) {
             switch (storageType) {
                 case FILE: {
                     File f = new File(dataDir, "player." + player.getUniqueId().toString() + ".abm");
@@ -100,7 +100,7 @@ public class BattleDataManager extends BattleComponent {
                     break;
                 }
                 case MYSQL: {
-                    PLAYER_STORAGE.put(player, provider = new Storage(new MySQLStorage(dataSource, "abm_player_"+player.getUniqueId().toString().replace("-", "")+"_")));
+                    PLAYER_STORAGE.put(player, provider = new Storage(new MySQLStorage(dataSource, "abm_player_" + player.getUniqueId().toString().replace("-", "") + "_")));
                     break;
                 }
                 default:
@@ -109,10 +109,10 @@ public class BattleDataManager extends BattleComponent {
         }
         BattleDebugger.startTiming("player-data-load");
         PlayerData pd = new PlayerData();
-        if(provider.load()) {
+        if (provider.load()) {
             DataMap<String> data = provider.getData();
             Integer ver = data.readTag("version", Integer.class);
-            if(ver != null) {
+            if (ver != null) {
                 if (ver < 2) {
                     plugin.getLogger().info("Upgrading player data: " + player.getUniqueId().toString() + " v1 -> v2");
                     data.cutTag("exp", "stats." + NativeStats.EXP);
@@ -141,27 +141,27 @@ public class BattleDataManager extends BattleComponent {
         return pd;
     }
 
-    public synchronized void unloadPlayerData(OfflinePlayer player){
+    public synchronized void unloadPlayerData(OfflinePlayer player) {
         plugin.playerData.remove(player);
         PLAYER_STORAGE.remove(player);
     }
 
-    public synchronized void savePlayerData(OfflinePlayer player){
+    public synchronized void savePlayerData(OfflinePlayer player) {
         PlayerData playerData = plugin.getPlayerData(player);
-        if(playerData != null) {
+        if (playerData != null) {
             BattleDebugger.startTiming("player-data-save");
             Storage provider = PLAYER_STORAGE.get(player);
             playerData.write(provider.getData());
-            if(provider.getData().getModifyTracker().get() && provider.save())
+            if (provider.getData().getModifyTracker().get() && provider.save())
                 provider.getData().getModifyTracker().set(false);
             BattleDebugger.endTiming("player-data-save");
         }
     }
 
-    public void destroy(){
+    public void destroy() {
         PLAYER_STORAGE.values().forEach(Storage::destroy);
         serverStorage.destroy();
         PLAYER_STORAGE.clear();
-        if(dataSource != null) dataSource.close();
+        if (dataSource != null) dataSource.close();
     }
 }

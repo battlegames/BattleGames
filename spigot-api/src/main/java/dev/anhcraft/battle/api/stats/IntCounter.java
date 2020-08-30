@@ -32,11 +32,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class IntCounter extends Statistic<Integer> {
     private final AtomicInteger backend;
 
-    public IntCounter(){
+    public IntCounter() {
         backend = new AtomicInteger();
     }
 
-    public IntCounter(int value){
+    public IntCounter(int value) {
         backend = new AtomicInteger(value);
     }
 
@@ -64,9 +64,9 @@ public abstract class IntCounter extends Statistic<Integer> {
     }
 
     public int increase(@Nullable Player who, int delta) {
-        if(delta == 0) return backend.get();
+        if (delta == 0) return backend.get();
         int x = backend.addAndGet(delta);
-        if(hasAdvancementSupport() && who != null) {
+        if (hasAdvancementSupport() && who != null) {
             BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
         }
         return x;

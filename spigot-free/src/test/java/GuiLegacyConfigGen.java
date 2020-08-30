@@ -27,19 +27,19 @@ import java.io.File;
 import java.io.IOException;
 
 public class GuiLegacyConfigGen {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         FileConfiguration fc = YamlConfiguration.loadConfiguration(new File("spigot-free/src/main/resources/config/gui.yml"));
-        for (String s : fc.getKeys(false)){
-            System.out.println("Visiting gui "+s);
-            ConfigurationSection cs = fc.getConfigurationSection(s+".components");
-            for (String k : cs.getKeys(false)){
-                System.out.println("  | Visiting component "+k);
+        for (String s : fc.getKeys(false)) {
+            System.out.println("Visiting gui " + s);
+            ConfigurationSection cs = fc.getConfigurationSection(s + ".components");
+            for (String k : cs.getKeys(false)) {
+                System.out.println("  | Visiting component " + k);
                 String q = cs.getString(k + ".item.material");
-                if(q != null){
+                if (q != null) {
                     PresentPair<String, Integer> p = LegacyUtils.LEGACY.get(q.toUpperCase());
-                    if(p != null) {
+                    if (p != null) {
                         cs.set(k + ".item.material", p.getFirst().toLowerCase());
-                        if(p.getSecond() != 0) cs.set(k + ".item.damage", p.getSecond());
+                        if (p.getSecond() != 0) cs.set(k + ".item.damage", p.getSecond());
                     }
                 }
             }

@@ -23,7 +23,7 @@ package dev.anhcraft.battle.system.messengers;
 import com.google.common.collect.Multiset;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
-import dev.anhcraft.battle.api.arena.*;
+import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
@@ -42,8 +42,8 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
         super(plugin);
     }
 
-    public void requestGameJoin(Player player, @Nullable String arena, String server){
-        if(arena == null) return;
+    public void requestGameJoin(Player player, @Nullable String arena, String server) {
+        if (arena == null) return;
         try {
             ByteArrayOutputStream s = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(s);
@@ -58,7 +58,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
         }
     }
 
-    public void sendGameUpdate(LocalGame game){
+    public void sendGameUpdate(LocalGame game) {
         try {
             ByteArrayOutputStream s = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(s);
@@ -69,7 +69,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
             out.writeLong(game.getCurrentTime().get());
             Multiset<String> servers = game.getDownstreamServers().keys();
             out.writeInt(servers.size());
-            for(String sv : servers) out.writeUTF(sv);
+            for (String sv : servers) out.writeUTF(sv);
             out.close();
             byte[] array = s.toByteArray();
             game.getPlayers().keySet().iterator().next().sendPluginMessage(plugin, BATTLE_CHANNEL, array);
@@ -78,7 +78,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
         }
     }
 
-    public void sendGameDestroy(LocalGame game){
+    public void sendGameDestroy(LocalGame game) {
         try {
             ByteArrayOutputStream s = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(s);
@@ -86,7 +86,7 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
             out.writeUTF(game.getArena().getId());
             Multiset<String> servers = game.getDownstreamServers().keys();
             out.writeInt(servers.size());
-            for(String sv : servers) out.writeUTF(sv);
+            for (String sv : servers) out.writeUTF(sv);
             out.close();
             byte[] array = s.toByteArray();
             game.getPlayers().keySet().iterator().next().sendPluginMessage(plugin, BATTLE_CHANNEL, array);
@@ -97,18 +97,18 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
 
     @Override
     public void onPluginMessageReceived(String channel, Player mid, byte[] message) {
-        if(!channel.equals(BATTLE_CHANNEL)) return;
+        if (!channel.equals(BATTLE_CHANNEL)) return;
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
         try {
             byte c = in.readByte();
-            switch (c){
+            switch (c) {
                 case 0: {
                     String arenaId = in.readUTF();
                     String phase = in.readUTF();
                     int players = in.readInt();
                     long time = in.readLong();
                     Arena arena = plugin.getArena(arenaId);
-                    if(arena != null && arena.hasBungeecordSupport()) {
+                    if (arena != null && arena.hasBungeecordSupport()) {
                         RemoteGame rg = (RemoteGame) plugin.arenaManager.getGame(arena);
                         if (rg != null) {
                             rg.setPhase(GamePhase.valueOf(phase));
@@ -125,15 +125,15 @@ public class BungeeMessenger extends BattleComponent implements PluginMessageLis
                     Arena arena = plugin.getArena(arenaId);
                     if (arena != null) {
                         Game game = plugin.arenaManager.join(player, arena, true);
-                        if(game != null) ((LocalGame) game).getDownstreamServers().put(server, player);
+                        if (game != null) ((LocalGame) game).getDownstreamServers().put(server, player);
                     }
                 }
                 case 3: {
                     String arenaId = in.readUTF();
                     Arena arena = plugin.getArena(arenaId);
-                    if(arena != null && arena.hasBungeecordSupport()) {
+                    if (arena != null && arena.hasBungeecordSupport()) {
                         Game g = plugin.arenaManager.getGame(arena);
-                        if(g instanceof RemoteGame) {
+                        if (g instanceof RemoteGame) {
                             plugin.arenaManager.destroy(g);
                         }
                     }

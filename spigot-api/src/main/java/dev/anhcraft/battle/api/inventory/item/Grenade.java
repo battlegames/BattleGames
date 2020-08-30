@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public class Grenade extends BattleItem<GrenadeModel> {
     @Override
     public void save(CompoundTag compound) {
-        if(getModel() != null){
+        if (getModel() != null) {
             compound.put(ItemTag.GRENADE_ID, getModel().getId());
         }
     }
@@ -41,6 +41,6 @@ public class Grenade extends BattleItem<GrenadeModel> {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        if(getModel() != null) getModel().inform(holder);
+        if (getModel() != null) getModel().inform(holder);
     }
 }

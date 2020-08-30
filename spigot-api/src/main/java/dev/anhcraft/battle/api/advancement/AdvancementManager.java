@@ -28,7 +28,10 @@ import java.util.SortedSet;
 
 public interface AdvancementManager {
     void registerAdvancement(@NotNull Advancement advancement);
+
     Collection<Advancement> getAdvancements();
+
     @NotNull SortedSet<Advancement> getAdvancementsFromType(@NotNull String type);
+
     void report(@NotNull Player player, @NotNull String type, double current);
 }

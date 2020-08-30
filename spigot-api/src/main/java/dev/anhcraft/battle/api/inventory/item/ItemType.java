@@ -32,12 +32,11 @@ public enum ItemType {
     GRENADE(Grenade::new);
 
     Supplier<BattleItem> c;
+    private String localizedName = name();
 
-    ItemType(Supplier<BattleItem> c){
+    ItemType(Supplier<BattleItem> c) {
         this.c = c;
     }
-
-    private String localizedName = name();
 
     @NotNull
     public String getLocalizedName() {
@@ -50,7 +49,7 @@ public enum ItemType {
     }
 
     @NotNull
-    public BattleItem make(){
+    public BattleItem make() {
         return c.get();
     }
 }

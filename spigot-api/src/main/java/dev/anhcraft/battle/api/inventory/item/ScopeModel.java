@@ -65,12 +65,13 @@ public class ScopeModel extends SingleSkinItem implements Attachable {
     }
 
     @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
-    private Object handle(ConfigSchema.Entry entry, Object value){
-        if(value != null && entry.getKey().equals("zoom_levels")){
+    private Object handle(ConfigSchema.Entry entry, Object value) {
+        if (value != null && entry.getKey().equals("zoom_levels")) {
             List<Integer> x = (List<Integer>) value;
             x.removeIf(integer -> {
                 boolean b = integer < 1 || integer > 255;
-                if(b) Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, getId()));
+                if (b)
+                    Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, getId()));
                 return b;
             });
             return x;

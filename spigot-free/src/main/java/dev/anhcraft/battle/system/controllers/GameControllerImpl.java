@@ -55,9 +55,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class GameControllerImpl extends BattleComponent implements Listener, GameController {
+    public final Map<UUID, Runnable> RELOADING_GUN = new ConcurrentHashMap<>();
     private final Map<String, Integer> RUNNING_TASKS = new ConcurrentHashMap<>();
     private final Map<String, CooldownMap> COOLDOWN = new ConcurrentHashMap<>();
-    public final Map<UUID, Runnable> RELOADING_GUN = new ConcurrentHashMap<>();
     private final Mode mode;
 
     GameControllerImpl(BattlePlugin plugin, Mode mode) {
@@ -65,21 +65,21 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         this.mode = mode;
     }
 
-    protected String blp(String path){
-        return "mode_"+ mode.getId()+"."+path;
+    protected String blp(String path) {
+        return "mode_" + mode.getId() + "." + path;
     }
 
     @Override
-    public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game){
+    public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game) {
         plugin.extension.getTaskHelper().newTask(() -> {
             event.getEntity().spigot().respawn();
         });
     }
 
     @Override
-    public void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game){
+    public void onSwapItem(@NotNull PlayerSwapHandItemsEvent event, @NotNull LocalGame game) {
         BattleItem<?> item = ApiProvider.consume().getItemManager().read(event.getOffHandItem());
-        if(item instanceof Gun){
+        if (item instanceof Gun) {
             Gun gun = (Gun) item;
             event.setCancelled(true);
             doReloadGun(event.getPlayer(), gun);
@@ -87,129 +87,128 @@ public abstract class GameControllerImpl extends BattleComponent implements List
     }
 
     @Override
-    public void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game){
+    public void onDropItem(@NotNull PlayerDropItemEvent event, @NotNull LocalGame game) {
         BattleItem<?> item = plugin.itemManager.read(event.getItemDrop().getItemStack());
-        if(item != null) event.setCancelled(true);
+        if (item != null) event.setCancelled(true);
     }
 
     @Override
-    public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window){
-        if(event.getClickedInventory() instanceof PlayerInventory){
+    public void onClickInventory(@NotNull InventoryClickEvent event, @NotNull LocalGame game, @NotNull Player player, @NotNull Window window) {
+        if (event.getClickedInventory() instanceof PlayerInventory) {
             BattleItem<?> item = plugin.itemManager.read(event.getCurrentItem());
-            if(item instanceof Gun && RELOADING_GUN.containsKey(player.getUniqueId())) {
+            if (item instanceof Gun && RELOADING_GUN.containsKey(player.getUniqueId())) {
                 event.setCancelled(true);
                 event.setResult(Event.Result.DENY);
             }
         }
     }
 
-    public void broadcast(@NotNull LocalGame game, @NotNull String localePath){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath) {
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath));
     }
 
-    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull InfoReplacer infoReplacer){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull InfoReplacer infoReplacer) {
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), infoReplacer);
     }
 
-    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type) {
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, null);
     }
 
-    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type, @NotNull InfoReplacer infoReplacer){
+    public void broadcast(@NotNull LocalGame game, @NotNull String localePath, @NotNull ChatMessageType type, @NotNull InfoReplacer infoReplacer) {
         plugin.chatManager.sendPlayers(game.getPlayers().keySet(), blp(localePath), type, infoReplacer);
     }
 
-    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath){
+    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath) {
         sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void broadcastTitle(@NotNull LocalGame game, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer) {
         sendTitle(game.getPlayers().keySet(), titleLocalePath, subtitleLocalePath, infoReplacer);
     }
 
-    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath){
+    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath) {
         sendTitle(player, titleLocalePath, subtitleLocalePath, null);
     }
 
-    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void sendTitle(@NotNull Player player, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer) {
         String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
         String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
-        if(infoReplacer == null) {
+        if (infoReplacer == null) {
             player.sendTitle(s1, s2, 10, 70, 20);
         } else {
             player.sendTitle(infoReplacer.replace(s1), infoReplacer.replace(s2), 10, 70, 20);
         }
     }
 
-    public void sendTitle(@NotNull Collection<Player> players, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer){
+    public void sendTitle(@NotNull Collection<Player> players, @NotNull String titleLocalePath, @NotNull String subtitleLocalePath, @Nullable InfoReplacer infoReplacer) {
         String s1 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(titleLocalePath)));
         String s2 = Objects.requireNonNull(plugin.getLocalizedMessage(blp(subtitleLocalePath)));
-        if(infoReplacer == null) {
-            for(Player player : players) {
+        if (infoReplacer == null) {
+            for (Player player : players) {
                 player.sendTitle(s1, s2, 10, 70, 20);
             }
         } else {
             s1 = infoReplacer.replace(s1);
             s2 = infoReplacer.replace(s2);
-            for(Player player : players) {
+            for (Player player : players) {
                 player.sendTitle(s1, s2, 10, 70, 20);
             }
         }
     }
 
-    public void trackTask(@NotNull LocalGame game, @NotNull String id, int task){
-        RUNNING_TASKS.put(game.getArena().getId()+id, task);
+    public void trackTask(@NotNull LocalGame game, @NotNull String id, int task) {
+        RUNNING_TASKS.put(game.getArena().getId() + id, task);
     }
 
-    public boolean hasTask(@NotNull LocalGame game, @NotNull String id){
-        return RUNNING_TASKS.containsKey(game.getArena().getId()+id);
+    public boolean hasTask(@NotNull LocalGame game, @NotNull String id) {
+        return RUNNING_TASKS.containsKey(game.getArena().getId() + id);
     }
 
-    public void cancelTask(@NotNull LocalGame game, @NotNull String id){
-        Integer x = RUNNING_TASKS.remove(game.getArena().getId()+id);
-        if(x != null) plugin.extension.getTaskHelper().cancelTask(x);
+    public void cancelTask(@NotNull LocalGame game, @NotNull String id) {
+        Integer x = RUNNING_TASKS.remove(game.getArena().getId() + id);
+        if (x != null) plugin.extension.getTaskHelper().cancelTask(x);
     }
 
-    public void cancelAllTasks(@NotNull LocalGame game){
+    public void cancelAllTasks(@NotNull LocalGame game) {
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(game.getArena().getId()))
                 .collect(Collectors.toList());
         x.forEach(e -> plugin.extension.getTaskHelper().cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
-    public void playSound(@NotNull LocalGame game, @Nullable BattleSound sound){
-        if(sound == null) return;
-        for(Player p : game.getPlayers().keySet()) {
+    public void playSound(@NotNull LocalGame game, @Nullable BattleSound sound) {
+        if (sound == null) return;
+        for (Player p : game.getPlayers().keySet()) {
             sound.play(p);
         }
     }
 
     @Nullable
-    public CooldownMap getCooldownMap(LocalGame game, String id){
-        return COOLDOWN.get(game.getArena().getId()+id);
+    public CooldownMap getCooldownMap(LocalGame game, String id) {
+        return COOLDOWN.get(game.getArena().getId() + id);
     }
 
-    public void clearCooldown(){
+    public void clearCooldown() {
         COOLDOWN.clear();
     }
 
-    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent){
-        String k = game.getArena().getId()+id;
+    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent) {
+        String k = game.getArena().getId() + id;
         CooldownMap m = COOLDOWN.get(k);
-        if(m != null) ifPresent.accept(m);
+        if (m != null) ifPresent.accept(m);
     }
 
-    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent, @NotNull Callable<CooldownMap> otherwise){
-        String k = game.getArena().getId()+id;
+    public void performCooldownMap(@NotNull LocalGame game, @NotNull String id, @NotNull Consumer<CooldownMap> ifPresent, @NotNull Callable<CooldownMap> otherwise) {
+        String k = game.getArena().getId() + id;
         CooldownMap m = COOLDOWN.get(k);
-        if(m == null) {
+        if (m == null) {
             try {
                 COOLDOWN.put(k, otherwise.call());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else ifPresent.accept(m);
+        } else ifPresent.accept(m);
     }
 
     @Override
@@ -218,36 +217,36 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         return mode;
     }
 
-    public void cancelReloadGun(@NotNull Player player){
+    public void cancelReloadGun(@NotNull Player player) {
         Runnable runnable = RELOADING_GUN.remove(player.getUniqueId());
-        if(runnable != null) runnable.run();
+        if (runnable != null) runnable.run();
     }
 
-    public void doReloadGun(@NotNull Player player, @NotNull Gun gun){
+    public void doReloadGun(@NotNull Player player, @NotNull Gun gun) {
         GunModel gm = gun.getModel();
-        if(gm == null) return;
+        if (gm == null) return;
         Magazine m = gun.getMagazine();
         MagazineModel mm = m.getModel();
-        if(mm == null) {
+        if (mm == null) {
             plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
             return;
         }
-        
-        if(RELOADING_GUN.containsKey(player.getUniqueId())) return;
+
+        if (RELOADING_GUN.containsKey(player.getUniqueId())) return;
 
         AmmoModel am = m.getAmmo().getModel();
         int maxCap;
-        if(am == null) {
+        if (am == null) {
             Map.Entry<AmmoModel, Integer> x = mm.getAmmunition().entrySet().iterator().next();
             am = x.getKey();
             maxCap = x.getValue();
         } else {
             maxCap = mm.getAmmunition().getOrDefault(am, 0);
         }
-        if(maxCap == 0) return;
+        if (maxCap == 0) return;
 
         int curCap = m.getAmmoCount();
-        if(curCap >= maxCap) return;
+        if (curCap >= maxCap) return;
 
         plugin.gunManager.handleZoomOut(player);
 
@@ -259,7 +258,7 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         PlayerBossBar bar = new PlayerBossBar(player, cb.getTitle(), cb.getColor(), cb.getStyle(), playerBossBar -> {
             long now = curDeltaTime.getAndIncrement();
             int amc = m.getAmmoCount();
-            if(now < delay && amc < maxCap) return;
+            if (now < delay && amc < maxCap) return;
             curDeltaTime.set(0);
 
             double d = maxCap - amc;
@@ -269,7 +268,7 @@ public abstract class GameControllerImpl extends BattleComponent implements List
             playerBossBar.getBar().setTitle(PlaceholderUtil.formatPAPI(player, info.compile().replace(cb.getTitle())));
             playerBossBar.show();
 
-            if(amc > maxCap) {
+            if (amc > maxCap) {
                 m.setAmmoCount(maxCap);
                 gun.setNextSpray(-1);
                 player.getInventory().setItem(slot, plugin.gunManager.createGun(gun, false));
@@ -280,15 +279,15 @@ public abstract class GameControllerImpl extends BattleComponent implements List
         });
 
         RELOADING_GUN.put(player.getUniqueId(), () -> {
-            if(cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
+            if (cb.isPrimarySlot()) plugin.bossbarRenderer.removePrimaryBar(player);
             else plugin.bossbarRenderer.removeSecondaryBar(player);
 
-            if(gm.getReloadEndSound() != null) gm.getReloadEndSound().play(player);
+            if (gm.getReloadEndSound() != null) gm.getReloadEndSound().play(player);
         });
 
-        if(cb.isPrimarySlot()) plugin.bossbarRenderer.setPrimaryBar(bar);
+        if (cb.isPrimarySlot()) plugin.bossbarRenderer.setPrimaryBar(bar);
         else plugin.bossbarRenderer.setSecondaryBar(bar);
 
-        if(gm.getReloadStartSound() != null) gm.getReloadStartSound().play(player);
+        if (gm.getReloadStartSound() != null) gm.getReloadStartSound().play(player);
     }
 }

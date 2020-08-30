@@ -38,6 +38,10 @@ public class KitReceiveEvent extends PlayerEvent implements Cancellable {
         this.kit = kit;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Kit getKit() {
         return kit;
@@ -55,10 +59,6 @@ public class KitReceiveEvent extends PlayerEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

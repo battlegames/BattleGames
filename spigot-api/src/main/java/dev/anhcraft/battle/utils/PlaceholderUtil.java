@@ -42,7 +42,7 @@ public class PlaceholderUtil {
     public static final Pattern INFO_PLACEHOLDER_PATTERN = Pattern.compile("<[a-zA-Z0-9:_]+>");
 
     @NotNull
-    public static PreparedItem formatPAPI(@NotNull PreparedItem pi, @NotNull Player player){
+    public static PreparedItem formatPAPI(@NotNull PreparedItem pi, @NotNull Player player) {
         Condition.notNull(pi);
         Condition.notNull(player);
         pi.name(formatPAPI(player, pi.name()));
@@ -51,7 +51,7 @@ public class PlaceholderUtil {
     }
 
     @NotNull
-    public static PreparedItem formatExpression(@NotNull PreparedItem pi){
+    public static PreparedItem formatExpression(@NotNull PreparedItem pi) {
         Condition.notNull(pi);
         pi.name(formatExpression(pi.name()));
         pi.lore().replaceAll(PlaceholderUtil::formatExpression);
@@ -59,7 +59,7 @@ public class PlaceholderUtil {
     }
 
     @NotNull
-    public static PreparedItem formatTranslations(@NotNull PreparedItem pi, @Nullable ConfigurationSection localeConf){
+    public static PreparedItem formatTranslations(@NotNull PreparedItem pi, @Nullable ConfigurationSection localeConf) {
         Condition.notNull(pi);
         pi.name(localizeString(pi.name(), localeConf));
         pi.lore(localizeStrings(pi.lore(), localeConf));
@@ -67,28 +67,28 @@ public class PlaceholderUtil {
     }
 
     @Contract("_, null -> null")
-    public static String formatPAPI(@NotNull Player player, @Nullable String str){
-        if(str == null) return null;
+    public static String formatPAPI(@NotNull Player player, @Nullable String str) {
+        if (str == null) return null;
         Condition.notNull(player);
         return PlaceholderAPI.setPlaceholders((OfflinePlayer) player, str);
     }
 
     @Contract("_, null -> null")
-    public static List<String> formatPAPI(@NotNull Player player, @Nullable List<String> str){
+    public static List<String> formatPAPI(@NotNull Player player, @Nullable List<String> str) {
         Condition.notNull(player);
-        if(str == null) return null;
+        if (str == null) return null;
         str.replaceAll(s -> formatPAPI(player, s)); // use #replaceAll is better than the provided PAPI method
         return str;
     }
 
     @Contract("null -> null")
-    public static String formatExpression(@Nullable String str){
-        if(str == null) return null;
+    public static String formatExpression(@Nullable String str) {
+        if (str == null) return null;
         Matcher m = EXPRESSION_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
-        while(m.find()){
+        while (m.find()) {
             String p = m.group();
-            String s = p.substring(2, p.length()-2).trim();
+            String s = p.substring(2, p.length() - 2).trim();
             m.appendReplacement(sb, MathUtil.formatRound(new ExpressionBuilder(s).build().evaluate()));
         }
         m.appendTail(sb);
@@ -96,13 +96,13 @@ public class PlaceholderUtil {
     }
 
     @Contract("null, _ -> null; _, null -> null")
-    public static String localizeString(@Nullable String str, @Nullable ConfigurationSection localeConf){
-        if(str == null || localeConf == null) return null;
+    public static String localizeString(@Nullable String str, @Nullable ConfigurationSection localeConf) {
+        if (str == null || localeConf == null) return null;
         Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
-        while(m.find()){
+        while (m.find()) {
             String p = m.group();
-            String s = localeConf.getString(p.substring(1, p.length()-1).trim());
+            String s = localeConf.getString(p.substring(1, p.length() - 1).trim());
             m.appendReplacement(sb, s == null ? p : s);
         }
         m.appendTail(sb);
@@ -110,18 +110,18 @@ public class PlaceholderUtil {
     }
 
     @NotNull
-    public static List<String> localizeStrings(@Nullable List<String> strs, @Nullable ConfigurationSection localeConf){
-        if(strs == null || localeConf == null) return new ArrayList<>();
+    public static List<String> localizeStrings(@Nullable List<String> strs, @Nullable ConfigurationSection localeConf) {
+        if (strs == null || localeConf == null) return new ArrayList<>();
         List<String> out = new ArrayList<>();
         outer:
-        for (String str : strs){
+        for (String str : strs) {
             Matcher m = LOCALE_PLACEHOLDER_PATTERN.matcher(str);
             StringBuffer sb = new StringBuffer(str.length());
-            while(m.find()){
+            while (m.find()) {
                 String p = m.group();
-                Object obj = localeConf.get(p.substring(1, p.length()-1).trim());
-                if(obj instanceof List){
-                    for(Object o : (List) obj)
+                Object obj = localeConf.get(p.substring(1, p.length() - 1).trim());
+                if (obj instanceof List) {
+                    for (Object o : (List) obj)
                         out.add(o.toString());
                     continue outer;
                 }

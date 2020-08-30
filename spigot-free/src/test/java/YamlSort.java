@@ -29,18 +29,18 @@ import java.util.ArrayList;
 
 public class YamlSort {
     @Test
-    public void a(){
+    public void a() {
         FileConfiguration c = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/general.yml"));
         Multimap<Integer, String> map = MultimapBuilder.treeKeys().treeSetValues().build();
-        for(String s : c.getConfigurationSection("misc.block_hardness").getKeys(false)){
-            map.putAll(c.getInt("misc.block_hardness."+s+".value"), c.getStringList("misc.block_hardness."+s+".material"));
+        for (String s : c.getConfigurationSection("misc.block_hardness").getKeys(false)) {
+            map.putAll(c.getInt("misc.block_hardness." + s + ".value"), c.getStringList("misc.block_hardness." + s + ".material"));
         }
         YamlConfiguration configuration = new YamlConfiguration();
         int i = 0;
-        for(Integer s : map.keySet()){
+        for (Integer s : map.keySet()) {
             String k = Integer.toString(i);
-            configuration.set(k+".material", new ArrayList<>(map.get(s)));
-            configuration.set(k+".value", s);
+            configuration.set(k + ".material", new ArrayList<>(map.get(s)));
+            configuration.set(k + ".value", s);
             i++;
         }
         System.out.println(configuration.saveToString());

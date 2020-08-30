@@ -29,8 +29,8 @@ import java.util.List;
 
 public class ColorUtil {
     @Nullable
-    public static Object colorize(@Nullable Object value){
-        if(value != null) {
+    public static Object colorize(@Nullable Object value) {
+        if (value != null) {
             if (value instanceof String) {
                 return ChatUtil.formatColorCodes((String) value);
             } else if (value instanceof List) {
@@ -53,8 +53,8 @@ public class ColorUtil {
     }
 
     @Nullable
-    public static Object uncolorize(@Nullable Object value){
-        if(value != null) {
+    public static Object uncolorize(@Nullable Object value) {
+        if (value != null) {
             if (value instanceof String) {
                 return ((String) value).replace(ChatColor.COLOR_CHAR, '&');
             } else if (value instanceof List) {

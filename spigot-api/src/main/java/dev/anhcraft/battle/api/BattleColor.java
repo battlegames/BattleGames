@@ -45,12 +45,12 @@ public enum BattleColor {
 
     private final Color color;
 
-    BattleColor(){
+    BattleColor() {
         color = (Color) ReflectionUtil.getStaticField(Color.class, name());
     }
 
     @NotNull
-    public Color asBukkit(){
+    public Color asBukkit() {
         return color;
     }
 }

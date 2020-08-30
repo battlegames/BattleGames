@@ -40,7 +40,7 @@ public class PlayerData implements Resettable, Serializable {
     private final Map<String, Object> storedStats = new HashMap<>();
     private final StatisticMap stats = new StatisticMap(statistic -> {
         Object v = storedStats.get(statistic.getId());
-        if(v != null) {
+        if (v != null) {
             statistic.setData(v);
         }
     });
@@ -51,12 +51,12 @@ public class PlayerData implements Resettable, Serializable {
     private final Map<String, PlayerProgression> advancements = new HashMap<>();
     private String activeBooster;
 
-    public PlayerData(){
+    public PlayerData() {
         stats.setAdvancementSupport(true);
     }
 
     @NotNull
-    public StatisticMap getStats(){
+    public StatisticMap getStats() {
         return stats;
     }
 
@@ -113,7 +113,7 @@ public class PlayerData implements Resettable, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public void read(DataMap<String> map) {
-        for(String x : map.filterKeys(s -> s.startsWith("stats."))){
+        for (String x : map.filterKeys(s -> s.startsWith("stats."))) {
             String t = x.substring("stats.".length());
             Object f = map.readTag(x);
             if (f != null) {
@@ -121,20 +121,20 @@ public class PlayerData implements Resettable, Serializable {
             }
         }
         List adv = map.readTag("adv", List.class);
-        if(adv != null) {
+        if (adv != null) {
             adv.forEach(o -> {
                 String type = ((StringTag) o).getValue();
-                List finished = map.readTag("adv.fns."+type, List.class);
-                String active = map.readTag("adv.act."+type, String.class);
-                double amount = map.readTag("adv.amt."+type, Double.class, 0d);
-                double tgtAmount = map.readTag("adv.tamt."+type, Double.class, 0d);
-                int cpg = map.readTag("adv.cpg."+type, Integer.class, 0);
+                List finished = map.readTag("adv.fns." + type, List.class);
+                String active = map.readTag("adv.act." + type, String.class);
+                double amount = map.readTag("adv.amt." + type, Double.class, 0d);
+                double tgtAmount = map.readTag("adv.tamt." + type, Double.class, 0d);
+                int cpg = map.readTag("adv.cpg." + type, Integer.class, 0);
                 PlayerProgression pp = new PlayerProgression();
                 pp.setCurrentLevel(cpg);
                 pp.setCurrentAmount(amount);
                 pp.setActiveAdvancement(active);
                 pp.setTargetAmount(tgtAmount);
-                if(finished != null) {
+                if (finished != null) {
                     for (Object obj : finished) {
                         String v = ((StringTag) obj).getValue();
                         pp.getFinishedAdvancements().add(v);
@@ -144,12 +144,12 @@ public class PlayerData implements Resettable, Serializable {
             });
         }
         List inv = map.readTag("inv", List.class);
-        if(inv != null) {
+        if (inv != null) {
             inv.forEach(o -> {
                 String q = ((StringTag) o).getValue();
                 Backpack.Compartment storage = backpack.getStorage(ItemType.valueOf(q));
                 List is = map.readTag("inv." + q, List.class);
-                if(is != null) {
+                if (is != null) {
                     is.forEach(o1 -> {
                         String v = ((StringTag) o1).getValue();
                         long t = map.readTag("inv." + q + "." + v, Long.class, 0L);
@@ -159,49 +159,49 @@ public class PlayerData implements Resettable, Serializable {
             });
         }
         List kl = map.readTag("kits", List.class);
-        if(kl != null){
+        if (kl != null) {
             kl.forEach(o -> {
                 String k = ((StringTag) o).getValue();
-                kits.put(k, map.readTag("kit."+k, Long.class));
+                kits.put(k, map.readTag("kit." + k, Long.class));
             });
         }
         List fjkl = map.readTag("first_join_kits", List.class);
-        if(fjkl != null) {
+        if (fjkl != null) {
             fjkl.forEach(o -> {
                 String k = ((StringTag) o).getValue();
                 receivedFirstJoinKits.add(k);
             });
         }
         int mkts = map.readTag("mkts", Integer.class, 0);
-        for (int i = 0; i < mkts; i++){
-            String pre = "mkts."+i;
+        for (int i = 0; i < mkts; i++) {
+            String pre = "mkts." + i;
             UUID buyer = new UUID(
-                    map.readRequiredTag(pre+".buyer.ms", Long.class),
-                    map.readRequiredTag(pre+".buyer.ls", Long.class)
+                    map.readRequiredTag(pre + ".buyer.ms", Long.class),
+                    map.readRequiredTag(pre + ".buyer.ls", Long.class)
             );
-            long date = map.readRequiredTag(pre+".date", Long.class);
-            double price = map.readRequiredTag(pre+".price", Double.class);
-            String currency = map.readTag(pre+".currency", String.class);
-            String product = map.readRequiredTag(pre+".product", String.class);
+            long date = map.readRequiredTag(pre + ".date", Long.class);
+            double price = map.readRequiredTag(pre + ".price", Double.class);
+            String currency = map.readTag(pre + ".currency", String.class);
+            String product = map.readRequiredTag(pre + ".product", String.class);
             transactions.add(new Transaction(buyer, product, price, currency == null ? "VAULT" : currency, date));
         }
         List boosterList = map.readTag("bst", List.class);
-        if(boosterList != null){
+        if (boosterList != null) {
             boosterList.forEach(o -> {
                 String k = ((StringTag) o).getValue();
-                boosters.put(k, map.readTag("bst."+k, Long.class));
+                boosters.put(k, map.readTag("bst." + k, Long.class));
             });
         }
         String atvBooster = map.readTag("abst", String.class);
-        if(atvBooster != null && boosters.containsKey(atvBooster)){
+        if (atvBooster != null && boosters.containsKey(atvBooster)) {
             activeBooster = atvBooster;
         }
     }
 
     @Override
     public void write(DataMap<String> map) {
-        for(Statistic x : stats.all()) {
-            map.writeTag("stats."+x.getId(), x.getData());
+        for (Statistic x : stats.all()) {
+            map.writeTag("stats." + x.getId(), x.getData());
         }
         List<StringTag> inv = new ArrayList<>();
         backpack.listStorage((itemType, compartment) -> {
@@ -210,15 +210,15 @@ public class PlayerData implements Resettable, Serializable {
             List<StringTag> items = new ArrayList<>();
             compartment.list((i, v) -> {
                 items.add(new StringTag(i));
-                map.writeTag("inv."+s+"."+i, v);
+                map.writeTag("inv." + s + "." + i, v);
             });
-            map.writeTag("inv."+s, items);
+            map.writeTag("inv." + s, items);
         });
         map.writeTag("inv", inv);
         List<StringTag> kts = new ArrayList<>();
         kits.forEach((key, value) -> {
             kts.add(new StringTag(key));
-            map.writeTag("kit."+key, value);
+            map.writeTag("kit." + key, value);
         });
         map.writeTag("kits", kts);
         List<StringTag> rfjk = new ArrayList<>();
@@ -226,35 +226,35 @@ public class PlayerData implements Resettable, Serializable {
         map.writeTag("first_join_kits", rfjk);
         map.writeTag("mkts", transactions.size());
         int tsi = 0;
-        for(Transaction ts : transactions){
-            String pre = "mkts."+tsi;
-            map.writeTag(pre+".buyer.ms", ts.getBuyer().getMostSignificantBits());
-            map.writeTag(pre+".buyer.ls", ts.getBuyer().getLeastSignificantBits());
-            map.writeTag(pre+".date", ts.getDate());
-            map.writeTag(pre+".product", ts.getProduct());
-            map.writeTag(pre+".price", ts.getPrice());
+        for (Transaction ts : transactions) {
+            String pre = "mkts." + tsi;
+            map.writeTag(pre + ".buyer.ms", ts.getBuyer().getMostSignificantBits());
+            map.writeTag(pre + ".buyer.ls", ts.getBuyer().getLeastSignificantBits());
+            map.writeTag(pre + ".date", ts.getDate());
+            map.writeTag(pre + ".product", ts.getProduct());
+            map.writeTag(pre + ".price", ts.getPrice());
             tsi++;
         }
         List<StringTag> bst = new ArrayList<>();
         boosters.forEach((key, value) -> {
             bst.add(new StringTag(key));
-            map.writeTag("bst."+key, value);
+            map.writeTag("bst." + key, value);
         });
         map.writeTag("bst", bst);
-        if(activeBooster != null){
+        if (activeBooster != null) {
             map.writeTag("abst", activeBooster);
         }
         List<StringTag> adv = new ArrayList<>();
         advancements.forEach((key, value) -> {
             adv.add(new StringTag(key));
-            if(!value.getFinishedAdvancements().isEmpty()) {
+            if (!value.getFinishedAdvancements().isEmpty()) {
                 List<StringTag> finished = new ArrayList<>();
                 for (String s : value.getFinishedAdvancements()) {
                     finished.add(new StringTag(s));
                 }
                 map.writeTag("adv.fns." + key, finished);
             }
-            if(value.getActiveAdvancement() != null) {
+            if (value.getActiveAdvancement() != null) {
                 map.writeTag("adv.act." + key, value.getActiveAdvancement());
             } else {
                 map.removeTag("adv.act." + key);

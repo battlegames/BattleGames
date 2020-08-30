@@ -151,10 +151,21 @@ public enum EnumEntity {
     static {
         for (EntityType et : EntityType.values()) {
             EnumEntity ee = (EnumEntity) EnumUtil.findEnum(EnumEntity.class, et.name());
-            if(ee != null) {
+            if (ee != null) {
                 LOOKUP.put(et, ee);
             }
         }
+    }
+
+    private final String path;
+    private final String legacyPath;
+
+    EnumEntity(@NotNull String path) {
+        this(path, null);
+    }
+    EnumEntity(@Nullable String path, @Nullable String legacyPath) {
+        this.path = path;
+        this.legacyPath = legacyPath;
     }
 
     @Nullable
@@ -165,20 +176,8 @@ public enum EnumEntity {
     @NotNull
     public static String getLocalePath(@Nullable EntityType entityType) {
         EnumEntity ee = LOOKUP.get(entityType);
-        if(ee == null) ee = EnumEntity.UNKNOWN;
+        if (ee == null) ee = EnumEntity.UNKNOWN;
         return ee.getLocalePath();
-    }
-
-    private final String path;
-    private final String legacyPath;
-
-    EnumEntity(@NotNull String path) {
-        this(path, null);
-    }
-
-    EnumEntity(@Nullable String path, @Nullable String legacyPath) {
-        this.path = path;
-        this.legacyPath = legacyPath;
     }
 
     @Nullable
@@ -193,7 +192,7 @@ public enum EnumEntity {
 
     @NotNull
     public String getLocalePath() {
-        if(LEGACY) {
+        if (LEGACY) {
             return legacyPath == null ? Objects.requireNonNull(EnumEntity.UNKNOWN.legacyPath) : legacyPath;
         } else {
             return path == null ? Objects.requireNonNull(EnumEntity.UNKNOWN.path) : path;

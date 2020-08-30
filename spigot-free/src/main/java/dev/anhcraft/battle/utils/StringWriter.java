@@ -42,7 +42,7 @@ public class StringWriter {
         return this;
     }
 
-    public byte[] build(){
+    public byte[] build() {
         return stream.toByteArray();
     }
 }

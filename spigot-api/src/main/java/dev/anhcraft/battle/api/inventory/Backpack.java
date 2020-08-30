@@ -31,21 +31,21 @@ public class Backpack {
     private final Map<ItemType, Compartment> backend = Collections.synchronizedMap(new HashMap<>());
 
     @NotNull
-    public Backpack.Compartment getStorage(@NotNull ItemType type){
+    public Backpack.Compartment getStorage(@NotNull ItemType type) {
         Condition.argNotNull("type", type);
         Compartment x = backend.get(type);
-        if(x == null){
+        if (x == null) {
             x = new Compartment();
             backend.put(type, x);
         }
         return x;
     }
 
-    public void clear(){
+    public void clear() {
         backend.clear();
     }
 
-    public void listStorage(@NotNull BiConsumer<ItemType, Compartment> consumer){
+    public void listStorage(@NotNull BiConsumer<ItemType, Compartment> consumer) {
         Condition.argNotNull("consumer", consumer);
         backend.forEach(consumer);
     }
@@ -53,7 +53,7 @@ public class Backpack {
     public static class Compartment {
         private final Map<String, Long> MAP = new LinkedHashMap<>();
 
-        public void put(@Nullable String id){
+        public void put(@Nullable String id) {
             MAP.put(id, System.currentTimeMillis());
         }
 
@@ -61,27 +61,27 @@ public class Backpack {
             MAP.putIfAbsent(id, owningDate);
         }
 
-        public void remove(@Nullable String id){
+        public void remove(@Nullable String id) {
             MAP.remove(id);
         }
 
         @Nullable
-        public Long get(@Nullable String id){
+        public Long get(@Nullable String id) {
             return MAP.get(id);
         }
 
-        public void list(@NotNull BiConsumer<String, Long> consumer){
+        public void list(@NotNull BiConsumer<String, Long> consumer) {
             Condition.argNotNull("consumer", consumer);
             MAP.forEach(consumer);
         }
 
         @NotNull
-        public Set<Map.Entry<String, Long>> list(){
+        public Set<Map.Entry<String, Long>> list() {
             return new HashSet<>(MAP.entrySet());
         }
 
         @NotNull
-        public Set<String> listIds(){
+        public Set<String> listIds() {
             return new HashSet<>(MAP.keySet());
         }
     }

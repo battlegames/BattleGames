@@ -152,7 +152,7 @@ public class MobRescueOptions extends GameOptions {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
         if (value != null) {
             if (entry.getKey().equals("mob_groups")) {
                 ConfigurationSection conf = (ConfigurationSection) value;
@@ -183,7 +183,7 @@ public class MobRescueOptions extends GameOptions {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
         if (value != null) {
             if (entry.getKey().equals("mob_groups")) {
                 YamlConfiguration conf = new YamlConfiguration();

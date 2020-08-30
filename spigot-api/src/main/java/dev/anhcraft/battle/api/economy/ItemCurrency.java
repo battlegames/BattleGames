@@ -41,14 +41,14 @@ public abstract class ItemCurrency implements Currency {
     public boolean withdraw(@NotNull Player player, double delta) {
         int remain = (int) delta;
         int index = 0;
-        while (player.getInventory().getSize() > index){
+        while (player.getInventory().getSize() > index) {
             ItemStack item = player.getInventory().getItem(index++);
-            if(item != null && item.getType() == getItemType()){
+            if (item != null && item.getType() == getItemType()) {
                 int current = item.getAmount();
                 int del = Math.min(current, remain);
                 item.setAmount(current - del);
                 remain -= del;
-                if(remain == 0) break;
+                if (remain == 0) break;
             }
         }
         return remain == 0;
@@ -57,7 +57,7 @@ public abstract class ItemCurrency implements Currency {
     @Override
     public boolean deposit(@NotNull Player player, double delta) {
         int remain = (int) delta;
-        while (remain > 0){
+        while (remain > 0) {
             int st = Math.min(remain, getItemType().getMaxStackSize());
             player.getInventory().addItem(new ItemStack(getItemType(), st));
             remain -= st;

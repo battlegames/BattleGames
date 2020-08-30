@@ -187,9 +187,9 @@ public class Component extends ConfigurableObject {
         return renderedFunction;
     }
 
-    private int parseNum(String s){
+    private int parseNum(String s) {
         String[] t = s.split("/");
-        if(t.length == 1){
+        if (t.length == 1) {
             return Integer.parseInt(s.trim());
         } else {
             int f1 = Integer.parseInt(t[0].trim());
@@ -197,52 +197,52 @@ public class Component extends ConfigurableObject {
             return CENTER_SLOTS.getOrDefault(Objects.hash(f2, f1), 0);
         }
     }
-    
-    private void parsePos(List<Integer> holder, String str){
+
+    private void parsePos(List<Integer> holder, String str) {
         String[] p = str.split(";");
-        if(p.length == 2){
+        if (p.length == 2) {
             String[] p1 = p[0].split("->");
             String[] p2 = p[1].split("->");
             int minX, maxX;
-            if(p1.length == 1){
+            if (p1.length == 1) {
                 minX = parseNum(p1[0]);
                 maxX = minX;
-            } else if(p1.length == 2){
+            } else if (p1.length == 2) {
                 minX = parseNum(p1[0]);
                 maxX = parseNum(p1[1]);
             } else {
-                Bukkit.getLogger().warning("Invalid slot format: "+str);
+                Bukkit.getLogger().warning("Invalid slot format: " + str);
                 return;
             }
             int minY, maxY;
-            if(p2.length == 1){
+            if (p2.length == 1) {
                 minY = parseNum(p2[0]);
                 maxY = minY;
-            } else if(p2.length == 2){
+            } else if (p2.length == 2) {
                 minY = parseNum(p2[0]);
                 maxY = parseNum(p2[1]);
             } else {
                 return;
             }
-            for(int i = minY; i <= maxY; i++) {
+            for (int i = minY; i <= maxY; i++) {
                 for (int j = minX; j <= maxX; j++) {
                     holder.add(i * 9 + j - 10);
                 }
             }
         } else {
-            Bukkit.getLogger().warning("Invalid slot format: "+str);
+            Bukkit.getLogger().warning("Invalid slot format: " + str);
         }
     }
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("positions")){
+        if (value != null && entry.getKey().equals("positions")) {
             List<Integer> ints = new ArrayList<>();
-            if(value instanceof String){
+            if (value instanceof String) {
                 parsePos(ints, (String) value);
-            } else if(value instanceof List){
+            } else if (value instanceof List) {
                 List<String> list = (List<String>) value;
-                for(String s : list) parsePos(ints, s);
+                for (String s : list) parsePos(ints, s);
             }
             return ints;
         }

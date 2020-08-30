@@ -20,9 +20,9 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.api.BattleBar;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
-import dev.anhcraft.battle.api.BattleBar;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -38,9 +38,8 @@ import java.util.List;
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class GunModel extends WeaponModel {
-    private static final BattleSound DEF_SHOOT_SOUND = new BattleSound("$entity_arrow_shoot");
     public static final ConfigSchema<GunModel> SCHEMA = ConfigSchema.of(GunModel.class);
-
+    private static final BattleSound DEF_SHOOT_SOUND = new BattleSound("$entity_arrow_shoot");
     @Key("skin.primary")
     @Explanation("Set the primary skin")
     @Validation(notNull = true)
@@ -166,7 +165,7 @@ public class GunModel extends WeaponModel {
     }
 
     @Override
-    public void inform(@NotNull InfoHolder holder){
+    public void inform(@NotNull InfoHolder holder) {
         super.inform(holder);
         holder.inform("weight", weight)
                 .inform("muzzle_velocity", muzzleVelocity)
@@ -206,8 +205,8 @@ public class GunModel extends WeaponModel {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null){
-            switch (entry.getKey()){
+        if (o != null) {
+            switch (entry.getKey()) {
                 case "magazine.default": {
                     return ApiProvider.consume().getMagazineModel((String) o);
                 }
@@ -217,17 +216,17 @@ public class GunModel extends WeaponModel {
                 case "spray_pattern": {
                     List<Pair<Double, Double>> sp = new ArrayList<>();
                     List<?> list = (List<?>) o;
-                    for(Object object : list){
+                    for (Object object : list) {
                         String[] args = String.valueOf(object).split(" ");
                         double x = 0, y = 0;
-                        if(args.length >= 1){
-                            if(RegEx.DECIMAL.valid(args[0]))
+                        if (args.length >= 1) {
+                            if (RegEx.DECIMAL.valid(args[0]))
                                 x = Double.parseDouble(args[0]);
                             else
                                 Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], getId()));
                         }
-                        if(args.length >= 2){
-                            if(RegEx.DECIMAL.valid(args[1]))
+                        if (args.length >= 2) {
+                            if (RegEx.DECIMAL.valid(args[1]))
                                 y = Double.parseDouble(args[1]);
                             else
                                 Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], getId()));
@@ -243,8 +242,8 @@ public class GunModel extends WeaponModel {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null){
-            switch (entry.getKey()){
+        if (o != null) {
+            switch (entry.getKey()) {
                 case "scope.default":
                 case "magazine.default": {
                     return ((BattleItemModel) o).getId();
@@ -252,8 +251,8 @@ public class GunModel extends WeaponModel {
                 case "spray_pattern": {
                     List<Pair<Double, Double>> sp = (List<Pair<Double, Double>>) o;
                     List<String> list = new ArrayList<>();
-                    for(Pair<Double, Double> p : sp){
-                        list.add(p.getFirst()+" "+p.getSecond());
+                    for (Pair<Double, Double> p : sp) {
+                        list.add(p.getFirst() + " " + p.getSecond());
                     }
                     return list;
                 }

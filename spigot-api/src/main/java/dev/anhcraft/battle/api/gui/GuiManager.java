@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 public interface GuiManager {
     /**
      * Collects the info of the given {@link View}
+     *
      * @param view view
      * @return info holder
      */
@@ -40,6 +41,7 @@ public interface GuiManager {
 
     /**
      * Registers the given GUI.
+     *
      * @param gui the GUI
      * @return {@code true} if success, or {@code false} if not
      */
@@ -47,15 +49,17 @@ public interface GuiManager {
 
     /**
      * Registers a new GUI handler.
+     *
      * @param handlerClass the handler's class
-     * @param <T> gui handler
+     * @param <T>          gui handler
      * @return {@code true} if success, or {@code false} if not
      */
     <T extends GuiHandler> boolean registerGuiHandler(@NotNull Class<T> handlerClass);
 
     /**
      * Registers the given pagination.
-     * @param id the identifier
+     *
+     * @param id         the identifier
      * @param pagination the pagination
      * @return {@code true} if success, or {@code false} if not
      */
@@ -64,6 +68,7 @@ public interface GuiManager {
     /**
      * Gets the {@link Window} of the given player.<br>
      * If it does not exist yet, a new instance will be created automatically.
+     *
      * @param player the player
      * @return a unique {@link Window} that belongs to the player
      */
@@ -72,15 +77,17 @@ public interface GuiManager {
 
     /**
      * Updates the given view.
+     *
      * @param player who is viewing
-     * @param view the view
+     * @param view   the view
      */
     void updateView(@NotNull Player player, @Nullable View view);
 
     /**
      * Updates the given component .
-     * @param player who is viewing
-     * @param view the view
+     *
+     * @param player    who is viewing
+     * @param view      the view
      * @param component the component
      */
     void updateComponent(@NotNull Player player, @Nullable View view, @Nullable Component component);
@@ -90,8 +97,9 @@ public interface GuiManager {
      * <br>
      * Calling this method will reset the current handlers and
      * re-render the bottom inventory of the given player.
+     *
      * @param player the player
-     * @param name the name of the GUI
+     * @param name   the name of the GUI
      * @return the view
      */
     @Nullable
@@ -102,8 +110,9 @@ public interface GuiManager {
      * <br>
      * Calling this method will reset the current handlers and
      * re-render the top inventory of the given player.
+     *
      * @param player the player
-     * @param name the name of the GUI
+     * @param name   the name of the GUI
      * @return the view
      */
     @Nullable

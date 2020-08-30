@@ -51,7 +51,7 @@ public class ExtendedCommand extends BaseCommand {
         pi.flags().add(ItemFlag.HIDE_ATTRIBUTES);
         pi.unbreakable(true);
         ItemStack itemStack = pi.build();
-        for(int i = 0; i < amount; i++){
+        for (int i = 0; i < amount; i++) {
             t.getInventory().addItem(itemStack.clone());
         }
     }
@@ -68,7 +68,7 @@ public class ExtendedCommand extends BaseCommand {
         pi.flags().add(ItemFlag.HIDE_ATTRIBUTES);
         pi.unbreakable(true);
         ItemStack itemStack = pi.build();
-        for(int i = 0; i < amount; i++){
+        for (int i = 0; i < amount; i++) {
             t.getInventory().addItem(itemStack.clone());
         }
     }

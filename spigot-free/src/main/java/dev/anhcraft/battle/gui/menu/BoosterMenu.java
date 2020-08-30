@@ -21,11 +21,11 @@ package dev.anhcraft.battle.gui.menu;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.Booster;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
-import dev.anhcraft.battle.api.Booster;
+import dev.anhcraft.battle.api.gui.screen.View;
+import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -38,25 +38,25 @@ public class BoosterMenu implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
-        if(pd != null) {
-            for (Map.Entry<String, Long> ent : pd.getBoosters().entrySet()){
-                if(!chain.hasNext()) break;
-                if(chain.shouldSkip()) continue;
+        if (pd != null) {
+            for (Map.Entry<String, Long> ent : pd.getBoosters().entrySet()) {
+                if (!chain.hasNext()) break;
+                if (chain.shouldSkip()) continue;
                 String id = ent.getKey();
                 Booster b = api.getBooster(id);
-                if(b == null){
+                if (b == null) {
                     continue;
                 }
                 long date = ent.getValue();
-                if(Objects.equals(id, pd.getActiveBooster()) && System.currentTimeMillis() - date > b.getExpiryTime()*50){
+                if (Objects.equals(id, pd.getActiveBooster()) && System.currentTimeMillis() - date > b.getExpiryTime() * 50) {
                     pd.getBoosters().remove(id);
-                   continue;
+                    continue;
                 }
                 Slot slot = chain.next();
                 slot.setPaginationItem(b.getIcon().duplicate());
                 slot.setExtraClickFunction((vm, report) -> {
-                    if(pd.getActiveBooster() != null){
-                        if(pd.getActiveBooster().equals(id)){
+                    if (pd.getActiveBooster() != null) {
+                        if (pd.getActiveBooster().equals(id)) {
                             api.getChatManager().sendPlayer(report.getPlayer(), "booster.already_used");
                         } else {
                             api.getChatManager().sendPlayer(report.getPlayer(), "booster.another_used");

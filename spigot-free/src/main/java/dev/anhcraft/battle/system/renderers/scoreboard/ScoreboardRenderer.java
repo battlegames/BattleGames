@@ -31,20 +31,20 @@ public class ScoreboardRenderer implements Runnable {
     private final Map<Player, PlayerScoreboard> ACTIVE = new ConcurrentHashMap<>();
 
     @Nullable
-    public PlayerScoreboard getScoreboard(Player player){
+    public PlayerScoreboard getScoreboard(Player player) {
         return ACTIVE.get(player);
     }
 
-    public void setScoreboard(PlayerScoreboard newScoreboard){
+    public void setScoreboard(PlayerScoreboard newScoreboard) {
         PlayerScoreboard currentScoreboard = ACTIVE.get(newScoreboard.getPlayer());
-        if(currentScoreboard != null) currentScoreboard.remove();
+        if (currentScoreboard != null) currentScoreboard.remove();
         ACTIVE.put(newScoreboard.getPlayer(), newScoreboard);
         newScoreboard.show();
     }
 
-    public void removeScoreboard(Player player){
+    public void removeScoreboard(Player player) {
         PlayerScoreboard currentScoreboard = ACTIVE.remove(player);
-        if(currentScoreboard != null) currentScoreboard.remove();
+        if (currentScoreboard != null) currentScoreboard.remove();
         player.setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager())
                 .getMainScoreboard());
     }

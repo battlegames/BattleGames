@@ -31,40 +31,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GamePlayerDamageEvent extends GameEvent implements Cancellable {
-    public enum BattleType {
-        /**
-         * A player attacks another player.<br>
-         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackReport}.
-         */
-        PLAYER_ATTACK_PLAYER,
-
-        /**
-         * An entity attacks a player.<br>
-         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackedReport}.
-         */
-        ENTITY_ATTACK_PLAYER,
-
-        /**
-         * A player attacks an entity.<br>
-         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackReport}.
-         */
-        PLAYER_ATTACK_ENTITY,
-
-        /**
-         * The player is damaged by other reasons.<br>
-         * The report will be {@link PlayerDamagedReport}.
-         */
-        PLAYER_DAMAGED
-    }
-
     public static final HandlerList handlers = new HandlerList();
-
     private final DamageReport report;
     private final GamePlayer gp1;
     private final GamePlayer gp2;
     private final BattleType battleType;
     private boolean cancelled;
-
     public GamePlayerDamageEvent(@NotNull LocalGame game, @NotNull DamageReport report, @Nullable GamePlayer gp1, @Nullable GamePlayer gp2, @NotNull BattleType battleType) {
         super(game);
         Condition.argNotNull("report", report);
@@ -72,6 +44,10 @@ public class GamePlayerDamageEvent extends GameEvent implements Cancellable {
         this.gp1 = gp1;
         this.gp2 = gp2;
         this.battleType = battleType;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
@@ -115,7 +91,29 @@ public class GamePlayerDamageEvent extends GameEvent implements Cancellable {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public enum BattleType {
+        /**
+         * A player attacks another player.<br>
+         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackReport}.
+         */
+        PLAYER_ATTACK_PLAYER,
+
+        /**
+         * An entity attacks a player.<br>
+         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackedReport}.
+         */
+        ENTITY_ATTACK_PLAYER,
+
+        /**
+         * A player attacks an entity.<br>
+         * The report will be {@link dev.anhcraft.battle.api.reports.PlayerAttackReport}.
+         */
+        PLAYER_ATTACK_ENTITY,
+
+        /**
+         * The player is damaged by other reasons.<br>
+         * The report will be {@link PlayerDamagedReport}.
+         */
+        PLAYER_DAMAGED
     }
 }

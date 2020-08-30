@@ -101,7 +101,7 @@ public class DocGen {
     }
 
     @Test
-    public void gen(){
+    public void gen() {
         new ConfigDocGenerator()
                 .withSchema(Advancement.SCHEMA)
                 .withSchema(Ammo.Bullet.SCHEMA)

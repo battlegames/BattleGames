@@ -33,11 +33,11 @@ public class BattleSound {
     private float pitch = 1.0f;
 
     public BattleSound(String s) {
-        if(s.length() == 0) return;
+        if (s.length() == 0) return;
         String[] x = s.split(":");
-        if(x.length >= 1){
+        if (x.length >= 1) {
             String sound = x[0];
-            if(sound.charAt(0) == '$') {
+            if (sound.charAt(0) == '$') {
                 try {
                     bukkitSound = XSound.matchXSound(sound.substring(1)).orElseThrow((Supplier<Throwable>) () ->
                             new IllegalArgumentException("No sound matched")).parseSound();
@@ -47,35 +47,35 @@ public class BattleSound {
             } else {
                 soundName = sound;
             }
-            if(x.length >= 2) {
+            if (x.length >= 2) {
                 volume = Float.parseFloat(x[1]);
 
-                if(x.length >= 3) {
+                if (x.length >= 3) {
                     pitch = Float.parseFloat(x[2]);
                 }
             }
         }
     }
 
-    public void play(Player player){
-        if(soundName != null)
+    public void play(Player player) {
+        if (soundName != null)
             player.playSound(player.getLocation(), soundName, volume, pitch);
-        else if(bukkitSound != null)
+        else if (bukkitSound != null)
             player.playSound(player.getLocation(), bukkitSound, volume, pitch);
     }
 
-    public void play(Location location){
-        if(soundName != null)
+    public void play(Location location) {
+        if (soundName != null)
             location.getWorld().playSound(location, soundName, volume, pitch);
-        else if(bukkitSound != null)
+        else if (bukkitSound != null)
             location.getWorld().playSound(location, bukkitSound, volume, pitch);
     }
 
     @Override
-    public String toString(){
-        if(bukkitSound != null)
-            return "$"+bukkitSound.name()+":"+volume+":"+pitch;
+    public String toString() {
+        if (bukkitSound != null)
+            return "$" + bukkitSound.name() + ":" + volume + ":" + pitch;
         else
-            return soundName+":"+volume+":"+pitch;
+            return soundName + ":" + volume + ":" + pitch;
     }
 }

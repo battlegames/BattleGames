@@ -47,7 +47,7 @@ public class QueueAdvancementTask implements Runnable {
     @SuppressWarnings("UnstableApiUsage")
     private final Multimap<Player, PresentPair<String, Double>> queue = MultimapBuilder.linkedHashKeys().linkedListValues().build();
 
-    public void put(Player player, String type, double amount){
+    public void put(Player player, String type, double amount) {
         synchronized (LOCK) {
             queue.put(player, new PresentPair<>(type, amount));
         }
@@ -61,14 +61,14 @@ public class QueueAdvancementTask implements Runnable {
         BattleApi api = BattleApi.getInstance();
         synchronized (LOCK) {
             Iterator<Player> keys = queue.keys().iterator();
-            while (keys.hasNext()){
+            while (keys.hasNext()) {
                 Player player = keys.next();
-                if(!player.isOnline()) {
+                if (!player.isOnline()) {
                     keys.remove();
                     continue;
                 }
                 PlayerData pd = api.getPlayerData(player);
-                if(pd == null) continue;
+                if (pd == null) continue;
                 Collection<PresentPair<String, Double>> pc = queue.get(player);
                 for (PresentPair<String, Double> p : pc) {
                     String type = p.getFirst();
@@ -77,14 +77,14 @@ public class QueueAdvancementTask implements Runnable {
                     Advancement current = null;
                     Advancement next = null;
                     Progression currentLevel = null;
-                    if(pp.getCurrentLevel() < 0) continue;
-                    if(pp.getActiveAdvancement() == null){
+                    if (pp.getCurrentLevel() < 0) continue;
+                    if (pp.getActiveAdvancement() == null) {
                         // if the player already done the advancement (amount > 0) we don't re-init it.
                         if (pp.getCurrentAmount() > 0) continue;
                         // if the player is first come to this advancement...
                         SortedSet<Advancement> set = api.getAdvancementManager().getAdvancementsFromType(type);
                         // this stat type must have its own advancement
-                        if(set.isEmpty()) {
+                        if (set.isEmpty()) {
                             continue;
                         } else {
                             Advancement adv = set.first();
@@ -92,38 +92,38 @@ public class QueueAdvancementTask implements Runnable {
                             pp.setCurrentLevel(0);
                             pp.setTargetAmount((currentLevel = adv.getProgression().first()).getAmount());
                             pp.setCurrentAmount(amount);
-                            if(pp.getCurrentAmount() < pp.getTargetAmount()) continue;
+                            if (pp.getCurrentAmount() < pp.getTargetAmount()) continue;
                             else {
                                 current = adv;
                                 next = set.stream().skip(1).findFirst().orElse(null);
                             }
                         }
                     } else {
-                        if(amount < pp.getTargetAmount()){
+                        if (amount < pp.getTargetAmount()) {
                             pp.setCurrentAmount(amount);
                             continue;
                         }
                         SortedSet<Advancement> set = api.getAdvancementManager().getAdvancementsFromType(type);
-                        for (Advancement adv : set){
-                            if(adv.getId().equals(pp.getActiveAdvancement())){
+                        for (Advancement adv : set) {
+                            if (adv.getId().equals(pp.getActiveAdvancement())) {
                                 current = adv;
-                            } else if(current != null){
+                            } else if (current != null) {
                                 next = adv;
                                 break;
                             }
                         }
                     }
-                    if(current == null){
+                    if (current == null) {
                         pp.setActiveAdvancement(null);
                         continue;
                     }
                     int currentLv = pp.getCurrentLevel();
-                    if(currentLevel == null){
+                    if (currentLevel == null) {
                         Optional<Progression> currLv = current.getProgression().stream().skip(currentLv).findFirst();
-                        if(!currLv.isPresent()) continue;
+                        if (!currLv.isPresent()) continue;
                         currentLevel = currLv.get();
                     }
-                    if(amount < currentLevel.getAmount()){
+                    if (amount < currentLevel.getAmount()) {
                         pp.setTargetAmount(currentLevel.getAmount());
                         pp.setCurrentAmount(amount);
                         continue;
@@ -133,9 +133,9 @@ public class QueueAdvancementTask implements Runnable {
                             .inform("exp", currentLevel.getRewardExp())
                             .inform("money", currentLevel.getRewardMoney())
                             .compile();
-                    if(currentLv + 1 >= current.getProgression().size()) {
+                    if (currentLv + 1 >= current.getProgression().size()) {
                         api.getChatManager().sendPlayer(player, "advancement.finished", currInfo);
-                        if(next != null) {
+                        if (next != null) {
                             api.getChatManager().sendPlayer(player, "advancement.unlocked", new InfoHolder("").inform("advancement", next.getName()).compile());
                             if (next.getInheritProgress()) {
                                 pp.setCurrentAmount(amount);
@@ -158,9 +158,9 @@ public class QueueAdvancementTask implements Runnable {
                         api.getChatManager().sendPlayer(player, "advancement.level_up", currInfo);
                         api.getChatManager().sendPlayer(player, "advancement.level_up_overview",
                                 new InfoHolder("")
-                                .inform("last_lv", currentLv)
-                                .inform("current_lv", currentLv + 1)
-                                .inform("progress", 100d/current.getProgression().size()*(currentLv+1)).compile());
+                                        .inform("last_lv", currentLv)
+                                        .inform("current_lv", currentLv + 1)
+                                        .inform("progress", 100d / current.getProgression().size() * (currentLv + 1)).compile());
                         pp.setCurrentAmount(amount);
                         pp.setCurrentLevel(currentLv + 1);
                         pp.setTargetAmount(current.getProgression().stream().skip(currentLv).findFirst().orElseThrow(IllegalStateException::new).getAmount());

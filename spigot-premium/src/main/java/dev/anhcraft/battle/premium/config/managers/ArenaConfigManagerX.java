@@ -41,7 +41,7 @@ public class ArenaConfigManagerX extends ConfigManager {
     }
 
     @Nullable
-    public ArenaSettings getArenaSettings(String arena){
+    public ArenaSettings getArenaSettings(String arena) {
         return arenaSettingsMap.get(arena);
     }
 
@@ -50,15 +50,15 @@ public class ArenaConfigManagerX extends ConfigManager {
         try {
             for (String k : getSettings().getKeys(false)) {
                 Arena a = plugin.getArena(k);
-                if(a == null) {
-                    plugin.getLogger().warning("["+loggerName+"] Arena #" + k + " not found.");
+                if (a == null) {
+                    plugin.getLogger().warning("[" + loggerName + "] Arena #" + k + " not found.");
                     continue;
                 }
                 ConfigurationSection s = getSettings().getConfigurationSection(k);
                 ArenaSettings as = ConfigHelper.readConfig(Objects.requireNonNull(s), ConfigSchema.of(ArenaSettings.class));
                 arenaSettingsMap.put(k, as);
                 if (a.getRollback() == null) {
-                    plugin.getLogger().warning("["+loggerName+"] You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
+                    plugin.getLogger().warning("[" + loggerName + "] You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
                     if (as.getEmptyRegions() != null) {
                         as.getEmptyRegions().clear();
                     }

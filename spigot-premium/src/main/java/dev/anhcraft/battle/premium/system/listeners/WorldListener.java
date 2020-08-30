@@ -34,62 +34,62 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class WorldListener implements Listener {
     @EventHandler(ignoreCancelled = true)
-    public void spawn(CreatureSpawnEvent event){
-        if(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
+    public void spawn(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
-        if(ws != null && ws.isPreventMobSpawn()){
+        if (ws != null && ws.isPreventMobSpawn()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void death(EntityDeathEvent event){
+    public void death(EntityDeathEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
-        if(ws != null && ws.isPreventMobDrops()){
+        if (ws != null && ws.isPreventMobDrops()) {
             event.setDroppedExp(0);
             event.getDrops().clear();
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void explode(EntityExplodeEvent event){
+    public void explode(EntityExplodeEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
-        if(ws != null && ws.isPreventExplosions()){
+        if (ws != null && ws.isPreventExplosions()) {
             event.blockList().clear();
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void explode(BlockExplodeEvent event){
+    public void explode(BlockExplodeEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
-        if(ws != null && ws.isPreventExplosions()){
+        if (ws != null && ws.isPreventExplosions()) {
             event.blockList().clear();
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void breakBlock(BlockBreakEvent event){
+    public void breakBlock(BlockBreakEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
-        if(ws != null && ws.isProtectBlocks()){
+        if (ws != null && ws.isProtectBlocks()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void placeBlock(BlockPlaceEvent event){
+    public void placeBlock(BlockPlaceEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
-        if(ws != null && ws.isProtectBlocks()){
+        if (ws != null && ws.isProtectBlocks()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void fireSpread(BlockIgniteEvent event) {
-        if(event.getCause() == BlockIgniteEvent.IgniteCause.SPREAD) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.SPREAD) {
             WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
-            if(ws != null && ws.isAntiFireSpread()){
+            if (ws != null && ws.isAntiFireSpread()) {
                 event.setCancelled(true);
             }
         }

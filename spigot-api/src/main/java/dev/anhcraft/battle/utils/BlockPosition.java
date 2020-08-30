@@ -32,6 +32,17 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 public class BlockPosition {
+    private final int x;
+    private final int y;
+    private final int z;
+    private final WeakReference<World> world;
+    public BlockPosition(int x, int y, int z, @Nullable World world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = new WeakReference<>(world);
+    }
+
     @NotNull
     public static BlockPosition of(@NotNull Location location) {
         Preconditions.checkNotNull(location);
@@ -49,18 +60,6 @@ public class BlockPosition {
         Preconditions.checkNotNull(str);
         String[] a = str.split(" ");
         return new BlockPosition(Integer.parseInt(a[1]), Integer.parseInt(a[2]), Integer.parseInt(a[3]), a[0].equals("null") ? null : Bukkit.getWorld(a[0]));
-    }
-
-    private final int x;
-    private final int y;
-    private final int z;
-    private final WeakReference<World> world;
-
-    public BlockPosition(int x, int y, int z, @Nullable World world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.world = new WeakReference<>(world);
     }
 
     public int getX() {
@@ -81,7 +80,7 @@ public class BlockPosition {
     }
 
     @NotNull
-    public Block getBlock(){
+    public Block getBlock() {
         return Objects.requireNonNull(world.get()).getBlockAt(x, y, z);
     }
 

@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class InGameCurrency implements Currency {
     @Nullable
-    private GamePlayer getGamePlayer(Player player){
+    private GamePlayer getGamePlayer(Player player) {
         return ApiProvider.consume().getArenaManager().getGamePlayer(player);
     }
 
@@ -46,8 +46,8 @@ public class InGameCurrency implements Currency {
     @Override
     public boolean withdraw(@NotNull Player player, double delta) {
         GamePlayer gp = getGamePlayer(player);
-        if(gp == null) return false;
-        if(delta != 0) {
+        if (gp == null) return false;
+        if (delta != 0) {
             gp.getIgBalance().addAndGet(delta < 0 ? delta : -delta);
         }
         return true;
@@ -56,8 +56,8 @@ public class InGameCurrency implements Currency {
     @Override
     public boolean deposit(@NotNull Player player, double delta) {
         GamePlayer gp = getGamePlayer(player);
-        if(gp == null) return false;
-        if(delta != 0) {
+        if (gp == null) return false;
+        if (delta != 0) {
             gp.getIgBalance().addAndGet(delta < 0 ? -delta : delta);
         }
         return true;

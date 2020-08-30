@@ -31,28 +31,27 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class MobRescueMatch {
+    private final Map<EntityType, Integer> mobCount;
+    private final int totalMobs;
+    private final BoundingBox gatheringRegion;
+    private int stolenMobs;
+    MobRescueMatch(@NotNull Map<EntityType, Integer> mobCount, int totalMobs, BoundingBox gatheringRegion) {
+        this.mobCount = mobCount;
+        this.totalMobs = totalMobs;
+        this.gatheringRegion = gatheringRegion;
+    }
+
     @NotNull
-    public static MobRescueMatch create(@NotNull MobRescueOptions options){
+    public static MobRescueMatch create(@NotNull MobRescueOptions options) {
         Map<EntityType, Integer> mobCount = new EnumMap<>(EntityType.class);
         int totalMobs = 0;
-        for(Map.Entry<EntityType, MobRescueObjective> e : options.getObjectives().entrySet()){
+        for (Map.Entry<EntityType, MobRescueObjective> e : options.getObjectives().entrySet()) {
             int v = RandomUtil.randomInt(e.getValue().getMinAmount(), e.getValue().getMaxAmount());
             mobCount.put(e.getKey(), v);
             totalMobs += v;
         }
         BoundingBox region = BoundingBox.of(options.getGatheringRegionCorner1(), options.getGatheringRegionCorner2());
         return new MobRescueMatch(mobCount, totalMobs, region);
-    }
-
-    private final Map<EntityType, Integer> mobCount;
-    private final int totalMobs;
-    private final BoundingBox gatheringRegion;
-    private int stolenMobs;
-
-    MobRescueMatch(@NotNull Map<EntityType, Integer> mobCount, int totalMobs, BoundingBox gatheringRegion) {
-        this.mobCount = mobCount;
-        this.totalMobs = totalMobs;
-        this.gatheringRegion = gatheringRegion;
     }
 
     @NotNull

@@ -37,6 +37,10 @@ public class ComponentRenderEvent extends ComponentEvent implements Cancellable 
         super(who, gui, window, view, component);
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -49,10 +53,6 @@ public class ComponentRenderEvent extends ComponentEvent implements Cancellable 
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

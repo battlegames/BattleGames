@@ -48,18 +48,18 @@ public class PlayerBossBar {
         return player;
     }
 
-    void render(){
+    void render() {
         callback.accept(this);
     }
 
-    public void show(){
-        if(isShow) return;
+    public void show() {
+        if (isShow) return;
         isShow = true;
         bar.addPlayer(player);
         bar.setVisible(true);
     }
 
-    void remove(){
+    void remove() {
         bar.removeAll();
     }
 }

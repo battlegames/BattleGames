@@ -30,16 +30,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class QueueTitleTask implements Runnable {
     private final Map<Player, Queue<QueueTitle>> QUEUE = new WeakHashMap<>();
 
-    public void put(Player p, QueueTitle title){
+    public void put(Player p, QueueTitle title) {
         Queue<QueueTitle> x = QUEUE.get(p);
-        if(x == null) {
+        if (x == null) {
             x = new ConcurrentLinkedQueue<>();
             QUEUE.put(p, x);
         }
         x.offer(title);
     }
 
-    public void remove(Player p){
+    public void remove(Player p) {
         QUEUE.remove(p);
     }
 

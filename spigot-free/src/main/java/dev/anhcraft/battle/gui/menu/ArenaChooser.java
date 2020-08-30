@@ -36,13 +36,13 @@ public class ArenaChooser implements Pagination {
     @Override
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
-        for (Arena arena : api.listArenas()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
+        for (Arena arena : api.listArenas()) {
+            if (!chain.hasNext()) break;
+            if (chain.shouldSkip()) continue;
             Slot slot = chain.next();
             InfoHolder infoHolder;
             Game game = ApiProvider.consume().getArenaManager().getGame(arena);
-            if(game != null){
+            if (game != null) {
                 infoHolder = new InfoHolder("game_");
                 game.inform(infoHolder);
             } else {

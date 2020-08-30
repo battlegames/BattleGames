@@ -40,10 +40,11 @@ public class SignedInt {
     private int unsigned;
     private boolean negative;
 
-    public SignedInt() { }
+    public SignedInt() {
+    }
 
     public SignedInt(int i) {
-        if(i < 0) {
+        if (i < 0) {
             unsigned = -i;
             negative = true;
         } else {
@@ -66,10 +67,10 @@ public class SignedInt {
 
     @NotNull
     public SignedInt add(SignedInt i) {
-        if(negative != i.negative) {
-            if(unsigned > i.unsigned) {
+        if (negative != i.negative) {
+            if (unsigned > i.unsigned) {
                 return new SignedInt(unsigned - i.unsigned, negative);
-            } else if(unsigned < i.unsigned) {
+            } else if (unsigned < i.unsigned) {
                 return new SignedInt(i.unsigned - unsigned, i.negative);
             } else {
                 return ZERO;

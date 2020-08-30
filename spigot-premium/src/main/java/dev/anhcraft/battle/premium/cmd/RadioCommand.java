@@ -68,7 +68,7 @@ public class RadioCommand extends BaseCommand {
             for (Player p : players) {
                 p.sendMessage(q);
             }
-        } else if(mode instanceof BedWarController) {
+        } else if (mode instanceof BedWarController) {
             TeamManager<BWTeam> tm = ((BedWarController) mode).getTeamManager(game);
             if (tm == null) {
                 player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));

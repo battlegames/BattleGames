@@ -54,7 +54,7 @@ public class ServerData implements Resettable, Serializable {
     }
 
     public void setJoinSign(@NotNull BlockPosition position, @Nullable String arena) {
-        if(arena != null) joinSigns.put(position, arena);
+        if (arena != null) joinSigns.put(position, arena);
         else joinSigns.remove(position);
     }
 

@@ -21,18 +21,18 @@ package dev.anhcraft.battle.api.arena;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
 import dev.anhcraft.battle.api.arena.game.Mode;
 import dev.anhcraft.battle.api.arena.game.options.GameOptions;
 import dev.anhcraft.battle.api.effect.firework.BattleFirework;
-import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.State;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -187,7 +187,7 @@ public class Arena extends ConfigurableObject implements Informative {
 
     @NotNull
     public Mode getMode() {
-        if(mode == null)
+        if (mode == null)
             throw new UnsupportedOperationException("Mode is not present");
         return mode;
     }
@@ -209,7 +209,7 @@ public class Arena extends ConfigurableObject implements Informative {
         return allowLateJoins;
     }
 
-    public double calculateFinalMoney(@NotNull GamePlayer player){
+    public double calculateFinalMoney(@NotNull GamePlayer player) {
         Validate.notNull(player, "Player must be non-null");
         return finalMoneyCalculator
                 .setVariable("a", player.getStats().of(HeadshotStat.class).get())
@@ -219,7 +219,7 @@ public class Arena extends ConfigurableObject implements Informative {
                 .evaluate();
     }
 
-    public long calculateFinalExp(@NotNull GamePlayer player){
+    public long calculateFinalExp(@NotNull GamePlayer player) {
         Validate.notNull(player, "Player must be non-null");
         return (long) finalExpCalculator
                 .setVariable("a", player.getStats().of(HeadshotStat.class).get())
@@ -249,11 +249,11 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @NotNull
-    public List<String> getRemoteServers(){
+    public List<String> getRemoteServers() {
         return remoteServers;
     }
 
-    public boolean hasBungeecordSupport(){
+    public boolean hasBungeecordSupport() {
         return bungeeSupport;
     }
 
@@ -308,8 +308,8 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null) {
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null) {
             switch (entry.getKey()) {
                 case "mode": {
                     return Mode.get((String) value);
@@ -324,7 +324,7 @@ public class Arena extends ConfigurableObject implements Informative {
                 }
                 case "bungeecord.enabled": {
                     boolean b = (Boolean) value;
-                    if(b && !ApiProvider.consume().hasBungeecordSupport()){
+                    if (b && !ApiProvider.consume().hasBungeecordSupport()) {
                         BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
                         return false;
                     }
@@ -345,8 +345,8 @@ public class Arena extends ConfigurableObject implements Informative {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null) {
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null) {
             switch (entry.getKey()) {
                 case "mode": {
                     return ((Mode) value).getId();

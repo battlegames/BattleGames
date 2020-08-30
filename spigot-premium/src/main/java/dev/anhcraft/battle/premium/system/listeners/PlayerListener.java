@@ -44,59 +44,59 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener {
     @EventHandler
-    public void craft(CraftItemEvent event){
+    public void craft(CraftItemEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getWhoClicked().getWorld().getName());
-        if(ws != null && ws.isDisableCrafting()){
+        if (ws != null && ws.isDisableCrafting()) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
         }
     }
 
     @EventHandler
-    public void food(FoodLevelChangeEvent event){
+    public void food(FoodLevelChangeEvent event) {
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
-        if(ws != null && ws.isPreventHungry()){
+        if (ws != null && ws.isPreventHungry()) {
             event.setFoodLevel(20);
         }
     }
 
     @EventHandler
-    public void itemUse(PlayerInteractEvent event){
-        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
-        if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+    public void itemUse(PlayerInteractEvent event) {
+        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = event.getItem();
             Player p = event.getPlayer();
-            if(item != null && item.getType() == Material.STONE_SWORD && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()){
-                if(item.getDurability() == 1) {
+            if (item != null && item.getType() == Material.STONE_SWORD && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()) {
+                if (item.getDurability() == 1) {
                     double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                     double now = p.getHealth();
                     if (max != now) {
                         ItemSettings is = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings();
                         p.setHealth(Math.min(max, is.getMedicalKitBonusHealth() + now));
                         p.getInventory().setItemInMainHand(null);
-                        if(is.getMedicalKitUseSound() != null) {
+                        if (is.getMedicalKitUseSound() != null) {
                             is.getMedicalKitUseSound().play(p.getLocation());
                         }
                         PlayerData pd = BattleApi.getInstance().getPlayerData(p);
-                        if(pd != null) pd.getStats().of(MedicalKitUseStat.class).increase(p);
+                        if (pd != null) pd.getStats().of(MedicalKitUseStat.class).increase(p);
                     }
                     event.setCancelled(true);
                 } else if (item.getDurability() == 4) {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 0));
                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 0));
                     ItemSettings is = PremiumModule.getInstance().getItemConfigManagerX().getItemSettings();
-                    if(is.getAdrenalineShotUseSound() != null) {
+                    if (is.getAdrenalineShotUseSound() != null) {
                         is.getAdrenalineShotUseSound().play(p.getLocation());
                     }
                     p.getInventory().setItemInMainHand(null);
                     PlayerData pd = BattleApi.getInstance().getPlayerData(p);
-                    if(pd != null) pd.getStats().of(AdrenalineShotUseStat.class).increase(p);
+                    if (pd != null) pd.getStats().of(AdrenalineShotUseStat.class).increase(p);
                     event.setCancelled(true);
                 }
             }
         }
         WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getPlayer().getWorld().getName());
-        if(ws != null && ws.isInteractDisabled()){
+        if (ws != null && ws.isInteractDisabled()) {
             event.setCancelled(true);
         }
     }

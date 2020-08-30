@@ -40,21 +40,21 @@ public class BattleWorldRollback extends BattleComponent {
     public BattleWorldRollback(BattlePlugin plugin) {
         super(plugin);
 
-        cachedWorldFolder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"worlds");
+        cachedWorldFolder = new File(plugin.getDataFolder(), "cache" + File.separatorChar + "worlds");
         cachedWorldFolder.mkdirs();
     }
 
     @NotNull
-    public File getCachedWorldFolder(World world){
+    public File getCachedWorldFolder(World world) {
         return new File(cachedWorldFolder, world.getName());
     }
 
-    public boolean backupWorld(World world){
-        if(cachedWorlds.contains(world.getName())) return true;
+    public boolean backupWorld(World world) {
+        if (cachedWorlds.contains(world.getName())) return true;
         cachedWorlds.add(world.getName());
-        plugin.getLogger().info("Making a backup for world "+world.getName()+"...");
+        plugin.getLogger().info("Making a backup for world " + world.getName() + "...");
         File dest = getCachedWorldFolder(world);
-        if(dest.exists()){
+        if (dest.exists()) {
             FileUtil.clean(dest);
         } else {
             dest.mkdir();
@@ -62,22 +62,22 @@ public class BattleWorldRollback extends BattleComponent {
         return FileUtil.copy(world.getWorldFolder(), dest);
     }
 
-    public boolean rollbackWorld(World world){
+    public boolean rollbackWorld(World world) {
         plugin.getLogger().info("[Rollback/BattleWorld] Reloading world: " + world.getName());
         BattleDebugger.startTiming("rollback-battle-world");
         File workingDir = world.getWorldFolder();
         File cacheDir = getCachedWorldFolder(world);
-        if(!cacheDir.exists()) {
+        if (!cacheDir.exists()) {
             BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }
         world.getPlayers().forEach(c -> c.kickPlayer("The world is going to be reloaded"));
-        if(!Bukkit.unloadWorld(world, false)) {
+        if (!Bukkit.unloadWorld(world, false)) {
             BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }
         FileUtil.clean(workingDir);
-        if(!FileUtil.copy(cacheDir, workingDir)) {
+        if (!FileUtil.copy(cacheDir, workingDir)) {
             BattleDebugger.endTiming("rollback-battle-world");
             return false;
         }

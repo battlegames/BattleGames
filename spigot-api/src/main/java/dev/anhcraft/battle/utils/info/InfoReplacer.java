@@ -39,15 +39,15 @@ public class InfoReplacer {
     }
 
     @NotNull
-    public String replace(@NotNull String str){
-        if(str.isEmpty()) return str;
+    public String replace(@NotNull String str) {
+        if (str.isEmpty()) return str;
         Matcher m = INFO_PLACEHOLDER_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer(str.length());
-        while(m.find()){
+        while (m.find()) {
             String p = m.group();
-            String s = p.substring(1, p.length()-1).trim();
+            String s = p.substring(1, p.length() - 1).trim();
             String[] f = s.split(":");
-            if(f.length == 2) {
+            if (f.length == 2) {
                 s = f[0];
                 p = f[1];
             }
@@ -59,23 +59,23 @@ public class InfoReplacer {
     }
 
     @NotNull
-    public List<String> replace(@NotNull List<String> strs){
+    public List<String> replace(@NotNull List<String> strs) {
         strs.replaceAll(this::replace);
         return strs;
     }
 
     @NotNull
-    public String[] replace(@NotNull String[] strs){
-        for(int i = 0; i < strs.length; i++){
+    public String[] replace(@NotNull String[] strs) {
+        for (int i = 0; i < strs.length; i++) {
             strs[i] = replace(strs[i]);
         }
         return strs;
     }
 
     @NotNull
-    public PreparedItem replace(@NotNull PreparedItem item){
+    public PreparedItem replace(@NotNull PreparedItem item) {
         String n = item.name();
-        if(n != null) {
+        if (n != null) {
             item.name(replace(n));
         }
         replace(item.lore());
@@ -83,7 +83,7 @@ public class InfoReplacer {
     }
 
     @NotNull
-    public Map<String, String> getMap(){
+    public Map<String, String> getMap() {
         return map;
     }
 }

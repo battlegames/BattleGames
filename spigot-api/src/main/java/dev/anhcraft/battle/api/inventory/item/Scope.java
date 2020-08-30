@@ -21,9 +21,9 @@ package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
 public class Scope extends BattleItem<ScopeModel> {
@@ -38,15 +38,15 @@ public class Scope extends BattleItem<ScopeModel> {
     }
 
     public int nextZoomLevel() {
-        if(getModel() != null){
-            if(++nextZoomLevel == getModel().getZoomLevels().size()) nextZoomLevel = -1;
+        if (getModel() != null) {
+            if (++nextZoomLevel == getModel().getZoomLevels().size()) nextZoomLevel = -1;
         }
         return nextZoomLevel;
     }
 
     @Override
     public void save(CompoundTag compound) {
-        if(getModel() != null){
+        if (getModel() != null) {
             compound.put(ItemTag.SCOPE_ID, getModel().getId());
         }
         compound.put(ItemTag.SCOPE_NEXT_ZOOM_LEVEL, nextZoomLevel);
@@ -56,12 +56,12 @@ public class Scope extends BattleItem<ScopeModel> {
     public void load(CompoundTag compound) {
         setModel(ApiProvider.consume().getScopeModel(compound.getValue(ItemTag.SCOPE_ID, StringTag.class)));
         Integer nextZoomLv = compound.getValue(ItemTag.SCOPE_NEXT_ZOOM_LEVEL, IntTag.class);
-        if(nextZoomLv != null) nextZoomLevel = nextZoomLv;
+        if (nextZoomLv != null) nextZoomLevel = nextZoomLv;
     }
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        if(getModel() != null)
+        if (getModel() != null)
             getModel().inform(holder);
     }
 }

@@ -41,6 +41,7 @@ public class CompressUtil {
         return outputStream.toByteArray();
 
     }
+
     public static byte[] decompress(byte[] data) throws IOException, DataFormatException {
         Inflater inflater = new Inflater();
         inflater.setInput(data);

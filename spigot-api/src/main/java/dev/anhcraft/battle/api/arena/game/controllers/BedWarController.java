@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.arena.game.controllers;
 
-import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.utils.BlockPosition;
 import org.jetbrains.annotations.Nullable;

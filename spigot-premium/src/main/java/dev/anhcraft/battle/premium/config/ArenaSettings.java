@@ -44,11 +44,11 @@ public class ArenaSettings extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("empty_regions")) {
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("empty_regions")) {
             List<PositionPair> list = new ArrayList<>();
             ConfigurationSection section = (ConfigurationSection) value;
-            for(String k : section.getKeys(false)){
+            for (String k : section.getKeys(false)) {
                 ConfigurationSection v = section.getConfigurationSection(k);
                 list.add(new PositionPair(v.getString("corner_1"), v.getString("corner_2")));
             }
@@ -58,12 +58,12 @@ public class ArenaSettings extends ConfigurableObject {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("empty_regions")) {
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("empty_regions")) {
             YamlConfiguration section = new YamlConfiguration();
             List<PositionPair> list = (List<PositionPair>) value;
             int i = 0;
-            for(PositionPair p : list){
+            for (PositionPair p : list) {
                 YamlConfiguration x = new YamlConfiguration();
                 x.set("corner_1", p.getFirst());
                 x.set("corner_2", p.getSecond());

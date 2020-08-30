@@ -21,12 +21,12 @@ package dev.anhcraft.battle.system.listeners;
 
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.arena.game.GamePhase;
+import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.events.game.GameJoinEvent;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.api.events.game.GameQuitEvent;
-import dev.anhcraft.battle.api.arena.game.GamePhase;
-import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.utils.EntityUtil;
@@ -46,27 +46,27 @@ public class GameListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void join(GameJoinEvent event){
+    public void join(GameJoinEvent event) {
         Player p = event.getGamePlayer().toBukkit();
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
         String mode = event.getGame().getMode().getId();
-        if(plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV + "_" + mode) == null){
+        if (plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV + "_" + mode) == null) {
             plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV);
         }
     }
 
     @EventHandler
-    public void quit(GameQuitEvent event){
+    public void quit(GameQuitEvent event) {
         Player p = event.getGamePlayer().toBukkit();
         ItemStack[] inv = event.getGamePlayer().getBackupInventory();
-        if(inv != null) p.getInventory().setContents(inv);
+        if (inv != null) p.getInventory().setContents(inv);
         // although the inventory got backup, its handler still
         // didn't change so we must set it again
         plugin.guiManager.setBottomGui(p, NativeGui.MAIN_PLAYER_INV);
 
-        for (PotionEffect pe : p.getActivePotionEffects()){
+        for (PotionEffect pe : p.getActivePotionEffects()) {
             p.removePotionEffect(pe.getType());
         }
 
@@ -75,7 +75,7 @@ public class GameListener extends BattleComponent implements Listener {
         // its better to execute the following code later
         // we can ignore if the player is going to quit the server
         plugin.extension.getTaskHelper().newTask(() -> {
-            if(p.isOnline()) {
+            if (p.isOnline()) {
                 plugin.resetScoreboard(p);
                 EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {
                     event.getGame().getMode().getController(c -> ((GameControllerImpl) c).cancelReloadGun(p));
@@ -86,16 +86,16 @@ public class GameListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void phaseChange(GamePhaseChangeEvent event){
-        if(event.getGame() instanceof LocalGame) {
+    public void phaseChange(GamePhaseChangeEvent event) {
+        if (event.getGame() instanceof LocalGame) {
             GameController controller = event.getGame().getMode().getController();
             if (controller != null) {
-                if(event.getOldPhase() == GamePhase.PLAYING) {
-                    if(controller instanceof GameControllerImpl) {
+                if (event.getOldPhase() == GamePhase.PLAYING) {
+                    if (controller instanceof GameControllerImpl) {
                         GameControllerImpl mc = (GameControllerImpl) controller;
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(mc::cancelReloadGun);
                     }
-                } else if(event.getNewPhase() == GamePhase.PLAYING) {
+                } else if (event.getNewPhase() == GamePhase.PLAYING) {
                     if (plugin.generalConf.shouldHealOnGameStart()) {
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
                     }

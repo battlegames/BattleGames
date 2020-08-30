@@ -34,21 +34,21 @@ import org.jetbrains.annotations.Nullable;
 public class Ammo extends BattleItem<AmmoModel> {
     @Override
     public void save(CompoundTag compound) {
-        if(getModel() != null){
+        if (getModel() != null) {
             compound.put(ItemTag.AMMO_ID, getModel().getId());
         }
     }
 
     @Override
     public void load(CompoundTag compound) {
-        if(compound.has(ItemTag.AMMO_ID)) { // todo: remove this temp fix
+        if (compound.has(ItemTag.AMMO_ID)) { // todo: remove this temp fix
             setModel(ApiProvider.consume().getAmmoModel(compound.getValue(ItemTag.AMMO_ID, StringTag.class)));
         }
     }
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        if(getModel() != null)
+        if (getModel() != null)
             getModel().inform(holder);
     }
 

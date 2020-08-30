@@ -30,18 +30,18 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class StatisticMap {
-    private boolean advancementSupport;
     private final Consumer<Statistic> onInit;
     private final ClassToInstanceMap<Statistic> stats = MutableClassToInstanceMap.create();
+    private boolean advancementSupport;
 
     public StatisticMap(@NotNull Consumer<Statistic> onInit) {
         this.onInit = onInit;
     }
 
     @NotNull
-    public <T extends Statistic> T of(@NotNull Class<T> clazz){
+    public <T extends Statistic> T of(@NotNull Class<T> clazz) {
         T stat = stats.getInstance(clazz);
-        if(stat == null){
+        if (stat == null) {
             try {
                 stat = clazz.newInstance();
                 stats.putInstance(clazz, stat);
@@ -54,12 +54,12 @@ public class StatisticMap {
         return Objects.requireNonNull(stat);
     }
 
-    public void clear(){
+    public void clear() {
         stats.values().forEach(Statistic::reset);
     }
 
     @NotNull
-    public Set<Statistic> all(){
+    public Set<Statistic> all() {
         return ImmutableSet.copyOf(stats.values());
     }
 

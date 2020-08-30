@@ -35,11 +35,12 @@ public class CustomDataContainer implements Informative {
 
     /**
      * Gets the backend of this container (which is a HashMap).
+     *
      * @return backend map
      */
     @NotNull
     public Map<String, Object> getDataContainer() {
-        if(dataContainer == null){
+        if (dataContainer == null) {
             dataContainer = new ConcurrentHashMap<>();
         }
         return dataContainer;
@@ -47,34 +48,26 @@ public class CustomDataContainer implements Informative {
 
     @Override
     public void inform(@NotNull InfoHolder holder) {
-        for(Map.Entry<String, Object> ent : getDataContainer().entrySet()){
+        for (Map.Entry<String, Object> ent : getDataContainer().entrySet()) {
             Object v = ent.getValue();
-            if(v instanceof String){
-                holder.inform("data_"+ent.getKey(), (String) v);
-            }
-            else if(v instanceof Boolean){
-                holder.inform("data_"+ent.getKey(), v.toString()); // fixed bug
-            }
-            else if(v instanceof State){
-                holder.inform("data_"+ent.getKey(), (State) v);
-            }
-            else if(v instanceof Byte){
-                holder.inform("data_"+ent.getKey(), (Byte) v);
-            }
-            else if(v instanceof Short){
-                holder.inform("data_"+ent.getKey(), (Short) v);
-            }
-            else if(v instanceof Integer){
-                holder.inform("data_"+ent.getKey(), (Integer) v);
-            }
-            else if(v instanceof Double){
-                holder.inform("data_"+ent.getKey(), (Double) v);
-            }
-            else if(v instanceof Float){
-                holder.inform("data_"+ent.getKey(), (Float) v);
-            }
-            else if(v instanceof Long){
-                holder.inform("data_"+ent.getKey(), (Long) v);
+            if (v instanceof String) {
+                holder.inform("data_" + ent.getKey(), (String) v);
+            } else if (v instanceof Boolean) {
+                holder.inform("data_" + ent.getKey(), v.toString()); // fixed bug
+            } else if (v instanceof State) {
+                holder.inform("data_" + ent.getKey(), (State) v);
+            } else if (v instanceof Byte) {
+                holder.inform("data_" + ent.getKey(), (Byte) v);
+            } else if (v instanceof Short) {
+                holder.inform("data_" + ent.getKey(), (Short) v);
+            } else if (v instanceof Integer) {
+                holder.inform("data_" + ent.getKey(), (Integer) v);
+            } else if (v instanceof Double) {
+                holder.inform("data_" + ent.getKey(), (Double) v);
+            } else if (v instanceof Float) {
+                holder.inform("data_" + ent.getKey(), (Float) v);
+            } else if (v instanceof Long) {
+                holder.inform("data_" + ent.getKey(), (Long) v);
             }
         }
     }

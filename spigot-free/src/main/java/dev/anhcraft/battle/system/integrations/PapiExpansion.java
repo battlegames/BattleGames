@@ -32,25 +32,19 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PapiExpansion extends PlaceholderExpansion {
-    public interface Callback {
-        String handle(Player player, PlayerData pd, LocalGame game, GamePlayer gp);
-    }
-    public interface Filter {
-        boolean check(String str);
-        String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp);
-    }
-    
     public final Map<String, Callback> handlers = new HashMap<>();
     public final List<Filter> filters = new ArrayList<>();
     private final BattlePlugin plugin;
-
-    public PapiExpansion(BattlePlugin plugin){
+    public PapiExpansion(BattlePlugin plugin) {
         this.plugin = plugin;
-        for(Icon icon : Icon.values())
+        for (Icon icon : Icon.values())
             handlers.put("icon_" + icon.name().toLowerCase(), (player, pd, game, gp) -> icon.getChar());
 
         handlers.put("exp", (player, pd, game, gp) -> {
@@ -60,14 +54,14 @@ public class PapiExpansion extends PlaceholderExpansion {
             return pd == null ? null : Integer.toString(plugin.calculateLevel(pd.getStats().of(ExpStat.class).get()));
         });
         handlers.put("level_progress", (player, pd, game, gp) -> {
-            if(pd != null) {
+            if (pd != null) {
                 long midExp = pd.getStats().of(ExpStat.class).get();
                 int lv = plugin.calculateLevel(midExp);
                 long startExp = plugin.calculateExp(lv);
                 long endExp = plugin.calculateExp(lv + 1);
                 long delta1 = endExp - startExp;
                 long delta2 = midExp - startExp;
-                return MathUtil.formatRound(100d/delta1*delta2);
+                return MathUtil.formatRound(100d / delta1 * delta2);
             } else return null;
         });
         handlers.put("stats_win_matches", (player, pd, game, gp) -> {
@@ -79,7 +73,7 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("stats_total_matches", (player, pd, game, gp) -> {
             return pd == null ? null : Integer.toString(
                     pd.getStats().of(WinStat.class).get() +
-                    pd.getStats().of(LoseStat.class).get()
+                            pd.getStats().of(LoseStat.class).get()
             );
         });
         handlers.put("stats_headshots", (player, pd, game, gp) -> {
@@ -127,14 +121,14 @@ public class PapiExpansion extends PlaceholderExpansion {
         handlers.put("game_current_time", (player, pd, game, gp) -> {
             return game == null ? null : Long.toString(game.getCurrentTime().get());
         });
-        handlers.put("game_current_time_formatted",  (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime(game.getCurrentTime().get()*50);
+        handlers.put("game_current_time_formatted", (player, pd, game, gp) -> {
+            return game == null ? null : plugin.formatShortFormTime(game.getCurrentTime().get() * 50);
         });
         handlers.put("game_remaining_time", (player, pd, game, gp) -> {
             return game == null ? null : Long.toString(game.getArena().getMaxTime() - game.getCurrentTime().get());
         });
         handlers.put("game_remaining_time_formatted", (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime((game.getArena().getMaxTime() - game.getCurrentTime().get())*50);
+            return game == null ? null : plugin.formatShortFormTime((game.getArena().getMaxTime() - game.getCurrentTime().get()) * 50);
         });
         handlers.put("arena_id", (player, pd, game, gp) -> {
             return game == null ? null : game.getArena().getId();
@@ -149,7 +143,7 @@ public class PapiExpansion extends PlaceholderExpansion {
             return game == null ? null : Long.toString(game.getArena().getMaxTime());
         });
         handlers.put("arena_max_time_formatted", (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime(game.getArena().getMaxTime()*50);
+            return game == null ? null : plugin.formatShortFormTime(game.getArena().getMaxTime() * 50);
         });
         handlers.put("mode_name", (player, pd, game, gp) -> {
             return game == null ? null : game.getArena().getMode().getName();
@@ -172,7 +166,7 @@ public class PapiExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean persist(){
+    public boolean persist() {
         return true;
     }
 
@@ -203,30 +197,40 @@ public class PapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(@Nullable OfflinePlayer offlinePlayer, @NotNull String identifier) {
-        if(offlinePlayer == null) return null;
+        if (offlinePlayer == null) return null;
         Player player = offlinePlayer.getPlayer();
-        if(player == null) return null;
+        if (player == null) return null;
         Callback x = handlers.get(identifier);
-        if(x != null) {
+        if (x != null) {
             PlayerData pd = plugin.getPlayerData(player);
             LocalGame game = plugin.getArenaManager().getGame(player);
             GamePlayer gp = null;
-            if(game != null) {
+            if (game != null) {
                 gp = game.getPlayers().get(player);
             }
             return x.handle(player, pd, game, gp);
         }
-        for (Filter f : filters){
-            if(f.check(identifier)) {
+        for (Filter f : filters) {
+            if (f.check(identifier)) {
                 PlayerData pd = plugin.getPlayerData(player);
                 LocalGame game = plugin.getArenaManager().getGame(player);
                 GamePlayer gp = null;
-                if(game != null) {
+                if (game != null) {
                     gp = game.getPlayers().get(player);
                 }
                 return f.handle(identifier, player, pd, game, gp);
             }
         }
         return null;
+    }
+
+    public interface Callback {
+        String handle(Player player, PlayerData pd, LocalGame game, GamePlayer gp);
+    }
+
+    public interface Filter {
+        boolean check(String str);
+
+        String handle(String str, Player player, PlayerData pd, LocalGame game, GamePlayer gp);
     }
 }

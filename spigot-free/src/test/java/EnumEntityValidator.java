@@ -29,7 +29,7 @@ import java.io.IOException;
 
 public class EnumEntityValidator {
     @Test
-    public void a(){
+    public void a() {
         try {
             //String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.12/assets/minecraft/lang/en_us.lang");
             String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.16/assets/minecraft/lang/en_us.json");
@@ -39,15 +39,15 @@ public class EnumEntityValidator {
             for(Map.Entry<Object, Object> e : p.entrySet()){
                 jo.addProperty(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
             }*/
-           JsonObject jo = new Gson().fromJson(str, JsonObject.class);
+            JsonObject jo = new Gson().fromJson(str, JsonObject.class);
             for (EntityType et : EntityType.values()) {
                 EnumEntity ee = EnumEntity.of(et);
                 if (ee == null) {
                     // System.out.println("[!!!] EnumEntity for " + et.name() + " not found!");
-                    System.out.println(et.name()+"(null, null)");
+                    System.out.println(et.name() + "(null, null)");
                 } else {
                     // System.out.println(et.name() + ": " + ObjectUtil.optional(ee.getPath(), "null") + " / " + ObjectUtil.optional(ee.getLegacyPath(), "null"));
-                    if(!jo.has(ee.getLocalePath())) {
+                    if (!jo.has(ee.getLocalePath())) {
                         System.out.println(">> Locale path for " + ee.name() + " not found");
                     }
                 }

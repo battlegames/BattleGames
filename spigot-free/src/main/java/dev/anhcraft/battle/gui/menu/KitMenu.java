@@ -21,12 +21,12 @@ package dev.anhcraft.battle.gui.menu;
 
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.Kit;
 import dev.anhcraft.battle.api.events.KitReceiveEvent;
 import dev.anhcraft.battle.api.gui.page.Pagination;
 import dev.anhcraft.battle.api.gui.page.SlotChain;
 import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.struct.Slot;
-import dev.anhcraft.battle.api.Kit;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import org.bukkit.Bukkit;
@@ -40,25 +40,25 @@ public class KitMenu implements Pagination {
     public void supply(@NotNull Player player, @NotNull View view, @NotNull SlotChain chain) {
         BattleApi api = ApiProvider.consume();
         PlayerData pd = api.getPlayerData(player);
-        if(pd != null) {
-            for(Kit kit : api.listKits()){
-                if(!chain.hasNext()) break;
-                if(chain.shouldSkip()) continue;
+        if (pd != null) {
+            for (Kit kit : api.listKits()) {
+                if (!chain.hasNext()) break;
+                if (chain.shouldSkip()) continue;
                 Slot slot = chain.next();
-                if(kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
+                if (kit.getPermission() != null && !player.hasPermission(kit.getPermission())) {
                     slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
                     slot.setExtraClickFunction((vm, report) -> api.getChatManager().sendPlayer(report.getPlayer(), "kit.no_permission"));
                     return;
                 }
                 long last = pd.getKits().getOrDefault(kit.getId(), 0L);
-                if(last != 0){
-                    if(kit.getRenewTime() == -1){
+                if (last != 0) {
+                    if (kit.getRenewTime() == -1) {
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
                         slot.setExtraClickFunction((vm, report) -> api.getChatManager().sendPlayer(report.getPlayer(), "kit.one_time_use"));
                         return;
                     }
-                    long next = last + kit.getRenewTime()*50;
-                    if(next > System.currentTimeMillis()){
+                    long next = last + kit.getRenewTime() * 50;
+                    if (next > System.currentTimeMillis()) {
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
                         slot.setExtraClickFunction((vm, report) -> {
                             String f = api.formatLongFormDate(new Date(next));
@@ -72,7 +72,7 @@ public class KitMenu implements Pagination {
                 slot.setExtraClickFunction((vm, report) -> {
                     KitReceiveEvent event = new KitReceiveEvent(player, kit);
                     Bukkit.getPluginManager().callEvent(event);
-                    if(event.isCancelled()) return;
+                    if (event.isCancelled()) return;
 
                     kit.givePlayer(report.getPlayer(), pd);
                     pd.getKits().put(kit.getId(), System.currentTimeMillis());

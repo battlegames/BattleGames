@@ -76,11 +76,11 @@ public class BattlePotionEffect extends ConfigurableObject {
     }
 
     @NotNull
-    public PotionEffect build(){
+    public PotionEffect build() {
         return new PotionEffect(type.asBukkit(), duration, amplifier, ambient, particles);
     }
 
-    public void give(@NotNull Player player){
+    public void give(@NotNull Player player) {
         Condition.argNotNull("player", player);
         player.addPotionEffect(build(), true);
     }

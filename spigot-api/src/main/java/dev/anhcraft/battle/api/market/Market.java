@@ -150,10 +150,10 @@ public class Market extends ConfigurableObject {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("categories")){
+        if (value != null && entry.getKey().equals("categories")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Category> ctgs = new ArrayList<>();
-            for(String s : cs.getKeys(false)){
+            for (String s : cs.getKeys(false)) {
                 try {
                     ConfigurationSection scs = cs.getConfigurationSection(s);
                     Category ctg = ConfigHelper.readConfig(scs, Category.SCHEMA, new Category(s));
@@ -169,9 +169,9 @@ public class Market extends ConfigurableObject {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("categories")){
+        if (value != null && entry.getKey().equals("categories")) {
             ConfigurationSection parent = new YamlConfiguration();
-            for(Category ctg : (List<Category>) value){
+            for (Category ctg : (List<Category>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, Category.SCHEMA, ctg);
                 parent.set(ctg.getId(), c);

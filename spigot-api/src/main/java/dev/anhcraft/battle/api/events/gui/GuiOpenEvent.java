@@ -35,6 +35,10 @@ public class GuiOpenEvent extends GuiEvent implements Cancellable {
         super(who, gui, window);
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -47,10 +51,6 @@ public class GuiOpenEvent extends GuiEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

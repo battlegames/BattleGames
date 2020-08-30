@@ -62,11 +62,11 @@ public class BattleFirework extends ConfigurableObject {
         return power;
     }
 
-    public void spawn(@NotNull Location location){
+    public void spawn(@NotNull Location location) {
         Firework fw = location.getWorld().spawn(location, Firework.class);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.setPower(power);
-        for (BattleFireworkEffect bfe : effects){
+        for (BattleFireworkEffect bfe : effects) {
             fwm.addEffect(bfe.getFireworkEffect());
         }
         fw.setFireworkMeta(fwm);
@@ -74,10 +74,10 @@ public class BattleFirework extends ConfigurableObject {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("effects")){
+        if (value != null && entry.getKey().equals("effects")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             List<BattleFireworkEffect> list = new ArrayList<>();
-            for(String s : cs.getKeys(false)){
+            for (String s : cs.getKeys(false)) {
                 try {
                     list.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), BattleFireworkEffect.SCHEMA));
                 } catch (InvalidValueException e) {
@@ -91,10 +91,10 @@ public class BattleFirework extends ConfigurableObject {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("effects")){
+        if (value != null && entry.getKey().equals("effects")) {
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
-            for(BattleFireworkEffect b : (List<BattleFireworkEffect>) value){
+            for (BattleFireworkEffect b : (List<BattleFireworkEffect>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, BattleFireworkEffect.SCHEMA, b);
                 parent.set(String.valueOf(i++), c);

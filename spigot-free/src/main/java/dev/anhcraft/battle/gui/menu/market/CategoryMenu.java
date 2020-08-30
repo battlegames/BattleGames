@@ -39,12 +39,13 @@ public class CategoryMenu implements Pagination {
         BattleApi api = ApiProvider.consume();
         Market mk = api.getMarket();
         Game g = api.getArenaManager().getGame(player);
-        for(Category c : mk.getCategories()){
-            if(!chain.hasNext()) break;
-            if(chain.shouldSkip()) continue;
-            if(c.isInGameOnly()) {
-                if(g == null) continue;
-                if(c.getGameModeReserved() != null && c.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId()))) continue;
+        for (Category c : mk.getCategories()) {
+            if (!chain.hasNext()) break;
+            if (chain.shouldSkip()) continue;
+            if (c.isInGameOnly()) {
+                if (g == null) continue;
+                if (c.getGameModeReserved() != null && c.getGameModeReserved().stream().map(String::toLowerCase).noneMatch(s -> s.equals(g.getMode().getId())))
+                    continue;
             }
             Slot slot = chain.next();
             slot.setPaginationItem(c.getIcon().duplicate());

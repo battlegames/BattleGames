@@ -22,10 +22,10 @@ package dev.anhcraft.battle.api.arena.game;
 
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.impl.Informative;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +35,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Game extends CustomDataContainer implements Resettable, Informative {
     private final AtomicLong currentTime = new AtomicLong();
+    private final Arena arena;
     protected int playerCount;
     private GamePhase phase = GamePhase.WAITING;
-    private final Arena arena;
 
     public Game(@NotNull Arena arena) {
         Validate.notNull(arena, "Arena must be non-null");
@@ -70,8 +70,8 @@ public class Game extends CustomDataContainer implements Resettable, Informative
 
     public void setPhase(@NotNull GamePhase phase) {
         Validate.notNull(phase, "Phase must be non-null");
-        if(phase == this.phase) return;
-        if(!Bukkit.isPrimaryThread()){
+        if (phase == this.phase) return;
+        if (!Bukkit.isPrimaryThread()) {
             try {
                 throw new IllegalStateException("Don't call #setPhase from another thread");
             } catch (IllegalStateException e) {

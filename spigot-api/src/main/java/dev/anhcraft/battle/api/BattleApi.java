@@ -46,22 +46,25 @@ import java.util.logging.Logger;
 
 public interface BattleApi {
     /**
+     * Returns the instance of this API.
+     *
+     * @return {@link BattleApi}
+     */
+    @NotNull
+    static BattleApi getInstance() {
+        return ApiProvider.consume();
+    }
+
+    /**
      * Whether this version is premium.
+     *
      * @return {@code true} if true, otherwise, {@code false}
      */
     boolean isPremium();
 
     /**
-     * Returns the instance of this API.
-     * @return {@link BattleApi}
-     */
-    @NotNull
-    static BattleApi getInstance(){
-        return ApiProvider.consume();
-    }
-
-    /**
      * Gets Battle's logger.
+     *
      * @return {@link Logger}
      */
     @NotNull
@@ -69,6 +72,7 @@ public interface BattleApi {
 
     /**
      * Gets the system configuration.
+     *
      * @return system config
      */
     @NotNull
@@ -76,6 +80,7 @@ public interface BattleApi {
 
     /**
      * Gets the general configuration.
+     *
      * @return general config
      */
     @NotNull
@@ -83,6 +88,7 @@ public interface BattleApi {
 
     /**
      * Gets Minecraft locale file.
+     *
      * @return {@link JsonObject}
      */
     @NotNull
@@ -93,6 +99,7 @@ public interface BattleApi {
      * <br>
      * If the given message is multi-lines, then they will be joined to
      * a single line separated by commas.
+     *
      * @param path the path to the message
      * @return the message (or {@code null} if not found)
      */
@@ -104,8 +111,9 @@ public interface BattleApi {
      * <br>
      * If the given message is multi-lines, then they will be joined to
      * a single line separated by commas.
+     *
      * @param path the path to the message
-     * @param def the default message
+     * @param def  the default message
      * @return the message.
      */
     @NotNull
@@ -113,6 +121,7 @@ public interface BattleApi {
 
     /**
      * Gets the localized messages.
+     *
      * @param path the path to the messages
      * @return the messages (or {@code null} if not found)
      */
@@ -121,8 +130,9 @@ public interface BattleApi {
 
     /**
      * Gets the localized messages.
+     *
      * @param path the path to the messages
-     * @param def the default message
+     * @param def  the default message
      * @return the messages.
      */
     @NotNull
@@ -130,8 +140,9 @@ public interface BattleApi {
 
     /**
      * Gets the localized messages.
+     *
      * @param path the path to the messages
-     * @param def the default messages
+     * @param def  the default messages
      * @return the messages.
      */
     @NotNull
@@ -139,6 +150,7 @@ public interface BattleApi {
 
     /**
      * Creates a map represents the view of {@link InfoHolder}.
+     *
      * @param holder the information holder
      * @return info map
      */
@@ -147,6 +159,7 @@ public interface BattleApi {
 
     /**
      * Formats the given date in long-form.
+     *
      * @param date the date
      * @return formatted date
      */
@@ -159,6 +172,7 @@ public interface BattleApi {
      * This method will calculate to make sure that the formatted time is shortest.
      * For instance, only seconds is displayed if the given time is below 60 seconds.
      * Or if the given time is below 60 minutes, the hour will be hidden
+     *
      * @param time the time in milliseconds
      * @return formatted date
      */
@@ -167,6 +181,7 @@ public interface BattleApi {
 
     /**
      * Formats the given date in short-form that stops at hours.
+     *
      * @param date the date
      * @return formatted date
      */
@@ -175,6 +190,7 @@ public interface BattleApi {
 
     /**
      * Formats the given date in short-form that stops at minutes.
+     *
      * @param date the date
      * @return formatted date
      */
@@ -183,6 +199,7 @@ public interface BattleApi {
 
     /**
      * Formats the given date in short-form that stops at seconds.
+     *
      * @param date the date
      * @return formatted date
      */
@@ -191,22 +208,25 @@ public interface BattleApi {
 
     /**
      * Gets the default walking speed.
-     * @deprecated better to get this value from {@link #getGeneralConfig()}
+     *
      * @return walking speed
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      */
     @Deprecated
     float getDefaultWalkingSpeed();
 
     /**
      * Gets the default flying speed.
-     * @deprecated better to get this value from {@link #getGeneralConfig()}
+     *
      * @return flying speed
+     * @deprecated better to get this value from {@link #getGeneralConfig()}
      */
     @Deprecated
     float getDefaultFlyingSpeed();
 
     /**
      * Calculates the exp amount from the given level
+     *
      * @param level the level
      * @return the exp that equals to the level
      */
@@ -214,6 +234,7 @@ public interface BattleApi {
 
     /**
      * Calculates the level from the given exp
+     *
      * @param exp the exp
      * @return the level that equals to the exp
      */
@@ -221,6 +242,7 @@ public interface BattleApi {
 
     /**
      * Gets the {@link PlayerData} of the given player
+     *
      * @param player player
      * @return {@link PlayerData} or null if not found
      */
@@ -229,6 +251,7 @@ public interface BattleApi {
 
     /**
      * Gets the {@link ServerData}
+     *
      * @return server data
      */
     @NotNull
@@ -236,6 +259,7 @@ public interface BattleApi {
 
     /**
      * Gets the arena that matches the given id.
+     *
      * @param id the id of the arena
      * @return {@link Arena} if found or null if not
      */
@@ -244,6 +268,7 @@ public interface BattleApi {
 
     /**
      * Gets the GUI that matches the given id.
+     *
      * @param id the id of the GUI
      * @return {@link Gui} if found or null if not
      */
@@ -252,8 +277,9 @@ public interface BattleApi {
 
     /**
      * Gets item model by type and id.
+     *
      * @param itemType the type of item
-     * @param id the id of item
+     * @param id       the id of item
      * @return item model
      */
     @Nullable
@@ -261,6 +287,7 @@ public interface BattleApi {
 
     /**
      * Gets the ammo that matches the given id.
+     *
      * @param id the id of the ammo
      * @return {@link AmmoModel} if found or null if not
      */
@@ -269,6 +296,7 @@ public interface BattleApi {
 
     /**
      * Gets the gun that matches the given id.
+     *
      * @param id the id of the gun
      * @return {@link GunModel} if found or null if not
      */
@@ -277,6 +305,7 @@ public interface BattleApi {
 
     /**
      * Gets the magazine that matches the given id.
+     *
      * @param id the id of the magazine
      * @return {@link MagazineModel} if found or null if not
      */
@@ -285,6 +314,7 @@ public interface BattleApi {
 
     /**
      * Gets the scope that matches the given id.
+     *
      * @param id the id of the scope
      * @return {@link ScopeModel} if found or null if not
      */
@@ -293,6 +323,7 @@ public interface BattleApi {
 
     /**
      * Gets the grenade that matches the given id.
+     *
      * @param id the id of the grenade
      * @return {@link GrenadeModel} if found or null if not
      */
@@ -301,6 +332,7 @@ public interface BattleApi {
 
     /**
      * Gets the kit that matches the given id.
+     *
      * @param id the id of the kit
      * @return {@link Kit} if found or null if not
      */
@@ -309,6 +341,7 @@ public interface BattleApi {
 
     /**
      * Gets the perk that matches the given id.
+     *
      * @param id the id of the perk
      * @return {@link Perk} if found or null if not
      */
@@ -317,6 +350,7 @@ public interface BattleApi {
 
     /**
      * Gets the booster that matches the given id.
+     *
      * @param id the id of the booster
      * @return {@link Booster} if found or null if not
      */
@@ -325,6 +359,7 @@ public interface BattleApi {
 
     /**
      * Lists all registered arenas.
+     *
      * @return an immutable list of arenas
      */
     @NotNull
@@ -332,12 +367,14 @@ public interface BattleApi {
 
     /**
      * Lists all arenas and gets them.
+     *
      * @param consumer the consumer
      */
     void listArenas(@NotNull Consumer<Arena> consumer);
 
     /**
      * Lists all registered gui.
+     *
      * @return an immutable list of gui
      */
     @NotNull
@@ -345,12 +382,14 @@ public interface BattleApi {
 
     /**
      * Lists all gui and gets them.
+     *
      * @param consumer the consumer
      */
     void listGui(@NotNull Consumer<Gui> consumer);
 
     /**
      * Lists all registered ammo.
+     *
      * @return an immutable list of ammo
      */
     @NotNull
@@ -358,12 +397,14 @@ public interface BattleApi {
 
     /**
      * Lists all ammo and gets them.
+     *
      * @param consumer the consumer
      */
     void listAmmoModels(@NotNull Consumer<AmmoModel> consumer);
 
     /**
      * Lists all registered guns.
+     *
      * @return an immutable list of guns
      */
     @NotNull
@@ -371,12 +412,14 @@ public interface BattleApi {
 
     /**
      * Lists all guns and gets them.
+     *
      * @param consumer the consumer
      */
     void listGunModels(@NotNull Consumer<GunModel> consumer);
 
     /**
      * Lists all registered magazines.
+     *
      * @return an immutable list of magazines
      */
     @NotNull
@@ -384,12 +427,14 @@ public interface BattleApi {
 
     /**
      * Lists all magazines and gets them.
+     *
      * @param consumer the consumer
      */
     void listMagazineModels(@NotNull Consumer<MagazineModel> consumer);
 
     /**
      * Lists all registered scopes.
+     *
      * @return an immutable list of scopes
      */
     @NotNull
@@ -397,12 +442,14 @@ public interface BattleApi {
 
     /**
      * Lists all scopes and gets them.
+     *
      * @param consumer the consumer
      */
     void listScopes(@NotNull Consumer<ScopeModel> consumer);
 
     /**
      * Lists all registered grenades.
+     *
      * @return an immutable list of grenades
      */
     @NotNull
@@ -410,12 +457,14 @@ public interface BattleApi {
 
     /**
      * Lists all grenades and gets them.
+     *
      * @param consumer the consumer
      */
     void listGrenades(@NotNull Consumer<GrenadeModel> consumer);
 
     /**
      * Lists all registered kits.
+     *
      * @return an immutable list of kits
      */
     @NotNull
@@ -423,12 +472,14 @@ public interface BattleApi {
 
     /**
      * Lists all kits and gets them.
+     *
      * @param consumer the consumer
      */
     void listKits(@NotNull Consumer<Kit> consumer);
 
     /**
      * Lists all registered perks.
+     *
      * @return an immutable list of perks
      */
     @NotNull
@@ -436,12 +487,14 @@ public interface BattleApi {
 
     /**
      * Lists all perks and gets them.
+     *
      * @param consumer the consumer
      */
     void listPerks(@NotNull Consumer<Perk> consumer);
 
     /**
      * Lists all registered boosters.
+     *
      * @return an immutable list of boosters
      */
     @NotNull
@@ -449,12 +502,14 @@ public interface BattleApi {
 
     /**
      * Lists all boosters and gets them.
+     *
      * @param consumer the consumer
      */
     void listBoosters(@NotNull Consumer<Booster> consumer);
 
     /**
      * Gets the arena manager.
+     *
      * @return {@link ArenaManager}
      */
     @NotNull
@@ -462,6 +517,7 @@ public interface BattleApi {
 
     /**
      * Gets the item manager.
+     *
      * @return {@link ItemManager}
      */
     @NotNull
@@ -469,6 +525,7 @@ public interface BattleApi {
 
     /**
      * Gets the GUI manager.
+     *
      * @return {@link GuiManager}
      */
     @NotNull
@@ -476,6 +533,7 @@ public interface BattleApi {
 
     /**
      * Gets the chat manager.
+     *
      * @return {@link ChatManager}
      */
     @NotNull
@@ -483,6 +541,7 @@ public interface BattleApi {
 
     /**
      * Gets the advancement manager.
+     *
      * @return {@link AdvancementManager}
      */
     @NotNull
@@ -490,6 +549,7 @@ public interface BattleApi {
 
     /**
      * Checks if Bungeecord is supported.
+     *
      * @return {@code true} if it is or {@code false} otherwise
      */
     // NOTE: THIS METHOD IS [DIFFERENT] THAN THE SIMILAR ONE IN GENERAL CONFIG
@@ -497,14 +557,16 @@ public interface BattleApi {
 
     /**
      * Checks if the plugin has SlimeWorldManager support.
+     *
      * @return {@code true} if it has or {@code false} otherwise
      */
     boolean hasSlimeWorldManagerSupport();
 
     /**
      * Plays the given effect.
+     *
      * @param location where the effect will be seen
-     * @param effect the effect
+     * @param effect   the effect
      */
     void playEffect(@NotNull Location location, @NotNull BattleEffect effect);
 

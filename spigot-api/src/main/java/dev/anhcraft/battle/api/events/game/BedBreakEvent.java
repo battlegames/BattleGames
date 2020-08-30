@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.events.game;
 
-import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
+import dev.anhcraft.battle.api.arena.team.BWTeam;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -43,6 +43,10 @@ public class BedBreakEvent extends GameEvent implements Cancellable {
         this.bed = bed;
         this.playerTeam = playerTeam;
         this.targetTeam = targetTeam;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
@@ -83,10 +87,6 @@ public class BedBreakEvent extends GameEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

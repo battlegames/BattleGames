@@ -32,6 +32,10 @@ public class GameEvent extends Event {
         this.game = game;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Game getGame() {
         return game;
@@ -39,10 +43,6 @@ public class GameEvent extends Event {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

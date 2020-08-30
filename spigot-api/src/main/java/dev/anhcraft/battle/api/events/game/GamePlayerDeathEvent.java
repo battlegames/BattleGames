@@ -39,6 +39,110 @@ import java.util.Map;
  */
 public class GamePlayerDeathEvent extends GameEvent {
     public static final HandlerList handlers = new HandlerList();
+    private final Player player;
+    private final Collection<DamageReport> damageReports;
+    private final Map<Player, Contribution> damagerMap;
+    private final Player mostDamager;
+    private final double mostPlayerDamage;
+    private final double totalPlayerDamage;
+    private final double totalNatureDamage;
+    private final double avgDamage;
+    public GamePlayerDeathEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull Collection<DamageReport> damageReports, @NotNull Map<Player, Contribution> damagerMap, @Nullable Player mostDamager, double mostPlayerDamage, double totalPlayerDamage, double totalNatureDamage, double avgDamage) {
+        super(game);
+        this.player = player;
+        this.damageReports = damageReports;
+        this.damagerMap = damagerMap;
+        this.mostDamager = mostDamager;
+        this.mostPlayerDamage = mostPlayerDamage;
+        this.totalPlayerDamage = totalPlayerDamage;
+        this.totalNatureDamage = totalNatureDamage;
+        this.avgDamage = avgDamage;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    /**
+     * Gets the player who died.
+     *
+     * @return the player
+     */
+    @NotNull
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Returns all damage reports.
+     *
+     * @return immutable collection of damage reports
+     */
+    @NotNull
+    public Collection<DamageReport> getDamageReports() {
+        return damageReports;
+    }
+
+    /**
+     * Returns the damager map.
+     *
+     * @return immutable damage map caused by players
+     */
+    @NotNull
+    public Map<Player, Contribution> getDamagerMap() {
+        return damagerMap;
+    }
+
+    /**
+     * Returns the average damage.
+     *
+     * @return average damage
+     */
+    public double getAvgDamage() {
+        return avgDamage;
+    }
+
+    /**
+     * Gets the player who causes the most damage.
+     *
+     * @return most damager (maybe null if the death was entirely caused by nature)
+     */
+    @Nullable
+    public Player getMostDamager() {
+        return mostDamager;
+    }
+
+    /**
+     * Returns the damage that {@link #getMostDamager()} caused
+     *
+     * @return the most damage caused by player
+     */
+    public double getMostPlayerDamage() {
+        return mostPlayerDamage;
+    }
+
+    /**
+     * Gets the total player damage.
+     *
+     * @return total player damage
+     */
+    public double getTotalPlayerDamage() {
+        return totalPlayerDamage;
+    }
+
+    /**
+     * Gets the total nature damage.
+     *
+     * @return total nature damage.
+     */
+    public double getTotalNatureDamage() {
+        return totalNatureDamage;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
 
     public static class Contribution {
         private List<PlayerAttackReport> damageReports = new ArrayList<>();
@@ -49,8 +153,8 @@ public class GamePlayerDeathEvent extends GameEvent {
         private boolean isKiller;
         private boolean isAssistant;
 
-        private void checkAccess(){
-            if(readOnly){
+        private void checkAccess() {
+            if (readOnly) {
                 try {
                     throw new IllegalAccessException("Read-only");
                 } catch (IllegalAccessException e) {
@@ -61,6 +165,7 @@ public class GamePlayerDeathEvent extends GameEvent {
 
         /**
          * Returns an immutable list of damage reports.
+         *
          * @return damage reports
          */
         @NotNull
@@ -124,103 +229,5 @@ public class GamePlayerDeathEvent extends GameEvent {
             readOnly = true;
             damageReports = ImmutableList.copyOf(damageReports);
         }
-    }
-
-    private final Player player;
-    private final Collection<DamageReport> damageReports;
-    private final Map<Player, Contribution> damagerMap;
-    private final Player mostDamager;
-    private final double mostPlayerDamage;
-    private final double totalPlayerDamage;
-    private final double totalNatureDamage;
-    private final double avgDamage;
-
-    public GamePlayerDeathEvent(@NotNull LocalGame game, @NotNull Player player, @NotNull Collection<DamageReport> damageReports, @NotNull Map<Player, Contribution> damagerMap, @Nullable Player mostDamager, double mostPlayerDamage, double totalPlayerDamage, double totalNatureDamage, double avgDamage) {
-        super(game);
-        this.player = player;
-        this.damageReports = damageReports;
-        this.damagerMap = damagerMap;
-        this.mostDamager = mostDamager;
-        this.mostPlayerDamage = mostPlayerDamage;
-        this.totalPlayerDamage = totalPlayerDamage;
-        this.totalNatureDamage = totalNatureDamage;
-        this.avgDamage = avgDamage;
-    }
-
-    /**
-     * Gets the player who died.
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
-     * Returns all damage reports.
-     * @return immutable collection of damage reports
-     */
-    @NotNull
-    public Collection<DamageReport> getDamageReports() {
-        return damageReports;
-    }
-
-    /**
-     * Returns the damager map.
-     * @return immutable damage map caused by players
-     */
-    @NotNull
-    public Map<Player, Contribution> getDamagerMap() {
-        return damagerMap;
-    }
-
-    /**
-     * Returns the average damage.
-     * @return average damage
-     */
-    public double getAvgDamage() {
-        return avgDamage;
-    }
-
-    /**
-     * Gets the player who causes the most damage.
-     * @return most damager (maybe null if the death was entirely caused by nature)
-     */
-    @Nullable
-    public Player getMostDamager() {
-        return mostDamager;
-    }
-
-    /**
-     * Returns the damage that {@link #getMostDamager()} caused
-     * @return the most damage caused by player
-     */
-    public double getMostPlayerDamage() {
-        return mostPlayerDamage;
-    }
-
-    /**
-     * Gets the total player damage.
-     * @return total player damage
-     */
-    public double getTotalPlayerDamage() {
-        return totalPlayerDamage;
-    }
-
-    /**
-     * Gets the total nature damage.
-     * @return total nature damage.
-     */
-    public double getTotalNatureDamage() {
-        return totalNatureDamage;
-    }
-
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

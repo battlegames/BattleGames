@@ -29,11 +29,11 @@ import org.bukkit.World;
 public class Task implements Runnable {
     @Override
     public void run() {
-        for(World world : Bukkit.getWorlds()){
+        for (World world : Bukkit.getWorlds()) {
             WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(world.getName());
-            if(ws != null){
-                if(ws.getAlwaysTime() != -1) world.setTime(ws.getAlwaysTime());
-                if(ws.getAlwaysWeather() != null) world.setStorm(ws.getAlwaysWeather() == WeatherType.DOWNFALL);
+            if (ws != null) {
+                if (ws.getAlwaysTime() != -1) world.setTime(ws.getAlwaysTime());
+                if (ws.getAlwaysWeather() != null) world.setStorm(ws.getAlwaysWeather() == WeatherType.DOWNFALL);
             }
         }
     }

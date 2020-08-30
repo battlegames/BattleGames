@@ -67,11 +67,11 @@ public class BattleGunManager extends BattleComponent {
         super(plugin);
     }
 
-    public ItemStack createGun(Gun gun, boolean secondarySkin){
-        if(gun.getModel() == null) return null;
+    public ItemStack createGun(Gun gun, boolean secondarySkin) {
+        if (gun.getModel() == null) return null;
         ItemSkin skin = secondarySkin ? gun.getModel().getSecondarySkin() : gun.getModel().getPrimarySkin();
         PreparedItem pi = plugin.itemManager.make(gun);
-        if(pi == null) return null;
+        if (pi == null) return null;
         else {
             pi = skin.transform(pi);
             return plugin.itemManager.write(pi.build(), gun);
@@ -93,10 +93,10 @@ public class BattleGunManager extends BattleComponent {
     public boolean selectGun(Player player, Gun gun) {
         GunModel g = Objects.requireNonNull(gun.getModel());
         int slot = player.getInventory().firstEmpty();
-        if(slot == -1) return false;
+        if (slot == -1) return false;
         player.getInventory().setItem(slot, createGun(gun, false));
         int held = player.getInventory().getHeldItemSlot();
-        if(held == slot) {
+        if (held == slot) {
             player.getInventory().setItemInOffHand(createGun(gun, true));
             SpeedUtil.setModifier(player, SpeedFactor.ITEM, -g.getWeight());
         }
@@ -109,7 +109,7 @@ public class BattleGunManager extends BattleComponent {
         return d2 < d1 / 4;
     }
 
-    private void rmvZoom(Player player){
+    private void rmvZoom(Player player) {
         PlayerUtil.unfreeze(player);
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
@@ -117,11 +117,11 @@ public class BattleGunManager extends BattleComponent {
         SpeedUtil.setModifier(player, SpeedFactor.ZOOM, 0);
     }
 
-    public boolean handleZoomOut(Player player){
-        if(player.hasMetadata("zoom")) {
+    public boolean handleZoomOut(Player player) {
+        if (player.hasMetadata("zoom")) {
             List<MetadataValue> x = player.getMetadata("zoom");
-            for(MetadataValue v : x){
-                if(v.getOwningPlugin() == plugin && v.asInt() != -1) {
+            for (MetadataValue v : x) {
+                if (v.getOwningPlugin() == plugin && v.asInt() != -1) {
                     rmvZoom(player);
                     return true;
                 }
@@ -130,29 +130,29 @@ public class BattleGunManager extends BattleComponent {
         return false;
     }
 
-    public boolean handleZoomIn(LocalGame localGame, Player player, Gun gunItem){
+    public boolean handleZoomIn(LocalGame localGame, Player player, Gun gunItem) {
         GameControllerImpl mc = (GameControllerImpl) localGame.getMode().getController();
-        if(mc != null){
-            if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
+        if (mc != null) {
+            if (mc.RELOADING_GUN.containsKey(player.getUniqueId())) {
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
                 return false;
             }
         }
         GunModel gm = gunItem.getModel();
-        if(gm == null) return false;
+        if (gm == null) return false;
         Scope scp = gunItem.getScope();
-        if(scp == null){
-            if(gm.getDefaultScope() != null) {
+        if (scp == null) {
+            if (gm.getDefaultScope() != null) {
                 gunItem.setScope(scp = new Scope());
                 scp.setModel(gm.getDefaultScope());
             }
         }
-        if(scp == null || scp.getModel() == null) {
+        if (scp == null || scp.getModel() == null) {
             plugin.chatManager.sendPlayer(player, "gun.none_scope_message");
             return false;
         }
         int next = scp.nextZoomLevel();
-        if(next == -1) {
+        if (next == -1) {
             rmvZoom(player);
         } else {
             ScopeModel sm = scp.getModel();
@@ -166,30 +166,30 @@ public class BattleGunManager extends BattleComponent {
         return true;
     }
 
-    public boolean shoot(LocalGame localGame, Player player, Gun gunItem){
+    public boolean shoot(LocalGame localGame, Player player, Gun gunItem) {
         GunModel gm = gunItem.getModel();
-        if(gm == null) return false;
+        if (gm == null) return false;
         GameControllerImpl mc = (GameControllerImpl) localGame.getMode().getController();
-        if(mc != null){
-            if(mc.RELOADING_GUN.containsKey(player.getUniqueId())){
+        if (mc != null) {
+            if (mc.RELOADING_GUN.containsKey(player.getUniqueId())) {
                 plugin.chatManager.sendPlayer(player, "gun.reloading_warn");
                 return false;
             }
         }
         Magazine mag = gunItem.getMagazine();
-        if(mag.getModel() == null) {
+        if (mag.getModel() == null) {
             plugin.chatManager.sendPlayer(player, "gun.none_magazine_message");
             return false;
         }
-        if(mag.getAmmo().getModel() == null || mag.getAmmoCount() == 0) {
-            if(plugin.getGeneralConfig().shouldAutoReloadGun()){
+        if (mag.getAmmo().getModel() == null || mag.getAmmoCount() == 0) {
+            if (plugin.getGeneralConfig().shouldAutoReloadGun()) {
                 Objects.requireNonNull((GameControllerImpl) localGame.getMode().getController()).doReloadGun(player, gunItem);
                 return false;
             }
             plugin.chatManager.sendPlayer(player, "gun.out_of_ammo");
             return false;
         }
-        mag.setAmmoCount(mag.getAmmoCount()-1);
+        mag.setAmmoCount(mag.getAmmoCount() - 1);
         gm.getShootSound().play(player.getLocation());
 
         BattleDebugger.startTiming("gun-shoot");
@@ -197,13 +197,13 @@ public class BattleGunManager extends BattleComponent {
         Vector originVec = player.getEyeLocation().toVector();
         Vector dir = start.getDirection().normalize();
         Vector sprayVec;
-        if(gunItem.nextSpray() != -1){
+        if (gunItem.nextSpray() != -1) {
             Pair<Double, Double> pair = gm.getSprayPattern().get(gunItem.getNextSpray());
-            if(pair.getFirst() == null || pair.getSecond() == null){
+            if (pair.getFirst() == null || pair.getSecond() == null) {
                 throw new IllegalStateException();
             }
             sprayVec = new Vector(pair.getFirst(), pair.getSecond(), pair.getFirst());
-            if(sprayVec.length() > 0){
+            if (sprayVec.length() > 0) {
                 sprayVec.normalize();
             }
             VectUtil.rotate(sprayVec, start.getYaw(), start.getPitch());
@@ -212,32 +212,32 @@ public class BattleGunManager extends BattleComponent {
             sprayVec = new Vector();
 
         Map<LivingEntity, BoundingBox> entities = new HashMap<>();
-        for (LivingEntity livingEntity : start.getWorld().getEntitiesByClass(LivingEntity.class)){
+        for (LivingEntity livingEntity : start.getWorld().getEntitiesByClass(LivingEntity.class)) {
             entities.put(livingEntity, EntityUtil.getBoundingBox(livingEntity).expand(.25, .25, .25));
         }
 
         final double maxHeight = player.getWorld().getMaxHeight();
-        final double angle = Math.toRadians(-start.getPitch()/5);
+        final double angle = Math.toRadians(-start.getPitch() / 5);
         final double cosA = Math.cos(angle);
         final double sinA = Math.sin(angle);
 
         List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
-        for(Ammo.Bullet b : bullets){
+        for (Ammo.Bullet b : bullets) {
             Block lastBlock = null;
             int power = b.getPenetrationPower();
             long currentTime = 0;
-            while (true){
+            while (true) {
                 double deltaTime = (currentTime += b.getTimeOffset()) / 1000d;
                 double x = gm.getMuzzleVelocity() * cosA * deltaTime;
                 double y = gm.getMuzzleVelocity() * sinA * deltaTime - 0.5 * 9.8 * deltaTime * deltaTime;
                 Location loc = start.clone().add(dir.clone().multiply(x).add(sprayVec)).add(0, y, 0);
-                if(loc.getY() > maxHeight || loc.getY() < 0) break;
+                if (loc.getY() > maxHeight || loc.getY() < 0) break;
 
-                if(b.getParticleEffect() != null)
+                if (b.getParticleEffect() != null)
                     b.getParticleEffect().spawn(loc);
 
                 Block block = loc.getBlock();
-                if(lastBlock == null || !lastBlock.equals(block)) {
+                if (lastBlock == null || !lastBlock.equals(block)) {
                     power -= plugin.generalConf.getMaterialHardness(block.getType());
                     if (power <= 0) {
                         int id = loc.hashCode();
@@ -250,25 +250,25 @@ public class BattleGunManager extends BattleComponent {
                     } else lastBlock = block;
                 }
 
-                for(Map.Entry<LivingEntity, BoundingBox> ent : entities.entrySet()){
+                for (Map.Entry<LivingEntity, BoundingBox> ent : entities.entrySet()) {
                     LivingEntity ve = ent.getKey();
-                    if(ve.equals(player) || !ent.getValue().contains(loc)) continue;
+                    if (ve.equals(player) || !ent.getValue().contains(loc)) continue;
                     PlayerAttackReport attackReport = new PlayerAttackReport(ve, b.getDamage(), player, gunItem);
                     attackReport.setHeadshotDamage(isHeadShot(loc, ent.getValue()));
                     WeaponUseEvent event = new WeaponUseEvent(localGame, attackReport);
                     Bukkit.getPluginManager().callEvent(event);
-                    if(event.isCancelled()) continue;
+                    if (event.isCancelled()) continue;
 
                     ve.damage(event.getReport().getDamage(), player);
-                    if(b.getFireTicks() > 0) ve.setFireTicks(b.getFireTicks());
+                    if (b.getFireTicks() > 0) ve.setFireTicks(b.getFireTicks());
                     Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
                             .normalize().multiply(b.getKnockback()));
                     ve.setVelocity(vec);
                     power -= plugin.generalConf.getEntityHardness(ve.getType());
                     EntityEquipment ee = ve.getEquipment();
-                    if(ee != null) {
-                        for(ItemStack item : ee.getArmorContents()){
-                            if(ItemUtil.isNull(item)) continue;
+                    if (ee != null) {
+                        for (ItemStack item : ee.getArmorContents()) {
+                            if (ItemUtil.isNull(item)) continue;
                             power -= plugin.generalConf.getMaterialHardness(item.getType());
                         }
                     }

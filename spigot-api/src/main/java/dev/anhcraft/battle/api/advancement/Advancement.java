@@ -22,8 +22,8 @@ package dev.anhcraft.battle.api.advancement;
 
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.State;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -138,7 +138,7 @@ public class Advancement extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("progression")){
+        if (value != null && entry.getKey().equals("progression")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             SortedSet<Progression> progressions = new TreeSet<>(Comparator.naturalOrder());
             Set<String> keys = cs.getKeys(false);
@@ -158,10 +158,10 @@ public class Advancement extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("progression")){
+        if (value != null && entry.getKey().equals("progression")) {
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
-            for(Progression p : (Set<Progression>) value){
+            for (Progression p : (Set<Progression>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, Progression.SCHEMA, p);
                 parent.set(String.valueOf(i++), c);

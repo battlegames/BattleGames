@@ -27,8 +27,8 @@ import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.EnumUtil;
-import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.State;
+import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -168,11 +168,11 @@ public class Kit extends ConfigurableObject implements Informative {
         return boosters;
     }
 
-    public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
+    public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
-        for(PreparedItem pi : vanillaItems){
+        for (PreparedItem pi : vanillaItems) {
             int in = player.getInventory().firstEmpty();
-            if(in == -1){
+            if (in == -1) {
                 player.getWorld().dropItemNaturally(loc, pi.build());
             } else {
                 player.getInventory().setItem(in, pi.build());
@@ -188,14 +188,14 @@ public class Kit extends ConfigurableObject implements Informative {
     @Override
     protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
         o = super.conf2schema(o, entry);
-        if(o != null) {
+        if (o != null) {
             switch (entry.getKey()) {
                 case "items.vanilla": {
                     ConfigurationSection cs = (ConfigurationSection) o;
                     Set<String> keys = cs.getKeys(false);
                     PreparedItem[] vanillaItems = new PreparedItem[keys.size()];
                     int i = 0;
-                    for(String s : keys){
+                    for (String s : keys) {
                         try {
                             vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), ConfigSchema.of(PreparedItem.class));
                         } catch (InvalidValueException e) {
@@ -208,7 +208,7 @@ public class Kit extends ConfigurableObject implements Informative {
                     ConfigurationSection cs = (ConfigurationSection) o;
                     Multimap<ItemType, String> items = HashMultimap.create();
                     Set<String> keys = cs.getKeys(false);
-                    for(String s : keys){
+                    for (String s : keys) {
                         ItemType type = EnumUtil.getEnum(ItemType.values(), s);
                         items.putAll(type, cs.getStringList(s));
                     }
@@ -221,12 +221,12 @@ public class Kit extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null) {
+        if (o != null) {
             switch (entry.getKey()) {
                 case "items.vanilla": {
                     ConfigurationSection parent = new YamlConfiguration();
                     int i = 0;
-                    for(PreparedItem item : (PreparedItem[]) o){
+                    for (PreparedItem item : (PreparedItem[]) o) {
                         YamlConfiguration c = new YamlConfiguration();
                         ConfigHelper.writeConfig(c, ConfigSchema.of(PreparedItem.class), item);
                         parent.set(String.valueOf(i++), c);
@@ -236,7 +236,7 @@ public class Kit extends ConfigurableObject implements Informative {
                 case "items.battle": {
                     Multimap<ItemType, String> map = (Multimap<ItemType, String>) o;
                     ConfigurationSection parent = new YamlConfiguration();
-                    for (ItemType type : map.keys()){
+                    for (ItemType type : map.keys()) {
                         // hashMultimap returns set, that is not friendly with yaml
                         // we have to change it to array list
                         List<String> x = new ArrayList<>(map.get(type));

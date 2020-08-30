@@ -37,52 +37,52 @@ public class InfoHolder {
         this.identifier = identifier;
     }
 
-    public InfoHolder inform(String key, @NotNull State val){
+    public InfoHolder inform(String key, @NotNull State val) {
         Condition.argNotNull("val", val);
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, int val){
+    public InfoHolder inform(String key, int val) {
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, long val){
+    public InfoHolder inform(String key, long val) {
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, double val){
+    public InfoHolder inform(String key, double val) {
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, float val){
+    public InfoHolder inform(String key, float val) {
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, @NotNull String val){
+    public InfoHolder inform(String key, @NotNull String val) {
         Condition.argNotNull("val", val);
         map.put(identifier + key, val);
         return this;
     }
 
-    public InfoHolder inform(String key, @NotNull String... val){
-        Condition.argNotNull("val", val);
-        map.put(identifier + key, String.join(", ", val));
-        return this;
-    }
-
-    public InfoHolder inform(String key, @NotNull Iterable<String> val){
+    public InfoHolder inform(String key, @NotNull String... val) {
         Condition.argNotNull("val", val);
         map.put(identifier + key, String.join(", ", val));
         return this;
     }
 
-    public InfoHolder link(@Nullable InfoHolder another){
-        if(another != null) map.putAll(another.map);
+    public InfoHolder inform(String key, @NotNull Iterable<String> val) {
+        Condition.argNotNull("val", val);
+        map.put(identifier + key, String.join(", ", val));
+        return this;
+    }
+
+    public InfoHolder link(@Nullable InfoHolder another) {
+        if (another != null) map.putAll(another.map);
         return this;
     }
 

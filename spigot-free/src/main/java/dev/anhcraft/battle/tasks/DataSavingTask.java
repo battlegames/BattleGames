@@ -19,8 +19,8 @@
  */
 package dev.anhcraft.battle.tasks;
 
-import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.BattleComponent;
+import dev.anhcraft.battle.BattlePlugin;
 
 public class DataSavingTask extends BattleComponent implements Runnable {
     public DataSavingTask(BattlePlugin plugin) {

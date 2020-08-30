@@ -40,19 +40,19 @@ public class WorldConfigManagerX extends ConfigManager {
         super("Premium/World", "premium/worlds.yml");
     }
 
-    @Nullable
-    public WorldSettings getWorldSettings(String world){
-        WorldSettings ws = worldSettingsMap.get(world);
-        if(ws != null) return ws;
-        return globalWorldSettings.getBlacklistWorlds().contains(world) ? null : globalWorldSettings;
-    }
-
-    private static void fillOptions(ConfigurationSection model, ConfigurationSection target){
-        for(String s : model.getKeys(false)){
-            if(!target.isSet(s)){
+    private static void fillOptions(ConfigurationSection model, ConfigurationSection target) {
+        for (String s : model.getKeys(false)) {
+            if (!target.isSet(s)) {
                 target.set(s, model.get(s));
             }
         }
+    }
+
+    @Nullable
+    public WorldSettings getWorldSettings(String world) {
+        WorldSettings ws = worldSettingsMap.get(world);
+        if (ws != null) return ws;
+        return globalWorldSettings.getBlacklistWorlds().contains(world) ? null : globalWorldSettings;
     }
 
     @Override
@@ -60,8 +60,8 @@ public class WorldConfigManagerX extends ConfigManager {
         try {
             ConfigurationSection gen = getSettings().getConfigurationSection("general");
             globalWorldSettings = ConfigHelper.readConfig(Objects.requireNonNull(gen), ConfigSchema.of(WorldSettings.class));
-            for(String k : Objects.requireNonNull(getSettings().getConfigurationSection("specific")).getKeys(false)){
-                ConfigurationSection s = getSettings().getConfigurationSection("specific."+k);
+            for (String k : Objects.requireNonNull(getSettings().getConfigurationSection("specific")).getKeys(false)) {
+                ConfigurationSection s = getSettings().getConfigurationSection("specific." + k);
                 fillOptions(gen, s);
                 worldSettingsMap.put(k, ConfigHelper.readConfig(Objects.requireNonNull(s), ConfigSchema.of(WorldSettings.class)));
             }

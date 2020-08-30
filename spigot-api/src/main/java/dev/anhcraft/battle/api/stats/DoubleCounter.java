@@ -31,11 +31,11 @@ import org.jetbrains.annotations.Nullable;
 public abstract class DoubleCounter extends Statistic<Double> {
     private final AtomicDouble backend;
 
-    public DoubleCounter(){
+    public DoubleCounter() {
         backend = new AtomicDouble();
     }
 
-    public DoubleCounter(double value){
+    public DoubleCounter(double value) {
         backend = new AtomicDouble(value);
     }
 
@@ -63,9 +63,9 @@ public abstract class DoubleCounter extends Statistic<Double> {
     }
 
     public double increase(@Nullable Player who, double delta) {
-        if(delta == 0) return backend.get();
+        if (delta == 0) return backend.get();
         double x = backend.addAndGet(delta);
-        if(hasAdvancementSupport() && who != null) {
+        if (hasAdvancementSupport() && who != null) {
             BattleApi.getInstance().getAdvancementManager().report(who, getId(), x);
         }
         return x;

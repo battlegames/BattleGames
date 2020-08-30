@@ -41,6 +41,10 @@ public class ItemChooseEvent extends PlayerEvent {
         this.itemModel = itemModel;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public SlotReport getSlotReport() {
         return slotReport;
@@ -58,10 +62,6 @@ public class ItemChooseEvent extends PlayerEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

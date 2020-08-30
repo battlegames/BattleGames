@@ -39,23 +39,23 @@ public class SpeedUtil {
     }
 
     public static void setSpeedModifiers(Player player, @Nullable double[] v) {
-        if(v == null) {
+        if (v == null) {
             player.removeMetadata("BattleSpeedModifiers", (BattlePlugin) BattleApi.getInstance());
         } else {
             player.setMetadata("BattleSpeedModifiers", new FixedMetadataValue((BattlePlugin) BattleApi.getInstance(), v));
         }
     }
 
-    public static void setModifier(Player player, SpeedFactor factor, double speed){
+    public static void setModifier(Player player, SpeedFactor factor, double speed) {
         double[] doubles = getSpeedModifiers(player);
-        if(doubles == null) {
+        if (doubles == null) {
             setSpeedModifiers(player, doubles = new double[SpeedFactor.values().length]);
         }
         doubles[factor.ordinal()] = speed;
         recalculateSpeed(player, doubles);
     }
 
-    private static void recalculateSpeed(Player player, double[] doubles){
+    private static void recalculateSpeed(Player player, double[] doubles) {
         double sum = 0;
         for (double v : doubles) {
             sum += v;
@@ -65,7 +65,7 @@ public class SpeedUtil {
         player.setFlySpeed(MathUtil.clampFloat((float) (c.getFlySpeed() + sum), -0.5f, 1));
     }
 
-    public static void resetSpeed(Player player){
+    public static void resetSpeed(Player player) {
         GeneralConfig c = BattleApi.getInstance().getGeneralConfig();
         player.setWalkSpeed(MathUtil.clampFloat((float) c.getWalkSpeed(), -0.5f, 1));
         player.setFlySpeed(MathUtil.clampFloat((float) c.getFlySpeed(), -0.5f, 1));

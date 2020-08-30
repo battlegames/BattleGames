@@ -45,13 +45,13 @@ public class ResourcePack {
     private static byte[] HASH;
     private static String FILE;
 
-    private static String getUrl(){
-        return "https://tichcucquaytayvanmayseden.000webhostapp.com/"+FILE;
+    private static String getUrl() {
+        return "https://tichcucquaytayvanmayseden.000webhostapp.com/" + FILE;
     }
 
     public static void init(Consumer<String> stringConsumer) {
         BattlePlugin plugin = (BattlePlugin) BattleApi.getInstance();
-        switch (NMSVersion.current()){
+        switch (NMSVersion.current()) {
             case v1_12_R1: {
                 FILE = "abm-1.12.zip";
                 break;
@@ -67,10 +67,10 @@ public class ResourcePack {
                 break;
             }
         }
-        File folder = new File(plugin.getDataFolder(), "cache"+File.separatorChar+"resourcepacks");
+        File folder = new File(plugin.getDataFolder(), "cache" + File.separatorChar + "resourcepacks");
         folder.mkdirs();
         File f = new File(folder, plugin.getDescription().getVersion().hashCode() + "." + FILE);
-        if(f.exists()) {
+        if (f.exists()) {
             try {
                 byte[] arr = FileUtil.read(f);
                 HashCode hashCode = Hashing.sha1().hashBytes(arr);
@@ -93,7 +93,7 @@ public class ResourcePack {
             BufferedStreamReadTracker tracker = new BufferedStreamReadTracker(4096, conn.getInput());
             FixedStreamTransferReport report = new FixedStreamTransferReport(conn.getContentLength());
             tracker.setBufferCallback(bytes -> {
-                if(RandomUtil.randomInt(0, 10) == 0) {
+                if (RandomUtil.randomInt(0, 10) == 0) {
                     stringConsumer.accept(report.getTransferredBytes() + " bytes ... " + MathUtil.round(report.getProgress(), 3) + "%");
                 }
                 try {
@@ -108,16 +108,16 @@ public class ResourcePack {
                 FileUtil.write(f, arr);
                 HashCode hashCode = Hashing.sha1().hashBytes(arr);
                 HASH = hashCode.asBytes();
-                stringConsumer.accept("Finished! Hash: "+hashCode.toString());
+                stringConsumer.accept("Finished! Hash: " + hashCode.toString());
             });
         }
     }
 
-    public static void send(Player player){
-        if(HASH == null) return;
+    public static void send(Player player) {
+        if (HASH == null) return;
         String url = getUrl();
         String s = BattleApi.getInstance().getGeneralConfig().getResourcePackCustomUrl();
-        if(s != null && !(s = s.trim()).isEmpty()) url = s;
+        if (s != null && !(s = s.trim()).isEmpty()) url = s;
         player.setResourcePack(url, HASH);
         BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.notice");
     }

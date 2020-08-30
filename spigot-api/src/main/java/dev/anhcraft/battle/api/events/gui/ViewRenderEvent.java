@@ -36,6 +36,10 @@ public class ViewRenderEvent extends ViewEvent implements Cancellable {
         super(who, gui, window, view);
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -48,10 +52,6 @@ public class ViewRenderEvent extends ViewEvent implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

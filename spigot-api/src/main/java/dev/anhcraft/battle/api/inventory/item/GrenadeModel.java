@@ -105,7 +105,7 @@ public class GrenadeModel extends SingleSkinWeapon {
     }
 
     @Override
-    public void inform(@NotNull InfoHolder holder){
+    public void inform(@NotNull InfoHolder holder) {
         super.inform(holder);
         holder.inform("delay_time", delayTime)
                 .inform("velocity_multiplier", velocityMultiplier)

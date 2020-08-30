@@ -36,15 +36,16 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 
 public class GamePlayer extends CustomDataContainer implements Resettable {
-    private final StatisticMap stats = new StatisticMap(x -> {});
+    private final StatisticMap stats = new StatisticMap(x -> {
+    });
     private final AtomicDouble igBalance = new AtomicDouble();
-    private boolean hasFirstKill;
     private final WeakReference<Player> player;
+    private final long joinDate;
+    private final Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
+    private boolean hasFirstKill;
     private boolean spectator;
     private boolean winner;
-    private final long joinDate;
     private ItemStack[] backupInventory;
-    private final Table<ItemType, String, BattleItem<?>> igBackpack = HashBasedTable.create();
 
     public GamePlayer(@NotNull Player player) {
         Validate.notNull(player, "Player must be non-null");
@@ -55,7 +56,7 @@ public class GamePlayer extends CustomDataContainer implements Resettable {
     @NotNull
     public Player toBukkit() {
         Player p = player.get();
-        if(p == null) {
+        if (p == null) {
             throw new IllegalStateException("The player is not online anymore, thus this game player should be removed previously?");
         }
         return p;

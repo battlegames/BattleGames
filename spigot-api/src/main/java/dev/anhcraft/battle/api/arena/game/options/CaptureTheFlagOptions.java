@@ -65,8 +65,8 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("flags")){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("flags")) {
             ConfigurationSection conf = (ConfigurationSection) value;
             List<FlagOptions> flags = new ArrayList<>();
             try {
@@ -82,8 +82,8 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("flags")){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("flags")) {
             YamlConfiguration conf = new YamlConfiguration();
             int i = 0;
             for (FlagOptions f : (List<FlagOptions>) value) {

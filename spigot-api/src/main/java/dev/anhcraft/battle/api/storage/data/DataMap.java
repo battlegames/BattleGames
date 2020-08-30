@@ -35,73 +35,73 @@ public class DataMap<T> {
     private final AtomicBoolean modifyTracker = new AtomicBoolean();
 
     @Nullable
-    public Object readTag(T key){
+    public Object readTag(T key) {
         DataTag<?> q = map.get(key);
         return q == null ? null : q.getValue();
     }
 
     @Nullable
-    public <C> C readTag(T key, Class<? extends C> clazz){
+    public <C> C readTag(T key, Class<? extends C> clazz) {
         return readTag(key, clazz, null);
     }
 
     @NotNull
-    public <C> C readTag(T key, Class<? extends C> clazz, C def){
+    public <C> C readTag(T key, Class<? extends C> clazz, C def) {
         Class<?> c = DataTypeUtil.getObjectClass(clazz);
         DataTag<?> q = map.get(key);
-        if(q == null) return def;
+        if (q == null) return def;
         Object a = q.getValue();
         return c.isAssignableFrom(a.getClass()) ? (C) a : def;
     }
 
     @NotNull
-    public <C> C readRequiredTag(T key, Class<? extends C> clazz){
+    public <C> C readRequiredTag(T key, Class<? extends C> clazz) {
         C v = readTag(key, clazz);
         return Objects.requireNonNull(v);
     }
 
-    public void forEach(BiConsumer<T, DataTag<?>> consumer){
+    public void forEach(BiConsumer<T, DataTag<?>> consumer) {
         map.forEach(consumer);
     }
 
-    public void put(T key, DataTag<?> tag){
-        if(!Objects.equals(tag, map.put(key, tag))) modifyTracker.set(true);
+    public void put(T key, DataTag<?> tag) {
+        if (!Objects.equals(tag, map.put(key, tag))) modifyTracker.set(true);
     }
 
     @Deprecated
-    public void fastPut(T key, DataTag<?> tag){
+    public void fastPut(T key, DataTag<?> tag) {
         map.put(key, tag);
     }
 
-    public void writeTag(T key, DataTag<?> value){
+    public void writeTag(T key, DataTag<?> value) {
         put(key, value);
     }
 
-    public void writeTag(T key, boolean value){
+    public void writeTag(T key, boolean value) {
         put(key, new BoolTag(value));
     }
 
-    public void writeTag(T key, int value){
+    public void writeTag(T key, int value) {
         put(key, new IntTag(value));
     }
 
-    public void writeTag(T key, double value){
+    public void writeTag(T key, double value) {
         put(key, new DoubleTag(value));
     }
 
-    public void writeTag(T key, long value){
+    public void writeTag(T key, long value) {
         put(key, new LongTag(value));
     }
 
-    public void writeTag(T key, float value){
+    public void writeTag(T key, float value) {
         put(key, new FloatTag(value));
     }
 
-    public void writeTag(T key, String value){
+    public void writeTag(T key, String value) {
         put(key, new StringTag(value));
     }
 
-    public <C extends DataTag<?>> void writeTag(T key, List<C> value){
+    public <C extends DataTag<?>> void writeTag(T key, List<C> value) {
         put(key, new ListTag<>(value));
     }
 
@@ -120,29 +120,29 @@ public class DataMap<T> {
     }
 
     @NotNull
-    public Set<T> filterKeys(@NotNull Predicate<T> predicate){
+    public Set<T> filterKeys(@NotNull Predicate<T> predicate) {
         return map.keySet().stream().filter(predicate).collect(Collectors.toSet());
     }
 
     @NotNull
-    public Set<Map.Entry<T, DataTag<?>>> filterEntries(@NotNull Predicate<T> predicate){
+    public Set<Map.Entry<T, DataTag<?>>> filterEntries(@NotNull Predicate<T> predicate) {
         return map.entrySet().stream().filter(e -> predicate.test(e.getKey())).collect(Collectors.toSet());
     }
 
-    public void copyTag(@NotNull T oldKey, @NotNull T newKey){
+    public void copyTag(@NotNull T oldKey, @NotNull T newKey) {
         DataTag<?> x = map.get(oldKey);
-        if(x == null) return;
+        if (x == null) return;
         put(newKey, x);
     }
 
-    public void cutTag(@NotNull T oldKey, @NotNull T newKey){
+    public void cutTag(@NotNull T oldKey, @NotNull T newKey) {
         DataTag<?> x = map.remove(oldKey);
-        if(x == null) return;
+        if (x == null) return;
         put(newKey, x);
     }
 
-    public void removeTag(@NotNull T key){
-        if(map.remove(key) != null){
+    public void removeTag(@NotNull T key) {
+        if (map.remove(key) != null) {
             modifyTracker.set(true);
         }
     }

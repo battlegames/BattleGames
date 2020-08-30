@@ -102,25 +102,25 @@ public class Perk extends ConfigurableObject implements Informative {
         return newFoodLevel;
     }
 
-    public void give(@NotNull Player player){
+    public void give(@NotNull Player player) {
         Condition.argNotNull("player", player);
-        for(BattlePotionEffect pe : potionEffects){
+        for (BattlePotionEffect pe : potionEffects) {
             pe.give(player);
         }
-        if(newHealth > 0){
+        if (newHealth > 0) {
             player.setHealth(Math.min(newHealth, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
         }
-        if(newFoodLevel > 0){
+        if (newFoodLevel > 0) {
             player.setFoodLevel(newFoodLevel);
         }
     }
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("executions.give_effects")){
+        if (value != null && entry.getKey().equals("executions.give_effects")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             List<BattlePotionEffect> effects = new ArrayList<>();
-            for(String s : cs.getKeys(false)){
+            for (String s : cs.getKeys(false)) {
                 try {
                     effects.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), BattlePotionEffect.SCHEMA));
                 } catch (InvalidValueException e) {
@@ -134,10 +134,10 @@ public class Perk extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("executions.give_effects")){
+        if (value != null && entry.getKey().equals("executions.give_effects")) {
             ConfigurationSection parent = new YamlConfiguration();
             int i = 0;
-            for(BattlePotionEffect effect : (List<BattlePotionEffect>) value){
+            for (BattlePotionEffect effect : (List<BattlePotionEffect>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, BattlePotionEffect.SCHEMA, effect);
                 parent.set(String.valueOf(i++), c);

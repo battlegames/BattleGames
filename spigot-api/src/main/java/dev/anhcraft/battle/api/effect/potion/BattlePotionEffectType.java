@@ -55,12 +55,12 @@ public enum BattlePotionEffectType {
 
     private final PotionEffectType potionEffectType;
 
-    BattlePotionEffectType(){
+    BattlePotionEffectType() {
         potionEffectType = (PotionEffectType) ReflectionUtil.getStaticField(PotionEffectType.class, name());
     }
 
     @NotNull
-    public PotionEffectType asBukkit(){
+    public PotionEffectType asBukkit() {
         return potionEffectType;
     }
 }

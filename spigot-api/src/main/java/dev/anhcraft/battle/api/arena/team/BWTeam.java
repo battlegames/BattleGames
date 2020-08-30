@@ -35,12 +35,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class BWTeam extends CustomDataContainer implements Team {
-    private String name;
     private final DyeColor color;
     private final List<Location> spawnPoints;
+    private final Location centerSpawnPoint;
+    private String name;
     private Block bedPart1;
     private Block bedPart2;
-    private final Location centerSpawnPoint;
 
     @SuppressWarnings("UnstableApiUsage")
     public BWTeam(BWTeamOptions c) {
@@ -49,9 +49,9 @@ public class BWTeam extends CustomDataContainer implements Team {
         this.name = c.getName();
         this.color = c.getColor();
         this.spawnPoints = c.getSpawnPoints();
-        for (Block b : BlockUtil.getNearbyBlocks(c.getBedLocation(), 2, 2, 2)){
-            if(b.getType().name().equals("BED_BLOCK") || b.getType().name().endsWith("_BED")){
-                if(this.bedPart1 == null) {
+        for (Block b : BlockUtil.getNearbyBlocks(c.getBedLocation(), 2, 2, 2)) {
+            if (b.getType().name().equals("BED_BLOCK") || b.getType().name().endsWith("_BED")) {
+                if (this.bedPart1 == null) {
                     this.bedPart1 = b;
                     this.bedPart2 = b;
                 } else {
@@ -64,7 +64,7 @@ public class BWTeam extends CustomDataContainer implements Team {
         List<Double> xp = new ArrayList<>();
         List<Double> yp = new ArrayList<>();
         List<Double> zp = new ArrayList<>();
-        for(Location sp : spawnPoints){
+        for (Location sp : spawnPoints) {
             xp.add(sp.getX());
             yp.add(sp.getY());
             zp.add(sp.getZ());

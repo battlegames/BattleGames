@@ -27,25 +27,25 @@ import java.io.IOException;
 
 public class YamlDiff {
     @Test
-    public void a(){
+    public void a() {
         FileConfiguration c1 = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/locale/en_us.yml"));
         FileConfiguration c2 = YamlConfiguration.loadConfiguration(new File("src/main/resources/config/locale/vi_vn.yml"));
-        for(String s : c1.getKeys(true)){
+        for (String s : c1.getKeys(true)) {
             Object a = c1.get(s);
             Object b = c2.get(s);
-            if(a != null && b == null){
-                System.out.println("Missing: "+s);
+            if (a != null && b == null) {
+                System.out.println("Missing: " + s);
                 c2.set(s, a);
-            } else if(a != null && !a.getClass().equals(b.getClass())){
-                System.out.println("Wrong data type: "+s);
+            } else if (a != null && !a.getClass().equals(b.getClass())) {
+                System.out.println("Wrong data type: " + s);
                 c2.set(s, a);
             }
         }
-        for(String s : c2.getKeys(true)){
+        for (String s : c2.getKeys(true)) {
             Object a = c1.get(s);
             Object b = c2.get(s);
-            if(a == null && b != null){
-                System.out.println("Redundant entry: "+s);
+            if (a == null && b != null) {
+                System.out.println("Redundant entry: " + s);
                 c2.set(s, null);
             }
         }

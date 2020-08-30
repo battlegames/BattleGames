@@ -21,11 +21,11 @@ package dev.anhcraft.battle.api.gui;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.api.BattleSound;
+import dev.anhcraft.battle.api.gui.struct.Component;
+import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.confighelper.ConfigHelper;
 import dev.anhcraft.confighelper.ConfigSchema;
 import dev.anhcraft.confighelper.annotation.*;
@@ -110,7 +110,7 @@ public class Gui extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null) {
+        if (value != null) {
             if (entry.getKey().equals("components")) {
                 ConfigurationSection cs = (ConfigurationSection) value;
                 List<Component> components = new ArrayList<>();
@@ -150,7 +150,7 @@ public class Gui extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null) {
+        if (value != null) {
             if (entry.getKey().equals("components")) {
                 ConfigurationSection parent = new YamlConfiguration();
                 int i = 0;

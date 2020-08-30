@@ -49,7 +49,7 @@ public class Transaction implements Informative {
         this.date = date;
         formattedDate = BattleApi.getInstance().formatLongFormDate(new Date(date));
         String s = BattleApi.getInstance().getLocalizedMessage("currency_format." + currency.toLowerCase());
-        if(s != null){
+        if (s != null) {
             formattedPrice = new InfoHolder("").inform("amount", price).compile().replace(s);
         } else {
             formattedPrice = price + " " + currency;

@@ -4,21 +4,21 @@ log_transactions: true
 product_lore_footer:
   enabled: true
   content:
-  - '&f'
-  - '&fPrice: &d<product_price_formatted>'
-  - '&f'
-  - '&e>> Click to purchase <<'
+    - '&f'
+    - '&fPrice: &d<product_price_formatted>'
+    - '&f'
+    - '&e>> Click to purchase <<'
 transaction_item:
   material: paper
   name: '&f<product> &7(<formatted_price>)'
   lore:
-  - '&7<formatted_date>'
+    - '&7<formatted_date>'
 default_product_icon:
   empty:
     material: barrier
     name: '&e&lEmpty'
     lore:
-    - '&cDon''t buy!!!'
+      - '&cDon''t buy!!!'
   package:
     material: chest
     name: '&e&lPackage'
@@ -43,11 +43,11 @@ categories:
       material: emerald
       name: '&b&lPerk shop'
       lore:
-      - '&fHere you can buy perks with&a cheap price'
+        - '&fHere you can buy perks with&a cheap price'
       enchant:
         unbreaking: 1
       flag:
-      - hide_enchants
+        - hide_enchants
     products:
       '1':
         package_name: '&cHealth boost'
@@ -56,25 +56,25 @@ categories:
         price: 75
         executions:
           give_perks:
-          - health_boost
+            - health_boost
       '2':
         icon:
           name: '&aSpeed'
           material: redstone
           lore:
-          - '&aSpeed up your movement!'
-          - '&eAvailable until the game ends'
+            - '&aSpeed up your movement!'
+            - '&eAvailable until the game ends'
         currency: vault
         price: 150
         executions:
           give_perks:
-          - speed
+            - speed
   food:
     icon:
       material: apple
       name: '&6&lFood shop'
       lore:
-      - '&bHere you can buy tasty food'
+        - '&bHere you can buy tasty food'
     products:
       '1':
         icon:
@@ -134,14 +134,14 @@ categories:
         in_game_only: true
         executions:
           perform_commands:
-          - fly %player_name%
+            - fly %player_name%
   bedwar_items:
     icon:
       material: diamond
       name: '&c&l[BW] &f&lItems Shop'
     in_game_only: true
     reserved_game_modes:
-    - bw
+      - bw
     products:
       stone_sword:
         currency: iron
@@ -299,51 +299,51 @@ categories:
       name: '&c&l[BW] &f&lUpgrades Shop'
     in_game_only: true
     reserved_game_modes:
-    - bw
+      - bw
     products:
       forge:
         icon:
           name: '&e&lForge'
           material: furnace
           lore:
-          - '&7Increases the spawn rate and the amount of irons and golds!'
+            - '&7Increases the spawn rate and the amount of irons and golds!'
         currency: diamond
         price: 3
         functions:
           on_purchase:
-          - BedwarPack:PreGeneratorUpgrade($result "local")
-          - Inst:Return() ? $result == true
-          - Var:Set($forbidden true)
-          - Battle:CloseGUI()
+            - BedwarPack:PreGeneratorUpgrade($result "local")
+            - Inst:Return() ? $result == true
+            - Var:Set($forbidden true)
+            - Battle:CloseGUI()
           on_purchased:
-          - BedwarPack:PostGeneratorUpgrade("local")
+            - BedwarPack:PostGeneratorUpgrade("local")
       recovery:
         icon:
           name: '&4&lRecovery'
           lore:
-          - '&7Get &8Regeneration&7 if you or teammates near your bed'
+            - '&7Get &8Regeneration&7 if you or teammates near your bed'
           material: cake
         currency: diamond
         price: 2
         functions:
           on_purchase:
-          - BedwarPack:HasPotionInPool($x "regeneration" "teammates")
-          - Var:Set($forbidden $x)
+            - BedwarPack:HasPotionInPool($x "regeneration" "teammates")
+            - Var:Set($forbidden $x)
           on_purchased:
-          - BedwarPack:RemovePotionFromPool("*" "teammates")
-          - BedwarPack:AddPotionToPool("regeneration" 0 18 "teammates")
+            - BedwarPack:RemovePotionFromPool("*" "teammates")
+            - BedwarPack:AddPotionToPool("regeneration" 0 18 "teammates")
       freeze:
         icon:
           name: '&f&lFreeze'
           lore:
-          - '&7Your enemies get &8Slowness&7 if they are near to your bed'
+            - '&7Your enemies get &8Slowness&7 if they are near to your bed'
           material: web
         currency: diamond
         price: 4
         functions:
           on_purchase:
-          - BedwarPack:HasPotionInPool($x "slow" "enemies")
-          - Var:Set($forbidden $x)
+            - BedwarPack:HasPotionInPool($x "slow" "enemies")
+            - Var:Set($forbidden $x)
           on_purchased:
-          - BedwarPack:RemovePotionFromPool("*" "enemies")
-          - BedwarPack:AddPotionToPool("slow" 0 18 "enemies")
+            - BedwarPack:RemovePotionFromPool("*" "enemies")
+            - BedwarPack:AddPotionToPool("slow" 0 18 "enemies")

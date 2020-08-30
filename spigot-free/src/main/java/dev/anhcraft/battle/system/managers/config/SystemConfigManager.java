@@ -52,7 +52,7 @@ public class SystemConfigManager extends ConfigManager {
         try {
             SystemConfig config = ConfigHelper.readConfig(getSettings(), SystemConfig.SCHEMA, plugin.getSystemConfig());
 
-            if(VersionUtil.compareVersion(config.getLastPluginVersion(), "1.1.9") < 0){
+            if (VersionUtil.compareVersion(config.getLastPluginVersion(), "1.1.9") < 0) {
                 plugin.getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
                 plugin.getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
                 plugin.getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
@@ -64,7 +64,7 @@ public class SystemConfigManager extends ConfigManager {
                 plugin.getLogger().warning("If you need help, contact me via Discord: https://discord.gg/QSpc5xH");
             }
 
-            if(!config.isRemoteConfigEnabled()) {
+            if (!config.isRemoteConfigEnabled()) {
                 String cf = config.getConfigFolder().trim();
                 if (cf.isEmpty()) {
                     // reset the config folder (in case of it was changed from a different path)
@@ -78,7 +78,7 @@ public class SystemConfigManager extends ConfigManager {
                         } else
                             // reset the config folder
                             plugin.configFolder = plugin.getDataFolder();
-                            plugin.getLogger().warning("Config folder is not an directory: " + file.getAbsolutePath());
+                        plugin.getLogger().warning("Config folder is not an directory: " + file.getAbsolutePath());
                     } else {
                         plugin.configFolder = file;
                     }
@@ -89,7 +89,7 @@ public class SystemConfigManager extends ConfigManager {
             new File(plugin.configFolder, "locale").mkdir();
             new File(plugin.configFolder, "items").mkdir();
             new File(plugin.configFolder, "editor").mkdir();
-            if(plugin.isPremium()) {
+            if (plugin.isPremium()) {
                 new File(plugin.configFolder, "premium").mkdir();
             }
         } catch (InvalidValueException e) {

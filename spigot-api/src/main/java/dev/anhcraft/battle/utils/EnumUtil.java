@@ -26,17 +26,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class EnumUtil {
     @NotNull
-    public static <E extends Enum> E getEnum(@NotNull E[] list, @Nullable String str){
+    public static <E extends Enum> E getEnum(@NotNull E[] list, @Nullable String str) {
         Condition.notNull(list);
         Condition.notEmpty(list);
-        if(str == null) return list[0];
+        if (str == null) return list[0];
 
         str = str.toUpperCase();
-        for(E e : list){
-            if(e.name().equals(str)) return e;
+        for (E e : list) {
+            if (e.name().equals(str)) return e;
         }
         StackTraceElement stacktrace = Thread.currentThread().getStackTrace()[2];
-        E def = list[list.length-1];
+        E def = list[list.length - 1];
         Bukkit.getLogger().warning(String.format("%s#%s() | Enum `%s` not found! Using default: `%s`", stacktrace.getClassName(), stacktrace.getMethodName(), str, def.name()));
         return def;
     }

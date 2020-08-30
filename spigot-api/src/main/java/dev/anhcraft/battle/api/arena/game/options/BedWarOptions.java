@@ -38,11 +38,6 @@ import java.util.List;
 @Schema
 public class BedWarOptions extends GameOptions {
     public static final ConfigSchema<BedWarOptions> SCHEMA = ConfigSchema.of(BedWarOptions.class);
-
-    @Key("team_size")
-    @Explanation("The size of a team")
-    private int teamSize = 2;
-
     @Key("teams")
     @Explanation("List of teams")
     @Example({
@@ -66,6 +61,9 @@ public class BedWarOptions extends GameOptions {
     })
     @IgnoreValue(ifNull = true)
     private final List<BWTeamOptions> teams = new ArrayList<>();
+    @Key("team_size")
+    @Explanation("The size of a team")
+    private int teamSize = 2;
 
     public int getTeamSize() {
         return teamSize;
@@ -77,8 +75,8 @@ public class BedWarOptions extends GameOptions {
     }
 
     @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("teams")){
+    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("teams")) {
             ConfigurationSection conf = (ConfigurationSection) value;
             List<BWTeamOptions> teams = new ArrayList<>();
             try {
@@ -91,7 +89,7 @@ public class BedWarOptions extends GameOptions {
             boolean[] colors = new boolean[DyeColor.values().length];
             for (BWTeamOptions t : teams) {
                 DyeColor c = t.getColor();
-                if(colors[c.ordinal()]) {
+                if (colors[c.ordinal()]) {
                     BattleApi.getInstance().getLogger().warning("[BedWarValidator] Duplicated team color: " + c.name());
                 } else {
                     colors[c.ordinal()] = true;
@@ -103,8 +101,8 @@ public class BedWarOptions extends GameOptions {
     }
 
     @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry){
-        if(value != null && entry.getKey().equals("teams")){
+    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
+        if (value != null && entry.getKey().equals("teams")) {
             YamlConfiguration conf = new YamlConfiguration();
             int i = 0;
             for (BWTeamOptions tm : (List<BWTeamOptions>) value) {

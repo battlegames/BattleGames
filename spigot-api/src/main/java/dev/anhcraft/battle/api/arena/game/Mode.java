@@ -20,10 +20,10 @@
 package dev.anhcraft.battle.api.arena.game;
 
 import com.google.common.collect.ImmutableList;
+import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.arena.game.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
-import dev.anhcraft.battle.api.BattleScoreboard;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -45,99 +45,87 @@ import java.util.function.Consumer;
 public class Mode extends ConfigurableObject implements Informative {
     public static final ConfigSchema<Mode> SCHEMA = ConfigSchema.of(Mode.class);
     private static final Map<String, Mode> REGISTRY = new HashMap<>();
-
-    @NotNull
-    public static Mode register(@NotNull Mode mode){
-        Condition.argNotNull("mode", mode);
-        if(REGISTRY.containsKey(mode.id)) throw new IllegalStateException("Mode is already registered");
-        REGISTRY.put(mode.id, mode);
-        return mode;
-    }
-
-    public static boolean unregister(@NotNull String id){
-        return REGISTRY.remove(id) != null;
-    }
-
-    @NotNull
-    public static List<Mode> list(){
-        return ImmutableList.copyOf(REGISTRY.values());
-    }
-
-    public static void list(@NotNull Consumer<Mode> consumer){
-        REGISTRY.values().forEach(consumer);
-    }
-
-    @Nullable
-    public static Mode get(@NotNull String id){
-        Condition.argNotNull("id", id);
-        return REGISTRY.get(id.toLowerCase());
-    }
-
-    public static void get(@NotNull String id, @NotNull Consumer<Mode> consumer){
-        Condition.argNotNull("id", id);
-        Condition.argNotNull("consumer", consumer);
-        Mode m = REGISTRY.get(id);
-        if(m != null) consumer.accept(m);
-    }
-
     /**
      * ID: <b>dm</b>
      */
     public static final Mode DEATHMATCH = register(new Mode("dm", DeathmatchOptions.SCHEMA));
-
     /**
      * ID: <b>tdm</b>
      */
     public static final Mode TEAM_DEATHMATCH = register(new Mode("tdm", TeamDeathmatchOptions.SCHEMA));
-
     /**
      * ID: <b>ctf</b>
      */
     public static final Mode CTF = register(new Mode("ctf", CaptureTheFlagOptions.SCHEMA));
-
     /**
      * ID: <b>bw</b>
      */
     public static final Mode BEDWAR = register(new Mode("bw", BedWarOptions.SCHEMA));
-
     /**
      * ID: <b>mr</b>
      */
     public static final Mode MOB_RESCUE = register(new Mode("mr", MobRescueOptions.SCHEMA));
-
     private final ConfigSchema<?> optionSchema;
     private final String id;
     private GameController controller;
-
     @Key("name")
     @Validation(notNull = true)
     @Explanation("A nice name for the game mode")
     private String name;
-
     @Key("waiting_chat")
     @Validation(notNull = true)
     @Explanation("Chat configuration (during waiting phase)")
     private BattleChat waitingChat;
-
     @Key("playing_chat")
     @Validation(notNull = true)
     @Explanation("Chat configuration (during playing phase)")
     private BattleChat playingChat;
-
     @Key("waiting_scoreboard")
     @Validation(notNull = true)
     @Explanation("Scoreboard configuration (during waiting phase)")
     private BattleScoreboard waitingScoreboard;
-
     @Key("playing_scoreboard")
     @Validation(notNull = true)
     @Explanation("Scoreboard configuration (during playing phase)")
     private BattleScoreboard playingScoreboard;
-
-    public Mode(@NotNull String id, @NotNull ConfigSchema<?> optionSchema){
+    public Mode(@NotNull String id, @NotNull ConfigSchema<?> optionSchema) {
         Condition.argNotNull("id", id);
         this.id = id.toLowerCase();
         this.optionSchema = optionSchema;
+    }
+
+    @NotNull
+    public static Mode register(@NotNull Mode mode) {
+        Condition.argNotNull("mode", mode);
+        if (REGISTRY.containsKey(mode.id)) throw new IllegalStateException("Mode is already registered");
+        REGISTRY.put(mode.id, mode);
+        return mode;
+    }
+
+    public static boolean unregister(@NotNull String id) {
+        return REGISTRY.remove(id) != null;
+    }
+
+    @NotNull
+    public static List<Mode> list() {
+        return ImmutableList.copyOf(REGISTRY.values());
+    }
+
+    public static void list(@NotNull Consumer<Mode> consumer) {
+        REGISTRY.values().forEach(consumer);
+    }
+
+    @Nullable
+    public static Mode get(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        return REGISTRY.get(id.toLowerCase());
+    }
+
+    public static void get(@NotNull String id, @NotNull Consumer<Mode> consumer) {
+        Condition.argNotNull("id", id);
+        Condition.argNotNull("consumer", consumer);
+        Mode m = REGISTRY.get(id);
+        if (m != null) consumer.accept(m);
     }
 
     @NotNull
@@ -180,12 +168,12 @@ public class Mode extends ConfigurableObject implements Informative {
         return controller;
     }
 
-    public void getController(Consumer<GameController> consumer) {
-        if(controller != null && consumer != null) consumer.accept(controller);
-    }
-
     public void setController(@Nullable GameController controller) {
         this.controller = controller;
+    }
+
+    public void getController(Consumer<GameController> consumer) {
+        if (controller != null && consumer != null) consumer.accept(controller);
     }
 
     @Override

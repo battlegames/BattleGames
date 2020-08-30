@@ -88,7 +88,7 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
         this.capturing = capturing;
     }
 
-    public void updateDisplayName(){
+    public void updateDisplayName() {
         InfoHolder h;
         inform(h = new InfoHolder("flag_"));
         String n = team != null ? (valid ? options.getValidDisplayName() : options.getInvalidDisplayName()) : options.getNeutralDisplayName();
@@ -105,7 +105,7 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
     @Override
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("health", health.get()).inform("max_health", options.getMaxHealth());
-        if(team != null) {
+        if (team != null) {
             holder.inform("team", team.getLocalizedName());
         }
     }

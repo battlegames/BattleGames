@@ -24,12 +24,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.api.Booster;
+import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.economy.CurrencyType;
 import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.battle.api.Booster;
-import dev.anhcraft.battle.api.Perk;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.impl.Informative;
@@ -301,28 +301,28 @@ public class Product extends ConfigurableObject implements Informative {
         return purchasedFunction;
     }
 
-    public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData){
+    public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
         player.getInventory().addItem(CollectionUtil.toArray(Arrays.stream(vanillaItems).map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         battleItems.forEach((type, x) -> {
             Backpack.Compartment is = playerData.getBackpack().getStorage(type);
             is.put(x);
         });
-        for(String perk : perks){
+        for (String perk : perks) {
             Perk p = ApiProvider.consume().getPerk(perk);
-            if(p != null) p.give(player);
+            if (p != null) p.give(player);
         }
-        for(String cmd : commands){
+        for (String cmd : commands) {
             cmd = PlaceholderUtil.formatPAPI(player, cmd);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
         }
-        if(vanillaExp > 0){
+        if (vanillaExp > 0) {
             player.giveExp(vanillaExp);
         }
-        if(battleExp > 0){
+        if (battleExp > 0) {
             playerData.getStats().of(ExpStat.class).increase(player, battleExp);
         }
-        for(String booster : boosters){
+        for (String booster : boosters) {
             playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());
         }
     }
@@ -338,16 +338,16 @@ public class Product extends ConfigurableObject implements Informative {
         Multimap<ItemType, String> battleItems = getBattleItems();
         PreparedItem[] vanillaItems = getVanillaItems();
 
-        if(perks.isEmpty() && boosters.isEmpty() && battleExp <= 0 && vanillaExp <= 0){
-            if(battleItems.isEmpty() && vanillaItems.length == 0) {
+        if (perks.isEmpty() && boosters.isEmpty() && battleExp <= 0 && vanillaExp <= 0) {
+            if (battleItems.isEmpty() && vanillaItems.length == 0) {
                 return icon = market.getDefaultIconForEmptyProduct().duplicate();
-            } else if(!market.shouldTreatSingleItemAsPackage()) {
+            } else if (!market.shouldTreatSingleItemAsPackage()) {
                 if (battleItems.size() == 1 && vanillaItems.length == 0) {
                     Map.Entry<ItemType, String> e = battleItems.entries().iterator().next();
                     BattleItemModel bi = api.getItemModel(e.getKey(), e.getValue());
-                    if(bi != null) {
+                    if (bi != null) {
                         PreparedItem pi = api.getItemManager().make(bi);
-                        if(pi != null) {
+                        if (pi != null) {
                             return icon = pi.duplicate();
                         }
                     }
@@ -358,20 +358,20 @@ public class Product extends ConfigurableObject implements Informative {
         }
 
         PreparedItem pi = market.getDefaultIconForPackage().duplicate();
-        if(packageName != null) {
+        if (packageName != null) {
             pi.name(packageName);
         }
-        if(packageMaterial != null) {
+        if (packageMaterial != null) {
             pi.material(packageMaterial);
         }
         PackageDetails details = market.getPackageDetails();
         boolean fe = false;
 
-        if(!battleItems.isEmpty() || vanillaItems.length > 0) {
+        if (!battleItems.isEmpty() || vanillaItems.length > 0) {
             pi.lore().add(details.getItemHeader());
             battleItems.forEach((type, _id) -> {
                 BattleItemModel bi = api.getItemModel(type, _id);
-                if(bi != null) {
+                if (bi != null) {
                     InfoHolder ih = new InfoHolder("");
                     bi.inform(ih);
                     pi.lore().add(ih.compile().replace(details.getBattleItemFormat()));
@@ -384,7 +384,7 @@ public class Product extends ConfigurableObject implements Informative {
             });
             for (PreparedItem i : vanillaItems) {
                 String n = i.name();
-                if(n == null) {
+                if (n == null) {
                     n = i.build().getItemMeta().getLocalizedName();
                 }
                 pi.lore().add(new InfoHolder("")
@@ -395,14 +395,14 @@ public class Product extends ConfigurableObject implements Informative {
             fe = true;
         }
 
-        if(!perks.isEmpty()) {
-            if(fe && details.shouldSeparatedPartByNewLine()) {
+        if (!perks.isEmpty()) {
+            if (fe && details.shouldSeparatedPartByNewLine()) {
                 pi.lore().add(ChatColor.WHITE.toString());
             }
             pi.lore().add(details.getPerkHeader());
             for (String perk : perks) {
                 Perk p = api.getPerk(perk);
-                if(p == null) {
+                if (p == null) {
                     pi.lore().add(new InfoHolder("")
                             .inform("id", perk)
                             .inform("name", perk)
@@ -416,14 +416,14 @@ public class Product extends ConfigurableObject implements Informative {
             fe = true;
         }
 
-        if(!boosters.isEmpty()) {
-            if(fe && details.shouldSeparatedPartByNewLine()) {
+        if (!boosters.isEmpty()) {
+            if (fe && details.shouldSeparatedPartByNewLine()) {
                 pi.lore().add(ChatColor.WHITE.toString());
             }
             pi.lore().add(details.getBoosterHeader());
             for (String booster : boosters) {
                 Booster b = api.getBooster(booster);
-                if(b == null) {
+                if (b == null) {
                     pi.lore().add(new InfoHolder("")
                             .inform("id", booster)
                             .inform("name", booster)
@@ -437,17 +437,17 @@ public class Product extends ConfigurableObject implements Informative {
             fe = true;
         }
 
-        if(battleExp > 0 || vanillaExp > 0) {
-            if(fe && details.shouldSeparatedPartByNewLine()) {
+        if (battleExp > 0 || vanillaExp > 0) {
+            if (fe && details.shouldSeparatedPartByNewLine()) {
                 pi.lore().add(ChatColor.WHITE.toString());
             }
             pi.lore().add(details.getExpHeader());
-            if(battleExp > 0) {
+            if (battleExp > 0) {
                 pi.lore().add(new InfoHolder("")
                         .inform("amount", battleExp)
                         .compile().replace(details.getBattleExpFormat()));
             }
-            if(vanillaExp > 0) {
+            if (vanillaExp > 0) {
                 pi.lore().add(new InfoHolder("")
                         .inform("amount", vanillaExp)
                         .compile().replace(details.getVanillaExpFormat()));
@@ -458,14 +458,14 @@ public class Product extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null) {
+        if (o != null) {
             switch (entry.getKey()) {
                 case "executions.give_items.vanilla": {
                     ConfigurationSection cs = (ConfigurationSection) o;
                     Set<String> keys = cs.getKeys(false);
                     PreparedItem[] vanillaItems = new PreparedItem[keys.size()];
                     int i = 0;
-                    for(String s : keys){
+                    for (String s : keys) {
                         try {
                             vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), ConfigSchema.of(PreparedItem.class));
                         } catch (InvalidValueException e) {
@@ -478,7 +478,7 @@ public class Product extends ConfigurableObject implements Informative {
                     ConfigurationSection cs = (ConfigurationSection) o;
                     Multimap<ItemType, String> items = HashMultimap.create();
                     Set<String> keys = cs.getKeys(false);
-                    for(String s : keys){
+                    for (String s : keys) {
                         ItemType type = EnumUtil.getEnum(ItemType.values(), s);
                         items.putAll(type, cs.getStringList(s));
                     }
@@ -491,12 +491,12 @@ public class Product extends ConfigurableObject implements Informative {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if(o != null) {
+        if (o != null) {
             switch (entry.getKey()) {
                 case "executions.give_items.vanilla": {
                     ConfigurationSection parent = new YamlConfiguration();
                     int i = 0;
-                    for(PreparedItem item : (PreparedItem[]) o){
+                    for (PreparedItem item : (PreparedItem[]) o) {
                         YamlConfiguration c = new YamlConfiguration();
                         ConfigHelper.writeConfig(c, ConfigSchema.of(PreparedItem.class), item);
                         parent.set(String.valueOf(i++), c);
@@ -506,7 +506,7 @@ public class Product extends ConfigurableObject implements Informative {
                 case "executions.give_items.battle": {
                     Multimap<ItemType, String> map = (Multimap<ItemType, String>) o;
                     ConfigurationSection parent = new YamlConfiguration();
-                    for (ItemType type : map.keys()){
+                    for (ItemType type : map.keys()) {
                         // hashMultimap returns set, that is not friendly with yaml
                         // we have to change it to array list
                         List<String> x = new ArrayList<>(map.get(type));

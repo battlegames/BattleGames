@@ -56,77 +56,77 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
     public CTFControllerImpl(BattlePlugin plugin) {
         super(plugin, Mode.CTF);
 
-        String p = getMode().getId()+"_";
+        String p = getMode().getId() + "_";
 
-        plugin.getPapiExpansion().handlers.put(p+"flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Integer.toString(f.size());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"valid_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "valid_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(TeamFlag::isValid).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_all_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_all_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == team).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_valid_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_valid_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             ABTeam team = t.getTeam(player);
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == team).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_a_all_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_a_all_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == ABTeam.TEAM_A).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_a_valid_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_a_valid_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == ABTeam.TEAM_A).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_b_all_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_b_all_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.getTeam() == ABTeam.TEAM_B).count());
         });
 
-        plugin.getPapiExpansion().handlers.put(p+"team_b_valid_flags", (player, pd, game, gp) -> {
-            if(game == null) return null;
+        plugin.getPapiExpansion().handlers.put(p + "team_b_valid_flags", (player, pd, game, gp) -> {
+            if (game == null) return null;
             TeamManager<ABTeam> t = TEAM.get(game);
-            if(t == null) return null;
+            if (t == null) return null;
             Collection<TeamFlag<ABTeam>> f = FLAG.get(game);
             return f == null ? null : Long.toString(f.stream().filter(flag -> flag.isValid() && flag.getTeam() == ABTeam.TEAM_B).count());
         });
     }
 
     @Override
-    public void onInitGame(@NotNull Game game){
+    public void onInitGame(@NotNull Game game) {
         super.onInitGame(game);
-        if(game instanceof LocalGame) {
+        if (game instanceof LocalGame) {
             LocalGame lc = (LocalGame) game;
-            if(game.getArena().getGameOptions() instanceof CaptureTheFlagOptions) {
+            if (game.getArena().getGameOptions() instanceof CaptureTheFlagOptions) {
                 CaptureTheFlagOptions options = (CaptureTheFlagOptions) game.getArena().getGameOptions();
                 for (FlagOptions f : options.getFlags()) {
                     lc.addInvolvedWorld(f.getLocation().getWorld());
@@ -140,20 +140,20 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
         super.onJoin(player, game);
 
         Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-        if(flags != null) {
-            for(TeamFlag<ABTeam> f : flags){
+        if (flags != null) {
+            for (TeamFlag<ABTeam> f : flags) {
                 f.getArmorStand().addViewer(player);
             }
         }
     }
 
     @Override
-    public void onQuit(@NotNull Player player, @NotNull LocalGame game){
+    public void onQuit(@NotNull Player player, @NotNull LocalGame game) {
         super.onQuit(player, game);
 
         Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-        if(flags != null) {
-            for(TeamFlag<ABTeam> f : flags){
+        if (flags != null) {
+            for (TeamFlag<ABTeam> f : flags) {
                 f.getArmorStand().removeViewer(player);
             }
         }
@@ -165,7 +165,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
 
         plugin.extension.getTaskHelper().newTask(() -> {
             List<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getGameOptions()).getFlags();
-            for(FlagOptions k : fs){
+            for (FlagOptions k : fs) {
                 ArmorStand armorStand = ArmorStand.spawn(k.getLocation());
                 armorStand.setVisible(false);
                 armorStand.setNameVisible(true);
@@ -179,31 +179,30 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
         });
     }
 
-    private void startOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier){
+    private void startOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier) {
         ABTeam team = TEAM.get(game).getTeam(occupier);
-        if(team == null || flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
+        if (team == null || flag.isCapturing() || (flag.isValid() && team == flag.getTeam())) return;
         flag.setCapturing(true);
-        if(flag.getOptions().getStartCaptureSound() != null) {
+        if (flag.getOptions().getStartCaptureSound() != null) {
             flag.getOptions().getStartCaptureSound().play(occupier);
         }
-        String id = "ctf_flag_occupy_"+occupier.getName();
+        String id = "ctf_flag_occupy_" + occupier.getName();
         int tid = plugin.extension.getTaskHelper().newTimerTask(() -> {
-            if(occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5){
+            if (occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5) {
                 stopOccupyFlag(game, flag, occupier);
                 return;
             }
-            if(flag.getTeam() == null || flag.getTeam() == team){
+            if (flag.getTeam() == null || flag.getTeam() == team) {
                 int h = flag.getHealth().incrementAndGet();
-                if(h == 1) flag.setTeam(team);
-                else if(h == flag.getOptions().getMaxHealth()){
+                if (h == 1) flag.setTeam(team);
+                else if (h == flag.getOptions().getMaxHealth()) {
                     flag.setValid(true);
                     stopOccupyFlag(game, flag, occupier);
                 }
-            }
-            else {
+            } else {
                 int h = flag.getHealth().decrementAndGet();
-                if(h == 0) flag.setTeam(null);
-                else if(h == flag.getOptions().getMaxHealth() - 1) flag.setValid(false);
+                if (h == 0) flag.setTeam(null);
+                else if (h == flag.getOptions().getMaxHealth() - 1) flag.setValid(false);
             }
             flag.updateDisplayName();
             FlagUpdateEvent e = new FlagUpdateEvent(game, occupier, team, flag);
@@ -212,34 +211,34 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
         trackTask(game, id, tid);
     }
 
-    private void stopOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier){
-        cancelTask(game, "ctf_flag_occupy_"+occupier.getName());
+    private void stopOccupyFlag(LocalGame game, TeamFlag<ABTeam> flag, Player occupier) {
+        cancelTask(game, "ctf_flag_occupy_" + occupier.getName());
         flag.setCapturing(false);
-        if(flag.getOptions().getStopCaptureSound() != null) {
+        if (flag.getOptions().getStopCaptureSound() != null) {
             flag.getOptions().getStopCaptureSound().play(occupier);
         }
     }
 
     @EventHandler
-    public void asm(PlayerArmorStandManipulateEvent event){
-        if(event.getRightClicked().hasMetadata("abm_ctf_flag"))
+    public void asm(PlayerArmorStandManipulateEvent event) {
+        if (event.getRightClicked().hasMetadata("abm_ctf_flag"))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void sneak(PlayerToggleSneakEvent event){
-        if(event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
+    public void sneak(PlayerToggleSneakEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
         LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
-        if(game != null){
-            if(game.getMode() != getMode()) return;
-            if(!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_"+event.getPlayer().getName())){
+        if (game != null) {
+            if (game.getMode() != getMode()) return;
+            if (!event.isSneaking() && !hasTask(game, "ctf_flag_occupy_" + event.getPlayer().getName())) {
                 return;
             }
             Location loc = event.getPlayer().getLocation();
             Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-            for(TeamFlag<ABTeam> flag : flags){
-                if(flag.getArmorStand().getLocation().distanceSquared(loc) >= 3) continue;
-                if(event.isSneaking()) {
+            for (TeamFlag<ABTeam> flag : flags) {
+                if (flag.getArmorStand().getLocation().distanceSquared(loc) >= 3) continue;
+                if (event.isSneaking()) {
                     startOccupyFlag(game, flag, event.getPlayer());
                 } else {
                     stopOccupyFlag(game, flag, event.getPlayer());
@@ -263,13 +262,13 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
     protected ABTeam handleResult(LocalGame game, IntSummaryStatistics sa, IntSummaryStatistics sb, List<GamePlayer> aPlayers, List<GamePlayer> bPlayers) {
         int a = 0, b = 0;
         Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-        for(TeamFlag<ABTeam> f : flags){
-            if(f.isValid()){
-                if(f.getTeam() == ABTeam.TEAM_A) a++;
+        for (TeamFlag<ABTeam> f : flags) {
+            if (f.isValid()) {
+                if (f.getTeam() == ABTeam.TEAM_A) a++;
                 else b++;
             }
         }
-        if(a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
+        if (a == b) return super.handleResult(game, sa, sb, aPlayers, bPlayers);
         else return a > b ? ABTeam.TEAM_A : ABTeam.TEAM_B;
     }
 

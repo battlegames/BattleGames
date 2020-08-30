@@ -24,10 +24,10 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class DamageReport {
+    private final long date;
     protected LivingEntity entity;
     private double damage;
     private boolean headshotDamage;
-    private final long date;
 
     public DamageReport(@NotNull LivingEntity entity, double damage) {
         Condition.argNotNull("entity", entity);

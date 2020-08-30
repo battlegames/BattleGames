@@ -39,8 +39,8 @@ import java.util.List;
 @SuppressWarnings("FieldMayBeFinal")
 @Schema
 public class Category extends ConfigurableObject {
-    private static final PreparedItem DEFAULT_ICON = new PreparedItem();
     public static final ConfigSchema<Category> SCHEMA = ConfigSchema.of(Category.class);
+    private static final PreparedItem DEFAULT_ICON = new PreparedItem();
 
     static {
         DEFAULT_ICON.material(Material.STONE);
@@ -116,10 +116,10 @@ public class Category extends ConfigurableObject {
 
     @Override
     protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("products")){
+        if (value != null && entry.getKey().equals("products")) {
             ConfigurationSection cs = (ConfigurationSection) value;
             List<Product> products = new ArrayList<>();
-            for(String s : cs.getKeys(false)){
+            for (String s : cs.getKeys(false)) {
                 try {
                     ConfigurationSection scs = cs.getConfigurationSection(s);
                     Product p = ConfigHelper.readConfig(scs, Product.SCHEMA, new Product(s));
@@ -135,9 +135,9 @@ public class Category extends ConfigurableObject {
 
     @Override
     protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if(value != null && entry.getKey().equals("products")){
+        if (value != null && entry.getKey().equals("products")) {
             ConfigurationSection parent = new YamlConfiguration();
-            for(Product p : (List<Product>) value){
+            for (Product p : (List<Product>) value) {
                 YamlConfiguration c = new YamlConfiguration();
                 ConfigHelper.writeConfig(c, Product.SCHEMA, p);
                 parent.set(p.getId(), c);

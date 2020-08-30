@@ -54,26 +54,26 @@ public class TeamManager<T extends Team> implements Resettable {
         PLAYER_COUNTER.put(team, 0);
     }
 
-    public void addPlayer(@NotNull Player player, @NotNull T team){
-        synchronized (LOCK){
-            if(PLAYER_MAP.putIfAbsent(player, team) == null)
+    public void addPlayer(@NotNull Player player, @NotNull T team) {
+        synchronized (LOCK) {
+            if (PLAYER_MAP.putIfAbsent(player, team) == null)
                 PLAYER_COUNTER.merge(team, 1, Integer::sum);
         }
     }
 
-    public void addPlayers(@NotNull List<Player> players, @NotNull T team){
-        synchronized (LOCK){
+    public void addPlayers(@NotNull List<Player> players, @NotNull T team) {
+        synchronized (LOCK) {
             int i = 0;
-            for(Player p : players){
-                if(PLAYER_MAP.putIfAbsent(p, team) == null) i++;
+            for (Player p : players) {
+                if (PLAYER_MAP.putIfAbsent(p, team) == null) i++;
             }
             PLAYER_COUNTER.merge(team, i, Integer::sum);
         }
     }
 
     @Nullable
-    public T removePlayer(@NotNull Player player){
-        synchronized (LOCK){
+    public T removePlayer(@NotNull Player player) {
+        synchronized (LOCK) {
             T last = PLAYER_MAP.remove(player);
             PLAYER_COUNTER.merge(last, -1, Integer::sum);
             return last;
@@ -120,12 +120,12 @@ public class TeamManager<T extends Team> implements Resettable {
     }
 
     @NotNull
-    public Map<T, List<Player>> reverse(){
+    public Map<T, List<Player>> reverse() {
         return reverse(UnaryOperator.identity());
     }
 
     @NotNull
-    public <R> Map<T, List<R>> reverse(@NotNull Function<Player, R> valueFunc){
+    public <R> Map<T, List<R>> reverse(@NotNull Function<Player, R> valueFunc) {
         synchronized (LOCK) {
             return PLAYER_MAP.entrySet()
                     .stream().collect(Collectors.groupingBy(Map.Entry::getValue)).values()
@@ -138,12 +138,12 @@ public class TeamManager<T extends Team> implements Resettable {
     }
 
     @NotNull
-    public Multimap<T, Player> toMultimap(){
+    public Multimap<T, Player> toMultimap() {
         return toMultimap(UnaryOperator.identity());
     }
 
     @NotNull
-    public <R> Multimap<T, R> toMultimap(@NotNull Function<Player, R> valueFunc){
+    public <R> Multimap<T, R> toMultimap(@NotNull Function<Player, R> valueFunc) {
         synchronized (LOCK) {
             return PLAYER_MAP.entrySet().stream().collect(Multimaps.toMultimap(Map.Entry::getValue, playerTEntry -> valueFunc.apply(playerTEntry.getKey()), (Supplier<Multimap<T, R>>) HashMultimap::create));
         }

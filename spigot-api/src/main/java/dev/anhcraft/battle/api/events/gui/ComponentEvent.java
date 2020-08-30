@@ -37,6 +37,10 @@ public class ComponentEvent extends ViewEvent {
         this.component = component;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @NotNull
     public Component getComponent() {
         return component;
@@ -44,10 +48,6 @@ public class ComponentEvent extends ViewEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
