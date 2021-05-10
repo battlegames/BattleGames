@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "22:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.zaxxer:HikariCP
+    versions:
+    - 4.0.1
+    - 4.0.2
+  - dependency-name: org.bstats:bstats-bukkit
+    versions:
+    - 2.1.0
