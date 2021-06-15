@@ -5,9 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/spigot-api/battle.spigot.api.iml" filepath="$PROJECT_DIR$/spigot-api/battle.spigot.api.iml" />
       <module fileurl="file://$PROJECT_DIR$/bungee/bungee.iml" filepath="$PROJECT_DIR$/bungee/bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/parent.iml" filepath="$PROJECT_DIR$/parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spigot/spigot.iml" filepath="$PROJECT_DIR$/spigot/spigot.iml" />
       <module fileurl="file://$PROJECT_DIR$/spigot-api/spigot-api.iml" filepath="$PROJECT_DIR$/spigot-api/spigot-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spigot-free/spigot-free.iml" filepath="$PROJECT_DIR$/spigot-free/spigot-free.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spigot-premium/spigot-premium.iml" filepath="$PROJECT_DIR$/spigot-premium/spigot-premium.iml" />
     </modules>
   </component>
 </project>
