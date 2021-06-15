@@ -1,0 +1,68 @@
+# Wiki: https://wiki.anhcraft.dev/en/battle/ammo
+# Configdoc: https://anhcraft.dev/cd/battle/AmmoModel.schema.html
+
+7_62mm:
+  name: "&f7.62mm"
+  skin:
+    material: arrow
+    damage: 0
+  bullets:
+    '1':
+      damage: 21
+      knockback: 0.1
+      penetration_power: 10
+      particle:
+        type: end_rod
+  reload_delay: 2
+
+_50_ae:
+  name: "&f.50 Action Express"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 16
+      knockback: 0.102
+      penetration_power: 10
+      particle:
+        type: end_rod
+  reload_delay: 6
+
+308_Winchester:
+  name: "&f.308 Winchester"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 28
+      knockback: 0.2
+      penetration_power: 20
+      particle:
+        type: end_rod
+  reload_delay: 7
+
+12_gauge:
+  name: "&f12 gauge"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 17.2
+      knockback: 0.25
+      penetration_power: 20
+      particle:
+        type: end_rod
+  reload_delay: 1
+
+5_56_nato:
+  name: "&f5.56 NATO"
+  skin:
+    material: arrow
+  bullets:
+    '1':
+      damage: 19
+      knockback: 0.1
+      penetration_power: 10
+      particle:
+        type: end_rod
+  reload_delay: 2

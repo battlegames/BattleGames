@@ -1,0 +1,40 @@
+# Wiki: https://wiki.anhcraft.dev/en/battle/kit
+# Configdoc: https://anhcraft.dev/cd/battle/Kit.schema.html
+
+starter:
+  icon:
+    material: redstone
+    name: "&eStarter kit"
+    lore:
+      - "&fA kit which includes essential items for beginners"
+  no_access_icon:
+    material: barrier
+    name: "&c&lYou don't have access to this kit!"
+  permission: "battle.kits.starter"
+  items:
+    vanilla:
+      '1':
+        material: bread
+        amount: 16
+    battle:
+      gun:
+        - ak_47
+        - desert_eagle
+  renew_time: -1
+  first_join: true
+
+food:
+  icon:
+    material: cake
+    name: "&fHot food"
+    lore:
+      - "&fFree food here!"
+  items:
+    vanilla:
+      '1':
+        material: cooked_chicken
+        amount: 8
+      '2':
+        material: cooked_porkchop
+        amount: 8
+  renew_time: 6000

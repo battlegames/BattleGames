@@ -1,0 +1,9 @@
+medical_kit:
+  # Additional health give to the player
+  health_bonus: 15
+
+  # Sound to be played when using the item
+  use_sound: "$item_armor_equip_leather"
+
+adrenaline_shot:
+  use_sound: "$item_bottle_fill_dragonbreath"

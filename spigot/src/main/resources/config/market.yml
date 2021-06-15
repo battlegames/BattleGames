@@ -1,0 +1,355 @@
+# Configdoc: https://anhcraft.dev/cd/battle/Market.schema.html
+
+log_transactions: true
+
+product_lore_footer:
+  enabled: true
+  content:
+    - "&f"
+    - "&fPrice: &d<product_price_formatted>"
+    - "&f"
+    - "&e>> Click to purchase <<"
+
+transaction_item:
+  material: paper
+  name: "&f<product> &7(<formatted_price>)"
+  lore:
+    - "&7<formatted_date>"
+
+default_product_icon:
+  empty:
+    material: barrier
+    name: "&e&lEmpty"
+    lore:
+      - "&cDon't buy!!!"
+  package:
+    material: chest
+    name: "&e&lPackage"
+  package_details:
+    item_header: "&e◆ Items"
+    item_format:
+      vanilla: "&f- <name> &7(x<amount>)"
+      battle: "&f- <name>"
+    perk_header: "&e◆ Perks"
+    perk_format: "&f- <name>"
+    booster_header: "&e◆ Boosters"
+    booster_format: "&f- <name> &7(<formatted_expiry_time>)"
+    exp_header: "&e◆ Exp"
+    exp_format:
+      vanilla: "&a+<amount> &7Minecraft exp"
+      battle: "&a+<amount> &7exp"
+    separated_part_by_new_line: true
+  single_item_package: false
+
+categories:
+  perks:
+    icon:
+      material: emerald
+      name: "&b&lPerk shop"
+      lore:
+        - "&fHere you can buy perks with&a cheap price"
+      enchant:
+        unbreaking: 1
+      flag:
+        - hide_enchants
+    products:
+      '1':
+        package_name: "&cHealth boost"
+        package_material: redstone
+        currency: vault
+        price: 75
+        executions:
+          give_perks:
+            - health_boost
+      '2':
+        icon:
+          name: "&aSpeed"
+          material: redstone
+          lore:
+            - "&aSpeed up your movement!"
+            - "&eAvailable until the game ends"
+        currency: vault
+        price: 150
+        executions:
+          give_perks:
+            - speed
+  food:
+    icon:
+      material: apple
+      name: "&6&lFood shop"
+      lore:
+        - "&bHere you can buy tasty food"
+    products:
+      '1':
+        icon:
+          name: "&aSnacks"
+          material: cookie
+        currency: vault
+        price: 20
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cookie
+                amount: 8
+              '2':
+                material: bread
+                amount: 8
+      '2':
+        package_name: "&4Meat"
+        package_material: cookie
+        currency: vault
+        price: 40
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cooked_beef
+                amount: 16
+              '2':
+                material: cooked_chicken
+                amount: 16
+  misc:
+    icon:
+      material: redstone
+      name: "&5&lMiscellaneous shop"
+    products:
+      '1':
+        package_name: "&a200 exp"
+        currency: vault
+        price: 5000
+        executions:
+          give_exp:
+            battle: 200
+      '2':
+        package_name: "&a1200 exp &c&l[HOT]"
+        currency: vault
+        price: 25000
+        executions:
+          give_exp:
+            battle: 1200
+            vanilla: 199
+      '3':
+        icon:
+          name: "&bFlying &fAbility"
+          material: feather
+        currency: ing
+        price: 200
+        in_game_only: true
+        executions:
+          perform_commands:
+            - "fly %player_name%"
+
+  bedwar_items:
+    icon:
+      material: diamond
+      name: "&c&l[BW] &f&lItems Shop"
+    in_game_only: true
+    reserved_game_modes:
+      - bw
+    products:
+      stone_sword:
+        currency: iron
+        price: 10
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_sword
+      iron_sword:
+        currency: gold
+        price: 7
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: iron_sword
+      diamond_sword:
+        currency: emerald
+        price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: diamond_sword
+      arrow:
+        currency: gold
+        price: 2
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: arrow
+                amount: 8
+      bow:
+        currency: gold
+        price: 12
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+      bow1:
+        currency: gold
+        price: 24
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+                enchant:
+                  power: 1
+      bow2:
+        currency: emerald
+        price: 6
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: bow
+                enchant:
+                  power: 1
+                  punch: 1
+      stone_pickaxe:
+        currency: iron
+        price: 10
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_pickaxe
+      iron_pickaxe:
+        currency: gold
+        price: 8
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: stone_pickaxe
+                enchant:
+                  efficiency: 1
+      iron_pickaxe1:
+        currency: gold
+        price: 16
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: iron_pickaxe
+                enchant:
+                  efficiency: 2
+      wool:
+        currency: iron
+        price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: white_wool
+                amount: 16
+      sandstone:
+        currency: iron
+        price: 16
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: sandstone
+                amount: 16
+      obsidian:
+        currency: emerald
+        price: 4
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: obsidian
+                amount: 4
+      ender_pearl:
+        currency: emerald
+        price: 3
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: ender_pearl
+      water_bucket:
+        currency: emerald
+        price: 2
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: water_bucket
+      tnt:
+        currency: gold
+        price: 7
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: tnt
+      cookie:
+        currency: gold
+        price: 5
+        executions:
+          give_items:
+            vanilla:
+              '1':
+                material: cookie
+                amount: 5
+
+  bedwar_upgrades:
+    icon:
+      material: diamond
+      name: "&c&l[BW] &f&lUpgrades Shop"
+    in_game_only: true
+    reserved_game_modes:
+      - bw
+    products:
+      forge:
+        icon:
+          name: "&e&lForge"
+          material: furnace
+          lore:
+            - "&7Increases the spawn rate and the amount of irons and golds!"
+        currency: diamond
+        price: 3
+        functions:
+          on_purchase:
+            - BedwarPack:PreGeneratorUpgrade($result "local")
+            - Inst:Return() ? $result == true
+            - Var:Set($forbidden true)
+            - Battle:CloseGUI()
+          on_purchased:
+            - BedwarPack:PostGeneratorUpgrade("local")
+      recovery:
+        icon:
+          name: "&4&lRecovery"
+          lore:
+            - "&7Get &8Regeneration&7 if you or teammates near your bed"
+          material: cake
+        currency: diamond
+        price: 2
+        functions:
+          on_purchase:
+            - BedwarPack:HasPotionInPool($x "regeneration" "teammates")
+            - Var:Set($forbidden $x)
+          on_purchased:
+            - BedwarPack:RemovePotionFromPool("*" "teammates")
+            - BedwarPack:AddPotionToPool("regeneration" 0 18 "teammates")
+      freeze:
+        icon:
+          name: "&f&lFreeze"
+          lore:
+            - "&7Your enemies get &8Slowness&7 if they are near to your bed"
+          material: cobweb
+        currency: diamond
+        price: 4
+        functions:
+          on_purchase:
+            - BedwarPack:HasPotionInPool($x "slow" "enemies")
+            - Var:Set($forbidden $x)
+          on_purchased:
+            - BedwarPack:RemovePotionFromPool("*" "enemies")
+            - BedwarPack:AddPotionToPool("slow" 0 18 "enemies")

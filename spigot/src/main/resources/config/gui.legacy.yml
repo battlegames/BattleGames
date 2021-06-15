@@ -1,0 +1,2442 @@
+item_value_editor:
+  title: '[ gui.value_editor.item_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/2; 2
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        lore:
+          - '[ gui.value_editor.item_btn ]'
+        damage: 14
+      functions:
+        on_rendered:
+          - Battle:CopyCurrentSlot($i)
+          - Battle:SetItemFromData("window" "value" $i "not-null")
+        on_click:
+          - Inst:Return() ? $click_type == "INVENTORY_RIGHT"
+          - Inst:Return() ? $click_type == "INVENTORY_SHIFT_RIGHT"
+          - Battle:CancelEvent()
+          - Battle:SetDataFromCursor("window" "value" "not-null")
+          - Battle:RefreshView()
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:ApplyDataValue("window" "value")
+          - Battle:DelWindowData("value")
+          - Battle:SwitchGUI($w_lastgui)
+boolean_value_editor:
+  title: '[ gui.value_editor.boolean_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/2; 2
+      item:
+        name: '&f<window_data_value:false>'
+        material: paper
+        unbreakable: true
+        enchant:
+          sharpness: 1
+        flag:
+          - hide_enchants
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Negate($w_value)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '2':
+      positions: 2/2; 2
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        on_init:
+          - Var:Exists($x $w_value)
+          - Battle:SetWindowData("value" false) ? $x == false
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:ApplyValue($w_value)
+          - Battle:DelWindowData("value")
+          - Battle:SwitchGUI($w_lastgui)
+int_value_editor:
+  title: '[ gui.value_editor.int_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 5
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/1; 2
+      item:
+        name: '&c[ gui.value_editor.negate_number_btn ]'
+        material: stained_glass_pane
+        lore:
+          - '&e= <window_data_value:0>'
+        damage: 11
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Negate($w_value)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '2':
+      positions: 1/1; 3
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        on_init:
+          - Var:Exists($x $w_value)
+          - Battle:SetWindowData("value" 0) ? $x == false
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:ApplyValue($w_value)
+          - Battle:DelWindowData("value")
+          - Battle:SwitchGUI($w_lastgui)
+    '3':
+      positions: 1/1; 4
+      item:
+        name: '&c[ gui.value_editor.fraction_number_btn ]'
+        material: stained_glass_pane
+        damage: 3
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '4':
+      positions: 1; 1
+      item:
+        name: '&f+1'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 1)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '5':
+      positions: 2; 1
+      item:
+        name: '&f+2'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 2)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '6':
+      positions: 3; 1
+      item:
+        name: '&f+5'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 5)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '7':
+      positions: 1; 2
+      item:
+        name: '&f+10'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 10)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '8':
+      positions: 2; 2
+      item:
+        name: '&f+20'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 20)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '9':
+      positions: 3; 2
+      item:
+        name: '&f+50'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 50)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '10':
+      positions: 1; 3
+      item:
+        name: '&f+100'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 100)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '11':
+      positions: 2; 3
+      item:
+        name: '&f+200'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 200)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '12':
+      positions: 3; 3
+      item:
+        name: '&f+500'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 500)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '13':
+      positions: 1; 4
+      item:
+        name: '&f+1000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 1000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '14':
+      positions: 2; 4
+      item:
+        name: '&f+2000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 2000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '15':
+      positions: 3; 4
+      item:
+        name: '&f+5000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 5000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '16':
+      positions: 1; 5
+      item:
+        name: '&f+10000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 10000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '17':
+      positions: 2; 5
+      item:
+        name: '&f+20000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 20000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '18':
+      positions: 3; 5
+      item:
+        name: '&f+50000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 50000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '19':
+      positions: 7; 1
+      item:
+        name: '&f-1'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 1)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '20':
+      positions: 8; 1
+      item:
+        name: '&f-2'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 2)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '21':
+      positions: 9; 1
+      item:
+        name: '&f-5'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 5)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '22':
+      positions: 7; 2
+      item:
+        name: '&f-10'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 10)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '23':
+      positions: 8; 2
+      item:
+        name: '&f-20'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 20)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '24':
+      positions: 9; 2
+      item:
+        name: '&f-50'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 50)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '25':
+      positions: 7; 3
+      item:
+        name: '&f-100'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 100)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '26':
+      positions: 8; 3
+      item:
+        name: '&f-200'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 200)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '27':
+      positions: 9; 3
+      item:
+        name: '&f-500'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 500)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '28':
+      positions: 7; 4
+      item:
+        name: '&f-1000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 1000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '29':
+      positions: 8; 4
+      item:
+        name: '&f-2000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 2000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '30':
+      positions: 9; 4
+      item:
+        name: '&f-5000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 5000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '31':
+      positions: 7; 5
+      item:
+        name: '&f-10000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 10000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '32':
+      positions: 8; 5
+      item:
+        name: '&f-20000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 20000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '33':
+      positions: 9; 5
+      item:
+        name: '&f-50000'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 50000)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+real_value_editor:
+  title: '[ gui.value_editor.real_title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 5
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/1; 2
+      item:
+        name: '&c[ gui.value_editor.negate_number_btn ]'
+        material: stained_glass_pane
+        lore:
+          - '&e= <window_data_value:0>'
+        damage: 11
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Negate($w_value)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '2':
+      positions: 1/1; 3
+      item:
+        name: '[ gui.value_editor.done_btn ]'
+        material: diamond
+      functions:
+        on_init:
+          - Var:Exists($x $w_value)
+          - Battle:SetWindowData("value" 0.0) ? $x == false
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:ApplyValue($w_value)
+          - Battle:DelWindowData("value")
+          - Battle:SwitchGUI($w_lastgui)
+    '3':
+      positions: 1/1; 4
+      item:
+        name: '&c[ gui.value_editor.fraction_number_btn ]'
+        material: stained_glass_pane
+        lore:
+          - '&e= <window_data_value:0>'
+        damage: 11
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Div($w_value 1 $w_value)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '4':
+      positions: 1; 1
+      item:
+        name: '&f+1'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Add($w_value $w_value 1)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '5':
+      positions: 2; 1
+      item:
+        name: '&f+2 &7(+0.5)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.5) ? $x == true
+          - Math:Add($w_value $w_value 2) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '6':
+      positions: 3; 1
+      item:
+        name: '&f+5 &7(+0.2)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.2) ? $x == true
+          - Math:Add($w_value $w_value 5) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '7':
+      positions: 1; 2
+      item:
+        name: '&f+10 &7(+0.1)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.1) ? $x == true
+          - Math:Add($w_value $w_value 10) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '8':
+      positions: 2; 2
+      item:
+        name: '&f+20 &7(+0.05)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.05) ? $x == true
+          - Math:Add($w_value $w_value 20) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '9':
+      positions: 3; 2
+      item:
+        name: '&f+50 &7(+0.02)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.02) ? $x == true
+          - Math:Add($w_value $w_value 50) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '10':
+      positions: 1; 3
+      item:
+        name: '&f+100 &7(+0.01)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.01) ? $x == true
+          - Math:Add($w_value $w_value 100) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '11':
+      positions: 2; 3
+      item:
+        name: '&f+200 &7(+0.005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.005) ? $x == true
+          - Math:Add($w_value $w_value 200) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '12':
+      positions: 3; 3
+      item:
+        name: '&f+500 &7(+0.002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.002) ? $x == true
+          - Math:Add($w_value $w_value 500) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '13':
+      positions: 1; 4
+      item:
+        name: '&f+1000 &7(+0.001)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.001) ? $x == true
+          - Math:Add($w_value $w_value 1000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '14':
+      positions: 2; 4
+      item:
+        name: '&f+2000 &7(+0.0005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.0005) ? $x == true
+          - Math:Add($w_value $w_value 2000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '15':
+      positions: 3; 4
+      item:
+        name: '&f+5000 &7(+0.0002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.0002) ? $x == true
+          - Math:Add($w_value $w_value 5000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '16':
+      positions: 1; 5
+      item:
+        name: '&f+10000 &7(+0.0001)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.0001) ? $x == true
+          - Math:Add($w_value $w_value 10000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '17':
+      positions: 2; 5
+      item:
+        name: '&f+20000 &7(+0.00005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.00005) ? $x == true
+          - Math:Add($w_value $w_value 20000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '18':
+      positions: 3; 5
+      item:
+        name: '&f+50000 &7(+0.00002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Add($w_value $w_value 0.00002) ? $x == true
+          - Math:Add($w_value $w_value 50000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '19':
+      positions: 7; 1
+      item:
+        name: '&f-1'
+        lore:
+          - '&e= <window_data_value:0>'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Math:Sub($w_value $w_value 1)
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '20':
+      positions: 8; 1
+      item:
+        name: '&f-2 &7(-0.5)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.5) ? $x == true
+          - Math:Sub($w_value $w_value 2) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '21':
+      positions: 9; 1
+      item:
+        name: '&f-5 &7(-0.2)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.2) ? $x == true
+          - Math:Sub($w_value $w_value 5) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '22':
+      positions: 7; 2
+      item:
+        name: '&f-10 &7(-0.1)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.1) ? $x == true
+          - Math:Sub($w_value $w_value 10) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '23':
+      positions: 8; 2
+      item:
+        name: '&f-20 &7(-0.05)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.05) ? $x == true
+          - Math:Sub($w_value $w_value 20) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '24':
+      positions: 9; 2
+      item:
+        name: '&f-50 &7(-0.02)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.02) ? $x == true
+          - Math:Sub($w_value $w_value 50) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '25':
+      positions: 7; 3
+      item:
+        name: '&f-100 &7(-0.01)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.01) ? $x == true
+          - Math:Sub($w_value $w_value 100) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '26':
+      positions: 8; 3
+      item:
+        name: '&f-200 &7(-0.005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.005) ? $x == true
+          - Math:Sub($w_value $w_value 200) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '27':
+      positions: 9; 3
+      item:
+        name: '&f-500 &7(-0.002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.002) ? $x == true
+          - Math:Sub($w_value $w_value 500) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '28':
+      positions: 7; 4
+      item:
+        name: '&f-1000 &7(-0.001)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.001) ? $x == true
+          - Math:Sub($w_value $w_value 1000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '29':
+      positions: 8; 4
+      item:
+        name: '&f-2000 &7(-0.0005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.0005) ? $x == true
+          - Math:Sub($w_value $w_value 2000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '30':
+      positions: 9; 4
+      item:
+        name: '&f-5000 &7(-0.0002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.0002) ? $x == true
+          - Math:Sub($w_value $w_value 5000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '31':
+      positions: 7; 5
+      item:
+        name: '&f-10000 &7(-0.0001)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.0001) ? $x == true
+          - Math:Sub($w_value $w_value 10000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '32':
+      positions: 8; 5
+      item:
+        name: '&f-20000 &7(-0.00005)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.00005) ? $x == true
+          - Math:Sub($w_value $w_value 20000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+    '33':
+      positions: 9; 5
+      item:
+        name: '&f-50000 &7(-0.00002)'
+        lore:
+          - '&e= <window_data_value:0>'
+          - '&7'
+          - '&7[SHIFT]'
+        material: stained_glass_pane
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - String:Contains($x $click_type "SHIFT")
+          - Math:Sub($w_value $w_value 0.00002) ? $x == true
+          - Math:Sub($w_value $w_value 50000) ? $x == false
+          - Battle:SetWindowData("value" $w_value)
+          - Battle:RefreshView()
+player_bp:
+  title: '[ gui.player_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/5; 2
+      item:
+        name: '[ gui.player_bp.gun_name ]'
+        lore:
+          - '[ gui.player_bp.gun_lore ]'
+        material: diamond_axe
+        damage: 1
+        unbreakable: true
+        flag:
+          - hide_attributes
+          - hide_unbreakable
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("player_gun_bp")
+    '2':
+      positions: 2/5; 2
+      item:
+        name: '[ gui.player_bp.magazine_name ]'
+        lore:
+          - '[ gui.player_bp.magazine_lore ]'
+        material: chest
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("player_magazine_bp")
+    '3':
+      positions: 3/5; 2
+      item:
+        material: arrow
+        name: '[ gui.player_bp.ammo_name ]'
+        lore:
+          - '[ gui.player_bp.ammo_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("player_ammo_bp")
+    '4':
+      positions: 4/5; 2
+      item:
+        material: glass
+        name: '[ gui.player_bp.scope_name ]'
+        lore:
+          - '[ gui.player_bp.scope_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("player_scope_bp")
+    '5':
+      positions: 5/5; 2
+      item:
+        material: tnt
+        name: '[ gui.player_bp.grenade_name ]'
+        lore:
+          - '[ gui.player_bp.grenade_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("player_grenade_bp")
+    '6':
+      positions: 1; 4
+      item:
+        material: ender_chest
+        name: '[ gui.player_bp.kit_name ]'
+        lore:
+          - '[ gui.player_bp.kit_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("kit_menu")
+    '7':
+      positions: 1/1; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+    '8':
+      positions: 9; 4
+      item:
+        material: emerald
+        name: '[ gui.player_bp.market_name ]'
+        lore:
+          - '[ gui.player_bp.market_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_category_menu")
+player_gun_bp:
+  title: '[ gui.player_gun_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: player_gun
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("gun")
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("gun")
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("player_gun")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("player_gun")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.back_name ]'
+        lore:
+          - '[ gui.common.back_lore ]'
+      functions:
+        on_click:
+          - Battle:SwitchGUI("player_bp")
+player_magazine_bp:
+  title: '[ gui.player_magazine_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: player_magazine
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("magazine")
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("magazine")
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("player_magazine")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("player_magazine")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.back_name ]'
+        lore:
+          - '[ gui.common.back_lore ]'
+      functions:
+        on_click:
+          - Battle:SwitchGUI("player_bp")
+player_ammo_bp:
+  title: '[ gui.player_ammo_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: player_ammo
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("player_ammo")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("player_ammo")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.back_name ]'
+        lore:
+          - '[ gui.common.back_lore ]'
+      functions:
+        on_click:
+          - Battle:SwitchGUI("player_bp")
+player_scope_bp:
+  title: '[ gui.player_scope_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: player_scope
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("scope")
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("scope")
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("player_scope")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("player_scope")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.back_name ]'
+        lore:
+          - '[ gui.common.back_lore ]'
+      functions:
+        on_click:
+          - Battle:SwitchGUI("player_bp")
+player_grenade_bp:
+  title: '[ gui.player_grenade_bp.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: player_grenade
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("grenade")
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:HandleItemDrop("grenade")
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("player_grenade")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("player_grenade")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.back_name ]'
+        lore:
+          - '[ gui.common.back_lore ]'
+      functions:
+        on_click:
+          - Battle:SwitchGUI("player_bp")
+kit_menu:
+  title: '[ gui.kit_menu.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: kits
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("kits")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("kits")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+booster_menu:
+  title: '[ gui.booster_menu.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: boosters
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("boosters")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("boosters")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+arena_chooser:
+  title: '[ gui.arena_chooser.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: arena_chooser
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("arena_chooser")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("arena_chooser")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+advancements:
+  title: '[ gui.advancements.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: advancements
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("advancements")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("advancements")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.advancements.back_name ]'
+        lore:
+          - '[ gui.advancements.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("statistics")
+statistics:
+  title: '[ gui.statistics.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/3; 2
+      item:
+        material: iron_sword
+        name: '[ gui.statistics.kills ]'
+        lore:
+          - '[ gui.statistics.footer ]'
+        flag:
+          - hide_attributes
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SetWindowData("stat" "kills")
+          - Battle:SwitchGUI("advancements")
+    '2':
+      positions: 2/3; 2
+      item:
+        material: pumpkin
+        name: '[ gui.statistics.respawns ]'
+        lore:
+          - '[ gui.statistics.footer ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SetWindowData("stat" "respawns")
+          - Battle:SwitchGUI("advancements")
+    '3':
+      positions: 3/3; 2
+      item:
+        material: glowstone
+        name: '[ gui.statistics.wins ]'
+        lore:
+          - '[ gui.statistics.footer ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SetWindowData("stat" "wins")
+          - Battle:SwitchGUI("advancements")
+    '4':
+      positions: 1/1; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+market_category_menu:
+  title: '[ gui.market_category_menu.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: market_category
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1; 4
+      item:
+        material: paper
+        name: '[ gui.market_category_menu.transaction_name ]'
+        lore:
+          - '[ gui.market_category_menu.transaction_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_transaction")
+    '2':
+      positions:
+        - 2 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '3':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("market_category")
+    '4':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("market_category")
+    '5':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+market_product_menu:
+  title: '[ gui.market_product_menu.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: market_product
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions:
+        - 1 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("market_product")
+    '3':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("market_product")
+    '4':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.market_product_menu.back_name ]'
+        lore:
+          - '[ gui.market_product_menu.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_category_menu")
+market_category_menu_editor:
+  title: '[ gui.market_category_menu_editor.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: editor_market_category
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1; 4
+      item:
+        material: diamond
+        name: '[ gui.market_category_menu_editor.create_name ]'
+        lore:
+          - '[ gui.market_category_menu_editor.create_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CreateCategory()
+          - Battle:RefreshView()
+    '2':
+      positions:
+        - 2 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '3':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("editor_market_category")
+    '4':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("editor_market_category")
+    '5':
+      positions: 9; 4
+      item:
+        material: barrier
+        name: '[ gui.common.close_name ]'
+        lore:
+          - '[ gui.common.close_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+market_category_editor:
+  title: '[ gui.market_category_editor.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 5
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1/3; 2
+      item:
+        material: paper
+        name: '[ gui.market_category_editor.set_igo_name ]'
+        lore:
+          - '[ gui.market_category_editor.set_igo_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:IgoEditor()
+          - Battle:SetWindowData("lastgui" "market_category_editor")
+          - Battle:SwitchGUI("boolean_value_editor")
+    '2':
+      positions: 2/3; 2
+      item:
+        material: chest
+        name: '[ gui.market_category_editor.edit_product_name ]'
+        lore:
+          - '[ gui.market_category_editor.edit_product_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_product_menu_editor")
+    '3':
+      positions: 3/3; 2
+      item:
+        material: barrier
+        name: '[ gui.market_category_editor.remove_name ]'
+        lore:
+          - '[ gui.market_category_editor.remove_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Inst:Jump(1) ? $click_type == "INVENTORY_RIGHT"
+          - Inst:Return() ? $click_type != "INVENTORY_SHIFT_RIGHT"
+          - Battle:RemoveCategory()
+          - Battle:SwitchGUI("market_category_menu_editor")
+    '4':
+      positions: 1/1; 4
+      item:
+        material: emerald
+        name: '[ gui.market_category_editor.back_name ]'
+        lore:
+          - '[ gui.market_category_editor.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_category_menu_editor")
+market_product_menu_editor:
+  title: '[ gui.market_product_menu_editor.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: editor_market_product
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1; 4
+      item:
+        material: diamond
+        name: '[ gui.market_product_menu_editor.create_name ]'
+        lore:
+          - '[ gui.market_product_menu_editor.create_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CreateProduct()
+          - Battle:RefreshView()
+    '2':
+      positions:
+        - 2 -> 5; 4
+        - 8; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '3':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("editor_market_product")
+    '4':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("editor_market_product")
+    '5':
+      positions: 9; 4
+      item:
+        material: emerald
+        name: '[ gui.market_product_menu_editor.back_name ]'
+        lore:
+          - '[ gui.market_product_menu_editor.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_category_editor")
+market_product_editor:
+  title: '[ gui.market_product_editor.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1; 1
+      item:
+        material: paper
+        name: '[ gui.market_product_editor.set_igo_name ]'
+        lore:
+          - '[ gui.market_product_editor.set_igo_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:IgoEditor()
+          - Battle:SetWindowData("lastgui" "market_product_editor")
+          - Battle:SwitchGUI("boolean_value_editor")
+    '2':
+      positions: 2; 1
+      item:
+        material: emerald
+        name: '[ gui.market_product_editor.set_price_name ]'
+        lore:
+          - '[ gui.market_product_editor.set_price_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PriceEditor()
+          - Battle:SetWindowData("lastgui" "market_product_editor")
+          - Battle:SwitchGUI("real_value_editor")
+    '3':
+      positions: 3; 1
+      item:
+        material: diamond
+        name: '[ gui.market_product_editor.set_exp_name ]'
+        lore:
+          - '[ gui.market_product_editor.set_exp_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:ExpEditor()
+          - Battle:SetWindowData("lastgui" "market_product_editor")
+          - Battle:SwitchGUI("real_value_editor")
+    '4':
+      positions: 4; 1
+      item:
+        material: diamond_pickaxe
+        name: '[ gui.market_product_editor.set_icon_name ]'
+        lore:
+          - '[ gui.market_product_editor.set_icon_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:IconEditor()
+          - Battle:SetWindowData("lastgui" "market_product_editor")
+          - Battle:SwitchGUI("item_value_editor")
+    '5':
+      positions: 9; 1
+      item:
+        material: barrier
+        name: '[ gui.market_product_editor.remove_name ]'
+        lore:
+          - '[ gui.market_product_editor.remove_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Inst:Jump(1) ? $click_type == "INVENTORY_RIGHT"
+          - Inst:Return() ? $click_type != "INVENTORY_SHIFT_RIGHT"
+          - Battle:RemoveProduct()
+          - Battle:SwitchGUI("market_product_menu_editor")
+    '6':
+      positions: 1/1; 3
+      item:
+        material: emerald
+        name: '[ gui.market_product_editor.back_name ]'
+        lore:
+          - '[ gui.market_product_editor.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_product_menu_editor")
+market_transaction:
+  title: '[ gui.market_transaction.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1 -> 9; 1 -> 3
+      pagination: market_transaction
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '1':
+      positions: 1; 4
+      item:
+        material: diamond
+        name: '[ gui.market_transaction.back_name ]'
+        lore:
+          - '[ gui.market_transaction.back_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:SwitchGUI("market_category_menu")
+    '2':
+      positions:
+        - 2 -> 5; 4
+        - 8 -> 9; 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '3':
+      positions: 6; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.prev_name ]'
+        lore:
+          - '[ gui.common.prev_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:PrevPage("market_transaction")
+    '4':
+      positions: 7; 4
+      item:
+        material: stained_glass_pane
+        name: '[ gui.common.next_name ]'
+        lore:
+          - '[ gui.common.next_lore ]'
+        damage: 15
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:NextPage("market_transaction")
+main_player_inv:
+  title: '[ gui.main_player_inv.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 1; 1
+      item:
+        material: watch
+        name: '[ gui.main_player_inv.arena_chooser_name ]'
+        lore:
+          - '[ gui.main_player_inv.arena_chooser_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:OpenTopGUI("arena_chooser")
+    '1':
+      positions: 2; 1
+      item:
+        material: chest
+        name: '[ gui.common.your_bp_name ]'
+        lore:
+          - '[ gui.common.your_bp_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:OpenTopGUI("player_bp")
+game_player_inv:
+  title: '[ gui.game_player_inv.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 9; 1
+      item:
+        material: barrier
+        name: '[ gui.game_player_inv.quit_name ]'
+        lore:
+          - '[ gui.game_player_inv.quit_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:OpenTopGUI("quit_game_confirm")
+    '1':
+      positions: 1 -> 9; 2 -> 4
+      item:
+        material: stained_glass_pane
+        name: '&f'
+        damage: 7
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+    '2':
+      positions: 1/1; 3
+      item:
+        material: chest
+        name: '[ gui.common.your_bp_name ]'
+        lore:
+          - '[ gui.common.your_bp_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:OpenTopGUI("player_bp")
+game_player_inv_bw:
+  title: '[ gui.game_player_inv.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions: 9; 1
+      item:
+        material: barrier
+        name: '[ gui.game_player_inv.quit_name ]'
+        lore:
+          - '[ gui.game_player_inv.quit_lore ]'
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:OpenTopGUI("quit_game_confirm")
+quit_game_confirm:
+  title: '[ gui.quit_game_confirm.title ]'
+  sound: $block_chest_open
+  components:
+    '0':
+      positions:
+        - 1 -> 4; 1
+        - 6 -> 9; 1
+      item:
+        material: stained_glass_pane
+        name: '[ gui.quit_game_confirm.no_btn ]'
+        damage: 14
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:CloseGUI()
+    '1':
+      positions: 5; 1
+      item:
+        material: stained_glass_pane
+        name: '[ gui.quit_game_confirm.yes_btn ]'
+        damage: 5
+      functions:
+        on_click:
+          - Battle:CancelEvent()
+          - Battle:QuitGame()

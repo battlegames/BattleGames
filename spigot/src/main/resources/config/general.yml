@@ -1,0 +1,298 @@
+# Configdoc: https://anhcraft.dev/cd/battle/GeneralConfig.schema.html
+
+locale: "en_us.yml"
+
+date_format:
+  long_form: "dd/MM/yyyy HH:mm:ss"
+  short_form:
+    hours: "HH:mm:ss"
+    minutes: "mm:ss"
+    seconds: "ss"
+
+level_system:
+  exp_to_level_formula: "floor(sqrt(x/20)/2)"
+  level_to_exp_formula: "floor(x*x*4*20)"
+
+default_scoreboard:
+  enabled: true
+  title: "&a &c&lBATTLE"
+  content:
+    - "&a&f"
+    - "%battle_icon_user% &aName:&r &b%player_displayname%"
+    - "%battle_icon_medal% &aLevel:&r &b%battle_level% (%battle_level_progress%%)"
+    - "%battle_icon_money_bag% &aMoney:&r &b$%vault_eco_balance_formatted%"
+    - "%battle_icon_gold_cup% &aW/L:&r &b%battle_stats_win_matches%/%battle_stats_lose_matches%"
+    - "%battle_icon_headshot% &aHS/AS:&r &b%battle_stats_headshots%/%battle_stats_assists%"
+    - "%battle_icon_gun% &aK/D:&r &b%battle_stats_kills%/%battle_stats_deaths%"
+    - "%battle_icon_chart% &aTPS/Ping:&r %server_tps_1_colored%&f/%player_ping%"
+    - "%battle_icon_online% &aOnline:&r &b%server_online%/%server_max_players%"
+    - "&c&a"
+    - "&dminecraft.net"
+  fixed_length: 0
+
+default_chat:
+  enabled: true
+  format: "&7[%battle_icon_medal%&r%battle_level%&7] &8%player_displayname%&f: <message>"
+
+storage:
+  type: file
+  file:
+    data_path: "battle"
+  mysql:
+    hostname: localhost
+    port: 3306
+    database: minecraft
+    username: root
+    password: ""
+    datasource_properties:
+      prepStmtCacheSize: 250
+      prepStmtCacheSqlLimit: 2048
+      cachePrepStmts: true
+      useServerPrepStmts: true
+
+misc:
+  resource_pack:
+    enabled: true
+    custom_url: ""
+  heal_on_game_start: true
+  heal_on_game_end: true
+  anti_death_drops: true
+  default_speed:
+    walk: 0.2
+    fly: 0.2
+  region_partition_size: 125000
+  entity_track_min_distance: 1.5
+  blood_effect:
+    enabled: true
+    particles_ratio: 1
+  entity_hardness:
+    _default_: 3
+    '0':
+      types:
+        - player
+        - skeleton
+        - stray
+        - spider
+        - cave_spider
+        - zombie
+        - zombie_villager
+        - pig_zombie
+        - drowned
+        - husk
+      value: 5
+    '1':
+      types:
+        - ender_dragon
+      value: 69
+  material_hardness:
+    _default_: 10
+    '0':
+      material:
+        - air
+        - cave_air
+        - void_air
+      value: 0
+    '1':
+      material:
+        - bubble_column
+        - string
+        - water
+        - leather_helmet
+        - leather_chestplate
+        - leather_leggings
+        - leather_boots
+      value: 1
+    '2':
+      material:
+        - (.+)_carpet
+        - (.+)_coral_fan
+        - (.+)_coral_wall_fan
+        - (.+)_leaves
+        - (.+)_sapling
+        - allium
+        - azure_bluet
+        - blue_orchid
+        - brown_mushroom_block
+        - chorus_plant
+        - cornflower
+        - dandelion
+        - dead_bush
+        - fern
+        - grass
+        - kelp
+        - large_fern
+        - lilac
+        - lily_of_the_valley
+        - lily_pad
+        - nether_wart_block
+        - orange_tulip
+        - oxeye_daisy
+        - peony
+        - pink_tulip
+        - poppy
+        - red_mushroom_block
+        - red_tulip
+        - rose_bush
+        - seagrass
+        - snow
+        - sugar_cane
+        - sunflower
+        - sweet_berry_bush
+        - tall_grass
+        - tall_seagrass
+        - wheat
+        - white_tulip
+        - wither_rose
+        - chainmail_helmet
+        - chainmail_chestplate
+        - chainmail_leggings
+        - chainmail_boots
+      value: 2
+    '3':
+      material:
+        - (.+)_banner
+        - (.+)_wall_banner
+        - cactus
+        - cake
+        - clay
+        - coarse_dirt
+        - dirt
+        - farmland
+        - painting
+        - sea_pickle
+        - torch
+        - tripwire
+        - tripwire_hook
+        - wall_torch
+        - turtle_egg
+        - iron_helmet
+        - iron_chestplate
+        - iron_leggings
+        - iron_boots
+      value: 3
+    '4':
+      material:
+        - (.+)_stained_glass
+        - (.+)_stained_glass_pane
+        - fire
+        - flower_pot
+        - glass
+        - hay_block
+        - item_frame
+        - lava
+        - potatoes
+        - potted_(.+)
+        - scaffolding
+        - snow_block
+        - gold_helmet
+        - gold_chestplate
+        - gold_leggings
+        - gold_boots
+        - golden_helmet
+        - golden_chestplate
+        - golden_leggings
+        - golden_boots
+      value: 4
+    '5':
+      material:
+        - ladder
+        - iron_bars
+        - (.+)_fence
+        - (.+)_fence_gate
+        - (.+)_slab
+        - (.+)_wall
+        - bamboo
+        - campfire
+        - pumpkin
+        - carved_pumpkin
+        - jack_o_lantern
+        - dried_kelp_block
+        - melon
+      value: 5
+    '6':
+      material:
+        - frosted_ice
+        - ice
+        - packed_ice
+        - (.+)_door
+        - (.+)_trapdoor
+        - cobweb
+        - sponge
+      value: 6
+    '7':
+      material:
+        - gravel
+        - red_sand
+        - sand
+        - soul_sand
+        - wet_sponge
+        - blue_ice
+        - diamond_helmet
+        - diamond_chestplate
+        - diamond_leggings
+        - diamond_boots
+      value: 7
+    '8':
+      material:
+        - netherite_helmet
+        - netherite_chestplate
+        - netherite_leggings
+        - netherite_boots
+      value: 10
+    '9':
+      material:
+        - (coal|iron|gold|diamond|emerald|lapis|redstone)_(.+)
+        - anvil
+        - barrier
+        - beacon
+        - bedrock
+        - cauldron
+        - chain_command_block
+        - command_block
+        - damaged_anvil
+        - end_gateway
+        - end_portal
+        - end_portal_frame
+        - ender_chest
+        - jigsaw
+        - moving_piston
+        - nether_portal
+        - obsidian
+        - repeating_command_block
+        - structure_block
+      value: 9999999
+
+bungeecord:
+  enabled: false
+  lobby_servers:
+    - "lobby_1"
+    - "lobby_2"
+    - "lobby_3"
+  reconnect_tries_per_server: 0
+  connection_delay: 100
+
+control:
+  gun_shoot: right_click
+  gun_zoom: left_click
+  grenade_throw: right_click
+  auto_reload_gun: true
+
+in_game_economy:
+  currency:
+    name: "&aCoins"
+    format: "%.2f coins"
+  init_balance: 0
+
+join_sign:
+  dynamic_lines:
+    - "<arena_name>"
+    - "&f&l<game_player_count:0>/<arena_max_players>"
+    - ""
+    - "&a&l<< Click to join >>"
+  update_time: 100
+
+backpack:
+  sounds:
+    on_add_success: "$item_armor_equip_generic"
+    on_add_failure: "$item_shield_block"
+    on_remove: "$item_armor_equip_generic"

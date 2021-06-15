@@ -1,0 +1,12 @@
+# Configdoc: https://anhcraft.dev/cd/battle/SystemConfig.schema.html
+
+config_folder: ""
+
+remote_config:
+  enabled: false
+  url: "http://localhost/battle/config/%s"
+
+# DON'T TOUCH ANYTHING BELOW!
+last_config_version: ${config.version}
+last_storage_version: ${storage.version}
+last_plugin_version: ${project.version}

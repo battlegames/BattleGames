@@ -1,0 +1,170 @@
+# Wiki: https://wiki.anhcraft.dev/en/battle/gun
+# Configdoc: https://anhcraft.dev/cd/battle/GunModel.schema.html
+
+ak_47:
+  name: "&e&l&nAK-47"
+  skin:
+    primary:
+      material: diamond_axe
+      damage: 1
+  weight: 0.0479
+  magazine:
+    default: default_ak_47
+    max_capacity: 90
+  sounds:
+    on_shoot: "bg.guns.ak47:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
+  bossbar:
+    on_reload:
+      primary: false
+      title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
+      color: green
+      style: segmented_20
+  spray_pattern:
+    - "0 0"
+    - "1.05 1.3"
+    - "1.45 1.9"
+    - "1.75 3"
+    - "1.25 3.5"
+    - "0.45 3.9"
+    - "-0.25 4.4"
+    - "-1.05 4.8"
+    - "-1.45 6.8"
+    - "-1.25 7.6"
+    - "-0.65 8.3"
+    - "0.35 8.7"
+    - "1.35 9.3"
+    - "3.05 8.5"
+    - "2.15 8"
+    - "1.15 7.7"
+    - "0.15 7.7"
+    - "-0.75 8.2"
+    - "-1.85 8.7"
+    - "-2.85 8.8"
+    - "-3.45 8.2"
+    - "-2.85 7.4"
+    - "-1.75 7.2"
+    - "-0.95 7.7"
+    - "0.95 8.7"
+    - "1.75 8.2"
+    - "1.95 7.2"
+    - "0.85 6.9"
+    - "-0.45 7.2"
+    - "-1.35 7.9"
+
+desert_eagle:
+  name: "&6&l&nDesert Eagle"
+  skin:
+    primary:
+      material: diamond_axe
+      damage: 2
+  weight: 0.018
+  magazine:
+    default: default_de
+    max_capacity: 35
+  sounds:
+    on_shoot: "bg.guns.de:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
+  bossbar:
+    on_reload:
+      title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
+      color: red
+  spray_pattern:
+    - "0 0"
+    - "1.65 0.6"
+    - "0.15 1.6"
+    - "-4.45 6.3"
+    - "1.75 5.2"
+    - "3.65 7.2"
+    - "-1.35 11.5"
+
+awm:
+  name: "&2&l&nAWM"
+  skin:
+    primary:
+      material: diamond_axe
+      damage: 3
+  weight: 0.06
+  scope:
+    default: basic_scope
+  magazine:
+    default: default_awm
+    max_capacity: 10
+  sounds:
+    on_shoot: "bg.guns.awm:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
+  bossbar:
+    on_reload:
+      title: "&b&lReloading... &6&l<magazine_ammo_count>/<magazine_ammo_capacity>"
+      color: green
+  muzzle_velocity: 120
+
+xm1014:
+  name: "&4&l&nXM1014"
+  skin:
+    primary:
+      material: diamond_axe
+      damage: 4
+  weight: 0.04
+  magazine:
+    default: default_xm1014
+    max_capacity: 35
+  sounds:
+    on_shoot: "bg.guns.shotgun:1"
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
+  bossbar:
+    on_reload:
+      title: "&e&lReloading... &f&l<magazine_ammo_count>/<magazine_ammo_capacity>"
+      color: green
+  spray_pattern:
+    - "0.05 0.36"
+    - "-1.05 1.76"
+    - "-0.55 4.96"
+    - "1.55 6.66"
+    - "1.05 9.56"
+    - "0.45 12.66"
+    - "-1.45 14.16"
+
+m4a4:
+  name: "&d&l&nM4A4"
+  skin:
+    primary:
+      material: diamond_axe
+      damage: 5
+  weight: 0.045
+  magazine:
+    default: default_m4a4
+    max_capacity: 90
+  sounds:
+    on_start_reloading: "$entity_player_levelup"
+    on_end_reloading: "$entity_player_levelup"
+  bossbar:
+    on_reload:
+      title: "&f&lReloading... <magazine_ammo_count>/<magazine_ammo_capacity>"
+      color: red
+  spray_pattern:
+    - "1.55 2.764"
+    - "2.15 5.365"
+    - "-0.45 8.06"
+    - "-2.95 9.26"
+    - "-5.45 10.76"
+    - "-5.75 12.26"
+    - "-3.15 12.06"
+    - "0.05 11.46"
+    - "2.75 11.06"
+    - "5.35 11.56"
+    - "6.75 12.76"
+    - "3.95 11.86"
+    - "2.75 12.26"
+    - "4.85 13.06"
+    - "1.65 13.46"
+    - "-1.45 15.16"
+    - "-3.15 16.96"
+    - "-5.95 16.16"
+    - "-7.35 15.16"
+    - "-6.75 15.26"
+    - "-4.75 14.66"
