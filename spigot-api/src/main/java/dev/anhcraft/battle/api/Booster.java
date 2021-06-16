@@ -21,60 +21,54 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Booster extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Booster> SCHEMA = ConfigSchema.of(Booster.class);
+@Configurable
+public class Booster implements Informative {
+    @Setting
+    @Virtual
+    private String id;
 
-    private final String id;
-
-    @Key("icon")
-    @Explanation("The icon that used to symbolize the booster")
+    @Setting
+    @Description("The icon that used to symbolize the booster")
     @Validation(notNull = true)
     private PreparedItem icon;
 
-    @Key("expiry_time")
-    @Explanation("The expiry time")
+    @Setting
+    @Path("expiry_time")
+    @Description("The expiry time")
     private int expiryTime;
 
-    @Key("money.multiplier")
-    @Explanation("The multiplier for the total money")
+    @Setting
+    @Path("money.multiplier")
+    @Description("The multiplier for the total money")
     private double moneyMultiplier = 1;
 
-    @Key("money.limit")
-    @Explanation({
+    @Setting
+    @Path("money.limit")
+    @Description({
             "The maximum money a player can get",
             "Set to 0 to disable this option"
     })
     private double moneyLimit;
 
-    @Key("exp.multiplier")
-    @Explanation("The multiplier for the total experience points")
+    @Setting
+    @Path("exp.multiplier")
+    @Description("The multiplier for the total experience points")
     private double expMultiplier = 1;
 
-    @Key("exp.limit")
-    @Explanation({
+    @Setting
+    @Path("exp.limit")
+    @Description({
             "The maximum exp a player can get",
             "Set to 0 to disable this option"
     })
     private int expLimit;
-
-    public Booster(@NotNull String id) {
-        Condition.argNotNull("id", id);
-        this.id = id;
-    }
 
     @NotNull
     public String getId() {

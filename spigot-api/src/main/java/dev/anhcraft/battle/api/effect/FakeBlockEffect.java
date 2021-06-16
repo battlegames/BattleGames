@@ -20,26 +20,21 @@
 
 package dev.anhcraft.battle.api.effect;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
-public class FakeBlockEffect extends ConfigurableObject {
-    public static final ConfigSchema<FakeBlockEffect> SCHEMA = ConfigSchema.of(FakeBlockEffect.class);
-
-    @Key("material")
-    @Explanation("The material of this block")
+@Configurable
+public class FakeBlockEffect {
+    @Setting
+    @Description("The material of this block")
     @Validation(notNull = true)
-    @PrettyEnum
     private Material material;
 
-    @Key("data")
-    @Explanation("External block data")
+    @Setting
+    @Description("External block data")
     private byte data;
 
     @NotNull

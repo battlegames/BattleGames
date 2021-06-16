@@ -20,40 +20,38 @@
 
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class BattleScoreboard {
-    public static final ConfigSchema<BattleScoreboard> SCHEMA = ConfigSchema.of(BattleScoreboard.class);
-
-    @Key("enabled")
-    @Explanation("Should we enable the scoreboard?")
+    @Setting
+    @Description("Should we enable the scoreboard?")
     private boolean enabled = true;
 
-    @Key("title")
-    @Explanation({
+    @Setting
+    @Description({
             "The title of the scoreboard",
             "You can use PAPI placeholders here"
     })
     @Validation(notNull = true)
     private String title;
 
-    @Key("content")
-    @Explanation({
+    @Setting
+    @Description({
             "The content of the scoreboard",
             "You can use PAPI placeholders here"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<String> content = new ArrayList<>();
 
-    @Key("fixed_length")
-    @Explanation({
+    @Setting
+    @Path("fixed_length")
+    @Description({
             "The (fixed) length of each line",
             "Set to 0 in order to resize automatically",
             "Maximum length of a line is:",

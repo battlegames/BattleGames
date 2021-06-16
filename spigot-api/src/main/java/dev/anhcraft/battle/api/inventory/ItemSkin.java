@@ -19,27 +19,26 @@
  */
 package dev.anhcraft.battle.api.inventory;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
-public class ItemSkin extends ConfigurableObject {
-    public static final ConfigSchema<ItemSkin> SCHEMA = ConfigSchema.of(ItemSkin.class);
+@Configurable
+public class ItemSkin {
     public static final ItemSkin EMPTY = new ItemSkin();
 
-    @Key("material")
-    @Explanation("Set the material")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Set the material")
+    @Validation(notNull = true, silent = true)
     private final Material material = Material.AIR;
 
-    @Key("damage")
-    @Explanation("Set the damage")
+    @Setting
+    @Description("Set the damage")
     private int damage;
 
     @NotNull
