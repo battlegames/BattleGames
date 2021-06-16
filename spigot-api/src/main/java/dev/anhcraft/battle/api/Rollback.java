@@ -20,10 +20,8 @@
 
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -33,38 +31,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Rollback extends ConfigurableObject {
-    public static final ConfigSchema<Rollback> SCHEMA = ConfigSchema.of(Rollback.class);
+@Configurable
+public class Rollback {
     private List<BoundingBox> cachedRegionPartitions = new ArrayList<>();
-    @Key("enabled")
-    @Explanation("Enabled/Disabled the rollback system")
+
+    @Setting
+    @Description("Enabled/Disabled the rollback system")
     private boolean enabled;
-    @Key("provider")
-    @Explanation("The provider which handles the rollback")
-    @PrettyEnum
+
+    @Setting
+    @Description("The provider which handles the rollback")
     @Validation(notNull = true)
     private Provider provider;
-    @Key("worlds")
-    @Explanation("List of worlds need to be reset")
-    @IgnoreValue(ifNull = true)
+
+    @Setting
+    @Description("List of worlds need to be reset")
+    @Validation(notNull = true, silent = true)
     private List<String> worlds = new ArrayList<>();
-    @Key("region.corner_1")
-    @Explanation({
+
+    @Setting
+    @Path("region.corner_1")
+    @Description({
             "First corner in the region",
             "This option only works with BATTLE_REGION"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private String corner1;
-    @Key("region.corner_2")
-    @Explanation({
+
+    @Setting
+    @Path("region.corner_2")
+    @Description({
             "Second corner in the region",
             "This option only works with BATTLE_REGION"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private String corner2;
-    @Key("clear_entities")
-    @Explanation({
+
+    @Setting
+    @Path("clear_entities")
+    @Description({
             "Clear all entities in the configured worlds",
             "This option only works with BATTLE_REGION"
     })

@@ -20,38 +20,33 @@
 
 package dev.anhcraft.battle.api.effect.potion;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
-public class BattlePotionEffect extends ConfigurableObject {
-    public static final ConfigSchema<BattlePotionEffect> SCHEMA = ConfigSchema.of(BattlePotionEffect.class);
-
-    @Key("type")
-    @Explanation("The type of the effect")
+@Configurable
+public class BattlePotionEffect {
+    @Setting
+    @Description("The type of the effect")
     @Validation(notNull = true)
-    @PrettyEnum
     private BattlePotionEffectType type;
 
-    @Key("duration")
-    @Explanation("How long does the effect remain")
+    @Setting
+    @Description("How long does the effect remain")
     private int duration;
 
-    @Key("amplifier")
-    @Explanation("Boost the effect to a higher level")
+    @Setting
+    @Description("Boost the effect to a higher level")
     private int amplifier;
 
-    @Key("ambient")
-    @Explanation("Makes potion effect produce more, translucent, particles")
+    @Setting
+    @Description("Makes potion effect produce more, translucent, particles")
     private boolean ambient;
 
-    @Key("particles")
-    @Explanation("Shows particle effects or not")
+    @Setting
+    @Description("Shows particle effects or not")
     private boolean particles;
 
     @NotNull

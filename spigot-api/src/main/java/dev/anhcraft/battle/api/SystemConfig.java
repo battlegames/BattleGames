@@ -20,18 +20,15 @@
 
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class SystemConfig extends ConfigurableObject {
-    public static final ConfigSchema<SystemConfig> SCHEMA = ConfigSchema.of(SystemConfig.class);
-
-    @Key("config_folder")
-    @Explanation({
+@Configurable
+public class SystemConfig {
+    @Setting
+    @Path("config_folder")
+    @Description({
             "Here you can specify the path to the configuration folder which contains",
             "general.yml, arenas.yml, locale files, etc (except system.yml).",
             "- If you are going to host multiple Battle servers, this option should be",
@@ -40,11 +37,12 @@ public class SystemConfig extends ConfigurableObject {
             "(*) If you are hosting files on the internet or on a private web server",
             "then it's better to try the remote config feature (see below)"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private String configFolder = "";
 
-    @Key("remote_config.enabled")
-    @Explanation({
+    @Setting
+    @Path("remote_config.enabled")
+    @Description({
             "Enable remote configuration feature or not?",
             "(*) Remote configuration: Allow you to host config files (except system.yml)",
             "on the internet, or on your private web server. For examples:",
@@ -53,18 +51,20 @@ public class SystemConfig extends ConfigurableObject {
     })
     private boolean remoteConfigEnabled;
 
-    @Key("remote_config.url")
-    @Explanation({
+    @Setting
+    @Path("remote_config.url")
+    @Description({
             "The URL to the directory contain the config files",
             "Placeholder: %s (to be replaced with a file name)",
             "For example, with the default URL (http://localhost/battle/config/%s), if the plugin",
             "wants to get general.yml, it will request to http://localhost/battle/config/general.yml"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private String remoteConfigLink = "http://localhost/battle/config/%s";
 
-    @Key("last_config_version")
-    @Explanation({
+    @Setting
+    @Path("last_config_version")
+    @Description({
             "Last configuration version",
             "This value is used to validate or upgrade the config",
             "DO NOT CHANGE MANUALLY!!!"
@@ -72,8 +72,9 @@ public class SystemConfig extends ConfigurableObject {
     @Validation(notNull = true)
     private int lastConfigVersion;
 
-    @Key("last_storage_version")
-    @Explanation({
+    @Setting
+    @Path("last_storage_version")
+    @Description({
             "Last storage version",
             "This value is used to validate or upgrade the storage",
             "DO NOT CHANGE MANUALLY!!!"
@@ -81,8 +82,9 @@ public class SystemConfig extends ConfigurableObject {
     @Validation(notNull = true)
     private int lastStorageVersion;
 
-    @Key("last_plugin_version")
-    @Explanation({
+    @Setting
+    @Path("last_plugin_version")
+    @Description({
             "Last plugin version",
             "DO NOT CHANGE MANUALLY!!!"
     })

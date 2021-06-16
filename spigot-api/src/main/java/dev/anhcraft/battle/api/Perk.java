@@ -22,38 +22,32 @@ package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.api.effect.potion.BattlePotionEffect;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Perk extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Perk> SCHEMA = ConfigSchema.of(Perk.class);
+@Configurable
+public class Perk implements Informative {
+    @Setting
+    @Virtual
+    private String id;
 
-    private final String id;
-
-    @Key("name")
-    @Explanation("This perk's name")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("This perk's name")
+    @Validation(notNull = true)
     private String name;
 
-    @Key("executions.give_effects")
-    @Explanation("Potion effects to be applied on the player")
-    @IgnoreValue(ifNull = true, ifEmptyList = true)
+    @Setting
+    @Path("executions.give_effects")
+    @Description("Potion effects to be applied on the player")
+    @Validation(notNull = true, silent = true)
     @Example({
             "executions:",
             "  give_effects:",
@@ -65,19 +59,15 @@ public class Perk extends ConfigurableObject implements Informative {
     })
     private List<BattlePotionEffect> potionEffects = new ArrayList<>();
 
-    @Key("executions.set_health")
-    @Explanation("Set the player's health")
+    @Setting
+    @Path("executions.set_health")
+    @Description("Set the player's health")
     private int newHealth;
 
-    @Key("executions.set_food_level")
-    @Explanation("Set the player's food level")
+    @Setting
+    @Path("executions.set_food_level")
+    @Description("Set the player's food level")
     private int newFoodLevel;
-
-    public Perk(@NotNull String id) {
-        Condition.argNotNull("id", id);
-        this.id = id;
-        name = id;
-    }
 
     @NotNull
     public String getId() {
@@ -113,38 +103,6 @@ public class Perk extends ConfigurableObject implements Informative {
         if (newFoodLevel > 0) {
             player.setFoodLevel(newFoodLevel);
         }
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("executions.give_effects")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            List<BattlePotionEffect> effects = new ArrayList<>();
-            for (String s : cs.getKeys(false)) {
-                try {
-                    effects.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), BattlePotionEffect.SCHEMA));
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
-            }
-            return effects;
-        }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("executions.give_effects")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            int i = 0;
-            for (BattlePotionEffect effect : (List<BattlePotionEffect>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, BattlePotionEffect.SCHEMA, effect);
-                parent.set(String.valueOf(i++), c);
-            }
-            return parent;
-        }
-        return value;
     }
 
     @Override
