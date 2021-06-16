@@ -20,68 +20,69 @@
 
 package dev.anhcraft.battle.api.market;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class PackageDetails extends ConfigurableObject {
-    public static final ConfigSchema<?> SCHEMA = ConfigSchema.of(PackageDetails.class);
-
-    @Key("item_header")
-    @Explanation("A nice header for the Item part")
+@Configurable
+public class PackageDetails {
+    @Setting
+    @Path("item_header")
+    @Description("A nice header for the Item part")
     @Validation(notNull = true)
     private String itemHeader;
 
-    @Key("item_format.vanilla")
-    @Explanation({
+    @Setting
+    @Path("item_format.vanilla")
+    @Description({
             "The format of each Vanilla item to show in the details",
             "Placeholders: &lt;name&gt;, &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String vanillaItemFormat;
 
-    @Key("item_format.battle")
-    @Explanation({
+    @Setting
+    @Path("item_format.battle")
+    @Description({
             "The format of each Battle item to show in the details",
             "Placeholders: &lt;name&gt;"
     })
     @Validation(notNull = true)
     private String battleItemFormat;
 
-    @Key("exp_header")
-    @Explanation("A nice header for the Experience points part")
+    @Setting
+    @Path("exp_header")
+    @Description("A nice header for the Experience points part")
     @Validation(notNull = true)
     private String expHeader;
 
-    @Key("exp_format.vanilla")
-    @Explanation({
+    @Setting
+    @Path("exp_format.vanilla")
+    @Description({
             "A line to show how many Vanilla exp points will be given",
             "Placeholders: &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String vanillaExpFormat;
 
-    @Key("exp_format.battle")
-    @Explanation({
+    @Setting
+    @Path("exp_format.battle")
+    @Description({
             "A line to show how many Battle exp points will be given",
             "Placeholders: &lt;amount&gt;"
     })
     @Validation(notNull = true)
     private String battleExpFormat;
 
-    @Key("perk_header")
-    @Explanation("A nice header for the Perks part")
+    @Setting
+    @Path("perk_header")
+    @Description("A nice header for the Perks part")
     @Validation(notNull = true)
     private String perkHeader;
 
-    @Key("perk_format")
-    @Explanation({
+    @Setting
+    @Path("perk_format")
+    @Description({
             "The format for each perk to show in the details",
             "You can use all informative placeholders for Perk here.",
             "&lt;id&gt;, &lt;name&gt;, &lt;effects&gt;, &lt;new_health&gt;, &lt;new_food_level&gt;"
@@ -89,13 +90,15 @@ public class PackageDetails extends ConfigurableObject {
     @Validation(notNull = true)
     private String perkFormat;
 
-    @Key("booster_header")
-    @Explanation("A nice header for the Boosters part")
+    @Setting
+    @Path("booster_header")
+    @Description("A nice header for the Boosters part")
     @Validation(notNull = true)
     private String boosterHeader;
 
-    @Key("booster_format")
-    @Explanation({
+    @Setting
+    @Path("booster_format")
+    @Description({
             "The format for each booster to show in the details",
             "You can use all informative placeholders for Booster here.",
             "&lt;id&gt;, &lt;name&gt;, &lt;expiry_time&gt;, &lt;formatted_expiry_time&gt;, &lt;money_limit&gt;",
@@ -104,8 +107,9 @@ public class PackageDetails extends ConfigurableObject {
     @Validation(notNull = true)
     private String boosterFormat;
 
-    @Key("separated_part_by_new_line")
-    @Explanation("Should we separate parts with new lines?")
+    @Setting
+    @Path("separated_part_by_new_line")
+    @Description("Should we separate parts with new lines?")
     @Validation(notNull = true)
     private boolean separatedPartByNewLine;
 

@@ -20,16 +20,10 @@
 
 package dev.anhcraft.battle.api.market;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,36 +31,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Category extends ConfigurableObject {
-    public static final ConfigSchema<Category> SCHEMA = ConfigSchema.of(Category.class);
+@Configurable
+public class Category {
     private static final PreparedItem DEFAULT_ICON = new PreparedItem();
 
     static {
         DEFAULT_ICON.material(Material.STONE);
     }
 
-    private final String id;
+    @Setting
+    @Virtual
+    private String id;
 
-    @Key("icon")
-    @Explanation("Category's icon")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Category's icon")
+    @Validation(notNull = true, silent = true)
     private PreparedItem icon = DEFAULT_ICON.duplicate();
 
-    @Key("in_game_only")
-    @Explanation("Make this category only available during the game")
+    @Setting
+    @Path("in_game_only")
+    @Description("Make this category only available during the game")
     private boolean inGameOnly;
 
-    @Key("reserved_game_modes")
-    @Explanation({
+    @Setting
+    @Path("reserved_game_modes")
+    @Description({
             "Make this category only available during certain game modes",
             "This option only takes effect if <b>in_game_only</b> set to <i>true</i>",
             "All game modes are non-case-sensitive"
     })
     private List<String> gameModeReserved;
 
-    @Key("products")
-    @Explanation("Products in this category")
+    @Setting
+    @Description("Products in this category")
     @Example({
             "products:",
             "  '1':",
@@ -75,11 +72,6 @@ public class Category extends ConfigurableObject {
             "    material: apple"
     })
     private List<Product> products = new ArrayList<>();
-
-    public Category(@NotNull String id) {
-        Condition.argNotNull("id", id);
-        this.id = id;
-    }
 
     @NotNull
     public String getId() {
@@ -112,38 +104,5 @@ public class Category extends ConfigurableObject {
     @Nullable
     public List<String> getGameModeReserved() {
         return gameModeReserved;
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("products")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            List<Product> products = new ArrayList<>();
-            for (String s : cs.getKeys(false)) {
-                try {
-                    ConfigurationSection scs = cs.getConfigurationSection(s);
-                    Product p = ConfigHelper.readConfig(scs, Product.SCHEMA, new Product(s));
-                    products.add(p);
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
-            }
-            return products;
-        }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("products")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            for (Product p : (List<Product>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, Product.SCHEMA, p);
-                parent.set(p.getId(), c);
-            }
-            return parent;
-        }
-        return value;
     }
 }

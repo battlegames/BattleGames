@@ -20,24 +20,21 @@
 
 package dev.anhcraft.battle.api.chat;
 
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class BattleChat {
-    public static final ConfigSchema<BattleChat> SCHEMA = ConfigSchema.of(BattleChat.class);
-
-    @Key("enabled")
-    @Explanation("Should we enable the chat system?")
+    @Setting
+    @Description("Should we enable the chat system?")
     private boolean enabled = true;
 
-    @Key("format")
-    @Explanation({
+    @Setting
+    @Description({
             "The format of messages",
             "You can use PAPI placeholders here",
             "Informative placeholders: &lt;message&gt;"
