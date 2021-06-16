@@ -20,37 +20,28 @@
 
 package dev.anhcraft.battle.api.effect.firework;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class BattleFirework extends ConfigurableObject {
-    public static ConfigSchema<BattleFirework> SCHEMA = ConfigSchema.of(BattleFirework.class);
-
-    @Key("effects")
-    @Explanation("The firework's effects")
-    @IgnoreValue(ifNull = true)
+@Configurable
+public class BattleFirework {
+    @Setting
+    @Description("The firework's effects")
+    @Validation(notNull = true, silent = true)
     private List<BattleFireworkEffect> effects = new ArrayList<>();
 
-    @Key("power")
-    @Explanation("The firework's power")
+    @Setting
+    @Description("The firework's power")
     private int power;
 
     @NotNull
@@ -70,37 +61,5 @@ public class BattleFirework extends ConfigurableObject {
             fwm.addEffect(bfe.getFireworkEffect());
         }
         fw.setFireworkMeta(fwm);
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("effects")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            List<BattleFireworkEffect> list = new ArrayList<>();
-            for (String s : cs.getKeys(false)) {
-                try {
-                    list.add(ConfigHelper.readConfig(cs.getConfigurationSection(s), BattleFireworkEffect.SCHEMA));
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
-            }
-            return list;
-        }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("effects")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            int i = 0;
-            for (BattleFireworkEffect b : (List<BattleFireworkEffect>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, BattleFireworkEffect.SCHEMA, b);
-                parent.set(String.valueOf(i++), c);
-            }
-            return parent;
-        }
-        return value;
     }
 }
