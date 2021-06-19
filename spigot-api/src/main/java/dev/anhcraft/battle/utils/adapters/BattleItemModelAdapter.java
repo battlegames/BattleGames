@@ -32,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 
 public class BattleItemModelAdapter implements TypeAdapter<BattleItemModel> {
+    public static final BattleItemModelAdapter INSTANCE = new BattleItemModelAdapter();
+
     @Override
     public @Nullable SimpleForm simplify(@NotNull ConfigSerializer configSerializer, @NotNull Type type, @NotNull BattleItemModel battleItemModel) throws Exception {
         return SimpleForm.of(battleItemModel.getId());
