@@ -110,7 +110,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                     }
                     PlayerData playerData = plugin.dataManager.loadPlayerData(player);
                     // back to main thread
-                    plugin.extension.getTaskHelper().newTask(() -> {
+                    plugin.extension.getTaskHelper().newDelayedTask(() -> {
                         plugin.resetScoreboard(player);
                         plugin.listKits(kit -> {
                             if (kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())) {
@@ -126,7 +126,7 @@ public class PlayerListener extends BattleComponent implements Listener {
                             }
                         }
                         BattleDebugger.endTiming("player-join");
-                    });
+                    }, 40);
                 });
             });
         }, 15);
