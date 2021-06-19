@@ -64,11 +64,10 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.CraftStats;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.CraftExtension;
 import dev.anhcraft.craftkit.common.utils.VersionUtil;
 import dev.anhcraft.craftkit.helpers.TaskHelper;
@@ -77,6 +76,7 @@ import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.objecthunter.exp4j.Expression;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
@@ -268,7 +268,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         new CommandInitializer(this);
 
         Metrics metrics = new Metrics(this, 6080);
-        metrics.addCustomChart(new Metrics.SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
+        metrics.addCustomChart(new SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
     }
 
     private void injectApiProvider() {
@@ -344,11 +344,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 getLogger().info("All done! Saving changes...");
                 systemConfigManager.getSettings().set("last_config_version", 2);
                 systemConfigManager.saveConfig();
-                try {
-                    ConfigHelper.readConfig(systemConfigManager.getSettings(), SystemConfig.SCHEMA, systemConf);
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
+                ConfigHelper.load(SystemConfig.class, systemConfigManager.getSettings(), systemConf);
             }
         } else {
             marketConfigManager.reloadConfig();

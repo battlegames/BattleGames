@@ -20,10 +20,8 @@
 
 package dev.anhcraft.battle.api.arena.game.options;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -31,28 +29,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Schema
-public class BWTeamOptions extends ConfigurableObject {
-    public static final ConfigSchema<BWTeamOptions> SCHEMA = ConfigSchema.of(BWTeamOptions.class);
-
-    @Key("name")
-    @Explanation("The name of this team")
+@Configurable
+public class BWTeamOptions {
+    @Setting
+    @Description("The name of this team")
     @Validation(notNull = true)
     private String name;
 
-    @Key("color")
-    @Explanation("The team's color")
+    @Setting
+    @Description("The team's color")
     @Validation(notNull = true)
-    @PrettyEnum
     private DyeColor color;
 
-    @Key("spawn_points")
-    @Explanation("The spawn points of this team (in playing phase)")
+    @Setting
+    @Path("spawn_points")
+    @Description("The spawn points of this team (in playing phase)")
     @Validation(notNull = true)
     private List<String> spawnPoints;
 
-    @Key("bed_location")
-    @Explanation("Where the bed of this team located")
+    @Setting
+    @Path("bed_location")
+    @Description("Where the bed of this team located")
     @Validation(notNull = true)
     private String bedLocation;
 

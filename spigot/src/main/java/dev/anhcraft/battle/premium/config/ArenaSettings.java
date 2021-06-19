@@ -21,21 +21,18 @@
 package dev.anhcraft.battle.premium.config;
 
 import dev.anhcraft.battle.premium.system.PositionPair;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.anhcraft.config.ConfigDeserializer;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.PostHandler;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.struct.ConfigSection;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class ArenaSettings extends ConfigurableObject {
-    @Key("empty_regions")
+@Configurable
+public class ArenaSettings {
     private List<PositionPair> emptyRegions;
 
     @Nullable
@@ -43,34 +40,18 @@ public class ArenaSettings extends ConfigurableObject {
         return emptyRegions;
     }
 
-    @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("empty_regions")) {
-            List<PositionPair> list = new ArrayList<>();
-            ConfigurationSection section = (ConfigurationSection) value;
+    @PostHandler
+    private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
+        try {
             for (String k : section.getKeys(false)) {
-                ConfigurationSection v = section.getConfigurationSection(k);
-                list.add(new PositionPair(v.getString("corner_1"), v.getString("corner_2")));
+                ConfigSection v = section.get(k).asSection();
+                emptyRegions.add(new PositionPair(
+                        v.get("corner_1").asString(),
+                        v.get("corner_2").asString()
+                ));
             }
-            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("empty_regions")) {
-            YamlConfiguration section = new YamlConfiguration();
-            List<PositionPair> list = (List<PositionPair>) value;
-            int i = 0;
-            for (PositionPair p : list) {
-                YamlConfiguration x = new YamlConfiguration();
-                x.set("corner_1", p.getFirst());
-                x.set("corner_2", p.getSecond());
-                section.set(String.valueOf(i), x);
-                i++;
-            }
-        }
-        return value;
     }
 }

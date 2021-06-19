@@ -21,11 +21,8 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.advancement.Advancement;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.Objects;
 
 public class AdvancementConfigManager extends ConfigManager {
     public AdvancementConfigManager() {
@@ -37,11 +34,7 @@ public class AdvancementConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             Advancement ach = new Advancement(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), Advancement.SCHEMA, ach);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Advancement.class, cs, ach);
             plugin.advancementManager.registerAdvancement(ach);
         });
     }

@@ -23,9 +23,7 @@ package dev.anhcraft.battle.premium.config.managers;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.premium.config.ArenaSettings;
 import dev.anhcraft.battle.system.managers.config.ConfigManager;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,25 +45,21 @@ public class ArenaConfigManagerX extends ConfigManager {
 
     @Override
     protected void onLoad() {
-        try {
-            for (String k : getSettings().getKeys(false)) {
-                Arena a = plugin.getArena(k);
-                if (a == null) {
-                    plugin.getLogger().warning("[" + loggerName + "] Arena #" + k + " not found.");
-                    continue;
-                }
-                ConfigurationSection s = getSettings().getConfigurationSection(k);
-                ArenaSettings as = ConfigHelper.readConfig(Objects.requireNonNull(s), ConfigSchema.of(ArenaSettings.class));
-                arenaSettingsMap.put(k, as);
-                if (a.getRollback() == null) {
-                    plugin.getLogger().warning("[" + loggerName + "] You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
-                    if (as.getEmptyRegions() != null) {
-                        as.getEmptyRegions().clear();
-                    }
+        for (String k : getSettings().getKeys(false)) {
+            Arena a = plugin.getArena(k);
+            if (a == null) {
+                plugin.getLogger().warning("[" + loggerName + "] Arena #" + k + " not found.");
+                continue;
+            }
+            ConfigurationSection s = getSettings().getConfigurationSection(k);
+            ArenaSettings as = ConfigHelper.load(ArenaSettings.class, Objects.requireNonNull(s));
+            arenaSettingsMap.put(k, as);
+            if (a.getRollback() == null) {
+                plugin.getLogger().warning("[" + loggerName + "] You've not configured rollback system for arena #" + k + ". Some extra settings will be disabled for safe reasons.");
+                if (as.getEmptyRegions() != null) {
+                    as.getEmptyRegions().clear();
                 }
             }
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
         }
     }
 

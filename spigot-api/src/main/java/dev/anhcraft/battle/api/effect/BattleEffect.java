@@ -19,14 +19,9 @@
  */
 package dev.anhcraft.battle.api.effect;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.utils.EnumUtil;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,27 +29,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class BattleEffect extends ConfigurableObject {
-    public static final ConfigSchema<BattleEffect> SCHEMA = ConfigSchema.of(BattleEffect.class);
-
-    @Key("particle")
-    @Explanation("The particle that used to make up this effect")
+@Configurable
+public class BattleEffect {
+    @Setting
+    @Description("The particle that used to make up this effect")
     private BattleParticle particle;
 
-    @Key("block_effect")
-    @Explanation("Fake block effect")
+    @Setting
+    @Path("block_effect")
+    @Description("Fake block effect")
     private FakeBlockEffect blockEffect;
 
-    @Key("type")
-    @Explanation("The effect's type")
+    @Setting
+    @Description("The effect's type")
     @Validation(notNull = true)
-    @PrettyEnum
     private EffectType type;
 
-    @Key("options")
-    @Explanation("Effect options")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Effect options")
+    @Validation(notNull = true, silent = true)
     @Example({
             "options:",
             "  repeat_delay: 20",
@@ -80,34 +73,6 @@ public class BattleEffect extends ConfigurableObject {
     @Nullable
     public FakeBlockEffect getBlockEffect() {
         return blockEffect;
-    }
-
-    @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("options")) {
-            Map<EffectOption, Object> options = new HashMap<>();
-            ConfigurationSection cs = (ConfigurationSection) value;
-            for (String k : cs.getKeys(false)) {
-                EffectOption eo = (EffectOption) EnumUtil.findEnum(EffectOption.class, k);
-                if (eo == null) continue;
-                options.put(eo, cs.get(k));
-            }
-            return options;
-        }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("options")) {
-            Map<EffectOption, Object> options = (Map<EffectOption, Object>) value;
-            ConfigurationSection cs = new YamlConfiguration();
-            for (Map.Entry<EffectOption, Object> ent : options.entrySet()) {
-                cs.set(ent.getKey().name().toLowerCase(), ent.getValue());
-            }
-            return cs;
-        }
-        return value;
     }
 
     public void spawn(@NotNull Location location) {

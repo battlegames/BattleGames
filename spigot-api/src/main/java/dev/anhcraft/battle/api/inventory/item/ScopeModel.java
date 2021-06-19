@@ -19,8 +19,7 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,19 +27,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class ScopeModel extends SingleSkinItem implements Attachable {
-    public static final ConfigSchema<ScopeModel> SCHEMA = ConfigSchema.of(ScopeModel.class);
-
-    @Key("zoom_levels")
-    @Explanation({
+    @Setting
+    @Path("zoom_levels")
+    @Description({
             "Set the zoom levels",
             "The zoom level must be between 1 and 255",
             "Players can turn to the next level by",
             "click the zoom button, when none level",
             "remains, the view returns to normal"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<Integer> zoomLevels = new ArrayList<>();
 
     public ScopeModel(@NotNull String id) {
@@ -64,18 +62,14 @@ public class ScopeModel extends SingleSkinItem implements Attachable {
         return ItemType.SCOPE;
     }
 
-    @Middleware(Middleware.Direction.CONFIG_TO_SCHEMA)
-    private Object handle(ConfigSchema.Entry entry, Object value) {
-        if (value != null && entry.getKey().equals("zoom_levels")) {
-            List<Integer> x = (List<Integer>) value;
-            x.removeIf(integer -> {
-                boolean b = integer < 1 || integer > 255;
-                if (b)
-                    Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, getId()));
-                return b;
-            });
-            return x;
-        }
-        return value;
+    @PostHandler
+    private void handle(){
+        zoomLevels.removeIf(integer -> {
+            boolean b = integer < 1 || integer > 255;
+            if (b) {
+                Bukkit.getLogger().warning(String.format("Removed invalid zoom level `%s` in scope `%s`", integer, getId()));
+            }
+            return b;
+        });
     }
 }

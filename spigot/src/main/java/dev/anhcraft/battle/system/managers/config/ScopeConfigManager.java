@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.ScopeModel;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ScopeConfigManager extends ConfigManager {
     public final Map<String, ScopeModel> SCOPE_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class ScopeConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
             ScopeModel sm = new ScopeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), ScopeModel.SCHEMA, sm);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(ScopeModel.class, cs, sm);
             SCOPE_MAP.put(s, sm);
         });
     }

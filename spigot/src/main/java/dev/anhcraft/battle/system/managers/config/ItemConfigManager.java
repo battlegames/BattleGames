@@ -21,8 +21,7 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -37,19 +36,11 @@ public class ItemConfigManager extends ConfigManager {
             String k = type.name().toLowerCase();
             ConfigurationSection sec = getSettings().getConfigurationSection("model_" + k);
             if (sec != null) {
-                try {
-                    plugin.itemManager.defineModelTemplate(type, ConfigHelper.readConfig(sec, PreparedItem.SCHEMA));
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
+                plugin.itemManager.defineModelTemplate(type, ConfigHelper.load(PreparedItem.class, sec));
             }
             sec = getSettings().getConfigurationSection(k);
             if (sec != null) {
-                try {
-                    plugin.itemManager.defineItemTemplate(type, ConfigHelper.readConfig(sec, PreparedItem.SCHEMA));
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
+                plugin.itemManager.defineItemTemplate(type, ConfigHelper.load(PreparedItem.class, sec));
             }
         }
     }

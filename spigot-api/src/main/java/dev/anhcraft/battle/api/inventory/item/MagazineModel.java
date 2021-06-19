@@ -19,28 +19,22 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.battle.ApiProvider;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class MagazineModel extends SingleSkinItem implements Attachable {
-    public static final ConfigSchema<MagazineModel> SCHEMA = ConfigSchema.of(MagazineModel.class);
-
-    @Key("ammo")
-    @Explanation("All ammo types can be stored in this magazine")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("ammo")
+    @Description("All ammo types can be stored in this magazine")
+    @Validation(notNull = true, silent = true)
     @Example({
             "ammo:",
-            "  7_62mm: 30 # Can hold up to x30 7.62 mm ammo"
+            "  7_62mm: 30 # Can hold up to x30 7.62mm ammo"
     })
     private Map<AmmoModel, Integer> ammunition = new HashMap<>();
 
@@ -63,34 +57,5 @@ public class MagazineModel extends SingleSkinItem implements Attachable {
         return new ItemType[]{
                 ItemType.GUN
         };
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null && entry.getKey().equals("ammo")) {
-            ConfigurationSection cs = (ConfigurationSection) o;
-            Map<AmmoModel, Integer> ammo = new HashMap<>();
-            for (String a : cs.getKeys(false)) {
-                AmmoModel am = ApiProvider.consume().getAmmoModel(a);
-                if (am != null) {
-                    ammo.put(am, cs.getInt(a));
-                }
-            }
-            return ammo;
-        }
-        return o;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null && entry.getKey().equals("ammo")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            Map<AmmoModel, Integer> map = (Map<AmmoModel, Integer>) o;
-            for (Map.Entry<AmmoModel, Integer> x : map.entrySet()) {
-                parent.set(x.getKey().getId(), x.getValue());
-            }
-            return parent;
-        }
-        return o;
     }
 }

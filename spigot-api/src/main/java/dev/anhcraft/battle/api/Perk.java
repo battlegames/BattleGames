@@ -35,9 +35,7 @@ import java.util.List;
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
 public class Perk implements Informative {
-    @Setting
-    @Virtual
-    private String id;
+    private final String id;
 
     @Setting
     @Description("This perk's name")
@@ -68,6 +66,12 @@ public class Perk implements Informative {
     @Path("executions.set_food_level")
     @Description("Set the player's food level")
     private int newFoodLevel;
+
+    public Perk(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        this.id = id;
+        name = id;
+    }
 
     @NotNull
     public String getId() {

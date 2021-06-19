@@ -54,10 +54,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BattleGunManager extends BattleComponent {
@@ -221,7 +218,7 @@ public class BattleGunManager extends BattleComponent {
         final double cosA = Math.cos(angle);
         final double sinA = Math.sin(angle);
 
-        List<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
+        Collection<Ammo.Bullet> bullets = mag.getAmmo().getModel().getBullets();
         for (Ammo.Bullet b : bullets) {
             Block lastBlock = null;
             int power = b.getPenetrationPower();

@@ -21,10 +21,7 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.arena.game.Mode;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-
-import java.util.Objects;
+import dev.anhcraft.battle.utils.ConfigHelper;
 
 public class ModeConfigManager extends ConfigManager {
     public ModeConfigManager() {
@@ -35,11 +32,7 @@ public class ModeConfigManager extends ConfigManager {
     public void onLoad() {
         getSettings().getKeys(false).forEach(s -> {
             Mode.get(s, m -> {
-                try {
-                    ConfigHelper.readConfig(Objects.requireNonNull(getSettings().getConfigurationSection(s)), Mode.SCHEMA, m);
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
+                ConfigHelper.load(Mode.class, getSettings().getConfigurationSection(s), m);
             });
         });
     }

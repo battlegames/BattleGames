@@ -40,10 +40,6 @@ public class Category {
     }
 
     @Setting
-    @Virtual
-    private String id;
-
-    @Setting
     @Description("Category's icon")
     @Validation(notNull = true, silent = true)
     private PreparedItem icon = DEFAULT_ICON.duplicate();
@@ -72,11 +68,6 @@ public class Category {
             "    material: apple"
     })
     private List<Product> products = new ArrayList<>();
-
-    @NotNull
-    public String getId() {
-        return id;
-    }
 
     @NotNull
     public PreparedItem getIcon() {

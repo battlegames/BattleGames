@@ -21,16 +21,16 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.api.inventory.ItemSkin;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
+@Configurable
 public abstract class SingleSkinItem extends BattleItemModel {
-    @Key("skin")
-    @Explanation("Set the item's skin")
+    @Setting
+    @Description("Set the item's skin")
     @Validation(notNull = true)
     private ItemSkin skin;
 

@@ -21,53 +21,52 @@
 package dev.anhcraft.battle.api.arena.game.options;
 
 import dev.anhcraft.battle.api.BattleSound;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class FlagOptions extends ConfigurableObject {
-    public static final ConfigSchema<FlagOptions> SCHEMA = ConfigSchema.of(FlagOptions.class);
-
-    @Key("location")
-    @Explanation("The location of the flag")
+@Configurable
+public class FlagOptions {
+    @Setting
+    @Description("The location of the flag")
     @Validation(notNull = true)
     private String location;
 
-    @Key("display_name.valid")
-    @Explanation("The name to be displayed when the flag state is valid")
+    @Setting
+    @Path("display_name.valid")
+    @Description("The name to be displayed when the flag state is valid")
     @Validation(notNull = true)
     private String validDisplayName;
 
-    @Key("display_name.invalid")
-    @Explanation("The name to be displayed when the flag state is invalid")
+    @Setting
+    @Path("display_name.invalid")
+    @Description("The name to be displayed when the flag state is invalid")
     @Validation(notNull = true)
     private String invalidDisplayName;
 
-    @Key("display_name.neutral")
-    @Explanation("The name to be displayed when the flag state is neutral")
+    @Setting
+    @Path("display_name.neutral")
+    @Description("The name to be displayed when the flag state is neutral")
     @Validation(notNull = true)
     private String neutralDisplayName;
 
-    @Key("max_health")
-    @Explanation("The maximum health points of the flag")
+    @Setting
+    @Path("max_health")
+    @Description("The maximum health points of the flag")
     @Validation(notNull = true)
     private int maxHealth = 10;
 
-    @Key("start_capture_sound")
-    @Explanation("The sound on starting the capture")
+    @Setting
+    @Path("start_capture_sound")
+    @Description("The sound on starting the capture")
     private BattleSound startCaptureSound;
 
-    @Key("stop_capture_sound")
-    @Explanation("The sound on stopping the capture")
+    @Setting
+    @Path("stop_capture_sound")
+    @Description("The sound on stopping the capture")
     private BattleSound stopCaptureSound;
 
     @NotNull

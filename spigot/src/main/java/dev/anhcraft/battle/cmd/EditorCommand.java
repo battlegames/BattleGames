@@ -25,8 +25,8 @@ import co.aikar.commands.annotation.*;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -56,7 +56,7 @@ public class EditorCommand extends BaseCommand {
     @Subcommand("market save")
     @CommandPermission("battle.editor.market.save")
     public void marketSave(CommandSender sender) {
-        ConfigHelper.writeConfig(plugin.marketConfigManager.getSettings(), Market.SCHEMA, plugin.getMarket(), ConfigHelper.newOptions().ignoreEmptyArray().ignoreEmptyList().ignoreFalse().ignoreZero().ignoreEmptySection());
+        ConfigHelper.save(Market.class, plugin.marketConfigManager.getSettings(), plugin.getMarket());
         File f = new File(plugin.getEditorFolder(), "market." + System.currentTimeMillis() + ".yml");
         try {
             plugin.marketConfigManager.getSettings().save(f);

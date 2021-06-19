@@ -24,44 +24,36 @@ import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.gui.struct.Component;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Gui extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Gui> SCHEMA = ConfigSchema.of(Gui.class);
-
+@Configurable
+public class Gui implements Informative {
     private final Map<Integer, Component> S2C = new HashMap<>();
     private final Multimap<String, Component> P2C = HashMultimap.create();
     private final String id;
     private int size;
 
-    @Key("title")
-    @Explanation("A nice title for the GUI")
+    @Setting
+    @Description("A nice title for the GUI")
     @Validation(notNull = true)
     private String title;
 
-    @Key("components")
-    @Explanation("List of components")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("List of components")
+    @Validation(notNull = true, silent = true)
     private List<Component> components = new ArrayList<>();
 
-    @Key("sound")
-    @Explanation("Sound to play on opening")
+    @Setting
+    @Description("Sound to play on opening")
     private BattleSound sound;
 
     public Gui(@NotNull String id) {
@@ -109,64 +101,34 @@ public class Gui extends ConfigurableObject implements Informative {
     }
 
     @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null) {
-            if (entry.getKey().equals("components")) {
-                ConfigurationSection cs = (ConfigurationSection) value;
-                List<Component> components = new ArrayList<>();
-                int highestSlot = 0;
-                for (String s : cs.getKeys(false)) {
-                    try {
-                        Component c = ConfigHelper.readConfig(cs.getConfigurationSection(s), Component.SCHEMA, new Component(s));
-                        for (Integer i : c.getSlots()) {
-                            Component prev = S2C.put(i, c);
-                            // if this slot exists in previous component, we will remove it
-                            if (prev != null) {
-                                prev.getSlots().remove(i);
-                            }
-                        }
-                        if (c.getPagination() != null) {
-                            if (!P2C.put(c.getPagination(), c)) {
-                                Bukkit.getLogger().warning("Pagination should not be duplicated! `" + c.getPagination() + "` in component: " + c.getId());
-                            }
-                        }
-                        int hs = Collections.max(c.getSlots());
-                        if (hs > highestSlot) highestSlot = hs;
-                        components.add(c);
-                    } catch (InvalidValueException e) {
-                        e.printStackTrace();
-                    }
-                }
-                size = MathUtil.nextMultiple(highestSlot, 9);
-                if (size > 54) {
-                    Bukkit.getLogger().warning("The inventory size is out of bound: " + size);
-                    size = 54;
-                }
-                return components;
-            }
-        }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null) {
-            if (entry.getKey().equals("components")) {
-                ConfigurationSection parent = new YamlConfiguration();
-                int i = 0;
-                for (Component cpn : (List<Component>) value) {
-                    YamlConfiguration c = new YamlConfiguration();
-                    ConfigHelper.writeConfig(c, Component.SCHEMA, cpn);
-                    parent.set(String.valueOf(i++), c);
-                }
-                return parent;
-            }
-        }
-        return value;
-    }
-
-    @Override
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id).inform("size", size);
+    }
+
+    @PostHandler
+    private void handle(){
+        int highestSlot = 0;
+        for (Component c : components) {
+            for (Integer i : c.getSlots()) {
+                Component prev = S2C.put(i, c);
+                // if this slot exists in previous component, we will remove it
+                if (prev != null) {
+                    prev.getSlots().remove(i);
+                }
+            }
+            if (c.getPagination() != null) {
+                if (!P2C.put(c.getPagination(), c)) {
+                    Bukkit.getLogger().warning("Pagination should not be duplicated! `" + c.getPagination() + "` in component: " + c.getId());
+                }
+            }
+            int hs = Collections.max(c.getSlots());
+            if (hs > highestSlot) highestSlot = hs;
+            components.add(c);
+        }
+        size = MathUtil.nextMultiple(highestSlot, 9);
+        if (size > 54) {
+            Bukkit.getLogger().warning("The inventory size is out of bound: " + size);
+            size = 54;
+        }
     }
 }

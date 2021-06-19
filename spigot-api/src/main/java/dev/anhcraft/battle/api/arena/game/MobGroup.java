@@ -20,32 +20,28 @@
 
 package dev.anhcraft.battle.api.arena.game;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class MobGroup extends ConfigurableObject {
-    public static final ConfigSchema<MobGroup> SCHEMA = ConfigSchema.of(MobGroup.class);
-
-    @Key("location")
-    @Explanation("Where to spawn the mobs")
+@Configurable
+public class MobGroup {
+    @Setting
+    @Description("Where to spawn the mobs")
     @Validation(notNull = true)
     private String location;
 
-    @Key("entity_type")
-    @Explanation("Mob type")
-    @PrettyEnum
+    @Setting
+    @Path("entity_type")
+    @Description("Mob type")
     @Validation(notNull = true)
     private EntityType entityType;
 
-    @Key("weight")
-    @Explanation({
+    @Setting
+    @Description({
             "Weight of each entity",
             "This value is used to reduce the speed of whom",
             "is carrying them. The ratio for weight:speed",
@@ -53,12 +49,12 @@ public class MobGroup extends ConfigurableObject {
     })
     private double weight;
 
-    @Key("stealable")
-    @Explanation("Can thieves steal these mobs")
+    @Setting
+    @Description("Can thieves steal these mobs")
     private boolean stealable;
 
-    @Key("amount")
-    @Explanation("How many entities should be spawned")
+    @Setting
+    @Description("How many entities should be spawned")
     private int amount = 1;
 
     @NotNull

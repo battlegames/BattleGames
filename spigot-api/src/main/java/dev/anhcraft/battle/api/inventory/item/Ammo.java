@@ -22,10 +22,10 @@ package dev.anhcraft.battle.api.inventory.item;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.effect.BattleParticle;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
 import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
@@ -53,43 +53,45 @@ public class Ammo extends BattleItem<AmmoModel> {
     }
 
     @SuppressWarnings("FieldMayBeFinal")
-    @Schema
+    @Configurable
     public static class Bullet {
-        public static final ConfigSchema<Bullet> SCHEMA = ConfigSchema.of(Bullet.class);
-
-        @Key("damage")
-        @Explanation({
+        @Setting
+        @Description({
                 "Amount of damage to the target",
                 "This damage may be increased or decreased relying on other",
                 "factors like damage buff, damage resistance, etc"
         })
         private double damage;
 
-        @Key("knockback")
-        @Explanation("The knockback power to push the target backward")
+        @Setting
+        @Description("The knockback power to push the target backward")
         private double knockback;
 
-        @Key("penetration_power")
-        @Explanation({
+        @Setting
+        @Path("penetration_power")
+        @Description({
                 "The penetration power",
                 "Every time a bullet digs through a block, its power will be",
                 "reduced until reaches zero and stop flying."
         })
         private int penetrationPower;
 
-        @Key("fire_ticks")
-        @Explanation({
+        @Setting
+        @Path("fire_ticks")
+        @Description({
                 "How long does the fire remain on the target",
                 "Set to 0 to turn off the fire"
         })
         private int fireTicks;
 
-        @Key("particle")
-        @Explanation("The particle to be shown when flying")
+        @Setting
+        @Path("particle")
+        @Description("The particle to be shown when flying")
         private BattleParticle particleEffect;
 
-        @Key("time_offset")
-        @Explanation({
+        @Setting
+        @Path("time_offset")
+        @Description({
                 "The bullet's time offset (in milliseconds)",
                 "Higher value can help to make the entity bounding check",
                 "more accurate, but may result in laggy"

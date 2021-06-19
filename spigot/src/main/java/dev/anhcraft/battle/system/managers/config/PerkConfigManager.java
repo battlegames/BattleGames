@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Perk;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class PerkConfigManager extends ConfigManager {
     public final Map<String, Perk> PERK_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class PerkConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
             Perk perk = new Perk(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), Perk.SCHEMA, perk);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Perk.class, cs, perk);
             PERK_MAP.put(s, perk);
         });
     }

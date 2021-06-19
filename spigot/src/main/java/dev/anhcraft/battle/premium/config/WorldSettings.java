@@ -20,11 +20,10 @@
 
 package dev.anhcraft.battle.premium.config;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.PrettyEnum;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import org.bukkit.WeatherType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,41 +32,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class WorldSettings extends ConfigurableObject {
-    @Key("prevent_mob_drops")
+@Configurable
+public class WorldSettings {
+    @Setting
+    @Path("prevent_mob_drops")
     private boolean preventMobDrops;
 
-    @Key("prevent_explosions")
+    @Setting
+    @Path("prevent_explosions")
     private boolean preventExplosions;
 
-    @Key("protect_blocks")
+    @Setting
+    @Path("protect_blocks")
     private boolean protectBlocks;
 
-    @Key("always_weather")
-    @PrettyEnum
+    @Setting
+    @Path("always_weather")
     private WeatherType alwaysWeather;
 
-    @Key("always_time")
+    @Setting
+    @Path("always_time")
     private long alwaysTime = -1;
 
-    @Key("prevent_hungry")
+    @Setting
+    @Path("prevent_hungry")
     private boolean preventHungry;
 
-    @Key("prevent_mob_spawn")
+    @Setting
+    @Path("prevent_mob_spawn")
     private boolean preventMobSpawn;
 
-    @Key("anti_fire_spread")
+    @Setting
+    @Path("anti_fire_spread")
     private boolean antiFireSpread;
 
-    @Key("disable_interact")
+    @Setting
+    @Path("disable_interact")
     private boolean disableInteract;
 
-    @Key("disable_crafting")
+    @Setting
+    @Path("disable_crafting")
     private boolean disableCrafting;
 
-    @Key("except_worlds")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("except_worlds")
+    @Validation(notNull = true, silent = true)
     private List<String> blacklistWorlds = new ArrayList<>();
 
     public boolean isPreventMobDrops() {

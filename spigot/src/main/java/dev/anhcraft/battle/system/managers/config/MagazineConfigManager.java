@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.MagazineModel;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MagazineConfigManager extends ConfigManager {
     public final Map<String, MagazineModel> MAGAZINE_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class MagazineConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             MagazineModel m = new MagazineModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), MagazineModel.SCHEMA, m);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(MagazineModel.class, cs, m);
             MAGAZINE_MAP.put(s, m);
         });
     }

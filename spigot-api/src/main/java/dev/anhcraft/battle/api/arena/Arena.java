@@ -30,13 +30,13 @@ import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.ConfigDeserializer;
+import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.struct.ConfigSection;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -50,42 +50,43 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Arena extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Arena> SCHEMA = ConfigSchema.of(Arena.class);
+@Configurable
+public class Arena implements Informative {
     private final String id;
-    private String finalExpExpression;
-    private String finalMoneyExpression;
 
-    @Key("name")
-    @Explanation("The name of this arena")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("The name of this arena")
+    @Validation(notNull = true, silent = true)
     private String name;
 
-    @Key("mode")
-    @Explanation("The game mode")
+    @Setting
+    @Description("The game mode")
     @Validation(notNull = true)
     private Mode mode;
 
-    @Key("icon")
-    @Explanation("The icon of this arena")
+    @Setting
+    @Description("The icon of this arena")
     @Validation(notNull = true)
     private PreparedItem icon;
 
-    @Key("max_time")
-    @Explanation("The maximum playing time")
+    @Setting
+    @Path("max_time")
+    @Description("The maximum playing time")
     private long maxTime;
 
-    @Key("max_players")
-    @Explanation("The maximum number of players")
+    @Setting
+    @Path("max_players")
+    @Description("The maximum number of players")
     private int maxPlayers;
 
-    @Key("allow_late_joins")
-    @Explanation("Able to join a game even it has started")
+    @Setting
+    @Path("allow_late_joins")
+    @Description("Able to join a game even it has started")
     private boolean allowLateJoins;
 
-    @Key("final_exp_formula")
-    @Explanation({
+    @Setting
+    @Path("final_exp_formula")
+    @Description({
             "The formula for calculating the final exp",
             "- a: number of headshots",
             "- b: number of kills",
@@ -93,10 +94,11 @@ public class Arena extends ConfigurableObject implements Informative {
             "- d: <b>1</b> if won or <b>0</b> if lost"
     })
     @Validation(notNull = true)
-    private Expression finalExpCalculator;
+    private String finalExpCalculator;
 
-    @Key("final_money_formula")
-    @Explanation({
+    @Setting
+    @Path("final_money_formula")
+    @Description({
             "The formula for calculating the final money",
             "- a: number of headshots",
             "- b: number of kills",
@@ -104,70 +106,74 @@ public class Arena extends ConfigurableObject implements Informative {
             "- d: <b>1</b> if won or <b>0</b> if lost"
     })
     @Validation(notNull = true)
-    private Expression finalMoneyCalculator;
+    private String finalMoneyCalculator;
 
-    @Key("game_options")
-    @Explanation("Game mode settings")
-    @Validation(notNull = true)
-    private GameOptions gameOptions;
-
-    @Key("end_commands.winners")
-    @Explanation({
+    @Setting
+    @Path("end_commands.winners")
+    @Description({
             "Commands to be executed by the console at the end",
             "Placeholders can be used within the command with",
             "values parsed from each <b>winner</b>"
     })
     private List<String> endCommandWinners;
 
-    @Key("end_commands.losers")
-    @Explanation({
+    @Setting
+    @Path("end_commands.losers")
+    @Description({
             "Commands to be executed by the console at the end",
             "Placeholders can be used within the command with",
             "values parsed from each <b>loser</b>"
     })
     private List<String> endCommandLosers;
 
-    @Key("render_gui_on_death")
-    @Explanation({
+    @Setting
+    @Path("render_gui_on_death")
+    @Description({
             "Re-renders the GUI on death",
             "This option can prevent players from reusing old items"
     })
     private boolean renderGuiOnDeath = true;
 
-    @Key("bungeecord.enabled")
-    @Explanation({
+    @Setting
+    @Path("bungeecord.enabled")
+    @Description({
             "Enable the Bungeecord support for this arena",
             "<b>Note: You must enable the Bungeecord support for",
             "the whole plugin first (see general.yml)</b>"
     })
     private boolean bungeeSupport;
 
-    @Key("bungeecord.remote_servers")
-    @Explanation({
+    @Setting
+    @Path("bungeecord.remote_servers")
+    @Description({
             "List of remote servers",
             "Remote servers are places where the game happens"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<String> remoteServers = new ArrayList<>();
 
-    @Key("end_firework")
-    @Explanation("The firework to be spawned when the game ends")
+    @Setting
+    @Path("end_firework")
+    @Description("The firework to be spawned when the game ends")
     private BattleFirework endFirework;
 
-    @Key("end_delay")
-    @Explanation("The delay time before the game actually ends")
+    @Setting
+    @Path("end_delay")
+    @Description("The delay time before the game actually ends")
     private long endDelay = 60;
 
-    @Key("result_broadcast.won")
-    @Explanation("The message to be sent to the winners")
+    @Setting
+    @Path("result_broadcast.won")
+    @Description("The message to be sent to the winners")
     private List<String> wonReport;
 
-    @Key("result_broadcast.lost")
-    @Explanation("The message to be sent to the losers")
+    @Setting
+    @Path("result_broadcast.lost")
+    @Description("The message to be sent to the losers")
     private List<String> lostReport;
 
-    @Key("rollback")
-    @Explanation("Rollback settings")
+    @Setting
+    @Description("Rollback settings")
     private Rollback rollback;
 
     public Arena(@NotNull String id) {
@@ -187,8 +193,9 @@ public class Arena extends ConfigurableObject implements Informative {
 
     @NotNull
     public Mode getMode() {
-        if (mode == null)
+        if (mode == null) {
             throw new UnsupportedOperationException("Mode is not present");
+        }
         return mode;
     }
 
@@ -209,9 +216,15 @@ public class Arena extends ConfigurableObject implements Informative {
         return allowLateJoins;
     }
 
+    private Expression finalMoneyExpression;
+    private Expression finalExpExpression;
+
     public double calculateFinalMoney(@NotNull GamePlayer player) {
         Validate.notNull(player, "Player must be non-null");
-        return finalMoneyCalculator
+        if(finalMoneyExpression == null) {
+            finalMoneyExpression = new ExpressionBuilder(finalMoneyCalculator).variables("a", "b", "c", "d").build();
+        }
+        return finalMoneyExpression
                 .setVariable("a", player.getStats().of(HeadshotStat.class).get())
                 .setVariable("b", player.getStats().of(KillStat.class).get())
                 .setVariable("c", player.getStats().of(DeathStat.class).get())
@@ -221,13 +234,18 @@ public class Arena extends ConfigurableObject implements Informative {
 
     public long calculateFinalExp(@NotNull GamePlayer player) {
         Validate.notNull(player, "Player must be non-null");
-        return (long) finalExpCalculator
+        if(finalExpExpression == null) {
+            finalExpExpression = new ExpressionBuilder(finalExpCalculator).variables("a", "b", "c", "d").build();
+        }
+        return (long) finalExpExpression
                 .setVariable("a", player.getStats().of(HeadshotStat.class).get())
                 .setVariable("b", player.getStats().of(KillStat.class).get())
                 .setVariable("c", player.getStats().of(DeathStat.class).get())
                 .setVariable("d", player.isWinner() ? 1 : 0)
                 .evaluate();
     }
+
+    private GameOptions gameOptions;
 
     @NotNull
     public GameOptions getGameOptions() {
@@ -307,58 +325,16 @@ public class Arena extends ConfigurableObject implements Informative {
                 .link(modeInfo);
     }
 
-    @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null) {
-            switch (entry.getKey()) {
-                case "mode": {
-                    return Mode.get((String) value);
-                }
-                case "final_exp_formula": {
-                    finalExpExpression = (String) value;
-                    return new ExpressionBuilder(finalExpExpression).variables("a", "b", "c", "d").build();
-                }
-                case "final_money_formula": {
-                    finalMoneyExpression = (String) value;
-                    return new ExpressionBuilder(finalMoneyExpression).variables("a", "b", "c", "d").build();
-                }
-                case "bungeecord.enabled": {
-                    boolean b = (Boolean) value;
-                    if (b && !ApiProvider.consume().hasBungeecordSupport()) {
-                        BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
-                        return false;
-                    }
-                }
-                case "game_options": {
-                    if (value instanceof ConfigurationSection && mode != null) {
-                        ConfigurationSection c = (ConfigurationSection) value;
-                        try {
-                            return ConfigHelper.readConfig(c, mode.getOptionSchema());
-                        } catch (InvalidValueException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
+    @PostHandler
+    private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
+        if (bungeeSupport && !ApiProvider.consume().hasBungeecordSupport()) {
+            BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
         }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null) {
-            switch (entry.getKey()) {
-                case "mode": {
-                    return ((Mode) value).getId();
-                }
-                case "final_exp_formula": {
-                    return finalExpExpression;
-                }
-                case "final_money_formula": {
-                    return finalMoneyExpression;
-                }
-            }
+        try {
+            gameOptions = ConfigHelper.DESERIALIZER.transformConfig(Objects.requireNonNull(mode.getOptionSchema()),
+                    Objects.requireNonNull(Objects.requireNonNull(section.get("game_options")).asSection()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return value;
     }
 }

@@ -21,13 +21,8 @@
 package dev.anhcraft.battle.api.arena.game.options;
 
 import dev.anhcraft.battle.api.BattleSound;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,37 +32,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class GameOptions extends ConfigurableObject {
-    public static final ConfigSchema<GameOptions> SCHEMA = ConfigSchema.of(GameOptions.class);
-
-    @Key("min_players")
-    @Explanation("The minimum players needed to start a game")
+@Configurable
+public class GameOptions {
+    @Setting
+    @Path("min_players")
+    @Description("The minimum players needed to start a game")
     private int minPlayers = 1;
 
-    @Key("countdown_time")
-    @Explanation("The countdown time")
+    @Setting
+    @Path("countdown_time")
+    @Description("The countdown time")
     private long countdownTime = 300;
 
-    @Key("spawn_protection_time")
-    @Explanation("Protection time when a player spawns (or respawn)")
+    @Setting
+    @Path("spawn_protection_time")
+    @Description("Protection time when a player spawns (or respawn)")
     private long spawnProtectionTime = 40;
 
-    @Key("item_selection_time")
-    @Explanation("The time for selecting Battle items")
+    @Setting
+    @Path("item_selection_time")
+    @Description("The time for selecting Battle items")
     private long itemSelectTime = 200;
 
-    @Key("respawn_waiting_time")
-    @Explanation("How long players need to wait before respawn")
+    @Setting
+    @Path("respawn_waiting_time")
+    @Description("How long players need to wait before respawn")
     private long respawnWaitTime = 200;
 
-    @Key("waiting_spawn_points")
-    @Explanation("Spawn points in waiting phase")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("waiting_spawn_points")
+    @Description("Spawn points in waiting phase")
+    @Validation(notNull = true, silent = true)
     private List<String> waitSpawnPoints = new ArrayList<>();
 
-    @Key("sounds.countdown")
-    @Explanation("Sound during countdown phrase")
+    @Setting
+    @Path("sounds.countdown")
+    @Description("Sound during countdown phrase")
     private BattleSound countdownSound;
 
     public int getMinPlayers() {

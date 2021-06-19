@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Booster;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class BoosterConfigManager extends ConfigManager {
     public final Map<String, Booster> BOOSTER_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class BoosterConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 1).forEach(s -> {
             Booster booster = new Booster(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), Booster.SCHEMA, booster);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Booster.class, cs, booster);
             BOOSTER_MAP.put(s, booster);
         });
     }

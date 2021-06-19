@@ -21,29 +21,24 @@
 package dev.anhcraft.battle.api.advancement;
 
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-@Schema
-public class Advancement extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Advancement> SCHEMA = ConfigSchema.of(Advancement.class);
-
+@Configurable
+public class Advancement implements Informative {
     private final String id;
 
-    @Key("type")
-    @Explanation({
+    @Setting
+    @Description({
             "The statistic type",
             "All statistic types can be seen here: <a href=\"https://wiki.anhcraft.dev/battle/stats\">https://wiki.anhcraft.dev/battle/stats</a>",
             "Except \"exp\" which is not supported."
@@ -51,23 +46,23 @@ public class Advancement extends ConfigurableObject implements Informative {
     @Validation(notNull = true)
     private String type;
 
-    @Key("name")
-    @Explanation("The advancement's name")
+    @Setting
+    @Description("The advancement's name")
     @Validation(notNull = true)
     private String name;
 
-    @Key("description")
-    @Explanation("A nice description for this advancement")
+    @Setting
+    @Description("A nice description for this advancement")
     private List<String> description;
 
-    @Key("icon")
+    @Setting
     @Validation(notNull = true)
-    @PrettyEnum
-    @Explanation("The icon")
+    @Description("The icon")
     private Material icon;
 
-    @Key("inherit_progress")
-    @Explanation({
+    @Setting
+    @Path("inherit_progress")
+    @Description({
             "Should a player's progressions be inherited from",
             "previous advancements with the same statistics type?",
             "This should be enabled as players can continue what",
@@ -75,15 +70,13 @@ public class Advancement extends ConfigurableObject implements Informative {
     })
     private boolean inheritProgress;
 
-    @Key("progression")
-    @Explanation({
+    @Setting
+    @Description({
             "Different period of this advancements",
             "They can be known as 'levels'"
     })
     @Validation(notNull = true)
-    private SortedSet<Progression> progression;
-
-    private double maxAmount;
+    private List<Progression> progression;
 
     public Advancement(@NotNull String id) {
         this.id = id;
@@ -118,10 +111,14 @@ public class Advancement extends ConfigurableObject implements Informative {
         return inheritProgress;
     }
 
+    private SortedSet<Progression> progressions;
+
     @NotNull
     public SortedSet<Progression> getProgression() {
-        return progression;
+        return progressions;
     }
+
+    private double maxAmount;
 
     public double getMaxAmount() {
         return maxAmount;
@@ -136,38 +133,12 @@ public class Advancement extends ConfigurableObject implements Informative {
                 .inform("inherit", State.ENABLED.inCaseOf(inheritProgress));
     }
 
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("progression")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            SortedSet<Progression> progressions = new TreeSet<>(Comparator.naturalOrder());
-            Set<String> keys = cs.getKeys(false);
-            try {
-                for (String s : keys) {
-                    Progression p = ConfigHelper.readConfig(cs.getConfigurationSection(s), Progression.SCHEMA);
-                    maxAmount = Math.max(maxAmount, p.getAmount());
-                    progressions.add(p);
-                }
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
-            return progressions;
+    @PostHandler
+    private void handle(){
+        this.progressions = new TreeSet<>(Comparator.naturalOrder());
+        for (Progression p : progression) {
+            maxAmount = Math.max(maxAmount, p.getAmount());
+            this.progressions.add(p);
         }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("progression")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            int i = 0;
-            for (Progression p : (Set<Progression>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, Progression.SCHEMA, p);
-                parent.set(String.valueOf(i++), c);
-            }
-            return parent;
-        }
-        return value;
     }
 }

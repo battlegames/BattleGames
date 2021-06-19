@@ -22,9 +22,8 @@ package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -62,11 +61,7 @@ public class ArenaConfigManager extends ConfigManager {
             plugin.getLogger().info("[" + loggerName + "] Loading arena " + s + "...");
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             configUpdater.update(Objects.requireNonNull(cs));
-            try {
-                ConfigHelper.readConfig(cs, Arena.SCHEMA, arena);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Arena.class, cs, arena);
             ARENA_MAP.put(s, arena);
             if (arena.getRollback() == null) {
                 plugin.getLogger().warning("[" + loggerName + "] For safety reasons, you should specify rollback for arena #" + arena.getId());

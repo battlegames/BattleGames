@@ -164,7 +164,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
         super.play(game);
 
         plugin.extension.getTaskHelper().newTask(() -> {
-            List<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getGameOptions()).getFlags();
+            Collection<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getGameOptions()).getFlags();
             for (FlagOptions k : fs) {
                 ArmorStand armorStand = ArmorStand.spawn(k.getLocation());
                 armorStand.setVisible(false);

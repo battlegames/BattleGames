@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Kit;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class KitConfigManager extends ConfigManager {
     public final Map<String, Kit> KIT_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class KitConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
             Kit kit = new Kit(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), Kit.SCHEMA, kit);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Kit.class, cs, kit);
             KIT_MAP.put(s, kit);
         });
     }

@@ -21,24 +21,27 @@
 package dev.anhcraft.battle.premium.config;
 
 import dev.anhcraft.battle.api.BattleSound;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
 import org.jetbrains.annotations.Nullable;
 
-@Schema
-public class ItemSettings extends ConfigurableObject {
-    @Key("medical_kit.health_bonus")
-    @Explanation("Additional health give to the player")
+@Configurable
+public class ItemSettings {
+    @Setting
+    @Path("medical_kit.health_bonus")
+    @Description("Additional health give to the player")
     private int medicalKitBonusHealth;
 
-    @Key("medical_kit.use_sound")
-    @Explanation("Sound to be played when using the medical kit")
+    @Setting
+    @Path("medical_kit.use_sound")
+    @Description("Sound to be played when using the medical kit")
     private BattleSound medicalKitUseSound;
 
-    @Key("adrenaline_shot.use_sound")
-    @Explanation("Sound to be played when using the adrenaline shot")
+    @Setting
+    @Path("adrenaline_shot.use_sound")
+    @Description("Sound to be played when using the adrenaline shot")
     private BattleSound adrenalineShotUseSound;
 
     public int getMedicalKitBonusHealth() {

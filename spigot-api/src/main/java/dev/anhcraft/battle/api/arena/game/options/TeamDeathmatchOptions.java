@@ -22,11 +22,7 @@ package dev.anhcraft.battle.api.arena.game.options;
 
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.utils.LocationUtil;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,18 +31,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class TeamDeathmatchOptions extends GameOptions {
-    public static final ConfigSchema<TeamDeathmatchOptions> SCHEMA = ConfigSchema.of(TeamDeathmatchOptions.class);
-
-    @Key("playing_spawn_points_a")
-    @Explanation("The spawn points of team A (in playing phase)")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("playing_spawn_points_a")
+    @Description("The spawn points of team A (in playing phase)")
+    @Validation(notNull = true, silent = true)
     private List<String> playSpawnPointsA = new ArrayList<>();
 
-    @Key("playing_spawn_points_b")
-    @Explanation("The spawn points of team B (in playing phase)")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("playing_spawn_points_b")
+    @Description("The spawn points of team B (in playing phase)")
+    @Validation(notNull = true, silent = true)
     private List<String> playSpawnPointsB = new ArrayList<>();
 
     @NotNull

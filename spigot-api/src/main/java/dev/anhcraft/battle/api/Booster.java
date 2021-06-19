@@ -24,15 +24,14 @@ import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
 public class Booster implements Informative {
-    @Setting
-    @Virtual
-    private String id;
+    private final String id;
 
     @Setting
     @Description("The icon that used to symbolize the booster")
@@ -69,6 +68,11 @@ public class Booster implements Informative {
             "Set to 0 to disable this option"
     })
     private int expLimit;
+
+    public Booster(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        this.id = id;
+    }
 
     @NotNull
     public String getId() {

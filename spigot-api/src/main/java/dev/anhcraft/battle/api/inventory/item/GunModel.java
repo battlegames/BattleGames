@@ -19,13 +19,11 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleBar;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.ItemSkin;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.lang.enumeration.RegEx;
 import dev.anhcraft.jvmkit.utils.Pair;
 import org.bukkit.Bukkit;
@@ -36,72 +34,83 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class GunModel extends WeaponModel {
-    public static final ConfigSchema<GunModel> SCHEMA = ConfigSchema.of(GunModel.class);
     private static final BattleSound DEF_SHOOT_SOUND = new BattleSound("$entity_arrow_shoot");
-    @Key("skin.primary")
-    @Explanation("Set the primary skin")
+
+    @Setting
+    @Path("skin.primary")
+    @Description("Set the primary skin")
     @Validation(notNull = true)
     private ItemSkin primarySkin;
 
-    @Key("skin.secondary")
-    @Explanation("Set the primary skin")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("skin.secondary")
+    @Description("Set the primary skin")
+    @Validation(notNull = true, silent = true)
     private ItemSkin secondarySkin = ItemSkin.EMPTY;
 
-    @Key("weight")
-    @Explanation({
+    @Setting
+    @Description({
             "Set the gun's weight",
             "This value reduces the speed while someone is holding the gun"
     })
     private double weight;
 
-    @Key("muzzle_velocity")
-    @Explanation("The initial velocity of a bullet when it is shot out of the gun")
+    @Setting
+    @Path("muzzle_velocity")
+    @Description("The initial velocity of a bullet when it is shot out of the gun")
     private double muzzleVelocity = 70;
 
-    @Key("magazine.default")
-    @Explanation("The default magazine")
+    @Setting
+    @Path("magazine.default")
+    @Description("The default magazine")
     @Validation(notNull = true)
     private MagazineModel defaultMagazine;
 
-    @Key("magazine.max_capacity")
-    @Explanation({
+    @Setting
+    @Path("magazine.max_capacity")
+    @Description({
             "Set the maximum magazine's capacity",
             "This option has no effect with the default magazine"
     })
     private int magazineMaxCapacity;
 
-    @Key("scope.default")
-    @Explanation("The default scope")
+    @Setting
+    @Path("scope.default")
+    @Description("The default scope")
     private ScopeModel defaultScope;
 
-    @Key("sounds.on_shoot")
-    @Explanation("Set the sound that is played when shooting")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("sounds.on_shoot")
+    @Description("Set the sound that is played when shooting")
+    @Validation(notNull = true, silent = true)
     private BattleSound shootSound = DEF_SHOOT_SOUND;
 
-    @Key("sounds.on_start_reloading")
-    @Explanation("Set the sound that is played when starting to reload ammo")
+    @Setting
+    @Path("sounds.on_start_reloading")
+    @Description("Set the sound that is played when starting to reload ammo")
     private BattleSound reloadStartSound;
 
-    @Key("sounds.on_end_reloading")
-    @Explanation("Set the sound that is played when finished reloading ammo")
+    @Setting
+    @Path("sounds.on_end_reloading")
+    @Description("Set the sound that is played when finished reloading ammo")
     private BattleSound reloadEndSound;
 
-    @Key("bossbar.on_reload")
-    @Explanation("Set the boss bar used during the reloading time")
+    @Setting
+    @Path("bossbar.on_reload")
+    @Description("Set the boss bar used during the reloading time")
     @Validation(notNull = true)
     private BattleBar reloadBar;
 
-    @Key("spray_pattern")
-    @Explanation({
+    @Setting
+    @Path("spray_pattern")
+    @Description({
             "Set the spray pattern",
             "With two numbers represent two offsets on the X axis and Y axis",
             "<a href=https://anhcraft.dev/tools/battle/spray.html>Spray pattern generator tool</a>"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     @Example({
             "spray_pattern:",
             "- 1.55 0.9600006103515625",
@@ -126,7 +135,7 @@ public class GunModel extends WeaponModel {
             "- -4.25 22.560000610351562",
             "- -5.65 22.860000610351562"
     })
-    private List<Pair<Double, Double>> sprayPattern = new ArrayList<>();
+    private List<String> sprayPattern = new ArrayList<>();
 
     public GunModel(@NotNull String id) {
         super(id);
@@ -198,66 +207,33 @@ public class GunModel extends WeaponModel {
         return defaultScope;
     }
 
+    private List<Pair<Double, Double>> compliedSprayPattern = new ArrayList<>();
+
     @NotNull
     public List<Pair<Double, Double>> getSprayPattern() {
-        return sprayPattern;
+        return compliedSprayPattern;
     }
 
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "magazine.default": {
-                    return ApiProvider.consume().getMagazineModel((String) o);
-                }
-                case "scope.default": {
-                    return ApiProvider.consume().getScopeModel((String) o);
-                }
-                case "spray_pattern": {
-                    List<Pair<Double, Double>> sp = new ArrayList<>();
-                    List<?> list = (List<?>) o;
-                    for (Object object : list) {
-                        String[] args = String.valueOf(object).split(" ");
-                        double x = 0, y = 0;
-                        if (args.length >= 1) {
-                            if (RegEx.DECIMAL.valid(args[0]))
-                                x = Double.parseDouble(args[0]);
-                            else
-                                Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], getId()));
-                        }
-                        if (args.length >= 2) {
-                            if (RegEx.DECIMAL.valid(args[1]))
-                                y = Double.parseDouble(args[1]);
-                            else
-                                Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], getId()));
-                        }
-                        sp.add(new Pair<>(x, y));
-                    }
-                    return sp;
+    @PostHandler
+    private void handle(){
+        for (String s : sprayPattern) {
+            String[] args = s.split(" ");
+            double x = 0, y = 0;
+            if (args.length >= 1) {
+                if (RegEx.DECIMAL.valid(args[0])) {
+                    x = Double.parseDouble(args[0]);
+                } else {
+                    Bukkit.getLogger().warning(String.format("Value X `%s` of spray pattern for gun `%s` is invalid.", args[0], getId()));
                 }
             }
-        }
-        return o;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "scope.default":
-                case "magazine.default": {
-                    return ((BattleItemModel) o).getId();
-                }
-                case "spray_pattern": {
-                    List<Pair<Double, Double>> sp = (List<Pair<Double, Double>>) o;
-                    List<String> list = new ArrayList<>();
-                    for (Pair<Double, Double> p : sp) {
-                        list.add(p.getFirst() + " " + p.getSecond());
-                    }
-                    return list;
+            if (args.length >= 2) {
+                if (RegEx.DECIMAL.valid(args[1])) {
+                    y = Double.parseDouble(args[1]);
+                } else {
+                    Bukkit.getLogger().warning(String.format("Value Y `%s` of spray pattern for gun `%s` is invalid.", args[1], getId()));
                 }
             }
+            compliedSprayPattern.add(new Pair<>(x, y));
         }
-        return o;
     }
 }

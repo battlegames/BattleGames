@@ -25,32 +25,23 @@ import dev.anhcraft.battle.api.inventory.Backpack;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Kit extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Kit> SCHEMA = ConfigSchema.of(Kit.class);
+@Configurable
+public class Kit implements Informative {
     private static final PreparedItem DEF_NO_ACCESS = new PreparedItem();
 
     static {
@@ -59,27 +50,30 @@ public class Kit extends ConfigurableObject implements Informative {
 
     private final String id;
 
-    @Key("icon")
-    @Explanation("The kit's icon (when players can get it)")
+    @Setting
+    @Description("The kit's icon (when players can get it)")
     @Validation(notNull = true)
     private PreparedItem icon;
 
-    @Key("no_access_icon")
-    @Explanation("The icon to be showed when players can't access the kit")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("no_access_icon")
+    @Description("The icon to be showed when players can't access the kit")
+    @Validation(notNull = true, silent = true)
     private PreparedItem noAccessIcon = DEF_NO_ACCESS.duplicate();
 
-    @Key("permission")
-    @Explanation("The permission that players must have to get the kit")
+    @Setting
+    @Description("The permission that players must have to get the kit")
     private String permission;
 
-    @Key("renew_time")
-    @Explanation("The delay time that players have to wait before get the kit again")
+    @Setting
+    @Path("renew_time")
+    @Description("The delay time that players have to wait before get the kit again")
     private int renewTime;
 
-    @Key("items.vanilla")
-    @Explanation("All vanilla items in this kit")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("items.vanilla")
+    @Description("All vanilla items in this kit")
+    @Validation(notNull = true, silent = true)
     @Example({
             "items:",
             "  vanilla:",
@@ -89,8 +83,9 @@ public class Kit extends ConfigurableObject implements Informative {
     })
     private PreparedItem[] vanillaItems = new PreparedItem[0];
 
-    @Key("items.battle")
-    @Explanation({
+    @Setting
+    @Path("items.battle")
+    @Description({
             "All Battle items in this kit",
             "Example:",
             "<code>gun:",
@@ -101,7 +96,7 @@ public class Kit extends ConfigurableObject implements Informative {
             "- 7_62mm",
             "- _50_ae</code>"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     @Example({
             "items:",
             "  battle:",
@@ -111,13 +106,14 @@ public class Kit extends ConfigurableObject implements Informative {
     })
     private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
-    @Key("boosters")
-    @Explanation("The boosters to be given")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("The boosters to be given")
+    @Validation(notNull = true, silent = true)
     private List<String> boosters = new ArrayList<>();
 
-    @Key("first_join")
-    @Explanation("Players receive the kit automatically on their first joins")
+    @Setting
+    @Path("first_join")
+    @Description("Players receive the kit automatically on their first joins")
     private boolean firstJoin;
 
     public Kit(@NotNull String id) {
@@ -183,70 +179,6 @@ public class Kit extends ConfigurableObject implements Informative {
             is.put(x);
         });
         boosters.forEach(s -> playerData.getBoosters().putIfAbsent(s, System.currentTimeMillis()));
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        o = super.conf2schema(o, entry);
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "items.vanilla": {
-                    ConfigurationSection cs = (ConfigurationSection) o;
-                    Set<String> keys = cs.getKeys(false);
-                    PreparedItem[] vanillaItems = new PreparedItem[keys.size()];
-                    int i = 0;
-                    for (String s : keys) {
-                        try {
-                            vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), ConfigSchema.of(PreparedItem.class));
-                        } catch (InvalidValueException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return vanillaItems;
-                }
-                case "items.battle": {
-                    ConfigurationSection cs = (ConfigurationSection) o;
-                    Multimap<ItemType, String> items = HashMultimap.create();
-                    Set<String> keys = cs.getKeys(false);
-                    for (String s : keys) {
-                        ItemType type = EnumUtil.getEnum(ItemType.values(), s);
-                        items.putAll(type, cs.getStringList(s));
-                    }
-                    return items;
-                }
-            }
-        }
-        return o;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "items.vanilla": {
-                    ConfigurationSection parent = new YamlConfiguration();
-                    int i = 0;
-                    for (PreparedItem item : (PreparedItem[]) o) {
-                        YamlConfiguration c = new YamlConfiguration();
-                        ConfigHelper.writeConfig(c, ConfigSchema.of(PreparedItem.class), item);
-                        parent.set(String.valueOf(i++), c);
-                    }
-                    return parent;
-                }
-                case "items.battle": {
-                    Multimap<ItemType, String> map = (Multimap<ItemType, String>) o;
-                    ConfigurationSection parent = new YamlConfiguration();
-                    for (ItemType type : map.keys()) {
-                        // hashMultimap returns set, that is not friendly with yaml
-                        // we have to change it to array list
-                        List<String> x = new ArrayList<>(map.get(type));
-                        parent.set(type.name().toLowerCase(), x);
-                    }
-                    return parent;
-                }
-            }
-        }
-        return o;
     }
 
     @Override

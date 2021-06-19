@@ -20,26 +20,17 @@
 
 package dev.anhcraft.battle.api.arena.game.options;
 
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
-    public static final ConfigSchema<CaptureTheFlagOptions> SCHEMA = ConfigSchema.of(CaptureTheFlagOptions.class);
-
-    @Key("flags")
-    @Explanation("All flags in the arena")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("All flags in the arena")
+    @Validation(notNull = true, silent = true)
     @Example({
             "flags:",
             "  '1':",
@@ -57,42 +48,10 @@ public class CaptureTheFlagOptions extends TeamDeathmatchOptions {
             "      neutral: \"&7Neutral\"",
             "    max_health: 15"
     })
-    private List<FlagOptions> flags = new ArrayList<>();
+    private Map<String, FlagOptions> flags = new HashMap<>();
 
     @NotNull
-    public List<FlagOptions> getFlags() {
-        return flags;
-    }
-
-    @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("flags")) {
-            ConfigurationSection conf = (ConfigurationSection) value;
-            List<FlagOptions> flags = new ArrayList<>();
-            try {
-                for (String s : conf.getKeys(false)) {
-                    flags.add(ConfigHelper.readConfig(conf.getConfigurationSection(s), FlagOptions.SCHEMA));
-                }
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
-            return flags;
-        }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("flags")) {
-            YamlConfiguration conf = new YamlConfiguration();
-            int i = 0;
-            for (FlagOptions f : (List<FlagOptions>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, FlagOptions.SCHEMA, f);
-                conf.set(String.valueOf(i++), c);
-            }
-            return conf;
-        }
-        return value;
+    public Collection<FlagOptions> getFlags() {
+        return flags.values();
     }
 }

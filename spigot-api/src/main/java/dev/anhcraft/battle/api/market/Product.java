@@ -33,14 +33,9 @@ import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.battle.utils.EnumUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.CollectionUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
@@ -48,8 +43,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -59,10 +52,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Product extends ConfigurableObject implements Informative {
+@Configurable
+public class Product implements Informative {
     public static final PreparedItem DEFAULT_ICON = new PreparedItem();
-    public static final ConfigSchema<Product> SCHEMA = ConfigSchema.of(Product.class);
 
     static {
         DEFAULT_ICON.material(Material.STONE);
@@ -70,12 +62,13 @@ public class Product extends ConfigurableObject implements Informative {
 
     private final String id;
 
-    @Key("icon")
-    @Explanation("Product's icon")
+    @Setting
+    @Description("Product's icon")
     private PreparedItem icon;
 
-    @Key("package_name")
-    @Explanation({
+    @Setting
+    @Path("package_name")
+    @Description({
             "A nice name for the package icon.",
             "This product is 'a package' when it gives player booster, perks, exp or items",
             "(for items, <b>requires the amount of two or more</b>). You can read more",
@@ -84,57 +77,62 @@ public class Product extends ConfigurableObject implements Informative {
     })
     private String packageName;
 
-    @Key("package_material")
-    @Explanation({
+    @Setting
+    @Path("package_material")
+    @Description({
             "The material for the package icon",
             "<i>What is a package?</i> Read above (option 'package_name')"
     })
-    @PrettyEnum
     private Material packageMaterial;
 
-    @Key("currency")
-    @Explanation("The currency to be used")
-    @PrettyEnum
+    @Setting
+    @Description("The currency to be used")
     private CurrencyType currency = CurrencyType.VAULT;
 
-    @Key("price")
-    @Explanation("The cost of this product")
+    @Setting
+    @Description("The cost of this product")
     private double price;
 
-    @Key("in_game_only")
-    @Explanation("Make this product only available during the game")
+    @Setting
+    @Path("in_game_only")
+    @Description("Make this product only available during the game")
     private boolean inGameOnly;
 
-    @Key("reserved_game_modes")
-    @Explanation({
+    @Setting
+    @Path("reserved_game_modes")
+    @Description({
             "Make this product only available during certain game modes",
             "This option only takes effect if <b>in_game_only</b> set to <i>true</i>",
             "All game modes are non-case-sensitive"
     })
     private List<String> gameModeReserved;
 
-    @Key("executions.perform_commands")
-    @Explanation({
+    @Setting
+    @Path("executions.perform_commands")
+    @Description({
             "The commands to be performed by the console later",
             "You can use placeholders here; they are parsed",
             "from the buyer's info"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<String> commands = new ArrayList<>();
 
-    @Key("executions.give_perks")
-    @Explanation("The perks to be given later")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("executions.give_perks")
+    @Description("The perks to be given later")
+    @Validation(notNull = true, silent = true)
     private List<String> perks = new ArrayList<>();
 
-    @Key("executions.give_boosters")
-    @Explanation("The boosters to be given later")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("executions.give_boosters")
+    @Description("The boosters to be given later")
+    @Validation(notNull = true, silent = true)
     private List<String> boosters = new ArrayList<>();
 
-    @Key("executions.give_items.vanilla")
-    @Explanation("The vanilla items to be given later")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("executions.give_items.vanilla")
+    @Description("The vanilla items to be given later")
+    @Validation(notNull = true, silent = true)
     @Example({
             "executions:",
             "  give_items:",
@@ -145,9 +143,10 @@ public class Product extends ConfigurableObject implements Informative {
     })
     private PreparedItem[] vanillaItems = new PreparedItem[0];
 
-    @Key("executions.give_items.battle")
-    @Explanation("The Battle items to be given later")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("executions.give_items.battle")
+    @Description("The Battle items to be given later")
+    @Validation(notNull = true, silent = true)
     @Example({
             "executions:",
             "  give_items:",
@@ -157,16 +156,19 @@ public class Product extends ConfigurableObject implements Informative {
     })
     private Multimap<ItemType, String> battleItems = HashMultimap.create();
 
-    @Key("executions.give_exp.vanilla")
-    @Explanation("The vanilla exp to be given later")
+    @Setting
+    @Path("executions.give_exp.vanilla")
+    @Description("The vanilla exp to be given later")
     private int vanillaExp;
 
-    @Key("executions.give_exp.battle")
-    @Explanation("The Battle exp to be given later")
+    @Setting
+    @Path("executions.give_exp.battle")
+    @Description("The Battle exp to be given later")
     private long battleExp;
 
-    @Key("functions.on_purchase")
-    @Explanation({
+    @Setting
+    @Path("functions.on_purchase")
+    @Description({
             "Function to be called when a player purchases this product, and the transaction",
             "has not been created (no money is taken, nothing is given to the player)",
             "This function is very useful that allows you to change the cost. For example,",
@@ -178,8 +180,9 @@ public class Product extends ConfigurableObject implements Informative {
     })
     private List<String> purchaseFunction;
 
-    @Key("functions.on_purchased")
-    @Explanation({
+    @Setting
+    @Path("functions.on_purchased")
+    @Description({
             "Function to be called when a player purchased this product successfully",
             "Variables: &#36;price, &#36;currency (read-only)"
     })
@@ -454,69 +457,6 @@ public class Product extends ConfigurableObject implements Informative {
             }
         }
         return icon = pi;
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "executions.give_items.vanilla": {
-                    ConfigurationSection cs = (ConfigurationSection) o;
-                    Set<String> keys = cs.getKeys(false);
-                    PreparedItem[] vanillaItems = new PreparedItem[keys.size()];
-                    int i = 0;
-                    for (String s : keys) {
-                        try {
-                            vanillaItems[i++] = ConfigHelper.readConfig(cs.getConfigurationSection(s), ConfigSchema.of(PreparedItem.class));
-                        } catch (InvalidValueException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return vanillaItems;
-                }
-                case "executions.give_items.battle": {
-                    ConfigurationSection cs = (ConfigurationSection) o;
-                    Multimap<ItemType, String> items = HashMultimap.create();
-                    Set<String> keys = cs.getKeys(false);
-                    for (String s : keys) {
-                        ItemType type = EnumUtil.getEnum(ItemType.values(), s);
-                        items.putAll(type, cs.getStringList(s));
-                    }
-                    return items;
-                }
-            }
-        }
-        return o;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object o, ConfigSchema.Entry entry) {
-        if (o != null) {
-            switch (entry.getKey()) {
-                case "executions.give_items.vanilla": {
-                    ConfigurationSection parent = new YamlConfiguration();
-                    int i = 0;
-                    for (PreparedItem item : (PreparedItem[]) o) {
-                        YamlConfiguration c = new YamlConfiguration();
-                        ConfigHelper.writeConfig(c, ConfigSchema.of(PreparedItem.class), item);
-                        parent.set(String.valueOf(i++), c);
-                    }
-                    return parent;
-                }
-                case "executions.give_items.battle": {
-                    Multimap<ItemType, String> map = (Multimap<ItemType, String>) o;
-                    ConfigurationSection parent = new YamlConfiguration();
-                    for (ItemType type : map.keys()) {
-                        // hashMultimap returns set, that is not friendly with yaml
-                        // we have to change it to array list
-                        List<String> x = new ArrayList<>(map.get(type));
-                        parent.set(type.name().toLowerCase(), x);
-                    }
-                    return parent;
-                }
-            }
-        }
-        return o;
     }
 
     @Override

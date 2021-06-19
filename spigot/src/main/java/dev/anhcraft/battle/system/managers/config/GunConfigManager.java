@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.GunModel;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class GunConfigManager extends ConfigManager {
     public final Map<String, GunModel> GUN_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class GunConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
             GunModel g = new GunModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), GunModel.SCHEMA, g);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(GunModel.class, cs, g);
             GUN_MAP.put(s, g);
         });
     }

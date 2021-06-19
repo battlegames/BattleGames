@@ -19,10 +19,10 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
+@Configurable
 public abstract class SingleSkinWeapon extends SingleSkinItem {
     protected SingleSkinWeapon(@NotNull String id) {
         super(id);

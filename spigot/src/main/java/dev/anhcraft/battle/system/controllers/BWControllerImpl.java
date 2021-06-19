@@ -241,7 +241,7 @@ public class BWControllerImpl extends DMControllerImpl implements BedWarControll
 
         TeamManager<BWTeam> tm = new TeamManager<>();
         TEAM.put(game, tm);
-        List<BWTeamOptions> teams = ((BedWarOptions) game.getArena().getGameOptions()).getTeams();
+        Collection<BWTeamOptions> teams = ((BedWarOptions) game.getArena().getGameOptions()).getTeams();
         BWTeam[] bwt = new BWTeam[teams.size()];
         int i = 0;
         for (BWTeamOptions team : teams) {

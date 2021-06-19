@@ -25,13 +25,10 @@ import dev.anhcraft.battle.api.arena.game.controllers.GameController;
 import dev.anhcraft.battle.api.arena.game.options.*;
 import dev.anhcraft.battle.api.chat.BattleChat;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.schema.SchemaScanner;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,54 +38,67 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-@Schema
-public class Mode extends ConfigurableObject implements Informative {
-    public static final ConfigSchema<Mode> SCHEMA = ConfigSchema.of(Mode.class);
+import static dev.anhcraft.config.schema.SchemaScanner.scanConfig;
+
+@Configurable
+public class Mode implements Informative {
     private static final Map<String, Mode> REGISTRY = new HashMap<>();
+
     /**
      * ID: <b>dm</b>
      */
-    public static final Mode DEATHMATCH = register(new Mode("dm", DeathmatchOptions.SCHEMA));
+    public static final Mode DEATHMATCH = register(new Mode("dm", scanConfig(DeathmatchOptions.class)));
     /**
      * ID: <b>tdm</b>
      */
-    public static final Mode TEAM_DEATHMATCH = register(new Mode("tdm", TeamDeathmatchOptions.SCHEMA));
+    public static final Mode TEAM_DEATHMATCH = register(new Mode("tdm", scanConfig(TeamDeathmatchOptions.class)));
     /**
      * ID: <b>ctf</b>
      */
-    public static final Mode CTF = register(new Mode("ctf", CaptureTheFlagOptions.SCHEMA));
+    public static final Mode CTF = register(new Mode("ctf", scanConfig(CaptureTheFlagOptions.class)));
     /**
      * ID: <b>bw</b>
      */
-    public static final Mode BEDWAR = register(new Mode("bw", BedWarOptions.SCHEMA));
+    public static final Mode BEDWAR = register(new Mode("bw", scanConfig(BedWarOptions.class)));
     /**
      * ID: <b>mr</b>
      */
-    public static final Mode MOB_RESCUE = register(new Mode("mr", MobRescueOptions.SCHEMA));
-    private final ConfigSchema<?> optionSchema;
+    public static final Mode MOB_RESCUE = register(new Mode("mr", scanConfig(MobRescueOptions.class)));
+
+    private final ConfigSchema optionSchema;
     private final String id;
     private GameController controller;
-    @Key("name")
+
+    @Setting
     @Validation(notNull = true)
-    @Explanation("A nice name for the game mode")
+    @Description("A nice name for the game mode")
     private String name;
-    @Key("waiting_chat")
+
+    @Setting
+    @Path("waiting_chat")
     @Validation(notNull = true)
-    @Explanation("Chat configuration (during waiting phase)")
+    @Description("Chat configuration (during waiting phase)")
     private BattleChat waitingChat;
-    @Key("playing_chat")
+
+    @Setting
+    @Path("playing_chat")
     @Validation(notNull = true)
-    @Explanation("Chat configuration (during playing phase)")
+    @Description("Chat configuration (during playing phase)")
     private BattleChat playingChat;
-    @Key("waiting_scoreboard")
+
+    @Setting
+    @Path("waiting_scoreboard")
     @Validation(notNull = true)
-    @Explanation("Scoreboard configuration (during waiting phase)")
+    @Description("Scoreboard configuration (during waiting phase)")
     private BattleScoreboard waitingScoreboard;
-    @Key("playing_scoreboard")
+
+    @Setting
+    @Path("playing_scoreboard")
     @Validation(notNull = true)
-    @Explanation("Scoreboard configuration (during playing phase)")
+    @Description("Scoreboard configuration (during playing phase)")
     private BattleScoreboard playingScoreboard;
-    public Mode(@NotNull String id, @NotNull ConfigSchema<?> optionSchema) {
+
+    public Mode(@NotNull String id, @Nullable ConfigSchema optionSchema) {
         Condition.argNotNull("id", id);
         this.id = id.toLowerCase();
         this.optionSchema = optionSchema;
@@ -158,8 +168,8 @@ public class Mode extends ConfigurableObject implements Informative {
         return playingScoreboard;
     }
 
-    @NotNull
-    public ConfigSchema<?> getOptionSchema() {
+    @Nullable
+    public ConfigSchema getOptionSchema() {
         return optionSchema;
     }
 

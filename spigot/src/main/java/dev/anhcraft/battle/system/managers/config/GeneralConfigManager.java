@@ -24,8 +24,7 @@ import dev.anhcraft.battle.api.GeneralConfig;
 import dev.anhcraft.battle.api.storage.StorageType;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.managers.BattleDataManager;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.configuration.ConfigurationSection;
@@ -41,11 +40,7 @@ public class GeneralConfigManager extends ConfigManager {
     @Override
     public void onLoad() {
         StorageType oldStorageType = plugin.generalConf.getStorageType();
-        try {
-            ConfigHelper.readConfig(getSettings(), GeneralConfig.SCHEMA, plugin.generalConf);
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
-        }
+        ConfigHelper.load(GeneralConfig.class, getSettings(), plugin.generalConf);
         if (getReloadCount() == 0) {
             plugin.dataManager = new BattleDataManager(plugin, plugin.generalConf.getStorageType());
             boolean ok = false;

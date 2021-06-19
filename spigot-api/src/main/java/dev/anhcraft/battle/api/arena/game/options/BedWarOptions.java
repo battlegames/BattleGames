@@ -20,26 +20,16 @@
 
 package dev.anhcraft.battle.api.arena.game.options;
 
-import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-import org.bukkit.DyeColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class BedWarOptions extends GameOptions {
-    public static final ConfigSchema<BedWarOptions> SCHEMA = ConfigSchema.of(BedWarOptions.class);
-    @Key("teams")
-    @Explanation("List of teams")
+    @Setting
+    @Description("List of teams")
     @Example({
             "teams:",
             "  '1':",
@@ -59,10 +49,12 @@ public class BedWarOptions extends GameOptions {
             "    - lighthouse -21.98 65 -87.81 -357.75 -0.60",
             "    bed_location: lighthouse -22.44 66.56 -76.01 0 0"
     })
-    @IgnoreValue(ifNull = true)
-    private final List<BWTeamOptions> teams = new ArrayList<>();
-    @Key("team_size")
-    @Explanation("The size of a team")
+    @Validation(notNull = true, silent = true)
+    private final Map<String, BWTeamOptions> teams = new HashMap<>();
+
+    @Setting
+    @Path("team_size")
+    @Description("The size of a team")
     private int teamSize = 2;
 
     public int getTeamSize() {
@@ -70,48 +62,7 @@ public class BedWarOptions extends GameOptions {
     }
 
     @NotNull
-    public List<BWTeamOptions> getTeams() {
-        return teams;
-    }
-
-    @Nullable
-    protected Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("teams")) {
-            ConfigurationSection conf = (ConfigurationSection) value;
-            List<BWTeamOptions> teams = new ArrayList<>();
-            try {
-                for (String s : conf.getKeys(false)) {
-                    teams.add(ConfigHelper.readConfig(conf.getConfigurationSection(s), BWTeamOptions.SCHEMA));
-                }
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
-            boolean[] colors = new boolean[DyeColor.values().length];
-            for (BWTeamOptions t : teams) {
-                DyeColor c = t.getColor();
-                if (colors[c.ordinal()]) {
-                    BattleApi.getInstance().getLogger().warning("[BedWarValidator] Duplicated team color: " + c.name());
-                } else {
-                    colors[c.ordinal()] = true;
-                }
-            }
-            return teams;
-        }
-        return value;
-    }
-
-    @Nullable
-    protected Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("teams")) {
-            YamlConfiguration conf = new YamlConfiguration();
-            int i = 0;
-            for (BWTeamOptions tm : (List<BWTeamOptions>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, BWTeamOptions.SCHEMA, tm);
-                conf.set(String.valueOf(i++), c);
-            }
-            return conf;
-        }
-        return value;
+    public Collection<BWTeamOptions> getTeams() {
+        return teams.values();
     }
 }

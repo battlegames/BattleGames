@@ -20,43 +20,39 @@
 
 package dev.anhcraft.battle.api.market;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Market extends ConfigurableObject {
-    public static final ConfigSchema<Market> SCHEMA = ConfigSchema.of(Market.class);
-
-    @Key("log_transactions")
-    @Explanation("Should we log the transactions made by players")
+@Configurable
+public class Market {
+    @Setting
+    @Path("log_transactions")
+    @Description("Should we log the transactions made by players")
     private boolean logTransactions;
 
-    @Key("product_lore_footer.enabled")
-    @Explanation("Should we add a nice footer to the lore of every product?")
+    @Setting
+    @Path("product_lore_footer.enabled")
+    @Description("Should we add a nice footer to the lore of every product?")
     private boolean productLoreFooterEnabled;
 
-    @Key("product_lore_footer.content")
-    @Explanation("Content of the footer")
+    @Setting
+    @Path("product_lore_footer.content")
+    @Description("Content of the footer")
     private List<String> productLoreFooterContent;
 
-    @Key("transaction_item")
-    @Explanation("The item to be displayed for each transaction in the transaction menu")
+    @Setting
+    @Path("transaction_item")
+    @Description("The item to be displayed for each transaction in the transaction menu")
     private PreparedItem transactionItem;
 
-    @Key("default_product_icon.empty")
-    @Explanation({
+    @Setting
+    @Path("default_product_icon.empty")
+    @Description({
             "<b>Default</b> icon for empty products",
             "A product is considered as <i>'empty'</i> when it has nothing to benefit the player",
             "in other words: <b>no exp points, no items are given, no perks and no boosters.</b>"
@@ -64,8 +60,9 @@ public class Market extends ConfigurableObject {
     @Validation(notNull = true)
     private PreparedItem defaultIconForEmptyProduct;
 
-    @Key("default_product_icon.package")
-    @Explanation({
+    @Setting
+    @Path("default_product_icon.package")
+    @Description({
             "<b>Default</b> icon for packages",
             "A package is a product that gives player booster, perks, exp or items",
             "(for items, <b>requires the amount of two or more</b>)",
@@ -78,13 +75,15 @@ public class Market extends ConfigurableObject {
     @Validation(notNull = true)
     private PreparedItem defaultIconForPackage;
 
-    @Key("default_product_icon.package_details")
-    @Explanation("Details for the default icon for packages")
+    @Setting
+    @Path("default_product_icon.package_details")
+    @Description("Details for the default icon for packages")
     @Validation(notNull = true)
     private PackageDetails packageDetails;
 
-    @Key("default_product_icon.single_item_package")
-    @Explanation({
+    @Setting
+    @Path("default_product_icon.single_item_package")
+    @Description({
             "Should we treat single item as 'package'",
             "As explained above, if a product only gives",
             "the player one item, the default icon will be",
@@ -93,10 +92,10 @@ public class Market extends ConfigurableObject {
     })
     private boolean treatSingleItemAsPackage;
 
-    @Key("categories")
-    @Explanation("All categories")
-    @IgnoreValue(ifNull = true)
-    private List<Category> categories = new ArrayList<>();
+    @Setting
+    @Description("All categories")
+    @Validation(notNull = true, silent = true)
+    private Map<String, Category> categories = new HashMap<>();
 
     public boolean shouldLogTransactions() {
         return logTransactions;
@@ -120,8 +119,8 @@ public class Market extends ConfigurableObject {
     }
 
     @NotNull
-    public List<Category> getCategories() {
-        return categories;
+    public Collection<Category> getCategories() {
+        return categories.values();
     }
 
     @Nullable
@@ -146,38 +145,5 @@ public class Market extends ConfigurableObject {
 
     public boolean shouldTreatSingleItemAsPackage() {
         return treatSingleItemAsPackage;
-    }
-
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("categories")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            List<Category> ctgs = new ArrayList<>();
-            for (String s : cs.getKeys(false)) {
-                try {
-                    ConfigurationSection scs = cs.getConfigurationSection(s);
-                    Category ctg = ConfigHelper.readConfig(scs, Category.SCHEMA, new Category(s));
-                    ctgs.add(ctg);
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
-            }
-            return ctgs;
-        }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("categories")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            for (Category ctg : (List<Category>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, Category.SCHEMA, ctg);
-                parent.set(ctg.getId(), c);
-            }
-            return parent;
-        }
-        return value;
     }
 }

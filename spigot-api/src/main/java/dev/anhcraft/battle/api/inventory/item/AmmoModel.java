@@ -20,34 +20,22 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class AmmoModel extends SingleSkinItem implements Attachable {
-    public static final ConfigSchema<AmmoModel> SCHEMA = ConfigSchema.of(AmmoModel.class);
+    @Setting
+    @Description("Define bullets in this ammunition")
+    @Validation(notNull = true, silent = true)
+    private Map<String, Ammo.Bullet> bullets = new HashMap<>();
 
-    @Key("bullets")
-    @Explanation("Define bullets in this ammunition")
-    @IgnoreValue(ifNull = true)
-    private List<Ammo.Bullet> bullets = new ArrayList<>();
-
-    @Key("reload_delay")
-    @Explanation({
+    @Setting
+    @Path("reload_delay")
+    @Description({
             "The time needed to put a single ammo into magazines.",
             "The reloading time of a magazine (or a gun with magazine attached) is",
             "<b>&lt;reload_delay&gt; * &lt;remaining ammo&gt; (ticks)</b>",
@@ -72,8 +60,8 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     }
 
     @NotNull
-    public List<Ammo.Bullet> getBullets() {
-        return bullets;
+    public Collection<Ammo.Bullet> getBullets() {
+        return bullets.values();
     }
 
     public long getReloadDelay() {
@@ -100,43 +88,15 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
         };
     }
 
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("bullets")) {
-            ConfigurationSection cs = (ConfigurationSection) value;
-            List<Ammo.Bullet> bullets = new ArrayList<>();
-            Set<String> keys = cs.getKeys(false);
-            for (String s : keys) {
-                try {
-                    Ammo.Bullet b = ConfigHelper.readConfig(cs.getConfigurationSection(s), Ammo.Bullet.SCHEMA);
-                    bullets.add(b);
-                    sumBulletDamage += b.getDamage();
-                    sumBulletKnockback += b.getKnockback();
-                    sumBulletPenetration += b.getPenetrationPower();
-                    avgBulletDamage += b.getDamage() / keys.size();
-                    avgBulletKnockback += b.getKnockback() / keys.size();
-                    avgBulletPenetration += b.getPenetrationPower() / (double) keys.size();
-                } catch (InvalidValueException e) {
-                    e.printStackTrace();
-                }
-            }
-            return bullets;
+    @PostHandler
+    private void handle(){
+        for (Ammo.Bullet b : bullets.values()) {
+            sumBulletDamage += b.getDamage();
+            sumBulletKnockback += b.getKnockback();
+            sumBulletPenetration += b.getPenetrationPower();
+            avgBulletDamage += b.getDamage() / bullets.size();
+            avgBulletKnockback += b.getKnockback() / bullets.size();
+            avgBulletPenetration += b.getPenetrationPower() / (double) bullets.size();
         }
-        return value;
-    }
-
-    @Override
-    protected @Nullable Object schema2conf(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("bullets")) {
-            ConfigurationSection parent = new YamlConfiguration();
-            int i = 0;
-            for (Ammo.Bullet b : (List<Ammo.Bullet>) value) {
-                YamlConfiguration c = new YamlConfiguration();
-                ConfigHelper.writeConfig(c, Ammo.Bullet.SCHEMA, b);
-                parent.set(String.valueOf(i++), c);
-            }
-            return parent;
-        }
-        return value;
     }
 }

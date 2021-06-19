@@ -21,14 +21,12 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.gui.Gui;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
-import java.util.Objects;
 
 public class GUIConfigManager extends ConfigManager {
     public GUIConfigManager() {
@@ -48,11 +46,7 @@ public class GUIConfigManager extends ConfigManager {
         getSettings().getKeys(false).forEach(s -> {
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             Gui gui = new Gui(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), Gui.SCHEMA, gui);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(Gui.class, cs, gui);
             plugin.guiManager.GUI.put(s, gui); // put directly for better performance
         });
     }

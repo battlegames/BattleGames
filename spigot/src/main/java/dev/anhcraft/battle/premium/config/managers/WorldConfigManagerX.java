@@ -22,9 +22,7 @@ package dev.anhcraft.battle.premium.config.managers;
 
 import dev.anhcraft.battle.premium.config.WorldSettings;
 import dev.anhcraft.battle.system.managers.config.ConfigManager;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,16 +55,12 @@ public class WorldConfigManagerX extends ConfigManager {
 
     @Override
     protected void onLoad() {
-        try {
-            ConfigurationSection gen = getSettings().getConfigurationSection("general");
-            globalWorldSettings = ConfigHelper.readConfig(Objects.requireNonNull(gen), ConfigSchema.of(WorldSettings.class));
-            for (String k : Objects.requireNonNull(getSettings().getConfigurationSection("specific")).getKeys(false)) {
-                ConfigurationSection s = getSettings().getConfigurationSection("specific." + k);
-                fillOptions(gen, s);
-                worldSettingsMap.put(k, ConfigHelper.readConfig(Objects.requireNonNull(s), ConfigSchema.of(WorldSettings.class)));
-            }
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
+        ConfigurationSection gen = getSettings().getConfigurationSection("general");
+        globalWorldSettings = ConfigHelper.load(WorldSettings.class, gen);
+        for (String k : Objects.requireNonNull(getSettings().getConfigurationSection("specific")).getKeys(false)) {
+            ConfigurationSection s = getSettings().getConfigurationSection("specific." + k);
+            fillOptions(gen, s);
+            worldSettingsMap.put(k, ConfigHelper.load(WorldSettings.class, Objects.requireNonNull(s)));
         }
     }
 

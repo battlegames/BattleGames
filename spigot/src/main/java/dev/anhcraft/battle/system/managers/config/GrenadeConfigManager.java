@@ -21,13 +21,11 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class GrenadeConfigManager extends ConfigManager {
     public final Map<String, GrenadeModel> GRENADE_MAP = new HashMap<>();
@@ -41,11 +39,7 @@ public class GrenadeConfigManager extends ConfigManager {
         plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
             GrenadeModel g = new GrenadeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
-            try {
-                ConfigHelper.readConfig(Objects.requireNonNull(cs), GrenadeModel.SCHEMA, g);
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            ConfigHelper.load(GrenadeModel.class, cs, g);
             GRENADE_MAP.put(s, g);
         });
     }

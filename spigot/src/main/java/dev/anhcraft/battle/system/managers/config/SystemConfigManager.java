@@ -21,9 +21,8 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.SystemConfig;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.common.utils.VersionUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,51 +48,47 @@ public class SystemConfigManager extends ConfigManager {
         configUpdater.getPathRelocating().add(new ConfigUpdater.PathRelocating().type(String.class).oldPath("plugin_version").newPath("last_plugin_version"));
         configUpdater.update(getSettings());
 
-        try {
-            SystemConfig config = ConfigHelper.readConfig(getSettings(), SystemConfig.SCHEMA, plugin.getSystemConfig());
+        SystemConfig config = ConfigHelper.load(SystemConfig.class, getSettings(), plugin.getSystemConfig());
 
-            if (VersionUtil.compareVersion(config.getLastPluginVersion(), "1.1.9") < 0) {
-                plugin.getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
-                plugin.getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
-                plugin.getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
-                plugin.getLogger().warning("1. Backup all the config files");
-                plugin.getLogger().warning("2. Remove the entire Battle folder");
-                plugin.getLogger().warning("3. Check out the new files");
-                plugin.getLogger().warning("4. Compare with the old files");
-                plugin.getLogger().warning("5. Re-configure");
-                plugin.getLogger().warning("If you need help, contact me via Discord: https://discord.gg/QSpc5xH");
-            }
+        if (VersionUtil.compareVersion(config.getLastPluginVersion(), "1.1.9") < 0) {
+            plugin.getLogger().warning("ATTENTION! It looks like you have updated the plugin from an older version!");
+            plugin.getLogger().warning("You should be noticed that the new version will have massive changes to the configuration");
+            plugin.getLogger().warning("Therefore, it is recommended to upgrade your config manually with the following steps:");
+            plugin.getLogger().warning("1. Backup all the config files");
+            plugin.getLogger().warning("2. Remove the entire Battle folder");
+            plugin.getLogger().warning("3. Check out the new files");
+            plugin.getLogger().warning("4. Compare with the old files");
+            plugin.getLogger().warning("5. Re-configure");
+            plugin.getLogger().warning("If you need help, contact me via Discord: https://discord.gg/QSpc5xH");
+        }
 
-            if (!config.isRemoteConfigEnabled()) {
-                String cf = config.getConfigFolder().trim();
-                if (cf.isEmpty()) {
-                    // reset the config folder (in case of it was changed from a different path)
-                    plugin.configFolder = plugin.getDataFolder();
-                } else {
-                    File file = new File(cf);
-                    if (file.exists()) {
-                        if (file.isDirectory()) {
-                            plugin.configFolder = file;
-                            plugin.getLogger().info("Now using config folder: " + file.getAbsolutePath());
-                        } else
-                            // reset the config folder
-                            plugin.configFolder = plugin.getDataFolder();
-                        plugin.getLogger().warning("Config folder is not an directory: " + file.getAbsolutePath());
-                    } else {
+        if (!config.isRemoteConfigEnabled()) {
+            String cf = config.getConfigFolder().trim();
+            if (cf.isEmpty()) {
+                // reset the config folder (in case of it was changed from a different path)
+                plugin.configFolder = plugin.getDataFolder();
+            } else {
+                File file = new File(cf);
+                if (file.exists()) {
+                    if (file.isDirectory()) {
                         plugin.configFolder = file;
-                    }
+                        plugin.getLogger().info("Now using config folder: " + file.getAbsolutePath());
+                    } else
+                        // reset the config folder
+                        plugin.configFolder = plugin.getDataFolder();
+                    plugin.getLogger().warning("Config folder is not an directory: " + file.getAbsolutePath());
+                } else {
+                    plugin.configFolder = file;
                 }
             }
+        }
 
-            plugin.configFolder.mkdir();
-            new File(plugin.configFolder, "locale").mkdir();
-            new File(plugin.configFolder, "items").mkdir();
-            new File(plugin.configFolder, "editor").mkdir();
-            if (plugin.isPremium()) {
-                new File(plugin.configFolder, "premium").mkdir();
-            }
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
+        plugin.configFolder.mkdir();
+        new File(plugin.configFolder, "locale").mkdir();
+        new File(plugin.configFolder, "items").mkdir();
+        new File(plugin.configFolder, "editor").mkdir();
+        if (plugin.isPremium()) {
+            new File(plugin.configFolder, "premium").mkdir();
         }
     }
 

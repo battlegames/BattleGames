@@ -22,9 +22,7 @@ package dev.anhcraft.battle.premium.config.managers;
 
 import dev.anhcraft.battle.premium.config.RadioSettings;
 import dev.anhcraft.battle.system.managers.config.ConfigManager;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class RadioConfigManagerX extends ConfigManager {
@@ -41,11 +39,7 @@ public class RadioConfigManagerX extends ConfigManager {
 
     @Override
     protected void onLoad() {
-        try {
-            radioSettings = ConfigHelper.readConfig(getSettings(), ConfigSchema.of(RadioSettings.class));
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
-        }
+        radioSettings = ConfigHelper.load(RadioSettings.class, getSettings());
     }
 
     @Override

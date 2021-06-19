@@ -21,9 +21,8 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.market.Market;
+import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.confighelper.ConfigHelper;
-import dev.anhcraft.confighelper.exception.InvalidValueException;
 import dev.anhcraft.craftkit.cb_common.NMSVersion;
 
 public class MarketConfigManager extends ConfigManager {
@@ -41,11 +40,7 @@ public class MarketConfigManager extends ConfigManager {
                         .type(Number.class)
         );
         u.update(getSettings());
-        try {
-            ConfigHelper.readConfig(getSettings(), Market.SCHEMA, plugin.getMarket());
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
-        }
+        ConfigHelper.load(Market.class, getSettings(), plugin.getMarket());
     }
 
     @Override

@@ -20,11 +20,8 @@
 
 package dev.anhcraft.battle.api.gui.struct;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +29,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class Component extends ConfigurableObject {
-    public static final ConfigSchema<Component> SCHEMA = ConfigSchema.of(Component.class);
+@Configurable
+public class Component {
     private static final Map<Integer, Integer> CENTER_SLOTS = new HashMap<>();
     private static final PreparedItem DEFAULT_ITEM = new PreparedItem();
 
@@ -56,10 +52,12 @@ public class Component extends ConfigurableObject {
         CENTER_SLOTS.put(Objects.hash(5, 5), 9);
     }
 
-    private final String id;
+    @Setting
+    @Virtual
+    private String id;
 
-    @Key("positions")
-    @Explanation("List of slots belong to this component")
+    @Setting
+    @Description("List of slots belong to this component")
     @Example("positions: 1 -> 9; 1 -> 3")
     @Example("positions: 3 -> 5; 4")
     @Example({
@@ -68,18 +66,19 @@ public class Component extends ConfigurableObject {
             " - 1 ; 2 -> 4"
     })
     @Validation(notNull = true)
-    private List<Integer> positions;
+    private List<String> positions;
 
-    @Key("item")
-    @Explanation({
+    @Setting
+    @Description({
             "The item to set in the GUI",
             "All slots belong to this component will have the same item"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private PreparedItem item = DEFAULT_ITEM;
 
-    @Key("functions.on_init")
-    @Explanation({
+    @Setting
+    @Path("functions.on_init")
+    @Description({
             "The function that gets called when one slot of this component is initialized",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
@@ -87,11 +86,12 @@ public class Component extends ConfigurableObject {
             "on_init:",
             " - Common:CopyCurrentSlot(\"window\" \"positionOfThisSlot\")"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<String> initFunction = new ArrayList<>();
 
-    @Key("functions.on_click")
-    @Explanation({
+    @Setting
+    @Path("functions.on_click")
+    @Description({
             "The function that gets called when one slot of this component is clicked",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
@@ -99,11 +99,12 @@ public class Component extends ConfigurableObject {
             "on_click:",
             " - Common:CancelEvent() # Prevent steal items"
     })
-    @IgnoreValue(ifNull = true)
+    @Validation(notNull = true, silent = true)
     private List<String> clickFunction = new ArrayList<>();
 
-    @Key("functions.on_render")
-    @Explanation({
+    @Setting
+    @Path("functions.on_render")
+    @Description({
             "The function that gets called when one slot of this component is going to be rendered",
             "Set &#36;cancel_render to `true` to prevent this action; `false` is set by default",
             "It is not recommended to do any modifications to the item on that slot, you would be better",
@@ -116,8 +117,9 @@ public class Component extends ConfigurableObject {
     })
     private List<String> renderFunction;
 
-    @Key("functions.on_rendered")
-    @Explanation({
+    @Setting
+    @Path("functions.on_rendered")
+    @Description({
             "The function that gets called when one slot of this component was rendered successfully",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
@@ -127,26 +129,23 @@ public class Component extends ConfigurableObject {
     })
     private List<String> renderedFunction;
 
-    @Key("pagination")
-    @Explanation({
+    @Setting
+    @Description({
             "Pagination that support multiple items to display in this component",
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
     private String pagination;
-
-    public Component(@NotNull String id) {
-        Condition.argNotNull("id", id);
-        this.id = id;
-    }
 
     @NotNull
     public String getId() {
         return id;
     }
 
+    private List<Integer> compiledPositions = new ArrayList<>();
+
     @NotNull
     public List<Integer> getSlots() {
-        return positions;
+        return compiledPositions;
     }
 
     @NotNull
@@ -234,18 +233,10 @@ public class Component extends ConfigurableObject {
         }
     }
 
-    @Override
-    protected @Nullable Object conf2schema(@Nullable Object value, ConfigSchema.Entry entry) {
-        if (value != null && entry.getKey().equals("positions")) {
-            List<Integer> ints = new ArrayList<>();
-            if (value instanceof String) {
-                parsePos(ints, (String) value);
-            } else if (value instanceof List) {
-                List<String> list = (List<String>) value;
-                for (String s : list) parsePos(ints, s);
-            }
-            return ints;
+    @PostHandler
+    private void handle(){
+        for(String s : positions) {
+            parsePos(compiledPositions, s);
         }
-        return value;
     }
 }

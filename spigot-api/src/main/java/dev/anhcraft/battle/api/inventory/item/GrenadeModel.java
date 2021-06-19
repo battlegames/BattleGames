@@ -22,56 +22,61 @@ package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.api.effect.BattleEffect;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
+@Configurable
 public class GrenadeModel extends SingleSkinWeapon {
-    public static final ConfigSchema<GrenadeModel> SCHEMA = ConfigSchema.of(GrenadeModel.class);
-
-    @Key("explosion_effect")
-    @Explanation("The explosion effect")
+    @Setting
+    @Path("explosion_effect")
+    @Description("The explosion effect")
     private BattleEffect explosionEffect;
 
-    @Key("delay_time")
-    @Explanation({
+    @Setting
+    @Path("delay_time")
+    @Description({
             "The delay time before the grenade is going to 'boom'",
             "Set to 0 to disable this feature"
     })
     private long delayTime;
 
-    @Key("velocity_multiplier")
-    @Explanation("The multiplier applies to the directional velocity")
+    @Setting
+    @Path("velocity_multiplier")
+    @Description("The multiplier applies to the directional velocity")
     private double velocityMultiplier = 2.0;
 
-    @Key("explosion_power")
-    @Explanation({
+    @Setting
+    @Path("explosion_power")
+    @Description({
             "The power of the explosion",
             "Set to 0 to prevent the explosion"
     })
     private double explosionPower;
 
-    @Key("fire.block_radius")
-    @Explanation({
+    @Setting
+    @Path("fire.block_radius")
+    @Description({
             "The radius that inner blocks get ignited",
             "Set to 0 to prevent the fire (for blocks)"
     })
     private int fireBlockRadius;
 
-    @Key("fire.mob_radius")
-    @Explanation({
+    @Setting
+    @Path("fire.mob_radius")
+    @Description({
             "The radius that inner mobs get ignited",
             "Set to 0 to prevent the fire (for mobs)"
     })
     private double fireMobRadius;
 
-    @Key("fire.mob_ticks")
-    @Explanation({
+    @Setting
+    @Path("fire.mob_ticks")
+    @Description({
             "How long do mobs get ignited",
             "Set to 0 to prevent the fire (for mobs)"
     })

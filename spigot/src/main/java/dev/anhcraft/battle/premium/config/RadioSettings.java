@@ -20,17 +20,14 @@
 
 package dev.anhcraft.battle.premium.config;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
-import dev.anhcraft.confighelper.annotation.Validation;
+import dev.anhcraft.config.annotations.*;
 import org.jetbrains.annotations.NotNull;
 
-@Schema
-public class RadioSettings extends ConfigurableObject {
-    @Key("message_format")
-    @Explanation("Message format")
+@Configurable
+public class RadioSettings {
+    @Setting
+    @Path("message_format")
+    @Description("Message format")
     @Validation(notNull = true)
     private String messageFormat;
 

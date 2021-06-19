@@ -20,27 +20,27 @@
 
 package dev.anhcraft.battle.api.arena.game;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class MobRescueObjective extends ConfigurableObject {
-    public static final ConfigSchema<MobRescueObjective> SCHEMA = ConfigSchema.of(MobRescueObjective.class);
-
-    @Key("amount.min")
-    @Explanation("Minimum amount of entities")
+@Configurable
+public class MobRescueObjective {
+    @Setting
+    @Path("amount.min")
+    @Description("Minimum amount of entities")
     private int minAmount = 1;
 
-    @Key("amount.max")
-    @Explanation("Maximum amount of entities")
+    @Setting
+    @Path("amount.max")
+    @Description("Maximum amount of entities")
     private int maxAmount = 1;
 
-    @Key("reward_coins")
-    @Explanation("Some coins to reward the player")
+    @Setting
+    @Path("reward_coins")
+    @Description("Some coins to reward the player")
     private double rewardCoins;
 
     public int getMinAmount() {

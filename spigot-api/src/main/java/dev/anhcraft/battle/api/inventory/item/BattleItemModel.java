@@ -20,24 +20,23 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.IgnoreValue;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Setting;
+import dev.anhcraft.config.annotations.Validation;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public abstract class BattleItemModel extends ConfigurableObject implements Informative {
+@Configurable
+public abstract class BattleItemModel implements Informative {
     private final String id;
 
-    @Key("name")
-    @Explanation("Give a name for the item")
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Give a name for the item")
+    @Validation(notNull = true, silent = true)
     private String name;
 
     protected BattleItemModel(@NotNull String id) {

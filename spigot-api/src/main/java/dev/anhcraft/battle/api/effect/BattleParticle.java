@@ -19,51 +19,50 @@
  */
 package dev.anhcraft.battle.api.effect;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class BattleParticle extends ConfigurableObject {
-    public static final ConfigSchema<BattleParticle> SCHEMA = ConfigSchema.of(BattleParticle.class);
-
-    @Key("type")
-    @Explanation("The type of particle")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+@Configurable
+public class BattleParticle {
+    @Setting
+    @Description("The type of particle")
+    @Validation(notNull = true, silent = true)
     private Particle type = Particle.CLOUD;
 
-    @Key("count")
-    @Explanation("The number of particles")
+    @Setting
+    @Description("The number of particles")
     private int count = 1;
 
-    @Key("offset_x")
-    @Explanation({
+    @Setting
+    @Path("offset_x")
+    @Description({
             "The maximum random offset on the X axis",
             "Or the Red value in RGB (with colored dust particle)"
     })
     private double offsetX;
 
-    @Key("offset_y")
-    @Explanation({
+    @Setting
+    @Path("offset_y")
+    @Description({
             "The maximum random offset on the Y axis",
             "Or the Green value in RGB (with colored dust particle)"
     })
     private double offsetY;
 
-    @Key("offset_z")
-    @Explanation({
+    @Setting
+    @Path("offset_z")
+    @Description({
             "The maximum random offset on the Z axis",
             "Or the Blue value in RGB (with colored dust particle)"
     })
     private double offsetZ;
 
-    @Key("speed")
-    @Explanation({
+    @Setting
+    @Description({
             "Particle speed"
     })
     private double speed;
@@ -94,6 +93,8 @@ public class BattleParticle extends ConfigurableObject {
     }
 
     public void spawn(@NotNull Location location) {
-        location.getWorld().spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null);
+        World w = location.getWorld();
+        if(w == null) return;
+        w.spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null);
     }
 }
