@@ -22,17 +22,21 @@ package dev.anhcraft.battle.premium.config;
 
 import dev.anhcraft.battle.premium.system.PositionPair;
 import dev.anhcraft.config.ConfigDeserializer;
-import dev.anhcraft.config.annotations.Configurable;
-import dev.anhcraft.config.annotations.PostHandler;
+import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.config.schema.ConfigSchema;
 import dev.anhcraft.config.struct.ConfigSection;
+import dev.anhcraft.config.struct.SimpleForm;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
 public class ArenaSettings {
+    @Setting
+    @Path("empty_regions")
+    @Consistent
     private List<PositionPair> emptyRegions;
 
     @Nullable
@@ -44,10 +48,15 @@ public class ArenaSettings {
     private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
         try {
             for (String k : section.getKeys(false)) {
-                ConfigSection v = section.get(k).asSection();
+                ConfigSection v = Objects.requireNonNull(section.get(k)).asSection();
+                if(v == null) continue;
+                SimpleForm v1 = v.get("corner_1");
+                if(v1 == null) continue;
+                SimpleForm v2 = v.get("corner_2");
+                if(v2 == null) continue;
                 emptyRegions.add(new PositionPair(
-                        v.get("corner_1").asString(),
-                        v.get("corner_2").asString()
+                        Objects.requireNonNull(v1.asString()),
+                        Objects.requireNonNull(v2.asString())
                 ));
             }
         } catch (Exception e) {

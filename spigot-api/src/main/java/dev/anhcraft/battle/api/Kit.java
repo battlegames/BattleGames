@@ -36,8 +36,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
@@ -81,7 +80,7 @@ public class Kit implements Informative {
             "      material: bread",
             "      amount: 16"
     })
-    private PreparedItem[] vanillaItems = new PreparedItem[0];
+    private Map<String, PreparedItem> vanillaItems = new HashMap<>();
 
     @Setting
     @Path("items.battle")
@@ -151,8 +150,8 @@ public class Kit implements Informative {
     }
 
     @NotNull
-    public PreparedItem[] getVanillaItems() {
-        return vanillaItems;
+    public Collection<PreparedItem> getVanillaItems() {
+        return vanillaItems.values();
     }
 
     public boolean isFirstJoin() {
@@ -166,7 +165,7 @@ public class Kit implements Informative {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
-        for (PreparedItem pi : vanillaItems) {
+        for (PreparedItem pi : vanillaItems.values()) {
             int in = player.getInventory().firstEmpty();
             if (in == -1) {
                 player.getWorld().dropItemNaturally(loc, pi.build());
@@ -185,7 +184,7 @@ public class Kit implements Informative {
     public void inform(@NotNull InfoHolder holder) {
         holder.inform("id", id)
                 .inform("renew_time", renewTime)
-                .inform("vanilla_items", vanillaItems.length)
+                .inform("vanilla_items", vanillaItems.size())
                 .inform("battle_items", battleItems.size())
                 .inform("boosters", boosters.size())
                 .inform("first_join", State.TRUE.inCaseOf(firstJoin));

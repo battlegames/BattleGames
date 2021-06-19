@@ -53,10 +53,6 @@ public class Component {
     }
 
     @Setting
-    @Virtual
-    private String id;
-
-    @Setting
     @Description("List of slots belong to this component")
     @Example("positions: 1 -> 9; 1 -> 3")
     @Example("positions: 3 -> 5; 4")
@@ -135,11 +131,6 @@ public class Component {
             "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
     })
     private String pagination;
-
-    @NotNull
-    public String getId() {
-        return id;
-    }
 
     private List<Integer> compiledPositions = new ArrayList<>();
 

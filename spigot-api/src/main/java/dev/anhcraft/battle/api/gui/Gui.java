@@ -50,7 +50,7 @@ public class Gui implements Informative {
     @Setting
     @Description("List of components")
     @Validation(notNull = true, silent = true)
-    private List<Component> components = new ArrayList<>();
+    private Map<String, Component> components = new HashMap<>();
 
     @Setting
     @Description("Sound to play on opening")
@@ -76,8 +76,8 @@ public class Gui implements Informative {
     }
 
     @NotNull
-    public List<Component> getComponents() {
-        return components;
+    public Collection<Component> getComponents() {
+        return components.values();
     }
 
     @Nullable
@@ -108,7 +108,7 @@ public class Gui implements Informative {
     @PostHandler
     private void handle(){
         int highestSlot = 0;
-        for (Component c : components) {
+        for (Component c : components.values()) {
             for (Integer i : c.getSlots()) {
                 Component prev = S2C.put(i, c);
                 // if this slot exists in previous component, we will remove it
@@ -118,12 +118,11 @@ public class Gui implements Informative {
             }
             if (c.getPagination() != null) {
                 if (!P2C.put(c.getPagination(), c)) {
-                    Bukkit.getLogger().warning("Pagination should not be duplicated! `" + c.getPagination() + "` in component: " + c.getId());
+                    //Bukkit.getLogger().warning("Pagination should not be duplicated! `" + c.getPagination() + "` in component: " + c.getId());
                 }
             }
             int hs = Collections.max(c.getSlots());
             if (hs > highestSlot) highestSlot = hs;
-            components.add(c);
         }
         size = MathUtil.nextMultiple(highestSlot, 9);
         if (size > 54) {

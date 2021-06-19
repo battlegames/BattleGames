@@ -26,12 +26,17 @@ import dev.anhcraft.battle.utils.adapters.BattleItemModelAdapter;
 import dev.anhcraft.battle.utils.adapters.MultimapAdapter;
 import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.ConfigSerializer;
+import dev.anhcraft.config.adapters.defaults.EnumAdapter;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.craftkit.abif.adapters.MaterialAdapter;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ConfigHelper {
     public static final ConfigSerializer SERIALIZER;
@@ -41,10 +46,15 @@ public class ConfigHelper {
         SERIALIZER = BukkitConfigProvider.YAML.createSerializer();
         SERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         SERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        SERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
 
         DESERIALIZER = BukkitConfigProvider.YAML.createDeserializer();
         DESERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         DESERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        DESERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
+        EnumAdapter ea = new EnumAdapter();
+        ea.preferUppercase(true);
+        DESERIALIZER.registerTypeAdapter(Enum.class, ea);
     }
 
     public static <T> T load(Class<T> clazz, ConfigurationSection section){

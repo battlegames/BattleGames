@@ -213,7 +213,7 @@ public class BattleGuiManager extends BattleComponent implements GuiManager {
         if (c.getPagination() != null) {
             Pagination pagination = PAGES.get(c.getPagination());
             if (pagination == null) {
-                plugin.getLogger().warning("Unknown pagination in component: " + c.getId());
+                //plugin.getLogger().warning("Unknown pagination in component: " + c.getId());
             } else updatePagination(player, view, c, pagination, c.getPagination());
         }
         drawComponent(player, view, c, infoMap);

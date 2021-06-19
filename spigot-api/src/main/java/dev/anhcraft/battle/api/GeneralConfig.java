@@ -215,11 +215,13 @@ public class GeneralConfig {
     @Setting
     @Path("misc.material_hardness")
     @Description("The material of blocks")
+    @Consistent
     private Map<Material, Integer> materialHardness;
 
     @Setting
     @Path("misc.entity_hardness")
     @Description("The base hardness of entities (without equipment)")
+    @Consistent
     private Map<EntityType, Integer> entityHardness;
 
     @Setting

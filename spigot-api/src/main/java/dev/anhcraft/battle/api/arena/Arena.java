@@ -62,12 +62,19 @@ public class Arena implements Informative {
     @Setting
     @Description("The game mode")
     @Validation(notNull = true)
-    private Mode mode;
+    private String mode;
 
     @Setting
     @Description("The icon of this arena")
     @Validation(notNull = true)
     private PreparedItem icon;
+
+    @Setting
+    @Path("game_options")
+    @Description("Game mode settings")
+    @Validation(notNull = true)
+    @Consistent
+    private GameOptions gameOptions;
 
     @Setting
     @Path("max_time")
@@ -193,10 +200,11 @@ public class Arena implements Informative {
 
     @NotNull
     public Mode getMode() {
-        if (mode == null) {
+        Mode m = Mode.get(mode);
+        if (m == null) {
             throw new UnsupportedOperationException("Mode is not present");
         }
-        return mode;
+        return m;
     }
 
     @NotNull
@@ -244,8 +252,6 @@ public class Arena implements Informative {
                 .setVariable("d", player.isWinner() ? 1 : 0)
                 .evaluate();
     }
-
-    private GameOptions gameOptions;
 
     @NotNull
     public GameOptions getGameOptions() {
@@ -331,7 +337,7 @@ public class Arena implements Informative {
             BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
         }
         try {
-            gameOptions = ConfigHelper.DESERIALIZER.transformConfig(Objects.requireNonNull(mode.getOptionSchema()),
+            gameOptions = ConfigHelper.DESERIALIZER.transformConfig(Objects.requireNonNull(getMode().getOptionSchema()),
                     Objects.requireNonNull(Objects.requireNonNull(section.get("game_options")).asSection()));
         } catch (Exception e) {
             e.printStackTrace();

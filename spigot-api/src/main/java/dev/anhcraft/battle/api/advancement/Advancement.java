@@ -23,15 +23,15 @@ package dev.anhcraft.battle.api.advancement;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
+import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.struct.ConfigSection;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 @Configurable
 public class Advancement implements Informative {
@@ -76,7 +76,7 @@ public class Advancement implements Informative {
             "They can be known as 'levels'"
     })
     @Validation(notNull = true)
-    private List<Progression> progression;
+    private Map<String, Progression> progression;
 
     public Advancement(@NotNull String id) {
         this.id = id;
@@ -136,7 +136,7 @@ public class Advancement implements Informative {
     @PostHandler
     private void handle(){
         this.progressions = new TreeSet<>(Comparator.naturalOrder());
-        for (Progression p : progression) {
+        for (Progression p : progression.values()) {
             maxAmount = Math.max(maxAmount, p.getAmount());
             this.progressions.add(p);
         }
