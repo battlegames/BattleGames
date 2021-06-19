@@ -21,6 +21,8 @@
 package dev.anhcraft.battle.utils;
 
 import com.google.common.collect.Multimap;
+import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
+import dev.anhcraft.battle.utils.adapters.BattleItemModelAdapter;
 import dev.anhcraft.battle.utils.adapters.MultimapAdapter;
 import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.ConfigSerializer;
@@ -38,9 +40,11 @@ public class ConfigHelper {
     static {
         SERIALIZER = BukkitConfigProvider.YAML.createSerializer();
         SERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
+        SERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
 
         DESERIALIZER = BukkitConfigProvider.YAML.createDeserializer();
         DESERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
+        DESERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
     }
 
     public static <T> T load(Class<T> clazz, ConfigurationSection section){
@@ -54,7 +58,7 @@ public class ConfigHelper {
 
     public static <T> T load(Class<T> clazz, ConfigurationSection section, T dest){
         try {
-            DESERIALIZER.transformConfig(Objects.requireNonNull(SchemaScanner.scanConfig(clazz)), new YamlConfigSection(section), dest);
+            return DESERIALIZER.transformConfig(Objects.requireNonNull(SchemaScanner.scanConfig(clazz)), new YamlConfigSection(section), dest);
         } catch (Exception e) {
             e.printStackTrace();
         }
