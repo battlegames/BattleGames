@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 public class MultimapAdapter implements TypeAdapter<Multimap> {
@@ -74,9 +75,14 @@ public class MultimapAdapter implements TypeAdapter<Multimap> {
                 valueType = Object.class;
             }
             ConfigSection section = Objects.requireNonNull(value.asSection());
-            Multimap<?, ?> map = HashMultimap.create();
+            Multimap map = HashMultimap.create();
             for (String k : section.getKeys(false)) {
-                map.put(deserializer.transform(keyType, SimpleForm.of(k)), deserializer.transform(valueType, section.get(k)));
+                Object o = deserializer.transform(valueType, section.get(k));
+                if(o instanceof Collection) {
+                    map.putAll(deserializer.transform(keyType, SimpleForm.of(k)), (Collection) o);
+                } else {
+                    map.put(deserializer.transform(keyType, SimpleForm.of(k)), o);
+                }
             }
             return map;
         }
