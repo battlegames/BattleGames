@@ -9,9 +9,11 @@
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
         <version>1.2.7</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>battle.spigot.api</artifactId>
+    <artifactId>battle.spigot-api</artifactId>
+    <version>${project.parent.version}</version>
 
     <dependencies>
         <dependency>
@@ -60,6 +62,12 @@
             <groupId>com.github.anhcraft</groupId>
             <artifactId>Inst</artifactId>
             <version>1.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.anhcraft.config</groupId>
+            <artifactId>config.neep</artifactId>
+            <version>1.0.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

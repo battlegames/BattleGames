@@ -21,7 +21,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="spigot-api" />
+    <orderEntry type="module" module-name="battle.spigot.api" />
+    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.neep:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.common:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.github.anhcraft:Neep:1.0.2-beta" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:21.0" level="project" />

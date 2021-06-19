@@ -19,36 +19,31 @@
  */
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class BattleBar extends ConfigurableObject {
-    public static final ConfigSchema<BattleBar> SCHEMA = ConfigSchema.of(BattleBar.class);
-
-    @Key("primary")
-    @Explanation("Make the bar appeared on the primary slot")
+@Configurable
+public class BattleBar {
+    @Setting
+    @Path("primary")
+    @Description("Make the bar appeared on the primary slot")
     private boolean primarySlot = true;
 
-    @Key("title")
-    @Explanation("Set the title")
+    @Setting
+    @Description("Set the title")
     @Validation(notNull = true)
     private String title;
 
-    @Key("color")
-    @Explanation("Set the color")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Set the color")
+    @Validation(notNull = true, silent = true)
     private BarColor color = BarColor.RED;
 
-    @Key("style")
-    @Explanation("Set the style")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Description("Set the style")
+    @Validation(notNull = true, silent = true)
     private BarStyle style = BarStyle.SOLID;
 
     public boolean isPrimarySlot() {

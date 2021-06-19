@@ -21,33 +21,32 @@
 package dev.anhcraft.battle.api.advancement;
 
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigurableObject;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.Explanation;
-import dev.anhcraft.confighelper.annotation.Key;
-import dev.anhcraft.confighelper.annotation.Schema;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Path;
+import dev.anhcraft.config.annotations.Setting;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@Schema
-public class Progression extends ConfigurableObject implements Comparable<Progression>, Informative {
-    public static final ConfigSchema<Progression> SCHEMA = ConfigSchema.of(Progression.class);
-
-    @Key("amount")
-    @Explanation({
+@Configurable
+public class Progression implements Comparable<Progression>, Informative {
+    @Setting
+    @Description({
             "Amount of objects need to be achieved",
             "E.g: 10 kills, 10 wins, 10 deaths, etc"
     })
     private double amount;
 
-    @Key("reward.exp")
-    @Explanation("Amount of exp points to reward the player")
+    @Setting
+    @Path("reward.exp")
+    @Description("Amount of exp points to reward the player")
     private long rewardExp;
 
-    @Key("reward.money")
-    @Explanation("Some money to reward the player")
+    @Setting
+    @Path("reward.money")
+    @Description("Some money to reward the player")
     private double rewardMoney;
 
     public double getAmount() {

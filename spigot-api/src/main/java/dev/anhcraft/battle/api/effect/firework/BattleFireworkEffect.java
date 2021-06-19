@@ -21,9 +21,7 @@
 package dev.anhcraft.battle.api.effect.firework;
 
 import dev.anhcraft.battle.api.BattleColor;
-import dev.anhcraft.battle.utils.ConfigurableObject;
-import dev.anhcraft.confighelper.ConfigSchema;
-import dev.anhcraft.confighelper.annotation.*;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,34 +29,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-@Schema
-public class BattleFireworkEffect extends ConfigurableObject {
-    public static ConfigSchema<BattleFireworkEffect> SCHEMA = ConfigSchema.of(BattleFireworkEffect.class);
-
-    @Key("type")
-    @Explanation("The firework type")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+@Configurable
+public class BattleFireworkEffect {
+    @Setting
+    @Description("The firework type")
+    @Validation(notNull = true, silent = true)
     private FireworkEffect.Type type = FireworkEffect.Type.BALL;
 
-    @Key("flicker")
-    @Explanation("Make this firework flicker")
+    @Setting
+    @Description("Make this firework flicker")
     private boolean flicker;
 
-    @Key("trail")
-    @Explanation("Make this firework has a trail")
+    @Setting
+    @Description("Make this firework has a trail")
     private boolean trail;
 
-    @Key("primary_colors")
-    @Explanation("All primary colors")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("primary_colors")
+    @Description("All primary colors")
+    @Validation(notNull = true, silent = true)
     private List<BattleColor> primaryColors = new ArrayList<>();
 
-    @Key("fade_colors")
-    @Explanation("All fade colors")
-    @PrettyEnum
-    @IgnoreValue(ifNull = true)
+    @Setting
+    @Path("fade_colors")
+    @Description("All fade colors")
+    @Validation(notNull = true, silent = true)
     private List<BattleColor> fadeColors = new ArrayList<>();
 
     private FireworkEffect cached;
