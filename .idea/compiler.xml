@@ -6,10 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spigot-api" />
-        <module name="bungee" />
         <module name="spigot" />
         <module name="battle.spigot.api" />
+        <module name="bungee" />
         <module name="Shared" />
       </profile>
     </annotationProcessing>

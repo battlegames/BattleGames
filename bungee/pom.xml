@@ -9,9 +9,11 @@
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
         <version>1.2.7</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>battle.bungee</artifactId>
+    <version>${project.parent.version}</version>
 
     <properties>
         <fileName>Battle.Bungeecord</fileName>
