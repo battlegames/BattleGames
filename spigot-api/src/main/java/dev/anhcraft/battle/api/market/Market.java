@@ -20,7 +20,12 @@
 
 package dev.anhcraft.battle.api.market;
 
+import dev.anhcraft.battle.utils.ConfigHelper;
+import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.config.struct.ConfigSection;
 import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -95,6 +100,7 @@ public class Market {
     @Setting
     @Description("All categories")
     @Validation(notNull = true, silent = true)
+    @Consistent
     private Map<String, Category> categories = new HashMap<>();
 
     public boolean shouldLogTransactions() {
@@ -145,5 +151,17 @@ public class Market {
 
     public boolean shouldTreatSingleItemAsPackage() {
         return treatSingleItemAsPackage;
+    }
+
+    @PostHandler
+    private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
+        try {
+            ConfigSection cs = section.get("categories").asSection();
+            for(String s : cs.getKeys(false)){
+                categories.put(s, deserializer.transformConfig(SchemaScanner.scanConfig(Category.class), cs.get(s).asSection(), new Category(s)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

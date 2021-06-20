@@ -39,6 +39,8 @@ public class Category {
         DEFAULT_ICON.material(Material.STONE);
     }
 
+    private final String id;
+
     @Setting
     @Description("Category's icon")
     @Validation(notNull = true, silent = true)
@@ -68,6 +70,16 @@ public class Category {
             "    material: apple"
     })
     private List<Product> products = new ArrayList<>();
+
+    public Category(@NotNull String id) {
+        Condition.argNotNull("id", id);
+        this.id = id;
+    }
+
+    @NotNull
+    public String getId() {
+        return id;
+    }
 
     @NotNull
     public PreparedItem getIcon() {

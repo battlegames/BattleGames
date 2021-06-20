@@ -333,7 +333,7 @@ public class BattleFunction extends GuiHandler {
     @Function("CreateCategory")
     public void createCategory() {
         String id = new String(RandomUtil.randomLetters(7));
-        Category category = new Category();
+        Category category = new Category(id);
         category.getIcon().name(id);
         BattleApi api = ApiProvider.consume();
         api.getMarket().getCategories().add(category);
