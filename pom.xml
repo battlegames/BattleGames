@@ -29,6 +29,19 @@
 
     <properties>
         <fileName>Battle</fileName>
+
+        <version.spigot>1.17-R0.1-SNAPSHOT</version.spigot>
+        <version.jvmkit>1.1.5</version.jvmkit>
+        <version.exp4j>0.4.8</version.exp4j>
+        <version.papi>2.10.9</version.papi>
+        <version.paperlib>1.0.6</version.paperlib>
+        <version.vault>1.7</version.vault>
+        <version.inst>1.0.3</version.inst>
+        <version.swm>2.2.1</version.swm>
+        <version.acf>0.5.0-SNAPSHOT</version.acf>
+        <version.config>1.0.3</version.config>
+        <version.bstats>2.2.1</version.bstats>
+        <version.hikaricp>4.0.3</version.hikaricp>
     </properties>
 
     <build>
