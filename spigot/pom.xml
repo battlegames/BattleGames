@@ -8,7 +8,7 @@
     <parent>
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
-        <version>1.2.8</version>
+        <version>1.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -45,12 +45,6 @@
             <groupId>com.github.anhcraft</groupId>
             <artifactId>JvmKit</artifactId>
             <version>1.1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.anhcraft.CraftKit</groupId>
-            <artifactId>craftkit.spigot</artifactId>
-            <version>1.2.4.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.objecthunter</groupId>
@@ -94,6 +88,18 @@
             <version>2.2.1</version>
             <systemPath>${basedir}/../lib/slimeworldmanager-plugin-2.2.1.jar</systemPath>
             <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.anhcraft.config</groupId>
+            <artifactId>config.bukkit</artifactId>
+            <version>1.0.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
