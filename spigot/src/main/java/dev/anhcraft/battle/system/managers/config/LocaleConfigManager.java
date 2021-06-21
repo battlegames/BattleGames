@@ -44,6 +44,8 @@ public class LocaleConfigManager extends ConfigManager {
     private static final Map<NMSVersion, String> ASSETS_VERSION = new EnumMap<>(NMSVersion.class);
 
     static {
+        ASSETS_VERSION.put(NMSVersion.current(), "1.12"); // set default
+
         ASSETS_VERSION.put(NMSVersion.v1_12_R1, "1.12");
         ASSETS_VERSION.put(NMSVersion.v1_13_R1, "1.13");
         ASSETS_VERSION.put(NMSVersion.v1_13_R2, "1.13.2");
@@ -51,6 +53,7 @@ public class LocaleConfigManager extends ConfigManager {
         ASSETS_VERSION.put(NMSVersion.v1_15_R1, "1.15.2");
         ASSETS_VERSION.put(NMSVersion.v1_16_R1, "1.16.1");
         ASSETS_VERSION.put(NMSVersion.v1_16_R2, "1.16.2");
+        ASSETS_VERSION.put(NMSVersion.v1_16_R3, "1.16.5");
         ASSETS_VERSION.put(NMSVersion.v1_17_R1, "1.17");
     }
 
