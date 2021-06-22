@@ -73,8 +73,8 @@
                     <finalName>${fileName}</finalName>
                     <relocations>
                         <relocation>
-                            <pattern>co.aikar</pattern>
-                            <shadedPattern>dev.anhcraft.battle.ext.aikar</shadedPattern>
+                            <pattern>co.aikar.commands</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.anhcraft.config</pattern>
