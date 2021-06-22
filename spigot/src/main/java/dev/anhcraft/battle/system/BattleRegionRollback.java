@@ -94,11 +94,14 @@ public class BattleRegionRollback extends BattleComponent {
                         b.setInteger("y", y - minY);
                         b.setInteger("z", z - minZ);
                         b.setString("data", block.getBlockData().getAsString());
-                        NBTCompound te = b.addCompound("tileEntity");
-                        te.mergeCompound(new NBTTileEntity(block.getState()));
-                        te.removeKey("x");
-                        te.removeKey("y");
-                        te.removeKey("z");
+                        BlockState bs = block.getState();
+                        if (!bs.getClass().getName().endsWith("CraftBlockState")) {
+                            NBTCompound te = b.addCompound("tileEntity");
+                            te.mergeCompound(new NBTTileEntity(bs));
+                            te.removeKey("x");
+                            te.removeKey("y");
+                            te.removeKey("z");
+                        }
                         i++;
                     }
                 }
