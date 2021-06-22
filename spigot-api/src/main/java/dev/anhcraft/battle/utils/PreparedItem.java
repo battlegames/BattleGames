@@ -21,18 +21,11 @@
 package dev.anhcraft.battle.utils;
 
 import dev.anhcraft.battle.utils.attribute.ItemModifier;
-import dev.anhcraft.config.ConfigDeserializer;
-import dev.anhcraft.config.ConfigSerializer;
-import dev.anhcraft.config.adapters.TypeAdapter;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.schema.ConfigSchema;
 import dev.anhcraft.config.schema.SchemaScanner;
-import dev.anhcraft.config.struct.ConfigSection;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -228,9 +221,11 @@ public class PreparedItem implements Serializable {
                     pi.metaType.getOnLoad().accept(pi, meta);
                 }
             }
-            ItemNBTHelper helper = ItemNBTHelper.of(itemStack);
-            pi.unbreakable = helper.isUnbreakable();
-            pi.itemModifiers.addAll(helper.getModifiers());
+            if (ItemUtil.isEmpty(itemStack)) {
+                ItemNBTHelper helper = ItemNBTHelper.of(itemStack);
+                pi.unbreakable = helper.isUnbreakable();
+                pi.itemModifiers.addAll(helper.getModifiers());
+            }
         }
 
         return pi;
@@ -448,8 +443,11 @@ public class PreparedItem implements Serializable {
             }
             item.setItemMeta(meta);
         }
+        if (ItemUtil.isEmpty(item)) {
+            return item;
+        }
         ItemNBTHelper helper = ItemNBTHelper.of(item);
-        if(itemModifiers != null && !itemModifiers.isEmpty()) helper.setModifiers(itemModifiers);
+        if (itemModifiers != null && !itemModifiers.isEmpty()) helper.setModifiers(itemModifiers);
         helper.setUnbreakable(unbreakable);
         return helper.save();
     }
