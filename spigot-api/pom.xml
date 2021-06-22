@@ -51,27 +51,32 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>nbt-data-api</artifactId>
             <version>${version.nbtapi}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>nbt-injector</artifactId>
             <version>${version.nbtapi}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${version.spigot}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>${version.papi}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>${version.vault}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
