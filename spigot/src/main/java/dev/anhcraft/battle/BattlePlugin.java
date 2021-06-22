@@ -174,11 +174,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             exit("BattleGames can only work on Spigot-based servers.");
             return;
         }
-        if (VaultApi.init()) {
-            NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
-        } else {
-            exit("Failed to hook to Vault");
-        }
         getLogger().info("Consider to donate me if you think BattleGames is awesome <3");
         injectApiProvider();
         loadLegacyMaterial();
@@ -271,6 +266,14 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         Metrics metrics = new Metrics(this, 6080);
         metrics.addCustomChart(new SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
+
+        getServer().getScheduler().runTaskLater(this, () -> {
+            if (VaultApi.init()) {
+                NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
+            } else {
+                exit("Failed to hook to Vault");
+            }
+        }, 20);
     }
 
     private void loadLegacyMaterial() {

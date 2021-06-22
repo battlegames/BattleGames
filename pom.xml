@@ -73,8 +73,8 @@
                     <finalName>${fileName}</finalName>
                     <relocations>
                         <relocation>
-                            <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>dev.anhcraft.battle.ext.acf</shadedPattern>
+                            <pattern>co.aikar</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.aikar</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.anhcraft.config</pattern>
@@ -113,8 +113,12 @@
                             <shadedPattern>dev.anhcraft.battle.ext.paperlib</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>dev.anhcraft.battle.ext.nbtapi</shadedPattern>
+                            <pattern>de.tr7zw</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.tr7zw</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javassist</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.javassist</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
