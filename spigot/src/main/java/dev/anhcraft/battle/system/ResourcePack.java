@@ -46,7 +46,7 @@ public class ResourcePack {
     private static String FILE;
 
     private static String getUrl() {
-        return "https://tichcucquaytayvanmayseden.000webhostapp.com/" + FILE;
+        return "https://github.com/battlegames/Battle-Hub/blob/master/" + FILE + "?raw=true";
     }
 
     public static void init(Consumer<String> stringConsumer) {
