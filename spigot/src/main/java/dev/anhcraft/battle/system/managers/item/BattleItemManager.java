@@ -24,6 +24,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.utils.ItemUtil;
 import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
@@ -130,7 +131,7 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     @Override
     @Nullable
     public BattleItem read(@Nullable ItemStack itemStack) {
-        if (itemStack == null) return null;
+        if (ItemUtil.isEmpty(itemStack)) return null;
         NBTItem i = new NBTItem(itemStack);
         NBTCompound compoundTag = i.getCompound("abm");
         if (compoundTag == null) return null;
@@ -144,7 +145,7 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     @Override
     @Nullable
     public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem) {
-        if (itemStack == null || battleItem == null) return null;
+        if (battleItem == null || ItemUtil.isEmpty(itemStack)) return null;
         NBTItem nbtHelper = new NBTItem(itemStack);
         NBTCompound compoundTag = nbtHelper.getOrCreateCompound("abm");
         battleItem.save(compoundTag);

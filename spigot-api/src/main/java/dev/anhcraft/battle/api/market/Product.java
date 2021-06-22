@@ -260,6 +260,10 @@ public class Product implements Informative {
 
     @NotNull
     public Collection<PreparedItem> getVanillaItems() {
+        // TODO temp fix, may be removed in the future
+        if(vanillaItems == null) {
+            return new ArrayList<>();
+        }
         return vanillaItems.values();
     }
 
