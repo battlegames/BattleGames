@@ -68,7 +68,7 @@ public class BlockUtil {
             }
             CRAFT_BLOCK_CLASS = Class.forName("org.bukkit.craftbukkit." + NMSVersion.current().name() + ".block.CraftBlock");
             CRAFT_WORLD_CLASS = Class.forName("org.bukkit.craftbukkit." + NMSVersion.current().name() + ".CraftWorld");
-            CRAFT_WORLD_CLASS = Class.forName("org.bukkit.craftbukkit." + NMSVersion.current().name() + ".entity.CraftPlayer");
+            CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + NMSVersion.current().name() + ".entity.CraftPlayer");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -143,7 +143,7 @@ public class BlockUtil {
         for(Player bukkitPlayer : viewers){
             Object craftPlayer = CRAFT_PLAYER_CLASS.cast(bukkitPlayer);
             Object entityPlayer = ReflectionUtil.invokeDeclaredMethod(CRAFT_PLAYER_CLASS, craftPlayer, "getHandle");
-            Object conn = ReflectionUtil.invokeDeclaredMethod(entityPlayerClass, entityPlayer, NMSVersion.current() == NMSVersion.v1_17_R1 ? "b" : "playerConnection");
+            Object conn = ReflectionUtil.getDeclaredField(entityPlayerClass, entityPlayer, NMSVersion.current() == NMSVersion.v1_17_R1 ? "b" : "playerConnection");
             ReflectionUtil.invokeDeclaredMethod(playerConnectionClass, conn, "sendPacket",
                     new Class<?>[]{packetClass},
                     new Object[]{packet}
