@@ -27,8 +27,10 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
@@ -69,7 +71,7 @@ public class Category {
             "    name: \"&c&lApple\"",
             "    material: apple"
     })
-    private List<Product> products = new ArrayList<>();
+    private Map<String, Product> products = new HashMap<>();
 
     public Category(@NotNull String id) {
         Condition.argNotNull("id", id);
@@ -92,8 +94,8 @@ public class Category {
     }
 
     @NotNull
-    public List<Product> getProducts() {
-        return products;
+    public Collection<Product> getProducts() {
+        return products.values();
     }
 
     public boolean isInGameOnly() {

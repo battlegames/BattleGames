@@ -48,10 +48,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
@@ -144,7 +141,7 @@ public class Product implements Informative {
             "        material: cookie",
             "        amount: 16"
     })
-    private PreparedItem[] vanillaItems = new PreparedItem[0];
+    private Map<String, PreparedItem> vanillaItems = new HashMap<>();
 
     @Setting
     @Path("executions.give_items.battle")
@@ -262,13 +259,8 @@ public class Product implements Informative {
     }
 
     @NotNull
-    public PreparedItem[] getVanillaItems() {
-        return vanillaItems;
-    }
-
-    public void setVanillaItems(@NotNull PreparedItem[] vanillaItems) {
-        Condition.argNotNull("vanillaItems", vanillaItems);
-        this.vanillaItems = vanillaItems;
+    public Collection<PreparedItem> getVanillaItems() {
+        return vanillaItems.values();
     }
 
     @NotNull
@@ -309,7 +301,7 @@ public class Product implements Informative {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
-        player.getInventory().addItem(CollectionUtil.toArray(Arrays.stream(vanillaItems).map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
+        player.getInventory().addItem(CollectionUtil.toArray(vanillaItems.values().stream().map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         battleItems.forEach((type, x) -> {
             Backpack.Compartment is = playerData.getBackpack().getStorage(type);
             is.put(x);
@@ -342,13 +334,13 @@ public class Product implements Informative {
         double battleExp = getBattleExp();
         double vanillaExp = getVanillaExp();
         Multimap<ItemType, String> battleItems = getBattleItems();
-        PreparedItem[] vanillaItems = getVanillaItems();
+        Collection<PreparedItem> vanillaItems = getVanillaItems();
 
         if (perks.isEmpty() && boosters.isEmpty() && battleExp <= 0 && vanillaExp <= 0) {
-            if (battleItems.isEmpty() && vanillaItems.length == 0) {
+            if (battleItems.isEmpty() && vanillaItems.isEmpty()) {
                 return icon = market.getDefaultIconForEmptyProduct().duplicate();
             } else if (!market.shouldTreatSingleItemAsPackage()) {
-                if (battleItems.size() == 1 && vanillaItems.length == 0) {
+                if (battleItems.size() == 1 && vanillaItems.isEmpty()) {
                     Map.Entry<ItemType, String> e = battleItems.entries().iterator().next();
                     BattleItemModel bi = api.getItemModel(e.getKey(), e.getValue());
                     if (bi != null) {
@@ -357,8 +349,8 @@ public class Product implements Informative {
                             return icon = pi.duplicate();
                         }
                     }
-                } else if (battleItems.isEmpty() && vanillaItems.length == 1) {
-                    return icon = vanillaItems[0].duplicate();
+                } else if (battleItems.isEmpty() && vanillaItems.size() == 1) {
+                    return icon = vanillaItems.stream().findFirst().get().duplicate();
                 }
             }
         }
@@ -373,7 +365,7 @@ public class Product implements Informative {
         PackageDetails details = market.getPackageDetails();
         boolean fe = false;
 
-        if (!battleItems.isEmpty() || vanillaItems.length > 0) {
+        if (!battleItems.isEmpty() || !vanillaItems.isEmpty()) {
             pi.lore().add(details.getItemHeader());
             battleItems.forEach((type, _id) -> {
                 BattleItemModel bi = api.getItemModel(type, _id);
@@ -469,7 +461,7 @@ public class Product implements Informative {
                 .inform("currency", currency.name().toLowerCase())
                 .inform("command_count", commands.size())
                 .inform("perk_count", perks.size())
-                .inform("vanilla_item_count", vanillaItems.length)
+                .inform("vanilla_item_count", vanillaItems.size())
                 .inform("vanilla_exp_count", vanillaExp)
                 .inform("battle_item_count", battleItems.size())
                 .inform("battle_exp_count", battleExp);
