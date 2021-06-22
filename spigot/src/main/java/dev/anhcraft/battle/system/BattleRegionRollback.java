@@ -20,13 +20,14 @@
 
 package dev.anhcraft.battle.system;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTFile;
+import de.tr7zw.changeme.nbtapi.NBTTileEntity;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
+import dev.anhcraft.battle.utils.BoundingBox;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.Bukkit;
@@ -41,6 +42,7 @@ import org.bukkit.block.data.MultipleFacing;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -79,41 +81,36 @@ public class BattleRegionRollback extends BattleComponent {
         int hash1 = first.hashCode();
         int hash2 = second.hashCode();
         World world = Objects.requireNonNull(first.getWorld());
-        CompoundTag root = new CompoundTag();
-        CompoundTag blocks = new CompoundTag();
+        NBTContainer root = new NBTContainer();
+        NBTCompound blocks = root.addCompound("blocks");
         long i = 0;
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
                     Block block = world.getBlockAt(x, y, z);
                     if (!block.isEmpty()) {
-                        CompoundTag b = new CompoundTag();
-                        b.put("x", x - minX);
-                        b.put("y", y - minY);
-                        b.put("z", z - minZ);
-                        b.put("data", block.getBlockData().getAsString());
-                        CompoundTag te = CompoundTag.of(block);
-                        if (te.size() > 0) {
-                            te.remove("x");
-                            te.remove("y");
-                            te.remove("z");
-                            b.put("tileEntity", te);
-                        }
-                        blocks.put(String.valueOf(i), b);
+                        NBTCompound b = blocks.addCompound(String.valueOf(i));
+                        b.setInteger("x", x - minX);
+                        b.setInteger("y", y - minY);
+                        b.setInteger("z", z - minZ);
+                        b.setString("data", block.getBlockData().getAsString());
+                        NBTCompound te = b.addCompound("tileEntity");
+                        te.mergeCompound(new NBTTileEntity(block.getState()));
+                        te.removeKey("x");
+                        te.removeKey("y");
+                        te.removeKey("z");
                         i++;
                     }
                 }
             }
         }
-        root.put("width", maxX - minX + 1);
-        root.put("depth", maxZ - minZ + 1);
-        root.put("height", maxY - minY + 1);
-        CompoundTag brd = new CompoundTag();
-        brd.put("hash1", hash1);
-        brd.put("hash2", hash2);
-        brd.put("version", plugin.getDescription().getVersion());
-        root.put("battleRegionData", brd);
-        root.put("blocks", blocks);
+        root.setInteger("width", maxX - minX + 1);
+        root.setInteger("depth", maxZ - minZ + 1);
+        root.setInteger("height", maxY - minY + 1);
+        NBTCompound brd = root.addCompound("battleRegionData");
+        brd.setInteger("hash1", hash1);
+        brd.setInteger("hash2", hash2);
+        brd.setString("version", plugin.getDescription().getVersion());
         File dir = new File(cachedRegionFolder, hash1 + File.separator + hash2);
         dir.mkdirs();
         File f = new File(dir, world.getName() + ".struct");
@@ -124,7 +121,11 @@ public class BattleRegionRollback extends BattleComponent {
         } catch (IOException e) {
             return false;
         }
-        root.save(f);
+        try(FileOutputStream s = new FileOutputStream(f)) {
+            root.writeCompound(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -139,39 +140,38 @@ public class BattleRegionRollback extends BattleComponent {
         World world = Objects.requireNonNull(first.getWorld());
         File f = new File(cachedRegionFolder, hash1 + File.separator + hash2 + File.separator + world.getName() + ".struct");
         if (f.exists()) {
-            CompoundTag tag = new CompoundTag();
-            tag.load(f);
-            if (tag.size() > 0) {
-                CompoundTag blocks = tag.get("blocks", CompoundTag.class);
+            try {
+                NBTFile tag = new NBTFile(f);
+                NBTCompound blocks = tag.getCompound("blocks");
                 if (blocks != null) {
-                    for (String s : blocks.listNames()) {
-                        CompoundTag b = blocks.get(s, CompoundTag.class);
-                        if (b != null && b.has("data")) {
-                            Location pos = loc.clone().add(
-                                    ObjectUtil.optional(b.getValue("x", IntTag.class), 0),
-                                    ObjectUtil.optional(b.getValue("y", IntTag.class), 0),
-                                    ObjectUtil.optional(b.getValue("z", IntTag.class), 0)
-                            );
-                            BlockData bd = Bukkit.createBlockData(Objects.requireNonNull(b.getValue("data", StringTag.class)));
-                            pos.getBlock().setBlockData(bd,
-                                    bd instanceof Directional
-                                            || bd instanceof MultipleFacing
-                                            || bd instanceof Bisected);
-                            BlockState te = pos.getBlock().getState();
-                            if (te.isPlaced()) {
-                                CompoundTag tileEntity = b.get("tileEntity", CompoundTag.class);
-                                if (tileEntity != null) {
-                                    tileEntity.put("x", pos.getBlockX());
-                                    tileEntity.put("y", pos.getBlockY());
-                                    tileEntity.put("z", pos.getBlockZ());
-                                    tileEntity.save(pos.getBlock(), true);
-                                }
+                    for (String s : blocks.getKeys()) {
+                        NBTCompound b = blocks.getCompound(s);
+                        Location pos = loc.clone().add(
+                                ObjectUtil.optional(b.getInteger("x"), 0),
+                                ObjectUtil.optional(b.getInteger("y"), 0),
+                                ObjectUtil.optional(b.getInteger("z"), 0)
+                        );
+                        BlockData bd = Bukkit.createBlockData(Objects.requireNonNull(b.getString("data")));
+                        pos.getBlock().setBlockData(bd,
+                                bd instanceof Directional
+                                        || bd instanceof MultipleFacing
+                                        || bd instanceof Bisected);
+                        BlockState te = pos.getBlock().getState();
+                        if (te.isPlaced()) {
+                            NBTCompound tileEntity = b.getCompound("tileEntity");
+                            if (tileEntity != null) {
+                                tileEntity.setInteger("x", pos.getBlockX());
+                                tileEntity.setInteger("y", pos.getBlockY());
+                                tileEntity.setInteger("z", pos.getBlockZ());
+                                new NBTTileEntity(pos.getBlock().getState()).mergeCompound(tileEntity);
                             }
                         }
                     }
                     BattleDebugger.endTiming("rollback-battle-region");
                     return true;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         BattleDebugger.endTiming("rollback-battle-region");

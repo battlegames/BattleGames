@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.utils.info;
 
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
+import dev.anhcraft.battle.utils.ChatUtil;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

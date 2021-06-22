@@ -23,11 +23,10 @@ package dev.anhcraft.battle.api.arena.team;
 import dev.anhcraft.battle.api.arena.game.options.FlagOptions;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.impl.Resettable;
+import dev.anhcraft.battle.utils.ChatUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
-import dev.anhcraft.craftkit.entity.ArmorStand;
-import dev.anhcraft.craftkit.entity.TrackedEntity;
 import dev.anhcraft.jvmkit.utils.Condition;
+import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,13 +34,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TeamFlag<T extends Team> implements Informative, Resettable {
     private final AtomicInteger health = new AtomicInteger();
-    private final TrackedEntity<ArmorStand> armorStand;
+    private final ArmorStand armorStand;
     private final FlagOptions options;
     private T team;
     private boolean valid;
     private boolean capturing;
 
-    public TeamFlag(@NotNull TrackedEntity<ArmorStand> armorStand, @NotNull FlagOptions options) {
+    public TeamFlag(@NotNull ArmorStand armorStand, @NotNull FlagOptions options) {
         Condition.argNotNull("armorStand", armorStand);
         Condition.argNotNull("options", options);
         this.armorStand = armorStand;
@@ -49,7 +48,7 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
     }
 
     @NotNull
-    public TrackedEntity<ArmorStand> getArmorStand() {
+    public ArmorStand getArmorStand() {
         return armorStand;
     }
 
@@ -92,8 +91,7 @@ public class TeamFlag<T extends Team> implements Informative, Resettable {
         InfoHolder h;
         inform(h = new InfoHolder("flag_"));
         String n = team != null ? (valid ? options.getValidDisplayName() : options.getInvalidDisplayName()) : options.getNeutralDisplayName();
-        armorStand.getEntity().setName(ChatUtil.formatColorCodes(h.compile().replace(n)));
-        armorStand.getEntity().sendUpdate();
+        armorStand.setCustomName(ChatUtil.formatColorCodes(h.compile().replace(n)));
     }
 
     @Override

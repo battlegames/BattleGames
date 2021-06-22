@@ -74,7 +74,7 @@ public class GameListener extends BattleComponent implements Listener {
 
         // its better to execute the following code later
         // we can ignore if the player is going to quit the server
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (p.isOnline()) {
                 plugin.resetScoreboard(p);
                 EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {

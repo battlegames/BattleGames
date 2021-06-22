@@ -335,7 +335,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
 
         long ed = arena.getEndDelay();
         if (ed <= 0) plugin.arenaManager.destroy(game);
-        else plugin.extension.getTaskHelper().newDelayedTask(() -> plugin.arenaManager.destroy(game), ed);
+        else plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.arenaManager.destroy(game), ed);
     }
 
     @NotNull

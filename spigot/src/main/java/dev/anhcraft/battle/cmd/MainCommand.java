@@ -35,12 +35,12 @@ import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
+import dev.anhcraft.battle.utils.ChatUtil;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.ItemUtil;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
-import dev.anhcraft.craftkit.chat.Chat;
-import dev.anhcraft.craftkit.utils.ItemUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -53,6 +53,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -74,12 +75,13 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.info")
     @Description("Show plugin information")
     public void info(CommandSender sender) {
-        Chat.noPrefix()
-                .message(sender, "&e&lBattleGames Minigame &7&lv" + plugin.getDescription().getVersion())
-                .message(sender, "&d◈ License: " + (plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"))
-                .message(sender, "&d◈ Author: &fanhcraft")
-                .message(sender, "&d◈ Discord: &fhttps://discord.gg/QSpc5xH")
-                .message(sender, "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463");
+        ChatUtil.formatColorCodes(Arrays.asList(
+                "&e&lBattleGames Minigame &7&lv" + plugin.getDescription().getVersion(),
+                "&d◈ License: " + (plugin.premiumConnector.isSuccess() ? "&bPremium" : "&fFree"),
+                "&d◈ Author: &f" + String.join(", ", plugin.getDescription().getAuthors()),
+                "&d◈ Discord: &fhttps://discord.gg/QSpc5xH",
+                "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463"
+        )).forEach(sender::sendMessage);
     }
 
     @Subcommand("setspawn")
@@ -445,7 +447,7 @@ public class MainCommand extends BaseCommand {
     @Description("Reload your gun instantly")
     public void reloadGun(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (ItemUtil.isNull(item)) {
+        if (ItemUtil.isEmpty(item)) {
             plugin.chatManager.sendPlayer(player, "items.is_null");
             return;
         }
@@ -560,9 +562,7 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.rsp.refresh")
     @Description("Refresh the resource pack")
     public void refreshRsp(CommandSender sender) {
-        plugin.extension.getTaskHelper().newAsyncTask(() -> {
-            ResourcePack.init(sender::sendMessage);
-        });
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> ResourcePack.init(sender::sendMessage));
     }
 
     @Subcommand("rsp install")
@@ -579,7 +579,7 @@ public class MainCommand extends BaseCommand {
         Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
         plugin.getArenaManager().listGames(g -> plugin.getArenaManager().destroy(g));
         // wait a bit for async tasks (e.g: rollback)
-        plugin.extension.getTaskHelper().newDelayedTask(() -> {
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             plugin.reloadConfigs();
             plugin.chatManager.send(sender, "reload.done");
         }, 100);

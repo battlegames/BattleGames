@@ -17,27 +17,20 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.jvmkit.utils.Condition;
-import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class EnumUtil {
-    @NotNull
-    public static <E extends Enum> E getEnum(@NotNull E[] list, @Nullable String str) {
-        Condition.notNull(list);
-        Condition.notEmpty(list);
-        if (str == null) return list[0];
-
-        str = str.toUpperCase();
-        for (E e : list) {
-            if (e.name().equals(str)) return e;
-        }
-        StackTraceElement stacktrace = Thread.currentThread().getStackTrace()[2];
-        E def = list[list.length - 1];
-        Bukkit.getLogger().warning(String.format("%s#%s() | Enum `%s` not found! Using default: `%s`", stacktrace.getClassName(), stacktrace.getMethodName(), str, def.name()));
-        return def;
+public class ItemUtil {
+    /**
+     * Checks if the given item stack is null or its material type is {@link Material#AIR}.
+     * @param item an item stack
+     * @return {@code true} if it is "null". Otherwise is {@code false}.
+     */
+    public static boolean isEmpty(@Nullable ItemStack item){
+        return item == null || MaterialUtil.isEmpty(item.getType());
     }
 }

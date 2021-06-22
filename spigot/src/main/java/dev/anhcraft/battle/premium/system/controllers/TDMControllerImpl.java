@@ -200,7 +200,7 @@ public class TDMControllerImpl extends DMControllerImpl implements TeamDeathmatc
         teamManager.addPlayers(tb, ABTeam.TEAM_B);
         TEAM.put(game, teamManager);
 
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(game, "respawn::" + p.getName());

@@ -25,7 +25,6 @@ import dev.anhcraft.battle.api.events.game.GamePhaseChangeEvent;
 import dev.anhcraft.battle.premium.PremiumModule;
 import dev.anhcraft.battle.premium.config.ArenaSettings;
 import dev.anhcraft.battle.premium.system.PositionPair;
-import dev.anhcraft.craftkit.utils.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -51,7 +50,7 @@ public class GameListener implements Listener {
                         for (int x = minX; x <= maxX; x++) {
                             for (int y = minY; y <= maxY; y++) {
                                 for (int z = minZ; z <= maxZ; z++) {
-                                    BlockUtil.setBlockFast(first.getWorld().getBlockAt(x, y, z), Material.AIR, false, true);
+                                    first.getWorld().getBlockAt(x, y, z).setType(Material.AIR, false);
                                 }
                             }
                         }

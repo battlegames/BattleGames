@@ -71,7 +71,7 @@ public abstract class GameControllerImpl extends BattleComponent implements List
 
     @Override
     public void onDeath(@NotNull PlayerDeathEvent event, @NotNull LocalGame game) {
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             event.getEntity().spigot().respawn();
         });
     }
@@ -167,14 +167,14 @@ public abstract class GameControllerImpl extends BattleComponent implements List
 
     public void cancelTask(@NotNull LocalGame game, @NotNull String id) {
         Integer x = RUNNING_TASKS.remove(game.getArena().getId() + id);
-        if (x != null) plugin.extension.getTaskHelper().cancelTask(x);
+        if (x != null) plugin.getServer().getScheduler().cancelTask(x);
     }
 
     public void cancelAllTasks(@NotNull LocalGame game) {
         List<Map.Entry<String, Integer>> x = RUNNING_TASKS.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(game.getArena().getId()))
                 .collect(Collectors.toList());
-        x.forEach(e -> plugin.extension.getTaskHelper().cancelTask(RUNNING_TASKS.remove(e.getKey())));
+        x.forEach(e -> plugin.getServer().getScheduler().cancelTask(RUNNING_TASKS.remove(e.getKey())));
     }
 
     public void playSound(@NotNull LocalGame game, @Nullable BattleSound sound) {

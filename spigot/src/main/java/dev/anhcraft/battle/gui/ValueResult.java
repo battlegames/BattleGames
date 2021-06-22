@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.gui;
 
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.inventory.ItemStack;
 

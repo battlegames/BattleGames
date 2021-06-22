@@ -54,9 +54,7 @@ import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -77,15 +75,33 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlayerListener extends BattleComponent implements Listener {
+    public final Map<UUID, Location> FROZEN_PLAYERS = new HashMap<>();
+
     public PlayerListener(BattlePlugin plugin) {
         super(plugin);
+    }
+
+    @EventHandler
+    public void move(PlayerMoveEvent event) {
+        Location to = event.getTo();
+        if(to == null || to.getWorld() == null) return;
+        Location last = FROZEN_PLAYERS.get(event.getPlayer().getUniqueId());
+        if(last != null) {
+            if(Objects.equals(last.getWorld(), to.getWorld())) {
+                double offX = to.getX() - last.getX();
+                double offY = to.getY() - last.getY();
+                double offZ = to.getZ() - last.getZ();
+                if (offX * offX + offY * offY + offZ * offZ >= 1) {
+                    event.setCancelled(true);
+                }
+            } else {
+                event.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler
@@ -96,7 +112,7 @@ public class PlayerListener extends BattleComponent implements Listener {
 
     public void handleJoin(Player player) {
         SpeedUtil.resetSpeed(player);
-        plugin.extension.getTaskHelper().newDelayedTask(() -> {
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             if (!player.isOnline()) return;
             BattleDebugger.startTiming("player-join");
             for (PotionEffect pe : player.getActivePotionEffects()) {
@@ -104,13 +120,13 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
             EntityUtil.teleport(player, plugin.getServerData().getSpawnPoint(), ok -> {
                 plugin.guiManager.setBottomGui(player, NativeGui.MAIN_PLAYER_INV);
-                plugin.extension.getTaskHelper().newAsyncTask(() -> {
+                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                     if (plugin.generalConf.isResourcePackEnabled()) {
                         ResourcePack.send(player);
                     }
                     PlayerData playerData = plugin.dataManager.loadPlayerData(player);
                     // back to main thread
-                    plugin.extension.getTaskHelper().newDelayedTask(() -> {
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                         plugin.resetScoreboard(player);
                         plugin.listKits(kit -> {
                             if (kit.isFirstJoin() && !playerData.getReceivedFirstJoinKits().contains(kit.getId())) {
@@ -137,7 +153,7 @@ public class PlayerListener extends BattleComponent implements Listener {
         plugin.guiManager.destroyWindow(event.getPlayer());
         plugin.arenaManager.quit(event.getPlayer());
         plugin.gunManager.handleZoomOut(event.getPlayer());
-        plugin.extension.getTaskHelper().newAsyncTask(() -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> plugin.dataManager.unloadPlayerData(event.getPlayer()));
     }
 
     @EventHandler

@@ -20,9 +20,9 @@
 
 package dev.anhcraft.battle.api;
 
+import dev.anhcraft.battle.utils.BoundingBox;
 import dev.anhcraft.battle.utils.LocationUtil;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

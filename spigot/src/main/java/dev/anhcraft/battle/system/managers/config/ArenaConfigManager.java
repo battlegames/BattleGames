@@ -22,9 +22,9 @@ package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.utils.BoundingBox;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;

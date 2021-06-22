@@ -28,16 +28,8 @@ import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
-import dev.anhcraft.battle.utils.SpeedFactor;
-import dev.anhcraft.battle.utils.SpeedUtil;
-import dev.anhcraft.battle.utils.VectUtil;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
-import dev.anhcraft.craftkit.utils.BlockUtil;
-import dev.anhcraft.craftkit.utils.EntityUtil;
-import dev.anhcraft.craftkit.utils.ItemUtil;
-import dev.anhcraft.craftkit.utils.PlayerUtil;
+import dev.anhcraft.battle.utils.*;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import dev.anhcraft.jvmkit.utils.Pair;
 import dev.anhcraft.jvmkit.utils.RandomUtil;
 import org.bukkit.Bukkit;
@@ -107,7 +99,7 @@ public class BattleGunManager extends BattleComponent {
     }
 
     private void rmvZoom(Player player) {
-        PlayerUtil.unfreeze(player);
+        plugin.playerListener.FROZEN_PLAYERS.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffectType.SLOW);
         player.getInventory().setHelmet(null);
         player.removeMetadata("zoom", plugin);
@@ -158,7 +150,7 @@ public class BattleGunManager extends BattleComponent {
             player.setMetadata("zoom", new FixedMetadataValue(plugin, nextLv));
             SpeedUtil.setModifier(player, SpeedFactor.ZOOM, -9999);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 696969, nextLv, false), true);
-            PlayerUtil.freeze(player);
+            plugin.playerListener.FROZEN_PLAYERS.put(player.getUniqueId(), player.getLocation());
         }
         return true;
     }
@@ -265,7 +257,7 @@ public class BattleGunManager extends BattleComponent {
                     EntityEquipment ee = ve.getEquipment();
                     if (ee != null) {
                         for (ItemStack item : ee.getArmorContents()) {
-                            if (ItemUtil.isNull(item)) continue;
+                            if (ItemUtil.isEmpty(item)) continue;
                             power -= plugin.generalConf.getMaterialHardness(item.getType());
                         }
                     }

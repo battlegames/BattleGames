@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +34,12 @@ public class NullBattleItem extends BattleItem<BattleItemModel> {
     }
 
     @Override
-    public void save(CompoundTag compound) {
+    public void save(NBTCompound compound) {
 
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void load(NBTCompound compound) {
 
     }
 

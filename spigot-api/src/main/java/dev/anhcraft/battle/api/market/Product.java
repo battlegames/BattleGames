@@ -34,9 +34,9 @@ import dev.anhcraft.battle.api.stats.natives.ExpStat;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.CollectionUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
@@ -48,7 +48,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")

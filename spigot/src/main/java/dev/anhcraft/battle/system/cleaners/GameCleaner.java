@@ -37,7 +37,7 @@ public class GameCleaner extends BattleComponent {
     }
 
     public void newSession(Arena arena, Consumer<Arena> onFinished) {
-        plugin.extension.getTaskHelper().newDelayedAsyncTask(() -> {
+        plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             plugin.getLogger().info(String.format("Cleaning arena %s (%s works remaining)", arena.getId(), works.length));
 
             WorkSession workSession = new WorkSession(works.length, plugin.getLogger());

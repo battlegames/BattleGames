@@ -48,6 +48,17 @@
         </dependency>
 
         <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>nbt-data-api</artifactId>
+            <version>${version.nbtapi}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>nbt-injector</artifactId>
+            <version>${version.nbtapi}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${version.spigot}</version>

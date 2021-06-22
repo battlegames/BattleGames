@@ -20,8 +20,8 @@
 
 package dev.anhcraft.battle.api.gui.struct;
 
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

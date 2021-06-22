@@ -123,7 +123,7 @@ public class DMControllerImpl extends GameControllerImpl {
         if (hasTask(game, "countdown")) return;
         AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getCountdownTime() / 20L);
         int m = Math.min(game.getArena().getGameOptions().getMinPlayers(), 1);
-        trackTask(game, "countdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
+        trackTask(game, "countdown", plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             if (m <= game.getPlayerCount()) {
                 broadcastTitle(game, "countdown_title", "countdown_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                 playSound(game, game.getArena().getGameOptions().getCountdownSound());
@@ -132,12 +132,12 @@ public class DMControllerImpl extends GameControllerImpl {
                     play(game);
                 }
             } else cancelTask(game, "countdown");
-        }, 0, 20));
+        }, 0, 20).getTaskId());
     }
 
     protected void play(LocalGame game) {
         broadcast(game, "game_start_broadcast");
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             game.setPhase(GamePhase.PLAYING);
             game.getPlayers().values().forEach(p -> {
                 cancelTask(game, "respawn::" + p.toBukkit().getName());
@@ -247,17 +247,17 @@ public class DMControllerImpl extends GameControllerImpl {
             gp.getStats().of(RespawnStat.class).increase(player);
             AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getRespawnWaitTime() / 20L);
             String task = "respawn::" + player.getName();
-            trackTask(game, task, plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
+            trackTask(game, task, plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
                 if (player.isOnline()) {
                     sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
                     player.playSound(player.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
                     if (current.getAndDecrement() == 0) {
                         cancelTask(game, task);
                         gp.setSpectator(false);
-                        plugin.extension.getTaskHelper().newTask(() -> respw(game, player));
+                        plugin.getServer().getScheduler().runTask(plugin, () -> respw(game, player));
                     }
                 } else cancelTask(game, task);
-            }, 0, 20));
+            }, 0, 20).getTaskId());
         }
     }
 

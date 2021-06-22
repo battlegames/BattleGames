@@ -57,7 +57,7 @@ public class KitMenu implements Pagination {
                         slot.setExtraClickFunction((vm, report) -> api.getChatManager().sendPlayer(report.getPlayer(), "kit.one_time_use"));
                         return;
                     }
-                    long next = last + kit.getRenewTime() * 50;
+                    long next = last + kit.getRenewTime() * 50L;
                     if (next > System.currentTimeMillis()) {
                         slot.setPaginationItem(kit.getNoAccessIcon().duplicate());
                         slot.setExtraClickFunction((vm, report) -> {

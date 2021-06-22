@@ -21,6 +21,8 @@
 package dev.anhcraft.battle.utils;
 
 import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.config.bukkit.NMSVersion;
+import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,9 +30,26 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class EntityUtil {
+    private static Class<?> ENTITY_CLASS;
+    private static Class<?> CRAFT_ENTITY_CLASS;
+
+    static {
+        try {
+            if (NMSVersion.current().compare(NMSVersion.v1_17_R1) >= 0) {
+                ENTITY_CLASS = Class.forName("net.minecraft.world.entity.Entity");
+            } else {
+                ENTITY_CLASS = Class.forName("net.minecraft.server." + NMSVersion.current().name() + ".Entity");
+            }
+            CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + NMSVersion.current().name() + ".entity.CraftEntity");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void teleport(@NotNull Entity entity, @Nullable Location location) {
         teleport(entity, location, ok -> {
         });
@@ -48,5 +67,20 @@ public class EntityUtil {
             entity.teleport(location);
             callback.accept(true);
         }
+    }
+
+    public static BoundingBox getBoundingBox(@NotNull Entity bukkitEntity){
+        Object craftEntity = CRAFT_ENTITY_CLASS.cast(bukkitEntity);
+        Object entity = ReflectionUtil.invokeDeclaredMethod(CRAFT_ENTITY_CLASS, craftEntity, "getHandle");
+        Object aabb = ReflectionUtil.invokeDeclaredMethod(ENTITY_CLASS, entity, "getBoundingBox");
+        double[] v = Arrays.stream(aabb.getClass().getDeclaredFields()).mapToDouble(f -> {
+            try {
+                return (double) f.get(aabb);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }).toArray();
+        return new BoundingBox(v[0], v[1], v[2], v[3], v[4], v[5]);
     }
 }

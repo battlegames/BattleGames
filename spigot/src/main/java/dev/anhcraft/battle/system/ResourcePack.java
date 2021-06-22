@@ -24,7 +24,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import dev.anhcraft.jvmkit.helpers.HTTPConnectionHelper;
 import dev.anhcraft.jvmkit.trackers.BufferedStreamReadTracker;
 import dev.anhcraft.jvmkit.trackers.reports.FixedStreamTransferReport;

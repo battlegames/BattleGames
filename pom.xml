@@ -30,7 +30,7 @@
     <properties>
         <fileName>Battle</fileName>
 
-        <version.spigot>1.17-R0.1-SNAPSHOT</version.spigot>
+        <version.spigot>1.13.2-R0.1-SNAPSHOT</version.spigot>
         <version.jvmkit>1.1.5</version.jvmkit>
         <version.exp4j>0.4.8</version.exp4j>
         <version.papi>2.10.9</version.papi>
@@ -42,6 +42,7 @@
         <version.config>1.0.3</version.config>
         <version.bstats>2.2.1</version.bstats>
         <version.hikaricp>4.0.3</version.hikaricp>
+        <version.nbtapi>2.8.0</version.nbtapi>
     </properties>
 
     <build>
@@ -109,7 +110,11 @@
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>dev.anhcraft.battle.ext.paperlib</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>dev.anhcraft.battle.ext.paperlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.nbtapi</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -138,6 +143,10 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>

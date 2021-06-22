@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

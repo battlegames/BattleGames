@@ -23,7 +23,7 @@ package dev.anhcraft.battle.system.managers.config;
 import dev.anhcraft.battle.api.SystemConfig;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.craftkit.common.utils.VersionUtil;
+import dev.anhcraft.battle.utils.VersionUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

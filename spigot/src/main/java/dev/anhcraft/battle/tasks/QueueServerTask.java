@@ -23,9 +23,11 @@ import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.utils.BungeeUtil;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,7 +64,15 @@ public class QueueServerTask extends BattleComponent implements Runnable {
                     if (qs.getArena() != null) {
                         plugin.bungeeMessenger.requestGameJoin(p, qs.getArena(), ns);
                     } else {
-                        BungeeUtil.connect(p, ns);
+                        try {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            DataOutputStream out = new DataOutputStream(stream);
+                            out.writeUTF("Connect");
+                            out.writeUTF(ns);
+                            p.sendPluginMessage(plugin, "BungeeCord", stream.toByteArray());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

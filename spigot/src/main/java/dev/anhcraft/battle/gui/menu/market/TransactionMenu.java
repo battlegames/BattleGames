@@ -28,8 +28,8 @@ import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.market.Transaction;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

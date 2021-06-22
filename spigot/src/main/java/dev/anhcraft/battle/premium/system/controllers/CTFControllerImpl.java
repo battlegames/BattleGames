@@ -33,11 +33,10 @@ import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.TeamFlag;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.FlagUpdateEvent;
-import dev.anhcraft.craftkit.entity.ArmorStand;
-import dev.anhcraft.craftkit.entity.TrackedEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -136,43 +135,16 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
     }
 
     @Override
-    public void onJoin(@NotNull Player player, @NotNull LocalGame game) {
-        super.onJoin(player, game);
-
-        Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-        if (flags != null) {
-            for (TeamFlag<ABTeam> f : flags) {
-                f.getArmorStand().addViewer(player);
-            }
-        }
-    }
-
-    @Override
-    public void onQuit(@NotNull Player player, @NotNull LocalGame game) {
-        super.onQuit(player, game);
-
-        Collection<TeamFlag<ABTeam>> flags = FLAG.get(game);
-        if (flags != null) {
-            for (TeamFlag<ABTeam> f : flags) {
-                f.getArmorStand().removeViewer(player);
-            }
-        }
-    }
-
-    @Override
     protected void play(LocalGame game) {
         super.play(game);
 
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             Collection<FlagOptions> fs = ((CaptureTheFlagOptions) game.getArena().getGameOptions()).getFlags();
             for (FlagOptions k : fs) {
-                ArmorStand armorStand = ArmorStand.spawn(k.getLocation());
+                ArmorStand armorStand = k.getLocation().getWorld().spawn(k.getLocation(), ArmorStand.class);
                 armorStand.setVisible(false);
-                armorStand.setNameVisible(true);
-                TrackedEntity<ArmorStand> te = plugin.extension.trackEntity(armorStand);
-                te.setViewDistance(50);
-                te.setViewers(new ArrayList<>(game.getPlayers().keySet()));
-                TeamFlag<ABTeam> flag = new TeamFlag<>(te, k);
+                armorStand.setCustomNameVisible(true);
+                TeamFlag<ABTeam> flag = new TeamFlag<>(armorStand, k);
                 flag.updateDisplayName();
                 FLAG.put(game, flag);
             }
@@ -187,7 +159,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
             flag.getOptions().getStartCaptureSound().play(occupier);
         }
         String id = "ctf_flag_occupy_" + occupier.getName();
-        int tid = plugin.extension.getTaskHelper().newTimerTask(() -> {
+        int tid = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             if (occupier.getLocation().distance(flag.getArmorStand().getLocation()) >= 1.5) {
                 stopOccupyFlag(game, flag, occupier);
                 return;
@@ -207,7 +179,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
             flag.updateDisplayName();
             FlagUpdateEvent e = new FlagUpdateEvent(game, occupier, team, flag);
             Bukkit.getPluginManager().callEvent(e);
-        }, 0, 20);
+        }, 0, 20).getTaskId();
         trackTask(game, id, tid);
     }
 
@@ -252,8 +224,7 @@ public class CTFControllerImpl extends TDMControllerImpl implements CaptureTheFl
         super.onEnd(game);
 
         FLAG.removeAll(game).forEach(f -> {
-            f.getArmorStand().kill();
-            plugin.extension.untrackEntity(f.getArmorStand());
+            f.getArmorStand().remove();
             f.reset();
         });
     }

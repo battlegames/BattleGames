@@ -23,7 +23,7 @@ package dev.anhcraft.battle.system.managers.config;
 import dev.anhcraft.battle.api.gui.Gui;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;

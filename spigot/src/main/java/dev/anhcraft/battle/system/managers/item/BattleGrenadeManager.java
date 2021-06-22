@@ -26,8 +26,8 @@ import dev.anhcraft.battle.api.inventory.item.Grenade;
 import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.tasks.EntityTrackingTask;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.utils.BlockUtil;
+import dev.anhcraft.battle.utils.BlockUtil;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -59,7 +59,7 @@ public class BattleGrenadeManager extends BattleComponent {
                 if (tracker.deltaMoveTime() >= 500 || (dt > 0 && tracker.deltaOriginTime() > dt * 50)) {
                     callback.untrack(entity);
                     Location eloc = entity.getLocation();
-                    plugin.extension.getTaskHelper().newTask(() -> {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> {
                         BattleDebugger.startTiming("grenade-track");
                         entity.remove();
                         if (gm.getExplosionPower() > 0) {

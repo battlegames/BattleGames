@@ -55,6 +55,19 @@
         </dependency>
 
         <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>nbt-data-api</artifactId>
+            <version>${version.nbtapi}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>nbt-injector</artifactId>
+            <version>${version.nbtapi}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.grinderwolf</groupId>
             <artifactId>slimeworldmanager</artifactId>
             <version>${version.swm}</version>

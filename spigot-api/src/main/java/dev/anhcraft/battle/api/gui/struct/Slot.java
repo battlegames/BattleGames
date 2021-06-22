@@ -21,7 +21,7 @@
 package dev.anhcraft.battle.api.gui.struct;
 
 import dev.anhcraft.battle.api.gui.SlotReport;
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.inst.VM;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;

@@ -20,7 +20,6 @@
 
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.craftkit.common.utils.ChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;

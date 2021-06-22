@@ -4,5 +4,5 @@ author: anhcraft
 version: ${project.version}
 main: dev.anhcraft.battle.BattlePlugin
 api-version: "1.13"
-depend: [ CraftKit, PlaceholderAPI, Vault ]
+depend: [ PlaceholderAPI, Vault ]
 softdepend: [ SlimeWorldManager ]

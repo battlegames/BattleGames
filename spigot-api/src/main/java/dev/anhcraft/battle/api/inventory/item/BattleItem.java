@@ -19,9 +19,9 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BattleItem<M extends BattleItemModel> implements Informative {
@@ -36,9 +36,9 @@ public abstract class BattleItem<M extends BattleItemModel> implements Informati
         this.model = model;
     }
 
-    public abstract void save(CompoundTag compound);
+    public abstract void save(NBTCompound compound);
 
-    public abstract void load(CompoundTag compound);
+    public abstract void load(NBTCompound compound);
 
     @Nullable
     public InfoHolder collectInfo(@Nullable String prefix) {

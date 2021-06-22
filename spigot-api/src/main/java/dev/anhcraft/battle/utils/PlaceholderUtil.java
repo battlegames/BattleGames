@@ -19,7 +19,6 @@
  */
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.MathUtil;
 import me.clip.placeholderapi.PlaceholderAPI;

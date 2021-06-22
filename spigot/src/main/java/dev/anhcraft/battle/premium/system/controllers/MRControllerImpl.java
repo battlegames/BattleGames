@@ -229,7 +229,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
         teamManager.addPlayers(tb, MRTeam.FARMER);
         TEAM.put(game, teamManager);
 
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             game.setPhase(GamePhase.PLAYING);
             ta.forEach(p -> {
                 cancelTask(game, "respawn::" + p.getName());
@@ -279,7 +279,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
     protected void extraFarmerCountdown(LocalGame game, List<Player> tb, long time, Runnable callback) {
         if (hasTask(game, "extraFarmerCountdown")) return;
         AtomicLong current = new AtomicLong(time / 20L);
-        trackTask(game, "extraFarmerCountdown", plugin.extension.getTaskHelper().newAsyncTimerTask(() -> {
+        trackTask(game, "extraFarmerCountdown", plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             InfoReplacer f = new InfoHolder("").inform("current", current.get()).compile();
             sendTitle(tb, "extra_farmer_countdown_title", "extra_farmer_countdown_subtitle", f);
             MobRescueOptions mro = (MobRescueOptions) game.getArena().getGameOptions();
@@ -290,9 +290,9 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
             }
             if (current.getAndDecrement() == 0) {
                 cancelTask(game, "extraFarmerCountdown");
-                plugin.extension.getTaskHelper().newTask(callback);
+                plugin.getServer().getScheduler().runTask(plugin, callback);
             }
-        }, 0, 20));
+        }, 0, 20).getTaskId());
     }
 
     @Nullable
@@ -389,7 +389,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                     }
                     SpeedUtil.setModifier(p, SpeedFactor.PASSENGER, -sr);
                     if (tm.getTeam(p) == MRTeam.THIEF) {
-                        trackTask(game, p.getName() + "-StealMobTask", plugin.extension.getTaskHelper().newDelayedTask(() -> {
+                        trackTask(game, p.getName() + "-StealMobTask", plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                             if (hasTask(game, p.getName() + "-StealMobTask")) {
                                 InfoReplacer ir = new InfoHolder("")
                                         .inform("player", p.getName())
@@ -398,7 +398,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                                 plugin.chatManager.sendPlayers(tm.getPlayers(MRTeam.THIEF), blp("on_thief_carry.teammates"), ir);
                                 plugin.chatManager.sendPlayers(tm.getPlayers(MRTeam.FARMER), blp("on_thief_carry.opponent"), ir);
                             }
-                        }, RandomUtil.randomInt(40, 100)));
+                        }, RandomUtil.randomInt(40, 100)).getTaskId());
                     }
                 }
             }
@@ -428,7 +428,7 @@ public class MRControllerImpl extends DMControllerImpl implements MobRescueContr
                 if (tm.getTeam(p) == MRTeam.THIEF) {
                     cancelTask(game, p.getName() + "-StealMobTask");
                     if (match.getGatheringRegion().contains(p.getLocation())) {
-                        plugin.extension.getTaskHelper().newTask(ent::remove);
+                        plugin.getServer().getScheduler().runTask(plugin, ent::remove);
                         Integer i = match.getMobCount().get(ent.getType());
                         if (i != null && i > 0) {
                             GamePlayer gp = Objects.requireNonNull(game.getPlayer(p));

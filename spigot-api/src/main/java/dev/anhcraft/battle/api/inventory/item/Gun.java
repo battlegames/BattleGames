@@ -19,12 +19,9 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
-import dev.anhcraft.craftkit.cb_common.nbt.LongTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,35 +85,33 @@ public class Gun extends Weapon<GunModel> {
     }
 
     @Override
-    public void save(CompoundTag compound) {
-        if (getModel() != null) compound.put(ItemTag.GUN_ID, getModel().getId());
+    public void save(NBTCompound compound) {
+        if (getModel() != null) compound.setString(ItemTag.GUN_ID, getModel().getId());
 
-        CompoundTag mc = new CompoundTag();
+        NBTCompound mc = compound.addCompound(ItemTag.GUN_MAGAZINE);
         magazine.save(mc);
-        compound.put(ItemTag.GUN_MAGAZINE, mc);
 
         if (scope != null) {
-            CompoundTag sc = new CompoundTag();
+            NBTCompound sc = compound.addCompound(ItemTag.GUN_SCOPE);
             scope.save(sc);
-            compound.put(ItemTag.GUN_SCOPE, sc);
         }
-        compound.put(ItemTag.GUN_NEXT_SPRAY, nextSpray);
-        compound.put(ItemTag.GUN_LAST_SPRAY_TIME, lastSprayTime);
+        compound.setInteger(ItemTag.GUN_NEXT_SPRAY, nextSpray);
+        compound.setLong(ItemTag.GUN_LAST_SPRAY_TIME, lastSprayTime);
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        setModel(ApiProvider.consume().getGunModel(compound.getValue(ItemTag.GUN_ID, StringTag.class)));
-        CompoundTag mag = compound.get(ItemTag.GUN_MAGAZINE, CompoundTag.class);
+    public void load(NBTCompound compound) {
+        setModel(ApiProvider.consume().getGunModel(compound.getString(ItemTag.GUN_ID)));
+        NBTCompound mag = compound.getCompound(ItemTag.GUN_MAGAZINE);
         if (mag != null) magazine.load(mag);
 
-        CompoundTag scp = compound.get(ItemTag.GUN_SCOPE, CompoundTag.class);
+        NBTCompound scp = compound.getCompound(ItemTag.GUN_SCOPE);
         if (scp != null) (scope = (scope == null) ? new Scope() : scope).load(scp);
 
-        Integer nextSpray = compound.getValue(ItemTag.GUN_NEXT_SPRAY, IntTag.class);
+        Integer nextSpray = compound.getInteger(ItemTag.GUN_NEXT_SPRAY);
         if (nextSpray != null) this.nextSpray = nextSpray;
 
-        Long lastSprayTime = compound.getValue(ItemTag.GUN_LAST_SPRAY_TIME, LongTag.class);
+        Long lastSprayTime = compound.getLong(ItemTag.GUN_LAST_SPRAY_TIME);
         if (lastSprayTime != null) this.lastSprayTime = lastSprayTime;
     }
 
