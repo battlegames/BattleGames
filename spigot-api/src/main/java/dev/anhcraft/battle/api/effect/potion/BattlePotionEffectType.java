@@ -51,7 +51,10 @@ public enum BattlePotionEffectType {
     GLOWING,
     LEVITATION,
     LUCK,
-    UNLUCK;
+    UNLUCK,
+    SLOW_FALLING,
+    CONDUIT_POWER,
+    DOLPHINS_GRACE;
 
     private final PotionEffectType potionEffectType;
 
