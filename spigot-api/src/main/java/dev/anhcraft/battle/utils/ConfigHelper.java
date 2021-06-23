@@ -21,11 +21,9 @@
 package dev.anhcraft.battle.utils;
 
 import com.google.common.collect.Multimap;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
-import dev.anhcraft.battle.utils.adapters.BattleItemModelAdapter;
-import dev.anhcraft.battle.utils.adapters.EnchantmentAdapter;
-import dev.anhcraft.battle.utils.adapters.MaterialAdapter;
-import dev.anhcraft.battle.utils.adapters.MultimapAdapter;
+import dev.anhcraft.battle.utils.adapters.*;
 import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.ConfigSerializer;
 import dev.anhcraft.config.adapters.defaults.EnumAdapter;
@@ -46,12 +44,14 @@ public class ConfigHelper {
         SERIALIZER = BukkitConfigProvider.YAML.createSerializer();
         SERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         SERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        SERIALIZER.registerTypeAdapter(BattleSound.class, BattleSoundAdapter.INSTANCE);
         SERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
         SERIALIZER.registerTypeAdapter(Enchantment.class, new EnchantmentAdapter());
 
         DESERIALIZER = BukkitConfigProvider.YAML.createDeserializer();
         DESERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         DESERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        DESERIALIZER.registerTypeAdapter(BattleSound.class, BattleSoundAdapter.INSTANCE);
         DESERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
         DESERIALIZER.registerTypeAdapter(Enchantment.class, new EnchantmentAdapter());
         EnumAdapter ea = new EnumAdapter();
