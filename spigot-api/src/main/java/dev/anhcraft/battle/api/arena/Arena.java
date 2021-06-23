@@ -354,6 +354,7 @@ public class Arena implements Informative {
             if(sf != null){
                 ConfigSection cs = sf.asSection();
                 if(cs != null) {
+                    emptyRegions = new ArrayList<>();
                     for (String k : cs.getKeys(false)) {
                         ConfigSection v = Objects.requireNonNull(cs.get(k)).asSection();
                         if (v == null) continue;
