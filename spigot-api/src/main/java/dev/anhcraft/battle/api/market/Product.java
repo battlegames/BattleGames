@@ -250,20 +250,22 @@ public class Product implements Informative {
 
     @NotNull
     public List<String> getPerks() {
+        // TODO temp fix, may be removed in the future
+        if(perks == null) return Collections.emptyList();
         return perks;
     }
 
     @NotNull
     public List<String> getBoosters() {
+        // TODO temp fix, may be removed in the future
+        if(boosters == null) return Collections.emptyList();
         return boosters;
     }
 
     @NotNull
     public Collection<PreparedItem> getVanillaItems() {
         // TODO temp fix, may be removed in the future
-        if(vanillaItems == null) {
-            return new ArrayList<>();
-        }
+        if(vanillaItems == null) return Collections.emptyList();
         return vanillaItems.values();
     }
 
