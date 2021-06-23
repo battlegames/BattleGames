@@ -258,7 +258,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
             getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
         }
-        getServer().getScheduler().runTaskTimerAsynchronously(this, new WorldTask(this), 0, 100);
+        getServer().getScheduler().runTaskTimer(this, new WorldTask(this), 0, 100);
 
         new CommandInitializer(this);
 
