@@ -15,6 +15,10 @@
     <artifactId>battle.spigot-api</artifactId>
     <version>${project.parent.version}</version>
 
+    <properties>
+        <fileName>Battle.API</fileName>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.anhcraft</groupId>
