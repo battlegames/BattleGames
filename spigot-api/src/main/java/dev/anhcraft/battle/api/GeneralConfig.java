@@ -328,8 +328,8 @@ public class GeneralConfig {
     @Setting
     @Path("radio.message_format")
     @Description("Radio message format")
-    @Validation(notNull = true)
-    private String radioMessageFormat;
+    @Validation(notNull = true, silent = true)
+    private String radioMessageFormat = "&6[RADIO] &8%player_displayname%&f: <message>";
 
     @Setting
     @Path("custom_items.medical_kit.health_bonus")
