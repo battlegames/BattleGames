@@ -1232,6 +1232,7 @@ player_gun_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
+          - Battle:CancelEvent()
           - Battle:SwitchGUI("player_bp")
 player_magazine_bp:
   title: '[ gui.player_magazine_bp.title ]'
@@ -1289,6 +1290,7 @@ player_magazine_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
+          - Battle:CancelEvent()
           - Battle:SwitchGUI("player_bp")
 player_ammo_bp:
   title: '[ gui.player_ammo_bp.title ]'
@@ -1344,6 +1346,7 @@ player_ammo_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
+          - Battle:CancelEvent()
           - Battle:SwitchGUI("player_bp")
 player_scope_bp:
   title: '[ gui.player_scope_bp.title ]'
@@ -1401,6 +1404,7 @@ player_scope_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
+          - Battle:CancelEvent()
           - Battle:SwitchGUI("player_bp")
 player_grenade_bp:
   title: '[ gui.player_grenade_bp.title ]'
@@ -1458,6 +1462,7 @@ player_grenade_bp:
           - '[ gui.common.back_lore ]'
       functions:
         on_click:
+          - Battle:CancelEvent()
           - Battle:SwitchGUI("player_bp")
 kit_menu:
   title: '[ gui.kit_menu.title ]'
