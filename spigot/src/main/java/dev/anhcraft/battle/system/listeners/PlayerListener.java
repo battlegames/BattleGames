@@ -25,6 +25,7 @@ import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.MouseClick;
+import dev.anhcraft.battle.api.WorldSettings;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.api.arena.game.GamePhase;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -42,10 +43,7 @@ import dev.anhcraft.battle.api.reports.PlayerAttackReport;
 import dev.anhcraft.battle.api.reports.PlayerAttackedReport;
 import dev.anhcraft.battle.api.reports.PlayerDamagedReport;
 import dev.anhcraft.battle.api.stats.StatisticMap;
-import dev.anhcraft.battle.api.stats.natives.AssistStat;
-import dev.anhcraft.battle.api.stats.natives.DeathStat;
-import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
-import dev.anhcraft.battle.api.stats.natives.KillStat;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueTitle;
 import dev.anhcraft.battle.system.ResourcePack;
@@ -56,6 +54,7 @@ import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
 import dev.anhcraft.config.bukkit.NMSVersion;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -73,6 +72,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -237,8 +237,41 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
         }
         if (event.getAction() != Action.PHYSICAL) {
-            BattleItem item = plugin.itemManager.read(event.getItem());
-            if (item != null) {
+            WorldSettings ws = plugin.getWorldSettings(event.getPlayer().getWorld().getName());
+            if (ws != null && ws.isInteractDisabled()) {
+                event.setCancelled(true);
+            }
+            ItemStack item = event.getItem();
+            if (item != null && item.getType() == Material.STONE_SWORD && item.getItemMeta() != null && item.getItemMeta().isUnbreakable()) {
+                if (item.getDurability() == 1) {
+                    double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    double now = p.getHealth();
+                    if (max != now) {
+                        p.setHealth(Math.min(max, plugin.generalConf.getMedicalKitBonusHealth() + now));
+                        p.getInventory().setItemInMainHand(null);
+                        if (plugin.generalConf.getMedicalKitUseSound() != null) {
+                            plugin.generalConf.getMedicalKitUseSound().play(p.getLocation());
+                        }
+                        PlayerData pd = BattleApi.getInstance().getPlayerData(p);
+                        if (pd != null) pd.getStats().of(MedicalKitUseStat.class).increase(p);
+                    }
+                    event.setCancelled(true);
+                    return;
+                } else if (item.getDurability() == 4) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 0));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 0));
+                    if (plugin.generalConf.getAdrenalineShotUseSound() != null) {
+                        plugin.generalConf.getAdrenalineShotUseSound().play(p.getLocation());
+                    }
+                    p.getInventory().setItemInMainHand(null);
+                    PlayerData pd = BattleApi.getInstance().getPlayerData(p);
+                    if (pd != null) pd.getStats().of(AdrenalineShotUseStat.class).increase(p);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+            BattleItem bi = plugin.itemManager.read(item);
+            if (bi != null) {
                 LocalGame game = plugin.arenaManager.getGame(p);
                 if (game != null && game.getPhase() == GamePhase.PLAYING) {
                     boolean left = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
@@ -249,8 +282,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                             || (right && plugin.generalConf.getGunZoomClick() == MouseClick.RIGHT_CLICK);
                     boolean act3 = (left && plugin.generalConf.getGrenadeThrowClick() == MouseClick.LEFT_CLICK)
                             || (right && plugin.generalConf.getGrenadeThrowClick() == MouseClick.RIGHT_CLICK);
-                    if (item instanceof Gun && (act1 || act2)) {
-                        Gun gun = (Gun) item;
+                    if (bi instanceof Gun && (act1 || act2)) {
+                        Gun gun = (Gun) bi;
                         if (act1) {
                             if (plugin.gunManager.shoot(game, p, gun)) {
                                 p.getInventory().setItemInMainHand(plugin.gunManager.createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
@@ -260,8 +293,8 @@ public class PlayerListener extends BattleComponent implements Listener {
                                 p.getInventory().setItemInMainHand(plugin.gunManager.createGun(gun, event.getHand() == EquipmentSlot.OFF_HAND));
                             }
                         }
-                    } else if (item instanceof Grenade && act3) {
-                        if (plugin.grenadeManager.throwGrenade(p, (Grenade) item)) {
+                    } else if (bi instanceof Grenade && act3) {
+                        if (plugin.grenadeManager.throwGrenade(p, (Grenade) bi)) {
                             if (event.getHand() == EquipmentSlot.HAND) {
                                 ItemStack i = p.getInventory().getItemInMainHand();
                                 i.setAmount(i.getAmount() - 1);

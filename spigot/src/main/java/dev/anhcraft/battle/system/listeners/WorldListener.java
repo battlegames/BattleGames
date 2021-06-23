@@ -23,6 +23,7 @@ package dev.anhcraft.battle.system.listeners;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.WorldSettings;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -32,6 +33,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 
 public class WorldListener extends BattleComponent implements Listener {
     public WorldListener(BattlePlugin plugin) {
@@ -97,6 +100,23 @@ public class WorldListener extends BattleComponent implements Listener {
             if (ws != null && ws.isAntiFireSpread()) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void craft(CraftItemEvent event) {
+        WorldSettings ws = plugin.getWorldSettings(event.getWhoClicked().getWorld().getName());
+        if (ws != null && ws.isDisableCrafting()) {
+            event.setCancelled(true);
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @EventHandler
+    public void food(FoodLevelChangeEvent event) {
+        WorldSettings ws = plugin.getWorldSettings(event.getEntity().getWorld().getName());
+        if (ws != null && ws.isPreventHungry()) {
+            event.setFoodLevel(20);
         }
     }
 }
