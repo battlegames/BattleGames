@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.gui;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -51,6 +52,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.Consumer;
 
@@ -135,7 +137,12 @@ public class BattleFunction extends GuiHandler {
 
     @Function("OpenTopGUI")
     public void openTop(StringVal gui) {
-        ApiProvider.consume().getGuiManager().openTopGui(report.getPlayer(), gui.getData());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ApiProvider.consume().getGuiManager().openTopGui(report.getPlayer(), gui.getData());
+            }
+        }.runTask((BattlePlugin) BattleApi.getInstance());
     }
 
     @Function("SetBottomGUI")
