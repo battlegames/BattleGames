@@ -47,17 +47,20 @@ public class ArenaSettings {
     @PostHandler
     private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
         try {
-            for (String k : section.getKeys(false)) {
-                ConfigSection v = Objects.requireNonNull(section.get(k)).asSection();
-                if(v == null) continue;
-                SimpleForm v1 = v.get("corner_1");
-                if(v1 == null) continue;
-                SimpleForm v2 = v.get("corner_2");
-                if(v2 == null) continue;
-                emptyRegions.add(new PositionPair(
-                        Objects.requireNonNull(v1.asString()),
-                        Objects.requireNonNull(v2.asString())
-                ));
+            SimpleForm sf = section.get("empty_regions");
+            if(sf != null && sf.isSection()) {
+                for (String k : sf.asSection().getKeys(false)) {
+                    ConfigSection v = Objects.requireNonNull(section.get(k)).asSection();
+                    if (v == null) continue;
+                    SimpleForm v1 = v.get("corner_1");
+                    if (v1 == null) continue;
+                    SimpleForm v2 = v.get("corner_2");
+                    if (v2 == null) continue;
+                    emptyRegions.add(new PositionPair(
+                            Objects.requireNonNull(v1.asString()),
+                            Objects.requireNonNull(v2.asString())
+                    ));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
