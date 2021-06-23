@@ -244,21 +244,29 @@ public class Product implements Informative {
 
     @NotNull
     public List<String> getCommands() {
+        // TODO temp fix
+        if(commands == null) return Collections.emptyList();
         return commands;
     }
 
     @NotNull
     public List<String> getPerks() {
+        // TODO temp fix
+        if(perks == null) return Collections.emptyList();
         return perks;
     }
 
     @NotNull
     public List<String> getBoosters() {
+        // TODO temp fix
+        if(boosters == null) return Collections.emptyList();
         return boosters;
     }
 
     @NotNull
     public Collection<PreparedItem> getVanillaItems() {
+        // TODO temp fix
+        if(vanillaItems == null) return Collections.emptyList();
         return vanillaItems.values();
     }
 
@@ -300,18 +308,18 @@ public class Product implements Informative {
 
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
-        player.getInventory().addItem(CollectionUtil.toArray(vanillaItems.values().stream().map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
+        player.getInventory().addItem(CollectionUtil.toArray(getVanillaItems().stream().map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
         if (battleItems != null) {
             battleItems.forEach((type, x) -> {
                 Backpack.Compartment is = playerData.getBackpack().getStorage(type);
                 is.put(x);
             });
         }
-        for (String perk : perks) {
+        for (String perk : getPerks()) {
             Perk p = ApiProvider.consume().getPerk(perk);
             if (p != null) p.give(player);
         }
-        for (String cmd : commands) {
+        for (String cmd : getCommands()) {
             cmd = PlaceholderUtil.formatPAPI(player, cmd);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
         }
@@ -321,7 +329,7 @@ public class Product implements Informative {
         if (battleExp > 0) {
             playerData.getStats().of(ExpStat.class).increase(player, battleExp);
         }
-        for (String booster : boosters) {
+        for (String booster : getBoosters()) {
             playerData.getBoosters().putIfAbsent(booster, System.currentTimeMillis());
         }
     }
@@ -368,19 +376,21 @@ public class Product implements Informative {
 
         if ((battleItems != null && !battleItems.isEmpty()) || !vanillaItems.isEmpty()) {
             pi.lore().add(details.getItemHeader());
-            battleItems.forEach((type, _id) -> {
-                BattleItemModel bi = api.getItemModel(type, _id);
-                if (bi != null) {
-                    InfoHolder ih = new InfoHolder("");
-                    bi.inform(ih);
-                    pi.lore().add(ih.compile().replace(details.getBattleItemFormat()));
-                } else {
-                    pi.lore().add(new InfoHolder("")
-                            .inform("id", _id)
-                            .inform("name", _id)
-                            .compile().replace(details.getBattleItemFormat()));
-                }
-            });
+            if (battleItems != null) {
+                battleItems.forEach((type, _id) -> {
+                    BattleItemModel bi = api.getItemModel(type, _id);
+                    if (bi != null) {
+                        InfoHolder ih = new InfoHolder("");
+                        bi.inform(ih);
+                        pi.lore().add(ih.compile().replace(details.getBattleItemFormat()));
+                    } else {
+                        pi.lore().add(new InfoHolder("")
+                                .inform("id", _id)
+                                .inform("name", _id)
+                                .compile().replace(details.getBattleItemFormat()));
+                    }
+                });
+            }
             for (PreparedItem i : vanillaItems) {
                 String n = i.name();
                 if (n == null) {
@@ -463,9 +473,9 @@ public class Product implements Informative {
         holder.inform("id", id)
                 .inform("price", price)
                 .inform("currency", currency.name().toLowerCase())
-                .inform("command_count", commands.size())
-                .inform("perk_count", perks.size())
-                .inform("vanilla_item_count", vanillaItems.size())
+                .inform("command_count", getCommands().size())
+                .inform("perk_count", getPerks().size())
+                .inform("vanilla_item_count", getVanillaItems().size())
                 .inform("vanilla_exp_count", vanillaExp)
                 .inform("battle_item_count", battleItems == null ? 0 : battleItems.size())
                 .inform("battle_exp_count", battleExp);

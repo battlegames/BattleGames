@@ -21,7 +21,11 @@
 package dev.anhcraft.battle.api.market;
 
 import dev.anhcraft.battle.utils.PreparedItem;
+import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.config.schema.ConfigSchema;
+import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.config.struct.ConfigSection;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -71,6 +75,7 @@ public class Category {
             "    name: \"&c&lApple\"",
             "    material: apple"
     })
+    @Consistent
     private Map<String, Product> products = new HashMap<>();
 
     public Category(@NotNull String id) {
@@ -109,5 +114,17 @@ public class Category {
     @Nullable
     public List<String> getGameModeReserved() {
         return gameModeReserved;
+    }
+
+    @PostHandler
+    private void handle(ConfigDeserializer deserializer, ConfigSchema schema, ConfigSection section){
+        try {
+            ConfigSection cs = section.get("products").asSection();
+            for(String s : cs.getKeys(false)){
+                products.put(s, deserializer.transformConfig(SchemaScanner.scanConfig(Product.class), cs.get(s).asSection(), new Product(s)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
