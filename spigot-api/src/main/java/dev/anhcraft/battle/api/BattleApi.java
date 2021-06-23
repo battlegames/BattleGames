@@ -56,13 +56,6 @@ public interface BattleApi {
     }
 
     /**
-     * Whether this version is premium.
-     *
-     * @return {@code true} if true, otherwise, {@code false}
-     */
-    boolean isPremium();
-
-    /**
      * Gets Battle's logger.
      *
      * @return {@link Logger}
@@ -256,6 +249,14 @@ public interface BattleApi {
      */
     @NotNull
     ServerData getServerData();
+
+    /**
+     * Gets the {@link WorldSettings}.
+     * @param world world's name
+     * @return world settings
+     */
+    @Nullable
+    WorldSettings getWorldSettings(String world);
 
     /**
      * Gets the arena that matches the given id.

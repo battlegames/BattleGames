@@ -18,9 +18,8 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system;
+package dev.anhcraft.battle.api.arena.game;
 
-import dev.anhcraft.battle.api.arena.game.MobRescueObjective;
 import dev.anhcraft.battle.api.arena.game.options.MobRescueOptions;
 import dev.anhcraft.battle.utils.BoundingBox;
 import dev.anhcraft.jvmkit.utils.RandomUtil;

@@ -36,7 +36,7 @@ public class BoosterConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 1).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             Booster booster = new Booster(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(Booster.class, cs, booster);

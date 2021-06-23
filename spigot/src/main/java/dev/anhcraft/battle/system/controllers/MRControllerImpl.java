@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-package dev.anhcraft.battle.premium.system.controllers;
+package dev.anhcraft.battle.system.controllers;
 
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleScoreboard;
@@ -28,8 +28,7 @@ import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.stats.natives.StolenMobStat;
-import dev.anhcraft.battle.premium.system.MobRescueMatch;
-import dev.anhcraft.battle.system.controllers.DMControllerImpl;
+import dev.anhcraft.battle.api.arena.game.MobRescueMatch;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;

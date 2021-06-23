@@ -46,7 +46,6 @@ import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
 import dev.anhcraft.battle.system.BattleRegionRollback;
 import dev.anhcraft.battle.system.BattleWorldRollback;
-import dev.anhcraft.battle.system.PremiumConnector;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
@@ -54,6 +53,7 @@ import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
+import dev.anhcraft.battle.system.listeners.WorldListener;
 import dev.anhcraft.battle.system.managers.*;
 import dev.anhcraft.battle.system.managers.config.*;
 import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
@@ -109,7 +109,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private final ServerData serverData = new ServerData();
     private final Market market = new Market();
     public JsonObject minecraftLocale;
-    public PremiumConnector premiumConnector;
     public File configFolder;
     public boolean syncDataTaskNeed;
     public boolean supportBungee;
@@ -142,6 +141,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public MarketConfigManager marketConfigManager;
     public AdvancementConfigManager advancementConfigManager;
     public GUIConfigManager guiConfigManager;
+    public WorldConfigManager worldConfigManager;
     // SYSTEM
     public BattleChatManager chatManager;
     public BattleArenaManager arenaManager;
@@ -180,8 +180,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         configFolder = getDataFolder();
         configFolder.mkdir();
-        premiumConnector = new PremiumConnector(this);
-        premiumConnector.onIntegrate();
         if (getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")) {
             slimeWorldManagerSupport = true;
             SWMIntegration = new SWMIntegration(this);
@@ -207,6 +205,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         marketConfigManager = new MarketConfigManager();
         advancementConfigManager = new AdvancementConfigManager();
         guiConfigManager = new GUIConfigManager();
+        worldConfigManager = new WorldConfigManager();
         itemManager = new BattleItemManager(this);
         gunManager = new BattleGunManager(this);
         grenadeManager = new BattleGrenadeManager(this);
@@ -216,7 +215,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         guiManager = new BattleGuiManager(this);
         battleWorldRollback = new BattleWorldRollback(this);
         battleRegionRollback = new BattleRegionRollback(this);
-        premiumConnector.onInitSystem();
 
         guiManager.registerGuiHandler(BattleFunction.class);
         guiManager.registerPagination("player_gun", new GunCompartment());
@@ -238,10 +236,10 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
+        getServer().getPluginManager().registerEvents(new WorldListener(this), this);
         playerListener = new PlayerListener(this);
         getServer().getPluginManager().registerEvents(playerListener, this);
         getServer().getOnlinePlayers().forEach(playerListener::handleJoin);
-        premiumConnector.onRegisterEvents();
 
         getServer().getScheduler().runTaskTimerAsynchronously(this, scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
         getServer().getScheduler().runTaskTimerAsynchronously(this, bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
@@ -260,12 +258,12 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
             getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
         }
-        premiumConnector.onRegisterTasks();
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new WorldTask(this), 0, 100);
 
         new CommandInitializer(this);
 
         Metrics metrics = new Metrics(this, 6080);
-        metrics.addCustomChart(new SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
+        metrics.addCustomChart(new SimplePie("license_type", () -> "premium"));
 
         getServer().getScheduler().runTaskLater(this, () -> {
             if (VaultApi.init()) {
@@ -307,7 +305,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
     @Override
     public void onDisable() {
-        premiumConnector.onDisable();
         arenaManager.listGames(game -> {/*
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {
@@ -352,6 +349,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         perkConfigManager.reloadConfig();
         boosterConfigManager.reloadConfig();
         advancementConfigManager.reloadConfig();
+        worldConfigManager.reloadConfig();
         if (VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0) {
             getLogger().info("Looks like the current config system has been outdated.");
             getLogger().info("The plugin will try to update it for you!");
@@ -372,21 +370,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             marketConfigManager.reloadConfig();
             guiConfigManager.reloadConfig();
         }
-        premiumConnector.onReloadConfig();
     }
 
     @NotNull
     public File getEditorFolder() {
         return new File(configFolder, "editor");
-    }
-
-    public <T> Collection<T> limit(String k, Set<T> strings, int max) {
-        if (premiumConnector.isSuccess() || strings.size() <= max) {
-            return strings;
-        } else {
-            getLogger().warning(k + " is limited in free version! (" + strings.size() + "/" + max + ")");
-            return strings.stream().limit(max).collect(Collectors.toSet());
-        }
     }
 
     public void resetScoreboard(Player player) {
@@ -397,11 +385,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         }
         PlayerScoreboard ps = new PlayerScoreboard(player, sb.getTitle(), sb.getContent(), sb.getFixedLength());
         scoreboardRenderer.setScoreboard(ps);
-    }
-
-    @Override
-    public boolean isPremium() {
-        return premiumConnector.isSuccess();
     }
 
     @Override
@@ -587,6 +570,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public ServerData getServerData() {
         return serverData;
+    }
+
+    @Override
+    public @Nullable WorldSettings getWorldSettings(String world) {
+        return worldConfigManager.getWorldSettings(world);
     }
 
     @Override

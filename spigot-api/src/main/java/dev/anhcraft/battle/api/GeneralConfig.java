@@ -325,6 +325,27 @@ public class GeneralConfig {
     @Description("Sound to be played when the player takes out item from backpack")
     private BattleSound backpackSoundRemoveItem;
 
+    @Setting
+    @Path("radio.message_format")
+    @Description("Radio message format")
+    @Validation(notNull = true)
+    private String radioMessageFormat;
+
+    @Setting
+    @Path("custom_items.medical_kit.health_bonus")
+    @Description("Additional health give to the player")
+    private int medicalKitBonusHealth;
+
+    @Setting
+    @Path("custom_items.medical_kit.use_sound")
+    @Description("Sound to be played when using the medical kit")
+    private BattleSound medicalKitUseSound;
+
+    @Setting
+    @Path("custom_items.adrenaline_shot.use_sound")
+    @Description("Sound to be played when using the adrenaline shot")
+    private BattleSound adrenalineShotUseSound;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -533,6 +554,25 @@ public class GeneralConfig {
     @Nullable
     public BattleSound getBackpackSoundRemoveItem() {
         return backpackSoundRemoveItem;
+    }
+
+    @NotNull
+    public String getRadioMessageFormat() {
+        return radioMessageFormat;
+    }
+
+    public int getMedicalKitBonusHealth() {
+        return medicalKitBonusHealth;
+    }
+
+    @Nullable
+    public BattleSound getMedicalKitUseSound() {
+        return medicalKitUseSound;
+    }
+
+    @Nullable
+    public BattleSound getAdrenalineShotUseSound() {
+        return adrenalineShotUseSound;
     }
 
     private void loadMaterialHardness(ConfigSection cs) throws Exception {

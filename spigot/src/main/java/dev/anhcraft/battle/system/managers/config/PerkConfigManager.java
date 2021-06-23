@@ -36,7 +36,7 @@ public class PerkConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             Perk perk = new Perk(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(Perk.class, cs, perk);

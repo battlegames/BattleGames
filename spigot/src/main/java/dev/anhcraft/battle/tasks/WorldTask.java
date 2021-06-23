@@ -18,23 +18,28 @@
  *
  */
 
-package dev.anhcraft.battle.system;
+package dev.anhcraft.battle.tasks;
 
-import co.aikar.commands.PaperCommandManager;
+import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.WorldSettings;
+import org.bukkit.Bukkit;
+import org.bukkit.WeatherType;
+import org.bukkit.World;
 
-public interface IPremiumModule {
-    void onIntegrate(BattlePlugin plugin);
+public class WorldTask extends BattleComponent implements Runnable {
+    public WorldTask(BattlePlugin plugin) {
+        super(plugin);
+    }
 
-    void onInitSystem(BattlePlugin plugin);
-
-    void onReloadConfig(BattlePlugin plugin);
-
-    void onRegisterEvents(BattlePlugin plugin);
-
-    void onRegisterTasks(BattlePlugin plugin);
-
-    void onRegisterCommands(BattlePlugin plugin, PaperCommandManager commandManager);
-
-    void onDisable(BattlePlugin plugin);
+    @Override
+    public void run() {
+        for (World world : Bukkit.getWorlds()) {
+            WorldSettings ws = plugin.getWorldSettings(world.getName());
+            if (ws != null) {
+                if (ws.getAlwaysTime() != -1) world.setTime(ws.getAlwaysTime());
+                if (ws.getAlwaysWeather() != null) world.setStorm(ws.getAlwaysWeather() == WeatherType.DOWNFALL);
+            }
+        }
+    }
 }

@@ -36,7 +36,7 @@ public class ScopeConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             ScopeModel sm = new ScopeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(ScopeModel.class, cs, sm);

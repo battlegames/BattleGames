@@ -38,6 +38,7 @@ public class CommandInitializer extends BattleComponent {
         manager.enableUnstableAPI("help");
         manager.registerCommand(new MainCommand(plugin));
         manager.registerCommand(new EditorCommand(plugin));
+        manager.registerCommand(new RadioCommand(plugin));
         CommandCompletions<BukkitCommandCompletionContext> cc = manager.getCommandCompletions();
         cc.registerAsyncCompletion("ammo", context -> plugin.ammoConfigManager.AMMO_MAP.keySet());
         cc.registerAsyncCompletion("gun", context -> plugin.gunConfigManager.GUN_MAP.keySet());
@@ -49,6 +50,5 @@ public class CommandInitializer extends BattleComponent {
         cc.registerAsyncCompletion("booster", context -> plugin.boosterConfigManager.BOOSTER_MAP.keySet());
         cc.registerAsyncCompletion("gui", context -> plugin.guiManager.GUI.keySet());
         cc.registerStaticCompletion("entityTypes", Arrays.stream(EntityType.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList()));
-        plugin.premiumConnector.onRegisterCommands(manager);
     }
 }

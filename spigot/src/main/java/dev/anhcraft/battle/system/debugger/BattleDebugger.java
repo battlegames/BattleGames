@@ -134,7 +134,6 @@ public class BattleDebugger {
             StringWriter w = new StringWriter();
             w.append("I. Basic info\n")
                     .append("- Plugin version: ").append(bp.getDescription().getVersion()).append('\n')
-                    .append("- License type: ").append(bp.premiumConnector.isSuccess() ? "premium" : "free").append('\n')
                     .append("- Server version: ").append(Bukkit.getBukkitVersion()).append('\n')
                     .append("- Java version: ").append(System.getProperty("java.version")).append('\n')
                     .append("- OS: ").append(System.getProperty("os.name")).append("\n\n");

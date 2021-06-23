@@ -18,14 +18,14 @@
  *
  */
 
-package dev.anhcraft.battle.premium.cmd;
+package dev.anhcraft.battle.cmd;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
-import dev.anhcraft.battle.api.BattleApi;
+import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.controllers.BedWarController;
 import dev.anhcraft.battle.api.arena.game.controllers.GameController;
@@ -33,7 +33,6 @@ import dev.anhcraft.battle.api.arena.game.controllers.TeamDeathmatchController;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.BWTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
-import dev.anhcraft.battle.premium.PremiumModule;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import org.bukkit.entity.Player;
 
@@ -42,28 +41,34 @@ import java.util.Objects;
 
 @CommandAlias("radio|r|rd")
 public class RadioCommand extends BaseCommand {
+    private final BattlePlugin plugin;
+
+    public RadioCommand(BattlePlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Subcommand("radio")
     @CatchUnknown
     @Default
     public void send(Player player, String[] msgs) {
-        LocalGame game = BattleApi.getInstance().getArenaManager().getGame(player);
+        LocalGame game = plugin.getArenaManager().getGame(player);
         if (game == null) {
-            player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.not_in_game"));
+            plugin.chatManager.sendPlayer(player, "radio.not_in_game");
             return;
         }
         GameController mode = game.getMode().getController();
         if (mode instanceof TeamDeathmatchController) {
             TeamManager<ABTeam> tm = ((TeamDeathmatchController) mode).getTeamManager(game);
             if (tm == null) {
-                player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
                 return;
             }
             ABTeam abt = tm.getTeam(player);
             if (abt == null) {
-                player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
                 return;
             }
-            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().getRadioConfigManagerX().getRadioSettings().getMessageFormat())).replace("<message>", String.join(" ", msgs));
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.generalConf.getRadioMessageFormat())).replace("<message>", String.join(" ", msgs));
             List<Player> players = tm.getPlayers(abt);
             for (Player p : players) {
                 p.sendMessage(q);
@@ -71,21 +76,21 @@ public class RadioCommand extends BaseCommand {
         } else if (mode instanceof BedWarController) {
             TeamManager<BWTeam> tm = ((BedWarController) mode).getTeamManager(game);
             if (tm == null) {
-                player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
                 return;
             }
             BWTeam abt = tm.getTeam(player);
             if (abt == null) {
-                player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.no_team"));
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
                 return;
             }
-            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, PremiumModule.getInstance().getRadioConfigManagerX().getRadioSettings().getMessageFormat())).replace("<message>", String.join(" ", msgs));
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.generalConf.getRadioMessageFormat())).replace("<message>", String.join(" ", msgs));
             List<Player> players = tm.getPlayers(abt);
             for (Player p : players) {
                 p.sendMessage(q);
             }
         } else {
-            player.sendMessage(BattleApi.getInstance().getLocalizedMessage("radio.unsupported_mode"));
+            plugin.chatManager.sendPlayer(player, "radio.unsupported_mode");
         }
     }
 }

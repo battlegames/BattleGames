@@ -36,7 +36,7 @@ public class MagazineConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             MagazineModel m = new MagazineModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(MagazineModel.class, cs, m);

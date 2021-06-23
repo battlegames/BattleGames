@@ -18,10 +18,11 @@
  *
  */
 
-package dev.anhcraft.battle.premium.system.listeners;
+package dev.anhcraft.battle.system.listeners;
 
-import dev.anhcraft.battle.premium.PremiumModule;
-import dev.anhcraft.battle.premium.config.WorldSettings;
+import dev.anhcraft.battle.BattleComponent;
+import dev.anhcraft.battle.BattlePlugin;
+import dev.anhcraft.battle.api.WorldSettings;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -32,11 +33,15 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-public class WorldListener implements Listener {
+public class WorldListener extends BattleComponent implements Listener {
+    public WorldListener(BattlePlugin plugin) {
+        super(plugin);
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void spawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getEntity().getWorld().getName());
         if (ws != null && ws.isPreventMobSpawn()) {
             event.setCancelled(true);
         }
@@ -44,7 +49,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void death(EntityDeathEvent event) {
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getEntity().getWorld().getName());
         if (ws != null && ws.isPreventMobDrops()) {
             event.setDroppedExp(0);
             event.getDrops().clear();
@@ -53,7 +58,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void explode(EntityExplodeEvent event) {
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getEntity().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getEntity().getWorld().getName());
         if (ws != null && ws.isPreventExplosions()) {
             event.blockList().clear();
             event.setCancelled(true);
@@ -62,7 +67,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void explode(BlockExplodeEvent event) {
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getBlock().getWorld().getName());
         if (ws != null && ws.isPreventExplosions()) {
             event.blockList().clear();
             event.setCancelled(true);
@@ -71,7 +76,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void breakBlock(BlockBreakEvent event) {
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getBlock().getWorld().getName());
         if (ws != null && ws.isProtectBlocks()) {
             event.setCancelled(true);
         }
@@ -79,7 +84,7 @@ public class WorldListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void placeBlock(BlockPlaceEvent event) {
-        WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
+        WorldSettings ws = plugin.getWorldSettings(event.getBlock().getWorld().getName());
         if (ws != null && ws.isProtectBlocks()) {
             event.setCancelled(true);
         }
@@ -88,7 +93,7 @@ public class WorldListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void fireSpread(BlockIgniteEvent event) {
         if (event.getCause() == BlockIgniteEvent.IgniteCause.SPREAD) {
-            WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(event.getBlock().getWorld().getName());
+            WorldSettings ws = plugin.getWorldSettings(event.getBlock().getWorld().getName());
             if (ws != null && ws.isAntiFireSpread()) {
                 event.setCancelled(true);
             }

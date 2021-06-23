@@ -18,10 +18,9 @@
  *
  */
 
-package dev.anhcraft.battle.premium.config.managers;
+package dev.anhcraft.battle.system.managers.config;
 
-import dev.anhcraft.battle.premium.config.WorldSettings;
-import dev.anhcraft.battle.system.managers.config.ConfigManager;
+import dev.anhcraft.battle.api.WorldSettings;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class WorldConfigManagerX extends ConfigManager {
+public class WorldConfigManager extends ConfigManager {
     private final Map<String, WorldSettings> worldSettingsMap = new HashMap<>();
     private WorldSettings globalWorldSettings;
 
-    public WorldConfigManagerX() {
-        super("Premium/World", "premium/worlds.yml");
+    public WorldConfigManager() {
+        super("World", "worlds.yml");
     }
 
     private static void fillOptions(ConfigurationSection model, ConfigurationSection target) {

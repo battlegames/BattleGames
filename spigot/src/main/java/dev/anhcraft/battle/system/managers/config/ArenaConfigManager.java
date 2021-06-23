@@ -56,7 +56,7 @@ public class ArenaConfigManager extends ConfigManager {
     public void onLoad() {
         Set<String> keys = getSettings().getKeys(false);
         plugin.getLogger().info("[" + loggerName + "] Total arenas found: " + keys.size());
-        plugin.limit(loggerName, keys, 8).forEach(s -> {
+        keys.forEach(s -> {
             Arena arena = new Arena(s);
             plugin.getLogger().info("[" + loggerName + "] Loading arena " + s + "...");
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

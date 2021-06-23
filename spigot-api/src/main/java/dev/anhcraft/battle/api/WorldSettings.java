@@ -18,7 +18,7 @@
  *
  */
 
-package dev.anhcraft.battle.premium.config;
+package dev.anhcraft.battle.api;
 
 import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Path;

@@ -31,4 +31,6 @@ public class NativeStats {
     public static String EXP = "exp";
     public static String RESPAWN = "respawns";
     public static String STOLEN_MOBS = "stolen_mobs";
+    public static String ADRENALINE_SHOT_USES = "adrenaline_shot_use";
+    public static String MEDICAL_KIT_USES = "medical_kit_use";
 }

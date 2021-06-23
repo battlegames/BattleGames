@@ -18,32 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.premium.config.managers;
+package dev.anhcraft.battle.api.stats.natives;
 
-import dev.anhcraft.battle.premium.config.ItemSettings;
-import dev.anhcraft.battle.system.managers.config.ConfigManager;
-import dev.anhcraft.battle.utils.ConfigHelper;
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemConfigManagerX extends ConfigManager {
-    private ItemSettings itemSettings;
-
-    public ItemConfigManagerX() {
-        super("Premium/Items", "premium/items.yml");
-    }
-
-    @NotNull
-    public ItemSettings getItemSettings() {
-        return itemSettings;
-    }
-
+public class AdrenalineShotUseStat extends IntCounter {
     @Override
-    protected void onLoad() {
-        itemSettings = ConfigHelper.load(ItemSettings.class, getSettings());
-    }
-
-    @Override
-    protected void onClean() {
-
+    public @NotNull String getId() {
+        return NativeStats.ADRENALINE_SHOT_USES;
     }
 }

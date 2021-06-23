@@ -45,23 +45,19 @@ public class GeneralConfigManager extends ConfigManager {
             plugin.dataManager = new BattleDataManager(plugin, plugin.generalConf.getStorageType());
             boolean ok = false;
             if (plugin.generalConf.getStorageType() == StorageType.MYSQL) {
-                if (plugin.premiumConnector.isSuccess()) {
-                    ConfigurationSection dsp = plugin.generalConf.getStorageMySQLProperties();
-                    String url = "jdbc:mysql://" +
-                            plugin.generalConf.getStorageMySQLHost() + ':' +
-                            plugin.generalConf.getStorageMySQLPort() + '/' +
-                            plugin.generalConf.getStorageMySQLDatabase();
-                    plugin.dataManager.initMySQLStorage(
-                            url,
-                            plugin.generalConf.getStorageMySQLUser(),
-                            plugin.generalConf.getStorageMySQLPass(),
-                            dsp
-                    );
-                    plugin.syncDataTaskNeed = true;
-                    ok = true;
-                } else {
-                    plugin.getLogger().warning("MySQL support is disabled in free version.");
-                }
+                ConfigurationSection dsp = plugin.generalConf.getStorageMySQLProperties();
+                String url = "jdbc:mysql://" +
+                        plugin.generalConf.getStorageMySQLHost() + ':' +
+                        plugin.generalConf.getStorageMySQLPort() + '/' +
+                        plugin.generalConf.getStorageMySQLDatabase();
+                plugin.dataManager.initMySQLStorage(
+                        url,
+                        plugin.generalConf.getStorageMySQLUser(),
+                        plugin.generalConf.getStorageMySQLPass(),
+                        dsp
+                );
+                plugin.syncDataTaskNeed = true;
+                ok = true;
             }
             if (!ok) {
                 File old = new File(".battle");
@@ -103,9 +99,7 @@ public class GeneralConfigManager extends ConfigManager {
         plugin.shortFormDate3 = new SimpleDateFormat(plugin.generalConf.getDateFormatShortSeconds());
 
         if (plugin.generalConf.isBungeeEnabled()) {
-            if (!plugin.premiumConnector.isSuccess()) {
-                plugin.getLogger().warning("Bungeecord support is not provided in free version.");
-            } else if (plugin.spigotBungeeEnabled) {
+            if (plugin.spigotBungeeEnabled) {
                 plugin.supportBungee = true;
             } else {
                 plugin.getLogger().warning("Looks like you have enabled Bungeecord support. But please also enable it in spigot.yml too. The option is now skipped for safe!");

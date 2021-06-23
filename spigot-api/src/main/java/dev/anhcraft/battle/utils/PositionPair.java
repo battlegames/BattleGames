@@ -18,21 +18,25 @@
  *
  */
 
-package dev.anhcraft.battle.premium.config;
+package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.config.annotations.*;
+import dev.anhcraft.jvmkit.utils.Pair;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-@Configurable
-public class RadioSettings {
-    @Setting
-    @Path("message_format")
-    @Description("Message format")
-    @Validation(notNull = true)
-    private String messageFormat;
+public class PositionPair extends Pair<String, String> {
+    public PositionPair(@NotNull String first, @NotNull String second) {
+        super(first, second);
+    }
 
-    @NotNull
-    public String getMessageFormat() {
-        return messageFormat;
+    @Nullable
+    public Location getCorner1() {
+        return getFirst() == null ? null : LocationUtil.fromString(getFirst());
+    }
+
+    @Nullable
+    public Location getCorner2() {
+        return getSecond() == null ? null : LocationUtil.fromString(getSecond());
     }
 }

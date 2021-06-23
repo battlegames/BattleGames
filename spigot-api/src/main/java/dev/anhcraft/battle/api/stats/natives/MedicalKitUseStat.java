@@ -18,23 +18,15 @@
  *
  */
 
-package dev.anhcraft.battle.premium.tasks;
+package dev.anhcraft.battle.api.stats.natives;
 
-import dev.anhcraft.battle.premium.PremiumModule;
-import dev.anhcraft.battle.premium.config.WorldSettings;
-import org.bukkit.Bukkit;
-import org.bukkit.WeatherType;
-import org.bukkit.World;
+import dev.anhcraft.battle.api.stats.IntCounter;
+import dev.anhcraft.battle.api.stats.NativeStats;
+import org.jetbrains.annotations.NotNull;
 
-public class Task implements Runnable {
+public class MedicalKitUseStat extends IntCounter {
     @Override
-    public void run() {
-        for (World world : Bukkit.getWorlds()) {
-            WorldSettings ws = PremiumModule.getInstance().getWorldConfigManagerX().getWorldSettings(world.getName());
-            if (ws != null) {
-                if (ws.getAlwaysTime() != -1) world.setTime(ws.getAlwaysTime());
-                if (ws.getAlwaysWeather() != null) world.setStorm(ws.getAlwaysWeather() == WeatherType.DOWNFALL);
-            }
-        }
+    public @NotNull String getId() {
+        return NativeStats.MEDICAL_KIT_USES;
     }
 }

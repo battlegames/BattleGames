@@ -59,7 +59,7 @@ public class SystemConfigManager extends ConfigManager {
             plugin.getLogger().warning("3. Check out the new files");
             plugin.getLogger().warning("4. Compare with the old files");
             plugin.getLogger().warning("5. Re-configure");
-            plugin.getLogger().warning("If you need help, contact me via Discord: https://discord.gg/QSpc5xH");
+            plugin.getLogger().warning("If you need help, contact me via Discord: https://discord.gg/5s75WtfTR2");
         }
 
         if (!config.isRemoteConfigEnabled()) {
@@ -87,9 +87,6 @@ public class SystemConfigManager extends ConfigManager {
         new File(plugin.configFolder, "locale").mkdir();
         new File(plugin.configFolder, "items").mkdir();
         new File(plugin.configFolder, "editor").mkdir();
-        if (plugin.isPremium()) {
-            new File(plugin.configFolder, "premium").mkdir();
-        }
     }
 
     @Override

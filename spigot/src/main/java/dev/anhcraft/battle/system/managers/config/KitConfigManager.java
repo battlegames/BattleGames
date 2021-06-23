@@ -36,7 +36,7 @@ public class KitConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 5).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             Kit kit = new Kit(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(Kit.class, cs, kit);
