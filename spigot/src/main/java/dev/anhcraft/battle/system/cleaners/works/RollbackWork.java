@@ -24,14 +24,11 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.arena.Arena;
 import dev.anhcraft.battle.system.cleaners.WorkSession;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
+import dev.anhcraft.battle.utils.BoundingBox;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
-import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -82,7 +79,7 @@ public class RollbackWork implements Work {
                         plugin.getLogger().warning("World not found: " + w);
                         it.remove();
                     } else {
-                        plugin.extension.getTaskHelper().newTask(() -> {
+                        plugin.getServer().getScheduler().runTask(plugin, () -> {
                             if (plugin.battleWorldRollback.rollbackWorld(wd)) {
                                 plugin.getLogger().info("[Rollback/BattleWorld] World reloaded successfully!");
                             } else {
@@ -103,7 +100,7 @@ public class RollbackWork implements Work {
                 if (l1 != null && l2 != null) {
                     List<BoundingBox> crp = rollback.getCachedRegionPartitions();
                     CountDownLatch countDownLatch = new CountDownLatch(1);
-                    plugin.extension.getTaskHelper().newTask(() -> {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> {
                         plugin.getLogger().info("[Rollback/BattleRegion] Total partitions: " + crp.size());
                         for (BoundingBox box : crp) {
                             Location a = box.getMin().toLocation(Objects.requireNonNull(l1.getWorld()));
@@ -120,7 +117,8 @@ public class RollbackWork implements Work {
                                     .flatMap(Collection::stream)
                                     .filter(entity -> !(entity instanceof Hanging
                                             || entity instanceof Vehicle
-                                            || entity instanceof ArmorStand))
+                                            || entity instanceof ArmorStand
+                                            || entity instanceof HumanEntity))
                                     .forEach(Entity::remove);
                         }
                         countDownLatch.countDown();

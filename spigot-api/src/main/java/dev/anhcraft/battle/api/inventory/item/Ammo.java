@@ -19,6 +19,7 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.effect.BattleParticle;
 import dev.anhcraft.battle.utils.info.InfoHolder;
@@ -26,23 +27,21 @@ import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Description;
 import dev.anhcraft.config.annotations.Path;
 import dev.anhcraft.config.annotations.Setting;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Ammo extends BattleItem<AmmoModel> {
     @Override
-    public void save(CompoundTag compound) {
+    public void save(NBTCompound compound) {
         if (getModel() != null) {
-            compound.put(ItemTag.AMMO_ID, getModel().getId());
+            compound.setString(ItemTag.AMMO_ID, getModel().getId());
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        if (compound.has(ItemTag.AMMO_ID)) { // todo: remove this temp fix
-            setModel(ApiProvider.consume().getAmmoModel(compound.getValue(ItemTag.AMMO_ID, StringTag.class)));
+    public void load(NBTCompound compound) {
+        if (compound.hasKey(ItemTag.AMMO_ID)) { // todo: remove this temp fix
+            setModel(ApiProvider.consume().getAmmoModel(compound.getString(ItemTag.AMMO_ID)));
         }
     }
 

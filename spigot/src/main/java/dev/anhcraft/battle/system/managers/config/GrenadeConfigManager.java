@@ -36,7 +36,7 @@ public class GrenadeConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 3).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             GrenadeModel g = new GrenadeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(GrenadeModel.class, cs, g);

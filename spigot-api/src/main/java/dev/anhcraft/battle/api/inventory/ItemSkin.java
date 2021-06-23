@@ -19,11 +19,11 @@
  */
 package dev.anhcraft.battle.api.inventory;
 
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Description;
 import dev.anhcraft.config.annotations.Setting;
 import dev.anhcraft.config.annotations.Validation;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;

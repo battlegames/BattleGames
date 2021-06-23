@@ -22,9 +22,9 @@ package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.Rollback;
 import dev.anhcraft.battle.api.arena.Arena;
+import dev.anhcraft.battle.utils.BoundingBox;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.ConfigUpdater;
-import dev.anhcraft.craftkit.cb_common.BoundingBox;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -56,7 +56,7 @@ public class ArenaConfigManager extends ConfigManager {
     public void onLoad() {
         Set<String> keys = getSettings().getKeys(false);
         plugin.getLogger().info("[" + loggerName + "] Total arenas found: " + keys.size());
-        plugin.limit(loggerName, keys, 8).forEach(s -> {
+        keys.forEach(s -> {
             Arena arena = new Arena(s);
             plugin.getLogger().info("[" + loggerName + "] Loading arena " + s + "...");
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

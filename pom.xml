@@ -6,7 +6,7 @@
 
     <groupId>dev.anhcraft</groupId>
     <artifactId>battle</artifactId>
-    <version>1.2.9</version>
+    <version>1.3.0</version>
     <packaging>pom</packaging>
 
     <name>Battle</name>
@@ -29,6 +29,20 @@
 
     <properties>
         <fileName>Battle</fileName>
+
+        <version.spigot>1.13.2-R0.1-SNAPSHOT</version.spigot>
+        <version.jvmkit>1.1.5</version.jvmkit>
+        <version.exp4j>0.4.8</version.exp4j>
+        <version.papi>2.10.9</version.papi>
+        <version.paperlib>1.0.6</version.paperlib>
+        <version.vault>1.7</version.vault>
+        <version.inst>1.0.3</version.inst>
+        <version.swm>2.2.1</version.swm>
+        <version.acf>0.5.0-SNAPSHOT</version.acf>
+        <version.config>1.0.4</version.config>
+        <version.bstats>2.2.1</version.bstats>
+        <version.hikaricp>4.0.3</version.hikaricp>
+        <version.nbtapi>2.8.0</version.nbtapi>
     </properties>
 
     <build>
@@ -60,11 +74,11 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>dev.anhcraft.craftkit.acf</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.anhcraft.config</pattern>
-                            <shadedPattern>dev.anhcraft.craftkit.helpers.config</shadedPattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.config</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.anhcraft.inst</pattern>
@@ -96,7 +110,15 @@
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>dev.anhcraft.battle.ext.paperlib</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>dev.anhcraft.battle.ext.paperlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>de.tr7zw</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.tr7zw</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javassist</pattern>
+                            <shadedPattern>dev.anhcraft.battle.ext.javassist</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -125,6 +147,10 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>

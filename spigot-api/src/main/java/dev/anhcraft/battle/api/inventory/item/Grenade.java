@@ -20,23 +20,23 @@
 
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.jetbrains.annotations.NotNull;
 
 public class Grenade extends BattleItem<GrenadeModel> {
     @Override
-    public void save(CompoundTag compound) {
+    public void save(NBTCompound compound) {
         if (getModel() != null) {
-            compound.put(ItemTag.GRENADE_ID, getModel().getId());
+            compound.setString(ItemTag.GRENADE_ID, getModel().getId());
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        setModel(ApiProvider.consume().getGrenadeModel(compound.getValue(ItemTag.GRENADE_ID, StringTag.class)));
+    public void load(NBTCompound compound) {
+        setModel(ApiProvider.consume().getGrenadeModel(compound.getString(ItemTag.GRENADE_ID)));
     }
 
     @Override

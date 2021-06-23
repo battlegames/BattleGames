@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.gui;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.arena.game.GamePlayer;
@@ -32,10 +33,11 @@ import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
 import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Product;
 import dev.anhcraft.battle.system.ResourcePack;
+import dev.anhcraft.battle.utils.ItemUtil;
+import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.utils.ItemUtil;
 import dev.anhcraft.inst.VM;
 import dev.anhcraft.inst.annotations.Function;
 import dev.anhcraft.inst.annotations.Namespace;
@@ -50,6 +52,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.Consumer;
 
@@ -134,7 +137,12 @@ public class BattleFunction extends GuiHandler {
 
     @Function("OpenTopGUI")
     public void openTop(StringVal gui) {
-        ApiProvider.consume().getGuiManager().openTopGui(report.getPlayer(), gui.getData());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ApiProvider.consume().getGuiManager().openTopGui(report.getPlayer(), gui.getData());
+            }
+        }.runTask((BattlePlugin) BattleApi.getInstance());
     }
 
     @Function("SetBottomGUI")
@@ -181,11 +189,11 @@ public class BattleFunction extends GuiHandler {
             return;
         }
         if (f instanceof ItemStack) {
-            if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull((ItemStack) f)) {
+            if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isEmpty((ItemStack) f)) {
                 report.getView().getInventory().setItem(slot.getData(), (ItemStack) f);
             }
         } else if (f instanceof PreparedItem) {
-            if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(((PreparedItem) f).material())) {
+            if (!notNull.getData().equalsIgnoreCase("not-null") || !MaterialUtil.isEmpty(((PreparedItem) f).material())) {
                 report.getView().getInventory().setItem(slot.getData(), ((PreparedItem) f).build());
             }
         }
@@ -194,7 +202,7 @@ public class BattleFunction extends GuiHandler {
     @Function("SetDataFromCursor")
     public void setDataFromCursor(StringVal container, StringVal data, StringVal notNull) {
         ItemStack i = report.getPlayer().getItemOnCursor();
-        if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isNull(i)) {
+        if (!notNull.getData().equalsIgnoreCase("not-null") || !ItemUtil.isEmpty(i)) {
             if (container.getData().equalsIgnoreCase("window")) {
                 report.getView().getWindow().getDataContainer().put(data.getData(), i.clone());
                 report.getPlayer().setItemOnCursor(null);
@@ -219,7 +227,7 @@ public class BattleFunction extends GuiHandler {
     public void handleItemDrop(StringVal type) {
         Player player = report.getPlayer();
         ItemStack item = player.getItemOnCursor();
-        if (!ItemUtil.isNull(item)) {
+        if (!ItemUtil.isEmpty(item)) {
             GamePlayer gp = BattleApi.getInstance().getArenaManager().getGamePlayer(player);
             if (gp != null) {
                 BattleItem<?> bi = BattleApi.getInstance().getItemManager().read(item);

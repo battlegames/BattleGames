@@ -29,7 +29,7 @@ import dev.anhcraft.battle.api.gui.screen.View;
 import dev.anhcraft.battle.api.gui.struct.Slot;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

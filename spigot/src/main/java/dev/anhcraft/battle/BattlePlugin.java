@@ -46,7 +46,6 @@ import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
 import dev.anhcraft.battle.system.BattleRegionRollback;
 import dev.anhcraft.battle.system.BattleWorldRollback;
-import dev.anhcraft.battle.system.PremiumConnector;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
 import dev.anhcraft.battle.system.integrations.PapiExpansion;
 import dev.anhcraft.battle.system.integrations.SWMIntegration;
@@ -54,6 +53,7 @@ import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.system.listeners.BlockListener;
 import dev.anhcraft.battle.system.listeners.GameListener;
 import dev.anhcraft.battle.system.listeners.PlayerListener;
+import dev.anhcraft.battle.system.listeners.WorldListener;
 import dev.anhcraft.battle.system.managers.*;
 import dev.anhcraft.battle.system.managers.config.*;
 import dev.anhcraft.battle.system.managers.item.BattleGrenadeManager;
@@ -65,13 +65,10 @@ import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
 import dev.anhcraft.battle.utils.ConfigHelper;
-import dev.anhcraft.battle.utils.CraftStats;
+import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.State;
+import dev.anhcraft.battle.utils.VersionUtil;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.CraftExtension;
-import dev.anhcraft.craftkit.common.utils.VersionUtil;
-import dev.anhcraft.craftkit.helpers.TaskHelper;
-import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.objecthunter.exp4j.Expression;
@@ -79,13 +76,18 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -93,7 +95,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BattlePlugin extends JavaPlugin implements BattleApi {
     public static final int BOSSBAR_UPDATE_INTERVAL = 1;
@@ -105,8 +109,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     private final ServerData serverData = new ServerData();
     private final Market market = new Market();
     public JsonObject minecraftLocale;
-    public PremiumConnector premiumConnector;
-    public CraftExtension extension;
     public File configFolder;
     public boolean syncDataTaskNeed;
     public boolean supportBungee;
@@ -139,6 +141,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public MarketConfigManager marketConfigManager;
     public AdvancementConfigManager advancementConfigManager;
     public GUIConfigManager guiConfigManager;
+    public WorldConfigManager worldConfigManager;
     // SYSTEM
     public BattleChatManager chatManager;
     public BattleArenaManager arenaManager;
@@ -158,6 +161,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     public QueueServerTask queueServerTask;
     public EntityTrackingTask entityTrackingTask;
     private PapiExpansion papiExpansion;
+    // LISTENER
+    public PlayerListener playerListener;
 
     @Override
     public void onEnable() {
@@ -169,20 +174,12 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             exit("BattleGames can only work on Spigot-based servers.");
             return;
         }
-        if (VaultApi.init()) {
-            NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
-        } else {
-            exit("Failed to hook to Vault");
-        }
         getLogger().info("Consider to donate me if you think BattleGames is awesome <3");
         injectApiProvider();
+        loadLegacyMaterial();
 
         configFolder = getDataFolder();
         configFolder.mkdir();
-        extension = CraftExtension.of(BattlePlugin.class);
-        extension.requireAtLeastVersion("1.1.9");
-        premiumConnector = new PremiumConnector(this);
-        premiumConnector.onIntegrate();
         if (getServer().getPluginManager().isPluginEnabled("SlimeWorldManager")) {
             slimeWorldManagerSupport = true;
             SWMIntegration = new SWMIntegration(this);
@@ -208,6 +205,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         marketConfigManager = new MarketConfigManager();
         advancementConfigManager = new AdvancementConfigManager();
         guiConfigManager = new GUIConfigManager();
+        worldConfigManager = new WorldConfigManager();
         itemManager = new BattleItemManager(this);
         gunManager = new BattleGunManager(this);
         grenadeManager = new BattleGrenadeManager(this);
@@ -217,7 +215,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         guiManager = new BattleGuiManager(this);
         battleWorldRollback = new BattleWorldRollback(this);
         battleRegionRollback = new BattleRegionRollback(this);
-        premiumConnector.onInitSystem();
 
         guiManager.registerGuiHandler(BattleFunction.class);
         guiManager.registerPagination("player_gun", new GunCompartment());
@@ -239,36 +236,58 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
-        PlayerListener pl = new PlayerListener(this);
-        getServer().getPluginManager().registerEvents(pl, this);
-        getServer().getOnlinePlayers().forEach(pl::handleJoin);
-        premiumConnector.onRegisterEvents();
+        getServer().getPluginManager().registerEvents(new WorldListener(this), this);
+        playerListener = new PlayerListener(this);
+        getServer().getPluginManager().registerEvents(playerListener, this);
+        getServer().getOnlinePlayers().forEach(playerListener::handleJoin);
 
-        TaskHelper taskHelper = extension.getTaskHelper();
-        taskHelper.newAsyncTimerTask(() -> CraftStats.sendData(this), 100, 576000);
-        taskHelper.newAsyncTimerTask(scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
-        taskHelper.newAsyncTimerTask(bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
-        taskHelper.newAsyncTimerTask(new DataSavingTask(this), 0, 60);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, scoreboardRenderer = new ScoreboardRenderer(), 0, SCOREBOARD_UPDATE_INTERVAL);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, bossbarRenderer = new BossbarRenderer(), 0, BOSSBAR_UPDATE_INTERVAL);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new DataSavingTask(this), 0, 60);
         if (syncDataTaskNeed) {
-            taskHelper.newAsyncTimerTask(new DataLoadingTask(this), 0, 60);
+            getServer().getScheduler().runTaskTimerAsynchronously(this, new DataLoadingTask(this), 0, 60);
         }
         if (generalConf.getJoinSignUpdateTime() >= 20) {
-            taskHelper.newTimerTask(new JoinSignUpdateTask(this), 0, generalConf.getJoinSignUpdateTime());
+            getServer().getScheduler().runTaskTimerAsynchronously(this, new JoinSignUpdateTask(this), 0, generalConf.getJoinSignUpdateTime());
         }
-        taskHelper.newAsyncTimerTask(queueTitleTask = new QueueTitleTask(), 0, 20);
-        taskHelper.newTimerTask(gameTask = new GameTask(this), 0, 1);
-        taskHelper.newAsyncTimerTask(entityTrackingTask = new EntityTrackingTask(this), 0, 10);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, queueTitleTask = new QueueTitleTask(), 0, 20);
+        getServer().getScheduler().runTaskTimer(this, gameTask = new GameTask(this), 0, 1);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, entityTrackingTask = new EntityTrackingTask(this), 0, 10);
         if (supportBungee) {
-            taskHelper.newAsyncTimerTask(queueServerTask = new QueueServerTask(this), 0, 20);
+            getServer().getScheduler().runTaskTimerAsynchronously(this, queueServerTask = new QueueServerTask(this), 0, 20);
             getServer().getMessenger().registerIncomingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL, bungeeMessenger = new BungeeMessenger(this));
             getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessenger.BATTLE_CHANNEL);
         }
-        premiumConnector.onRegisterTasks();
+        getServer().getScheduler().runTaskTimer(this, new WorldTask(this), 0, 100);
 
         new CommandInitializer(this);
 
         Metrics metrics = new Metrics(this, 6080);
-        metrics.addCustomChart(new SimplePie("license_type", () -> premiumConnector.isSuccess() ? "premium" : "free"));
+        metrics.addCustomChart(new SimplePie("license_type", () -> "premium"));
+
+        getServer().getScheduler().runTaskLater(this, () -> {
+            if (VaultApi.init()) {
+                NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
+            } else {
+                exit("Failed to hook to Vault");
+            }
+        }, 20);
+    }
+
+    private void loadLegacyMaterial() {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/material.txt")));
+            while(reader.ready()) {
+                String line = reader.readLine();
+                String[] p = line.split(" ");
+                if(p.length == 3){
+                    MaterialUtil.registerLegacyMaterial(p[0], Integer.parseInt(p[1]), p[2]);
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void injectApiProvider() {
@@ -286,7 +305,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
     @Override
     public void onDisable() {
-        premiumConnector.onDisable();
         arenaManager.listGames(game -> {/*
             if(game instanceof LocalGame) {
                 ((LocalGame) game).getPlayers().values().forEach(player -> {
@@ -298,12 +316,13 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         });
         dataManager.saveServerData();
         playerData.keySet().forEach(dataManager::savePlayerData);
-        ServerUtil.getAllEntities(entity -> {
+        getServer().getWorlds().stream()
+                .flatMap((Function<World, Stream<Entity>>) world -> world.getEntities().stream())
+                .forEach(entity -> {
             if (entity instanceof HumanEntity) return;
             if (entity.hasMetadata("abm_temp_entity")) entity.remove();
         });
         dataManager.destroy();
-        CraftExtension.unregister(BattlePlugin.class);
     }
 
     @Override
@@ -330,6 +349,7 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         perkConfigManager.reloadConfig();
         boosterConfigManager.reloadConfig();
         advancementConfigManager.reloadConfig();
+        worldConfigManager.reloadConfig();
         if (VersionUtil.compareVersion(Objects.requireNonNull(systemConfigManager.getSettings().getString("last_config_version")), "2") < 0) {
             getLogger().info("Looks like the current config system has been outdated.");
             getLogger().info("The plugin will try to update it for you!");
@@ -350,21 +370,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
             marketConfigManager.reloadConfig();
             guiConfigManager.reloadConfig();
         }
-        premiumConnector.onReloadConfig();
     }
 
     @NotNull
     public File getEditorFolder() {
         return new File(configFolder, "editor");
-    }
-
-    public <T> Collection<T> limit(String k, Set<T> strings, int max) {
-        if (premiumConnector.isSuccess() || strings.size() <= max) {
-            return strings;
-        } else {
-            getLogger().warning(k + " is limited in free version! (" + strings.size() + "/" + max + ")");
-            return strings.stream().limit(max).collect(Collectors.toSet());
-        }
     }
 
     public void resetScoreboard(Player player) {
@@ -375,11 +385,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         }
         PlayerScoreboard ps = new PlayerScoreboard(player, sb.getTitle(), sb.getContent(), sb.getFixedLength());
         scoreboardRenderer.setScoreboard(ps);
-    }
-
-    @Override
-    public boolean isPremium() {
-        return premiumConnector.isSuccess();
     }
 
     @Override
@@ -565,6 +570,11 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
     @Override
     public ServerData getServerData() {
         return serverData;
+    }
+
+    @Override
+    public @Nullable WorldSettings getWorldSettings(String world) {
+        return worldConfigManager.getWorldSettings(world);
     }
 
     @Override
@@ -792,18 +802,18 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         int maxRepeat = (int) effect.getOptions().getOrDefault(EffectOption.REPEAT_TIMES, 0);
         BiConsumer<Location, BattleEffect> consumer = effect.getType().getEffectConsumer();
         AtomicInteger id = new AtomicInteger();
-        id.set(extension.getTaskHelper().newAsyncTimerTask(new Runnable() {
+        id.set(getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             private int counter;
 
             @Override
             public void run() {
                 if (counter++ == maxRepeat) {
-                    extension.getTaskHelper().cancelTask(id.get());
+                    getServer().getScheduler().cancelTask(id.get());
                     return;
                 }
                 consumer.accept(location, effect);
             }
-        }, 0, delayTime.longValue()));
+        }, 0, delayTime.longValue()).getTaskId());
     }
 
     @Override

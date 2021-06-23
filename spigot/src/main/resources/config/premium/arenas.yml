@@ -1,8 +1,0 @@
-bw_lighthouse: # Write arena's id here
-  # Remove all blocks in a specific region when the game starts.
-  # Two locations must be in THE SAME WORLD.
-  # [WARNING] Rollback system must be enabled! Otherwise your worlds will be broken forever!!!
-  empty_regions:
-    '1':
-      corner_1: "lighthouse 23 118 -20 56 30"
-      corner_2: "lighthouse -10 143 15 -138 20"

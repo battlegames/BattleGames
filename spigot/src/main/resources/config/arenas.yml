@@ -23,7 +23,7 @@ dm_assault:
     region:
       corner_1: assault -315.3998 54 -216.3871 -202 13
       corner_2: assault -388.5286 37 -303.4149 -90 90
-  mode_options:
+  game_options:
     min_players: 2
     waiting_spawn_points:
       - assault -309.37 48.00 -240.57 -270.16 5.40
@@ -107,6 +107,10 @@ bw_lighthouse:
       - "&bPlayers: &f<game_player_count:0>/<arena_max_players>"
   final_exp_formula: "a*3+b*20-c*7.7+d*15.75"
   final_money_formula: "a*3.5+b*15-c*2.5+d*14.25"
+  empty_regions:
+    '1':
+      corner_1: lighthouse 23 118 -20 56 30
+      corner_2: lighthouse -10 143 15 -138 20
   rollback:
     enabled: true
     provider: battle_region
@@ -130,7 +134,7 @@ bw_lighthouse:
           - purple
           - aqua
   end_delay: 100
-  mode_options:
+  game_options:
     min_players: 3
     countdown_time: 300
     waiting_spawn_points:
@@ -251,7 +255,7 @@ dm_italy:
     clear_entities: true
     worlds:
       - "italy"
-  mode_options:
+  game_options:
     min_players: 1
     waiting_spawn_points:
       - italy -269 51 39 -90 1
@@ -340,7 +344,7 @@ mr_farm:
       corner_2: "farm 119.5 96.0 -117.5 1 74"
     clear_entities: true
   end_delay: 100
-  mode_options:
+  game_options:
     min_players: 2
     countdown_time: 300
     extra_farmer_countdown_time: 900

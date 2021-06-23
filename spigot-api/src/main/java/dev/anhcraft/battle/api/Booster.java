@@ -21,9 +21,9 @@
 package dev.anhcraft.battle.api;
 
 import dev.anhcraft.battle.impl.Informative;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.craftkit.abif.PreparedItem;
 import dev.anhcraft.jvmkit.utils.Condition;
 import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.jetbrains.annotations.NotNull;

@@ -36,7 +36,7 @@ public class GunConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             GunModel g = new GunModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(GunModel.class, cs, g);

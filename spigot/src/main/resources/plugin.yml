@@ -1,8 +1,8 @@
 name: Battle
 description: ${project.parent.description}
-author: anhcraft
+authors: [ anhcraft, chochoco4777 ]
 version: ${project.version}
 main: dev.anhcraft.battle.BattlePlugin
 api-version: "1.13"
-depend: [ CraftKit, PlaceholderAPI, Vault ]
+depend: [ PlaceholderAPI, Vault ]
 softdepend: [ SlimeWorldManager ]

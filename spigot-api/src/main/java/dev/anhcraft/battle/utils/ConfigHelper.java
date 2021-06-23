@@ -21,22 +21,20 @@
 package dev.anhcraft.battle.utils;
 
 import com.google.common.collect.Multimap;
+import dev.anhcraft.battle.api.BattleSound;
 import dev.anhcraft.battle.api.inventory.item.BattleItemModel;
-import dev.anhcraft.battle.utils.adapters.BattleItemModelAdapter;
-import dev.anhcraft.battle.utils.adapters.MultimapAdapter;
+import dev.anhcraft.battle.utils.adapters.*;
 import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.ConfigSerializer;
 import dev.anhcraft.config.adapters.defaults.EnumAdapter;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
-import dev.anhcraft.craftkit.abif.adapters.MaterialAdapter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ConfigHelper {
     public static final ConfigSerializer SERIALIZER;
@@ -46,12 +44,16 @@ public class ConfigHelper {
         SERIALIZER = BukkitConfigProvider.YAML.createSerializer();
         SERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         SERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        SERIALIZER.registerTypeAdapter(BattleSound.class, BattleSoundAdapter.INSTANCE);
         SERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
+        SERIALIZER.registerTypeAdapter(Enchantment.class, new EnchantmentAdapter());
 
         DESERIALIZER = BukkitConfigProvider.YAML.createDeserializer();
         DESERIALIZER.registerTypeAdapter(Multimap.class, MultimapAdapter.INSTANCE);
         DESERIALIZER.registerTypeAdapter(BattleItemModel.class, BattleItemModelAdapter.INSTANCE);
+        DESERIALIZER.registerTypeAdapter(BattleSound.class, BattleSoundAdapter.INSTANCE);
         DESERIALIZER.registerTypeAdapter(Material.class, new MaterialAdapter());
+        DESERIALIZER.registerTypeAdapter(Enchantment.class, new EnchantmentAdapter());
         EnumAdapter ea = new EnumAdapter();
         ea.preferUppercase(true);
         DESERIALIZER.registerTypeAdapter(Enum.class, ea);

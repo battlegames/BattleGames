@@ -31,7 +31,7 @@ public class AdvancementConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        plugin.limit(loggerName, getSettings().getKeys(false), 15).forEach(s -> {
+        getSettings().getKeys(false).forEach(s -> {
             Advancement ach = new Advancement(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
             ConfigHelper.load(Advancement.class, cs, ach);

@@ -35,9 +35,7 @@ import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
 import dev.anhcraft.battle.system.QueueServer;
 import dev.anhcraft.battle.system.cleaners.GameCleaner;
-import dev.anhcraft.battle.system.controllers.BWControllerImpl;
-import dev.anhcraft.battle.system.controllers.DMControllerImpl;
-import dev.anhcraft.battle.system.controllers.GameControllerImpl;
+import dev.anhcraft.battle.system.controllers.*;
 import dev.anhcraft.battle.system.integrations.VaultApi;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import dev.anhcraft.battle.utils.SpeedUtil;
@@ -68,6 +66,9 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
         cleaner = new GameCleaner(plugin);
         initController(Mode.DEATHMATCH, new DMControllerImpl(plugin));
         initController(Mode.BEDWAR, new BWControllerImpl(plugin));
+        initController(Mode.TEAM_DEATHMATCH, new TDMControllerImpl(plugin));
+        initController(Mode.CTF, new CTFControllerImpl(plugin));
+        initController(Mode.MOB_RESCUE, new MRControllerImpl(plugin));
     }
 
     public void initController(Mode mode, GameControllerImpl controller) {
@@ -335,7 +336,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
 
         long ed = arena.getEndDelay();
         if (ed <= 0) plugin.arenaManager.destroy(game);
-        else plugin.extension.getTaskHelper().newDelayedTask(() -> plugin.arenaManager.destroy(game), ed);
+        else plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.arenaManager.destroy(game), ed);
     }
 
     @NotNull

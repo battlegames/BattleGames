@@ -29,8 +29,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
@@ -55,7 +54,7 @@ public class Perk implements Informative {
             "      duration: 99999",
             "      particles: false"
     })
-    private List<BattlePotionEffect> potionEffects = new ArrayList<>();
+    private Map<String, BattlePotionEffect> potionEffects = new HashMap<>();
 
     @Setting
     @Path("executions.set_health")
@@ -84,8 +83,8 @@ public class Perk implements Informative {
     }
 
     @NotNull
-    public List<BattlePotionEffect> getPotionEffects() {
-        return potionEffects;
+    public Collection<BattlePotionEffect> getPotionEffects() {
+        return potionEffects.values();
     }
 
     public int getNewHealth() {
@@ -98,7 +97,7 @@ public class Perk implements Informative {
 
     public void give(@NotNull Player player) {
         Condition.argNotNull("player", player);
-        for (BattlePotionEffect pe : potionEffects) {
+        for (BattlePotionEffect pe : potionEffects.values()) {
             pe.give(player);
         }
         if (newHealth > 0) {

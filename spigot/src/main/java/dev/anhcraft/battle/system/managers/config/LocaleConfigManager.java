@@ -21,12 +21,12 @@
 package dev.anhcraft.battle.system.managers.config;
 
 import com.google.common.io.Files;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
-import dev.anhcraft.craftkit.common.internal.CKPlugin;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.HttpUtil;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,6 +42,7 @@ import java.util.Properties;
 
 public class LocaleConfigManager extends ConfigManager {
     private static final Map<NMSVersion, String> ASSETS_VERSION = new EnumMap<>(NMSVersion.class);
+    private static final Gson GSON = new Gson();
 
     static {
         ASSETS_VERSION.put(NMSVersion.current(), "1.12"); // set default
@@ -100,7 +101,7 @@ public class LocaleConfigManager extends ConfigManager {
         File f = new File(plugin.configFolder, "locale/minecraft/" + version.hashCode() + "." + Files.getNameWithoutExtension(plugin.generalConf.getLocaleFile()) + ".json");
         try {
             if (f.exists()) {
-                plugin.minecraftLocale = CKPlugin.GSON.fromJson(FileUtil.readText(f), JsonObject.class);
+                plugin.minecraftLocale = GSON.fromJson(FileUtil.readText(f), JsonObject.class);
             } else {
                 f.createNewFile();
                 //noinspection UnstableApiUsage
@@ -111,7 +112,7 @@ public class LocaleConfigManager extends ConfigManager {
                 if (NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
                     String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".json");
                     FileUtil.write(f, str);
-                    plugin.minecraftLocale = CKPlugin.GSON.fromJson(str, JsonObject.class);
+                    plugin.minecraftLocale = GSON.fromJson(str, JsonObject.class);
                 } else {
                     String str = HttpUtil.fetchString("https://assets.mcasset.cloud/" + version + "/assets/minecraft/lang/" + locale + ".lang");
                     Properties p = new Properties();
@@ -120,7 +121,7 @@ public class LocaleConfigManager extends ConfigManager {
                     for (Map.Entry<Object, Object> e : p.entrySet()) {
                         plugin.minecraftLocale.addProperty(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
                     }
-                    FileUtil.write(f, CKPlugin.GSON.toJson(plugin.minecraftLocale));
+                    FileUtil.write(f, GSON.toJson(plugin.minecraftLocale));
                 }
             }
         } catch (IOException e) {

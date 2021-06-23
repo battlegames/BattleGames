@@ -19,15 +19,15 @@
  */
 package dev.anhcraft.battle.system.managers.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.anhcraft.battle.BattleComponent;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.inventory.item.*;
+import dev.anhcraft.battle.utils.ItemUtil;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
-import dev.anhcraft.craftkit.abif.PreparedItem;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
-import dev.anhcraft.craftkit.helpers.ItemNBTHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -131,13 +131,13 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     @Override
     @Nullable
     public BattleItem read(@Nullable ItemStack itemStack) {
-        if (itemStack == null) return null;
-        ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
-        CompoundTag compoundTag = nbtHelper.getTag().get("abm", CompoundTag.class);
+        if (ItemUtil.isEmpty(itemStack)) return null;
+        NBTItem i = new NBTItem(itemStack);
+        NBTCompound compoundTag = i.getCompound("abm");
         if (compoundTag == null) return null;
-        StringTag typeTag = compoundTag.get(ItemTag.ITEM_TYPE, StringTag.class);
+        String typeTag = compoundTag.getString(ItemTag.ITEM_TYPE);
         if (typeTag == null) return null;
-        BattleItem item = ItemType.valueOf(typeTag.getValue()).make();
+        BattleItem item = ItemType.valueOf(typeTag).make();
         item.load(compoundTag);
         return item;
     }
@@ -145,13 +145,13 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
     @Override
     @Nullable
     public ItemStack write(@Nullable ItemStack itemStack, @Nullable BattleItem<?> battleItem) {
-        if (itemStack == null || battleItem == null) return null;
-        ItemNBTHelper nbtHelper = ItemNBTHelper.of(itemStack);
-        CompoundTag compoundTag = nbtHelper.getTag().getOrCreateDefault("abm", CompoundTag.class);
+        if (battleItem == null || ItemUtil.isEmpty(itemStack)) return null;
+        NBTItem nbtHelper = new NBTItem(itemStack);
+        NBTCompound compoundTag = nbtHelper.getOrCreateCompound("abm");
         battleItem.save(compoundTag);
         if (battleItem.getModel() != null)
-            compoundTag.put(ItemTag.ITEM_TYPE, battleItem.getModel().getItemType().name());
-        nbtHelper.getTag().put("abm", compoundTag);
-        return nbtHelper.save();
+            compoundTag.setString(ItemTag.ITEM_TYPE, battleItem.getModel().getItemType().name());
+        nbtHelper.applyNBT(itemStack);
+        return itemStack;
     }
 }

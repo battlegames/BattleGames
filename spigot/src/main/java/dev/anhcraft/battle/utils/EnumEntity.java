@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.utils;
 
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import dev.anhcraft.jvmkit.utils.EnumUtil;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;

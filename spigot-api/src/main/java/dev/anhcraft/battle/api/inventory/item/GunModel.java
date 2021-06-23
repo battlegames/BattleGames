@@ -60,7 +60,7 @@ public class GunModel extends WeaponModel {
     @Setting
     @Path("muzzle_velocity")
     @Description("The initial velocity of a bullet when it is shot out of the gun")
-    private double muzzleVelocity = 70;
+    private double muzzleVelocity = 100;
 
     @Setting
     @Path("magazine.default")

@@ -22,7 +22,7 @@ package dev.anhcraft.battle.system.managers.config;
 
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.utils.ConfigHelper;
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.battle.utils.PreparedItem;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ItemConfigManager extends ConfigManager {

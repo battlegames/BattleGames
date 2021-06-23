@@ -32,7 +32,7 @@ public class EnumEntityValidator {
     public void a() {
         try {
             //String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.12/assets/minecraft/lang/en_us.lang");
-            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.16/assets/minecraft/lang/en_us.json");
+            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.17/assets/minecraft/lang/en_us.json");
             /*Properties p = new Properties();
             p.load(new StringReader(str));
             JsonObject jo = new JsonObject();
@@ -43,11 +43,11 @@ public class EnumEntityValidator {
             for (EntityType et : EntityType.values()) {
                 EnumEntity ee = EnumEntity.of(et);
                 if (ee == null) {
-                    // System.out.println("[!!!] EnumEntity for " + et.name() + " not found!");
-                    System.out.println(et.name() + "(null, null)");
+                    System.out.println("[!!!] EnumEntity for " + et.name() + " not found!");
+                    //System.out.println(et.name() + "(null, null)");
                 } else {
-                    // System.out.println(et.name() + ": " + ObjectUtil.optional(ee.getPath(), "null") + " / " + ObjectUtil.optional(ee.getLegacyPath(), "null"));
-                    if (!jo.has(ee.getLocalePath())) {
+                    //System.out.println(et.name() + ": " + ObjectUtil.optional(ee.getPath(), "null") + " / " + ObjectUtil.optional(ee.getLegacyPath(), "null"));
+                    if (!jo.has(ee.getPath())) {
                         System.out.println(">> Locale path for " + ee.name() + " not found");
                     }
                 }

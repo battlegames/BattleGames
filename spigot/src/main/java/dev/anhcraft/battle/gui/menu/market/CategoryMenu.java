@@ -20,6 +20,7 @@
 package dev.anhcraft.battle.gui.menu.market;
 
 import dev.anhcraft.battle.ApiProvider;
+import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.api.arena.game.Game;
 import dev.anhcraft.battle.api.gui.NativeGui;
@@ -31,6 +32,7 @@ import dev.anhcraft.battle.api.market.Category;
 import dev.anhcraft.battle.api.market.Market;
 import dev.anhcraft.battle.gui.GDataRegistry;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class CategoryMenu implements Pagination {
@@ -51,7 +53,12 @@ public class CategoryMenu implements Pagination {
             slot.setPaginationItem(c.getIcon().duplicate());
             slot.setExtraClickFunction((vm, report) -> {
                 view.getWindow().getDataContainer().put(GDataRegistry.MARKET_CATEGORY, c);
-                api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_MENU);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        api.getGuiManager().openTopGui(player, NativeGui.MARKET_PRODUCT_MENU);
+                    }
+                }.runTask((BattlePlugin) api);
             });
         }
     }

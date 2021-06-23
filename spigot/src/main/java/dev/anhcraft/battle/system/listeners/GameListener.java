@@ -30,6 +30,9 @@ import dev.anhcraft.battle.api.events.game.GameQuitEvent;
 import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.system.controllers.GameControllerImpl;
 import dev.anhcraft.battle.utils.EntityUtil;
+import dev.anhcraft.battle.utils.PositionPair;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +42,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class GameListener extends BattleComponent implements Listener {
     public GameListener(BattlePlugin plugin) {
@@ -74,7 +78,7 @@ public class GameListener extends BattleComponent implements Listener {
 
         // its better to execute the following code later
         // we can ignore if the player is going to quit the server
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (p.isOnline()) {
                 plugin.resetScoreboard(p);
                 EntityUtil.teleport(p, plugin.getServerData().getSpawnPoint(), ok -> {
@@ -98,6 +102,32 @@ public class GameListener extends BattleComponent implements Listener {
                 } else if (event.getNewPhase() == GamePhase.PLAYING) {
                     if (plugin.generalConf.shouldHealOnGameStart()) {
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+                    }
+
+                    if (event.getOldPhase() == GamePhase.WAITING) {
+                        List<PositionPair> rg = event.getGame().getArena().getEmptyRegions();
+                        if (rg != null) {
+                            for (PositionPair pair : rg) {
+                                Location first = pair.getCorner1();
+                                Location second = pair.getCorner2();
+                                if (first == null || second == null) {
+                                    continue;
+                                }
+                                int minX = Math.min(first.getBlockX(), second.getBlockX());
+                                int maxX = Math.max(first.getBlockX(), second.getBlockX());
+                                int minY = Math.min(first.getBlockY(), second.getBlockY());
+                                int maxY = Math.max(first.getBlockY(), second.getBlockY());
+                                int minZ = Math.min(first.getBlockZ(), second.getBlockZ());
+                                int maxZ = Math.max(first.getBlockZ(), second.getBlockZ());
+                                for (int x = minX; x <= maxX; x++) {
+                                    for (int y = minY; y <= maxY; y++) {
+                                        for (int z = minZ; z <= maxZ; z++) {
+                                            first.getWorld().getBlockAt(x, y, z).setType(Material.AIR, false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -21,7 +21,7 @@ package dev.anhcraft.battle.system.renderers.scoreboard;
 
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
-import dev.anhcraft.craftkit.cb_common.NMSVersion;
+import dev.anhcraft.config.bukkit.NMSVersion;
 import dev.anhcraft.jvmkit.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -48,7 +48,7 @@ public class BoosterMenu implements Pagination {
                     continue;
                 }
                 long date = ent.getValue();
-                if (Objects.equals(id, pd.getActiveBooster()) && System.currentTimeMillis() - date > b.getExpiryTime() * 50) {
+                if (Objects.equals(id, pd.getActiveBooster()) && System.currentTimeMillis() - date > b.getExpiryTime() * 50L) {
                     pd.getBoosters().remove(id);
                     continue;
                 }

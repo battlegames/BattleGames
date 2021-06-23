@@ -19,11 +19,10 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.craftkit.cb_common.nbt.CompoundTag;
-import dev.anhcraft.craftkit.cb_common.nbt.IntTag;
-import dev.anhcraft.craftkit.cb_common.nbt.StringTag;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,22 +56,21 @@ public class Magazine extends BattleItem<MagazineModel> {
     }
 
     @Override
-    public void save(CompoundTag compound) {
+    public void save(NBTCompound compound) {
         if (getModel() != null) {
-            compound.put(ItemTag.MAGAZINE_ID, getModel().getId());
+            compound.setString(ItemTag.MAGAZINE_ID, getModel().getId());
         }
-        compound.put(ItemTag.MAGAZINE_AMMO_COUNT, ammoCount);
-        CompoundTag c = new CompoundTag();
+        compound.setInteger(ItemTag.MAGAZINE_AMMO_COUNT, ammoCount);
+        NBTCompound c = compound.addCompound(ItemTag.MAGAZINE_AMMO);
         ammo.save(c);
-        compound.put(ItemTag.MAGAZINE_AMMO, c);
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        setModel(ApiProvider.consume().getMagazineModel(compound.getValue(ItemTag.MAGAZINE_ID, StringTag.class)));
-        Integer a = compound.getValue(ItemTag.MAGAZINE_AMMO_COUNT, IntTag.class);
+    public void load(NBTCompound compound) {
+        setModel(ApiProvider.consume().getMagazineModel(compound.getString(ItemTag.MAGAZINE_ID)));
+        Integer a = compound.getInteger(ItemTag.MAGAZINE_AMMO_COUNT);
         if (a != null) ammoCount = a;
-        CompoundTag am = compound.get(ItemTag.MAGAZINE_AMMO, CompoundTag.class);
+        NBTCompound am = compound.getCompound(ItemTag.MAGAZINE_AMMO);
         if (am != null) ammo.load(am);
     }
 

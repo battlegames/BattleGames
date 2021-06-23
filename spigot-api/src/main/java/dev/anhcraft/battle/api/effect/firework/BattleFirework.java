@@ -29,8 +29,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Configurable
@@ -38,15 +37,15 @@ public class BattleFirework {
     @Setting
     @Description("The firework's effects")
     @Validation(notNull = true, silent = true)
-    private List<BattleFireworkEffect> effects = new ArrayList<>();
+    private Map<String, BattleFireworkEffect> effects = new HashMap<>();
 
     @Setting
     @Description("The firework's power")
     private int power;
 
     @NotNull
-    public List<BattleFireworkEffect> getEffects() {
-        return effects;
+    public Collection<BattleFireworkEffect> getEffects() {
+        return effects.values();
     }
 
     public int getPower() {
@@ -57,7 +56,7 @@ public class BattleFirework {
         Firework fw = location.getWorld().spawn(location, Firework.class);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.setPower(power);
-        for (BattleFireworkEffect bfe : effects) {
+        for (BattleFireworkEffect bfe : effects.values()) {
             fwm.addEffect(bfe.getFireworkEffect());
         }
         fw.setFireworkMeta(fwm);

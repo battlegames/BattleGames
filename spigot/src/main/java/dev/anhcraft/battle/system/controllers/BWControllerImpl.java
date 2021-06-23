@@ -274,7 +274,7 @@ public class BWControllerImpl extends DMControllerImpl implements BedWarControll
         }
 
         final int j_ = teammates == 0 ? teamIndex : teamIndex + 1;
-        plugin.extension.getTaskHelper().newTask(() -> {
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
             for (int j = j_; j < bwt.length; j++) {
                 BWTeam t = bwt[j];
                 if (t != null) {

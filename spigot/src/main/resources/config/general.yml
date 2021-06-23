@@ -296,3 +296,13 @@ backpack:
     on_add_success: "$item_armor_equip_generic"
     on_add_failure: "$item_shield_block"
     on_remove: "$item_armor_equip_generic"
+
+radio:
+  message_format: "&6[RADIO] &8%player_displayname%&f: <message>"
+
+custom_items:
+  medical_kit:
+    health_bonus: 15
+    use_sound: "$item_armor_equip_leather"
+  adrenaline_shot:
+    use_sound: "$item_bottle_fill_dragonbreath"

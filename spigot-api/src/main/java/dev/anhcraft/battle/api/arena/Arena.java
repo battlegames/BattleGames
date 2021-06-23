@@ -30,18 +30,18 @@ import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.HeadshotStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.impl.Informative;
-import dev.anhcraft.battle.utils.ConfigHelper;
+import dev.anhcraft.battle.utils.PositionPair;
+import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.config.schema.ConfigSchema;
 import dev.anhcraft.config.struct.ConfigSection;
-import dev.anhcraft.craftkit.abif.PreparedItem;
+import dev.anhcraft.config.struct.SimpleForm;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang.Validate;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -183,6 +183,11 @@ public class Arena implements Informative {
     @Description("Rollback settings")
     private Rollback rollback;
 
+    @Setting
+    @Path("empty_regions")
+    @Consistent
+    private List<PositionPair> emptyRegions;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -305,6 +310,11 @@ public class Arena implements Informative {
         return lostReport;
     }
 
+    @Nullable
+    public List<PositionPair> getEmptyRegions() {
+        return emptyRegions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -337,8 +347,28 @@ public class Arena implements Informative {
             BattleApi.getInstance().getLogger().warning(String.format("Looks like you have enabled Bungeecord support for arena `%s`. But please also enable it in general.yml as well. The option is now skipped for safe!", id));
         }
         try {
-            gameOptions = ConfigHelper.DESERIALIZER.transformConfig(Objects.requireNonNull(getMode().getOptionSchema()),
+            gameOptions = deserializer.transformConfig(Objects.requireNonNull(getMode().getOptionSchema()),
                     Objects.requireNonNull(Objects.requireNonNull(section.get("game_options")).asSection()));
+
+            SimpleForm sf = section.get("empty_regions");
+            if(sf != null){
+                ConfigSection cs = sf.asSection();
+                if(cs != null) {
+                    emptyRegions = new ArrayList<>();
+                    for (String k : cs.getKeys(false)) {
+                        ConfigSection v = Objects.requireNonNull(cs.get(k)).asSection();
+                        if (v == null) continue;
+                        SimpleForm v1 = v.get("corner_1");
+                        if (v1 == null) continue;
+                        SimpleForm v2 = v.get("corner_2");
+                        if (v2 == null) continue;
+                        emptyRegions.add(new PositionPair(
+                                Objects.requireNonNull(v1.asString()),
+                                Objects.requireNonNull(v2.asString())
+                        ));
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

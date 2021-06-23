@@ -26,7 +26,6 @@ import com.google.common.util.concurrent.AtomicDouble;
 import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.BattleApi;
 import dev.anhcraft.battle.utils.StringWriter;
-import dev.anhcraft.craftkit.utils.ServerUtil;
 import dev.anhcraft.jvmkit.utils.PresentPair;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -113,7 +112,7 @@ public class BattleDebugger {
         }
     }
 
-    public static void reportTps() {
+    public static void reportTps() {/*
         if (activeDebugger != null) {
             if (activeDebugger.tpsTickDelay == TPS_DELAY_TICKS) {
                 synchronized (SYNC_LOCK) {
@@ -121,7 +120,7 @@ public class BattleDebugger {
                 }
                 activeDebugger.tpsTickDelay = 0;
             } else activeDebugger.tpsTickDelay++;
-        }
+        }*/
     }
 
     private String formatTime(long date) {
@@ -135,7 +134,6 @@ public class BattleDebugger {
             StringWriter w = new StringWriter();
             w.append("I. Basic info\n")
                     .append("- Plugin version: ").append(bp.getDescription().getVersion()).append('\n')
-                    .append("- License type: ").append(bp.premiumConnector.isSuccess() ? "premium" : "free").append('\n')
                     .append("- Server version: ").append(Bukkit.getBukkitVersion()).append('\n')
                     .append("- Java version: ").append(System.getProperty("java.version")).append('\n')
                     .append("- OS: ").append(System.getProperty("os.name")).append("\n\n");
