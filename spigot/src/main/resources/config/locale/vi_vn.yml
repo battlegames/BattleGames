@@ -123,13 +123,10 @@ mode_mr:
   respawn_title: '&6&lHồi sinh sau'
   respawn_subtitle: '&e&l<current>'
   objective_details:
-    header:
-    - '&f&l----------------------------------------'
-    - '&5&lMục tiêu'
+    header: "&f&l--------------- NHIỆM VỤ ---------------"
     each: '&e- Trộm &cx<amount> &e%battle_mc_locale_<localized_entity>% &7(+<coins>
       xu)'
-    footer:
-    - '&f&l----------------------------------------'
+    footer: "&f&l----------------------------------------"
   on_thief_carry:
     teammates: '&a<player> đang bế %battle_mc_locale_<localized_entity>%.'
     opponent: '&cCẢNH BÁO: <player> đang bế %battle_mc_locale_<localized_entity>%
