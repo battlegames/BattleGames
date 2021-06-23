@@ -20,7 +20,6 @@
 
 package dev.anhcraft.battle.api.market;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.api.BattleApi;
@@ -146,7 +145,6 @@ public class Product implements Informative {
     @Setting
     @Path("executions.give_items.battle")
     @Description("The Battle items to be given later")
-    @Validation(notNull = true, silent = true)
     @Example({
             "executions:",
             "  give_items:",
@@ -154,7 +152,7 @@ public class Product implements Informative {
             "      gun: # gun, ammo, magazine, scope, grenade",
             "      - ak_47",
     })
-    private Multimap<ItemType, String> battleItems = HashMultimap.create();
+    private Multimap<ItemType, String> battleItems;
 
     @Setting
     @Path("executions.give_exp.vanilla")
@@ -269,7 +267,7 @@ public class Product implements Informative {
         return vanillaItems.values();
     }
 
-    @NotNull
+    @Nullable
     public Multimap<ItemType, String> getBattleItems() {
         return battleItems;
     }
@@ -308,10 +306,12 @@ public class Product implements Informative {
     public void givePlayer(@NotNull Player player, @NotNull PlayerData playerData) {
         Location loc = player.getLocation();
         player.getInventory().addItem(CollectionUtil.toArray(vanillaItems.values().stream().map(PreparedItem::build).collect(Collectors.toList()), ItemStack.class)).values().forEach(i -> player.getWorld().dropItemNaturally(loc, i));
-        battleItems.forEach((type, x) -> {
-            Backpack.Compartment is = playerData.getBackpack().getStorage(type);
-            is.put(x);
-        });
+        if (battleItems != null) {
+            battleItems.forEach((type, x) -> {
+                Backpack.Compartment is = playerData.getBackpack().getStorage(type);
+                is.put(x);
+            });
+        }
         for (String perk : perks) {
             Perk p = ApiProvider.consume().getPerk(perk);
             if (p != null) p.give(player);
@@ -343,10 +343,10 @@ public class Product implements Informative {
         Collection<PreparedItem> vanillaItems = getVanillaItems();
 
         if (perks.isEmpty() && boosters.isEmpty() && battleExp <= 0 && vanillaExp <= 0) {
-            if (battleItems.isEmpty() && vanillaItems.isEmpty()) {
+            if ((battleItems == null || battleItems.isEmpty()) && vanillaItems.isEmpty()) {
                 return icon = market.getDefaultIconForEmptyProduct().duplicate();
             } else if (!market.shouldTreatSingleItemAsPackage()) {
-                if (battleItems.size() == 1 && vanillaItems.isEmpty()) {
+                if (battleItems != null && battleItems.size() == 1 && vanillaItems.isEmpty()) {
                     Map.Entry<ItemType, String> e = battleItems.entries().iterator().next();
                     BattleItemModel bi = api.getItemModel(e.getKey(), e.getValue());
                     if (bi != null) {
@@ -355,7 +355,7 @@ public class Product implements Informative {
                             return icon = pi.duplicate();
                         }
                     }
-                } else if (battleItems.isEmpty() && vanillaItems.size() == 1) {
+                } else if ((battleItems == null || battleItems.isEmpty()) && vanillaItems.size() == 1) {
                     return icon = vanillaItems.stream().findFirst().get().duplicate();
                 }
             }
@@ -469,7 +469,7 @@ public class Product implements Informative {
                 .inform("perk_count", perks.size())
                 .inform("vanilla_item_count", vanillaItems.size())
                 .inform("vanilla_exp_count", vanillaExp)
-                .inform("battle_item_count", battleItems.size())
+                .inform("battle_item_count", battleItems == null ? 0 : battleItems.size())
                 .inform("battle_exp_count", battleExp);
     }
 }
