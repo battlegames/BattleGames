@@ -100,7 +100,7 @@ awm:
     on_reload:
       title: "&b&lReloading... &6&l<magazine_ammo_count>/<magazine_ammo_capacity>"
       color: green
-  muzzle_velocity: 120
+  muzzle_velocity: 180
 
 xm1014:
   name: "&4&l&nXM1014"
