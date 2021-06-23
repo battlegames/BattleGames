@@ -351,18 +351,21 @@ public class Arena implements Informative {
                     Objects.requireNonNull(Objects.requireNonNull(section.get("game_options")).asSection()));
 
             SimpleForm sf = section.get("empty_regions");
-            if(sf != null && sf.isSection()) {
-                for (String k : sf.asSection().getKeys(false)) {
-                    ConfigSection v = Objects.requireNonNull(section.get(k)).asSection();
-                    if (v == null) continue;
-                    SimpleForm v1 = v.get("corner_1");
-                    if (v1 == null) continue;
-                    SimpleForm v2 = v.get("corner_2");
-                    if (v2 == null) continue;
-                    emptyRegions.add(new PositionPair(
-                            Objects.requireNonNull(v1.asString()),
-                            Objects.requireNonNull(v2.asString())
-                    ));
+            if(sf != null){
+                ConfigSection cs = sf.asSection();
+                if(cs != null) {
+                    for (String k : cs.getKeys(false)) {
+                        ConfigSection v = Objects.requireNonNull(cs.get(k)).asSection();
+                        if (v == null) continue;
+                        SimpleForm v1 = v.get("corner_1");
+                        if (v1 == null) continue;
+                        SimpleForm v2 = v.get("corner_2");
+                        if (v2 == null) continue;
+                        emptyRegions.add(new PositionPair(
+                                Objects.requireNonNull(v1.asString()),
+                                Objects.requireNonNull(v2.asString())
+                        ));
+                    }
                 }
             }
         } catch (Exception e) {
