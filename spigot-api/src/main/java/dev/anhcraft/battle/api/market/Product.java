@@ -44,6 +44,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -248,22 +249,16 @@ public class Product implements Informative {
 
     @NotNull
     public List<String> getPerks() {
-        // TODO temp fix, may be removed in the future
-        if(perks == null) return Collections.emptyList();
         return perks;
     }
 
     @NotNull
     public List<String> getBoosters() {
-        // TODO temp fix, may be removed in the future
-        if(boosters == null) return Collections.emptyList();
         return boosters;
     }
 
     @NotNull
     public Collection<PreparedItem> getVanillaItems() {
-        // TODO temp fix, may be removed in the future
-        if(vanillaItems == null) return Collections.emptyList();
         return vanillaItems.values();
     }
 
@@ -371,7 +366,7 @@ public class Product implements Informative {
         PackageDetails details = market.getPackageDetails();
         boolean fe = false;
 
-        if (!battleItems.isEmpty() || !vanillaItems.isEmpty()) {
+        if ((battleItems != null && !battleItems.isEmpty()) || !vanillaItems.isEmpty()) {
             pi.lore().add(details.getItemHeader());
             battleItems.forEach((type, _id) -> {
                 BattleItemModel bi = api.getItemModel(type, _id);
@@ -389,10 +384,13 @@ public class Product implements Informative {
             for (PreparedItem i : vanillaItems) {
                 String n = i.name();
                 if (n == null) {
-                    n = i.build().getItemMeta().getLocalizedName();
+                    ItemMeta meta = i.build().getItemMeta();
+                    if (meta != null) {
+                        n = meta.getLocalizedName();
+                    }
                 }
                 pi.lore().add(new InfoHolder("")
-                        .inform("name", n)
+                        .inform("name", n == null ? "" : n)
                         .inform("amount", i.amount())
                         .compile().replace(details.getVanillaItemFormat()));
             }
