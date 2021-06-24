@@ -29,6 +29,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -67,7 +68,7 @@ public class EntityUtil {
         Object craftEntity = CRAFT_ENTITY_CLASS.cast(bukkitEntity);
         Object entity = ReflectionUtil.invokeDeclaredMethod(CRAFT_ENTITY_CLASS, craftEntity, "getHandle");
         Object aabb = ReflectionUtil.invokeDeclaredMethod(ENTITY_CLASS, entity, "getBoundingBox");
-        double[] v = Arrays.stream(aabb.getClass().getDeclaredFields()).mapToDouble(f -> {
+        double[] v = Arrays.stream(aabb.getClass().getDeclaredFields()).filter(f -> !Modifier.isStatic(f.getModifiers())).mapToDouble(f -> {
             try {
                 return (double) f.get(aabb);
             } catch (IllegalAccessException e) {

@@ -28,6 +28,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -120,7 +121,7 @@ public class BlockUtil {
            return new BoundingBox();
         } else {
             Object aabb = ReflectionUtil.invokeDeclaredMethod(voxelShapeClass, voxelShape, NMSVersion.current() == NMSVersion.v1_13_R1 ? "a" : "getBoundingBox");
-            double[] v = Arrays.stream(aabb.getClass().getDeclaredFields()).mapToDouble(f -> {
+            double[] v = Arrays.stream(aabb.getClass().getDeclaredFields()).filter(f -> !Modifier.isStatic(f.getModifiers())).mapToDouble(f -> {
                 try {
                     return (double) f.get(aabb);
                 } catch (IllegalAccessException e) {
