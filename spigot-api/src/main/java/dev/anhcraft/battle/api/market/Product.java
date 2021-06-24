@@ -399,6 +399,12 @@ public class Product implements Informative {
                         n = meta.getLocalizedName();
                     }
                 }
+                if (n == null || n.isEmpty()) {
+                    String k = "item.minecraft." + i.material().name().toLowerCase();
+                    if (api.getMinecraftLocale().has(k)) {
+                        n = api.getMinecraftLocale().get(k).getAsString();
+                    }
+                }
                 pi.lore().add(new InfoHolder("")
                         .inform("name", n == null ? "" : n)
                         .inform("amount", i.amount())
