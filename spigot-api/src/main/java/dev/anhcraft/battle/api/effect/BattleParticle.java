@@ -95,6 +95,10 @@ public class BattleParticle {
     public void spawn(@NotNull Location location) {
         World w = location.getWorld();
         if(w == null) return;
-        w.spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null);
+        w.spawnParticle(type, location, count, offsetX, offsetY, offsetZ, speed, null, true);
+    }
+
+    public void spawn(@NotNull World w, double x, double y, double z) {
+        w.spawnParticle(type, x, y, z, count, offsetX, offsetY, offsetZ, speed, null, true);
     }
 }

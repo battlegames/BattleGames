@@ -86,7 +86,7 @@ public class BattleGrenadeManager extends BattleComponent {
                         BattleDebugger.endTiming("grenade-track");
                     });
                     if (gm.getExplosionEffect() != null) {
-                        plugin.playEffect(eloc, gm.getExplosionEffect());
+                        plugin.playEffect(eloc.clone(), gm.getExplosionEffect());
                     }
                 }
             }

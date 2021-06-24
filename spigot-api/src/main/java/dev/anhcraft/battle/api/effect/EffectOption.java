@@ -25,7 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public enum EffectOption {
     REPEAT_DELAY(Long.class),
     REPEAT_TIMES(Integer.class),
-    SPHERE_RADIUS(Double.class);
+    SPHERE_RADIUS(Double.class),
+    PARTICLE_DENSITY(Double.class);
 
     private final Class<?> clazz;
 

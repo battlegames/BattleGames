@@ -22,6 +22,7 @@ package dev.anhcraft.battle.api.effect;
 import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,6 +83,16 @@ public class BattleEffect {
         }
         if (blockEffect != null) {
             blockEffect.spawn(location);
+        }
+    }
+
+    public void spawn(@NotNull World world, double x, double y, double z) {
+        Condition.argNotNull("world", world);
+        if (particle != null) {
+            particle.spawn(world, x, y, z);
+        }
+        if (blockEffect != null) {
+            blockEffect.spawn(new Location(world, x, y, z));
         }
     }
 }
