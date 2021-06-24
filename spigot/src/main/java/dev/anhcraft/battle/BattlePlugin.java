@@ -807,11 +807,10 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
             @Override
             public void run() {
-                if (counter++ == maxRepeat) {
-                    getServer().getScheduler().cancelTask(id.get());
-                    return;
-                }
                 consumer.accept(location, effect);
+                if (counter++ >= maxRepeat) {
+                    getServer().getScheduler().cancelTask(id.get());
+                }
             }
         }, 0, delayTime.longValue()).getTaskId());
     }
