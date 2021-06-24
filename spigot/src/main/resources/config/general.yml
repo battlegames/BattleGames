@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/GeneralConfig.schema.html
-
 locale: "en_us.yml"
 
 date_format:

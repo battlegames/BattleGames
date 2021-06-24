@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/Perk.schema.html
-
 speed:
   name: "&aSpeed"
   executions:

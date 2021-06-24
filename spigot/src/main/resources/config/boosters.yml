@@ -1,6 +1,3 @@
-# Wiki: https://wiki.anhcraft.dev/en/battle/booster
-# Configdoc: https://anhcraft.dev/cd/battle/Booster.schema.html
-
 booster1:
   icon:
     name: "&aMoney booster"

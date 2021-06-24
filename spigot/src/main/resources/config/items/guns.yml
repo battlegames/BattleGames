@@ -1,6 +1,3 @@
-# Wiki: https://wiki.anhcraft.dev/en/battle/gun
-# Configdoc: https://anhcraft.dev/cd/battle/GunModel.schema.html
-
 ak_47:
   name: "&e&l&nAK-47"
   skin:

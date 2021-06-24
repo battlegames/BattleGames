@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/Market.schema.html
-
 log_transactions: true
 
 product_lore_footer:

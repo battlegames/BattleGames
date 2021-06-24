@@ -1,6 +1,3 @@
-# Wiki: https://wiki.anhcraft.dev/en/battle/grenade
-# Configdoc: https://anhcraft.dev/cd/battle/GrenadeModel.schema.html
-
 fire_grenade:
   name: "&cFire &fGrenade"
   skin:

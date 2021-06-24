@@ -1,6 +1,3 @@
-# Wiki: https://wiki.anhcraft.dev/en/battle/scope
-# Configdoc: https://anhcraft.dev/cd/battle/ScopeModel.schema.html
-
 basic_scope:
   name: "&aBasic scope"
   skin:

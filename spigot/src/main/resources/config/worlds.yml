@@ -1,50 +1,20 @@
-# World settings
-
-# General configuration
 general:
-  # Prevent hungry
   prevent_hungry: true
-
-  # Prevent mobs from dropping items
   prevent_mob_drops: true
-
-  # Prevent explosions
   prevent_explosions: true
-
-  # Protect the blocks
   protect_blocks: true
-
-  # Control the weather
   always_weather: clear
-
-  # Control the world time
   always_time: 3000
-
-  # Prevent fire spread
   anti_fire_spread: true
-
-  # Disable interacts to chest, door, etc
   disable_interact: true
-
-  # Disable crafting
   disable_crafting: true
-
-  # Any worlds that will not get effect
   except_worlds:
     - world
 
-# Specific world settings
 specific:
-  lighthouse: # The world's name
-    # If you install the BedwarPack addon, it has a feature similar to
-    # this. It is recommended to use that and disable this option.
-    # If you enable, players can't place any blocks!!!
+  lighthouse:
     protect_blocks: false
-
-    # Interacts should be allowed so players can access the ender chest
     disable_interact: false
-
-    # No mobs spawn in this world
     prevent_mob_spawn: true
 
   farm:

@@ -1,6 +1,3 @@
-# Wiki: https://wiki.anhcraft.dev/en/battle/magazine
-# Configdoc: https://anhcraft.dev/cd/battle/MagazineModel.schema.html
-
 default_ak_47:
   name: "&2AK-47 Magazine"
   skin:

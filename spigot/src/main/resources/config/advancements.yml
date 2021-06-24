@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/Advancement.schema.html
-
 kill_beginner:
   type: kills
   name: "&c&lBe a killer"

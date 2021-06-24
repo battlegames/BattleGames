@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/SystemConfig.schema.html
-
 config_folder: ""
 
 remote_config:

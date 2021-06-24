@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/Mode.schema.html
-
 dm:
   name: "&bDeathmatch"
   waiting_chat:

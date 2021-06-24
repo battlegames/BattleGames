@@ -1,5 +1,3 @@
-# Configdoc: https://anhcraft.dev/cd/battle/Arena.schema.html
-
 dm_assault:
   name: "&4&lAssault"
   mode: dm
