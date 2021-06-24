@@ -9,6 +9,14 @@ fire_grenade:
     mob_ticks: 100
     mob_radius: 3.5
     block_radius: 2
+  explosion_effect:
+    particle:
+      count: 10
+      type: flame
+    type: hollow_sphere
+    options:
+      sphere_radius: 3
+      particle_density: 15
 
 explosive_grenade:
   name: "&4Explosive &aGrenade"
