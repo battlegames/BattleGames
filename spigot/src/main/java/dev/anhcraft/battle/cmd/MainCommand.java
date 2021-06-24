@@ -21,6 +21,7 @@ package dev.anhcraft.battle.cmd;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import dev.anhcraft.battle.BattlePlugin;
@@ -38,6 +39,9 @@ import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.*;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.battle.utils.info.InfoReplacer;
+import dev.anhcraft.config.annotations.Configurable;
+import dev.anhcraft.configdoc.ConfigDocGenerator;
+import dev.anhcraft.jvmkit.utils.ReflectionUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -51,10 +55,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
+import java.io.File;
+import java.net.URLClassLoader;
+import java.util.*;
 
 @CommandAlias("b|bg|battle|battlegames")
 public class MainCommand extends BaseCommand {
@@ -80,6 +86,34 @@ public class MainCommand extends BaseCommand {
                 "&d◈ Discord: &fhttps://discord.gg/5s75WtfTR2",
                 "&d◈ Spigot: &fhttps://spigotmc.org/resources/69463"
         )).forEach(sender::sendMessage);
+    }
+
+    @Subcommand("configdoc")
+    @CommandPermission("battle.configdoc")
+    @Description("Generate config documentation")
+    public void configdoc() {
+        JavaPluginLoader jpl = (JavaPluginLoader) plugin.getPluginLoader();
+        List<URLClassLoader> loaders = (List<URLClassLoader>) ReflectionUtil.getDeclaredField(JavaPluginLoader.class, jpl, "loaders");
+        TreeMap<String, Class<?>> map = new TreeMap<>();
+        ConfigDocGenerator gen = new ConfigDocGenerator();
+        for (URLClassLoader loader : loaders) {
+            PluginDescriptionFile desc = (PluginDescriptionFile) ReflectionUtil.getDeclaredField(loader.getClass(), loader, "description");
+            if(!desc.getName().equals("Battle") && !desc.getDepend().contains("Battle")) continue;
+            Map<String, Class<?>> classMap = (Map<String, Class<?>>) ReflectionUtil.getDeclaredField(loader.getClass(), loader, "classes");
+            for (Class<?> clazz : classMap.values()) {
+                if (clazz.isAnnotationPresent(Configurable.class)) {
+                    if(map.containsKey(clazz.getSimpleName())) {
+                        map.put(clazz.getSimpleName() + clazz.getName(), clazz);
+                    } else {
+                        map.put(clazz.getSimpleName(), clazz);
+                    }
+                }
+            }
+        }
+        for(Class<?> clazz : map.values()){
+            gen.withSchemaOf(clazz);
+        }
+        gen.generate(new File(plugin.configFolder, "docs"));
     }
 
     @Subcommand("setspawn")
