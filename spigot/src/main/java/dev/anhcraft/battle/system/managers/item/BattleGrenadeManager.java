@@ -27,14 +27,12 @@ import dev.anhcraft.battle.api.inventory.item.GrenadeModel;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.tasks.EntityTrackingTask;
 import dev.anhcraft.battle.utils.BlockUtil;
+import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.PreparedItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 
 public class BattleGrenadeManager extends BattleComponent {
     public BattleGrenadeManager(BattlePlugin plugin) {
@@ -44,16 +42,17 @@ public class BattleGrenadeManager extends BattleComponent {
     public boolean throwGrenade(Player player, Grenade grenade) {
         GrenadeModel gm = grenade.getModel();
         if (gm == null) return false;
-        Location ploc = player.getLocation();
+        Location ploc = player.getEyeLocation();
         PreparedItem pi = plugin.itemManager.make(gm);
         if (pi == null) return false;
-        Item item = player.getWorld().dropItem(ploc, gm.getSkin().transform(pi).build());
-        item.setInvulnerable(true);
-        item.setGravity(true);
-        item.setVelocity(ploc.getDirection().normalize().multiply(gm.getVelocityMultiplier()));
-        item.setPickupDelay(Integer.MAX_VALUE);
+        ArmorStand as = player.getWorld().spawn(ploc, ArmorStand.class);
+        as.setBoots(gm.getSkin().transform(pi).build());
+        as.setInvulnerable(true);
+        as.setGravity(true);
+        as.setVelocity(ploc.getDirection().normalize().multiply(gm.getVelocityMultiplier()));
+        as.setVisible(false);
         long dt = gm.getDelayTime();
-        plugin.entityTrackingTask.track(item, new EntityTrackingTask.EntityTrackCallback() {
+        plugin.entityTrackingTask.track(as, new EntityTrackingTask.EntityTrackCallback() {
             @Override
             public void onCheck(EntityTrackingTask.EntityTracker tracker, EntityTrackingTask.EntityTrackCallback callback, Entity entity) {
                 if (tracker.deltaMoveTime() >= 500 || (dt > 0 && tracker.deltaOriginTime() > dt * 50)) {
@@ -68,7 +67,7 @@ public class BattleGrenadeManager extends BattleComponent {
                         int fbr = gm.getFireBlockRadius();
                         if (fbr > 0) {
                             for (Block b : BlockUtil.getNearbyBlocks(eloc, fbr, 1, fbr)) {
-                                if (b.getType() == Material.AIR || b.getType().name().endsWith("_AIR")) {
+                                if (MaterialUtil.isEmpty(b.getType())) {
                                     b.setType(Material.FIRE);
                                 }
                             }
