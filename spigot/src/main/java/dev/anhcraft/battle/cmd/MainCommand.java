@@ -113,7 +113,7 @@ public class MainCommand extends BaseCommand {
         for(Class<?> clazz : map.values()){
             gen.withSchemaOf(clazz);
         }
-        gen.generate(new File(plugin.configFolder, "docs"));
+        gen.addJavadoc("dev.anhcraft.battle.*", "https://battlegames.github.io/jd/").generate(new File(plugin.configFolder, "docs"));
     }
 
     @Subcommand("setspawn")
