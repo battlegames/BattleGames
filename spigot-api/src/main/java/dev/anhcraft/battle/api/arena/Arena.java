@@ -71,7 +71,12 @@ public class Arena implements Informative {
 
     @Setting
     @Path("game_options")
-    @Description("Game mode settings")
+    @Description(
+            {
+                    "Game mode settings",
+                    "The settings are different per game-mode"
+            }
+    )
     @Validation(notNull = true)
     @Consistent
     private GameOptions gameOptions;
@@ -186,6 +191,12 @@ public class Arena implements Informative {
     @Setting
     @Path("empty_regions")
     @Consistent
+    @Example({
+            "empty_regions:",
+            "  '1':",
+            "    corner_1: lighthouse 23 118 -20 56 30",
+            "    corner_2: lighthouse -10 143 15 -138 20"
+    })
     private List<PositionPair> emptyRegions;
 
     public Arena(@NotNull String id) {

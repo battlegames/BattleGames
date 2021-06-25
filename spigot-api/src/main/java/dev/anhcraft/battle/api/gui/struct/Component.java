@@ -76,7 +76,7 @@ public class Component {
     @Path("functions.on_init")
     @Description({
             "The function that gets called when one slot of this component is initialized",
-            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+            "Read more: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/GUI\">https://github.com/battlegames/Battle-Hub/wiki/GUI</a>"
     })
     @Example({
             "on_init:",
@@ -89,11 +89,11 @@ public class Component {
     @Path("functions.on_click")
     @Description({
             "The function that gets called when one slot of this component is clicked",
-            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+            "Read more: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/GUI\">https://github.com/battlegames/Battle-Hub/wiki/GUI</a>"
     })
     @Example({
             "on_click:",
-            " - Common:CancelEvent() # Prevent steal items"
+            "  - Common:CancelEvent() # Prevent steal items"
     })
     @Validation(notNull = true, silent = true)
     private List<String> clickFunction = new ArrayList<>();
@@ -105,11 +105,11 @@ public class Component {
             "Set &#36;cancel_render to `true` to prevent this action; `false` is set by default",
             "It is not recommended to do any modifications to the item on that slot, you would be better",
             "to look at on_rendered, which is called <b>after</b> the rendering has done.",
-            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+            "Read more: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/GUI\">https://github.com/battlegames/Battle-Hub/wiki/GUI</a>"
     })
     @Example({
             "on_render:",
-            " - Cache:SetBool(\"_cancel_render_\" true) ? _slot_ == 27"
+            "  - Cache:SetBool(\"_cancel_render_\" true) ? _slot_ == 27"
     })
     private List<String> renderFunction;
 
@@ -117,18 +117,18 @@ public class Component {
     @Path("functions.on_rendered")
     @Description({
             "The function that gets called when one slot of this component was rendered successfully",
-            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+            "Read more: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/GUI\">https://github.com/battlegames/Battle-Hub/wiki/GUI</a>"
     })
     @Example({
             "on_rendered:",
-            " - Common:SetItemFromData(\"window\" \"value\" &#36;_window_positionOfThisSlot \"not-null\")"
+            "  - Common:SetItemFromData(\"window\" \"value\" &#36;_window_positionOfThisSlot \"not-null\")"
     })
     private List<String> renderedFunction;
 
     @Setting
     @Description({
             "Pagination that support multiple items to display in this component",
-            "Read more: <a href=\"https://wiki.anhcraft.dev/battle/gui\">https://wiki.anhcraft.dev/battle/gui</a>"
+            "Read more: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/GUI\">https://github.com/battlegames/Battle-Hub/wiki/GUI</a>"
     })
     private String pagination;
 

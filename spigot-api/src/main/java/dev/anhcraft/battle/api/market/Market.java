@@ -103,6 +103,28 @@ public class Market {
     @Description("All categories")
     @Validation(notNull = true, silent = true)
     @Consistent
+    @Example({
+            "categories:",
+            "  perks:",
+            "    icon:",
+            "      material: emerald",
+            "      name: \"&b&lPerk shop\"",
+            "      lore:",
+            "        - \"&fHere you can buy perks with&a cheap price\"",
+            "      enchant:",
+            "        unbreaking: 1",
+            "      flag:",
+            "        - hide_enchants",
+            "    products:",
+            "      '1':",
+            "        package_name: \"&cHealth boost\"",
+            "        package_material: redstone",
+            "        currency: vault",
+            "        price: 75",
+            "        executions:",
+            "          give_perks:",
+            "            - health_boost"
+    })
     private Map<String, Category> categories = new HashMap<>();
 
     public boolean shouldLogTransactions() {

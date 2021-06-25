@@ -50,6 +50,28 @@ public class Gui implements Informative {
     @Setting
     @Description("List of components")
     @Validation(notNull = true, silent = true)
+    @Example({
+            "components:",
+            "  '0':",
+            "    positions: 1 -> 9; 1 -> 3",
+            "    pagination: advancements",
+            "    item:",
+            "      material: gray_stained_glass_pane",
+            "      name: '&f'",
+            "    functions:",
+            "      on_click:",
+            "        - Battle:CancelEvent()",
+            "  '1':",
+            "    positions:",
+            "      - 1 -> 5; 4",
+            "      - 8; 4",
+            "    item:",
+            "      material: gray_stained_glass_pane",
+            "      name: '&f'",
+            "    functions:",
+            "      on_click:",
+            "        - Battle:CancelEvent()"
+    })
     private Map<String, Component> components = new HashMap<>();
 
     @Setting

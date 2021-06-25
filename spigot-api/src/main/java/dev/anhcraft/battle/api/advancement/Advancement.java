@@ -23,10 +23,7 @@ package dev.anhcraft.battle.api.advancement;
 import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import dev.anhcraft.config.ConfigDeserializer;
 import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.config.schema.ConfigSchema;
-import dev.anhcraft.config.struct.ConfigSection;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +37,7 @@ public class Advancement implements Informative {
     @Setting
     @Description({
             "The statistic type",
-            "All statistic types can be seen here: <a href=\"https://wiki.anhcraft.dev/battle/stats\">https://wiki.anhcraft.dev/battle/stats</a>",
+            "All statistic types can be seen here: <a href=\"https://github.com/battlegames/Battle-Hub/wiki/Statistics\">https://github.com/battlegames/Battle-Hub/wiki/Statistics</a>",
             "Except \"exp\" which is not supported."
     })
     @Validation(notNull = true)
@@ -76,6 +73,24 @@ public class Advancement implements Informative {
             "They can be known as 'levels'"
     })
     @Validation(notNull = true)
+    @Example({
+            "progression:",
+            "  '0':",
+            "    amount: 1",
+            "    reward:",
+            "      exp: 5",
+            "      money: 8",
+            "  '1':",
+            "    amount: 10",
+            "    reward:",
+            "      exp: 60",
+            "      money: 100",
+            "  '2':",
+            "    amount: 20",
+            "    reward:",
+            "      exp: 150",
+            "      money: 200"
+    })
     private Map<String, Progression> progression;
 
     public Advancement(@NotNull String id) {

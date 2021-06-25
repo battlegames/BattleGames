@@ -58,6 +58,33 @@ public class MobRescueOptions extends GameOptions {
     @Path("mob_groups")
     @Description("Configuration for mobs")
     @Validation(notNull = true)
+    @Example({
+            "mob_groups:",
+            "  '0':",
+            "    location: \"farm 15.6338 65.0 -59.4813 -95.411865 3.89998\"",
+            "    entity_type: horse",
+            "    weight: 800",
+            "    stealable: false",
+            "    amount: 1",
+            "  '1':",
+            "    location: \"farm 15.6295 65.0 -55.3090 -91.36191 2.8499768\"",
+            "    entity_type: horse",
+            "    weight: 800",
+            "    stealable: false",
+            "    amount: 1",
+            "  '2':",
+            "    location: \"farm 15.3668 65.0 -51.2762 -93.31171 1.4999669\"",
+            "    entity_type: horse",
+            "    weight: 800",
+            "    stealable: false",
+            "    amount: 1",
+            "  '3':",
+            "    location: \"farm 66.0071 72.0 -83.4858 -180.01172 -1.5000186\"",
+            "    entity_type: cow",
+            "    weight: 600",
+            "    stealable: true",
+            "    amount: 1"
+    })
     private Map<String, MobGroup> mobGroups;
 
     @Setting
@@ -85,6 +112,20 @@ public class MobRescueOptions extends GameOptions {
 
     @Setting
     @Validation(notNull = true)
+    @Description("Objectives")
+    @Example({
+            "objectives:",
+            "  cow:",
+            "    amount:",
+            "      min: 1",
+            "      max: 2",
+            "    reward_coins: 50",
+            "  pig:",
+            "    amount:",
+            "      min: 2",
+            "      max: 5",
+            "    reward_coins: 10"
+    })
     private Map<EntityType, MobRescueObjective> objectives;
 
     @Setting

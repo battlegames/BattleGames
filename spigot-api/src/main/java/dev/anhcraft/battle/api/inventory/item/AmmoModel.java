@@ -31,6 +31,15 @@ public class AmmoModel extends SingleSkinItem implements Attachable {
     @Setting
     @Description("Define bullets in this ammunition")
     @Validation(notNull = true, silent = true)
+    @Example({
+            "bullets:",
+            "  '1':",
+            "    damage: 21",
+            "    knockback: 0.1",
+            "    penetration_power: 10",
+            "    particle:",
+            "      type: end_rod"
+    })
     private Map<String, Ammo.Bullet> bullets = new HashMap<>();
 
     @Setting

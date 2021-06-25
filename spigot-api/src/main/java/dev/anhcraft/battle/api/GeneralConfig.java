@@ -42,7 +42,7 @@ public class GeneralConfig {
     @Path("locale")
     @Description({
             "The locale file used for messages and texts",
-            "Available: en_us.yml, vi.yml"
+            "Available: en_us.yml, vi_vn.yml"
     })
     @Validation(notNull = true)
     private String localeFile;
@@ -214,14 +214,45 @@ public class GeneralConfig {
 
     @Setting
     @Path("misc.material_hardness")
-    @Description("The material of blocks")
+    @Description({
+            "The hardness of material",
+            "(Legacy and future materials are supported: that means you can even specify 1.17 material when running a 1.16 server)"
+    })
     @Consistent
+    @Example({
+            "material_hardness:",
+            "  _default_: 10",
+            "  '0':",
+            "    material:",
+            "      - air",
+            "      - cave_air",
+            "      - void_air",
+            "    value: 0",
+            "  '1':",
+            "    material:",
+            "      - leather_helmet",
+            "      - leather_chestplate",
+            "      - leather_leggings",
+            "      - leather_boots",
+            "    value: 1"
+    })
     private Map<Material, Integer> materialHardness;
 
     @Setting
     @Path("misc.entity_hardness")
     @Description("The base hardness of entities (without equipment)")
     @Consistent
+    @Example({
+            "entity_hardness:",
+            "  _default_: 3",
+            "  '0':",
+            "    types:",
+            "      - player",
+            "      - skeleton",
+            "      - stray",
+            "      - spider",
+            "    value: 5"
+    })
     private Map<EntityType, Integer> entityHardness;
 
     @Setting

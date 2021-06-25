@@ -42,5 +42,4 @@ public class NativeGui {
     public static final String BOOL_VAL_EDITOR = "boolean_value_editor";
     public static final String INT_VAL_EDITOR = "int_value_editor";
     public static final String REAL_VAL_EDITOR = "real_value_editor";
-    public static final String GUN_MENU = "gun_menu";
 }

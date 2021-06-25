@@ -20,10 +20,7 @@
 
 package dev.anhcraft.battle.api;
 
-import dev.anhcraft.config.annotations.Configurable;
-import dev.anhcraft.config.annotations.Path;
-import dev.anhcraft.config.annotations.Setting;
-import dev.anhcraft.config.annotations.Validation;
+import dev.anhcraft.config.annotations.*;
 import org.bukkit.WeatherType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,47 +33,61 @@ import java.util.List;
 public class WorldSettings {
     @Setting
     @Path("prevent_mob_drops")
+    @Description("Should mob drops prevented")
     private boolean preventMobDrops;
 
     @Setting
     @Path("prevent_explosions")
+    @Description("Should explosions from TNT, creeper, etc prevented")
     private boolean preventExplosions;
 
     @Setting
     @Path("protect_blocks")
+    @Description({
+            "Should blocks are protected",
+            "WARNING: This option should be <b>disabled</b> if you have BedwarPack <b>enabled in these worlds</b>"
+    })
     private boolean protectBlocks;
 
     @Setting
     @Path("always_weather")
+    @Description("Set permanent weather type")
     private WeatherType alwaysWeather;
 
     @Setting
     @Path("always_time")
+    @Description("Set permanent world time")
     private long alwaysTime = -1;
 
     @Setting
     @Path("prevent_hungry")
+    @Description("Players won't feel hungry")
     private boolean preventHungry;
 
     @Setting
     @Path("prevent_mob_spawn")
+    @Description("Prevent natural mob spawns")
     private boolean preventMobSpawn;
 
     @Setting
     @Path("anti_fire_spread")
+    @Description("Prevent fire from spreading")
     private boolean antiFireSpread;
 
     @Setting
     @Path("disable_interact")
+    @Description("Disables interacts with blocks like opening door, trapdoor, etc")
     private boolean disableInteract;
 
     @Setting
     @Path("disable_crafting")
+    @Description("Disables crafting")
     private boolean disableCrafting;
 
     @Setting
     @Path("except_worlds")
     @Validation(notNull = true, silent = true)
+    @Description("Specify worlds that won't be affected by this settings")
     private List<String> blacklistWorlds = new ArrayList<>();
 
     public boolean isPreventMobDrops() {
