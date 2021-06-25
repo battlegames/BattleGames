@@ -21,8 +21,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.github.anhcraft:JvmKit:1.1.5" level="project" />
     <orderEntry type="library" name="Maven: com.github.anhcraft:Inst:1.0.3" level="project" />
-    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.bukkit:1.0.5" level="project" />
-    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.common:1.0.5" level="project" />
+    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.bukkit:1.0.6" level="project" />
+    <orderEntry type="library" name="Maven: com.github.anhcraft.config:config.common:1.0.6" level="project" />
     <orderEntry type="library" name="Maven: net.objecthunter:exp4j:0.4.8" level="project" />
     <orderEntry type="library" name="Maven: io.papermc:paperlib:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: de.tr7zw:nbt-data-api:2.8.0" level="project" />
