@@ -103,6 +103,9 @@ public class GameListener extends BattleComponent implements Listener {
                     if (plugin.generalConf.shouldHealOnGameStart()) {
                         ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
                     }
+                    if (plugin.generalConf.isNoHungryOnGameStart()) {
+                        ((LocalGame) event.getGame()).getPlayers().keySet().forEach(p -> p.setFoodLevel(20));
+                    }
 
                     if (event.getOldPhase() == GamePhase.WAITING) {
                         List<PositionPair> rg = event.getGame().getArena().getEmptyRegions();

@@ -269,6 +269,9 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
             if (plugin.generalConf.shouldHealOnGameEnd()) {
                 p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
             }
+            if (plugin.generalConf.isNoHungryOnGameEnd()) {
+                p.setFoodLevel(20);
+            }
             plugin.gunManager.handleZoomOut(p);
             PlayerData pd = plugin.getPlayerData(p);
             if (pd != null) {

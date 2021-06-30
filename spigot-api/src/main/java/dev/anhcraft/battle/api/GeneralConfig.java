@@ -177,6 +177,16 @@ public class GeneralConfig {
     private boolean healOnGameEnd = true;
 
     @Setting
+    @Path("misc.no_hungry_on_game_start")
+    @Description("Enable this option to fill up hungry bar when game started")
+    private boolean noHungryOnGameStart = true;
+
+    @Setting
+    @Path("misc.no_hungry_on_game_end")
+    @Description("Enable this option to fill up hungry bar after end game")
+    private boolean noHungryOnGameEnd = true;
+
+    @Setting
     @Path("misc.default_speed.walk")
     @Description({
             "The walking speed",
@@ -549,6 +559,14 @@ public class GeneralConfig {
 
     public boolean shouldHealOnGameEnd() {
         return healOnGameEnd;
+    }
+
+    public boolean isNoHungryOnGameStart() {
+        return noHungryOnGameStart;
+    }
+
+    public boolean isNoHungryOnGameEnd() {
+        return noHungryOnGameEnd;
     }
 
     public int getRegionPartitionSize() {
