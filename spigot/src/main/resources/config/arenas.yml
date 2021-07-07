@@ -230,17 +230,17 @@ bw_lighthouse:
       - "&f"
       - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
 
-dm_italy:
-  name: "&b&lItaly"
-  mode: dm
-  final_exp_formula: "a+b*30-c*10+d*5"
-  final_money_formula: "a*4+b*12+d*5"
+ctf_italy:
+  name: '&b&lItaly'
+  mode: ctf
+  final_exp_formula: a+b*30-c*10+d*5
+  final_money_formula: a*4+b*12+d*5
   icon:
-    material: GRASS
-    name: "<arena_name>"
+    material: WOOL
+    name: <arena_name>
     lore:
-      - "&4Game Mode: &f<mode_name>"
-      - "&4Players: &f<game_current_time:0>/<arena_max_players>"
+      - '&4Game Mode: &f<mode_name>'
+      - '&4Players: &f<game_current_time:0>/<arena_max_players>'
   max_time: 8400
   max_players: 20
   allow_late_joins: true
@@ -248,33 +248,55 @@ dm_italy:
     enabled: true
     provider: battle_region
     region:
-      corner_1: "italy -346 31 3 -96 33"
-      corner_2: "italy -195 98 117 -268 10"
+      corner_1: italy -346 31 3 -96 33
+      corner_2: italy -195 98 117 -268 10
     clear_entities: true
     worlds:
-      - "italy"
+      - italy
   game_options:
     min_players: 1
+    flags:
+      '1':
+        location: italy -309.1571590469714 42.0 54.99857630906323 228.0001 7.3499637
+        display_name:
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
+          neutral: "&7Neutral"
+        max_health: 5
+      '2':
+        location: italy -304.39875875777005 42.5 84.5322748252515 216.60065 1.4999988
+        display_name:
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
+          neutral: "&7Neutral"
+        max_health: 10
+      '3':
+        location: italy -224.52138852065306 46.0 86.9775117135513 -25.799303 6.450035
+        display_name:
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
+          neutral: "&7Neutral"
+        max_health: 5
+      '4':
+        location: italy -249.90573731301106 42.0 54.25242352833119 144.6008 5.850018
+        display_name:
+          valid: "&a&l<flag_team> | &f&l<flag_health> &c&l❤"
+          invalid: "&7&l<flag_team> | &f&l<flag_health>/<flag_max_health> &c&l❤"
+          neutral: "&7Neutral"
+        max_health: 10
     waiting_spawn_points:
       - italy -269 51 39 -90 1
       - italy -269 51 41 -90 1
       - italy -269 51 44 -90 1
       - italy -269 51 47 -90 1
-    playing_spawn_points:
-      - italy -305 42 84 -93.7459 3.150032
-      - italy -277 42 82 -269.69574 -0.14996877
-      - italy -285 42 54 -267.44608 0.7500529
-      - italy -253 42 31 -271.64615 2.5500715
-      - italy -272 47 50 -90.89651 4.050111
-      - italy -222 46 86 -359.84628 3.9000845
-      - italy -250 42 54 -88.34592 2.2500813
-      - italy -323 39 44 -87.44594 2.2501101
+    playing_spawn_points_a:
+      - italy -326.16216918915336 39.0 43.74598189178139 -89.5495 2.0999866
+    playing_spawn_points_b:
+      - italy -231.12805454484933 49.5 82.15454874052332 -270.44962 5.9999366
     countdown_time: 300
     item_selection_time: 1000
     spawn_protection_time: 40
     respawn_waiting_time: 200
-    sounds:
-      countdown: "$block_fence_gate_open"
   render_gui_on_death: true
   end_firework:
     power: 3
@@ -301,23 +323,23 @@ dm_italy:
   end_delay: 100
   result_broadcast:
     won:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&a         Congratulations! You WON the game!         "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - '&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+'
+      - '&f'
+      - '&a         Congratulations! You WON the game!         '
+      - '&f'
+      - '&b         • Money: &e+$<money>'
+      - '&b         • Exp: &e+<exp>'
+      - '&f'
+      - '&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+'
     lost:
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
-      - "&f"
-      - "&7       You lost. Be better in the next match!       "
-      - "&f"
-      - "&b         • Money: &e+$<money>"
-      - "&b         • Exp: &e+<exp>"
-      - "&f"
-      - "&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+"
+      - '&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+'
+      - '&f'
+      - '&7       You lost. Be better in the next match!       '
+      - '&f'
+      - '&b         • Money: &e+$<money>'
+      - '&b         • Exp: &e+<exp>'
+      - '&f'
+      - '&f+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+'
 
 mr_farm:
   name: "&6&lFarm"
