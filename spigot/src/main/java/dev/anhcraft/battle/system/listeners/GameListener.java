@@ -55,6 +55,11 @@ public class GameListener extends BattleComponent implements Listener {
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
+        p.setHealth(p.getHealth());
+        p.setMaxHealth(p.getMaxHealth());
+        p.setFlying(false);
+        p.setAllowFlight(false);
+        p.setFireTicks(0);
         String mode = event.getGame().getMode().getId();
         if (plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV + "_" + mode) == null) {
             plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV);

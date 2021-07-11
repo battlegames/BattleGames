@@ -61,9 +61,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -187,6 +185,31 @@ public class PlayerListener extends BattleComponent implements Listener {
                 }
                 case ACCEPTED: {
                     BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.accepted");
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void food(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player p = (Player) event.getEntity();
+            LocalGame game = plugin.arenaManager.getGame(p);
+            if (game != null) {
+                event.setCancelled(true);
+                event.setFoodLevel(20);
+            }
+        }
+    }
+
+    @EventHandler
+    public void entityInteract(EntityInteractEvent e) {
+        if (e.getEntity() instanceof Player) {
+            Player p = (Player) e.getEntity();
+            LocalGame game = plugin.arenaManager.getGame(p);
+            if (game != null) {
+                if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
+                    e.setCancelled(true);
                 }
             }
         }
