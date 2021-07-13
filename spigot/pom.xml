@@ -8,7 +8,7 @@
     <parent>
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
-        <version>1.3.2</version>
+        <version>1.3.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -39,7 +39,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${version.hikaricp}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>co.aikar</groupId>
@@ -69,7 +69,7 @@
             <groupId>com.github.anhcraft.config</groupId>
             <artifactId>config.configdoc</artifactId>
             <version>${version.config}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -103,6 +103,12 @@
             <version>${version.swm}</version>
             <systemPath>${basedir}/../lib/slimeworldmanager-plugin-${version.swm}.jar</systemPath>
             <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
