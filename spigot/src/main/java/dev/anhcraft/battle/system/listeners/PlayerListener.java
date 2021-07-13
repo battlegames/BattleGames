@@ -196,8 +196,10 @@ public class PlayerListener extends BattleComponent implements Listener {
             Player p = (Player) event.getEntity();
             LocalGame game = plugin.arenaManager.getGame(p);
             if (game != null) {
-                event.setCancelled(true);
-                event.setFoodLevel(20);
+                if (game.getPhase() == GamePhase.WAITING) {
+                    event.setCancelled(true);
+                    event.setFoodLevel(20);
+                }
             }
         }
     }
@@ -208,9 +210,9 @@ public class PlayerListener extends BattleComponent implements Listener {
             Player p = (Player) e.getEntity();
             LocalGame game = plugin.arenaManager.getGame(p);
             if (game != null) {
-                if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
-                    e.setCancelled(true);
-                }
+                    if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
+                        e.setCancelled(true);
+                    }
             }
         }
     }
@@ -257,6 +259,12 @@ public class PlayerListener extends BattleComponent implements Listener {
                     plugin.arenaManager.join(p, a);
                 }
                 return;
+            }
+        }
+        LocalGame g = plugin.arenaManager.getGame(p);
+        if (g != null) {
+            if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
+                event.setCancelled(true);
             }
         }
         if (event.getAction() != Action.PHYSICAL) {
