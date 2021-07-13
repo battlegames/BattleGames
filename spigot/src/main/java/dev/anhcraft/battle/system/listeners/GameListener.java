@@ -55,11 +55,13 @@ public class GameListener extends BattleComponent implements Listener {
         PlayerInventory i = p.getInventory();
         event.getGamePlayer().setBackupInventory(Arrays.copyOf(i.getContents(), i.getSize()));
         i.clear();
-        p.setHealth(p.getHealth());
-        p.setMaxHealth(p.getMaxHealth());
-        p.setFlying(false);
-        p.setAllowFlight(false);
-        p.setFireTicks(0);
+        event.getGamePlayer().toBukkit().setExp(0F);
+        event.getGamePlayer().toBukkit().setLevel(0);
+        event.getGamePlayer().toBukkit().setHealth(p.getMaxHealth());
+        event.getGamePlayer().toBukkit().setFoodLevel(20);
+        for (PotionEffect potionEffect : event.getGamePlayer().toBukkit().getActivePotionEffects())  {
+            event.getGamePlayer().toBukkit().removePotionEffect(potionEffect.getType());
+        }
         String mode = event.getGame().getMode().getId();
         if (plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV + "_" + mode) == null) {
             plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV);
