@@ -608,13 +608,17 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("battle.reload")
     @Description("Reload the configuration")
     public void reload(CommandSender sender) {
-        Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
-        plugin.getArenaManager().listGames(g -> plugin.getArenaManager().destroy(g));
-        // wait a bit for async tasks (e.g: rollback)
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            plugin.reloadConfigs();
-            plugin.chatManager.send(sender, "reload.done");
-        }, 100);
+        try {
+            Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
+            plugin.getArenaManager().listGames(g -> plugin.getArenaManager().destroy(g));
+            // wait a bit for async tasks (e.g: rollback)
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                plugin.reloadConfigs();
+                plugin.chatManager.send(sender, "reload.done");
+            }, 100);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Subcommand("give medical_kit")
