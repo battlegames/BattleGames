@@ -64,6 +64,7 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
+import dev.anhcraft.battle.update.Updater;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.State;
@@ -262,6 +263,8 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         new CommandInitializer(this);
 
+        onUpdateCheck();
+
         Metrics metrics = new Metrics(this, 6080);
         metrics.addCustomChart(new SimplePie("license_type", () -> "premium"));
 
@@ -272,6 +275,22 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 exit("Failed to hook to Vault");
             }
         }, 20);
+    }
+
+    private void onUpdateCheck() {
+        Updater updater = new Updater(this, 69463);
+        try {
+            if (updater.checkForUpdates()) {
+                getLogger().info("Plugin update found, Please download the latest version!");
+            }
+            else {
+                getLogger().info("No update was found, you are running the latest version!");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadLegacyMaterial() {
