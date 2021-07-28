@@ -246,19 +246,24 @@ public class DMControllerImpl extends GameControllerImpl {
             player.setGameMode(GameMode.SPECTATOR);
             if (!shouldAcceptRespawn(event, game, gp)) return;
             gp.getStats().of(RespawnStat.class).increase(player);
-            AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getRespawnWaitTime() / 20L);
-            String task = "respawn::" + player.getName();
-            trackTask(game, task, plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-                if (player.isOnline()) {
-                    sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
-                    player.playSound(player.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
-                    if (current.getAndDecrement() == 0) {
-                        cancelTask(game, task);
-                        gp.setSpectator(false);
-                        plugin.getServer().getScheduler().runTask(plugin, () -> respw(game, player));
-                    }
-                } else cancelTask(game, task);
-            }, 0, 20).getTaskId());
+            if(game.getArena().getGameOptions().getRespawnWaitTime() < 20) {
+                gp.setSpectator(false);
+                plugin.getServer().getScheduler().runTask(plugin, () -> respw(game, player));
+            } else {
+                AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getRespawnWaitTime() / 20L);
+                String task = "respawn::" + player.getName();
+                trackTask(game, task, plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+                    if (player.isOnline()) {
+                        sendTitle(player, "respawn_title", "respawn_subtitle", new InfoHolder("").inform("current", current.get()).compile());
+                        player.playSound(player.getLocation(), Sound.BLOCK_FENCE_GATE_OPEN, 1f, 0.5f);
+                        if (current.getAndDecrement() == 0) {
+                            cancelTask(game, task);
+                            gp.setSpectator(false);
+                            plugin.getServer().getScheduler().runTask(plugin, () -> respw(game, player));
+                        }
+                    } else cancelTask(game, task);
+                }, 0, 20).getTaskId());
+            }
         }
     }
 

@@ -41,22 +41,25 @@ public class GameOptions {
 
     @Setting
     @Path("countdown_time")
-    @Description("The countdown time")
+    @Description("The countdown time (in ticks)")
     private long countdownTime = 300;
 
     @Setting
     @Path("spawn_protection_time")
-    @Description("Protection time when a player spawns (or respawn)")
+    @Description("Protection time when a player spawns (or respawn) (in ticks)")
     private long spawnProtectionTime = 40;
 
     @Setting
     @Path("item_selection_time")
-    @Description("The time for selecting Battle items")
+    @Description("The time for selecting Battle items (in ticks)")
     private long itemSelectTime = 200;
 
     @Setting
     @Path("respawn_waiting_time")
-    @Description("How long players need to wait before respawn")
+    @Description({
+            "How long players need to wait before respawn (in ticks)",
+            "Set to any number below 20 to disable"
+    })
     private long respawnWaitTime = 200;
 
     @Setting
