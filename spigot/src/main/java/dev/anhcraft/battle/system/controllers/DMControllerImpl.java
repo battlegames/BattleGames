@@ -31,6 +31,7 @@ import dev.anhcraft.battle.api.events.game.WeaponUseEvent;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.inventory.item.NullBattleItem;
+import dev.anhcraft.battle.api.stats.natives.DeathStat;
 import dev.anhcraft.battle.api.stats.natives.KillStat;
 import dev.anhcraft.battle.api.stats.natives.RespawnStat;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
@@ -230,7 +231,7 @@ public class DMControllerImpl extends GameControllerImpl {
     }
 
     public boolean shouldAcceptRespawn(PlayerRespawnEvent event, LocalGame game, GamePlayer gp) {
-        return true;
+        return game.getArena().getMaxDeaths() == -1 || gp.getStats().of(DeathStat.class).get() <= game.getArena().getMaxDeaths();
     }
 
     @Override
@@ -242,8 +243,8 @@ public class DMControllerImpl extends GameControllerImpl {
             if (loc.getWorld() == null) loc.setWorld(player.getWorld());
             event.setRespawnLocation(loc);
             gp.setSpectator(true);
-            if (!shouldAcceptRespawn(event, game, gp)) return;
             player.setGameMode(GameMode.SPECTATOR);
+            if (!shouldAcceptRespawn(event, game, gp)) return;
             gp.getStats().of(RespawnStat.class).increase(player);
             AtomicLong current = new AtomicLong(game.getArena().getGameOptions().getRespawnWaitTime() / 20L);
             String task = "respawn::" + player.getName();

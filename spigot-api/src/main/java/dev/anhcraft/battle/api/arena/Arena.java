@@ -199,6 +199,17 @@ public class Arena implements Informative {
     })
     private List<PositionPair> emptyRegions;
 
+    @Setting
+    @Path("max_deaths")
+    @Description({
+            "Maximum deaths allowed per player",
+            "For example, to make one-life only, set this to 0",
+            "Or to allow one chance of resurrection, set this to 1",
+            "This option does not work with BedWars",
+            "To disable, set to -1 (default)"
+    })
+    private int maxDeaths = -1;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -324,6 +335,10 @@ public class Arena implements Informative {
     @Nullable
     public List<PositionPair> getEmptyRegions() {
         return emptyRegions;
+    }
+
+    public int getMaxDeaths() {
+        return maxDeaths;
     }
 
     @Override
