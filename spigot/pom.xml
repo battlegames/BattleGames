@@ -57,12 +57,16 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>nbt-data-api</artifactId>
             <version>${version.nbtapi}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.tr7zw</groupId>
-            <artifactId>nbt-injector</artifactId>
-            <version>${version.nbtapi}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.tr7zw</groupId>
+                    <artifactId>nbt-injector</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.tr7zw</groupId>
+                    <artifactId>functional-annotations</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>compile</scope>
         </dependency>
         <dependency>

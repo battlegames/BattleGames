@@ -30,10 +30,10 @@
     <properties>
         <fileName>Battle</fileName>
 
-        <version.spigot>1.17-R0.1-SNAPSHOT</version.spigot>
+        <version.spigot>1.17.1-R0.1-SNAPSHOT</version.spigot>
         <version.jvmkit>1.1.5</version.jvmkit>
         <version.exp4j>0.4.8</version.exp4j>
-        <version.papi>2.10.9</version.papi>
+        <version.papi>2.10.10</version.papi>
         <version.paperlib>1.0.6</version.paperlib>
         <version.vault>1.7</version.vault>
         <version.inst>1.0.3</version.inst>
