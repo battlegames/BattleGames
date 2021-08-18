@@ -177,7 +177,6 @@ public class GamePlayerDeathEvent extends GameEvent {
             return totalDamage;
         }
 
-        @Deprecated
         public void setTotalDamage(double totalDamage) {
             checkAccess();
             this.totalDamage = totalDamage;
@@ -187,7 +186,6 @@ public class GamePlayerDeathEvent extends GameEvent {
             return avgDamage;
         }
 
-        @Deprecated
         public void setAvgDamage(double avgDamage) {
             checkAccess();
             this.avgDamage = avgDamage;
@@ -197,7 +195,6 @@ public class GamePlayerDeathEvent extends GameEvent {
             return isHeadshooter;
         }
 
-        @Deprecated
         public void setHeadshooter(boolean headshooter) {
             checkAccess();
             isHeadshooter = headshooter;
@@ -207,7 +204,6 @@ public class GamePlayerDeathEvent extends GameEvent {
             return isKiller;
         }
 
-        @Deprecated
         public void setKiller(boolean killer) {
             checkAccess();
             isKiller = killer;
@@ -217,13 +213,11 @@ public class GamePlayerDeathEvent extends GameEvent {
             return isAssistant;
         }
 
-        @Deprecated
         public void setAssistant(boolean assistant) {
             checkAccess();
             isAssistant = assistant;
         }
 
-        @Deprecated
         public void readOnly() {
             checkAccess();
             readOnly = true;

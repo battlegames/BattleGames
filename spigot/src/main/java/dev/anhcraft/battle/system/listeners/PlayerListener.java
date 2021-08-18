@@ -210,9 +210,9 @@ public class PlayerListener extends BattleComponent implements Listener {
             Player p = (Player) e.getEntity();
             LocalGame game = plugin.arenaManager.getGame(p);
             if (game != null) {
-                    if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
-                        e.setCancelled(true);
-                    }
+                if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
+                    e.setCancelled(true);
+                }
             }
         }
     }
