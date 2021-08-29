@@ -75,11 +75,16 @@ public class MaterialUtil {
 
     @Nullable
     public static LegacyMaterial antiquate(@Nullable String material) {
+        return antiquate(material, 0);
+    }
+
+    @Nullable
+    public static LegacyMaterial antiquate(@Nullable String material, int data) {
         if(material == null || material.isEmpty()) return null;
         material = material.toUpperCase();
         Material mt = (Material) EnumUtil.findEnum(Material.class, material);
-        if (mt != null) {
-            return new LegacyMaterial(mt, 0);
+        if (mt != null && mt.name().startsWith("LEGACY_")) {
+            return new LegacyMaterial(mt, data);
         } else {
             PresentPair<String, Integer> pair = MODERN.get(material);
             if(pair != null) {

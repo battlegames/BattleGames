@@ -205,19 +205,6 @@ public class PlayerListener extends BattleComponent implements Listener {
     }
 
     @EventHandler
-    public void entityInteract(EntityInteractEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            LocalGame game = plugin.arenaManager.getGame(p);
-            if (game != null) {
-                if (e.getBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
-                    e.setCancelled(true);
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void swap(PlayerSwapHandItemsEvent event) {
         plugin.guiManager.callClickEvent(event.getPlayer(), event.getPlayer().getInventory().getHeldItemSlot(), false, event, "SWAP_ITEM");
         LocalGame game = plugin.arenaManager.getGame(event.getPlayer());
@@ -262,11 +249,6 @@ public class PlayerListener extends BattleComponent implements Listener {
             }
         }
         LocalGame g = plugin.arenaManager.getGame(p);
-        if (g != null) {
-            if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == XMaterial.FARMLAND.parseMaterial()) {
-                event.setCancelled(true);
-            }
-        }
         if (event.getAction() != Action.PHYSICAL) {
             WorldSettings ws = plugin.getWorldSettings(event.getPlayer().getWorld().getName());
             if (ws != null && ws.isInteractDisabled()) {
