@@ -217,6 +217,10 @@ public class Arena implements Informative {
     })
     private boolean killStatsByMonsters;
 
+    @Setting
+    @Path("disable_death_message")
+    private boolean disableDeathMessage;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -350,6 +354,10 @@ public class Arena implements Informative {
 
     public boolean isKillStatsByMonsters() {
         return killStatsByMonsters;
+    }
+
+    public boolean isDeathMessageDisabled() {
+        return disableDeathMessage;
     }
 
     @Override

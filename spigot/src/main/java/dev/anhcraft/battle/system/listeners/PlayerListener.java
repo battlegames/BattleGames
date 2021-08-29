@@ -592,35 +592,39 @@ public class PlayerListener extends BattleComponent implements Listener {
             totalNatureDamage = event.getTotalNatureDamage();
             totalPlayerDamage = event.getTotalPlayerDamage();
 
-            if (totalPlayerDamage == 0) {
-                InfoReplacer ir = new InfoHolder("")
-                        .inform("player", e.getEntity().getName())
-                        .compile();
-                e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocalizedMessage("game.death_message.by_nature"))));
+            if(game.getArena().isDeathMessageDisabled()) {
+                e.setDeathMessage(null);
             } else {
-                boolean over = damagerMap.keySet().size() > 3;
-                String attackerNames = damagerMap.keySet()
-                        .stream()
-                        .limit(3)
-                        .map(Player::getName)
-                        .collect(Collectors.joining(", "));
-                double playerPtg = totalPlayerDamage * 100 / (totalPlayerDamage + totalNatureDamage);
-                double naturePtg = 100 - playerPtg;
-                InfoReplacer ir = new InfoHolder("")
-                        .inform("attackers", attackerNames)
-                        .inform("nature_ptg", naturePtg)
-                        .inform("player_ptg", playerPtg)
-                        .inform("player", e.getEntity().getName())
-                        .compile();
-                String x;
-                if (totalNatureDamage == 0) {
-                    if (over) x = "game.death_message.by_players.over";
-                    else x = "game.death_message.by_players.enough";
+                if (totalPlayerDamage == 0) {
+                    InfoReplacer ir = new InfoHolder("")
+                            .inform("player", e.getEntity().getName())
+                            .compile();
+                    e.setDeathMessage(ir.replace(ChatUtil.formatColorCodes(plugin.getLocalizedMessage("game.death_message.by_nature"))));
                 } else {
-                    if (over) x = "game.death_message.with_players.over";
-                    else x = "game.death_message.with_players.enough";
+                    boolean over = damagerMap.keySet().size() > 3;
+                    String attackerNames = damagerMap.keySet()
+                            .stream()
+                            .limit(3)
+                            .map(Player::getName)
+                            .collect(Collectors.joining(", "));
+                    double playerPtg = totalPlayerDamage * 100 / (totalPlayerDamage + totalNatureDamage);
+                    double naturePtg = 100 - playerPtg;
+                    InfoReplacer ir = new InfoHolder("")
+                            .inform("attackers", attackerNames)
+                            .inform("nature_ptg", naturePtg)
+                            .inform("player_ptg", playerPtg)
+                            .inform("player", e.getEntity().getName())
+                            .compile();
+                    String x;
+                    if (totalNatureDamage == 0) {
+                        if (over) x = "game.death_message.by_players.over";
+                        else x = "game.death_message.by_players.enough";
+                    } else {
+                        if (over) x = "game.death_message.with_players.over";
+                        else x = "game.death_message.with_players.enough";
+                    }
+                    e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(Objects.requireNonNull(plugin.getLocalizedMessage(x)))));
                 }
-                e.setDeathMessage(ChatUtil.formatColorCodes(ir.replace(Objects.requireNonNull(plugin.getLocalizedMessage(x)))));
             }
 
             String hst = plugin.getLocalizedMessage("medal.headshot_title");
