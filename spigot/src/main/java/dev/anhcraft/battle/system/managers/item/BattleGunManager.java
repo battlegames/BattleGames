@@ -47,6 +47,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class BattleGunManager extends BattleComponent {
@@ -222,7 +223,7 @@ public class BattleGunManager extends BattleComponent {
                 Location loc = start.clone().add(dir.clone().multiply(x).add(sprayVec)).add(0, y, 0);
                 if (loc.getY() > maxHeight || loc.getY() < 0) break;
 
-                if (b.getParticleEffect() != null)
+                if (b.getParticleEffect() != null && ThreadLocalRandom.current().nextDouble() <= plugin.generalConf.getBulletParticleChance())
                     b.getParticleEffect().spawn(loc);
 
                 Block block = loc.getBlock();

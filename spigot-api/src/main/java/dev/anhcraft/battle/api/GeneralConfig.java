@@ -266,6 +266,14 @@ public class GeneralConfig {
     private Map<EntityType, Integer> entityHardness;
 
     @Setting
+    @Path("misc.bullet_particle_chance")
+    @Description({
+            "The chance for bullet to be displayed as particles",
+            "Reduces the chance allow for performance improvement"
+    })
+    private double bulletParticleChance;
+
+    @Setting
     @Path("bungeecord.enabled")
     @Description("Should we enable the Bungeecord support?")
     private boolean bungeeEnabled;
@@ -560,6 +568,10 @@ public class GeneralConfig {
 
     public int getEntityHardness(@NotNull EntityType entityType) {
         return entityHardness.getOrDefault(entityType, 0);
+    }
+
+    public double getBulletParticleChance() {
+        return bulletParticleChance;
     }
 
     public boolean shouldHealOnGameStart() {
