@@ -221,6 +221,10 @@ public class Arena implements Informative {
     @Path("disable_death_message")
     private boolean disableDeathMessage;
 
+    @Setting
+    @Path("message_on_join")
+    private List<String> messageOnJoin;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -358,6 +362,11 @@ public class Arena implements Informative {
 
     public boolean isDeathMessageDisabled() {
         return disableDeathMessage;
+    }
+
+    @Nullable
+    public List<String> getMessageOnJoin() {
+        return messageOnJoin;
     }
 
     @Override
