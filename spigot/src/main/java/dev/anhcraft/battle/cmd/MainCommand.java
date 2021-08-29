@@ -604,6 +604,21 @@ public class MainCommand extends BaseCommand {
         ResourcePack.send(target);
     }
 
+    @Subcommand("soft-reload")
+    @CommandPermission("battle.reload")
+    @Description("Reload the configuration without destroying playing arenas")
+    public void softReload(CommandSender sender) {
+        try {
+            Objects.requireNonNull(plugin.getLocalizedMessages("reload.warn")).forEach(sender::sendMessage);
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                plugin.reloadConfigs();
+                plugin.chatManager.send(sender, "reload.done");
+            }, 100);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @Subcommand("reload")
     @CommandPermission("battle.reload")
     @Description("Reload the configuration")
