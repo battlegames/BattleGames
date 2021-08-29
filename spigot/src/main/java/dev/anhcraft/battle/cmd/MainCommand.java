@@ -638,8 +638,7 @@ public class MainCommand extends BaseCommand {
 
     @Subcommand("give medical_kit")
     @CommandPermission("battle.give.medical_kit")
-    public void giveMedicalKit(Player player, int amount, @Optional OnlinePlayer target) {
-        Player t = (target == null) ? player : target.getPlayer();
+    public void giveMedicalKit(CommandSender sender, int amount, @Optional OnlinePlayer target) {
         PreparedItem pi = new PreparedItem();
         pi.material(Material.STONE_SWORD);
         pi.name(ChatUtil.formatColorCodes("&f&lMedical Kit &c&l(❤)"));
@@ -649,14 +648,13 @@ public class MainCommand extends BaseCommand {
         pi.unbreakable(true);
         ItemStack itemStack = pi.build();
         for (int i = 0; i < amount; i++) {
-            t.getInventory().addItem(itemStack.clone());
+            target.getPlayer().getInventory().addItem(itemStack.clone());
         }
     }
 
     @Subcommand("give adrenaline_shot")
     @CommandPermission("battle.give.adrenaline_shot")
-    public void giveAdrenalineShot(Player player, int amount, @Optional OnlinePlayer target) {
-        Player t = (target == null) ? player : target.getPlayer();
+    public void giveAdrenalineShot(CommandSender sender, int amount, @Optional OnlinePlayer target) {
         PreparedItem pi = new PreparedItem();
         pi.material(Material.STONE_SWORD);
         pi.name(ChatUtil.formatColorCodes("&4&lAdrenaline Shot"));
@@ -666,7 +664,7 @@ public class MainCommand extends BaseCommand {
         pi.unbreakable(true);
         ItemStack itemStack = pi.build();
         for (int i = 0; i < amount; i++) {
-            t.getInventory().addItem(itemStack.clone());
+            target.getPlayer().getInventory().addItem(itemStack.clone());
         }
     }
 }
