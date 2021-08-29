@@ -210,6 +210,13 @@ public class Arena implements Informative {
     })
     private int maxDeaths = -1;
 
+    @Setting
+    @Path("kill_stats_by_monsters")
+    @Description({
+            "Kill stats will be counted for monsters"
+    })
+    private boolean killStatsByMonsters;
+
     public Arena(@NotNull String id) {
         Validate.notNull(id, "Id must be non-null");
         this.id = id;
@@ -339,6 +346,10 @@ public class Arena implements Informative {
 
     public int getMaxDeaths() {
         return maxDeaths;
+    }
+
+    public boolean isKillStatsByMonsters() {
+        return killStatsByMonsters;
     }
 
     @Override

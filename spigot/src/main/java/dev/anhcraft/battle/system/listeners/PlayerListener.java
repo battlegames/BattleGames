@@ -671,6 +671,21 @@ public class PlayerListener extends BattleComponent implements Listener {
         }
     }
 
+    @EventHandler
+    public void deathEntity(EntityDeathEvent e) {
+        if(e.getEntity() instanceof Player) return; // players are handled above
+        if (plugin.generalConf.shouldAntiDeathDrops()) {
+            e.getDrops().clear();
+            e.setDroppedExp(0);
+        }
+        Player killer = e.getEntity().getKiller();
+        if (killer == null) return;
+        LocalGame game = plugin.arenaManager.getGame(killer);
+        if (game != null && game.getArena().isKillStatsByMonsters()) {
+            Objects.requireNonNull(game.getPlayer(killer)).getStats().of(KillStat.class).increase(killer);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void chat(AsyncPlayerChatEvent event) {
         if (plugin.chatManager.chat(event.getPlayer(), event.getMessage()))
