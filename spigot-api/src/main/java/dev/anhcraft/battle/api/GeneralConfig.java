@@ -387,6 +387,15 @@ public class GeneralConfig {
     @Description("Sound to be played when using the adrenaline shot")
     private BattleSound adrenalineShotUseSound;
 
+    @Setting
+    @Path("real_time_game_stats_saving")
+    @Description({
+            "The local stats (in-game) will be merged to the player stats",
+            "when they quits the game (without knowing win or lose)",
+            "Default is false"
+    })
+    private boolean realTimeGameStatSaving;
+
     @NotNull
     public String getLocaleFile() {
         return localeFile;
@@ -622,6 +631,10 @@ public class GeneralConfig {
     @Nullable
     public BattleSound getAdrenalineShotUseSound() {
         return adrenalineShotUseSound;
+    }
+
+    public boolean isRealTimeGameStatSaving() {
+        return realTimeGameStatSaving;
     }
 
     private void loadMaterialHardness(ConfigSection cs) throws Exception {

@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import dev.anhcraft.battle.api.inventory.item.BattleItem;
 import dev.anhcraft.battle.api.inventory.item.ItemType;
 import dev.anhcraft.battle.api.stats.StatisticMap;
+import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.CustomDataContainer;
 import org.apache.commons.lang.Validate;
@@ -122,5 +123,16 @@ public class GamePlayer extends CustomDataContainer implements Resettable {
         backupInventory = null;
         hasFirstKill = false;
         igBalance.set(0);
+    }
+
+    public void mergeBasicStats(StatisticMap dest) {
+        Player p = toBukkit();
+        dest.of(KillStat.class).increase(p, getStats().of(KillStat.class).get());
+        dest.of(HeadshotStat.class).increase(p, getStats().of(HeadshotStat.class).get());
+        dest.of(AssistStat.class).increase(p, getStats().of(AssistStat.class).get());
+        dest.of(DeathStat.class).increase(p, getStats().of(DeathStat.class).get());
+        dest.of(RespawnStat.class).increase(p, getStats().of(RespawnStat.class).get());
+        dest.of(StolenMobStat.class).increase(p, getStats().of(StolenMobStat.class).get());
+        if (hasFirstKill()) dest.of(FirstKillStat.class).increase(p);
     }
 }

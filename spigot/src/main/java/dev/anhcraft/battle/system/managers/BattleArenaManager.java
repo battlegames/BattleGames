@@ -48,10 +48,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -205,6 +202,10 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
             GamePlayer gp = game.getPlayer(player);
             if (gp == null) return false;
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(game, gp));
+            if(plugin.generalConf.isRealTimeGameStatSaving()) {
+                StatisticMap sm = Objects.requireNonNull(plugin.getPlayerData(player)).getStats();
+                gp.mergeBasicStats(sm);
+            }
             game.getPlayers().remove(player);
             game.getMode().getController(c -> {
                 if (c instanceof GameControllerImpl) {
@@ -300,13 +301,7 @@ public class BattleArenaManager extends BattleComponent implements ArenaManager 
                 pd.getStats().of(ExpStat.class).increase(p, exp);
 
                 StatisticMap sm = pd.getStats();
-                sm.of(KillStat.class).increase(p, gp.getStats().of(KillStat.class).get());
-                sm.of(HeadshotStat.class).increase(p, gp.getStats().of(HeadshotStat.class).get());
-                sm.of(AssistStat.class).increase(p, gp.getStats().of(AssistStat.class).get());
-                sm.of(DeathStat.class).increase(p, gp.getStats().of(DeathStat.class).get());
-                sm.of(RespawnStat.class).increase(p, gp.getStats().of(RespawnStat.class).get());
-                sm.of(StolenMobStat.class).increase(p, gp.getStats().of(StolenMobStat.class).get());
-                if (gp.hasFirstKill()) sm.of(FirstKillStat.class).increase(p);
+                gp.mergeBasicStats(sm);
                 InfoReplacer infoReplacer = new InfoHolder("").inform("money", money).inform("exp", exp).compile();
                 if (gp.isWinner()) {
                     if (arena.getWonReport() != null) {
