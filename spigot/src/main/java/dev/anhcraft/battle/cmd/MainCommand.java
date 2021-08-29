@@ -623,8 +623,8 @@ public class MainCommand extends BaseCommand {
 
     @Subcommand("give medical_kit")
     @CommandPermission("battle.give.medical_kit")
-    public void giveMedicalKit(Player player, int amount, @Optional Player target) {
-        Player t = (target == null) ? player : target;
+    public void giveMedicalKit(Player player, int amount, @Optional OnlinePlayer target) {
+        Player t = (target == null) ? player : target.getPlayer();
         PreparedItem pi = new PreparedItem();
         pi.material(Material.STONE_SWORD);
         pi.name(ChatUtil.formatColorCodes("&f&lMedical Kit &c&l(❤)"));
@@ -640,8 +640,8 @@ public class MainCommand extends BaseCommand {
 
     @Subcommand("give adrenaline_shot")
     @CommandPermission("battle.give.adrenaline_shot")
-    public void giveAdrenalineShot(Player player, int amount, @Optional Player target) {
-        Player t = (target == null) ? player : target;
+    public void giveAdrenalineShot(Player player, int amount, @Optional OnlinePlayer target) {
+        Player t = (target == null) ? player : target.getPlayer();
         PreparedItem pi = new PreparedItem();
         pi.material(Material.STONE_SWORD);
         pi.name(ChatUtil.formatColorCodes("&4&lAdrenaline Shot"));
