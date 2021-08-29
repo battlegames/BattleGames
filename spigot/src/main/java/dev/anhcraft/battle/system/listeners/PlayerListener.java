@@ -451,12 +451,15 @@ public class PlayerListener extends BattleComponent implements Listener {
         GamePlayerDamageEvent event = new GamePlayerDamageEvent(g, report, gp1, gp2, battleType);
         Bukkit.getPluginManager().callEvent(event);
         e.setCancelled(event.isCancelled());
-        if (!event.isCancelled() && p2 != null) {
-            g.getDamageReports().put(p2, report);
-            if (plugin.generalConf.isBloodEffectEnabled() && NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
+        if (!event.isCancelled()) {
+            if(p2 != null) {
+                g.getDamageReports().put(p2, report);
+            }
+            if (e.getEntity() instanceof LivingEntity &&
+                    plugin.generalConf.isBloodEffectEnabled() && NMSVersion.current().compare(NMSVersion.v1_13_R1) >= 0) {
                 double ratio = plugin.generalConf.getBloodEffectParticleRatio();
-                int amount = (int) Math.ceil(ratio * Math.min(report.getDamage(), p2.getHealth()));
-                p2.getWorld().spawnParticle(Particle.BLOCK_CRACK, p2.getLocation(), amount, Bukkit.createBlockData(Material.REDSTONE_BLOCK));
+                int amount = (int) Math.ceil(ratio * Math.min(report.getDamage(), ((LivingEntity) e.getEntity()).getHealth()));
+                e.getEntity().getWorld().spawnParticle(Particle.BLOCK_CRACK, e.getEntity().getLocation(), amount, Bukkit.createBlockData(Material.REDSTONE_BLOCK));
             }
         }
     }
