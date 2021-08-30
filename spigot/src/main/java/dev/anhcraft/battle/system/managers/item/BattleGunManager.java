@@ -251,9 +251,11 @@ public class BattleGunManager extends BattleComponent {
 
                     ve.damage(event.getReport().getDamage(), player);
                     if (b.getFireTicks() > 0) ve.setFireTicks(b.getFireTicks());
-                    Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
-                            .normalize().multiply(b.getKnockback()));
-                    ve.setVelocity(vec);
+                    if(Math.abs(b.getKnockback()) > 0.01) {
+                        Vector vec = ve.getVelocity().add(ve.getLocation().toVector().subtract(originVec)
+                                .normalize().multiply(b.getKnockback()));
+                        ve.setVelocity(vec);
+                    }
                     power -= plugin.generalConf.getEntityHardness(ve.getType());
                     EntityEquipment ee = ve.getEquipment();
                     if (ee != null) {

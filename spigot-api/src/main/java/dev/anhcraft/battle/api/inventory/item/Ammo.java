@@ -63,7 +63,10 @@ public class Ammo extends BattleItem<AmmoModel> {
         private double damage;
 
         @Setting
-        @Description("The knockback power to push the target backward")
+        @Description({
+                "The knockback power to push the target backward",
+                "Negative values may create 'pull' effect"
+        })
         private double knockback;
 
         @Setting
