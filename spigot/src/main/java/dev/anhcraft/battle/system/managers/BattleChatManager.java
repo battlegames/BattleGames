@@ -30,6 +30,7 @@ import dev.anhcraft.battle.utils.info.InfoReplacer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
                 for (Player p : g.getPlayers().keySet()) {
                     p.sendMessage(q);
                 }
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + String.format("[#%s] ", g.getArena().getId()) + ChatColor.RESET + q);
             } else {
                 if (!g.getMode().getPlayingChat().isEnabled()) return false;
                 String q = PlaceholderUtil.formatPAPI(player, g.getArena()
@@ -63,6 +65,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
                 for (Player p : g.getPlayers().keySet()) {
                     p.sendMessage(q);
                 }
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + String.format("[#%s] ", g.getArena().getId()) + ChatColor.RESET + q);
             }
         } else {
             BattleChat bc = plugin.generalConf.getDefaultChat();
@@ -74,6 +77,7 @@ public class BattleChatManager extends BattleComponent implements ChatManager {
                     p.sendMessage(q);
                 }
             }
+            Bukkit.getConsoleSender().sendMessage(q);
         }
         return true;
     }
