@@ -167,6 +167,15 @@ public class GeneralConfig {
     private String resourcePackCustomUrl;
 
     @Setting
+    @Path("misc.resource_pack.optional")
+    @Description({
+            "Is installing resource-pack is optional?",
+            "If <b>true</b>, the player will be kicked when failed to install resource-pack",
+            "If <b>false</b>, in that case, he will still be allowed to play on the server"
+    })
+    private boolean resourcePackOptional;
+
+    @Setting
     @Path("misc.heal_on_game_start")
     @Description("Enable this option to heal all players when game started")
     private boolean healOnGameStart = true;
@@ -600,6 +609,10 @@ public class GeneralConfig {
 
     public String getResourcePackCustomUrl() {
         return resourcePackCustomUrl;
+    }
+
+    public boolean isResourcePackOptional() {
+        return resourcePackOptional;
     }
 
     @Nullable
