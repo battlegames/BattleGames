@@ -29,9 +29,11 @@ import dev.anhcraft.battle.BattlePlugin;
 import dev.anhcraft.battle.api.arena.game.LocalGame;
 import dev.anhcraft.battle.api.arena.game.controllers.BedWarController;
 import dev.anhcraft.battle.api.arena.game.controllers.GameController;
+import dev.anhcraft.battle.api.arena.game.controllers.MobRescueController;
 import dev.anhcraft.battle.api.arena.game.controllers.TeamDeathmatchController;
 import dev.anhcraft.battle.api.arena.team.ABTeam;
 import dev.anhcraft.battle.api.arena.team.BWTeam;
+import dev.anhcraft.battle.api.arena.team.MRTeam;
 import dev.anhcraft.battle.api.arena.team.TeamManager;
 import dev.anhcraft.battle.utils.PlaceholderUtil;
 import org.bukkit.entity.Player;
@@ -86,6 +88,22 @@ public class RadioCommand extends BaseCommand {
             }
             String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.generalConf.getRadioMessageFormat())).replace("<message>", String.join(" ", msgs));
             List<Player> players = tm.getPlayers(abt);
+            for (Player p : players) {
+                p.sendMessage(q);
+            }
+        } else if (mode instanceof MobRescueController) {
+            TeamManager<MRTeam> tm = ((MobRescueController) mode).getTeamManager(game);
+            if (tm == null) {
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
+                return;
+            }
+            MRTeam mrt = tm.getTeam(player);
+            if (mrt == null) {
+                plugin.chatManager.sendPlayer(player, "radio.no_team");
+                return;
+            }
+            String q = Objects.requireNonNull(PlaceholderUtil.formatPAPI(player, plugin.generalConf.getRadioMessageFormat())).replace("<message>", String.join(" ", msgs));
+            List<Player> players = tm.getPlayers(mrt);
             for (Player p : players) {
                 p.sendMessage(q);
             }
