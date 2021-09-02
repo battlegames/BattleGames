@@ -47,6 +47,7 @@ public class MobRescueMatch {
         int totalMobs = 0;
         for (Map.Entry<EntityType, MobRescueObjective> e : options.getObjectives().entrySet()) {
             int v = RandomUtil.randomInt(e.getValue().getMinAmount(), e.getValue().getMaxAmount());
+            if(v == 0) continue;
             mobCount.put(e.getKey(), v);
             totalMobs += v;
         }
