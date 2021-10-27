@@ -36,6 +36,7 @@ public class GunConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        GUN_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             GunModel g = new GunModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

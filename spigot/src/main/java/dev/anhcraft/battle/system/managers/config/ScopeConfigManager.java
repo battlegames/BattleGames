@@ -36,6 +36,7 @@ public class ScopeConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        SCOPE_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             ScopeModel sm = new ScopeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

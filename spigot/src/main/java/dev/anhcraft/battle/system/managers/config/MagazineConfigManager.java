@@ -36,6 +36,7 @@ public class MagazineConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        MAGAZINE_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             MagazineModel m = new MagazineModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

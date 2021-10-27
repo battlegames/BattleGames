@@ -42,7 +42,8 @@ public class BattleItemManager extends BattleComponent implements ItemManager {
 
     public BattleItemManager(BattlePlugin plugin) {
         super(plugin);
-
+        ITEMS.clear();
+        MODELS.clear();
         PreparedItem empty = new PreparedItem();
         for (ItemType type : ItemType.values()) {
             ITEMS.put(type, empty);

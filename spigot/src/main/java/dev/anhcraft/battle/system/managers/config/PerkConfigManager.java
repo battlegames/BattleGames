@@ -36,6 +36,7 @@ public class PerkConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        PERK_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             Perk perk = new Perk(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

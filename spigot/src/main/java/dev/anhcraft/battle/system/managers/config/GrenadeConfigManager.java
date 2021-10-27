@@ -36,6 +36,7 @@ public class GrenadeConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
+        GRENADE_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             GrenadeModel g = new GrenadeModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
