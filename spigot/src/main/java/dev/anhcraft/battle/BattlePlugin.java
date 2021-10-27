@@ -64,7 +64,6 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
-import dev.anhcraft.battle.update.Updater;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.State;
