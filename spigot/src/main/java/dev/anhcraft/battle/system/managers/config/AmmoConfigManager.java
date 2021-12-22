@@ -36,7 +36,6 @@ public class AmmoConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        AMMO_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             AmmoModel a = new AmmoModel(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

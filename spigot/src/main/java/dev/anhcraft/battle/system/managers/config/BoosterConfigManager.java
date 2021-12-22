@@ -36,7 +36,6 @@ public class BoosterConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        BOOSTER_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             Booster booster = new Booster(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);

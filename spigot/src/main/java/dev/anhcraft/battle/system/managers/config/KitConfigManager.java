@@ -36,7 +36,6 @@ public class KitConfigManager extends ConfigManager {
 
     @Override
     public void onLoad() {
-        KIT_MAP.clear();
         getSettings().getKeys(false).forEach(s -> {
             Kit kit = new Kit(s);
             ConfigurationSection cs = getSettings().getConfigurationSection(s);
