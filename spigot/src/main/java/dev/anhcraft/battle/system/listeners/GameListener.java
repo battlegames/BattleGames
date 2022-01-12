@@ -66,6 +66,11 @@ public class GameListener extends BattleComponent implements Listener {
         if (plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV + "_" + mode) == null) {
             plugin.guiManager.setBottomGui(p, NativeGui.GAME_PLAYER_INV);
         }
+        if(event.getGame().getArena().getMessageOnJoin() != null){
+            for (String s : event.getGame().getArena().getMessageOnJoin()) {
+                p.sendMessage(s);
+            }
+        }
     }
 
     @EventHandler

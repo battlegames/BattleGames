@@ -161,22 +161,26 @@ public class PlayerListener extends BattleComponent implements Listener {
             switch (event.getStatus()) {
                 case DECLINED: {
                     BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.declined");
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.kickPlayer("Resource pack declined");
-                        }
-                    }.runTaskLater(plugin, 60);
+                    if(!plugin.generalConf.isResourcePackOptional()) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.kickPlayer("Resource pack declined");
+                            }
+                        }.runTaskLater(plugin, 60);
+                    }
                     break;
                 }
                 case FAILED_DOWNLOAD: {
                     BattleApi.getInstance().getChatManager().sendPlayer(player, "resource_pack.failed");
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.kickPlayer("Resource pack installation failed");
-                        }
-                    }.runTaskLater(plugin, 60);
+                    if(!plugin.generalConf.isResourcePackOptional()) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.kickPlayer("Resource pack installation failed");
+                            }
+                        }.runTaskLater(plugin, 60);
+                    }
                     break;
                 }
                 case SUCCESSFULLY_LOADED: {

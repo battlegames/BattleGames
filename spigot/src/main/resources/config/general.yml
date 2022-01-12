@@ -52,6 +52,8 @@ misc:
   resource_pack:
     enabled: true
     custom_url: ""
+    optional: false
+  bullet_particle_chance: 0.5
   heal_on_game_start: true
   heal_on_game_end: true
   anti_death_drops: true

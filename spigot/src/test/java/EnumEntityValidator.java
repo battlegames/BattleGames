@@ -32,7 +32,7 @@ public class EnumEntityValidator {
     public void a() {
         try {
             //String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.12/assets/minecraft/lang/en_us.lang");
-            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.17/assets/minecraft/lang/en_us.json");
+            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.18/assets/minecraft/lang/en_us.json");
             /*Properties p = new Properties();
             p.load(new StringReader(str));
             JsonObject jo = new JsonObject();

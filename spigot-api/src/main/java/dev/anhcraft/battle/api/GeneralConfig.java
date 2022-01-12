@@ -167,6 +167,15 @@ public class GeneralConfig {
     private String resourcePackCustomUrl;
 
     @Setting
+    @Path("misc.resource_pack.optional")
+    @Description({
+            "Is installing resource-pack is optional?",
+            "If <b>true</b>, the player will be kicked when failed to install resource-pack",
+            "If <b>false</b>, in that case, he will still be allowed to play on the server"
+    })
+    private boolean resourcePackOptional;
+
+    @Setting
     @Path("misc.heal_on_game_start")
     @Description("Enable this option to heal all players when game started")
     private boolean healOnGameStart = true;
@@ -264,6 +273,14 @@ public class GeneralConfig {
             "    value: 5"
     })
     private Map<EntityType, Integer> entityHardness;
+
+    @Setting
+    @Path("misc.bullet_particle_chance")
+    @Description({
+            "The chance for bullet to be displayed as particles",
+            "Reduces the chance allow for performance improvement"
+    })
+    private double bulletParticleChance;
 
     @Setting
     @Path("bungeecord.enabled")
@@ -562,6 +579,10 @@ public class GeneralConfig {
         return entityHardness.getOrDefault(entityType, 0);
     }
 
+    public double getBulletParticleChance() {
+        return bulletParticleChance;
+    }
+
     public boolean shouldHealOnGameStart() {
         return healOnGameStart;
     }
@@ -588,6 +609,10 @@ public class GeneralConfig {
 
     public String getResourcePackCustomUrl() {
         return resourcePackCustomUrl;
+    }
+
+    public boolean isResourcePackOptional() {
+        return resourcePackOptional;
     }
 
     @Nullable
