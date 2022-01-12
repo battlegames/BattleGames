@@ -142,6 +142,7 @@ public enum EnumEntity {
     ZOMBIFIED_PIGLIN("entity.minecraft.zombified_piglin", null),
     HOGLIN("entity.minecraft.hoglin", null),
     PIGLIN("entity.minecraft.piglin", null),
+    PIGLIN_BRUTE("entity.minecraft.piglin_brute", null),
     STRIDER("entity.minecraft.strider", null),
     ZOGLIN("entity.minecraft.zoglin", null);
 
