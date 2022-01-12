@@ -47,12 +47,8 @@ public class PapiExpansion extends PlaceholderExpansion {
         for (Icon icon : Icon.values())
             handlers.put("icon_" + icon.name().toLowerCase(), (player, pd, game, gp) -> icon.getChar());
 
-        handlers.put("exp", (player, pd, game, gp) -> {
-            return pd == null ? null : Long.toString(pd.getStats().of(ExpStat.class).get());
-        });
-        handlers.put("level", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(plugin.calculateLevel(pd.getStats().of(ExpStat.class).get()));
-        });
+        handlers.put("exp", (player, pd, game, gp) -> pd == null ? null : Long.toString(pd.getStats().of(ExpStat.class).get()));
+        handlers.put("level", (player, pd, game, gp) -> pd == null ? null : Integer.toString(plugin.calculateLevel(pd.getStats().of(ExpStat.class).get())));
         handlers.put("level_progress", (player, pd, game, gp) -> {
             if (pd != null) {
                 long midExp = pd.getStats().of(ExpStat.class).get();
@@ -64,94 +60,38 @@ public class PapiExpansion extends PlaceholderExpansion {
                 return MathUtil.formatRound(100d / delta1 * delta2);
             } else return null;
         });
-        handlers.put("stats_win_matches", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(WinStat.class).get());
-        });
-        handlers.put("stats_lose_matches", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(LoseStat.class).get());
-        });
-        handlers.put("stats_total_matches", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(
-                    pd.getStats().of(WinStat.class).get() +
-                            pd.getStats().of(LoseStat.class).get()
-            );
-        });
-        handlers.put("stats_headshots", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(HeadshotStat.class).get());
-        });
-        handlers.put("stats_assists", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(AssistStat.class).get());
-        });
-        handlers.put("stats_first_kills", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(FirstKillStat.class).get());
-        });
-        handlers.put("stats_kills", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(KillStat.class).get());
-        });
-        handlers.put("stats_deaths", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(DeathStat.class).get());
-        });
-        handlers.put("stats_respawns", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(RespawnStat.class).get());
-        });
-        handlers.put("stats_stolen_mobs", (player, pd, game, gp) -> {
-            return pd == null ? null : Integer.toString(pd.getStats().of(StolenMobStat.class).get());
-        });
-        handlers.put("game_stats_headshots", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(HeadshotStat.class).get());
-        });
-        handlers.put("game_stats_assists", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(AssistStat.class).get());
-        });
-        handlers.put("game_stats_kills", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(KillStat.class).get());
-        });
-        handlers.put("game_stats_deaths", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(DeathStat.class).get());
-        });
-        handlers.put("game_stats_respawns", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(RespawnStat.class).get());
-        });
-        handlers.put("game_stats_stolen_mobs", (player, pd, game, gp) -> {
-            return gp == null ? null : Integer.toString(gp.getStats().of(StolenMobStat.class).get());
-        });
-        handlers.put("game_total_players", (player, pd, game, gp) -> {
-            return game == null ? null : Integer.toString(game.getPlayerCount());
-        });
-        handlers.put("game_current_time", (player, pd, game, gp) -> {
-            return game == null ? null : Long.toString(game.getCurrentTime().get());
-        });
-        handlers.put("game_current_time_formatted", (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime(game.getCurrentTime().get() * 50);
-        });
-        handlers.put("game_remaining_time", (player, pd, game, gp) -> {
-            return game == null ? null : Long.toString(game.getArena().getMaxTime() - game.getCurrentTime().get());
-        });
-        handlers.put("game_remaining_time_formatted", (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime((game.getArena().getMaxTime() - game.getCurrentTime().get()) * 50);
-        });
-        handlers.put("arena_id", (player, pd, game, gp) -> {
-            return game == null ? null : game.getArena().getId();
-        });
-        handlers.put("arena_name", (player, pd, game, gp) -> {
-            return game == null ? null : game.getArena().getName();
-        });
-        handlers.put("arena_max_players", (player, pd, game, gp) -> {
-            return game == null ? null : Integer.toString(game.getArena().getMaxPlayers());
-        });
-        handlers.put("arena_max_time", (player, pd, game, gp) -> {
-            return game == null ? null : Long.toString(game.getArena().getMaxTime());
-        });
-        handlers.put("arena_max_time_formatted", (player, pd, game, gp) -> {
-            return game == null ? null : plugin.formatShortFormTime(game.getArena().getMaxTime() * 50);
-        });
-        handlers.put("mode_name", (player, pd, game, gp) -> {
-            return game == null ? null : game.getArena().getMode().getName();
-        });
+        handlers.put("stats_win_matches", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(WinStat.class).get()));
+        handlers.put("stats_lose_matches", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(LoseStat.class).get()));
+        handlers.put("stats_total_matches", (player, pd, game, gp) -> pd == null ? null : Integer.toString(
+                pd.getStats().of(WinStat.class).get() +
+                        pd.getStats().of(LoseStat.class).get()
+        ));
+        handlers.put("stats_headshots", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(HeadshotStat.class).get()));
+        handlers.put("stats_assists", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(AssistStat.class).get()));
+        handlers.put("stats_first_kills", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(FirstKillStat.class).get()));
+        handlers.put("stats_kills", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(KillStat.class).get()));
+        handlers.put("stats_deaths", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(DeathStat.class).get()));
+        handlers.put("stats_respawns", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(RespawnStat.class).get()));
+        handlers.put("stats_stolen_mobs", (player, pd, game, gp) -> pd == null ? null : Integer.toString(pd.getStats().of(StolenMobStat.class).get()));
+        handlers.put("game_stats_headshots", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(HeadshotStat.class).get()));
+        handlers.put("game_stats_assists", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(AssistStat.class).get()));
+        handlers.put("game_stats_kills", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(KillStat.class).get()));
+        handlers.put("game_stats_deaths", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(DeathStat.class).get()));
+        handlers.put("game_stats_respawns", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(RespawnStat.class).get()));
+        handlers.put("game_stats_stolen_mobs", (player, pd, game, gp) -> gp == null ? null : Integer.toString(gp.getStats().of(StolenMobStat.class).get()));
+        handlers.put("game_total_players", (player, pd, game, gp) -> game == null ? null : Integer.toString(game.getPlayerCount()));
+        handlers.put("game_current_time", (player, pd, game, gp) -> game == null ? null : Long.toString(game.getCurrentTime().get()));
+        handlers.put("game_current_time_formatted", (player, pd, game, gp) -> game == null ? null : plugin.formatShortFormTime(game.getCurrentTime().get() * 50));
+        handlers.put("game_remaining_time", (player, pd, game, gp) -> game == null ? null : Long.toString(game.getArena().getMaxTime() - game.getCurrentTime().get()));
+        handlers.put("game_remaining_time_formatted", (player, pd, game, gp) -> game == null ? null : plugin.formatShortFormTime((game.getArena().getMaxTime() - game.getCurrentTime().get()) * 50));
+        handlers.put("arena_id", (player, pd, game, gp) -> game == null ? null : game.getArena().getId());
+        handlers.put("arena_name", (player, pd, game, gp) -> game == null ? null : game.getArena().getName());
+        handlers.put("arena_max_players", (player, pd, game, gp) -> game == null ? null : Integer.toString(game.getArena().getMaxPlayers()));
+        handlers.put("arena_max_time", (player, pd, game, gp) -> game == null ? null : Long.toString(game.getArena().getMaxTime()));
+        handlers.put("arena_max_time_formatted", (player, pd, game, gp) -> game == null ? null : plugin.formatShortFormTime(game.getArena().getMaxTime() * 50));
+        handlers.put("mode_name", (player, pd, game, gp) -> game == null ? null : game.getArena().getMode().getName());
         handlers.put("ig_eco_currency", (player, pd, game, gp) -> plugin.generalConf.getIgEcoCurrencyName());
-        handlers.put("ig_eco_balance", (player, pd, game, gp) -> {
-            return gp == null ? null : String.format(plugin.generalConf.getIgEcoCurrencyFormat(), gp.getIgBalance().get());
-        });
+        handlers.put("ig_eco_balance", (player, pd, game, gp) -> gp == null ? null : String.format(plugin.generalConf.getIgEcoCurrencyFormat(), gp.getIgBalance().get()));
         filters.add(new PapiExpansion.Filter() {
             @Override
             public boolean check(String str) {

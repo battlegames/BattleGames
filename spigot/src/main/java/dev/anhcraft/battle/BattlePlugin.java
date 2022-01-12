@@ -44,6 +44,7 @@ import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
+import dev.anhcraft.battle.premium.PremiumHandler;
 import dev.anhcraft.battle.system.BattleRegionRollback;
 import dev.anhcraft.battle.system.BattleWorldRollback;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
@@ -64,7 +65,6 @@ import dev.anhcraft.battle.system.renderers.bossbar.BossbarRenderer;
 import dev.anhcraft.battle.system.renderers.scoreboard.PlayerScoreboard;
 import dev.anhcraft.battle.system.renderers.scoreboard.ScoreboardRenderer;
 import dev.anhcraft.battle.tasks.*;
-import dev.anhcraft.battle.update.Updater;
 import dev.anhcraft.battle.utils.ConfigHelper;
 import dev.anhcraft.battle.utils.MaterialUtil;
 import dev.anhcraft.battle.utils.State;
@@ -263,10 +263,14 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
 
         new CommandInitializer(this);
 
-        onUpdateCheck();
-
         Metrics metrics = new Metrics(this, 6080);
         metrics.addCustomChart(new SimplePie("license_type", () -> "premium"));
+
+        if (!PremiumHandler.isPremium()) {
+            getLogger().info("This resource seems to be cracked. Please do not crack resources.");
+        } else {
+            getLogger().info("Welcome back. Thanks for buying the plugin. User ID: " + PremiumHandler.getUserID());
+        }
 
         getServer().getScheduler().runTaskLater(this, () -> {
             if (VaultApi.init()) {
@@ -275,22 +279,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
                 exit("Failed to hook to Vault");
             }
         }, 20);
-    }
-
-    private void onUpdateCheck() {
-        Updater updater = new Updater(this, 69463);
-        try {
-            if (updater.checkForUpdates()) {
-                getLogger().info("Plugin update found, Please download the latest version!");
-            }
-            else {
-                getLogger().info("No update was found, you are running the latest version!");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void loadLegacyMaterial() {

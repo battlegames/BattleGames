@@ -54,6 +54,7 @@ public class WorldConfigManager extends ConfigManager {
 
     @Override
     protected void onLoad() {
+        worldSettingsMap.clear();
         ConfigurationSection gen = getSettings().getConfigurationSection("general");
         globalWorldSettings = ConfigHelper.load(WorldSettings.class, gen);
         for (String k : Objects.requireNonNull(getSettings().getConfigurationSection("specific")).getKeys(false)) {
