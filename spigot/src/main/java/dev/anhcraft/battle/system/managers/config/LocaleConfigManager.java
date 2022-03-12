@@ -45,9 +45,9 @@ public class LocaleConfigManager extends ConfigManager {
     private static final Gson GSON = new Gson();
 
     static {
-        ASSETS_VERSION.put(NMSVersion.current(), "1.12"); // set default
+        ASSETS_VERSION.put(NMSVersion.current(), "1.12.2"); // set default
 
-        ASSETS_VERSION.put(NMSVersion.v1_12_R1, "1.12");
+        ASSETS_VERSION.put(NMSVersion.v1_12_R1, "1.12.2");
         ASSETS_VERSION.put(NMSVersion.v1_13_R1, "1.13");
         ASSETS_VERSION.put(NMSVersion.v1_13_R2, "1.13.2");
         ASSETS_VERSION.put(NMSVersion.v1_14_R1, "1.14.4");
@@ -55,8 +55,9 @@ public class LocaleConfigManager extends ConfigManager {
         ASSETS_VERSION.put(NMSVersion.v1_16_R1, "1.16.1");
         ASSETS_VERSION.put(NMSVersion.v1_16_R2, "1.16.2");
         ASSETS_VERSION.put(NMSVersion.v1_16_R3, "1.16.5");
-        ASSETS_VERSION.put(NMSVersion.v1_17_R1, "1.17");
-        ASSETS_VERSION.put(NMSVersion.v1_18_R1, "1.18");
+        ASSETS_VERSION.put(NMSVersion.v1_17_R1, "1.17.1");
+        ASSETS_VERSION.put(NMSVersion.v1_18_R1, "1.18.1");
+        ASSETS_VERSION.put(NMSVersion.v1_18_R2, "1.18.2");
     }
 
     public LocaleConfigManager() {
