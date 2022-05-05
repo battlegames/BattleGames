@@ -1,10 +1,6 @@
 # BattleGames
 
-## Links
-
-Hub: https://github.com/anhcraft/Battle-Hub/
-
-Configdoc: https://anhcraft.dev/cd/battle/
+Remastered BattleGames plugin
 
 ## Compile
 
