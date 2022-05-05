@@ -75,12 +75,6 @@
             <version>${version.config}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -107,12 +101,6 @@
             <version>${version.swm}</version>
             <systemPath>${basedir}/../lib/slimeworldmanager-plugin-${version.swm}.jar</systemPath>
             <scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

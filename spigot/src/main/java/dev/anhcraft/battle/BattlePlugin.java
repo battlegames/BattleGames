@@ -266,12 +266,6 @@ public class BattlePlugin extends JavaPlugin implements BattleApi {
         Metrics metrics = new Metrics(this, 6080);
         metrics.addCustomChart(new SimplePie("license_type", () -> "premium"));
 
-        if (!PremiumHandler.isPremium()) {
-            getLogger().info("This resource seems to be cracked. Please do not crack resources.");
-        } else {
-            getLogger().info("Welcome back. Thanks for buying the plugin. User ID: " + PremiumHandler.getUserID());
-        }
-
         getServer().getScheduler().runTaskLater(this, () -> {
             if (VaultApi.init()) {
                 NativeCurrencies.VAULT.setEconomy(VaultApi.getEconomyApi());
