@@ -40,7 +40,7 @@
         <version.swm>2.2.1</version.swm>
         <version.acf>0.5.0-SNAPSHOT</version.acf>
         <version.config>v1.0.9</version.config>
-        <version.bstats>2.2.1</version.bstats>
+        <version.bstats>3.0.0</version.bstats>
         <version.hikaricp>4.0.3</version.hikaricp>
         <version.nbtapi>2.9.0-SNAPSHOT</version.nbtapi>
     </properties>
