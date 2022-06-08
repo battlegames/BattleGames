@@ -34,7 +34,6 @@ import dev.anhcraft.battle.api.gui.NativeGui;
 import dev.anhcraft.battle.api.inventory.item.*;
 import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.api.storage.data.PlayerData;
-import dev.anhcraft.battle.premium.PremiumHandler;
 import dev.anhcraft.battle.system.ResourcePack;
 import dev.anhcraft.battle.system.debugger.BattleDebugger;
 import dev.anhcraft.battle.utils.*;
@@ -75,18 +74,6 @@ public class MainCommand extends BaseCommand {
     @HelpCommand
     public void help(CommandSender sender, CommandHelp help) {
         help.showHelp();
-    }
-
-    @Subcommand("verify")
-    @CommandPermission("battle.verify")
-    @Description("Get buyer information")
-    public void verify(CommandSender sender) {
-        sender.sendMessage(ChatUtil.formatColorCodes("&eBuyer information:"));
-        sender.sendMessage(ChatUtil.formatColorCodes("  &7Buyer ID: &e" + PremiumHandler.getUserID()));
-        sender.sendMessage(ChatUtil.formatColorCodes("  &7Resource ID: &e" + PremiumHandler.getResourceID()));
-        sender.sendMessage(ChatUtil.formatColorCodes("  &7Download ID: &e" + PremiumHandler.getDownloadID()));
-        sender.sendMessage(ChatUtil.formatColorCodes("  &7License: &e" + PremiumHandler.formatUserURL()));
-        sender.sendMessage(ChatUtil.formatColorCodes("  &7Verified: &e" + PremiumHandler.isPremium()));
     }
 
     @Subcommand("info")

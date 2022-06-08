@@ -44,7 +44,6 @@ import dev.anhcraft.battle.gui.menu.BoosterMenu;
 import dev.anhcraft.battle.gui.menu.KitMenu;
 import dev.anhcraft.battle.gui.menu.backpack.*;
 import dev.anhcraft.battle.gui.menu.market.*;
-import dev.anhcraft.battle.premium.PremiumHandler;
 import dev.anhcraft.battle.system.BattleRegionRollback;
 import dev.anhcraft.battle.system.BattleWorldRollback;
 import dev.anhcraft.battle.system.integrations.ISWMIntegration;
