@@ -8,7 +8,7 @@
     <parent>
         <artifactId>battle</artifactId>
         <groupId>dev.anhcraft</groupId>
-        <version>1.4.6</version>
+        <version>1.4.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -101,6 +101,12 @@
             <version>${version.swm}</version>
             <systemPath>${basedir}/../lib/slimeworldmanager-plugin-${version.swm}.jar</systemPath>
             <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
