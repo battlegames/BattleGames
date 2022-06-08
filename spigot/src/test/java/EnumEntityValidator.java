@@ -22,23 +22,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dev.anhcraft.battle.utils.EnumEntity;
 import dev.anhcraft.jvmkit.utils.HttpUtil;
+import dev.anhcraft.jvmkit.utils.ObjectUtil;
 import org.bukkit.entity.EntityType;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.Map;
+import java.util.Properties;
 
 public class EnumEntityValidator {
     @Test
     public void a() {
         try {
-            //String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.12/assets/minecraft/lang/en_us.lang");
-            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.18/assets/minecraft/lang/en_us.json");
-            /*Properties p = new Properties();
-            p.load(new StringReader(str));
-            JsonObject jo = new JsonObject();
-            for(Map.Entry<Object, Object> e : p.entrySet()){
-                jo.addProperty(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
-            }*/
+            String str = HttpUtil.fetchString("https://assets.mcasset.cloud/1.19/assets/minecraft/lang/en_us.json");
             JsonObject jo = new Gson().fromJson(str, JsonObject.class);
             for (EntityType et : EntityType.values()) {
                 EnumEntity ee = EnumEntity.of(et);
