@@ -22,7 +22,7 @@ package dev.anhcraft.battle.api.inventory.item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public class Gun extends Weapon<GunModel> {
     }
 
     public void setMagazine(@NotNull Magazine magazine) {
-        Validate.notNull(magazine, "Magazine must be non-null");
+        Condition.notNull(magazine, "Magazine must be non-null");
         this.magazine = magazine;
     }
 

@@ -25,7 +25,7 @@ import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Description;
 import dev.anhcraft.config.annotations.Setting;
 import dev.anhcraft.config.annotations.Validation;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +40,8 @@ public abstract class BattleItemModel implements Informative {
     private String name;
 
     protected BattleItemModel(@NotNull String id) {
-        Validate.notNull(id, "Id must be non-null");
-        Validate.isTrue(id.matches("[A-Za-z0-9_]+"), "Id must only contains A-Z,a-z, 0-9 and underscore only");
+        Condition.notNull(id, "Id must be non-null");
+        Condition.check(id.matches("[A-Za-z0-9_]+"), "Id must only contains A-Z,a-z, 0-9 and underscore only");
         this.id = id;
         name = id;
     }

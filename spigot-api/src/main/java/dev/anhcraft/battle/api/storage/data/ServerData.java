@@ -23,7 +23,7 @@ import dev.anhcraft.battle.api.storage.tags.StringTag;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.impl.Serializable;
 import dev.anhcraft.battle.utils.BlockPosition;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public class ServerData implements Resettable, Serializable {
     }
 
     public void setSpawnPoint(@NotNull Location spawnPoint) {
-        Validate.notNull(spawnPoint, "Spawn point must be non-null");
+        Condition.notNull(spawnPoint, "Spawn point must be non-null");
         this.spawnPoint = spawnPoint;
     }
 

@@ -20,10 +20,9 @@
 package dev.anhcraft.battle.api.inventory.item;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.anhcraft.battle.ApiProvider;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 
 public class Magazine extends BattleItem<MagazineModel> {
@@ -45,7 +44,7 @@ public class Magazine extends BattleItem<MagazineModel> {
     }
 
     public void setAmmo(@NotNull Ammo ammo) {
-        Validate.notNull(ammo, "AmmoModel must be non-null");
+        Condition.notNull(ammo, "AmmoModel must be non-null");
         this.ammo = ammo;
     }
 
