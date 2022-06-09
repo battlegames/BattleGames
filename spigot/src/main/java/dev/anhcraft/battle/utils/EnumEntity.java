@@ -144,7 +144,17 @@ public enum EnumEntity {
     PIGLIN("entity.minecraft.piglin", null),
     PIGLIN_BRUTE("entity.minecraft.piglin_brute", null),
     STRIDER("entity.minecraft.strider", null),
-    ZOGLIN("entity.minecraft.zoglin", null);
+    ZOGLIN("entity.minecraft.zoglin", null),
+    AXOLOTL("entity.minecraft.axolotl", null),
+    GLOW_ITEM_FRAME("entity.minecraft.glow_item_frame", null),
+    GLOW_SQUID("entity.minecraft.glow_squid", null),
+    GOAT("entity.minecraft.goat", null),
+    MARKER("entity.minecraft.marker", null),
+    ALLAY("entity.minecraft.allay", null),
+    CHEST_BOAT("entity.minecraft.chest_boat", null),
+    FROG("entity.minecraft.frog", null),
+    TADPOLE("entity.minecraft.tadpole", null),
+    WARDEN("entity.minecraft.warden", null);
 
     private static final Map<EntityType, EnumEntity> LOOKUP = new EnumMap<>(EntityType.class);
     private static final boolean LEGACY = NMSVersion.current().compare(NMSVersion.v1_13_R1) < 0;

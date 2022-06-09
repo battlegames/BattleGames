@@ -29,7 +29,7 @@ import dev.anhcraft.battle.utils.PreparedItem;
 import dev.anhcraft.battle.utils.State;
 import dev.anhcraft.battle.utils.info.InfoHolder;
 import dev.anhcraft.config.annotations.*;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -116,7 +116,7 @@ public class Kit implements Informative {
     private boolean firstJoin;
 
     public Kit(@NotNull String id) {
-        Validate.notNull(id, "Id must be non-null");
+        Condition.notNull(id, "Id must be non-null");
         this.id = id;
     }
 

@@ -39,9 +39,9 @@ import dev.anhcraft.config.annotations.*;
 import dev.anhcraft.config.schema.ConfigSchema;
 import dev.anhcraft.config.struct.ConfigSection;
 import dev.anhcraft.config.struct.SimpleForm;
+import dev.anhcraft.jvmkit.utils.Condition;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -226,7 +226,7 @@ public class Arena implements Informative {
     private List<String> messageOnJoin;
 
     public Arena(@NotNull String id) {
-        Validate.notNull(id, "Id must be non-null");
+        Condition.notNull(id, "Id must be non-null");
         this.id = id;
     }
 
@@ -270,7 +270,7 @@ public class Arena implements Informative {
     private Expression finalExpExpression;
 
     public double calculateFinalMoney(@NotNull GamePlayer player) {
-        Validate.notNull(player, "Player must be non-null");
+        Condition.notNull(player, "Player must be non-null");
         if(finalMoneyExpression == null) {
             finalMoneyExpression = new ExpressionBuilder(finalMoneyCalculator).variables("a", "b", "c", "d").build();
         }
@@ -283,7 +283,7 @@ public class Arena implements Informative {
     }
 
     public long calculateFinalExp(@NotNull GamePlayer player) {
-        Validate.notNull(player, "Player must be non-null");
+        Condition.notNull(player, "Player must be non-null");
         if(finalExpExpression == null) {
             finalExpExpression = new ExpressionBuilder(finalExpCalculator).variables("a", "b", "c", "d").build();
         }

@@ -21,7 +21,6 @@
 package dev.anhcraft.battle.gui;
 
 import dev.anhcraft.battle.utils.PreparedItem;
-import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class ValueResult {
     }
 
     public boolean asBoolean() {
-        return BooleanUtils.toBooleanObject(String.valueOf(val));
+        return Boolean.parseBoolean(String.valueOf(val));
     }
 
     public int asInt() {

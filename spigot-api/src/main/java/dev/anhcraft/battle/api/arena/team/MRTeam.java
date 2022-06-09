@@ -20,7 +20,7 @@
 
 package dev.anhcraft.battle.api.arena.team;
 
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 
 public enum MRTeam implements Team {
@@ -37,7 +37,7 @@ public enum MRTeam implements Team {
 
     @Override
     public void setLocalizedName(@NotNull String localizedName) {
-        Validate.notNull(localizedName, "Localized name must be non-null");
+        Condition.notNull(localizedName, "Localized name must be non-null");
         this.localizedName = localizedName;
     }
 }

@@ -28,7 +28,7 @@ import dev.anhcraft.battle.api.stats.StatisticMap;
 import dev.anhcraft.battle.api.stats.natives.*;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.CustomDataContainer;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,7 @@ public class GamePlayer extends CustomDataContainer implements Resettable {
     private ItemStack[] backupInventory;
 
     public GamePlayer(@NotNull Player player) {
-        Validate.notNull(player, "Player must be non-null");
+        Condition.notNull(player, "Player must be non-null");
         this.player = new WeakReference<>(player);
         this.joinDate = System.currentTimeMillis();
     }

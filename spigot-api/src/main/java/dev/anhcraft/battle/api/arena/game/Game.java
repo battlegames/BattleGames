@@ -26,7 +26,7 @@ import dev.anhcraft.battle.impl.Informative;
 import dev.anhcraft.battle.impl.Resettable;
 import dev.anhcraft.battle.utils.CustomDataContainer;
 import dev.anhcraft.battle.utils.info.InfoHolder;
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +40,7 @@ public class Game extends CustomDataContainer implements Resettable, Informative
     private GamePhase phase = GamePhase.WAITING;
 
     public Game(@NotNull Arena arena) {
-        Validate.notNull(arena, "Arena must be non-null");
+        Condition.notNull(arena, "Arena must be non-null");
         this.arena = arena;
     }
 
@@ -69,7 +69,7 @@ public class Game extends CustomDataContainer implements Resettable, Informative
     }
 
     public void setPhase(@NotNull GamePhase phase) {
-        Validate.notNull(phase, "Phase must be non-null");
+        Condition.notNull(phase, "Phase must be non-null");
         if (phase == this.phase) return;
         if (!Bukkit.isPrimaryThread()) {
             try {

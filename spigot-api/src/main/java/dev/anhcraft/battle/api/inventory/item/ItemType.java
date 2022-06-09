@@ -19,7 +19,7 @@
  */
 package dev.anhcraft.battle.api.inventory.item;
 
-import org.apache.commons.lang.Validate;
+import dev.anhcraft.jvmkit.utils.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -44,7 +44,7 @@ public enum ItemType {
     }
 
     public void setLocalizedName(@NotNull String localizedName) {
-        Validate.notNull(localizedName, "Localized name must be non-null");
+        Condition.notNull(localizedName, "Localized name must be non-null");
         this.localizedName = localizedName;
     }
 
