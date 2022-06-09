@@ -62,8 +62,27 @@ public class ResourcePack {
                 FILE = "abm-1.13-1.14.zip";
                 break;
             }
-            default: {
+            case v1_15_R1: {
                 FILE = "abm-1.15.zip";
+                break;
+            }
+            case v1_16_R1:
+            case v1_16_R2:
+            case v1_16_R3: {
+                FILE = "abm-1.16.zip";
+                break;
+            }
+            case v1_17_R1: {
+                FILE = "abm-1.17.zip";
+                break;
+            }
+            case v1_18_R1:
+            case v1_18_R2: {
+                FILE = "abm-1.18.zip";
+                break;
+            }
+            default: {
+                FILE = "abm-1.19.zip";
                 break;
             }
         }
@@ -108,7 +127,7 @@ public class ResourcePack {
                 FileUtil.write(f, arr);
                 HashCode hashCode = Hashing.sha1().hashBytes(arr);
                 HASH = hashCode.asBytes();
-                stringConsumer.accept("Finished! Hash: " + hashCode.toString());
+                stringConsumer.accept("Finished! Hash: " + hashCode);
             });
         }
     }
