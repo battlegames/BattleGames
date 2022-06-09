@@ -26,6 +26,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="battle.spigot.api" options="-parameters" />
       <module name="bungee" options="-parameters" />
+      <module name="parent" options="-parameters" />
       <module name="spigot" options="-parameters" />
       <module name="spigot-api" options="-parameters" />
       <module name="spigot-free" options="-parameters" />

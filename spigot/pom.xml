@@ -73,7 +73,7 @@
             <groupId>com.github.anhcraft.config</groupId>
             <artifactId>config.configdoc</artifactId>
             <version>${version.config}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
